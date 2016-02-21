@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="XML">
+      <UniqueIdentifier>{45b73c92-359b-44e9-a5a8-bf056a8c0a1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{c4a95876-b2cc-4a3f-bce8-4a7fe3f0f8e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{92c1db23-5433-46ac-bf86-1d84af3e78a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="notif">
+      <UniqueIdentifier>{4080d5f1-a711-4cb1-a174-19b32507274c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="offset">
+      <UniqueIdentifier>{1373003b-58a8-495b-b705-0128a1cfd64b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="log">
+      <UniqueIdentifier>{26f5ccfd-d842-45f3-8c28-7962d17ae184}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="registry">
+      <UniqueIdentifier>{af7d82dd-d1fb-40e0-b4ff-823dc83e8961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="containers">
+      <UniqueIdentifier>{57d9dd2a-afcd-4c9f-9742-0351173d9b4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sqlite">
+      <UniqueIdentifier>{2f424b6e-1de6-413a-b361-e8220c5b417a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="html">
+      <UniqueIdentifier>{da516f4f-0abb-49e2-85d2-f5ba511a3f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="threads">
+      <UniqueIdentifier>{27d01403-5c2d-4b21-80b4-e7316b26106e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="files">
+      <UniqueIdentifier>{e0102e7f-f5b6-45c3-8ada-d2350f624fc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{f49da014-7528-465b-aaa8-af5113de6e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="geo">
+      <UniqueIdentifier>{f728e3a3-3f8a-47f6-8567-039b8c6b77b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network">
+      <UniqueIdentifier>{a0f9d6ae-f29f-4593-be7a-e887a0502576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wnd">
+      <UniqueIdentifier>{bac88c21-2be8-4098-a497-9ade5412722a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="string">
+      <UniqueIdentifier>{3087a44d-af8b-4376-a7d9-8eb5ef6d1b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="stree">
+      <UniqueIdentifier>{920a93e4-eb1d-4ed6-88f1-4fffd20543a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="boost">
+      <UniqueIdentifier>{a6fc104d-1209-4b21-96bc-adfc7e015d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="boost\boost.program_options">
+      <UniqueIdentifier>{66ceb099-2868-4a40-8dd0-fe2ec1421ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="boost\boost.regex">
+      <UniqueIdentifier>{41cfb6e2-dcac-4921-8ec3-17d94adeaa73}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="myodd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xml\tinyxml.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="xml\tinyxmlerror.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="xml\tinyxmlparser.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="common\program_options.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="config\Config.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="config\ConfigBase.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="config\ConfigObject.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\c_regex_traits.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\cpp_regex_traits.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\cregex.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\fileiter.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\icu.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\instances.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\posix_api.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\regex.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\regex_debug.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\regex_raw_buffer.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\regex_traits_defaults.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\static_mutex.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\usinstances.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\w32_regex_traits.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\wc_regex_traits.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\wide_posix_api.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\regex\src\winstances.cpp">
+      <Filter>boost\boost.regex</Filter>
+    </ClCompile>
+    <ClCompile Include="offsets\offset.cpp">
+      <Filter>offset</Filter>
+    </ClCompile>
+    <ClCompile Include="log\log.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="log\logfile.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+    <ClCompile Include="registry\registry.cpp">
+      <Filter>registry</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite\shell.c">
+      <Filter>sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite\sqlite.cpp">
+      <Filter>sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite\sqlite3.c">
+      <Filter>sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="html\html.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Parser.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Token.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TokenBold.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TokenBr.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TokenItalic.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Tokens.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TokenStrikeout.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TokenUnderline.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\cmdline.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\config_file.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\convert.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\options_description.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\parsers.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\positional_options.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\utf8_codecvt_facet.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\value_semantic.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\variables_map.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="boost\libs\program_options\src\winmain.cpp">
+      <Filter>boost\boost.program_options</Filter>
+    </ClCompile>
+    <ClCompile Include="threads\threads.cpp">
+      <Filter>threads</Filter>
+    </ClCompile>
+    <ClCompile Include="files\files.cpp">
+      <Filter>files</Filter>
+    </ClCompile>
+    <ClCompile Include="math\math.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="geo\geo.cpp">
+      <Filter>geo</Filter>
+    </ClCompile>
+    <ClCompile Include="network\network.cpp">
+      <Filter>network</Filter>
+    </ClCompile>
+    <ClCompile Include="wnd\wnd.cpp">
+      <Filter>wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="string\string.cpp">
+      <Filter>string</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="myodd.def">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="sqlite\sqlite3.def">
+      <Filter>sqlite</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="myodd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xml\tinyxml.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="common\includes.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\program_options.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="config\Config.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="config\ConfigBase.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="config\ConfigData.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="config\ConfigObject.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="notif\notif.h">
+      <Filter>notif</Filter>
+    </ClInclude>
+    <ClInclude Include="offsets\offset.h">
+      <Filter>offset</Filter>
+    </ClInclude>
+    <ClInclude Include="log\log.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="log\logfile.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="registry\registry.h">
+      <Filter>registry</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\idx_map.h">
+      <Filter>containers</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\Matrix2D.h">
+      <Filter>containers</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3ext.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="html\html.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Parser.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Token.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TokenBold.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TokenBr.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TokenItalic.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Tokens.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TokenStrikeout.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TokenUnderline.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\threads.h">
+      <Filter>threads</Filter>
+    </ClInclude>
+    <ClInclude Include="files\files.h">
+      <Filter>files</Filter>
+    </ClInclude>
+    <ClInclude Include="math\math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="geo\geo.h">
+      <Filter>geo</Filter>
+    </ClInclude>
+    <ClInclude Include="network\network.h">
+      <Filter>network</Filter>
+    </ClInclude>
+    <ClInclude Include="wnd\wnd.h">
+      <Filter>wnd</Filter>
+    </ClInclude>
+    <ClInclude Include="string\string.h">
+      <Filter>string</Filter>
+    </ClInclude>
+    <ClInclude Include="stree\smap.h">
+      <Filter>stree</Filter>
+    </ClInclude>
+    <ClInclude Include="stree\sset.h">
+      <Filter>stree</Filter>
+    </ClInclude>
+    <ClInclude Include="stree\stree.h">
+      <Filter>stree</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

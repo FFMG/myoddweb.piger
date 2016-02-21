@@ -1,0 +1,6 @@
+; myodd.def : Declares the module parameters for the DLL.
+
+LIBRARY      "myodd"
+
+EXPORTS
+    ; Explicit exports can go here
