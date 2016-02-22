@@ -234,8 +234,10 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-Output
+
+#custom
 /plugins/amplugind.lib
 /plugins/am_plugins.h
 /plugins/amplugin.h
 /plugins/amplugind.lib
+/Output/
