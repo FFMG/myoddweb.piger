@@ -43,7 +43,7 @@
 #ifdef _DEBUG
   #pragma comment(lib, "../amplugind.lib" )
 #else
-  #pragma comment(lib, "../plugins/amplugin.lib" )
+  #pragma comment(lib, "../amplugin.lib" )
 #endif
 
 //

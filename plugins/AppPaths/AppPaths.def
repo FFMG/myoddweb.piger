@@ -1,0 +1,6 @@
+; AppPaths.def : Declares the module parameters for the DLL.
+
+LIBRARY      "AppPaths"
+
+EXPORTS
+    ; Explicit exports can go here
