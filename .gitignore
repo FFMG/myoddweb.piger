@@ -236,3 +236,6 @@ _Pvt_Extensions
 .fake/
 Output
 /plugins/amplugind.lib
+/plugins/am_plugins.h
+/plugins/amplugin.h
+/plugins/amplugind.lib
