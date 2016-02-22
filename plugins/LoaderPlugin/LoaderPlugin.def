@@ -1,0 +1,6 @@
+; LoaderPlugin.def : Declares the module parameters for the DLL.
+
+LIBRARY      "LoaderPlugin.amp"
+
+EXPORTS
+    ; Explicit exports can go here
