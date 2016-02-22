@@ -15,11 +15,12 @@
 // Boost.Test
 #define BOOST_TEST_MODULE single header test
 #include <boost/test/included/unit_test.hpp>
+using namespace boost::unit_test;
 
 BOOST_AUTO_TEST_CASE( test )
 {
     int i = 1;
-    BOOST_TEST( i*i == 1 );
+    BOOST_CHECK( i*i == 1 );
 }
 
 //____________________________________________________________________________//

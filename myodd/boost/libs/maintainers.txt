@@ -94,7 +94,7 @@ property_map          Douglas Gregor <dgregor -at- cs.indiana.edu>
 property_tree         Sebastian Redl <sebastian.redl -at- getdesigned.at>
 proto                 Eric Niebler <eric -at- boostpro.com>
 ptr_container         Thorsten Ottosen <nesotto -at- cs.auc.dk>
-python                Stefan Seefeld <stefan -at- seefeld dot name>
+python                Stefan Seefeld <stefan -at- seefeld.name>
 random                Steven Watanabe <watanabesj -at- gmail.com>
 range                 Neil Groves <neilgroves -at- googlemail.com>, Nathan Ridge <zeratul976 -at- hotmail.com>
 ratio                 Vicente J. Botet Escriba <vicente.botet -at- wanadoo.fr>
@@ -110,7 +110,7 @@ sort                  Steven Ross <spreadsort -at- gmail.com>
 spirit                Joel de Guzman <joel -at- boost-consulting.com>, Hartmut Kaiser <hartmut.kaiser -at- gmail.com>
 statechart            Andreas Huber <ahd6974-boostorg -at- yahoo.com>
 static_assert         John Maddock <john -at- johnmaddock.co.uk>
-test                  Gennadiy Rozental <gennadiy.rozental -at- thomson.com>
+test                  Gennadiy Rozental <rogeeff -at- gmail.com>, Raffi Enficiaud <raffi.enficiaud -at- free.fr>
 thread                Vicente J. Botet Escriba <vicente.botet -at- wanadoo.fr>, Niall Douglas <niall -at- nedprod.com>
 throw_exception       Emil Dotchevski <emil -at- revergestudios.com>
 timer                 Beman Dawes <bdawes -at- acm.org>
@@ -131,6 +131,7 @@ utility/result_of     Daniel Walker <daniel.j.walker -at- gmail.com>
 utility/swap          Joseph Gauterin <joseph.gauterin -at- googlemail.com>
 uuid                  Andy Tompkins <atompkins -at- fastmail.fm>
 variant               Eric Friedman <ericbrandon -at- gmail.com>
+vmd                   Edward Diener <eld -at- tropicsoft.com>
 wave                  Hartmut Kaiser <hartmut.kaiser -at- gmail.com>
 xpressive             Eric Niebler <eric -at- boostpro.com>
 

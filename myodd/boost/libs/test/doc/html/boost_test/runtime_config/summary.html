@@ -53,20 +53,8 @@
               </td>
 <td>
                 <p>
-                  Automatically attach debugger in case of system failure.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/show_progress.html" title="show_progress"><code class="computeroutput"><span class="identifier">show_progress</span></code></a>
-                </p>
-              </td>
-<td>
-                <p>
-                  Makes the framework to print progress information. More details
-                  <a class="link" href="../test_output/test_output_progress.html" title="Progress display">here</a>.
+                  Instructs the framework to automatically attach debugger in case
+                  of system failure.
                 </p>
               </td>
 </tr>
@@ -78,7 +66,7 @@
               </td>
 <td>
                 <p>
-                  Print build information.
+                  Instructs the framework to display library build information.
                 </p>
               </td>
 </tr>
@@ -90,19 +78,7 @@
               </td>
 <td>
                 <p>
-                  Catch system errors.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/break_exec_path.html" title="break_exec_path"><code class="computeroutput"><span class="identifier">break_exec_path</span></code></a>
-                </p>
-              </td>
-<td>
-                <p>
-                  Break execution path
+                  Instructs the framework to catch system errors.
                 </p>
               </td>
 </tr>
@@ -114,7 +90,69 @@
               </td>
 <td>
                 <p>
-                  Produce color output
+                  Instructs the framework to produce color output
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/detect_fp_exceptions.html" title="detect_fp_exceptions"><code class="computeroutput"><span class="identifier">detect_fp_exceptions</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Instructs the framework to trap floating point exceptions (on supported
+                  platforms).
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/detect_memory_leaks.html" title="detect_memory_leaks"><code class="computeroutput"><span class="identifier">detect_memory_leaks</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Instructs the framework to detect memory leaks (on supported platforms).
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/help.html" title="help"><code class="computeroutput"><span class="identifier">help</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Provides help on the <span class="emphasis"><em>Unit Test Framework</em></span> parameters.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/list_content.html" title="list_content"><code class="computeroutput"><span class="identifier">list_content</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Lists the tests units, their organization in the test tree, their
+                  enabled/disabled state...
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/list_labels.html" title="list_labels"><code class="computeroutput"><span class="identifier">list_labels</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Lists the labels defined in the test module.
                 </p>
               </td>
 </tr>
@@ -138,19 +176,19 @@
               </td>
 <td>
                 <p>
-                  Specifies the logging level of the <span class="emphasis"><em>Unit Test Framework</em></span>
+                  Specifies the framework's logging level
                 </p>
               </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/run_test.html" title="run_test"><code class="computeroutput"><span class="identifier">run_test</span></code></a>
+                  <a class="link" href="../utf_reference/rt_param_reference/log_sink.html" title="log_sink"><code class="computeroutput"><span class="identifier">log_sink</span></code></a>
                 </p>
               </td>
 <td>
                 <p>
-                  Specifies which test units to run.
+                  Specifies where to write testing log to.
                 </p>
               </td>
 </tr>
@@ -169,6 +207,18 @@
 <tr>
 <td>
                 <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/random.html" title="random"><code class="computeroutput"><span class="identifier">random</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Instructs the framework to run the tests in random order
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
                   <a class="link" href="../utf_reference/rt_param_reference/report_format.html" title="report_format"><code class="computeroutput"><span class="identifier">report_format</span></code></a>
                 </p>
               </td>
@@ -181,86 +231,26 @@
 <tr>
 <td>
                 <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/result_code.html" title="result_code"><code class="computeroutput"><span class="identifier">result_code</span></code></a>
-                </p>
-              </td>
-<td>
-                <p>
-                  Make the framework return a result code indicating an error in
-                  the tests.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
                   <a class="link" href="../utf_reference/rt_param_reference/report_level.html" title="report_level"><code class="computeroutput"><span class="identifier">report_level</span></code></a>
                 </p>
               </td>
 <td>
                 <p>
-                  The level of details carried by the <span class="emphasis"><em>Unit Test Framework</em></span>
-                  report.
+                  Specifies the level of details carried by the framework's testing
+                  result report.
                 </p>
               </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/random.html" title="random"><code class="computeroutput"><span class="identifier">random</span></code></a>
+                  <a class="link" href="../utf_reference/rt_param_reference/report_memory_leaks_to.html" title="report_memory_leaks_to"><code class="computeroutput"><span class="identifier">report_memory_leaks_to</span></code></a>
                 </p>
               </td>
 <td>
                 <p>
-                  Runs the tests in random order
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/detect_memory_leaks.html" title="detect_memory_leaks"><code class="computeroutput"><span class="identifier">detect_memory_leaks</span></code></a>
-                </p>
-              </td>
-<td>
-                <p>
-                  Detects memory leaks.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/use_alt_stack.html" title="use_alt_stack"><code class="computeroutput"><span class="identifier">use_alt_stack</span></code></a>
-                </p>
-              </td>
-<td>
-                <p>
-                  Uses an alternative stack for running tests (on supported platforms).
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/detect_fp_exceptions.html" title="detect_fp_exceptions"><code class="computeroutput"><span class="identifier">detect_fp_exceptions</span></code></a>
-                </p>
-              </td>
-<td>
-                <p>
-                  Traps floating point exceptions (on supported platforms).
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/log_sink.html" title="log_sink"><code class="computeroutput"><span class="identifier">log_sink</span></code></a>
-                </p>
-              </td>
-<td>
-                <p>
-                  Specifies the sink stream for logging.
+                  Specifies file name where memory leaks report should be re-directed
+                  to.
                 </p>
               </td>
 </tr>
@@ -272,7 +262,32 @@
               </td>
 <td>
                 <p>
-                  Specifies the sink stream for tests reports.
+                  Specifies where to write the testing result report to.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/result_code.html" title="result_code"><code class="computeroutput"><span class="identifier">result_code</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Instructs the framework to return or ignore a result code indicating
+                  an error in the tests.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/run_test.html" title="run_test"><code class="computeroutput"><span class="identifier">run_test</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Allows to filter which test units to execute at runtime.
                 </p>
               </td>
 </tr>
@@ -284,19 +299,58 @@
               </td>
 <td>
                 <p>
-                  Provides parameters for testing output streams.
+                  Facilitates mode switching for testing output streams.
                 </p>
               </td>
 </tr>
 <tr>
 <td>
                 <p>
-                  <a class="link" href="../utf_reference/rt_param_reference/list_content.html" title="list_content"><code class="computeroutput"><span class="identifier">list_content</span></code></a>
+                  <a class="link" href="../utf_reference/rt_param_reference/show_progress.html" title="show_progress"><code class="computeroutput"><span class="identifier">show_progress</span></code></a>
                 </p>
               </td>
 <td>
                 <p>
-                  List the tests that will be run.
+                  Instructs the framework to print progress information. More details
+                  <a class="link" href="../test_output/test_output_progress.html" title="Progress display">here</a>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/use_alt_stack.html" title="use_alt_stack"><code class="computeroutput"><span class="identifier">use_alt_stack</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Instructs the framework to use an alternative stack for signal
+                  processing (on supported platforms).
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/usage.html" title="usage"><code class="computeroutput"><span class="identifier">usage</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Displays short usage message.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <a class="link" href="../utf_reference/rt_param_reference/wait_for_debugger.html" title="wait_for_debugger"><code class="computeroutput"><span class="identifier">wait_for_debugger</span></code></a>
+                </p>
+              </td>
+<td>
+                <p>
+                  Instructs the framework to pause test module before testing is
+                  started to allow debugger to attach.
                 </p>
               </td>
 </tr>
@@ -305,7 +359,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test team<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

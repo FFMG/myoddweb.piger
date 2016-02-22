@@ -7,7 +7,7 @@
 <link rel="home" href="../../../index.html" title="Boost.Test">
 <link rel="up" href="../../../boost_test/reference.html" title="Reference">
 <link rel="prev" href="../../../boost/unit_test/unit_test_log_formatter.html" title="Class unit_test_log_formatter">
-<link rel="next" href="utils/algorithm_hpp.html" title="Header &lt;boost/test/utils/algorithm.hpp&gt;">
+<link rel="next" href="../../../boost/unit_test/runtime_config/stream_holder.html" title="Class stream_holder">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../../../boost/unit_test/unit_test_log_formatter.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../boost_test/reference.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="utils/algorithm_hpp.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../../../boost/unit_test/unit_test_log_formatter.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../boost_test/reference.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../../boost/unit_test/runtime_config/stream_holder.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
@@ -30,81 +30,47 @@
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">namespace</span> <span class="identifier">unit_test</span> <span class="special">{</span>
     <span class="keyword">namespace</span> <span class="identifier">runtime_config</span> <span class="special">{</span>
-      <span class="keyword">void</span> <a name="boost.unit_test.runtime_config.init_idp44567776"></a><span class="identifier">init</span><span class="special">(</span><span class="keyword">int</span> <span class="special">&amp;</span> argc<span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">*</span> argv<span class="special">)</span><span class="special">;</span>
+      <span class="keyword">class</span> <a class="link" href="../../../boost/unit_test/runtime_config/stream_holder.html" title="Class stream_holder">stream_holder</a><span class="special">;</span>
 
-      <span class="comment">// Automatically attach debugger in a location of fatal error. </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.auto_start_dbg"></a><span class="identifier">auto_start_dbg</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-      <span class="identifier">const_string</span> <a name="boost.unit_test.runtime_config.break_exec_path"></a><span class="identifier">break_exec_path</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/AUTO_START_DBG.html" title="Global AUTO_START_DBG">AUTO_START_DBG</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/BREAK_EXEC_PATH.html" title="Global BREAK_EXEC_PATH">BREAK_EXEC_PATH</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/BUILD_INFO.html" title="Global BUILD_INFO">BUILD_INFO</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/CATCH_SYS_ERRORS.html" title="Global CATCH_SYS_ERRORS">CATCH_SYS_ERRORS</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/COLOR_OUTPUT.html" title="Global COLOR_OUTPUT">COLOR_OUTPUT</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/DETECT_FP_EXCEPT.html" title="Global DETECT_FP_EXCEPT">DETECT_FP_EXCEPT</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/DETECT_MEM_LEAKS.html" title="Global DETECT_MEM_LEAKS">DETECT_MEM_LEAKS</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/LIST_CONTENT.html" title="Global LIST_CONTENT">LIST_CONTENT</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/LIST_LABELS.html" title="Global LIST_LABELS">LIST_LABELS</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/LOG_FORMAT.html" title="Global LOG_FORMAT">LOG_FORMAT</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/LOG_LEVEL.html" title="Global LOG_LEVEL">LOG_LEVEL</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/LOG_SINK.html" title="Global LOG_SINK">LOG_SINK</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/OUTPUT_FORMAT.html" title="Global OUTPUT_FORMAT">OUTPUT_FORMAT</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/RANDOM_SEED.html" title="Global RANDOM_SEED">RANDOM_SEED</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/REPORT_FORMAT.html" title="Global REPORT_FORMAT">REPORT_FORMAT</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/REPORT_LEVEL.html" title="Global REPORT_LEVEL">REPORT_LEVEL</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/REPORT_MEM_LEAKS.html" title="Global REPORT_MEM_LEAKS">REPORT_MEM_LEAKS</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/REPORT_SINK.html" title="Global REPORT_SINK">REPORT_SINK</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/RESULT_CODE.html" title="Global RESULT_CODE">RESULT_CODE</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/RUN_FILTERS.html" title="Global RUN_FILTERS">RUN_FILTERS</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/SAVE_TEST_PATTERN.html" title="Global SAVE_TEST_PATTERN">SAVE_TEST_PATTERN</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/SHOW_PROGRESS.html" title="Global SHOW_PROGRESS">SHOW_PROGRESS</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/USE_ALT_STACK.html" title="Global USE_ALT_STACK">USE_ALT_STACK</a><span class="special">;</span>
+      <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="../../../boost/unit_test/runtime_config/WAIT_FOR_DEBUGGER.html" title="Global WAIT_FOR_DEBUGGER">WAIT_FOR_DEBUGGER</a><span class="special">;</span>
+      <span class="keyword">void</span> <a name="boost.unit_test.runtime_config.init_idm46165629136880"></a><span class="identifier">init</span><span class="special">(</span><span class="keyword">int</span> <span class="special">&amp;</span> argc<span class="special">,</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">*</span> argv<span class="special">)</span><span class="special">;</span>
 
-      <span class="comment">// Should we catch system errors/sygnals? </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.catch_sys_errors"></a><span class="identifier">catch_sys_errors</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+      <span class="comment">// Access to arguments. </span>
+      <span class="identifier">runtime</span><span class="special">::</span><span class="identifier">arguments_store</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="boost.unit_test.runtime_config.argument_store"></a><span class="identifier">argument_store</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+      <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="boost.unit_test.runtime_config.get_idm46165629133504"></a><span class="identifier">get</span><span class="special">(</span><span class="identifier">runtime</span><span class="special">::</span><span class="identifier">cstring</span> parameter_name<span class="special">)</span><span class="special">;</span>
 
-      <span class="comment">// Should we try to produce color output? </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.color_output"></a><span class="identifier">color_output</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Should we detect floating point exceptions? </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.detect_fp_exceptions"></a><span class="identifier">detect_fp_exceptions</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Should we detect memory leaks (&gt;0)? And if yes, which specific memory allocation should we break. </span>
-      <span class="keyword">long</span> <a name="boost.unit_test.runtime_config.detect_memory__idp44575504"></a><span class="identifier">detect_memory_leaks</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// List content of test tree? </span>
-      <span class="identifier">output_format</span> <a name="boost.unit_test.runtime_config.list_content"></a><span class="identifier">list_content</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// List available labels? </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.list_labels"></a><span class="identifier">list_labels</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Which output format to use. </span>
-      <span class="identifier">output_format</span> <a name="boost.unit_test.runtime_config.log_format"></a><span class="identifier">log_format</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Which log level to set. </span>
-      <span class="identifier">unit_test</span><span class="special">::</span><span class="identifier">log_level</span> <a name="boost.unit_test.runtime_config.log_level"></a><span class="identifier">log_level</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Where to direct log stream into. </span>
-      <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span> <span class="special">*</span> <a name="boost.unit_test.runtime_config.log_sink"></a><span class="identifier">log_sink</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// If memory leak detection, where to direct the report. </span>
-      <span class="identifier">const_string</span> <a name="boost.unit_test.runtime_config.memory_leaks_report_file"></a><span class="identifier">memory_leaks_report_file</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Do not prodce result code. </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.no_result_code"></a><span class="identifier">no_result_code</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Random seed to use to randomize order of test units being run. </span>
-      <span class="keyword">unsigned</span> <a name="boost.unit_test.runtime_config.random_seed"></a><span class="identifier">random_seed</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Which format to use to report results. </span>
-      <span class="identifier">output_format</span> <a name="boost.unit_test.runtime_config.report_format"></a><span class="identifier">report_format</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Wht lever of report format to set. </span>
-      <span class="identifier">unit_test</span><span class="special">::</span><span class="identifier">report_level</span> <a name="boost.unit_test.runtime_config.report_level"></a><span class="identifier">report_level</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Where to direct results report into. </span>
-      <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span> <span class="special">*</span> <a name="boost.unit_test.runtime_config.report_sink"></a><span class="identifier">report_sink</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Should we save pattern (true) or match against existing pattern (used by output validation tool) </span>
+      <span class="comment">// For public access. </span>
       <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.save_pattern"></a><span class="identifier">save_pattern</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Should Unit Test framework show the build information? </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.show_build_info"></a><span class="identifier">show_build_info</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Tells Unit Test Framework to show test progress (forces specific log level) </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.show_progress"></a><span class="identifier">show_progress</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Specific test units to run/exclude. </span>
-      <span class="identifier">std</span><span class="special">::</span><span class="identifier">list</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="boost.unit_test.runtime_config.test_to_run"></a><span class="identifier">test_to_run</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Should execution monitor use alternative stack for signal handling. </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.use_alt_stack"></a><span class="identifier">use_alt_stack</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-
-      <span class="comment">// Tells Unit Test Framework to wait for debugger to attach. </span>
-      <span class="keyword">bool</span> <a name="boost.unit_test.runtime_config.wait_for_debugger"></a><span class="identifier">wait_for_debugger</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
     <span class="special">}</span>
   <span class="special">}</span>
 <span class="special">}</span></pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test team<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -112,7 +78,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../../../boost/unit_test/unit_test_log_formatter.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../boost_test/reference.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="utils/algorithm_hpp.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../../../boost/unit_test/unit_test_log_formatter.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../boost_test/reference.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../../boost/unit_test/runtime_config/stream_holder.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

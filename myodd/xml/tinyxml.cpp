@@ -957,10 +957,17 @@ bool TiXmlDocument::LoadFile( const TCHAR* _filename, TiXmlEncoding encoding )
 	TIXML_STRING filename( _filename );
 	value = filename;
 
+  // does the file actually exist?
+  if (!myodd::files::FileExists(value.c_str()))
+  {
+    SetError(TIXML_ERROR_OPENING_FILE, 0, 0, TIXML_ENCODING_UNKNOWN);
+    return false;
+  }
+
 	// reading in binary mode so that tinyxml can normalize the EOL
 	FILE* file = 0;
   myodd::files::FileEncode fileEncoding = myodd::files::DetermineEncoding( value.c_str() );
- 
+  
   file = TiXmlFOpen( value.c_str (), _T("rb") );	
 	if ( file )
 	{

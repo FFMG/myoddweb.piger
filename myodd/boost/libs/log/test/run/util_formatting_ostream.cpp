@@ -229,6 +229,70 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(operator_forwarding, CharT, char_types)
     BOOST_CHECK(equal_strings(strm_fmt.str(), strm_correct.str()));
 }
 
+namespace my_namespace2 {
+
+class A {};
+template< typename CharT, typename TraitsT, typename AllocatorT >
+inline logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& operator<< (logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& strm, A const&)
+{
+    strm << "A";
+    return strm;
+}
+
+class B {};
+template< typename CharT, typename TraitsT, typename AllocatorT >
+inline logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& operator<< (logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& strm, B&)
+{
+    strm << "B";
+    return strm;
+}
+
+class C {};
+template< typename CharT, typename TraitsT, typename AllocatorT >
+inline logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& operator<< (logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& strm, C const&)
+{
+    strm << "C";
+    return strm;
+}
+
+class D {};
+template< typename CharT, typename TraitsT, typename AllocatorT >
+inline logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& operator<< (logging::basic_formatting_ostream< CharT, TraitsT, AllocatorT >& strm,
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+    D&&
+#else
+    D const&
+#endif
+    )
+{
+    strm << "D";
+    return strm;
+}
+
+} // namespace my_namespace2
+
+// Test operator overriding
+BOOST_AUTO_TEST_CASE_TEMPLATE(operator_overriding, CharT, char_types)
+{
+    typedef CharT char_type;
+    typedef std::basic_string< char_type > string_type;
+    typedef std::basic_ostringstream< char_type > ostream_type;
+    typedef logging::basic_formatting_ostream< char_type > formatting_ostream_type;
+
+    string_type str_fmt;
+    formatting_ostream_type strm_fmt(str_fmt);
+
+    const my_namespace2::A a = my_namespace2::A(); // const lvalue
+    my_namespace2::B b; // lvalue
+    strm_fmt << a << b << my_namespace2::C() << my_namespace2::D(); // rvalue
+    strm_fmt.flush();
+
+    ostream_type strm_correct;
+    strm_correct << "ABCD";
+
+    BOOST_CHECK(equal_strings(strm_fmt.str(), strm_correct.str()));
+}
+
 #if defined(BOOST_LOG_USE_CHAR) && defined(BOOST_LOG_USE_WCHAR_T)
 
 namespace {

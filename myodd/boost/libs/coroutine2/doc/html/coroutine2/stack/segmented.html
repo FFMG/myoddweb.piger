@@ -41,7 +41,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
           Segmented stacks are currently only supported by <span class="bold"><strong>gcc</strong></span>
-          from version <span class="bold"><strong>4.7</strong></span> <span class="bold"><strong>clang</strong></span>
+          from version <span class="bold"><strong>4.7</strong></span> and <span class="bold"><strong>clang</strong></span>
           from version <span class="bold"><strong>3.4</strong></span> onwards. In order to
           use a <span class="emphasis"><em>segmented-stack</em></span> <span class="bold"><strong>Boost.Coroutine2</strong></span>
           must be built with <span class="bold"><strong>toolset=gcc segmented-stacks=on</strong></span>
@@ -82,7 +82,7 @@
 <dt><span class="term">Effects:</span></dt>
 <dd><p>
               Allocates memory of at least <code class="computeroutput"><span class="identifier">size</span></code>
-              Bytes and stores a pointer to the stack and its actual size in <code class="computeroutput"><span class="identifier">sctx</span></code>. Depending on the architecture
+              bytes and stores a pointer to the stack and its actual size in <code class="computeroutput"><span class="identifier">sctx</span></code>. Depending on the architecture
               (the stack grows downwards/upwards) the stored address is the highest/lowest
               address of the stack.
             </p></dd>
@@ -110,6 +110,16 @@
             </p></dd>
 </dl>
 </div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          If the library is compiled for segmented stacks, <span class="emphasis"><em>segmented-stack</em></span>
+          is the only available stack allocator.
+        </p></td></tr>
+</table></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

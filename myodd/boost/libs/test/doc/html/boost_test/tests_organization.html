@@ -110,8 +110,8 @@
         </li>
 </ul></div>
 <p>
-      The above points should make it clear that it's preferable to split a <a class="link" href="section_glossary.html#ref_test_module">test module</a> into smaller units. These units
-      are the <span class="bold"><strong>test cases</strong></span>.
+      The above points should make it clear that it's preferable to split a <a class="link" href="section_glossary.html#ref_test_module">test module</a> into smaller <span class="bold"><strong>units</strong></span>.
+      These units are the <span class="bold"><strong>test cases</strong></span>, the <span class="bold"><strong>test suites</strong></span> and the <span class="bold"><strong>fixtures</strong></span>.
     </p>
 <div class="variablelist">
 <p class="title"><b>Subjects covered by this section</b></p>
@@ -149,16 +149,16 @@
 <dt><span class="term">Setup/teardown test unit actions</span></dt>
 <dd><p>
             When several tests shares the same set-up (environment, test data preparation,
-            etc.), the <a class="link" href="tests_organization/fixtures.html" title="Fixtures">fixtures</a>
-            comes into play. In the <span class="emphasis"><em>Unit Test Framework</em></span>, fixtures
-            can be defined at the test case or the test suite level.
+            etc.), the preparation and cleanup code may be factorized in <a class="link" href="tests_organization/fixtures.html" title="Fixtures">fixtures</a>.
+            In the <span class="emphasis"><em>Unit Test Framework</em></span>, fixtures can be associated
+            to test cases, test suites or globally to the test module.
           </p></dd>
 </dl>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test team<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

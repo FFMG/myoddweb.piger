@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="../../../../index.html" title="Boost.Test">
 <link rel="up" href="../../../../header/boost/test/data/monomorphic/singleton_hpp.html" title="Header &lt;boost/test/data/monomorphic/singleton.hpp&gt;">
-<link rel="prev" href="is_dataset_sin_idp43292960.html" title="Struct template is_dataset&lt;singleton&lt; T &gt;&gt;">
+<link rel="prev" href="is_datas_idm46165630437888.html" title="Struct template is_dataset&lt;singleton&lt; T &gt;&gt;">
 <link rel="next" href="singleton/iterator.html" title="Struct iterator">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="is_dataset_sin_idp43292960.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../../header/boost/test/data/monomorphic/singleton_hpp.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="singleton/iterator.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="is_datas_idm46165630437888.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../../header/boost/test/data/monomorphic/singleton_hpp.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="singleton/iterator.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="refentry">
 <a name="boost.unit_test.data.monomorphic.singleton"></a><div class="titlepage"></div>
@@ -32,62 +32,63 @@
 <div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../../../header/boost/test/data/monomorphic/singleton_hpp.html" title="Header &lt;boost/test/data/monomorphic/singleton.hpp&gt;">boost/test/data/monomorphic/singleton.hpp</a>&gt;
 
 </span><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
-<span class="keyword">class</span> <a class="link" href="singleton.html" title="Class template singleton">singleton</a> <span class="special">:</span> <span class="keyword">public</span> boost::unit_test::data::monomorphic::dataset&lt; boost::decay&lt; T &gt;::type &gt;
-<span class="special">{</span>
+<span class="keyword">class</span> <a class="link" href="singleton.html" title="Class template singleton">singleton</a> <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// types</span>
+  <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">decay</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> <a name="boost.unit_test.data.monomorphic.singleton.sample"></a><span class="identifier">sample</span><span class="special">;</span>
+
   <span class="comment">// member classes/structs/unions</span>
 
-  <span class="keyword">struct</span> <a class="link" href="singleton/iterator.html" title="Struct iterator">iterator</a> <span class="special">:</span>
-    <span class="keyword">public</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">unit_test</span><span class="special">::</span><span class="identifier">data</span><span class="special">::</span><span class="identifier">monomorphic</span><span class="special">::</span><span class="identifier">dataset</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">iterator</span>
-  <span class="special">{</span>
+  <span class="keyword">struct</span> <a class="link" href="singleton/iterator.html" title="Struct iterator">iterator</a> <span class="special">{</span>
     <span class="comment">// <a class="link" href="singleton/iterator.html#boost.unit_test.data.monomorphic.singleton.iteratorconstruct-copy-destruct">construct/copy/destruct</a></span>
-    <span class="keyword">explicit</span> <a class="link" href="singleton/iterator.html#idp43301312-bb"><span class="identifier">iterator</span></a><span class="special">(</span><a class="link" href="singleton.html" title="Class template singleton">singleton</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+    <span class="keyword">explicit</span> <a class="link" href="singleton/iterator.html#idm46165630431024-bb"><span class="identifier">iterator</span></a><span class="special">(</span><a class="link" href="singleton.html" title="Class template singleton">singleton</a><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
 
-    <span class="comment">// <a class="link" href="singleton/iterator.html#idp43298352-bb">public member functions</a></span>
-    <span class="keyword">virtual</span> <span class="identifier">base</span><span class="special">::</span><span class="identifier">data_type</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="singleton/iterator.html#idp43298912-bb"><span class="keyword">operator</span><span class="special">*</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-    <span class="keyword">virtual</span> <span class="keyword">void</span> <a class="link" href="singleton/iterator.html#idp43300032-bb"><span class="keyword">operator</span><span class="special">++</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+    <span class="comment">// <a class="link" href="singleton/iterator.html#idm46165630433712-bb">public member functions</a></span>
+    <span class="identifier">sample</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="singleton/iterator.html#idm46165630433152-bb"><span class="keyword">operator</span><span class="special">*</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+    <span class="keyword">void</span> <a class="link" href="singleton/iterator.html#idm46165630432032-bb"><span class="keyword">operator</span><span class="special">++</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
   <span class="special">}</span><span class="special">;</span>
 
-  <span class="keyword">enum</span> <a name="boost.unit_test.data.monomorphic.singleton.@8"></a>@8 <span class="special">{</span> arity = = 1 <span class="special">}</span><span class="special">;</span>
-  <span class="comment">// <a class="link" href="singleton.html#boost.unit_test.data.monomorphic.singletonconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">explicit</span> <a class="link" href="singleton.html#idp43309456-bb"><span class="identifier">singleton</span></a><span class="special">(</span><span class="identifier">T</span> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="singleton.html#idp43310992-bb"><span class="identifier">singleton</span></a><span class="special">(</span><a class="link" href="singleton.html" title="Class template singleton">singleton</a> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">enum</span> <a name="boost.unit_test.data.monomorphic.singleton.@9"></a>@9 <span class="special">{</span> arity = = 1 <span class="special">}</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="singleton.html#idp43304096-bb">public member functions</a></span>
-  <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="singleton.html#idp43304656-bb"><span class="identifier">value</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">virtual</span> <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a class="link" href="singleton.html#idp43305776-bb"><span class="identifier">size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">virtual</span> <span class="identifier">iter_ptr</span> <a class="link" href="singleton.html#idp43307584-bb"><span class="identifier">begin</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="singleton.html#boost.unit_test.data.monomorphic.singletonconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <span class="keyword">explicit</span> <a class="link" href="singleton.html#idm46165630422480-bb"><span class="identifier">singleton</span></a><span class="special">(</span><span class="identifier">T</span> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="singleton.html#idm46165630420944-bb"><span class="identifier">singleton</span></a><span class="special">(</span><a class="link" href="singleton.html" title="Class template singleton">singleton</a> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="singleton.html#idm46165630427392-bb">public member functions</a></span>
+  <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="singleton.html#idm46165630426832-bb"><span class="identifier">value</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a class="link" href="singleton.html#idm46165630425424-bb"><span class="identifier">size</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <a class="link" href="singleton/iterator.html" title="Struct iterator">iterator</a> <a class="link" href="singleton.html#idm46165630423888-bb"><span class="identifier">begin</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp95454480"></a><h2>Description</h2>
+<a name="idm46570755097056"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp95454896"></a><h3>
+<a name="idm46570755096640"></a><h3>
 <a name="boost.unit_test.data.monomorphic.singletonconstruct-copy-destruct"></a><code class="computeroutput">singleton</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp43309456-bb"></a><span class="identifier">singleton</span><span class="special">(</span><span class="identifier">T</span> <span class="special">&amp;&amp;</span> value<span class="special">)</span><span class="special">;</span></pre>Constructor. </li>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idm46165630422480-bb"></a><span class="identifier">singleton</span><span class="special">(</span><span class="identifier">T</span> <span class="special">&amp;&amp;</span> value<span class="special">)</span><span class="special">;</span></pre>Constructor. </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp43310992-bb"></a><span class="identifier">singleton</span><span class="special">(</span><a class="link" href="singleton.html" title="Class template singleton">singleton</a> <span class="special">&amp;&amp;</span> s<span class="special">)</span><span class="special">;</span></pre>Move constructor. </li>
+<pre class="literallayout"><a name="idm46165630420944-bb"></a><span class="identifier">singleton</span><span class="special">(</span><a class="link" href="singleton.html" title="Class template singleton">singleton</a> <span class="special">&amp;&amp;</span> s<span class="special">)</span><span class="special">;</span></pre>Move constructor. </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp95468416"></a><h3>
-<a name="idp43304096-bb"></a><code class="computeroutput">singleton</code> public member functions</h3>
+<a name="idm46570755083056"></a><h3>
+<a name="idm46165630427392-bb"></a><code class="computeroutput">singleton</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="idp43304656-bb"></a><span class="identifier">value</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">virtual</span> <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a name="idp43305776-bb"></a><span class="identifier">size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Dataset size. </li>
+<pre class="literallayout"><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="idm46165630426832-bb"></a><span class="identifier">value</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Value access method. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">virtual</span> <span class="identifier">iter_ptr</span> <a name="idp43307584-bb"></a><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Iterator to use to iterate over this dataset. </li>
+<pre class="literallayout"><a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a name="idm46165630425424-bb"></a><span class="identifier">size</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>dataset interface </li>
+<li class="listitem"><pre class="literallayout"><a class="link" href="singleton/iterator.html" title="Struct iterator">iterator</a> <a name="idm46165630423888-bb"></a><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test team<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -95,7 +96,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="is_dataset_sin_idp43292960.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../../header/boost/test/data/monomorphic/singleton_hpp.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="singleton/iterator.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="is_datas_idm46165630437888.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../../../../header/boost/test/data/monomorphic/singleton_hpp.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="singleton/iterator.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

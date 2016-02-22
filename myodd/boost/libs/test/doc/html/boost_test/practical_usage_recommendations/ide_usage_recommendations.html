@@ -46,7 +46,7 @@
 <p>
         Full command you need in "Command Line" field is:
       </p>
-<pre class="programlisting"><span class="string">"$(TargetDir)\$(TargetName).exe"</span> <span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/result_code.html" title="result_code"><code class="computeroutput"><span class="identifier">result_code</span></code></a><span class="special">=</span><span class="identifier">no</span> <span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/report_level.html" title="report_level"><code class="computeroutput"><span class="identifier">report_level</span></code></a><span class="special">=</span><span class="identifier">no</span>
+<pre class="programlisting">"$(TargetDir)$(TargetName).exe" --<a class="link" href="../utf_reference/rt_param_reference/result_code.html" title="result_code"><code class="computeroutput"><span class="identifier">result_code</span></code></a>=no --<a class="link" href="../utf_reference/rt_param_reference/report_level.html" title="report_level"><code class="computeroutput"><span class="identifier">report_level</span></code></a>=no
 </pre>
 <p>
         Note that both report level and result code are suppressed. This way the
@@ -68,7 +68,7 @@
         indication fatal or system error) when you run you test, to get more information
         of error location add
       </p>
-<pre class="programlisting"><span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/catch_system.html" title="catch_system_errors"><code class="computeroutput"><span class="identifier">catch_system_error</span></code></a><span class="special">=</span><span class="identifier">no</span>
+<pre class="programlisting">--<a class="link" href="../utf_reference/rt_param_reference/catch_system.html" title="catch_system_errors">catch_system_error</a>=no
 </pre>
 <p>
         to the test run command line:
@@ -82,7 +82,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test team<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

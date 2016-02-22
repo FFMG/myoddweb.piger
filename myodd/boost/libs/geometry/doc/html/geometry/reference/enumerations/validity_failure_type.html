@@ -27,20 +27,21 @@
 <a name="geometry.reference.enumerations.validity_failure_type"></a><a class="link" href="validity_failure_type.html" title="validity_failure_type">validity_failure_type</a>
 </h4></div></div></div>
 <p>
-          <a class="indexterm" name="idp104207072"></a>
-<a class="indexterm" name="idp104207888"></a>
-<a class="indexterm" name="idp104208704"></a>
-<a class="indexterm" name="idp104209520"></a>
-<a class="indexterm" name="idp104210352"></a>
-<a class="indexterm" name="idp104211168"></a>
-<a class="indexterm" name="idp104212000"></a>
-<a class="indexterm" name="idp104212816"></a>
-<a class="indexterm" name="idp104213648"></a>
-<a class="indexterm" name="idp104214480"></a>
-<a class="indexterm" name="idp104215312"></a>
-<a class="indexterm" name="idp104216144"></a>
-<a class="indexterm" name="idp104216976"></a>
-<a class="indexterm" name="idp104217808"></a>
+          <a class="indexterm" name="idm44837175224176"></a>
+<a class="indexterm" name="idm44837175223360"></a>
+<a class="indexterm" name="idm44837175222544"></a>
+<a class="indexterm" name="idm44837175221728"></a>
+<a class="indexterm" name="idm44837175220896"></a>
+<a class="indexterm" name="idm44837175220080"></a>
+<a class="indexterm" name="idm44837175219248"></a>
+<a class="indexterm" name="idm44837175218432"></a>
+<a class="indexterm" name="idm44837175217600"></a>
+<a class="indexterm" name="idm44837175216768"></a>
+<a class="indexterm" name="idm44837175215936"></a>
+<a class="indexterm" name="idm44837175215104"></a>
+<a class="indexterm" name="idm44837175214272"></a>
+<a class="indexterm" name="idm44837175213440"></a>
+<a class="indexterm" name="idm44837175212608"></a>
 Enumerates the possible validity failure types for a geometry.
         </p>
 <h6>
@@ -73,7 +74,8 @@ Enumerates the possible validity failure types for a geometry.
     <span class="identifier">failure_nested_interior_rings</span> <span class="special">=</span> <span class="number">31</span><span class="special">,</span>
     <span class="identifier">failure_disconnected_interior</span> <span class="special">=</span> <span class="number">32</span><span class="special">,</span>
     <span class="identifier">failure_intersecting_interiors</span> <span class="special">=</span> <span class="number">40</span><span class="special">,</span>
-    <span class="identifier">failure_wrong_corner_order</span> <span class="special">=</span> <span class="number">50</span>
+    <span class="identifier">failure_wrong_corner_order</span> <span class="special">=</span> <span class="number">50</span><span class="special">,</span>
+    <span class="identifier">failure_invalid_coordinate</span> <span class="special">=</span> <span class="number">60</span>
 <span class="special">};</span></pre>
 <p>
         </p>
@@ -268,6 +270,19 @@ Enumerates the possible validity failure types for a geometry.
                   <p>
                     The top-right corner of the box is lexicographically smaller
                     than its bottom-left corner (applies to boxes only)
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    failure_invalid_coordinate
+                  </p>
+                </td>
+<td>
+                  <p>
+                    The geometry has at least one point with an invalid coordinate
+                    (for example, the coordinate is a NaN)
                   </p>
                 </td>
 </tr>

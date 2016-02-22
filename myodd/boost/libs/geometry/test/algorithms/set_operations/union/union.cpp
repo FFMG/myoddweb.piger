@@ -1,9 +1,9 @@
 // Boost.Geometry (aka GGL, Generic Geometry Library)
 // Unit Test
 
-// Copyright (c) 2007-2012 Barend Gehrels, Amsterdam, the Netherlands.
-// Copyright (c) 2008-2012 Bruno Lalande, Paris, France.
-// Copyright (c) 2009-2012 Mateusz Loskot, London, UK.
+// Copyright (c) 2007-2015 Barend Gehrels, Amsterdam, the Netherlands.
+// Copyright (c) 2008-2015 Bruno Lalande, Paris, France.
+// Copyright (c) 2009-2015 Mateusz Loskot, London, UK.
 
 // Parts of Boost.Geometry are redesigned from Geodan's Geographic Library
 // (geolib/GGL), copyright (c) 1995-2010 Geodan, Amsterdam, the Netherlands.
@@ -181,6 +181,11 @@ void test_areal()
     test_one<Polygon, Polygon, Polygon>("59_iet",
                 case_59[0], case_59[2], 1, 1, 14, 17.20833);
 
+    test_one<Polygon, Polygon, Polygon>("80",
+                case_80[0], case_80[1], 2, 2, 18, 129.0);
+
+    test_one<Polygon, Polygon, Polygon>("81",
+                case_81[0], case_81[1], 1, 2, 15, 163.5);
 
     /*
     test_one<Polygon, Polygon, Polygon>(102,
@@ -242,16 +247,20 @@ void test_areal()
         67.3550722317627);
 #endif
 
+    {
+        ut_settings settings;
+        settings.percentage = 0.1;
 
-    test_one<Polygon, Polygon, Polygon>("isovist",
-        isovist1[0], isovist1[1],
-        1,
-        0,
-        -1,
-        313.36036462, 0.01);
+        test_one<Polygon, Polygon, Polygon>("isovist",
+            isovist1[0], isovist1[1],
+            1,
+            0,
+            -1,
+            313.36036462, settings);
 
-    // SQL Server gives: 313.360374193241
-    // PostGIS gives:    313.360364623393
+        // SQL Server gives: 313.360374193241
+        // PostGIS gives:    313.360364623393
+    }
 
     // Ticket 5103 https://svn.boost.org/trac/boost/ticket/5103
     // This ticket was actually reported for Boost.Polygon
@@ -261,10 +270,13 @@ void test_areal()
     // Boost.Geometry gives: 2515271327070.5237746891 (ttmath)
     //                       2515271327070.5156 (double)
     //                       2515271320603.0000 (int)
-    // Note the int-test was tested outside of this unit test. It is in two points 0.37 off (logical for an int).
-    // Because of the width of the polygon (400000 meter) this causes a substantial difference.
+    // Note the int-test was tested outside of this unit test.
+    // It is in two points 0.37 off (logical for an int).
+    // Because of the width of the polygon (400000 meter)
+    // this causes a substantial difference.
 
-    test_one<Polygon, Polygon, Polygon>("ticket_5103", ticket_5103[0], ticket_5103[1],
+    test_one<Polygon, Polygon, Polygon>("ticket_5103",
+                ticket_5103[0], ticket_5103[1],
                 1, 0, 25, 2515271327070.5);
 
     test_one<Polygon, Polygon, Polygon>("ticket_8310a", ticket_8310a[0], ticket_8310a[1],
@@ -319,10 +331,8 @@ void test_areal()
                 1, 0, if_typed<ct, double>(18, 23), 4.60853);
 #endif
 
-#if ! defined(BOOST_GEOMETRY_NO_ROBUSTNESS)
     test_one<Polygon, Polygon, Polygon>("buffer_rt_g", buffer_rt_g[0], buffer_rt_g[1],
                 1, 0, if_typed<ct, float>(18, 17), 16.571);
-#endif
     test_one<Polygon, Polygon, Polygon>("buffer_rt_g_rev", buffer_rt_g[1], buffer_rt_g[0],
                 1, 0, if_typed<ct, float>(18, 17), 16.571);
 
@@ -355,10 +365,8 @@ void test_areal()
     test_one<Polygon, Polygon, Polygon>("buffer_rt_m2_rev", buffer_rt_m2[1], buffer_rt_m2[0],
                 1, 0, if_typed_tt<ct>(20, 19), 21.4853);
 
-#if ! defined(BOOST_GEOMETRY_NO_ROBUSTNESS)
     test_one<Polygon, Polygon, Polygon>("buffer_rt_q", buffer_rt_q[0], buffer_rt_q[1],
                 1, 0, 18, 18.5710);
-#endif
     test_one<Polygon, Polygon, Polygon>("buffer_rt_q_rev", buffer_rt_q[1], buffer_rt_q[0],
                 1, 0, 18, 18.5710);
 
@@ -376,13 +384,27 @@ void test_areal()
                 1, 0, if_typed_tt<ct>(16, if_typed<ct, float>(15, 14)), 15.6569);
 #endif
 
-#if ! defined(BOOST_GEOMETRY_NO_ROBUSTNESS)
     test_one<Polygon, Polygon, Polygon>("buffer_mp1", buffer_mp1[0], buffer_mp1[1],
                 1, 0, if_typed_tt<ct>(93, 91), 22.815);
-#endif
 
     test_one<Polygon, Polygon, Polygon>("buffer_mp2", buffer_mp2[0], buffer_mp2[1],
                 1, 0, 217, 36.752837);
+
+#ifdef BOOST_GEOMETRY_TEST_INCLUDE_FAILING_TESTS
+    test_one<Polygon, Polygon, Polygon>("ticket_11725",
+        ticket_11725[0], ticket_11725[1],
+        1, 1, -1, 7.5);
+#endif
+
+    test_one<Polygon, Polygon, Polygon>("mysql_21964079_1",
+        mysql_21964079_1[0], mysql_21964079_1[1],
+        2, 1, -1, 234.5);
+    test_one<Polygon, Polygon, Polygon>("mysql_21964079_2",
+        mysql_21964079_2[0], mysql_21964079_2[1],
+        2, 1, -1, 112.0);
+    test_one<Polygon, Polygon, Polygon>("mysql_21964049",
+        mysql_21964049[0], mysql_21964049[1],
+        1, 1, -1, 220.5);
 }
 
 template <typename P>

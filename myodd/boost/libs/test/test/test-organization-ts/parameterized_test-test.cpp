@@ -5,11 +5,8 @@
 
 //  See http://www.boost.org/libs/test for the library home page.
 //
-//  File        : $RCSfile$
-//
-//  Version     : $Revision$
-//
 //  Description : tests parameterized tests
+//  Note: this file should be compatible with C++03 compilers (features in boost.test v2)
 // ***************************************************************************
 
 // Boost.Test
@@ -34,14 +31,14 @@ namespace ut = boost::unit_test;
 
 void test0( int i )
 {
-    BOOST_TEST( i%2 == 0 );
+    BOOST_TEST( (i%2 == 0) ); // amounts to BOOST_CHECK, for backward compatibility wrt. boost.test v2
 }
 
 //____________________________________________________________________________//
 
 void test1( int i )
 {
-    BOOST_TEST( i%2 == 0 );
+    BOOST_TEST( (i%2 == 0) );
     if( i%3 == 0 ) {
         throw 124;
     }
@@ -213,7 +210,7 @@ BOOST_AUTO_TEST_CASE( test_case8 )
     ut::test_results const& tr = ut::results_collector.results( test->p_id );
 
     ut::unit_test_log.set_stream( std::cout );
-    BOOST_CHECK_EQUAL( tr.p_assertions_failed, 3U );
+    BOOST_TEST( tr.p_assertions_failed == 3U );
     BOOST_TEST( !tr.p_aborted );
 }
 

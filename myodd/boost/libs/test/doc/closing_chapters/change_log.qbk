@@ -1,11 +1,51 @@
 [/
- / Copyright (c) 2013 Boost.Test team
+ / Copyright (c) 2013 Boost.Test contributors
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
 [section Change log]
+
+[h4 Boost.Test v3.1 / boost 1.60]
+
+[h5 New major features]
+* improved API for datasets
+  * it is now possible to use initializer lists
+  * the use of `make` as top left dataset is not necessary anymore
+* improved command line interface
+  * clearer help commands
+  * now proposes closest matching command in case of ambiguity
+  * reports invalid or ambiguous parameters: this might break existing calls when user defined commands are
+    provided to the test module. The following calling convention should be adopted:
+    * if the test module uses user supplied commands, those should be passed after an empty token `--`
+    * all boost.test related commands should be passed before `--`, if any
+
+    Example:
+    the call
+    ``
+    test_module --user-arg1=xy --log_level=test_suite
+    ``
+    should be rewritten to
+    ``
+    test_module --log_level=test_suite -- --user-arg1=xy
+    ``
+
+[h5 Bugfixes and feature requests]
+# [ticket 3384] Double-quoted arguments including spaces are divided by Boost.Test.
+# [ticket 3897] Test framework does not include `<osreldate.h>` before testing `__FreeBSD_version` (fixed in 1.59)
+# [ticket 6032] Program options within `init_unit_test_suite` are incorrect when using path and whitespaces
+# [ticket 6859] Boost.Test eats away last empty command line parameter
+# [ticket 7257] Boost.Test alters and does not restore `ostream` precision after any Test macro (fixed in 1.59)
+# [ticket 9228] Patch to make Boost.Test work with RTTI disabled (fixed in 1.59)
+# [ticket 10317] boost::test corrupts contents of `argv` if a paramter contains whitespace
+# [ticket 11279] invalid parameters should be reported
+# [ticket 11478] Boost Test Exception Assert Failure has poor message
+# [ticket 11571] Can't compile `BOOST_TEST( ..., per_element() )` comparison of `vector<string>`
+# [ticket 11623] Clang rejects some simple `BOOST_TEST()` statements
+# [ticket 11624] `BOOST_TEST( 0.0 == 0.0 )` fails under C++11 (GCC and Clang)
+# [ticket 11625] `BOOST_TEST( ..., per_element() )` erroneously requires collections are comparable
+
 
 [h4 Boost.Test v3 / boost 1.59]
 
@@ -18,8 +58,8 @@
 * support for declaring [link boost_test.tests_organization.tests_dependencies dependencies] over test cases
 * attributes for [link boost_test.tests_organization.enabling enabling or disabling] test execution based on static, compile-time or runtime rules
 * extended [link boost_test.runtime_config.test_unit_filtering unit test filtering] from the command line (negation, labels, ...)
-* color output with __param_color_output__
-* test bed listing with __param_list_content__
+* color output with [link boost_test.utf_reference.rt_param_reference.color_output `color_output`]
+* test bed listing with [link boost_test.utf_reference.rt_param_reference.list_content `list_content`]
 * rewritten documentation using quickbook
 
 [/* now having a more accurate timing (see [ticket 7397]) for the tests. Old format is still available through the command line option __param_deprecated_timer_format__

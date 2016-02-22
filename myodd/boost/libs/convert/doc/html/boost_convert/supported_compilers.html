@@ -45,10 +45,12 @@
         </li>
 <li class="listitem">
           Intel C++ compiler. Successfully tested with versions from 12.1 forward.
-          Earlier versions fail to compile <span class="emphasis"><em>Boost.Convert</em></span>;
+          Earlier versions fail to compile <span class="emphasis"><em>Boost.Convert</em></span> due
+          to lacking full SFINAE support;
         </li>
 <li class="listitem">
-          MSVC ... still waiting for the latest results...
+          MSVC. Successfully tested from MSVC 2013 (msvc-12.0) forward. Earlier versions
+          had some components disabled due to lacking full SFINAE support;
         </li>
 </ul></div>
 <p>

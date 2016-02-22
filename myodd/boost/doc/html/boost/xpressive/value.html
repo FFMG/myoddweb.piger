@@ -37,15 +37,15 @@
   <span class="keyword">public</span> <span class="identifier">proto</span><span class="special">::</span><span class="identifier">extends</span><span class="special">&lt;</span> <span class="identifier">proto</span><span class="special">::</span><span class="identifier">terminal</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span><span class="special">,</span> <span class="identifier">value</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">&gt;</span>
 <span class="special">{</span>
   <span class="comment">// <a class="link" href="value.html#boost.xpressive.valueconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="value.html#idp358108320-bb"><span class="identifier">value</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">explicit</span> <a class="link" href="value.html#idp358109360-bb"><span class="identifier">value</span></a><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="value.html#idm45506840432224-bb"><span class="identifier">value</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="value.html#idm45506840431184-bb"><span class="identifier">value</span></a><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="value.html#idp358104784-bb">public member functions</a></span>
-  <span class="identifier">T</span> <span class="special">&amp;</span> <a class="link" href="value.html#idp358105344-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="value.html#idp358106736-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="value.html#idm45506840435760-bb">public member functions</a></span>
+  <span class="identifier">T</span> <span class="special">&amp;</span> <a class="link" href="value.html#idm45506840435200-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="value.html#idm45506840433808-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp537847184"></a><h2>Description</h2>
+<a name="idm45555020415584"></a><h2>Description</h2>
 <p>
 Below is an example that shows where <code class="computeroutput"><code class="computeroutput">value&lt;&gt;</code></code> is useful.</p>
 <pre class="programlisting"><span class="identifier">sregex</span> <span class="identifier">good_voodoo</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">pi</span><span class="special">)</span>
@@ -59,22 +59,22 @@ Below is an example that shows where <code class="computeroutput"><code class="c
 </pre>
 <p> In the above code, <code class="computeroutput">xpressive::val()</code> is a function that returns a <code class="computeroutput">value&lt;&gt;</code> object. Had <code class="computeroutput">val()</code> not been used here, the operation <code class="computeroutput">++*pi</code> would have been evaluated eagerly once, instead of lazily when the regex match happens. </p>
 <div class="refsect2">
-<a name="idp537878240"></a><h3>Template Parameters</h3>
+<a name="idm45555020384528"></a><h3>Template Parameters</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
 <pre class="literallayout"><span class="keyword">typename</span> T</pre>
 <p>The type of the value to store.</p>
 </li></ol></div>
 </div>
 <div class="refsect2">
-<a name="idp537881376"></a><h3>
+<a name="idm45555020381392"></a><h3>
 <a name="boost.xpressive.valueconstruct-copy-destruct"></a><code class="computeroutput">value</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp358108320-bb"></a><span class="identifier">value</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Store a default-constructed <code class="computeroutput">T</code>. </li>
+<pre class="literallayout"><a name="idm45506840432224-bb"></a><span class="identifier">value</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Store a default-constructed <code class="computeroutput">T</code>. </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp358109360-bb"></a><span class="identifier">value</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> t<span class="special">)</span><span class="special">;</span></pre>Store a copy of <code class="computeroutput">t</code>. <p>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idm45506840431184-bb"></a><span class="identifier">value</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> t<span class="special">)</span><span class="special">;</span></pre>Store a copy of <code class="computeroutput">t</code>. <p>
 </p>
 <div class="variablelist"><table border="0" class="variablelist compact">
 <colgroup>
@@ -99,15 +99,15 @@ Below is an example that shows where <code class="computeroutput"><code class="c
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp537898416"></a><h3>
-<a name="idp358104784-bb"></a><code class="computeroutput">value</code> public member functions</h3>
+<a name="idm45555020364352"></a><h3>
+<a name="idm45506840435760-bb"></a><code class="computeroutput">value</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">T</span> <span class="special">&amp;</span> <a name="idp358105344-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">T</span> <span class="special">&amp;</span> <a name="idm45506840435200-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="idp358106736-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Fetch the stored value. </li>
+<pre class="literallayout"><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="idm45506840433808-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Fetch the stored value. </li>
 </ol></div>
 </div>
 </div>

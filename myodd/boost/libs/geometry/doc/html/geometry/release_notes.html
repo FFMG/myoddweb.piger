@@ -28,6 +28,58 @@
 </h2></div></div></div>
 <h4>
 <a name="geometry.release_notes.h0"></a>
+      <span class="phrase"><a name="geometry.release_notes.boost_1_60"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_60">Boost
+      1.60</a>
+    </h4>
+<p>
+      <span class="bold"><strong>Solved tickets</strong></span>
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/10803" target="_top">10803</a>
+          Union algorithm returning invalid geometry
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11522" target="_top">11522</a>
+          Namespace clash in buffer for traits::detail
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11533" target="_top">11533</a>
+          Assert failure in rtree caused by a bug in remove() if min elements number
+          is 1
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11607" target="_top">11607</a>
+          Private geometry::exception::what()
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11709" target="_top">11709</a>
+          is_simple segfault
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11710" target="_top">11710</a>
+          is_simple - empty geometry logic
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11711" target="_top">11711</a>
+          is_simple and is_valid - Points that are NaN or Infinity
+        </li>
+</ul></div>
+<p>
+      <span class="bold"><strong>Bugfixes</strong></span>
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          Fix colocations of touching interior ring / exterior ring, where it also
+          touches another polygon
+        </li>
+<li class="listitem">
+          Fix removing values from an empty rtree - no effect and 0 returned instead
+          of assertion failure.
+        </li>
+</ul></div>
+<h4>
+<a name="geometry.release_notes.h1"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_59"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_59">Boost
       1.59</a>
     </h4>
@@ -146,7 +198,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="geometry.release_notes.h1"></a>
+<a name="geometry.release_notes.h2"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_58"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_58">Boost
       1.58</a>
     </h4>
@@ -360,13 +412,10 @@
         </li>
 </ul></div>
 <h4>
-<a name="geometry.release_notes.h2"></a>
+<a name="geometry.release_notes.h3"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_57"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_57">Boost
       1.57</a>
     </h4>
-<p>
-      <span class="bold"><strong>Additional functionality</strong></span>
-    </p>
 <p>
       <span class="bold"><strong>Improvements</strong></span>
     </p>
@@ -470,7 +519,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="geometry.release_notes.h3"></a>
+<a name="geometry.release_notes.h4"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_56"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_56">Boost
       1.56</a>
     </h4>
@@ -621,7 +670,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="geometry.release_notes.h4"></a>
+<a name="geometry.release_notes.h5"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_55"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_55">Boost
       1.55</a>
     </h4>
@@ -722,7 +771,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="geometry.release_notes.h5"></a>
+<a name="geometry.release_notes.h6"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_54"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_54">Boost
       1.54</a>
     </h4>
@@ -807,7 +856,7 @@
           length, num_points)
         </li></ul></div>
 <h4>
-<a name="geometry.release_notes.h6"></a>
+<a name="geometry.release_notes.h7"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_53"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_53">Boost
       1.53</a>
     </h4>
@@ -862,7 +911,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="geometry.release_notes.h7"></a>
+<a name="geometry.release_notes.h8"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_51"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_51">Boost
       1.51</a>
     </h4>
@@ -895,7 +944,7 @@
           spherical distance, fixed (by patch of Karsten Ahnert)
         </li></ul></div>
 <h4>
-<a name="geometry.release_notes.h8"></a>
+<a name="geometry.release_notes.h9"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_50"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_50">Boost
       1.50</a>
     </h4>
@@ -950,7 +999,7 @@
           added algorithm "touches" (OGC SF compliant) for *polygon/*polygon
         </li></ul></div>
 <h4>
-<a name="geometry.release_notes.h9"></a>
+<a name="geometry.release_notes.h10"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_49"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_49">Boost
       1.49</a>
     </h4>
@@ -1070,7 +1119,7 @@
         </li>
 </ul></div>
 <h4>
-<a name="geometry.release_notes.h10"></a>
+<a name="geometry.release_notes.h11"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_48"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_48">Boost
       1.48</a>
     </h4>
@@ -1162,7 +1211,7 @@
           Basic (limited) support for Boost.Rational
         </li></ul></div>
 <h4>
-<a name="geometry.release_notes.h11"></a>
+<a name="geometry.release_notes.h12"></a>
       <span class="phrase"><a name="geometry.release_notes.boost_1_47"></a></span><a class="link" href="release_notes.html#geometry.release_notes.boost_1_47">Boost
       1.47</a>
     </h4>

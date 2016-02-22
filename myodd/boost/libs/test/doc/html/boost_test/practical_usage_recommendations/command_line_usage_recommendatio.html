@@ -38,7 +38,7 @@
         indication fatal or system error) when you run you test, to get more information
         about the error location add
       </p>
-<pre class="programlisting"><span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/catch_system.html" title="catch_system_errors"><code class="computeroutput"><span class="identifier">catch_system_error</span></code></a><span class="special">=</span><span class="identifier">no</span>
+<pre class="programlisting">--<a class="link" href="../utf_reference/rt_param_reference/catch_system.html" title="catch_system_errors">catch_system_error</a>=no
 </pre>
 <p>
         to the test run command line. Now run the test again and it will create a
@@ -55,19 +55,19 @@
         My first recommendation is to make sure that the test framework catches all
         fatal errors by adding argument
       </p>
-<pre class="programlisting"><span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/catch_system.html" title="catch_system_errors"><code class="computeroutput"><span class="identifier">catch_system_error</span></code></a><span class="special">=</span><span class="identifier">yes</span>
+<pre class="programlisting">--<a class="link" href="../utf_reference/rt_param_reference/catch_system.html" title="catch_system_errors">catch_system_error</a>=yes
 </pre>
 <p>
         to all test modules invocations. Otherwise test program may produce unwanted
         dialogs (depends on compiler and OS) that will halt you regression tests
         run. The second recommendation is to suppress result report output by adding
       </p>
-<pre class="programlisting"><span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/report_level.html" title="report_level"><code class="computeroutput"><span class="identifier">report_level</span></code></a><span class="special">=</span><span class="identifier">no</span>
+<pre class="programlisting">--__param_report_level__=no
 </pre>
 <p>
         argument and test log output by adding
       </p>
-<pre class="programlisting"><span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/log_level.html" title="log_level"><code class="computeroutput"><span class="identifier">log_level</span></code></a><span class="special">=</span><span class="identifier">nothing</span>
+<pre class="programlisting">--<a class="link" href="../utf_reference/rt_param_reference/log_level.html" title="log_level">log_level</a>=nothing
 </pre>
 <p>
         argument, so that test module won't produce undesirable output no one is
@@ -76,7 +76,7 @@
         is direct both log and report to separate file you could analyze later on.
         Moreover you can make Boost.Test to produce them in XML format using
       </p>
-<pre class="programlisting"><span class="special">--</span><a class="link" href="../utf_reference/rt_param_reference/output_format.html" title="output_format"><code class="computeroutput"><span class="identifier">output_format</span></code></a><span class="special">=</span><span class="identifier">XML</span>
+<pre class="programlisting">--<a class="link" href="../utf_reference/rt_param_reference/output_format.html" title="output_format">output_format</a>=XML
 </pre>
 <p>
         and use some automated tool that will format this information as you like.
@@ -84,7 +84,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test team<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

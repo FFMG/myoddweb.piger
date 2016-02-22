@@ -13,33 +13,44 @@ project
     : requirements
     ;
 
+local check_msg = "Boost.Test feature check: " ;
+
+# documentation requirements: we use new style examples in the doc and compile on compilers supporting that
+requirements_documentation = [ requires cxx11_decltype cxx11_hdr_random cxx11_hdr_tuple cxx11_hdr_initializer_list cxx11_variadic_macros ] ;
+
+# requirements for BOOST_TEST feature, full extension
+requirements_boost_test_full_support = [ requires cxx11_variadic_macros cxx11_decltype cxx11_auto_declarations ] ;
+# requirements_boost_test_full_support += [ check-target-builds ../tools/check_boost_test_support.cpp "Boost.Test feature check: BOOST_TEST full support"  : : <build>no ] ;
+
+# requirements for dataset feature
+requirements_datasets = [ requires cxx11_decltype cxx11_hdr_random cxx11_hdr_tuple cxx11_hdr_initializer_list cxx11_variadic_macros cxx11_trailing_result_types ] ;
+
+
 #_________________________________________________________________________________________________#
 
-rule boost.test-self-test ( test-rule : test-suite : test-name : usage-variant ? : pattern_file * : source_files * : extra-libs ? : extra-options ? )
+# lib gcov : : <name>gcov : ;
+
+rule boost.test-self-test ( test-rule : test-suite : test-name : usage-variant ? : pattern_file * : source_files * : extra-libs ? : extra-options ? : requirements * )
 {
     source_files ?= $(test-suite)/$(test-name).cpp ;
     usage-variant ?= boost_unit_test_framework/<link>static ;
 
     return [ $(test-rule) $(source_files) ../build//$(usage-variant) $(extra-libs)
-             : #args
+#             gcov
+             : -- "" #args
              : $(pattern_file)
              : # Activating -pedantic finds more gotchas
                # Unfortunately, this warns about the use of "long long" in gcc's own stdlib
                # So deactivate those warnings again
                <toolset>gcc:<cxxflags>-pedantic
                <toolset>gcc:<cxxflags>-Wno-long-long
-               <toolset>gcc:<cxxflags>-std=c++11
+               <toolset>gcc:<cxxflags>-Wno-variadic-macros
                <toolset>clang:<cxxflags>-Wno-c99-extensions
-               <toolset>clang:<cxxflags>-std=c++11
-#               <toolset>clang:<cxxflags>-Wconversion
-#               <toolset>clang:<cxxflags>-Wno-sign-conversion
-#               <toolset>gcc:<cxxflags>-E
-#               <toolset>gcc:<cxxflags>-fno-exceptions
-#               <toolset>gcc:<cxxflags>-DBOOST_NO_EXCEPTION
-#               <toolset>clang:<cxxflags>-fno-exceptions
-#               <toolset>clang:<cxxflags>-DBOOST_NO_EXCEPTION
+               <toolset>clang:<cxxflags>-Wno-variadic-macros
+#               <toolset>gcc:<cxxflags>--coverage
                <warnings>all
                $(extra-options)
+               $(requirements)
              : $(test-name)
            ] ;
 }
@@ -66,7 +77,17 @@ rule docs-example-as-test ( test-file )
     test-file-name = [ path.basename $(test-file) ] ;
     test-name-rule = [ MATCH (.+)\\.(.+)\\.cpp : $(test-file-name) ] ;
 
-    return [ boost.test-self-test $(test-name-rule[2]) : ../doc/examples : doc-$(test-name-rule[1]) : included : : $(test-file) ] ;
+
+    return [ boost.test-self-test $(test-name-rule[2])
+              : ../doc/examples
+              : doc-$(test-name-rule[1])
+              : included
+              :
+              : $(test-file)
+              :
+              :
+              : $(requirements_documentation) # requirements
+            ] ;
 }
 
 #_________________________________________________________________________________________________#
@@ -76,12 +97,10 @@ test-suite "utils-ts"
   [ boost.test-self-test run : utils-ts : algorithm-test ]
   [ boost.test-self-test run : utils-ts : basic_cstring-test ]
   [ boost.test-self-test run : utils-ts : class_properties-test ]
-#  [ boost.test-self-test run : utils-ts : config_file-test ]
-#  [ boost.test-self-test run : utils-ts : config_file_iterator-test ]
-  [ boost.test-self-test run : utils-ts : fixed_mapping-test ]
   [ boost.test-self-test run : utils-ts : foreach-test ]
-  [ boost.test-self-test run : utils-ts : ifstream_line_iterator-test : : inputs/ifstream_line_iterator.tst1
-                                                                          inputs/ifstream_line_iterator.tst2 ]
+  [ boost.test-self-test run : utils-ts : named_params-test ]
+  [ boost.test-self-test run : utils-ts : runtime-param-test : : : : : : [ requires cxx11_auto_declarations cxx11_function_template_default_args cxx11_lambdas cxx11_hdr_initializer_list ] ]
+  [ boost.test-self-test run : utils-ts : string_cast-test ]
   [ boost.test-self-test run : utils-ts : token_iterator-test ]
 ;
 
@@ -113,17 +132,17 @@ test-suite "framework-ts"
 
 test-suite "writing-test-ts"
 :
-  [ boost.test-self-test run : writing-test-ts : assertion-construction-test ]
+  [ boost.test-self-test run : writing-test-ts : assertion-construction-test : : : : : : $(requirements_boost_test_full_support) [ requires cxx11_trailing_result_types cxx11_nullptr ] ]
   [ boost.test-self-test run : writing-test-ts : boost_check_equal-str-test ]
-  [ boost.test-self-test run : writing-test-ts : collection-comparison-test ]
-  [ boost.test-self-test run : writing-test-ts : dont_print_log_value-test ]
-  [ boost.test-self-test run : writing-test-ts : fp-comparisons-test ]
-  [ boost.test-self-test run : writing-test-ts : fp-multiprecision-comparison-test ]
+  [ boost.test-self-test run : writing-test-ts : collection-comparison-test : : : : : : $(requirements_boost_test_full_support)  [ requires cxx11_unified_initialization_syntax ] ] # required by the test content
+  [ boost.test-self-test run : writing-test-ts : dont_print_log_value-test : : : : : : $(requirements_datasets) ]
+  [ boost.test-self-test run : writing-test-ts : fp-comparisons-test : : : : : : $(requirements_boost_test_full_support) ]
+  [ boost.test-self-test run : writing-test-ts : fp-multiprecision-comparison-test : : : : : : $(requirements_boost_test_full_support) ]
   [ boost.test-self-test run : writing-test-ts : output_test_stream-test ]
-  [ boost.test-self-test run : writing-test-ts : test_tools-test : : baseline-outputs/test_tools-test.pattern ]
+  [ boost.test-self-test run : writing-test-ts : test_tools-test : : baseline-outputs/test_tools-test.pattern : : : : $(requirements_boost_test_full_support) ]
   [ boost.test-self-test run : writing-test-ts : windows-headers-test ]
   [ boost.test-self-test run : writing-test-ts : tools-under-debugger-test ]
-  [ boost.test-self-test run : writing-test-ts : tools-debuggable-test ]
+  [ boost.test-self-test run : writing-test-ts : tools-debuggable-test  : : : : : : $(requirements_boost_test_full_support) ]
 ;
 
 #_________________________________________________________________________________________________#
@@ -132,7 +151,7 @@ test-suite "test-organization-ts"
 :
   [ boost.test-self-test run : test-organization-ts : parameterized_test-test ]
   [ boost.test-self-test run : test-organization-ts : test_case_template-test ]
-  [ boost.test-self-test run : test-organization-ts : datasets-test : : : [ glob test-organization-ts/datasets-test/*.cpp ] ]
+  [ boost.test-self-test run : test-organization-ts : datasets-test : : : [ glob test-organization-ts/datasets-test/*.cpp ] : : : $(requirements_datasets) ]
   [ boost.test-self-test run : test-organization-ts : test_unit-order-test ]
   [ boost.test-self-test run : test-organization-ts : test-tree-management-test ]
 ;
@@ -147,7 +166,7 @@ test-suite "multithreading-ts"
 #_________________________________________________________________________________________________#
 
 test-suite "prg_exec_monitor-ts"
-: 
+:
   [ boost.test-self-test run-fail : prg_exec_monitor-ts : result-code-test : boost_prg_exec_monitor/<link>static ]
   [ boost.test-self-test run-fail : prg_exec_monitor-ts : system-exception-test : boost_prg_exec_monitor/<link>static ]
   [ boost.test-self-test run-fail : prg_exec_monitor-ts : uncatched-exception-test : included ]

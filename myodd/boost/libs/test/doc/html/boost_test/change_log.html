@@ -28,12 +28,130 @@
 </h2></div></div></div>
 <h5>
 <a name="boost_test.change_log.h0"></a>
-      <span class="phrase"><a name="boost_test.change_log.boost_test_v3_boost_1_59"></a></span><a class="link" href="change_log.html#boost_test.change_log.boost_test_v3_boost_1_59">Boost.Test
-      v3 / boost 1.59</a>
+      <span class="phrase"><a name="boost_test.change_log.boost_test_v3_1_boost_1_60"></a></span><a class="link" href="change_log.html#boost_test.change_log.boost_test_v3_1_boost_1_60">Boost.Test
+      v3.1 / boost 1.60</a>
     </h5>
 <h6>
 <a name="boost_test.change_log.h1"></a>
       <span class="phrase"><a name="boost_test.change_log.new_major_features"></a></span><a class="link" href="change_log.html#boost_test.change_log.new_major_features">New
+      major features</a>
+    </h6>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          improved API for datasets
+          <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+                it is now possible to use initializer lists
+              </li>
+<li class="listitem">
+                the use of <code class="computeroutput"><span class="identifier">make</span></code> as
+                top left dataset is not necessary anymore
+              </li>
+</ul></div>
+        </li>
+<li class="listitem">
+          improved command line interface
+          <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem">
+                clearer help commands
+              </li>
+<li class="listitem">
+                now proposes closest matching command in case of ambiguity
+              </li>
+<li class="listitem">
+<p class="simpara">
+                reports invalid or ambiguous parameters: this might break existing
+                calls when user defined commands are provided to the test module.
+                The following calling convention should be adopted:
+                <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: square; ">
+<li class="listitem">
+                      if the test module uses user supplied commands, those should
+                      be passed after an empty token <code class="computeroutput"><span class="special">--</span></code>
+                    </li>
+<li class="listitem">
+                      all boost.test related commands should be passed before <code class="computeroutput"><span class="special">--</span></code>, if any
+                    </li>
+</ul></div>
+              </p>
+<p class="simpara">
+                Example: the call
+              </p>
+<pre class="programlisting"><span class="identifier">test_module</span> <span class="special">--</span><span class="identifier">user</span><span class="special">-</span><span class="identifier">arg1</span><span class="special">=</span><span class="identifier">xy</span> <span class="special">--</span><span class="identifier">log_level</span><span class="special">=</span><span class="identifier">test_suite</span>
+</pre>
+<p class="simpara">
+                should be rewritten to
+              </p>
+<pre class="programlisting"><span class="identifier">test_module</span> <span class="special">--</span><span class="identifier">log_level</span><span class="special">=</span><span class="identifier">test_suite</span> <span class="special">--</span> <span class="special">--</span><span class="identifier">user</span><span class="special">-</span><span class="identifier">arg1</span><span class="special">=</span><span class="identifier">xy</span>
+</pre>
+</li>
+</ul></div>
+        </li>
+</ul></div>
+<h6>
+<a name="boost_test.change_log.h2"></a>
+      <span class="phrase"><a name="boost_test.change_log.bugfixes_and_feature_requests"></a></span><a class="link" href="change_log.html#boost_test.change_log.bugfixes_and_feature_requests">Bugfixes
+      and feature requests</a>
+    </h6>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/3384" target="_top">#3384</a> Double-quoted arguments including spaces are divided by Boost.Test.
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/3897" target="_top">#3897</a> Test framework does not include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">osreldate</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code>
+          before testing <code class="computeroutput"><span class="identifier">__FreeBSD_version</span></code>
+          (fixed in 1.59)
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/6032" target="_top">#6032</a> Program options within <code class="computeroutput"><span class="identifier">init_unit_test_suite</span></code>
+          are incorrect when using path and whitespaces
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/6859" target="_top">#6859</a> Boost.Test eats away last empty command line parameter
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/7257" target="_top">#7257</a> Boost.Test alters and does not restore <code class="computeroutput"><span class="identifier">ostream</span></code>
+          precision after any Test macro (fixed in 1.59)
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/9228" target="_top">#9228</a> Patch to make Boost.Test work with RTTI disabled (fixed in 1.59)
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/10317" target="_top">#10317</a> boost::test corrupts contents of <code class="computeroutput"><span class="identifier">argv</span></code>
+          if a paramter contains whitespace
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11279" target="_top">#11279</a> invalid parameters should be reported
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11478" target="_top">#11478</a> Boost Test Exception Assert Failure has poor message
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11571" target="_top">#11571</a> Can't compile <code class="computeroutput"><span class="identifier">BOOST_TEST</span><span class="special">(</span> <span class="special">...,</span> <span class="identifier">per_element</span><span class="special">()</span>
+          <span class="special">)</span></code> comparison of <code class="computeroutput"><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span></code>
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11623" target="_top">#11623</a> Clang rejects some simple <code class="computeroutput"><span class="identifier">BOOST_TEST</span><span class="special">()</span></code> statements
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11624" target="_top">#11624</a> <code class="computeroutput"><span class="identifier">BOOST_TEST</span><span class="special">(</span>
+          <span class="number">0.0</span> <span class="special">==</span>
+          <span class="number">0.0</span> <span class="special">)</span></code>
+          fails under C++11 (GCC and Clang)
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/11625" target="_top">#11625</a> <code class="computeroutput"><span class="identifier">BOOST_TEST</span><span class="special">(</span>
+          <span class="special">...,</span> <span class="identifier">per_element</span><span class="special">()</span> <span class="special">)</span></code> erroneously
+          requires collections are comparable
+        </li>
+</ol></div>
+<h5>
+<a name="boost_test.change_log.h3"></a>
+      <span class="phrase"><a name="boost_test.change_log.boost_test_v3_boost_1_59"></a></span><a class="link" href="change_log.html#boost_test.change_log.boost_test_v3_boost_1_59">Boost.Test
+      v3 / boost 1.59</a>
+    </h5>
+<h6>
+<a name="boost_test.change_log.h4"></a>
+      <span class="phrase"><a name="boost_test.change_log.new_major_features0"></a></span><a class="link" href="change_log.html#boost_test.change_log.new_major_features0">New
       major features</a>
     </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -76,8 +194,8 @@
         </li>
 </ul></div>
 <h6>
-<a name="boost_test.change_log.h2"></a>
-      <span class="phrase"><a name="boost_test.change_log.bugfixes_and_feature_requests"></a></span><a class="link" href="change_log.html#boost_test.change_log.bugfixes_and_feature_requests">Bugfixes
+<a name="boost_test.change_log.h5"></a>
+      <span class="phrase"><a name="boost_test.change_log.bugfixes_and_feature_requests0"></a></span><a class="link" href="change_log.html#boost_test.change_log.bugfixes_and_feature_requests0">Bugfixes
       and feature requests</a>
     </h6>
 <div class="orderedlist"><ol class="orderedlist" type="1">
@@ -359,7 +477,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test team<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2001-2015 Boost.Test contributors<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

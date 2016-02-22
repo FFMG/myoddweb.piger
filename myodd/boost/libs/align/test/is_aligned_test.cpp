@@ -1,6 +1,6 @@
 /*
 (c) 2014 Glen Joseph Fernandes
-glenjofe at gmail dot com
+<glenjofe -at- gmail.com>
 
 Distributed under the Boost Software
 License, Version 1.0.
@@ -13,7 +13,7 @@ http://boost.org/LICENSE_1_0.txt
 template<std::size_t Alignment>
 void test()
 {
-    char s[Alignment + Alignment];
+    char s[Alignment << 1];
     char* b = s;
     while (!boost::alignment::is_aligned(Alignment, b)) {
         b++;
