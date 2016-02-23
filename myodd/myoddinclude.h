@@ -67,19 +67,35 @@
 #endif 
 
 #if _MSC_VER == 1900
-#  if !defined(_DLL)
-#    ifdef _DEBUG
-#      pragma comment(lib, "myoddMT14d.lib" )
-#    else
-#      pragma comment(lib, "myoddMT14.lib" )
-#    endif
-#  else
-#    ifdef _DEBUG
-#       pragma comment(lib, "myodd14d.lib" )
-#     else
-#       pragma comment(lib, "myodd14.lib" )
-#     endif
+# if !defined(_DLL)
+#  ifdef _DEBUG
+#   ifdef _WIN64
+#    pragma comment(lib, "myodd64MT14d.lib" )
+#   else
+#    pragma comment(lib, "myoddMT14d.lib" )
 #   endif
+#  else
+#   ifdef _WIN64
+#    pragma comment(lib, "myodd64MT14.lib" )
+#   else
+#    pragma comment(lib, "myoddMT14.lib" )
+#   endif
+#  endif
+# else
+#  ifdef _DEBUG
+#   ifdef _WIN64
+#    pragma comment(lib, "myodd6414d.lib" )
+#   else
+#    pragma comment(lib, "myodd14d.lib" )
+#   endif
+#  else
+#   ifdef _WIN64
+#    pragma comment(lib, "myodd6414.lib" )
+#   else
+#    pragma comment(lib, "myodd14.lib" )
+#   endif
+#  endif
+# endif
 #else
 #   error "Unknown compilier version defined!"
 #endif

@@ -127,40 +127,40 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)$(PlatformArchitecture)14d</TargetName>
+    <TargetName>$(ProjectName)14d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>$(ProjectName)$(PlatformArchitecture)14d</TargetName>
+    <TargetName>$(ProjectName)14d</TargetName>
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)$(PlatformArchitecture)14</TargetName>
+    <TargetName>$(ProjectName)14</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>$(ProjectName)$(PlatformArchitecture)14</TargetName>
+    <TargetName>$(ProjectName)14</TargetName>
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)$(PlatformArchitecture)MT14d</TargetName>
+    <TargetName>$(ProjectName)MT14d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-    <TargetName>$(ProjectName)$(PlatformArchitecture)MT14d</TargetName>
+    <TargetName>$(ProjectName)MT14d</TargetName>
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>$(ProjectName)$(PlatformArchitecture)MT14</TargetName>
+    <TargetName>$(ProjectName)MT14</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
-    <TargetName>$(ProjectName)$(PlatformArchitecture)MT14</TargetName>
+    <TargetName>$(ProjectName)MT14</TargetName>
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
