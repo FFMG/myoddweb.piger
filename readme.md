@@ -125,3 +125,13 @@ Any arguments given are simply passed.
 Navigate to the root commands folder.
 
     START explorer /e,%appdata%\MyOddWeb\ActionMonitor\RootCommands\
+
+# Debuging
+
+To debug piger you will need a 'debug' action folder, "%appdata%\myoddweb\ActionMonitor_d\RootCommands\"
+
+## Remark
+
+If you are writing your own plugin, note that debug and release versions don't play well together, do be careful when you are trying to mix and match.
+
+As a rule, remove all the actions and just leave your own plugin that you are developing. 
