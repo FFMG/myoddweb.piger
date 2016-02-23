@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{93AF99D9-1217-4A51-BBF5-2794513D4136}</ProjectGuid>
+    <ProjectGuid>{9B97CC3E-1BBC-452F-A8E8-FEAE2653ACA2}</ProjectGuid>
     <RootNamespace>amplugin</RootNamespace>
     <Keyword>MFCDLLProj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>

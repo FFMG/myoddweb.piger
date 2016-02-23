@@ -368,9 +368,8 @@
     <ProjectReference Include="..\..\myodd\myodd64.vcxproj">
       <Project>{0161d190-3859-42d8-b30d-15718aebb5da}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\api\amplugin\amplugin.vcxproj">
-      <Project>{93af99d9-1217-4a51-bbf5-2794513d4136}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\api\amplugin\amplugin64.vcxproj">
+      <Project>{9b97cc3e-1bbc-452f-a8e8-feae2653aca2}</Project>
     </ProjectReference>
     <ProjectReference Include="..\api\lua\lua.vcxproj">
       <Project>{29a050d6-5061-4511-80bb-c59f37ba7804}</Project>
