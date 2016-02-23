@@ -20,10 +20,25 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{2BCE893B-002B-4D34-8880-E05F12B8DF54}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LoaderPlugin", "plugins\LoaderPlugin\LoaderPlugin.vcxproj", "{3727CC9F-BFC4-46C0-818B-01D816E290C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{93AF99D9-1217-4A51-BBF5-2794513D4136} = {93AF99D9-1217-4A51-BBF5-2794513D4136}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dolly", "plugins\Dolly\Dolly.vcxproj", "{563BEEC4-FBEC-4457-BC1F-BC72A70471FF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{93AF99D9-1217-4A51-BBF5-2794513D4136} = {93AF99D9-1217-4A51-BBF5-2794513D4136}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AppPaths", "plugins\AppPaths\AppPaths.vcxproj", "{B5683404-E532-424F-8B05-758799186726}"
+	ProjectSection(ProjectDependencies) = postProject
+		{887C7E24-886C-4584-8CE4-89F45D7BB3D7} = {887C7E24-886C-4584-8CE4-89F45D7BB3D7}
+		{93AF99D9-1217-4A51-BBF5-2794513D4136} = {93AF99D9-1217-4A51-BBF5-2794513D4136}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{402FB2C7-B5B4-4BC3-8570-C6CBB03B698F}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
