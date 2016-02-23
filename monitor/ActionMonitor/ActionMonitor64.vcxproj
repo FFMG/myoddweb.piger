@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7CE5149C-FF54-4BC5-A962-7982CE41D08F}</ProjectGuid>
+    <ProjectGuid>{8F04DF17-B68F-44E6-B306-8E33F3FDFE35}</ProjectGuid>
     <RootNamespace>ActionMonitor</RootNamespace>
     <Keyword>MFCProj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -365,9 +365,8 @@
     <None Include="res\ActionMonitor.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\myodd\myodd.vcxproj">
-      <Project>{887c7e24-886c-4584-8ce4-89f45d7bb3d7}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\..\myodd\myodd64.vcxproj">
+      <Project>{0161d190-3859-42d8-b30d-15718aebb5da}</Project>
     </ProjectReference>
     <ProjectReference Include="..\api\amplugin\amplugin.vcxproj">
       <Project>{93af99d9-1217-4a51-bbf5-2794513d4136}</Project>

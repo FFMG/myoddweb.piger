@@ -952,7 +952,7 @@ void CActionMonitorDlg::ClearUnusedMessages()
       break;
     }
 
-    if( 0 != ::GetWindowLong( *it, GWL_HWNDPARENT) )
+    if( 0 != ::GetWindowLongPtr( *it, GWLP_HWNDPARENT) )
     {
       // no need to go past this one
       break;
@@ -980,7 +980,7 @@ void CActionMonitorDlg::WaitForActiveWindows()
     if( it == m_displayWindows.end() )
       break;
 
-    if( 0 != ::GetWindowLong( *it, GWL_HWNDPARENT) )
+    if( 0 != ::GetWindowLongPtr( *it, GWLP_HWNDPARENT ) )
     {
       // just do one message at a time
       // so we don't block others.
