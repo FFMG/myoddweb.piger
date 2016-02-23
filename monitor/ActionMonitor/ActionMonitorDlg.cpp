@@ -524,7 +524,7 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
 
         //  do the action now
         //  we might not have any, but that's not for us to decides :).
-        aCommand.DoIt( szCommandLine );
+        aCommand.DoIt( szCommandLine, false  );
       }
       catch( ... )
       {

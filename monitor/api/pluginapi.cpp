@@ -144,11 +144,12 @@ int pluginapi::getCommandCount()
  * @see helperapi::execute
  * @param void
  * @param void
+ * @param bool isPrivileged if we need administrator privilege to run this.
  * @return void
  */
-bool pluginapi::execute( LPCWSTR module, LPCWSTR cmdLine)
+bool pluginapi::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
 {
-  return helperapi::execute( module, cmdLine);
+  return helperapi::execute( module, cmdLine, isPrivileged );
 }
 
 /**

@@ -186,12 +186,13 @@ int helperapi::getCommandCount()
  *
  * @param LPCTSTR | NULL the name of the module/dll/exe we are trying to run
  * @param LPCTSTR | NULL the command line arguments we want to run.
+ * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool success or not
  */
-bool helperapi::execute( LPCSTR module, LPCSTR cmdLine)
+bool helperapi::execute( LPCSTR module, LPCSTR cmdLine, bool isPrivileged)
 {
   USES_CONVERSION;
-  return execute( A2T(module), A2T(cmdLine) );
+  return execute( A2T(module), A2T(cmdLine), isPrivileged );
 }
 
 /**
@@ -200,9 +201,10 @@ bool helperapi::execute( LPCSTR module, LPCSTR cmdLine)
  *
  * @param LPCTSTR | NULL the name of the module/dll/exe we are trying to run
  * @param LPCTSTR | NULL the command line arguments we want to run.
+ * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool success or not
  */
-bool helperapi::execute( LPCWSTR module, LPCWSTR cmdLine)
+bool helperapi::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
 {
   if( NULL == module && NULL == cmdLine )
   {
@@ -229,7 +231,7 @@ bool helperapi::execute( LPCWSTR module, LPCWSTR cmdLine)
   }
   
   // Execute the command +  module
-  return Action::Execute( argv );
+  return Action::Execute( argv, isPrivileged );
 }
 
 /**

@@ -13,7 +13,7 @@ typedef double (*PLUGIN_FNCVERSION)( );
 typedef int (*PLUGIN_FNCGETS)( UINT, DWORD, LPTSTR );
 typedef int (*PLUGIN_FNCGET)( DWORD, LPTSTR );
 typedef int (*PLUGIN_FNCGETCOUNT)(  );
-typedef bool (*PLUGIN_FNCEXECUTE)( LPCWSTR, LPCWSTR );
+typedef bool (*PLUGIN_FNCEXECUTE)( LPCWSTR, LPCWSTR, bool );
 typedef bool (*PLUGIN_FNCOMMAND)( LPCWSTR, LPCWSTR );
 typedef bool (*PLUGIN_FINDCOMMAND)( UINT, LPCWSTR, DWORD, LPWSTR );
 
@@ -214,14 +214,14 @@ int amplugin::getCommandCount()
  * @param void
  * @return void
  */
-bool amplugin::execute( LPCWSTR module, LPCWSTR cmdLine)
+bool amplugin::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged)
 {
   void* pFunc = get( _T("execute") );
   if( !pFunc )
   {
     return false;
   }
-  return ((PLUGIN_FNCEXECUTE)(pFunc))( module, cmdLine );
+  return ((PLUGIN_FNCEXECUTE)(pFunc))( module, cmdLine, isPrivileged );
 }
 
 /**

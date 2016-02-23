@@ -77,9 +77,9 @@ int luaapi::execute (lua_State *lua)
   // the first argument is the name of the module
   // and the second is the arguments.
   int n = lua_gettop( lua );
-  if( n < 1 || n > 2 )
+  if( n < 1 || n > 3 )
   {
-    helperapi::say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine])</i>"), 3000, 5 );
+    helperapi::say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
@@ -88,7 +88,21 @@ int luaapi::execute (lua_State *lua)
 
   LPCTSTR module  = T_A2T( lua_tostring (lua, 1) );
   LPCTSTR cmdLine = T_A2T( lua_tostring (lua, 2) );
-  bool result = helperapi::execute( module, cmdLine );
+
+  bool isPrivileged = false;
+  if (n == 3)
+  {
+    if (!lua_isboolean(lua, 3))
+    {
+      helperapi::say(_T("<b>Error : </b> The third argument, (privileged), can only be true|false"), 3000, 5);
+      lua_pushboolean(lua, false);
+      return 1;
+    }
+    isPrivileged = (lua_toboolean(lua, 3 ) == 1);
+  }
+
+  // run the query
+  bool result = helperapi::execute(module, cmdLine, isPrivileged );
 
   // push the result.
   lua_pushboolean ( lua, result );

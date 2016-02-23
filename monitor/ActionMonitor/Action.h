@@ -33,11 +33,11 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  bool DoIt( STD_TSTRING szCommandLine );
+  bool DoIt( STD_TSTRING szCommandLine, bool isPrivileged);
 
   // Same as DoIt( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  bool DoItDirect( LPCTSTR szArgs ) const;
+  bool DoItDirect( LPCTSTR szArgs, bool isPrivileged ) const;
 
   //  convert to a LPCTSTR
   LPCTSTR toChar() const;
@@ -62,7 +62,7 @@ protected:
   Clipboard m_clipBoard;
   
 public:
-  static bool Execute( const std::vector<STD_TSTRING>& argv );
+  static bool Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged );
 
 private:  
   STD_TSTRING m_szCommand;  //  the command line only.

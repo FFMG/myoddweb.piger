@@ -26,7 +26,7 @@ public:
   static int getCommandCount();
 
   static bool say         ( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
-  static bool execute     ( LPCWSTR module, LPCWSTR cmdLine);
+  static bool execute     ( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
   static int getString    ( DWORD nBufferLength, LPWSTR lpBuffer);
   static int getCommand   ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
   static int getAction    ( DWORD nBufferLength, LPWSTR lpBuffer );

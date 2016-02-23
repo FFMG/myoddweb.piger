@@ -32,7 +32,7 @@ public:
 
   // get the number of parameters passed.
   int getCommandCount();
-  bool execute( LPCWSTR module, LPCWSTR cmdLine);
+  bool execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
   int getString ( DWORD nBufferLength, LPWSTR lpBuffer );
   int getFile   ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
   int getFolder ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);

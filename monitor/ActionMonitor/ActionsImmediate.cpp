@@ -39,16 +39,17 @@ void ActionsImmediate::Init()
   {
     ParseDirectory( sPath.c_str(), m_subDir.c_str() );
   }
+
   //  we must now do all the actions
-  DoThem();
+  DoThem( false );
 }
 
 /**
  * todo
- * @param void
+ * @param bool isPrivileged if we need administrator privilege to run this.
  * @return void
  */
-void ActionsImmediate::DoThem()
+void ActionsImmediate::DoThem(  bool isPrivileged )
 {
   for( array_of_actions::iterator it = m_Actions.begin(); it != m_Actions.end(); ++it )
   {
@@ -70,7 +71,7 @@ void ActionsImmediate::DoThem()
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'DoIt(...)' function
       // and go directly to 'Launch(...)'
-      action.DoItDirect( _T( "" ) );
+      action.DoItDirect( _T( "" ), isPrivileged );
     }
     catch( ... )
     {

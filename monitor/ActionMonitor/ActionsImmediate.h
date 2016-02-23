@@ -18,5 +18,5 @@ protected:
 
 protected:
   STD_TSTRING m_subDir;
-  void DoThem();
+  void DoThem(bool isPrivileged);
 };

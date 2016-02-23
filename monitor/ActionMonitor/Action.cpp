@@ -121,10 +121,11 @@ void Action::SetCommandPath( LPCTSTR szPath )
 /**
  * Run the command, we take into account the current selection and command parameters given.
  *
- * @param void
+ * @param STD_TSTRING
+ * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-bool Action::DoIt( STD_TSTRING szCommandLine )
+bool Action::DoIt( STD_TSTRING szCommandLine, bool isPrivileged)
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
@@ -199,7 +200,7 @@ bool Action::DoIt( STD_TSTRING szCommandLine )
     }
 
     //  so now, at last we can call the command line
-    bool bResult = DoItDirect( szCommandLine.c_str() );
+    bool bResult = DoItDirect( szCommandLine.c_str(), isPrivileged);
 
     // now that we are back from calling the plugin, restore the keyboard state.
     hook_RejectKeyboad( bThen );
@@ -261,9 +262,10 @@ LPCTSTR Action::toChar() const
  * Execute a file.
  * We will expend all the environment variables as needed.
  * @param const std::vector<STD_TSTRING> [0] the file path, [1] the arguments to launch with, (optional).
+ * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool true|false success or not.
  */
-bool Action::Execute( const std::vector<STD_TSTRING>& argv )
+bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
 {
   // get the number of arguments.
   int argc = argv.size();
@@ -302,15 +304,28 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv )
   //
   // ShellExec
   //
-
-  //  launch as a normal file.
-  HINSTANCE hHinstance = 
-  ShellExecute( GetDesktopWindow(), 
-                _T("open"), 
-                argvModule, 
-                argvCmd, 
-                _T(""),   
-                SW_SHOW);
+  HINSTANCE hHinstance = NULL;
+  if (isPrivileged == true && !myodd::wnd::IsElevated() )
+  {
+    hHinstance = ShellExecute( NULL,
+                               _T("runas"),  //  elevate
+                               argvModule,
+                               argvCmd,
+                               _T(""),
+                               SW_SHOW
+                              );
+  }
+  else
+  {
+    //  launch as a normal file.
+    hHinstance = ShellExecute( GetDesktopWindow(), 
+                               _T("open"), 
+                               argvModule, 
+                               argvCmd, 
+                               _T(""),   
+                               SW_SHOW
+                              );
+  }
 
   if( (int)hHinstance > 32 )
   {
@@ -331,11 +346,11 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv )
 /**
  * Launch a single action with all the command line arguments.
  * TODO : The API calls ignore the values been passed to them, so we should first check that we have all the values.
- *
  * @param LPCTSTR the command and the arguments we are launching this file with.
+ * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL TRUE|FALSE success or not.
  */
-bool Action::DoItDirect( LPCTSTR szArgs ) const
+bool Action::DoItDirect( LPCTSTR szArgs, bool isPrivileged) const
 {
   // sanity check
   if( 0 == m_szFile.length() )
@@ -385,7 +400,7 @@ bool Action::DoItDirect( LPCTSTR szArgs ) const
   std::vector<STD_TSTRING> argv;
   argv.push_back( cmdLine );
   argv.push_back( szArgs );
-  bool bResult = Action::Execute( argv );
+  bool bResult = Action::Execute( argv, isPrivileged);
 
   return bResult;
 }

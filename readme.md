@@ -39,6 +39,10 @@ As with the above, actions listed in that folder are called when piger closes.
 
 This allows for cleanup for example.
 
+#### __plugins
+
+This special folders allows your plugin to save whatever they want to, (and it will not be deleted), for example you could save configuration data.
+
 #### __temp
 
 This is a special folder that is **not** parsed.
@@ -54,7 +58,7 @@ You can put your own files, code etc in that folder.
 - am_getCommand( idx ), get a typed command, if the user selects something like "*google world*", then command #0 is "google" and command #1 is "world".
 - am_getAction, get the selected action.
 - am_getCommandCount, get the number of commands including the action.
-- am_execute, execute a certain app/event/batch file.
+- am_execute, execute a certain app/event/batch file. You can also ask for elevated permission, (if piger is not running elevated).
 - am_getstring, get a string that the user might have selected at the time of calling the action.
 - am_getfile, get a file that the user might have selected at the time of calling the action.
 - am_getfolder, get a folder that the user might have selected at the time of calling the action.
@@ -88,10 +92,10 @@ Launch the explorer and navigate to the Google site, if one or more words are hi
 	  word = am_getstring();
 	  if false == word then
 	    am_say( "Starting Google.", 400, 10 );
-	    am_execute( browser, "http://www.google.com/" );
+	    am_execute( browser, "http://www.google.com/", false );
 	  else
 	    am_say( "Starting Google for : " .. word , 400, 10 );
-	    am_execute( browser, "http://www.google.com/search?hl=en&q=" .. word );
+	    am_execute( browser, "http://www.google.com/search?hl=en&q=" .. word, false );
 	  end
 	else
 	  query = ""
@@ -109,12 +113,12 @@ Launch the explorer and navigate to the Google site, if one or more words are hi
 	  end
 	
 	  am_say( "Searching Google for: " .. prettyQuery, 400, 10 );
-	  am_execute( browser, "http://www.google.com/search?hl=en&q=" .. query );
+	  am_execute( browser, "http://www.google.com/search?hl=en&q=" .. query, false );
 	end
 
 ## Batch files
 
-Windows batch files are just executed, they have no access to any of the plugins funtions.
+Windows batch files are just executed, they have no access to any of the plugins functions.
 
 Any arguments given are simply passed.
 

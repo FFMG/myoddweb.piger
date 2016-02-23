@@ -242,4 +242,5 @@ _Pvt_Extensions
 /plugins/am_plugins.h
 /plugins/amplugin.h
 /plugins/amplugind.lib
+/plugins/amplugin.lib
 /Output/

@@ -28,8 +28,8 @@ public:
   static int getCommandCount();
 
   // execute a module and a command line
-  static bool execute( LPCWSTR module, LPCTSTR cmdLine);
-  static bool execute( LPCSTR module, LPCSTR cmdLine);
+  static bool execute( LPCWSTR module, LPCTSTR cmdLine, bool isPrivileged);
+  static bool execute( LPCSTR module, LPCSTR cmdLine, bool isPrivileged);
 
   // get the currently selected text, or false if none.
   static bool getString (STD_TSTRING& sValue );
