@@ -8,9 +8,17 @@ static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 
 // add the LUA libs
 #ifdef _DEBUG
-  #pragma comment(lib, "../plugins/amplugind.lib" )
+# ifdef _WIN64
+#   pragma comment(lib, "../plugins/amplugin64d.lib" )
 #else
-  #pragma comment(lib, "../plugins/amplugin.lib" )
+#   pragma comment(lib, "../plugins/amplugind.lib" )
+# endif
+#else
+# ifdef _WIN64
+#   pragma comment(lib, "../plugins/amplugin64.lib" )
+# else
+#   pragma comment(lib, "../plugins/amplugin.lib" )
+# endif
 #endif
 
 class pluginapi
