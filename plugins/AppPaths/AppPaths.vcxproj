@@ -79,6 +79,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.amp</TargetExt>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
@@ -89,6 +91,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.amp</TargetExt>
+    <OutDir>$(SolutionDir)Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Output\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -111,7 +115,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName).amp</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -119,7 +123,7 @@
       <ImageHasSafeExceptionHandlers />
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
+      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor_d\RootCommands\__in\AppPaths.amp" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -142,7 +146,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName).amp</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -150,7 +154,7 @@
       </ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
+      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor_d\RootCommands\__in\AppPaths.amp" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -174,7 +178,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName).amp</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -184,7 +188,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)Output\RootCommands\__in\ /Y 
-xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
+xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\AppPaths.amp" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -208,7 +212,7 @@ xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\R
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)$(ProjectName).amp</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -217,7 +221,7 @@ xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\R
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)Output\RootCommands\__in\ /Y 
-xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
+xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\AppPaths.amp" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

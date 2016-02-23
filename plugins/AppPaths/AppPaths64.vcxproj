@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FFF8994D-0BF3-4D3D-B9A3-4FBC97B52C48}</ProjectGuid>
-    <RootNamespace>Dolly</RootNamespace>
+    <ProjectGuid>{9606E42D-13B5-4A98-BDD6-7E5DF8171945}</ProjectGuid>
+    <RootNamespace>AppPaths</RootNamespace>
     <Keyword>MFCDLLProj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -108,7 +108,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -117,14 +116,14 @@
     </ResourceCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ModuleDefinitionFile>.\Dolly.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers />
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor_d\RootCommands\__in\Dolly.amp" /Y </Command>
+      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -139,8 +138,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -149,14 +147,14 @@
     </ResourceCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ModuleDefinitionFile>.\Dolly.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor_d\RootCommands\__in\Dolly.amp" /Y </Command>
+      <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -173,7 +171,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -182,7 +179,7 @@
     </ResourceCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ModuleDefinitionFile>.\Dolly.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -191,7 +188,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)Output\RootCommands\__in\ /Y 
-xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp" /Y </Command>
+xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -208,7 +205,6 @@ xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\R
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -217,7 +213,7 @@ xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\R
     </ResourceCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <ModuleDefinitionFile>.\Dolly.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>.\AppPaths.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -225,11 +221,11 @@ xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\R
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)Output\RootCommands\__in\ /Y 
-xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp" /Y </Command>
+xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Dolly.cpp" />
+    <ClCompile Include="AppPaths.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -238,17 +234,17 @@ xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\R
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dolly.def" />
-    <None Include="res\Dolly.rc2" />
+    <None Include="AppPaths.def" />
+    <None Include="res\AppPaths.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dolly.h" />
+    <ClInclude Include="AppPaths.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Dolly.rc" />
+    <ResourceCompile Include="AppPaths.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
