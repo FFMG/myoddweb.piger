@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5173B5B4-A838-44C3-9CC3-5172504CF9AE}</ProjectGuid>
+    <ProjectGuid>{FFD7C5CB-0CB2-4550-8CEF-DEE9AAAD388A}</ProjectGuid>
     <RootNamespace>hook</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>

@@ -16,7 +16,11 @@
 #include "targetver.h"
 
 // and the hook lib
-#pragma comment(lib, "hook.lib" )
+#ifdef _WIN64
+# pragma comment(lib, "hook64.lib" )
+#else
+# pragma comment(lib, "hook.lib" )
+#endif
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
 
