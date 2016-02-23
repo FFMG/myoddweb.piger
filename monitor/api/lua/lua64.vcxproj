@@ -84,7 +84,7 @@
     <ClCompile Include="src\lzio.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{29A050D6-5061-4511-80BB-C59F37BA7804}</ProjectGuid>
+    <ProjectGuid>{460C4FCF-0BAA-4E9B-90C3-E7DC57E75FA6}</ProjectGuid>
     <RootNamespace>lua</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>

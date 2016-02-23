@@ -371,9 +371,8 @@
     <ProjectReference Include="..\api\amplugin\amplugin64.vcxproj">
       <Project>{9b97cc3e-1bbc-452f-a8e8-feae2653aca2}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\api\lua\lua.vcxproj">
-      <Project>{29a050d6-5061-4511-80bb-c59f37ba7804}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\api\lua\lua64.vcxproj">
+      <Project>{460c4fcf-0baa-4e9b-90c3-e7dc57e75fa6}</Project>
     </ProjectReference>
     <ProjectReference Include="..\hook\hook64.vcxproj">
       <Project>{ffd7c5cb-0cb2-4550-8cef-dee9aaad388a}</Project>

@@ -12,7 +12,11 @@ extern "C"
 }
 
 // add the LUA libs
-#pragma comment(lib, "lua.lib" )
+#ifdef _WIN64
+# pragma comment(lib, "lua64.lib" )
+#else
+# pragma comment(lib, "lua.lib" )
+#endif
 
 class luaapi
 {
