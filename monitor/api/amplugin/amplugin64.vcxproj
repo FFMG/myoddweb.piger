@@ -222,12 +222,6 @@ xcopy $(ProjectDir)am_plugins.h $(SolutionDir)\plugins\ /Y
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\myodd\myodd.vcxproj">
-      <Project>{887c7e24-886c-4584-8ce4-89f45d7bb3d7}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
