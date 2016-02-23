@@ -52,6 +52,9 @@ namespace myodd{ namespace wnd{
 
   void GetNearestMonitorRect( HWND hwndParent, RECT& rect );
 
+  // check if the current process is elevated or not.
+  BOOL IsElevated();
+
   // -- kill an app.
   DWORD WINAPI TerminateApp( DWORD dwPID, DWORD dwTimeout ) ;
 } //  wnd
