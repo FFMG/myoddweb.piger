@@ -35,7 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{887C7E24-886C-4584-8CE4-89F45D7BB3D7}</ProjectGuid>
+    <ProjectGuid>{0161D190-3859-42D8-B30D-15718AEBB5DA}</ProjectGuid>
     <RootNamespace>myodd</RootNamespace>
     <Keyword>MFCDLLProj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
