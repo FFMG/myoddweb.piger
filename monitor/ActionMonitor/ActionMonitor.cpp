@@ -96,6 +96,10 @@ bool CActionMonitorApp::CanStartApp()
   return true;
 }
 
+/**
+ * If needed we restart ourselves and run as administrator.
+ * @return none
+ */
 void CActionMonitorApp::SelfElavate()
 {
 #ifdef _DEBUG
@@ -119,7 +123,7 @@ void CActionMonitorApp::SelfElavate()
 
   // Launch itself as admin
   SHELLEXECUTEINFO sei = { sizeof(sei) };
-  sei.lpVerb = L"runas";
+  sei.lpVerb = _T("runas");
   sei.lpFile = szPath;
   sei.hwnd = NULL;
   sei.nShow = SW_NORMAL;
