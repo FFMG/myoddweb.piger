@@ -215,19 +215,20 @@ BOOL Clipboard::GetURL( STD_TSTRING& sText, UINT idx ) const
  */
 Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
 {
-  CLIPBOARD_FORMAT *cf = NULL;
   if (!IsClipboardFormatAvailable(format)) 
   {
-    return cf;
+    return NULL;
   }
   
   // Get the handle of the Global memory that contains the text
   HGLOBAL hData = GetClipboardData(format); 
   if (hData == NULL) 
   {
-    return cf;
+    return NULL;
   }
-  
+
+  CLIPBOARD_FORMAT *cf = NULL;
+
   // Get the size of the data
   SIZE_T DataSize = GlobalSize(hData);
   BYTE* lptstr = (BYTE*)GlobalLock(hData); 
