@@ -57,6 +57,9 @@ public:
   // check Mutext and so on
   bool CanStartApp();
 
+  // self elevate us to admin.
+  void SelfElavate();
+
   // the handle of the mutex
   HANDLE m_hMutex; 
 };

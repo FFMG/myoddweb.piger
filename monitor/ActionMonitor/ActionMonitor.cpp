@@ -96,6 +96,48 @@ bool CActionMonitorApp::CanStartApp()
   return true;
 }
 
+void CActionMonitorApp::SelfElavate()
+{
+#ifdef _DEBUG
+  // if we are in debug we cannot elevate ourselve.
+  // otherwise we will never be able to debug...
+  return;
+#endif
+
+  if (myodd::os::IsElevated())
+  {
+    //  already elevated.
+    return;
+  }
+
+  TCHAR szPath[MAX_PATH];
+  if (0 == GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath)))
+  {
+    //  could not get our own path!
+    return;
+  }
+
+  // Launch itself as admin
+  SHELLEXECUTEINFO sei = { sizeof(sei) };
+  sei.lpVerb = L"runas";
+  sei.lpFile = szPath;
+  sei.hwnd = NULL;
+  sei.nShow = SW_NORMAL;
+  if (!ShellExecuteEx(&sei))
+  {
+    DWORD dwError = GetLastError();
+    if (dwError == ERROR_CANCELLED)
+    {
+      // The user refused to allow privileges elevation.
+      // continue unelevated.
+    }
+  }
+  else
+  {
+    _exit(1);  // Quit itself
+  }
+}
+
 /**
  * todo
  * @param void
@@ -103,6 +145,9 @@ bool CActionMonitorApp::CanStartApp()
  */
 BOOL CActionMonitorApp::InitInstance()
 {
+  // elevate ourselves to admin if need be.
+  SelfElavate();
+
   // can we start running now?
   // if not then there is a problem.
   if( !CanStartApp( ) )
