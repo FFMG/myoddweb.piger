@@ -1913,7 +1913,7 @@ FileEncode DetermineEncoding( LPCTSTR file, int* npSkip )
 
   static const unsigned int blockSize = 5;
   BYTE b[ blockSize ];
-  int nLen = fread( &b, sizeof(BYTE), blockSize, fp );
+  size_t nLen = fread( &b, sizeof(BYTE), blockSize, fp );
   
   FileEncode encoding = uni8Bit;
   int nSkip = 0;
@@ -1942,12 +1942,12 @@ FileEncode DetermineEncoding( LPCTSTR file, int* npSkip )
     encoding = uniUTF8;
     nSkip = 3;
   }
-  else if (nLen >= 2 && b[0] != NULL && b[1] == NULL && IsTextUnicode(b, nLen, NULL))
+  else if (nLen >= 2 && b[0] != NULL && b[1] == NULL && IsTextUnicode(b, (int)nLen, NULL))
   {
     encoding = uni16LE_NoBOM;
     nSkip = 0;
   }
-  else if (nLen >= 2 && IsTextUnicode(b, nLen, NULL))
+  else if (nLen >= 2 && IsTextUnicode(b, (int)nLen, NULL))
   {
     encoding = uniUTF8NoBOM;
     nSkip = 0;

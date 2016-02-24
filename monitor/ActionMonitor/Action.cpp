@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "ActionMonitor.h"
 
+#include "os\os.h"
+
 #ifdef _DEBUG
 #   define new DEBUG_NEW
 #endif
@@ -228,7 +230,7 @@ STD_TSTRING Action::toSingleLine( LPCTSTR sText ) const
   }
 
   LPCTSTR pdest = _tcschr( sText, '\n' );
-  int  result;
+  size_t  result;
 
   STD_TSTRING ret( sText );
   if( pdest != NULL )
@@ -268,7 +270,7 @@ LPCTSTR Action::toChar() const
 bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
 {
   // get the number of arguments.
-  int argc = argv.size();
+  size_t argc = argv.size();
 
   // sanity check
   if( argc < 1 || argc > 2 )
@@ -305,7 +307,7 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
   // ShellExec
   //
   HINSTANCE hHinstance = NULL;
-  if (isPrivileged == true && !myodd::wnd::IsElevated() )
+  if (isPrivileged == true && !myodd::os::IsElevated() )
   {
     hHinstance = ShellExecute( NULL,
                                _T("runas"),  //  elevate
@@ -327,7 +329,7 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
                               );
   }
 
-  if( (int)hHinstance > 32 )
+  if( hHinstance > (HINSTANCE)32 )
   {
     result = true;
   }
