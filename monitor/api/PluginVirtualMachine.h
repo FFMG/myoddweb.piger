@@ -2,6 +2,7 @@
 
 #include "pluginapi.h"
 #include <map>
+#include "os/os.h"
 
 class PluginVirtualMachine
 {
@@ -23,6 +24,9 @@ protected:
 
 protected:
   int InitFile( LPCTSTR pluginFile );
+
+  // our own architecture.
+  myodd::os::ARCHITECTURE _moduleArchitecture;
 
 protected:
   // the plugin functions.

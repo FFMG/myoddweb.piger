@@ -27,7 +27,9 @@ PluginVirtualMachine& GetPluginVirtualMachine()
  * @return void
  */
 PluginVirtualMachine::PluginVirtualMachine(void) : m_amPlugin( NULL )
-{ 
+{
+  //  get our own module architecture.
+  _moduleArchitecture = myodd::os::GetImageArchitecture( NULL );
 }
 
 /**
@@ -178,7 +180,21 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
   HMODULE hModule = ExpandLoadLibrary( pluginFile );
   if( NULL == hModule )
   {
-    helperapi::say( _T("<b>Error : </b> Plugin could not be loaded."), 3000, 5 );
+    myodd::os::ARCHITECTURE pe = myodd::os::GetImageArchitecture(pluginFile);
+    if (pe == myodd::os::ARCHITECTURE_UNKNOWN)
+    {
+      helperapi::say(_T("<b>Error : </b> Plugin could not be loaded."), 3000, 5);
+    }
+    else
+    if (pe != _moduleArchitecture )
+    {
+      helperapi::say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 3000, 5);
+    }
+    else
+    {
+      //  it is not unknown, but somehow we could not load it.
+      helperapi::say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 3000, 5);
+    }
     return -1;
   }
 
