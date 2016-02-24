@@ -1,13 +1,5 @@
 #include "stdafx.h"
 
-#ifdef __AFXWIN_H__
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif // _DEBUG
-#endif // __AFXWIN_H__
-
 #pragma comment(lib, "wininet.lib" )
 
 #include "network.h"
@@ -253,5 +245,5 @@ namespace myodd{ namespace net{
     WSACleanup( );
     return true;
   }
-} //  wnd
+} //  network
 } //  myodd
