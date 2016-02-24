@@ -72,6 +72,9 @@
     <Filter Include="boost\boost.regex">
       <UniqueIdentifier>{41cfb6e2-dcac-4921-8ec3-17d94adeaa73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="os">
+      <UniqueIdentifier>{1f0f441e-0f5d-46e1-abc1-bbb86cb6ce98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="myodd.cpp">
@@ -251,6 +254,9 @@
     <ClCompile Include="string\string.cpp">
       <Filter>string</Filter>
     </ClCompile>
+    <ClCompile Include="os\os.cpp">
+      <Filter>os</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -377,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="stree\stree.h">
       <Filter>stree</Filter>
+    </ClInclude>
+    <ClInclude Include="os\os.h">
+      <Filter>os</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

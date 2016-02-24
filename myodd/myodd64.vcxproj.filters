@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="boost\libs\program_options\src\cmdline.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\config_file.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\convert.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\options_description.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\parsers.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\positional_options.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\utf8_codecvt_facet.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\value_semantic.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\variables_map.cpp" />
+    <ClCompile Include="boost\libs\program_options\src\winmain.cpp" />
+    <ClCompile Include="boost\libs\regex\src\cpp_regex_traits.cpp" />
+    <ClCompile Include="boost\libs\regex\src\cregex.cpp" />
+    <ClCompile Include="boost\libs\regex\src\c_regex_traits.cpp" />
+    <ClCompile Include="boost\libs\regex\src\fileiter.cpp" />
+    <ClCompile Include="boost\libs\regex\src\icu.cpp" />
+    <ClCompile Include="boost\libs\regex\src\instances.cpp" />
+    <ClCompile Include="boost\libs\regex\src\posix_api.cpp" />
+    <ClCompile Include="boost\libs\regex\src\regex.cpp" />
+    <ClCompile Include="boost\libs\regex\src\regex_debug.cpp" />
+    <ClCompile Include="boost\libs\regex\src\regex_raw_buffer.cpp" />
+    <ClCompile Include="boost\libs\regex\src\regex_traits_defaults.cpp" />
+    <ClCompile Include="boost\libs\regex\src\static_mutex.cpp" />
+    <ClCompile Include="boost\libs\regex\src\usinstances.cpp" />
+    <ClCompile Include="boost\libs\regex\src\w32_regex_traits.cpp" />
+    <ClCompile Include="boost\libs\regex\src\wc_regex_traits.cpp" />
+    <ClCompile Include="boost\libs\regex\src\wide_posix_api.cpp" />
+    <ClCompile Include="boost\libs\regex\src\winstances.cpp" />
+    <ClCompile Include="common\program_options.cpp" />
+    <ClCompile Include="config\Config.cpp" />
+    <ClCompile Include="config\ConfigBase.cpp" />
+    <ClCompile Include="config\ConfigObject.cpp" />
+    <ClCompile Include="files\files.cpp" />
+    <ClCompile Include="geo\geo.cpp" />
+    <ClCompile Include="html\html.cpp" />
+    <ClCompile Include="html\Parser.cpp" />
+    <ClCompile Include="html\Token.cpp" />
+    <ClCompile Include="html\TokenBold.cpp" />
+    <ClCompile Include="html\TokenBr.cpp" />
+    <ClCompile Include="html\TokenItalic.cpp" />
+    <ClCompile Include="html\Tokens.cpp" />
+    <ClCompile Include="html\TokenStrikeout.cpp" />
+    <ClCompile Include="html\TokenUnderline.cpp" />
+    <ClCompile Include="log\log.cpp" />
+    <ClCompile Include="log\logfile.cpp" />
+    <ClCompile Include="math\math.cpp" />
+    <ClCompile Include="myodd.cpp" />
+    <ClCompile Include="network\network.cpp" />
+    <ClCompile Include="offsets\offset.cpp" />
+    <ClCompile Include="registry\registry.cpp" />
+    <ClCompile Include="sqlite\shell.c" />
+    <ClCompile Include="sqlite\sqlite.cpp" />
+    <ClCompile Include="sqlite\sqlite3.c" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="string\string.cpp" />
+    <ClCompile Include="threads\threads.cpp" />
+    <ClCompile Include="wnd\wnd.cpp" />
+    <ClCompile Include="xml\tinyxml.cpp" />
+    <ClCompile Include="xml\tinyxmlerror.cpp" />
+    <ClCompile Include="xml\tinyxmlparser.cpp" />
+    <ClCompile Include="os\os.cpp">
+      <Filter>os</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\includes.h" />
+    <ClInclude Include="common\program_options.h" />
+    <ClInclude Include="config\Config.h" />
+    <ClInclude Include="config\ConfigBase.h" />
+    <ClInclude Include="config\ConfigData.h" />
+    <ClInclude Include="config\ConfigObject.h" />
+    <ClInclude Include="containers\idx_map.h" />
+    <ClInclude Include="containers\Matrix2D.h" />
+    <ClInclude Include="files\files.h" />
+    <ClInclude Include="geo\geo.h" />
+    <ClInclude Include="html\html.h" />
+    <ClInclude Include="html\Parser.h" />
+    <ClInclude Include="html\Token.h" />
+    <ClInclude Include="html\TokenBold.h" />
+    <ClInclude Include="html\TokenBr.h" />
+    <ClInclude Include="html\TokenItalic.h" />
+    <ClInclude Include="html\Tokens.h" />
+    <ClInclude Include="html\TokenStrikeout.h" />
+    <ClInclude Include="html\TokenUnderline.h" />
+    <ClInclude Include="log\log.h" />
+    <ClInclude Include="log\logfile.h" />
+    <ClInclude Include="math\math.h" />
+    <ClInclude Include="myodd.h" />
+    <ClInclude Include="network\network.h" />
+    <ClInclude Include="notif\notif.h" />
+    <ClInclude Include="offsets\offset.h" />
+    <ClInclude Include="registry\registry.h" />
+    <ClInclude Include="sqlite\sqlite.h" />
+    <ClInclude Include="sqlite\sqlite3.h" />
+    <ClInclude Include="sqlite\sqlite3ext.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stree\smap.h" />
+    <ClInclude Include="stree\sset.h" />
+    <ClInclude Include="stree\stree.h" />
+    <ClInclude Include="string\string.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="threads\threads.h" />
+    <ClInclude Include="wnd\wnd.h" />
+    <ClInclude Include="xml\tinyxml.h" />
+    <ClInclude Include="os\os.h">
+      <Filter>os</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="myodd.def" />
+    <None Include="sqlite\sqlite3.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="os">
+      <UniqueIdentifier>{3ee5d2a8-efb8-47da-81ce-bbcfa7697379}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
