@@ -138,4 +138,20 @@ To debug piger you will need a 'debug' action folder, "%appdata%\myoddweb\Action
 
 If you are writing your own plugin, note that debug and release versions don't play well together, do be careful when you are trying to mix and match.
 
-As a rule, remove all the actions and just leave your own plugin that you are developing. 
+As a rule, remove all the actions and just leave your own plugin that you are developing.
+
+## FAQ
+
+### How to debug
+
+Use the '*%appdata%\myoddweb\ActionMonitor_d\RootCommands\__in*' folder to debug your plugin.
+
+- Stop piger
+- Start the debuger
+- Remove all plugins from '*%appdata%\myoddweb\ActionMonitor_d\RootCommands\__in*'
+- Make sure that you select the correct platform, x86 or x64, that you want to debug.
+- Make sure that your compiler copies the file automatically to the __in folder.
+
+### Plugin is not loading
+
+If you get an error loading a plugin, **it is almost certainly** because your plugin was build in x86 and you are trying to debug it with an x64 plugin. 
