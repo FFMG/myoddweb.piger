@@ -155,3 +155,11 @@ Use the '*%appdata%\myoddweb\ActionMonitor_d\RootCommands\__in*' folder to debug
 ### Plugin is not loading
 
 If you get an error loading a plugin, **it is almost certainly** because your plugin was build in x86 and you are trying to debug it with an x64 plugin. 
+
+### Keyboard shortcut is not always picked up.
+
+This happens when you are not debuging in 'Elevated mode', basically you need to debug as an admin.
+
+If you are using visual studio, simply restart the IDE, but be sure to run as Admin. That will launch the app as admin as well.
+
+**NB**: In release mode, the app auto-elevates itself.
