@@ -116,7 +116,7 @@ int GetInt( HWND hwndParent, WORD id, int iDefault/*=0*/ )
 
   // get the text
   STD_TSTRING s = GetText( hwndParent, id );
-  int length = s.length();
+  size_t length = s.length();
   if( length == 0 )
   {
     return iDefault;
@@ -151,7 +151,7 @@ long GetLong( HWND hwndParent, WORD id, long lDefault/*=0*/ )
 
   // get the text
   STD_TSTRING s = GetText( hwndParent, id );
-  int length = s.length();
+  size_t length = s.length();
   if( length == 0 )
   {
     return lDefault;
@@ -186,7 +186,7 @@ double GetDouble( HWND hwndParent, WORD id, double dDefault/*=0*/ )
 
   // get the text
   STD_TSTRING s = GetText( hwndParent, id );
-  int length = s.length();
+  size_t length = s.length();
   if( length == 0 )
   {
     return dDefault;

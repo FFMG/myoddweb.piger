@@ -84,7 +84,7 @@ bool tableExists
 
   // create the select that we will call.
   static const TCHAR* pszSelect = _T("SELECT name FROM sqlite_master WHERE type='table' and name='%s';");
-  int nLen = (_tcslen( pszSelect ) + _tcslen( table_name )) * sizeof(TCHAR);
+  size_t nLen = (_tcslen( pszSelect ) + _tcslen( table_name )) * sizeof(TCHAR);
   TCHAR* pszSelectFull = new TCHAR[ nLen+ sizeof(TCHAR)];
   _stprintf_s( pszSelectFull, nLen, pszSelect, table_name );
 

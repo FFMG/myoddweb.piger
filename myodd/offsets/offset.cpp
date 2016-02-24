@@ -23,7 +23,7 @@ namespace myodd{ namespace offset{
   ( 
     const TCHAR* fileName, 
     BYTE*& pData, 
-    unsigned long& ulOffset 
+    size_t& ulOffset
   )
   {
     long bufferLen = 0;
@@ -76,9 +76,9 @@ namespace myodd{ namespace offset{
   void write
   ( 
     const void* item, 
-    unsigned long unItemSize, 
+    size_t unItemSize,
     BYTE*& pData, 
-    unsigned long& ulOffset 
+    size_t& ulOffset
   )
   {
     if( unItemSize == 0 )
@@ -105,10 +105,10 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  void write<TCHAR>( const TCHAR*& item, BYTE*& pData, unsigned long& ulOffset )
+  void write<TCHAR>( const TCHAR*& item, BYTE*& pData, size_t& ulOffset )
   {
-    unsigned int uiLength = (item ? _tcslen( item ) : 0) * sizeof(TCHAR);
-    unsigned int uiSize = uiLength;
+    size_t uiLength = (item ? _tcslen( item ) : 0) * sizeof(TCHAR);
+    size_t uiSize = uiLength;
     uiSize += sizeof(unsigned int); //  the length
     if( ulOffset > 0 )
     {
@@ -131,7 +131,7 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  void write<STD_TSTRING>( const STD_TSTRING& item, BYTE*& pData, unsigned long& ulOffset )
+  void write<STD_TSTRING>( const STD_TSTRING& item, BYTE*& pData, size_t& ulOffset )
   {
     const TCHAR* lp = item.c_str();
     write( lp, pData, ulOffset );
@@ -142,8 +142,8 @@ namespace myodd{ namespace offset{
   ( 
     TCHAR*& item, 
     const void* pData, 
-    unsigned long& ulOffset, 
-    unsigned int uiMaxSize 
+    size_t& ulOffset,
+    size_t uiMaxSize
   )
   {
     if( !pData )
@@ -178,8 +178,8 @@ namespace myodd{ namespace offset{
   ( 
     STD_TSTRING& item, 
     const void* pData, 
-    unsigned long& ulOffset, 
-    unsigned int uiMaxSize 
+    size_t& ulOffset,
+    size_t uiMaxSize
   )
   {
     TCHAR* pText = NULL;
@@ -201,10 +201,10 @@ namespace myodd{ namespace offset{
   bool read
   ( 
     void* item, 
-    unsigned long unItemSize, 
+    size_t unItemSize,
     const void* pData, 
-    unsigned long& ulOffset, 
-    unsigned int uiMaxSize 
+    size_t& ulOffset,
+    size_t uiMaxSize
   )
   {
     if( ulOffset+unItemSize > uiMaxSize )
@@ -227,8 +227,8 @@ namespace myodd{ namespace offset{
   ( 
     const TCHAR* fileName, 
     const BYTE* pData, 
-    unsigned long& ulOffset, 
-    unsigned int uiMaxSize 
+    size_t& ulOffset,
+    size_t uiMaxSize
   )
   {
     long bufferLen =  0;

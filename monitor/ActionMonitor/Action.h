@@ -50,7 +50,7 @@ public:
   }
 
   // ----------------------------
-  inline int len()
+  inline size_t len() const
   {
     return m_szCommand.length();
   }

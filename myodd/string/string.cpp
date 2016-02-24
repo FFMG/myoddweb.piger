@@ -604,7 +604,7 @@ void TrimLeft( STD_TSTRING& str, const TCHAR* chars )
  */ 
 LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet)
 {
-	int nLen = _tcslen(strCharSet);
+  size_t nLen = _tcslen(strCharSet);
 
 	while (*string)
 	{

@@ -55,7 +55,7 @@ protected:
         memcpy( data, cf.data, cf.dataSize );
         if( cf.dataName )
         {
-          unsigned l = _tcslen( cf.dataName );
+          size_t l = _tcslen( cf.dataName );
           dataName = new TCHAR[l+1];
           memset( dataName, 0, l+1 );
           _tcsncpy_s( dataName, l, cf.dataName, l);
