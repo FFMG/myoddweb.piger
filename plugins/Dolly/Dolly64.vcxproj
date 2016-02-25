@@ -118,7 +118,12 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)Output\RootCommands\__in\ /Y 
-xcopy $(OutDir)$(TargetName)$(TargetExt) "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp" /Y </Command>
+if not exist "%25appdata%25\myoddweb" mkdir "%25appdata%25\myoddweb\"
+if not exist "%25appdata%25\myoddweb\ActionMonitor" mkdir "%25appdata%25\myoddweb\ActionMonitor"
+if not exist "%25appdata%25\myoddweb\ActionMonitor\RootCommands" mkdir "%25appdata%25\myoddweb\ActionMonitor\RootCommands"
+if not exist "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in" mkdir "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in"
+rem we have to use copy, as xcopy raises a warning for file renames :( ...
+copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "%25appdata%25\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp" /L </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
