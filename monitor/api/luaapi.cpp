@@ -119,7 +119,7 @@ int luaapi::execute (lua_State *lua)
 int luaapi::getCommandCount(lua_State *lua)
 {
   // get it
-  int nSize = helperapi::getCommandCount();
+  size_t nSize = helperapi::getCommandCount();
   
   // and push it to LUA.
   lua_pushinteger(lua, nSize );
@@ -146,7 +146,7 @@ int luaapi::getCommand (lua_State *lua)
     return 1;
   }
 
-  size_t idx = (UINT)lua_tointeger (lua, ARGUMENT_NUMBER);
+  size_t idx = (size_t)lua_tointeger (lua, ARGUMENT_NUMBER);
   STD_TSTRING sValue;
   if( !helperapi::getCommand( idx, sValue ) )
   {

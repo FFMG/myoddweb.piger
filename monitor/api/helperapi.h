@@ -25,7 +25,7 @@ public:
   static bool getAction( STD_TSTRING& sValue );
 
   // get the number of commands.
-  static int getCommandCount();
+  static size_t getCommandCount();
 
   // execute a module and a command line
   static bool execute( LPCWSTR module, LPCTSTR cmdLine, bool isPrivileged);

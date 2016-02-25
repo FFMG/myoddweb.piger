@@ -31,12 +31,12 @@ public:
   static void Initialize();
 
   static double version ();
-  static int getCommandCount();
+  static size_t getCommandCount();
 
   static bool say         ( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
   static bool execute     ( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
   static int getString    ( DWORD nBufferLength, LPWSTR lpBuffer);
-  static int getCommand   ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  static size_t getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
   static int getAction    ( DWORD nBufferLength, LPWSTR lpBuffer );
   static int getFile      ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
   static int getFolder    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );

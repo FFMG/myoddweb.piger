@@ -86,7 +86,7 @@ bool pluginapi::say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
  * @param void
  * @return void
  */
-int pluginapi::getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
+size_t pluginapi::getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING sValue = _T("");
   if( !helperapi::getCommand( idx, sValue ) )
@@ -98,7 +98,7 @@ int pluginapi::getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
   if ( nBufferLength > 0 && lpBuffer )
   {
     memset( lpBuffer, 0, nBufferLength );
-    _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
+    _tcsncpy_s( lpBuffer, (nBufferLength > len ? len : nBufferLength), sValue.c_str(), _TRUNCATE );
   }
   return len;
 }
@@ -134,7 +134,7 @@ int pluginapi::getAction( DWORD nBufferLength, LPWSTR lpBuffer )
  * @see helperapi::getCommandCount
  * @return in the number of commanded entered by the user
  */
-int pluginapi::getCommandCount()
+size_t pluginapi::getCommandCount()
 {
   return helperapi::getCommandCount();
 }

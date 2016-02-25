@@ -154,7 +154,7 @@ bool helperapi::getAction( STD_TSTRING& sValue )
  * one command count, ( 'Home' );
  * @return void
  */
-int helperapi::getCommandCount()
+size_t helperapi::getCommandCount()
 {
   try
   {
@@ -168,7 +168,7 @@ int helperapi::getCommandCount()
 
     // get the action commands and get the number of argument .
     std::vector<STD_TSTRING> params;
-    int nSize = myodd::strings::explode(  params, szCommandLine, _T(' '), -1, false );
+    size_t nSize = myodd::strings::explode(  params, szCommandLine, _T(' '), -1, false );
     
     // return the number of arguments we have.
     return nSize;

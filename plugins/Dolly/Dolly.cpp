@@ -23,7 +23,7 @@ AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam  )
       // get the full path of this plugin
       // call 'getCommand( 0, ... ) and it will return this file.
       WCHAR szPath[MAX_PATH];
-      int l = p->getCommand( 0, MAX_PATH, szPath );
+      size_t l = p->getCommand( 0, MAX_PATH, szPath );
 
       //
       // add an actio called 'dolly'

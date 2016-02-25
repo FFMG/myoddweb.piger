@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef __AFXWIN_H__
-	#error "include 'stdafx.h' before including this file for PCH"
-#endif
-
 #include "am_plugins.h"
 #include <string>
 #include <map>
@@ -25,18 +21,18 @@ public:
   // the various functions
   double version ();
   bool say( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
-  int getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  size_t getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
 
   // get the full action as given by the user
-  int getAction( DWORD nBufferLength, LPWSTR lpBuffer );
+  size_t getAction( DWORD nBufferLength, LPWSTR lpBuffer );
 
   // get the number of parameters passed.
-  int getCommandCount();
+  size_t getCommandCount() const;
   bool execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
   int getString ( DWORD nBufferLength, LPWSTR lpBuffer );
-  int getFile   ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  int getFolder ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  int getURL    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  size_t getFile   ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer) const;
+  size_t getFolder ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer) const;
+  size_t getURL    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer) const;
   bool addAction( LPCWSTR szText, LPCTSTR szPath );
   bool removeAction( LPCWSTR szText, LPCTSTR szPath );
   bool findAction( UINT idx, LPCWSTR szText, DWORD nBufferLength, LPWSTR lpBuffer);
@@ -45,7 +41,7 @@ public:
   void Add( LPCTSTR name, void* );
 
 private:
-  void* get( LPCTSTR name );
+  void* get( LPCTSTR name ) const;
   // ---------------------------------------------------------------------------------------------
   typedef std::map< std::wstring, void *> FNC_CONTAINER;
   FNC_CONTAINER m_pFunction;

@@ -10,9 +10,9 @@
 
 typedef bool (*PLUGIN_FNCSAY)(LPCWSTR, UINT, UINT );
 typedef double (*PLUGIN_FNCVERSION)( );
-typedef int (*PLUGIN_FNCGETS)( UINT, DWORD, LPTSTR );
+typedef size_t (*PLUGIN_FNCGETS)( UINT, DWORD, LPTSTR );
 typedef int (*PLUGIN_FNCGET)( DWORD, LPTSTR );
-typedef int (*PLUGIN_FNCGETCOUNT)(  );
+typedef size_t (*PLUGIN_FNCGETCOUNT)(  );
 typedef bool (*PLUGIN_FNCEXECUTE)( LPCWSTR, LPCWSTR, bool );
 typedef bool (*PLUGIN_FNCOMMAND)( LPCWSTR, LPCWSTR );
 typedef bool (*PLUGIN_FINDCOMMAND)( UINT, LPCWSTR, DWORD, LPWSTR );
@@ -50,7 +50,7 @@ void amplugin::Add( LPCWSTR name, void* pFunc )
  * @param void
  * @return void
  */
-void* amplugin::get( LPCWSTR name )
+void* amplugin::get( LPCWSTR name ) const
 {
   FNC_CONTAINER::const_iterator iter = m_pFunction.find( name );
   if( iter == m_pFunction.end() )
@@ -99,7 +99,7 @@ double amplugin::version ()
  * @param void
  * @return void
  */
-int amplugin::getCommand( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer )
+size_t amplugin::getCommand( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer )
 {
   void* pFunc = get( _T("getCommand") );
   if( !pFunc )
@@ -116,7 +116,7 @@ int amplugin::getCommand( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer )
  * @param void
  * @return void
  */
-int amplugin::getFile( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer)
+size_t amplugin::getFile( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
 {
   void* pFunc = get( _T("getFile") );
   if( !pFunc )
@@ -133,7 +133,7 @@ int amplugin::getFile( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer)
  * @param void
  * @return void
  */
-int amplugin::getFolder( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer)
+size_t amplugin::getFolder( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
 {
   void* pFunc = get( _T("getFolder") );
   if( !pFunc )
@@ -150,7 +150,7 @@ int amplugin::getFolder( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer)
  * @param void
  * @return void
  */
-int amplugin::getURL( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer)
+size_t amplugin::getURL( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
 {
   void* pFunc = get( _T("getURL") );
   if( !pFunc )
@@ -183,7 +183,7 @@ int amplugin::getString(DWORD nBufferLength, LPTSTR lpBuffer)
  * @param void
  * @return void
  */
-int amplugin::getAction(DWORD nBufferLength, LPTSTR lpBuffer)
+size_t amplugin::getAction(DWORD nBufferLength, LPTSTR lpBuffer)
 {
   void* pFunc = get( _T("getAction") );
   if( !pFunc )
@@ -198,7 +198,7 @@ int amplugin::getAction(DWORD nBufferLength, LPTSTR lpBuffer)
  * @param void
  * @return void
  */
-int amplugin::getCommandCount()
+size_t amplugin::getCommandCount() const
 {
   void* pFunc = get( _T("getCommandCount") );
   if( !pFunc )
