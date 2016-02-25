@@ -47,7 +47,7 @@ namespace myodd{ namespace strings{
     const STD_TSTRING& replaceStr
     );
 
-  size_t ifind( const STD_TSTRING& origStr, const STD_TSTRING& srchStr, unsigned int nFrom = 0 );
+  size_t ifind( const STD_TSTRING& origStr, const STD_TSTRING& srchStr, const size_t nFrom = 0 );
   int icompare( const STD_TSTRING& origStr, const STD_TSTRING& srchStr );
 
   // explode with a '\0' char

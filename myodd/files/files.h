@@ -101,7 +101,7 @@ bool GetFullTempFileName( LPTSTR& lpFullPathFileName, LPCTSTR lpFileName );
 bool is_dot( const STD_TSTRING& stdFile );
 bool is_dot( LPCTSTR lpFile );
 
-int GetKeys
+size_t GetKeys
 ( 
   LPCTSTR lpFileName, 
   std::vector<STD_TSTRING>& tokens,

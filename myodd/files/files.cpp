@@ -2174,7 +2174,7 @@ void Version::DetermineFileVersion( LPCTSTR lpFileName )
  * @param LPCTSTR | NULL the wild search to limit certain keys only or NULL to get all the keys.
  * @return std::vector<STD_TSTRING> list of all the keys or some that match the seatch.
  */
-int GetKeys
+size_t GetKeys
 ( 
   LPCTSTR lpFileName, 
   std::vector<STD_TSTRING>& tokens,
@@ -2185,7 +2185,7 @@ int GetKeys
   tokens.clear();
 
   //  get all the keys
-  size_t keys_size = T_MAX_PATH;
+  DWORD keys_size = T_MAX_PATH;
   while( true )
   {
     TCHAR* keys = new TCHAR[ keys_size ];

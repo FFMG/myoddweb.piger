@@ -301,7 +301,7 @@ size_t ifind
 ( 
   const STD_TSTRING& origStr, 
   const STD_TSTRING& srchStr, 
-  unsigned int nFrom /*= 0*/ 
+  const size_t nFrom /*= 0*/ 
 )
 {
   // make sure we are not searching past the length of the string
@@ -314,8 +314,7 @@ size_t ifind
   if( NULL == lpFind )
     return STD_TSTRING::npos;  //  not found
 
-  int result = (int)(lpFind - origStr.c_str());
-  return result;
+  return (size_t)(lpFind - origStr.c_str());
 }
 
 /**
