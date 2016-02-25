@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Config>
+    <commands>
+        <current.bold type="8">0</current.bold>
+        <current.color type="1">000000</current.color>
+        <current.italic type="8">0</current.italic>
+        <default.bold type="8">0</default.bold>
+        <default.color type="1">000000</default.color>
+        <default.italic type="8">0</default.italic>
+        <left type="8">5</left>
+        <max.x type="8">99</max.x>
+        <max.y type="8">99</max.y>
+        <pad.x type="8">2</pad.x>
+        <pad.y type="8">2</pad.y>
+        <selected.bold type="8">1</selected.bold>
+        <selected.color type="1">808000</selected.color>
+        <selected.italic type="8">1</selected.italic>
+        <show.extentions type="8">0</show.extentions>
+        <show.time type="8">1</show.time>
+        <top type="8">5</top>
+        <transparency type="8">127</transparency>
+    </commands>
+    <paths>
+        <commands type="1">%appdata%\myoddweb\ActionMonitor\RootCommands</commands>
+        <maxcommand type="8">2048</maxcommand>
+    </paths>
+</Config>

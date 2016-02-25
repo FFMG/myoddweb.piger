@@ -246,3 +246,5 @@ _Pvt_Extensions
 /Output/
 /plugins/amplugin64.lib
 /plugins/amplugin64d.lib
+*.exe
+*.~is
