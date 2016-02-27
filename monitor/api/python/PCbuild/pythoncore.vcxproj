@@ -59,8 +59,10 @@
       <BaseAddress>0x1e000000</BaseAddress>
     </Link>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy /Y "$(SolutionDir)includes\python35.zip" "$(OutDir)"  /L</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy /Y $(SolutionDir)\includes\python35.zip $(OutDir)  /L</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
