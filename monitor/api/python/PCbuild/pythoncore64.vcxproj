@@ -60,7 +60,7 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /Y $(SolutionDir)\plugins\python35.zip $(OutDir)  /L</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /Y "$(SolutionDir)includes\python35.zip" "$(OutDir)"  /L</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /Y "$(SolutionDir)includes\python35.zip" "$(OutDir)"  /L</Command>
