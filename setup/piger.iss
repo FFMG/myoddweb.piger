@@ -56,20 +56,33 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 ; be sure to build the latest exe.
 ; select "Release Any CPU" to ensure that both x64 and x86 are built.
 ;
+; x86 App
 Source: {#APP_SOURCE}ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE}hook.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
+Source: {#APP_SOURCE}python35.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
+
+; x64 App
+Source: {#APP_SOURCE}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+Source: {#APP_SOURCE}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+Source: {#APP_SOURCE}python6435.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+
+; common
+Source: ..\includes\python35.zip; DestDir: {app}; Flags: recursesubdirs createallsubdirs
+
+; x86 plugins
 Source: {#APP_SOURCE}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE}AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE}Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: "not IsWin64"
 
-Source: {#APP_SOURCE}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+; x64 plugins
 Source: {#APP_SOURCE}LoaderPlugin64.amp; DestName:LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64
 
+; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
 
+; default config
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist
 
 [Run]
