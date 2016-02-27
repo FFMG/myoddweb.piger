@@ -60,7 +60,7 @@ static const TCHAR CONF_MUTEXT[]	  = _T("MyOddweb_com_ActionMonitor"); //  if yo
 // this is the various API we are using
 // remove/comment if we are not using it.
 #define ACTIONMONITOR_API_LUA
-// #define ACTIONMONITOR_API_PY
+#define ACTIONMONITOR_API_PY
 #define ACTIONMONITOR_API_PLUGIN
 
 #ifdef ACTIONMONITOR_API_LUA
