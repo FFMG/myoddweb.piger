@@ -98,7 +98,7 @@
       </DataExecutionPrevention>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -153,7 +153,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);$(OutDir)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -170,6 +170,8 @@
     <ClCompile Include="..\api\LuaVirtualMachine.cpp" />
     <ClCompile Include="..\api\pluginapi.cpp" />
     <ClCompile Include="..\api\PluginVirtualMachine.cpp" />
+    <ClCompile Include="..\api\pyapi.cpp" />
+    <ClCompile Include="..\api\PythonVirtualMachine.cpp" />
     <ClCompile Include="..\common\Clipboard.cpp" />
     <ClCompile Include="..\common\TrayDialog.cpp" />
     <ClCompile Include="Action.cpp" />
@@ -193,6 +195,9 @@
     <ClInclude Include="..\api\LuaVirtualMachine.h" />
     <ClInclude Include="..\api\pluginapi.h" />
     <ClInclude Include="..\api\PluginVirtualMachine.h" />
+    <ClInclude Include="..\api\pyapi.h" />
+    <ClInclude Include="..\api\pyconfig.h" />
+    <ClInclude Include="..\api\PythonVirtualMachine.h" />
     <ClInclude Include="..\common\Clipboard.h" />
     <ClInclude Include="..\common\TrayDialog.h" />
     <ClInclude Include="Action.h" />

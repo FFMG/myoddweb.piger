@@ -63,6 +63,12 @@
     <ClCompile Include="..\api\PluginVirtualMachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="..\api\pyapi.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\PythonVirtualMachine.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -122,6 +128,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\api\PluginVirtualMachine.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\pyapi.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\pyconfig.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\PythonVirtualMachine.h">
       <Filter>api</Filter>
     </ClInclude>
   </ItemGroup>
