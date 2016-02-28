@@ -64,9 +64,9 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
       // this one is because some APIs need to know the name of the current command
       // in order to get the path of the command.
       //
-      // we cannot replace 'posibleActions' with 'this' as the APIs might
+      // we cannot replace 'possibleActions' with 'this' as the APIs might
       // actually add or remove commands.
-      posibleActions->SetAction( &action );
+      App().PossibleActions().SetAction( &action );
 
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'DoIt(...)' function
@@ -80,5 +80,5 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
   }// for loop
 
   // reset the current action to the default.
-  posibleActions->SetAction( NULL );
+  App().PossibleActions().SetAction( NULL );
 }

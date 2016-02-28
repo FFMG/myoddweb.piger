@@ -20,25 +20,25 @@ extern "C"
 
 class luaapi
 {
-protected: // all static
-  luaapi(void);
-  ~luaapi(void);
+public:
+  luaapi();
+  virtual ~luaapi();
 
 public:
-  static void Initialize();
 
-  static int version (lua_State *lua);
-  static int say (lua_State *lua);
-  static int getAction (lua_State *lua);
-  static int getCommand (lua_State *lua);
-  static int getCommandCount (lua_State *lua);
-  static int execute (lua_State *lua);
-  static int getstring( lua_State *lua );
-  static int getVersion( lua_State *lua );
-  static int getfile( lua_State *lua );
-  static int getfolder( lua_State *lua );
-  static int geturl( lua_State *lua );
-  static int addAction( lua_State *lua );
-  static int removeAction( lua_State *lua );
-  static int findAction( lua_State *lua );
+  // static functions
+  int version (lua_State *lua);
+  int say (lua_State *lua);
+  int getAction (lua_State *lua);
+  int getCommand (lua_State *lua);
+  int getCommandCount (lua_State *lua);
+  int execute (lua_State *lua);
+  int getstring( lua_State *lua );
+  int getVersion( lua_State *lua );
+  int getfile( lua_State *lua );
+  int getfolder( lua_State *lua );
+  int geturl( lua_State *lua );
+  int addAction( lua_State *lua );
+  int removeAction( lua_State *lua );
+  int findAction( lua_State *lua );
 };

@@ -87,7 +87,7 @@ bool helperapi::getCommand( UINT idx, STD_TSTRING& sValue )
   try
   {
     STD_TSTRING szCommandLine = _T( "" );
-    const Action& action = posibleActions->getCommand( &szCommandLine );
+    const Action& action = App().PossibleActions().getCommand( &szCommandLine );
 
     // if the user wants command 0 then we want the full name
     // this is more consistent with the get commands normally work.
@@ -135,7 +135,7 @@ bool helperapi::getAction( STD_TSTRING& sValue )
 {
   try
   {
-    const Action& action = posibleActions->getCommand();
+    const Action& action = App().PossibleActions().getCommand();
     sValue = action.toChar( );
   }
   catch(...)
@@ -159,7 +159,7 @@ size_t helperapi::getCommandCount()
   try
   {
     STD_TSTRING szCommandLine = _T( "" );
-    const Action& action = posibleActions->getCommand( &szCommandLine );
+    const Action& action = App().PossibleActions().getCommand( &szCommandLine );
 
     if( 0 == szCommandLine.length() )
     {
@@ -259,7 +259,7 @@ bool helperapi::getString (STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = posibleActions->getCommand();
+    Action& aCommand = App().PossibleActions().getCommand();
     const Clipboard& clipBoard = aCommand.GetClipBoard( );
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetText( sClipBoard ) )
@@ -295,7 +295,7 @@ bool helperapi::getFile(UINT idx, STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = posibleActions->getCommand();
+    Action& aCommand = App().PossibleActions().getCommand();
     const Clipboard& clipBoard = aCommand.GetClipBoard( );
 
     STD_TSTRING sClipBoard = _T("");
@@ -326,7 +326,7 @@ bool helperapi::getURL (UINT idx, STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = posibleActions->getCommand();
+    Action& aCommand = App().PossibleActions().getCommand();
     const Clipboard& clipBoard = aCommand.GetClipBoard( );
 
     STD_TSTRING sClipBoard = _T("");
@@ -360,7 +360,7 @@ bool helperapi::getFolder (UINT idx, STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = posibleActions->getCommand();
+    Action& aCommand = App().PossibleActions().getCommand();
     const Clipboard& clipBoard = aCommand.GetClipBoard( );
 
     STD_TSTRING sClipBoard = _T("");
@@ -415,7 +415,7 @@ bool helperapi::addAction( LPCWSTR szText, LPCWSTR szPath )
     // only internal commands have null paths
     return false;
   }
-  return posibleActions->Add( szText, szPath );
+  return App().PossibleActions().Add( szText, szPath );
 }
 
 /**
@@ -451,7 +451,7 @@ bool helperapi::removeAction( LPCWSTR szText, LPCWSTR szPath )
     // only internal commands have null paths
     return false;
   }
-  return posibleActions->Remove( szText, szPath );
+  return App().PossibleActions().Remove( szText, szPath );
 }
 
 /**
@@ -482,5 +482,5 @@ bool helperapi::findAction( UINT idx, LPCWSTR szText, STD_TSTRING& stdPath )
   {
     return false;
   }
-  return posibleActions->Find( idx, szText, stdPath );
+  return App().PossibleActions().Find( idx, szText, stdPath );
 }

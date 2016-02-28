@@ -10,10 +10,10 @@
 
 /**
  * Todo
- * @param void
+ * @param lua_State
  * @return void
  */
-luaapi::luaapi(void)
+luaapi::luaapi(  )
 {
 }
 
@@ -24,29 +24,6 @@ luaapi::luaapi(void)
  */
 luaapi::~luaapi(void)
 {
-}
-
-/**
- * Todo
- * @return void
- */
-void luaapi::Initialize ( )
-{
-  LuaVirtualMachine& vm = GetLuaVirtualMachine();
-  vm.Register( _T("am_say"), luaapi::say );
-  vm.Register( _T("am_version"), luaapi::version );
-  vm.Register( _T("am_getCommand"), luaapi::getCommand );
-  vm.Register( _T("am_getAction"), luaapi::getAction );
-  vm.Register( _T("am_getCommandCount"), luaapi::getCommandCount );
-  vm.Register( _T("am_execute"), luaapi::execute );
-  vm.Register( _T("am_getstring"), luaapi::getstring );
-  vm.Register( _T("am_getfile"), luaapi::getfile );
-  vm.Register( _T("am_getfolder"), luaapi::getfolder );
-  vm.Register( _T("am_geturl"), luaapi::geturl );
-  vm.Register( _T("am_addAction"), luaapi::addAction );
-  vm.Register( _T("am_removeAction"), luaapi::removeAction );
-  vm.Register( _T("am_getVersion"), luaapi::getVersion );
-  vm.Register( _T("am_findAction"), luaapi::findAction );
 }
 
 /**

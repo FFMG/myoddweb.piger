@@ -1,5 +1,23 @@
 #pragma once
 
+#include <mutex>
+
+// support for LUA
+extern "C" 
+{
+  #include "lua/src/lua.h"
+  #include "lua/src/lualib.h"
+  #include "lua/src/lauxlib.h"
+}
+
+// add the LUA libs
+#ifdef _WIN64
+# pragma comment(lib, "lua64.lib" )
+#else
+# pragma comment(lib, "lua.lib" )
+#endif
+
+// support for LUA
 #include "luaapi.h"
 
 class LuaVirtualMachine
@@ -7,16 +25,36 @@ class LuaVirtualMachine
 public:
   LuaVirtualMachine(void);
   virtual ~LuaVirtualMachine(void);
-
-  void Initialize(); 
-
+  
   int LoadFile( LPCTSTR luaFile );
-  int Register( LPCTSTR lpName, const lua_CFunction& fn );
 
-  bool IsLuaExt( LPCTSTR ext ) const;
+  static bool IsLuaExt( LPCTSTR ext );
+
 protected:
-  lua_State* m_lua_State;
-};
+  lua_State* Create();
+  void Dispose(lua_State* lua);
+  void Dispose();
 
-// the Lua virtual machine
-LuaVirtualMachine& GetLuaVirtualMachine();
+protected:
+  std::mutex _mutex;
+  typedef std::map<lua_State*, luaapi*> state_api;
+  state_api _lua_Api;
+
+  static luaapi& GetApi(lua_State* lua);
+
+public:
+  static int version(lua_State *lua);
+  static int say(lua_State *lua);
+  static int getAction(lua_State *lua);
+  static int getCommand(lua_State *lua);
+  static int getCommandCount(lua_State *lua);
+  static int execute(lua_State *lua);
+  static int getstring(lua_State *lua);
+  static int getVersion(lua_State *lua);
+  static int getfile(lua_State *lua);
+  static int getfolder(lua_State *lua);
+  static int geturl(lua_State *lua);
+  static int addAction(lua_State *lua);
+  static int removeAction(lua_State *lua);
+  static int findAction(lua_State *lua);
+};

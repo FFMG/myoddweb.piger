@@ -16,18 +16,15 @@ BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 END_MESSAGE_MAP()
 
 /**
- * All the posible actions.
- * @param Actions*
- */
-Actions* posibleActions = NULL;
-
-/**
  * todo
  * @param void
  * @return void
  */
 CActionMonitorApp::CActionMonitorApp() :
   m_hMutex( NULL )
+#ifdef ACTIONMONITOR_API_LUA
+  , _lvm(NULL)
+#endif
 {
 }
 
@@ -38,7 +35,21 @@ CActionMonitorApp::CActionMonitorApp() :
  */
 CActionMonitorApp::~CActionMonitorApp()
 {
+#ifdef ACTIONMONITOR_API_LUA
+  delete _lvm;
+#endif
 }
+
+#ifdef ACTIONMONITOR_API_LUA
+LuaVirtualMachine* CActionMonitorApp::GetLuaVirtualMachine()
+{
+  if (_lvm == NULL)
+  {
+    _lvm = new LuaVirtualMachine();
+  }
+  return _lvm;
+}
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CActionMonitorApp object
@@ -244,7 +255,7 @@ BOOL CActionMonitorApp::InitInstance()
 
   // remove the actions
   // we are about to close, we are no longer monitoring anything
-  delete posibleActions;
+  delete _possibleActions;
 
 	//  Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pupszCmdLine.
@@ -259,19 +270,19 @@ BOOL CActionMonitorApp::InitInstance()
 void CActionMonitorApp::BuildActionsList()
 {
   //  remove the old one
-  delete posibleActions;
+  delete _possibleActions;
 
   //  create a new one.
-  posibleActions = new Actions( );
+  _possibleActions = new Actions( );
 
   //  parse the directory for all possible files.
-  posibleActions->Init();
+  _possibleActions->Init();
 
   //TODO these really need to move out of here
   //  add the default commands
-  posibleActions->Add( ACTION_CORE_BYE, NULL );
-  posibleActions->Add( ACTION_CORE_LOAD, NULL);
-  posibleActions->Add( ACTION_CORE_VERSION, NULL);
+  _possibleActions->Add( ACTION_CORE_BYE, NULL );
+  _possibleActions->Add( ACTION_CORE_LOAD, NULL);
+  _possibleActions->Add( ACTION_CORE_VERSION, NULL);
 }
 
 /**

@@ -6,10 +6,6 @@
 #include "ActionMonitorDlg.h"
 #include "MessageDlg.h"
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 #define RECT_MIN_H 70
 
 //  common message
@@ -204,7 +200,7 @@ void CActionMonitorDlg::ShowWindow( BYTE bTrans )
     {
       // remove the current action
       // we are hidding the current action
-      posibleActions->CurrentActionReset();
+      App().PossibleActions().CurrentActionReset();
 
       //  we need to recalculate the size of the command window
       //  normally when we hide the window it is because we are no longer
@@ -397,7 +393,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
       TrayUpdate();
 
       //  reset the last command
-      posibleActions->CurrentActionReset();
+      App().PossibleActions().CurrentActionReset();
       ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
     }
   }
@@ -411,7 +407,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
   switch (wParam) 
   { 
   case VK_BACK:     // backspace 
-    posibleActions->CurrentActionBack();
+    App().PossibleActions().CurrentActionBack();
     ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
     break;
 
@@ -422,11 +418,11 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     break; 
 
   case VK_ESCAPE:
-    posibleActions->CurrentActionReset( );
+    App().PossibleActions().CurrentActionReset( );
     ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
 
   case VK_DOWN:
-    posibleActions->down();
+    App().PossibleActions().down();
     ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
     break;
 
@@ -434,7 +430,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     break;
 
   case VK_UP:
-    posibleActions->up();
+    App().PossibleActions().up();
     ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
     break;
 
@@ -470,7 +466,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
       {
         TCHAR c = (TCHAR)( CHAR(w) );
         //  add the current character to the list of items
-        posibleActions->CurrentActionAdd( c ); 
+        App().PossibleActions().CurrentActionAdd( c );
 
         //  make sure that the window is visible
         //  This will also force a refresh of the window
@@ -520,7 +516,7 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         //
         //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
         STD_TSTRING szCommandLine = _T( "" );
-        Action& aCommand = posibleActions->getCommand( &szCommandLine );
+        Action& aCommand = App().PossibleActions().getCommand( &szCommandLine );
 
         //  do the action now
         //  we might not have any, but that's not for us to decides :).
@@ -613,7 +609,7 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= NULL*/ )
   }
   //  get the current text as well as the possible commands.
   //  we pass what ever the user entered to whatever commands are saved.
-  STD_TSTRING sCommand = posibleActions->toChar( );
+  STD_TSTRING sCommand = App().PossibleActions().toChar( );
   size_t len = sCommand.length();
 
   HDC localHdc = NULL;

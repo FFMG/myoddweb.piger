@@ -373,10 +373,10 @@ bool Action::DoItDirect( LPCTSTR szArgs, bool isPrivileged) const
 #ifdef ACTIONMONITOR_API_LUA
   // Do the API calls.
   //
-  LuaVirtualMachine& lua = GetLuaVirtualMachine( );
-  if( lua.IsLuaExt( m_szExt.c_str() ) )
+  if(LuaVirtualMachine::IsLuaExt( m_szExt.c_str() ) )
   {
-    int s = lua.LoadFile( m_szFile.c_str() );
+    LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
+    int s = lua->LoadFile( m_szFile.c_str() );
     return ( s == 0 ); 
   }
 #endif // ACTIONMONITOR_API_LUA

@@ -62,9 +62,26 @@ public:
 
   // the handle of the mutex
   HANDLE m_hMutex; 
+
+public:
+  const Actions& PossibleActions() const {
+    return *_possibleActions;
+  }
+  Actions& PossibleActions() {
+    return *_possibleActions;
+  }
+private:
+  Actions* _possibleActions;
+
+#ifdef ACTIONMONITOR_API_LUA
+protected:
+  LuaVirtualMachine* _lvm;
+
+public:
+  LuaVirtualMachine* GetLuaVirtualMachine();
+#endif
 };
 
 CActionMonitorApp& App();
-extern Actions* posibleActions;
 
 /////////////////////////////////////////////////////////////////////////////
