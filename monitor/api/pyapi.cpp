@@ -1,18 +1,12 @@
 #include "stdafx.h"
-
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 #include "pyapi.h"
-#include "helperapi.h"
 
 /**
  * Todo
  * @param void
  * @return void
  */
-pyapi::pyapi()
+pyapi::pyapi() : helperapi()
 {
 }
 
@@ -27,7 +21,7 @@ pyapi::~pyapi()
 
 /**
  * Todo
- * @see helperapi::say
+ * @see __super::say
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -42,7 +36,7 @@ PyObject* pyapi::say(PyObject *self, PyObject *args)
   // the last argument is optional
   if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
   {
-    helperapi::say( _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am.say( msg, <b>elapse</b>, fade=0)</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am.say( msg, <b>elapse</b>, fade=0)</i>"), 3000, 5 );
     
     //  just return false.
     return Py_BuildValue("b", 0 );
@@ -50,7 +44,7 @@ PyObject* pyapi::say(PyObject *self, PyObject *args)
 
   // display the message
   // and we can now display the message.
-  bool result = helperapi::say( msg, nElapse, nFadeOut );
+  bool result = __super::say( msg, nElapse, nFadeOut );
   
   // return true.
   return Py_BuildValue("b", result );
@@ -58,7 +52,7 @@ PyObject* pyapi::say(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::version
+ * @see __super::version
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -72,7 +66,7 @@ PyObject* pyapi::version (PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::getCommand
+ * @see __super::getCommand
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -83,14 +77,14 @@ PyObject* pyapi::getCommand(PyObject *self, PyObject *args)
   // get the index number
   if (!PyArg_ParseTuple(args, "I", &idx))
   {
-    helperapi::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getCommand( <b>index</b> )</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getCommand( <b>index</b> )</i>"), 3000, 5 );
 
     //  just return false.
     return Py_BuildValue("b", 0 );
   }
 
   STD_TSTRING sValue;
-  if( !helperapi::getCommand( idx, sValue ) )
+  if( !__super::getCommand( idx, sValue ) )
   {
     //  just return false.
     return Py_BuildValue("b", 0 );
@@ -103,7 +97,7 @@ PyObject* pyapi::getCommand(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::getAction
+ * @see __super::getAction
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -111,7 +105,7 @@ PyObject* pyapi::getCommand(PyObject *self, PyObject *args)
 PyObject* pyapi::getAction(PyObject *self, PyObject *args)
 {
   STD_TSTRING sValue;
-  if( !helperapi::getAction( sValue ) )
+  if( !__super::getAction( sValue ) )
   {
     //  just return false.
     return Py_BuildValue("b", 0 );
@@ -124,7 +118,7 @@ PyObject* pyapi::getAction(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::getcommandcount
+ * @see __super::getcommandcount
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -132,7 +126,7 @@ PyObject* pyapi::getAction(PyObject *self, PyObject *args)
 PyObject* pyapi::getCommandCount(PyObject *self, PyObject *args)
 {
   // get it
-  int nSize = helperapi::getCommandCount();
+  int nSize = __super::getCommandCount();
 
   // and return it.
   return Py_BuildValue("i", nSize);
@@ -140,7 +134,7 @@ PyObject* pyapi::getCommandCount(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::execute
+ * @see __super::execute
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -152,12 +146,12 @@ PyObject* pyapi::execute(PyObject *self, PyObject *args)
   bool isPrivileged;
   if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
   {
-    helperapi::say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged]])</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged]])</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   // run it
-  bool result = helperapi::execute( module, cmdLine, isPrivileged );
+  bool result = __super::execute( module, cmdLine, isPrivileged );
 
   // return the result.
   return Py_BuildValue("b", result );
@@ -165,7 +159,7 @@ PyObject* pyapi::execute(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::getstring
+ * @see __super::getstring
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -173,7 +167,7 @@ PyObject* pyapi::execute(PyObject *self, PyObject *args)
 PyObject* pyapi::getstring(PyObject *self, PyObject *args)
 {
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getString( sValue ) )
+  if( !__super::getString( sValue ) )
   {
     // we have nothing
     return Py_BuildValue("b", false);
@@ -186,7 +180,7 @@ PyObject* pyapi::getstring(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::getfile
+ * @see __super::getfile
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -196,12 +190,12 @@ PyObject* pyapi::getfile(PyObject *self, PyObject *args)
   UINT idx = 0;
   if (!PyArg_ParseTuple(args, "I", &idx ))
   {
-    helperapi::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b> )</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b> )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getFile( idx, sValue ) )
+  if( !__super::getFile( idx, sValue ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -214,7 +208,7 @@ PyObject* pyapi::getfile(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::getfolder
+ * @see __super::getfolder
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -224,12 +218,12 @@ PyObject* pyapi::getfolder(PyObject *self, PyObject *args)
   UINT idx = 0;
   if (!PyArg_ParseTuple(args, "I", &idx ))
   {
-    helperapi::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> )</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getFolder( idx, sValue ) )
+  if( !__super::getFolder( idx, sValue ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -242,7 +236,7 @@ PyObject* pyapi::getfolder(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::geturl
+ * @see __super::geturl
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -252,12 +246,12 @@ PyObject* pyapi::geturl(PyObject *self, PyObject *args)
   UINT idx = 0;
   if (!PyArg_ParseTuple(args, "I", &idx ))
   {
-    helperapi::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( <b>index</b> )</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( <b>index</b> )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getURL( idx, sValue ) )
+  if( !__super::getURL( idx, sValue ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -270,7 +264,7 @@ PyObject* pyapi::geturl(PyObject *self, PyObject *args)
 
 /**
  * Todo
- * @see helperapi::addAction
+ * @see __super::addAction
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -282,18 +276,18 @@ PyObject* pyapi::addAction(PyObject *self, PyObject *args)
   
   if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
   {
-    helperapi::say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   // run it
-  bool result = helperapi::addAction( szText, szPath );
+  bool result = __super::addAction( szText, szPath );
   return Py_BuildValue("b", result );
 }
 
 /**
  * Todo
- * @see helperapi::removeAction
+ * @see __super::removeAction
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -305,18 +299,18 @@ PyObject* pyapi::removeAction(PyObject *self, PyObject *args)
   
   if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
   {
-    helperapi::say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   // run it
-  bool result = helperapi::removeAction( szText, szPath );
+  bool result = __super::removeAction( szText, szPath );
   return Py_BuildValue("b", result );
 }
 
 /**
  * Get the current Action monitor version number.
- * @see helperapi::getVersion
+ * @see __super::getVersion
  * @param PyObject *
  * @param PyObject *
  * @return PyObject*
@@ -324,7 +318,7 @@ PyObject* pyapi::removeAction(PyObject *self, PyObject *args)
 PyObject* pyapi::getVersion(PyObject *self, PyObject *args)
 {
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getVersion( sValue ) )
+  if( !__super::getVersion( sValue ) )
   {
     // we have nothing
     return Py_BuildValue("b", false);
@@ -337,7 +331,7 @@ PyObject* pyapi::getVersion(PyObject *self, PyObject *args)
 
 /**
  * Find an action.
- * @see helperapi::findAction
+ * @see __super::findAction
  * @param PyObject *
  * @param PyObject *
  * @return PyObject* false or the path of that action.
@@ -348,12 +342,12 @@ PyObject* pyapi::findAction(PyObject *self, PyObject *args)
   CHAR* szText = NULL;
   if (!PyArg_ParseTuple(args, "Is", &idx, &szText ))
   {
-    helperapi::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>"), 3000, 5 );
+    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   STD_TSTRING sValue = _T("");
-  if( !helperapi::findAction( idx, szText, sValue ) )
+  if( !__super::findAction( idx, szText, sValue ) )
   {
     // we have nothing
     return Py_BuildValue("b", false);

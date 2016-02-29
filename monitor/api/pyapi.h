@@ -1,15 +1,17 @@
 #pragma once
 
+#include "helperapi.h"
+
 // this is the version number for that particular API
 static const double ACTIONMONITOR_API_PY_VERSION = 0.1f;
 
 // support for Python
 #include "python\include\Python.h"
 
-class pyapi
+class pyapi : public helperapi
 {
 public:
-  pyapi(void);
+  pyapi();
   virtual ~pyapi();
 
 public:

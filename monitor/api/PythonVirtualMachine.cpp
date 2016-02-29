@@ -194,7 +194,8 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
   LPCSTR s = script.c_str();
   if( -1 == PyRun_SimpleString( s ))
   {
-    helperapi::say( _T("<b>Error : </b>An error was raised in the PyAPI"), 500, 10 );
+    helperapi h;
+    h.say( _T("<b>Error : </b>An error was raised in the PyAPI"), 500, 10 );
   }
 
   // no more errors.

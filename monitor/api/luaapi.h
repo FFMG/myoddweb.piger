@@ -1,5 +1,7 @@
 #pragma once
 
+#include "helperapi.h"
+
 // this is the version number for that particular API
 static const double ACTIONMONITOR_API_LUA_VERSION = 0.1f;
 
@@ -18,7 +20,7 @@ extern "C"
 # pragma comment(lib, "lua.lib" )
 #endif
 
-class luaapi
+class luaapi : public helperapi
 {
 public:
   luaapi();

@@ -1,9 +1,5 @@
 #include "stdafx.h"
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 #include "helperapi.h"
 #include "../actionmonitor/ActionMonitor.h"
 #include "../actionmonitor/ActionMonitorDlg.h"
