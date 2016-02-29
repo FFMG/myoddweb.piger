@@ -80,6 +80,14 @@ protected:
 public:
   LuaVirtualMachine* GetLuaVirtualMachine();
 #endif
+
+#ifdef ACTIONMONITOR_API_PY
+protected:
+  PythonVirtualMachine* _pvm;
+
+public:
+  PythonVirtualMachine* GetPythonVirtualMachine();
+#endif
 };
 
 CActionMonitorApp& App();

@@ -1,33 +1,15 @@
 #include "stdafx.h"
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 #include "helperapi.h"
 #include "PythonVirtualMachine.h"
 #include "files\files.h"
 
-// define the virtual machine object.
-static PythonVirtualMachine pyVirtualMachine;
-
 /**
  * Todo
  * @param void
  * @return void
  */
-PythonVirtualMachine& GetPyVirtualMachine()
-{
-  pyVirtualMachine.Initialize();
-  return (pyVirtualMachine);
-}
-
-/**
- * Todo
- * @param void
- * @return void
- */
-PythonVirtualMachine::PythonVirtualMachine(void) : 
+PythonVirtualMachine::PythonVirtualMachine() : 
   m_isInitialized( false )
 {
 }
@@ -37,10 +19,13 @@ PythonVirtualMachine::PythonVirtualMachine(void) :
  * @param void
  * @return void
  */
-PythonVirtualMachine::~PythonVirtualMachine(void)
+PythonVirtualMachine::~PythonVirtualMachine()
 {
-  // simply close python
-  Py_Finalize();
+  if (m_isInitialized)
+  {
+    // simply close python
+    Py_Finalize();
+  }
 }
 
 /**
@@ -50,22 +35,24 @@ PythonVirtualMachine::~PythonVirtualMachine(void)
  */
 void PythonVirtualMachine::Initialize()
 {
-  if( !m_isInitialized )
+  if (m_isInitialized)
   {
-    pyapi::Initialize();
-
-    STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
-    std::wstring python_path;
-    python_path += exe_dir + L"python35.zip";
-    Py_SetPath(python_path.c_str());
-
-    Py_Initialize();
-
-    PyObject *main_module = PyImport_AddModule( "__main__" );
-    PyObject *main_dict = PyModule_GetDict(main_module);
-
-    m_isInitialized = true;
+    return;
   }
+
+  pyapi::Initialize();
+
+  STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
+  std::wstring python_path;
+  python_path += exe_dir + L"python35.zip";
+  Py_SetPath(python_path.c_str());
+
+  Py_Initialize();
+
+  PyObject *main_module = PyImport_AddModule( "__main__" );
+  PyObject *main_dict = PyModule_GetDict(main_module);
+
+  m_isInitialized = true;
 }
 
 /**
@@ -73,7 +60,7 @@ void PythonVirtualMachine::Initialize()
  * @param void
  * @return void
  */
-bool PythonVirtualMachine::IsPyExt( LPCTSTR ext ) const
+bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
 {
   return ( _tcsicmp( ext, _T("py") ) == 0 );
 }
@@ -85,6 +72,7 @@ bool PythonVirtualMachine::IsPyExt( LPCTSTR ext ) const
  */
 int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
 {
+  Initialize();
   if( !m_isInitialized )
   {
     return -1;

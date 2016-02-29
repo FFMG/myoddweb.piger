@@ -384,10 +384,10 @@ bool Action::DoItDirect( LPCTSTR szArgs, bool isPrivileged) const
 #ifdef ACTIONMONITOR_API_PY
   // Do the API calls.
   //
-  PythonVirtualMachine& py = GetPyVirtualMachine( );
-  if( py.IsPyExt( m_szExt.c_str() ) )
+  if(PythonVirtualMachine::IsPyExt( m_szExt.c_str() ) )
   {
-    int s = py.LoadFile( m_szFile.c_str() );
+    PythonVirtualMachine* py = App().GetPythonVirtualMachine();
+    int s = py->LoadFile( m_szFile.c_str() );
     return ( s == 0 ); 
   }
 #endif // ACTIONMONITOR_API_PY

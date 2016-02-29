@@ -25,6 +25,9 @@ CActionMonitorApp::CActionMonitorApp() :
 #ifdef ACTIONMONITOR_API_LUA
   , _lvm(NULL)
 #endif
+#ifdef ACTIONMONITOR_API_PY
+  , _pvm(NULL)
+#endif
 {
 }
 
@@ -38,6 +41,9 @@ CActionMonitorApp::~CActionMonitorApp()
 #ifdef ACTIONMONITOR_API_LUA
   delete _lvm;
 #endif
+#ifdef ACTIONMONITOR_API_PY
+  delete _pvm;
+#endif
 }
 
 #ifdef ACTIONMONITOR_API_LUA
@@ -48,6 +54,17 @@ LuaVirtualMachine* CActionMonitorApp::GetLuaVirtualMachine()
     _lvm = new LuaVirtualMachine();
   }
   return _lvm;
+}
+#endif
+
+#ifdef ACTIONMONITOR_API_PY
+PythonVirtualMachine* CActionMonitorApp::GetPythonVirtualMachine()
+{
+  if (_pvm == NULL)
+  {
+    _pvm = new PythonVirtualMachine();
+  }
+  return _pvm;
 }
 #endif
 

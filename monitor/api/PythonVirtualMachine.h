@@ -5,17 +5,14 @@
 class PythonVirtualMachine
 {
 public:
-  PythonVirtualMachine(void);
-  ~PythonVirtualMachine(void);
+  PythonVirtualMachine();
+  ~PythonVirtualMachine();
 
   void Initialize(); 
 
   int LoadFile( LPCTSTR pyFile );
-  bool IsPyExt( LPCTSTR ext ) const;
+  static bool IsPyExt( LPCTSTR ext );
 
 protected:
   bool m_isInitialized;
 };
-
-// the Python virtual machine
-PythonVirtualMachine& GetPyVirtualMachine();
