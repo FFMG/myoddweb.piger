@@ -166,16 +166,21 @@ luaapi& LuaVirtualMachine::GetApi(lua_State* lua)
   // find the lua...
   lvm->_mutex.lock();
   state_api::iterator it = lvm->_lua_Api.find( lua );
-  lvm->_mutex.unlock();
 
   // does it exist?
   if (it == lvm->_lua_Api.end())
   {
     // we could not find this lua!
     // has it been destroyed?
+    lvm->_mutex.unlock();
     throw - 1;
   }
-  return *it->second;
+
+  //  get the value before we lock it...
+  luaapi* api = it->second;
+  lvm->_mutex.unlock();
+
+  return *api;
 }
 
 /**
