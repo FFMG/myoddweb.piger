@@ -8,25 +8,23 @@ static const double ACTIONMONITOR_API_PY_VERSION = 0.1f;
 
 class pyapi
 {
-protected: // all static
+public:
   pyapi(void);
-  ~pyapi(void);
+  virtual ~pyapi();
 
 public:
-  static void Initialize( );
-
-  static PyObject* say(PyObject *self, PyObject *args);
-  static PyObject* version(PyObject *self, PyObject *args);
-  static PyObject* getCommand(PyObject *self, PyObject *args);
-  static PyObject* getAction(PyObject *self, PyObject *args);
-  static PyObject* getCommandCount(PyObject *self, PyObject *args);
-  static PyObject* execute(PyObject *self, PyObject *args);
-  static PyObject* getstring(PyObject *self, PyObject *args);
-  static PyObject* getfile(PyObject *self, PyObject *args);
-  static PyObject* getfolder(PyObject *self, PyObject *args);
-  static PyObject* geturl(PyObject *self, PyObject *args);
-  static PyObject* addAction(PyObject *self, PyObject *args);
-  static PyObject* removeAction(PyObject *self, PyObject *args);
-  static PyObject* getVersion(PyObject *self, PyObject *args);
-  static PyObject* findAction(PyObject *self, PyObject *args);
+  PyObject* say(PyObject *self, PyObject *args);
+  PyObject* version(PyObject *self, PyObject *args);
+  PyObject* getCommand(PyObject *self, PyObject *args);
+  PyObject* getAction(PyObject *self, PyObject *args);
+  PyObject* getCommandCount(PyObject *self, PyObject *args);
+  PyObject* execute(PyObject *self, PyObject *args);
+  PyObject* getstring(PyObject *self, PyObject *args);
+  PyObject* getfile(PyObject *self, PyObject *args);
+  PyObject* getfolder(PyObject *self, PyObject *args);
+  PyObject* geturl(PyObject *self, PyObject *args);
+  PyObject* addAction(PyObject *self, PyObject *args);
+  PyObject* removeAction(PyObject *self, PyObject *args);
+  PyObject* getVersion(PyObject *self, PyObject *args);
+  PyObject* findAction(PyObject *self, PyObject *args);
 };

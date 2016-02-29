@@ -12,7 +12,7 @@
  * @param void
  * @return void
  */
-pyapi::pyapi(void)
+pyapi::pyapi()
 {
 }
 
@@ -21,66 +21,8 @@ pyapi::pyapi(void)
  * @param void
  * @return void
  */
-pyapi::~pyapi(void)
+pyapi::~pyapi()
 {
-}
-
-static PyMethodDef amMethods[] = {
-    {"say", pyapi::say, METH_VARARGS, "Display a message on the screen."},
-    {"version", pyapi::version, METH_VARARGS, "Get this API version number."},
-    {"getCommand", pyapi::getCommand, METH_VARARGS, "Get a certain command, return false if it does not exist."},
-    {"getAction", pyapi::getAction, METH_VARARGS, "Get the action entered by the user."},
-    {"getCommandCount", pyapi::getCommandCount, METH_VARARGS, "Get the number of commands."},
-    {"execute", pyapi::execute, METH_VARARGS, "Execute a command, (app, command)."},
-    {"getstring", pyapi::getstring, METH_VARARGS, "Get the currently selected text if any."},
-    {"getfile", pyapi::getfile, METH_VARARGS, "Get a file by index, return false if not found."},
-    {"getfolder", pyapi::getfolder, METH_VARARGS, "Get a folder by index, return false if not found."},
-    {"geturl", pyapi::geturl, METH_VARARGS, "Get a URL by index, return false if not found."},
-    {"addAction", pyapi::addAction, METH_VARARGS, "Add an action and path to the list of actions."},
-    {"removeAction", pyapi::removeAction, METH_VARARGS, "Remove an action from the list."},
-    {"getVersion", pyapi::getVersion, METH_VARARGS, "Get the full version string."},
-    {"findAction", pyapi::findAction, METH_VARARGS, "Find an action given an index, return false or the path."},
-    {NULL, NULL, 0, NULL}
-};
-
-static struct PyModuleDef amModule = {
-  PyModuleDef_HEAD_INIT,
-  "am",     /* name of module */
-  NULL,     /* module documentation, may be NULL */
-  -1,       /* size of per-interpreter state of the module,
-            or -1 if the module keeps state in global variables. */
-  amMethods
-};
-
-#if PY_MAJOR_VERSION < 3
-PyObject *PyInit_am(void)
-{
-  PyObject *m;
-  m = PyModule_Create(&amModule);
-  if (!m) {
-    return NULL;
-  }
-  return m;
-}
-#endif 
-
-static PyObject*
-PyInit_am(void)
-{
-  return PyModule_Create(&amModule);
-}
-
-/**
- * Todo
- * @param void
- * @return void
- */
-void pyapi::Initialize( )
-{
-  PyImport_AppendInittab(
-    "am",
-    &PyInit_am
-  );
 }
 
 /**
