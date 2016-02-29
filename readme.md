@@ -25,34 +25,37 @@ At statup all the actions/plugins are loaded. A file will have the command name.
 
 For example, the file "**google.lua**" will create a command called "**google**" and the code in "google.lua" will be executed when that action is called. 
 
-### Sub folders
-
-All sub folders are parsed, a file in the folder "**\os\calc.lua**" will create a command "**calc**"
-
-#### __in
-Anything in this folder, actions, plugins are loaded/called at startup.    
-
-This allows your plugin to add/remove actions.
-
-#### __out
-As with the above, actions listed in that folder are called when piger closes.
-
-This allows for cleanup for example.
-
-#### __plugins
-
-This special folders allows your plugin to save whatever they want to, (and it will not be deleted), for example you could save configuration data.
-
-#### __temp
-
-This is a special folder that is **not** parsed.
-You can put your own files, code etc in that folder.
-
-
 # Scripting your own commands.
-## Lua
+## Python
 ### Code
 
+import module, **import am**, (only usable within Piger of course).
+
+- say( what, elapse, fade ), display a message
+- version, get the LUA version been used.
+- getCommand( idx ), get a typed command, if the user selects something like "*google world*", then command #0 is "google" and command #1 is "world".
+- getAction, get the selected action.
+- getCommandCount, get the number of commands including the action.
+- execute, execute a certain app/event/batch file. You can also ask for elevated permission, (if piger is not running elevated).
+- getstring, get a string that the user might have selected at the time of calling the action.
+- getfile, get a file that the user might have selected at the time of calling the action.
+- getfolder, get a folder that the user might have selected at the time of calling the action.
+- geturl, get a url that the user might have selected at the time of calling the action.
+- addAction, add an action to our current list of actions. (lost when the app restarts!)
+- removeAction, remove an action from the list.
+- getVersion, get the piger version number.
+- findAction, find an action in our list of actions.
+
+### Example
+#### Calculator.lua
+
+    import am
+    am.say( "Run - calc ...", 400, 10 );
+    am.execute( "%SystemRoot%\\system32\\calc.exe" );
+
+
+## Lua
+### Code
 - am_say( what, elapse, fade ), display a message
 - am_version, get the LUA version been used.
 - am_getCommand( idx ), get a typed command, if the user selects something like "*google world*", then command #0 is "google" and command #1 is "world".
@@ -69,7 +72,6 @@ You can put your own files, code etc in that folder.
 - am_findAction, find an action in our list of actions.
 
 ### Example
-
 #### Calculator.lua
 
 Launch the default calculator.
@@ -163,3 +165,26 @@ This happens when you are not debuging in 'Elevated mode', basically you need to
 If you are using visual studio, simply restart the IDE, but be sure to run as Admin. That will launch the app as admin as well.
 
 **NB**: In release mode, the app auto-elevates itself.
+
+### Sub folders
+
+All sub folders are parsed, a file in the folder "**\os\calc.lua**" will create a command "**calc**"
+
+#### __in
+Anything in this folder, actions, plugins are loaded/called at startup.    
+
+This allows your plugin to add/remove actions.
+
+#### __out
+As with the above, actions listed in that folder are called when piger closes.
+
+This allows for cleanup for example.
+
+#### __plugins
+
+This special folders allows your plugin to save whatever they want to, (and it will not be deleted), for example you could save configuration data.
+
+#### __temp
+
+This is a special folder that is **not** parsed.
+You can put your own files, code etc in that folder.
