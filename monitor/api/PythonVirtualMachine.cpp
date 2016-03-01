@@ -73,7 +73,6 @@ PythonVirtualMachine::~PythonVirtualMachine()
     // simply close python
     Py_Finalize();
   }
-  
   delete _api;
 }
 
