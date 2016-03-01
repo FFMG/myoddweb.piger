@@ -7,12 +7,12 @@
 class PluginVirtualMachine
 {
 public:
-  PluginVirtualMachine(void);
-  virtual ~PluginVirtualMachine(void);
+  PluginVirtualMachine();
+  virtual ~PluginVirtualMachine();
 
   void Initialize(); 
   int LoadFile( LPCTSTR pluginFile );
-  bool IsPluginExt( LPCTSTR ext ) const;
+  static bool IsPluginExt( LPCTSTR ext );
 
   bool Register( LPCTSTR, void* );
 
@@ -20,7 +20,12 @@ public:
   void ErasePlugin( const STD_TSTRING& plugin);
 
 protected:
-  amplugin* m_amPlugin;
+  amplugin* _amPlugin;
+
+  static pluginapi& GetApi();
+
+protected:
+  void InitializeFunctions();
 
 protected:
   int InitFile( LPCTSTR pluginFile );
@@ -35,8 +40,9 @@ protected:
   // the threads structures.
   struct PLUGIN_THREAD
   {
-    HMODULE           hModule;
-    PFUNC_MSG         fnMsg;
+    HMODULE    hModule;
+    PFUNC_MSG  fnMsg;
+    pluginapi* api;
   };
 
   // map of all the functions.
@@ -48,7 +54,21 @@ protected:
   PLUGIN_THREAD* Find( const STD_TSTRING& ) const;
 
   HMODULE ExpandLoadLibrary( LPCTSTR lpFile );
-};
 
-// the Lua virtual machine
-PluginVirtualMachine& GetPluginVirtualMachine();
+public:
+  static double version();
+  static size_t getCommandCount();
+
+  static bool say(LPCWSTR msg, UINT nElapse, UINT nFadeOut);
+  static bool execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
+  static int getString(DWORD nBufferLength, LPWSTR lpBuffer);
+  static size_t getCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static int getAction(DWORD nBufferLength, LPWSTR lpBuffer);
+  static int getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static int getFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static int getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static bool addAction(LPCWSTR szText, LPCWSTR szPath);
+  static bool removeAction(LPCWSTR szText, LPCWSTR szPath);
+  static bool getVersion(DWORD nBufferLength, LPWSTR lpBuffer);
+  static bool findAction(UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
+};

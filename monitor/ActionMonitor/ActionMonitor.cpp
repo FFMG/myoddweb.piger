@@ -28,6 +28,9 @@ CActionMonitorApp::CActionMonitorApp() :
 #ifdef ACTIONMONITOR_API_PY
   , _pvm(NULL)
 #endif
+#ifdef ACTIONMONITOR_API_PLUGIN
+  , _plugvm(NULL)
+#endif
 {
 }
 
@@ -40,9 +43,15 @@ CActionMonitorApp::~CActionMonitorApp()
 {
 #ifdef ACTIONMONITOR_API_LUA
   delete _lvm;
+  _lvm = NULL;
 #endif
 #ifdef ACTIONMONITOR_API_PY
   delete _pvm;
+  _pvm = NULL;
+#endif
+#ifdef ACTIONMONITOR_API_PLUGIN
+  delete _plugvm;
+  _plugvm = NULL;
 #endif
 }
 
@@ -68,6 +77,16 @@ PythonVirtualMachine* CActionMonitorApp::GetPythonVirtualMachine()
 }
 #endif
 
+#ifdef ACTIONMONITOR_API_PLUGIN
+PluginVirtualMachine* CActionMonitorApp::GetPluginVirtualMachine()
+{
+  if (_plugvm == NULL)
+  {
+    _plugvm = new PluginVirtualMachine();
+  }
+  return _plugvm;
+}
+#endif
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CActionMonitorApp object
 CActionMonitorApp theApp;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "helperapi.h"
+
 // this is the version number for that particular API
 static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 
@@ -21,28 +23,26 @@ static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 # endif
 #endif
 
-class pluginapi
+class pluginapi : public helperapi
 {
-protected: // all static
-  pluginapi(void);
-  ~pluginapi(void);
+public:
+  pluginapi();
+  virtual ~pluginapi();
 
 public:
-  static void Initialize();
+  double version ();
+  size_t getCommandCount();
 
-  static double version ();
-  static size_t getCommandCount();
-
-  static bool say         ( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
-  static bool execute     ( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
-  static int getString    ( DWORD nBufferLength, LPWSTR lpBuffer);
-  static size_t getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  static int getAction    ( DWORD nBufferLength, LPWSTR lpBuffer );
-  static int getFile      ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  static int getFolder    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  static int getURL       ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  static bool addAction   ( LPCWSTR szText, LPCWSTR szPath );
-  static bool removeAction( LPCWSTR szText, LPCWSTR szPath );
-  static bool getVersion  ( DWORD nBufferLength, LPWSTR lpBuffer);
-  static bool findAction  ( UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
+  bool say         ( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
+  bool execute     ( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
+  int getString    ( DWORD nBufferLength, LPWSTR lpBuffer);
+  size_t getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  int getAction    ( DWORD nBufferLength, LPWSTR lpBuffer );
+  int getFile      ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  int getFolder    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  int getURL       ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  bool addAction   ( LPCWSTR szText, LPCWSTR szPath );
+  bool removeAction( LPCWSTR szText, LPCWSTR szPath );
+  bool getVersion  ( DWORD nBufferLength, LPWSTR lpBuffer);
+  bool findAction  ( UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
 };

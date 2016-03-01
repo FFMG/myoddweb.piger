@@ -1,11 +1,6 @@
 #include "stdafx.h"
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 #include "pluginapi.h"
-#include "helperapi.h"
 #include "pluginVirtualMachine.h"
 
 /**
@@ -13,7 +8,7 @@
  * @param void
  * @return void
  */
-pluginapi::pluginapi(void)
+pluginapi::pluginapi() : helperapi()
 {
 }
 
@@ -22,37 +17,13 @@ pluginapi::pluginapi(void)
  * @param void
  * @return void
  */
-pluginapi::~pluginapi(void)
+pluginapi::~pluginapi()
 {
 }
 
 /**
  * Todo
- * @param void
- * @return void
- */
-void pluginapi::Initialize ( )
-{
-  PluginVirtualMachine& vm = GetPluginVirtualMachine();
-  vm.Register( _T("say"), pluginapi::say );
-  vm.Register( _T("version"), pluginapi::version );
-  vm.Register( _T("getCommand"), pluginapi::getCommand );
-  vm.Register( _T("getAction"), pluginapi::getAction );
-  vm.Register( _T("getCommandCount"),  pluginapi::getCommandCount );
-  vm.Register( _T("execute"),  pluginapi::execute );
-  vm.Register( _T("getString"),  pluginapi::getString );
-  vm.Register( _T("getFile"),  pluginapi::getFile );
-  vm.Register( _T("getFolder"),  pluginapi::getFolder );
-  vm.Register( _T("getURL"),  pluginapi::getURL );
-  vm.Register( _T("addAction"),  pluginapi::addAction );
-  vm.Register( _T("removeAction"),  pluginapi::removeAction );
-  vm.Register( _T("getVersion"),  pluginapi::getVersion );
-  vm.Register( _T("findAction"),  pluginapi::findAction );
-}
-
-/**
- * Todo
- * @see helperapi::version
+ * @see __super::version
  * @param void
  * @return void
  */
@@ -65,7 +36,7 @@ double pluginapi::version ( )
 
 /**
  * Todo
- * @see helperapi::say
+ * @see __super::say
  * @param void
  * @param void
  * @param void
@@ -75,37 +46,42 @@ bool pluginapi::say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
 {
   // display the message
   // and we can now display the message.
-  return helperapi::say( msg, nElapse, nFadeOut );
+  return __super::say( msg, nElapse, nFadeOut );
 }
 
 /**
  * Todo
- * @see helperapi::getCommand
- * @param void
- * @param void
- * @param void
+ * @see __super::getCommand
+ * @param UINT idx the command number we want to get.
+ * @param DWORD nBufferLength the max buffer length that we want to get. 
+ * @param LPWSTR lpBuffer the buffer that will contain the command, if it is NULL only the size will be returned.
  * @return void
  */
 size_t pluginapi::getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 {
+  // first get the command
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getCommand( idx, sValue ) )
+  if( !__super::getCommand( idx, sValue ) )
   {
     return 0;
   }
 
+  // then copy the data into the buffer.
   size_t len = sValue.length();
   if ( nBufferLength > 0 && lpBuffer )
   {
-    memset( lpBuffer, 0, nBufferLength );
-    _tcsncpy_s( lpBuffer, (nBufferLength > len ? len : nBufferLength), sValue.c_str(), _TRUNCATE );
+    // clear the buffer.
+    memset( lpBuffer, 0, nBufferLength * sizeof(TCHAR) );
+
+    // then copy the word.
+    _tcsncpy_s( lpBuffer, (nBufferLength > len+1 ? len+1 : nBufferLength), sValue.c_str(), _TRUNCATE );
   }
   return len;
 }
 
 /**
  * Todo
- * @see helperapi::getAction
+ * @see __super::getAction
  * @param void
  * @param void
  * @param void
@@ -114,7 +90,7 @@ size_t pluginapi::getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 int pluginapi::getAction( DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getAction( sValue ) )
+  if( !__super::getAction( sValue ) )
   {
     return 0;
   }
@@ -131,17 +107,17 @@ int pluginapi::getAction( DWORD nBufferLength, LPWSTR lpBuffer )
 
 /**
  * Get the number of command, (space delimited).
- * @see helperapi::getCommandCount
+ * @see __super::getCommandCount
  * @return in the number of commanded entered by the user
  */
 size_t pluginapi::getCommandCount()
 {
-  return helperapi::getCommandCount();
+  return __super::getCommandCount();
 }
 
 /**
  * Todo
- * @see helperapi::execute
+ * @see __super::execute
  * @param void
  * @param void
  * @param bool isPrivileged if we need administrator privilege to run this.
@@ -149,12 +125,12 @@ size_t pluginapi::getCommandCount()
  */
 bool pluginapi::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
 {
-  return helperapi::execute( module, cmdLine, isPrivileged );
+  return __super::execute( module, cmdLine, isPrivileged );
 }
 
 /**
  * Todo
- * @see helperapi::getString
+ * @see __super::getString
  * @param void
  * @param void
  * @return void
@@ -162,7 +138,7 @@ bool pluginapi::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
 int pluginapi::getString( DWORD nBufferLength, LPWSTR lpBuffer)
 {
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getString ( sValue ) )
+  if( !__super::getString ( sValue ) )
   {
     return 0;
   }
@@ -178,7 +154,7 @@ int pluginapi::getString( DWORD nBufferLength, LPWSTR lpBuffer)
 
 /**
  * Todo
- * @see helperapi::getFile
+ * @see __super::getFile
  * @param void
  * @param void
  * @param void
@@ -187,7 +163,7 @@ int pluginapi::getString( DWORD nBufferLength, LPWSTR lpBuffer)
 int pluginapi::getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getFile(idx, sValue ) )
+  if( !__super::getFile(idx, sValue ) )
   {
     return 0;
   }
@@ -203,7 +179,7 @@ int pluginapi::getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 
 /**
  * Todo
- * @see helperapi::getFolder
+ * @see __super::getFolder
  * @param void
  * @param void
  * @param void
@@ -212,7 +188,7 @@ int pluginapi::getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 int pluginapi::getFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getFolder (idx, sValue ) )
+  if( !__super::getFolder (idx, sValue ) )
   {
     return 0;
   }
@@ -228,7 +204,7 @@ int pluginapi::getFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 
 /**
  * Todo
- * @see helperapi::getURL
+ * @see __super::getURL
  * @param void
  * @param void
  * @param void
@@ -237,7 +213,7 @@ int pluginapi::getFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 int pluginapi::getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING sValue = _T("");
-  if( !helperapi::getURL (idx, sValue ) )
+  if( !__super::getURL (idx, sValue ) )
   {
     return 0;
   }
@@ -253,7 +229,7 @@ int pluginapi::getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 
 /**
  * Todo
- * @see helperapi::addAction
+ * @see __super::addAction
  * @param void
  * @param void
  * @return void
@@ -261,12 +237,12 @@ int pluginapi::getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 bool pluginapi::addAction( LPCWSTR szText, LPCWSTR szPath )
 {
   // pass it straight to the helper API as it will do all the needed validations
-  return helperapi::addAction( szText, szPath );
+  return __super::addAction( szText, szPath );
 }
 
 /**
  * Todo
- * @see helperapi::removeAction
+ * @see __super::removeAction
  * @param void
  * @param void
  * @return void
@@ -274,7 +250,7 @@ bool pluginapi::addAction( LPCWSTR szText, LPCWSTR szPath )
 bool pluginapi::removeAction( LPCWSTR szText, LPCWSTR szPath )
 {
   // pass it straight to the helper API as it will do all the needed validations
-  return helperapi::removeAction( szText, szPath );
+  return __super::removeAction( szText, szPath );
 }
 
 /**
@@ -286,7 +262,7 @@ bool pluginapi::removeAction( LPCWSTR szText, LPCWSTR szPath )
 bool pluginapi::getVersion(DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING stdVersion;
-  if( !helperapi::getVersion( stdVersion ) )
+  if( !__super::getVersion( stdVersion ) )
   {
     return false;
   }
@@ -311,7 +287,7 @@ bool pluginapi::findAction
 )
 {
   STD_TSTRING stdActionPath;
-  if( !helperapi::findAction( idx, lpCommand, stdActionPath ) )
+  if( !__super::findAction( idx, lpCommand, stdActionPath ) )
   {
     return false;
   }

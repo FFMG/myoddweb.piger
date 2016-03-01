@@ -1,32 +1,15 @@
 #include "stdafx.h"
-
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 #include "PluginVirtualMachine.h"
 #include "helperapi.h"
-
-// define the virtual machine object.
-static PluginVirtualMachine pluginVirtualMachine;
+#include "..\ActionMonitor\ActionMonitor.h"
 
 /**
  * Todo
  * @param void
  * @return void
  */
-PluginVirtualMachine& GetPluginVirtualMachine()
-{
-  pluginVirtualMachine.Initialize();
-  return (pluginVirtualMachine);
-}
-
-/**
- * Todo
- * @param void
- * @return void
- */
-PluginVirtualMachine::PluginVirtualMachine(void) : m_amPlugin( NULL )
+PluginVirtualMachine::PluginVirtualMachine() : 
+  _amPlugin( NULL )
 {
   //  get our own module architecture.
   _moduleArchitecture = myodd::os::GetImageArchitecture( NULL );
@@ -37,13 +20,28 @@ PluginVirtualMachine::PluginVirtualMachine(void) : m_amPlugin( NULL )
  * @param void
  * @return void
  */
-PluginVirtualMachine::~PluginVirtualMachine(void)
+PluginVirtualMachine::~PluginVirtualMachine()
 {
   //  destroy all the plugins.
   DestroyPlugins();
 
   // clean the monitor.
-  delete m_amPlugin;
+  delete _amPlugin;
+}
+
+pluginapi& PluginVirtualMachine::GetApi()
+{
+  // get our current self.
+  PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
+
+  // for now, get the first value...
+  // @todo, we need to get the actual thread id running.
+  PLUGIN_CONTAINER::const_iterator it = pvm->m_pluginsContainer.begin();
+  if (it == pvm->m_pluginsContainer.end())
+  {
+    throw -1;
+  }
+  return *(it->second->api);
 }
 
 /**
@@ -54,12 +52,36 @@ PluginVirtualMachine::~PluginVirtualMachine(void)
 void PluginVirtualMachine::Initialize()
 {
   //  only do it once
-  if( !m_amPlugin )
+  if( !_amPlugin )
   {
-    m_amPlugin = new amplugin();
+    _amPlugin = new amplugin();
+
     // register our Plugin functions.
-    pluginapi::Initialize( );
+    InitializeFunctions();
   }
+}
+
+/**
+* Todo
+* @param void
+* @return void
+*/
+void PluginVirtualMachine::InitializeFunctions()
+{
+  Register(_T("say"), PluginVirtualMachine::say);
+  Register(_T("version"), PluginVirtualMachine::version);
+  Register(_T("getCommand"), PluginVirtualMachine::getCommand);
+  Register(_T("getAction"), PluginVirtualMachine::getAction);
+  Register(_T("getCommandCount"), PluginVirtualMachine::getCommandCount);
+  Register(_T("execute"), PluginVirtualMachine::execute);
+  Register(_T("getString"), PluginVirtualMachine::getString);
+  Register(_T("getFile"), PluginVirtualMachine::getFile);
+  Register(_T("getFolder"), PluginVirtualMachine::getFolder);
+  Register(_T("getURL"), PluginVirtualMachine::getURL);
+  Register(_T("addAction"), PluginVirtualMachine::addAction);
+  Register(_T("removeAction"), PluginVirtualMachine::removeAction);
+  Register(_T("getVersion"), PluginVirtualMachine::getVersion);
+  Register(_T("findAction"), PluginVirtualMachine::findAction);
 }
 
 /**
@@ -70,11 +92,11 @@ void PluginVirtualMachine::Initialize()
  */
 bool PluginVirtualMachine::Register( LPCTSTR what, void* with )
 {
-  if( !m_amPlugin )
+  if( !_amPlugin )
   {
     return false;
   }
-  m_amPlugin->Add( what,  with );
+  _amPlugin->Add( what,  with );
 
   return true;
 }
@@ -84,7 +106,7 @@ bool PluginVirtualMachine::Register( LPCTSTR what, void* with )
  * @param void
  * @return void
  */
-bool PluginVirtualMachine::IsPluginExt( LPCTSTR ext ) const
+bool PluginVirtualMachine::IsPluginExt( LPCTSTR ext )
 {
   return ( _tcsicmp( ext, _T("amp") ) == 0 );
 }
@@ -133,7 +155,8 @@ HMODULE PluginVirtualMachine::ExpandLoadLibrary( LPCTSTR lpFile )
  */
 int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile )
 {
-  if( NULL == m_amPlugin )
+  Initialize();
+  if( NULL == _amPlugin )
   {
     // the plugin manager was not created?
     return -1;
@@ -158,7 +181,7 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile )
   // it is up to the plugins to ensure that they don't block the main thread for too long
   try
   {
-    result = f-> fnMsg( AM_MSG_MAIN, 0, (LPARAM)m_amPlugin );
+    result = f-> fnMsg( AM_MSG_MAIN, 0, (LPARAM)_amPlugin );
   }
   catch( ... )
   {
@@ -180,20 +203,21 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
   HMODULE hModule = ExpandLoadLibrary( pluginFile );
   if( NULL == hModule )
   {
+    helperapi api;
     myodd::os::ARCHITECTURE pe = myodd::os::GetImageArchitecture(pluginFile);
     if (pe == myodd::os::ARCHITECTURE_UNKNOWN)
     {
-      helperapi::say(_T("<b>Error : </b> Plugin could not be loaded."), 3000, 5);
+      api.say(_T("<b>Error : </b> Plugin could not be loaded."), 3000, 5);
     }
     else
     if (pe != _moduleArchitecture )
     {
-      helperapi::say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 3000, 5);
+      api.say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 3000, 5);
     }
     else
     {
       //  it is not unknown, but somehow we could not load it.
-      helperapi::say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 3000, 5);
+      api.say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 3000, 5);
     }
     return -1;
   }
@@ -202,13 +226,15 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
   PFUNC_MSG pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
   if (NULL == pfMsg )
   {
-    helperapi::say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
+    helperapi api;
+    api.say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
     return -1;
   }
 
   PLUGIN_THREAD* f = new PLUGIN_THREAD;
-  f-> hModule         = hModule;
-  f-> fnMsg           = pfMsg;
+  f-> hModule = hModule;
+  f-> fnMsg   = pfMsg;
+  f->api      = new pluginapi();
 
   m_pluginsContainer[ pluginFile ] = f;
 
@@ -234,7 +260,7 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
     pfMsg( AM_MSG_PATH_PLUGIN, 0, (LPARAM)lp );
 
     // call the init path
-    result = pfMsg( AM_MSG_INIT,     0, (LPARAM)m_amPlugin );
+    result = pfMsg( AM_MSG_INIT,     0, (LPARAM)_amPlugin );
   }
   catch( ... )
   {
@@ -242,7 +268,6 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
     ErasePlugin( pluginFile );
     result = AM_RESP_THROW;
   }
-
   return result;
 }
 
@@ -265,6 +290,10 @@ void PluginVirtualMachine::ErasePlugin( const STD_TSTRING& plugin)
  
     // destroy
     f-> fnMsg( AM_MSG_DEINIT, 0, 0 );
+
+    //  free the memory
+    delete f->api;
+    delete f;
   }
   catch( ... )
   {
@@ -297,10 +326,195 @@ void PluginVirtualMachine::DestroyPlugins()
     FreeLibrary( f->hModule );
 
     // and with the pointer
+    delete f->api;
     delete f;
     f = NULL;
   }// for each modules.
 
   // and remove everything
   m_pluginsContainer.erase( m_pluginsContainer.begin(), m_pluginsContainer.end() );
+}
+
+/**
+* Todo
+* @see __super::version
+* @param void
+* @return void
+*/
+double PluginVirtualMachine::version()
+{
+  return GetApi().version();
+}
+
+/**
+* Todo
+* @see __super::say
+* @param void
+* @param void
+* @param void
+* @return void
+*/
+bool PluginVirtualMachine::say(LPCWSTR msg, UINT nElapse, UINT nFadeOut)
+{
+  return GetApi().say(msg, nElapse, nFadeOut);
+}
+
+/**
+* Todo
+* @see __super::getCommand
+* @param void
+* @param void
+* @param void
+* @return void
+*/
+size_t PluginVirtualMachine::getCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+{
+  return GetApi().getCommand( idx, nBufferLength, lpBuffer);
+}
+
+/**
+* Todo
+* @see __super::getAction
+* @param void
+* @param void
+* @param void
+* @return void
+*/
+int PluginVirtualMachine::getAction(DWORD nBufferLength, LPWSTR lpBuffer)
+{
+  return GetApi().getAction( nBufferLength, lpBuffer);
+}
+
+/**
+* Get the number of command, (space delimited).
+* @see __super::getCommandCount
+* @return in the number of commanded entered by the user
+*/
+size_t PluginVirtualMachine::getCommandCount()
+{
+  return GetApi().getCommandCount();
+}
+
+/**
+* Todo
+* @see __super::execute
+* @param void
+* @param void
+* @param bool isPrivileged if we need administrator privilege to run this.
+* @return void
+*/
+bool PluginVirtualMachine::execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged)
+{
+  return GetApi().execute(module, cmdLine, isPrivileged);
+}
+
+/**
+* Todo
+* @see __super::getString
+* @param void
+* @param void
+* @return void
+*/
+int PluginVirtualMachine::getString(DWORD nBufferLength, LPWSTR lpBuffer)
+{
+  return GetApi().getString(nBufferLength, lpBuffer);
+}
+
+/**
+* Todo
+* @see __super::getFile
+* @param void
+* @param void
+* @param void
+* @return void
+*/
+int PluginVirtualMachine::getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+{
+  return GetApi().getFile( idx, nBufferLength, lpBuffer);
+}
+
+/**
+* Todo
+* @see __super::getFolder
+* @param void
+* @param void
+* @param void
+* @return void
+*/
+int PluginVirtualMachine::getFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+{
+  return GetApi().getFolder( idx, nBufferLength, lpBuffer);
+}
+
+/**
+* Todo
+* @see __super::getURL
+* @param void
+* @param void
+* @param void
+* @return void
+*/
+int PluginVirtualMachine::getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+{
+  return GetApi().getURL( idx,  nBufferLength,  lpBuffer);
+}
+
+/**
+* Todo
+* @see __super::addAction
+* @param void
+* @param void
+* @return void
+*/
+bool PluginVirtualMachine::addAction(LPCWSTR szText, LPCWSTR szPath)
+{
+  return GetApi().addAction(szText, szPath);
+}
+
+/**
+* Todo
+* @see __super::removeAction
+* @param void
+* @param void
+* @return void
+*/
+bool PluginVirtualMachine::removeAction(LPCWSTR szText, LPCWSTR szPath)
+{
+  return GetApi().removeAction( szText, szPath);
+}
+
+/**
+* Get the action monitor version string.
+* @param DWORD the max size of the buffer.
+* @param LPWSTR the buffer that will contain the return data, (version).
+* @return bool success or not if there was an error.
+*/
+bool PluginVirtualMachine::getVersion(DWORD nBufferLength, LPWSTR lpBuffer)
+{
+  return GetApi().getVersion( nBufferLength, lpBuffer);
+}
+
+/**
+* Find an action.
+* @param UINT the action number we are after.
+* @param LPCWSTR the action name we are looking for.
+* @param DWORD the max size of the buffer.
+* @param LPWSTR the buffer that will contain the return data, (version).
+* @return bool if the command exists or not.
+*/
+bool PluginVirtualMachine::findAction
+(
+  UINT idx,
+  LPCWSTR lpCommand,
+  DWORD nBufferLength,
+  LPWSTR lpBuffer
+)
+{
+  return GetApi().findAction
+    (
+      idx,
+      lpCommand,
+      nBufferLength,
+      lpBuffer
+    );
 }

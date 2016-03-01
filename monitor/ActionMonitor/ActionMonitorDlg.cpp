@@ -858,8 +858,8 @@ LRESULT CActionMonitorDlg::OnReload
 #ifdef ACTIONMONITOR_API_PLUGIN
   // We have to kill all the API plugins.
   //
-  PluginVirtualMachine& pg = GetPluginVirtualMachine( );
-  pg.DestroyPlugins();
+  PluginVirtualMachine* pg = App().GetPluginVirtualMachine( );
+  pg->DestroyPlugins();
 #endif // ACTIONMONITOR_API_PLUGIN
 
   WaitForActiveWindows( );

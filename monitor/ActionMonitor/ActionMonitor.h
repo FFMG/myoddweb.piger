@@ -88,6 +88,14 @@ protected:
 public:
   PythonVirtualMachine* GetPythonVirtualMachine();
 #endif
+
+#ifdef ACTIONMONITOR_API_PLUGIN
+protected:
+  PluginVirtualMachine* _plugvm;
+
+public:
+  PluginVirtualMachine* GetPluginVirtualMachine();
+#endif
 };
 
 CActionMonitorApp& App();
