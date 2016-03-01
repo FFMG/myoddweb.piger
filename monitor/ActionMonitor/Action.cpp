@@ -362,10 +362,10 @@ bool Action::DoItDirect( LPCTSTR szArgs, bool isPrivileged) const
 #ifdef ACTIONMONITOR_API_PLUGIN
   // Do the API calls.
   //
-  PluginVirtualMachine& pg = GetPluginVirtualMachine( );
-  if( pg.IsPluginExt( m_szExt.c_str() ) )
+  if(PluginVirtualMachine::IsPluginExt( m_szExt.c_str() ) )
   {
-    int s = pg.LoadFile( m_szFile.c_str() );
+    PluginVirtualMachine* pg = App().GetPluginVirtualMachine();
+    int s = pg->LoadFile( m_szFile.c_str() );
     return ( s == 0 ); 
   }
 #endif // ACTIONMONITOR_API_PLUGIN
