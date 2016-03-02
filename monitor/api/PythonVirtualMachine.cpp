@@ -101,9 +101,6 @@ void PythonVirtualMachine::Initialize()
 
   Py_Initialize();
 
-  PyObject *main_module = PyImport_AddModule( "__main__" );
-  PyObject *main_dict = PyModule_GetDict(main_module);
-
   m_isInitialized = true;
 }
 
@@ -189,12 +186,56 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
   // we are done with the file.
   fclose(fp);
 
+
+  PyObject *main_module = PyImport_AddModule("__main__");
+  PyObject *main_dict = PyModule_GetDict(main_module);
+  
   // we can now run our script
   LPCSTR s = script.c_str();
-  if( -1 == PyRun_SimpleString( s ))
+  PyObject * PyRes = PyRun_String(s, Py_file_input, main_dict, main_dict);
+  PyObject* ex = PyErr_Occurred();
+  if( NULL != ex)
   {
-    helperapi h;
-    h.say( _T("<b>Error : </b>An error was raised in the PyAPI"), 500, 10 );
+    //  if this is a normal exist, then we don't need to show an error message.
+    if (!PyErr_ExceptionMatches(PyExc_SystemExit)) 
+    {
+      PyObject *type, *value, *traceback;
+      PyErr_Fetch(&type, &value, &traceback);
+      PyErr_Clear();
+
+      std::string message = "<b>Error : </b>An error was raised in the PyAPI.";
+      if (type) {
+        PyObject * temp_bytes = PyUnicode_AsEncodedString(type, "ASCII", "strict");
+        if (temp_bytes != NULL) {
+          message += "<br>";
+          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
+          Py_DECREF(temp_bytes);
+        }
+      }
+      if (value) {
+        PyObject * temp_bytes = PyUnicode_AsEncodedString(value, "ASCII", "strict");
+        if (temp_bytes != NULL) {
+          message += "<br>";
+          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
+          Py_DECREF(temp_bytes);
+        }
+      }
+      if (traceback) {
+        PyObject * temp_bytes = PyUnicode_AsEncodedString(traceback, "ASCII", "strict");
+        if (temp_bytes != NULL) {
+          message += "<br>";
+          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
+          Py_DECREF(temp_bytes);
+        }
+      }
+      Py_XDECREF(type);
+      Py_XDECREF(value);
+      Py_XDECREF(traceback);
+
+      USES_CONVERSION;
+      helperapi h;
+      h.say(T_A2T( message.c_str() ), 500, 10);
+    }
   }
 
   // no more errors.
