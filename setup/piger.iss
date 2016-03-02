@@ -3,6 +3,7 @@
 #define APP_URL "http://www.myoddweb.com";
 #define APP_DIR "{pf}\myoddweb\piger";
 #define APP_SOURCE "..\Output\Release\";
+#define APP_INCLUDE "..\includes\";
 
 ; set the version number based on the classifier version number.
 #define APP_VERSION GetFileVersion( APP_SOURCE + 'ActionMonitor.exe' );
@@ -52,6 +53,8 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
 
 [Files]
+Source: {#APP_INCLUDE}vc_redist.x86.exe; DestDir: {tmp}; Flags: deleteafterinstall; Check: "not IsWin64"
+Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinstall; Check: IsWin64
 ;
 ; be sure to build the latest exe.
 ; select "Release Any CPU" to ensure that both x64 and x86 are built.
@@ -67,7 +70,7 @@ Source: {#APP_SOURCE}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: Is
 Source: {#APP_SOURCE}python6435.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 
 ; common
-Source: ..\includes\python35.zip; DestDir: {app}; Flags: recursesubdirs createallsubdirs
+Source: {#APP_INCLUDE}python35.zip; DestDir: {app}; Flags: recursesubdirs createallsubdirs
 
 ; x86 plugins
 Source: {#APP_SOURCE}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: "not IsWin64"
@@ -86,6 +89,9 @@ Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootComm
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist
 
 [Run]
+Filename: {tmp}\vc_redist.x86.exe; Parameters: "/passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...; Check: "not IsWin64"
+Filename: {tmp}\vc_redist.x64.exe; Parameters: "/passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...; Check: IsWin64
+
 Filename: {app}\ActionMonitor.exe; Description: {cm:LaunchProgram,Piger}; Flags: nowait postinstall skipifsilent
 
 [Icons]
