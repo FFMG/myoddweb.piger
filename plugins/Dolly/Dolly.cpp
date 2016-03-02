@@ -4,10 +4,6 @@
 #include "stdafx.h"
 #include "Dolly.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 PLUGIN_API
 AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam  )
 {
@@ -15,6 +11,10 @@ AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam  )
   {
   case AM_MSG_INIT:
     {
+      //  seed me up...
+      unsigned int seed = (unsigned)time(NULL);
+      srand(seed);
+
       //
       // the plugin manager.
       amplugin* p = (amplugin*)(lParam);
@@ -38,6 +38,7 @@ AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam  )
   case AM_MSG_MAIN:
     {
       // just say something.
+      const
       WCHAR* lyrics[] = {L"Hello, Dolly",
                         L"Well, hello, Dolly",
                         L"It's so nice to have you back where you belong",
@@ -68,10 +69,14 @@ AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam  )
                         L"Dolly'll never go away again",
       };
 
-      srand( (unsigned)time( NULL ) );
+      // the range of numbers.
+      const double range_max = _countof(lyrics);
 
-      double range_max = _countof(lyrics);
-      int u = (int)((double)rand() / (RAND_MAX + 1) * (range_max));
+      // get the random number
+      const double rnd = static_cast<double>(rand());
+
+      // make sure it is in range.
+      const int u = static_cast<int>( rnd / (RAND_MAX + 1) * (range_max));
 
       const WCHAR* lyric = lyrics[u];
 
