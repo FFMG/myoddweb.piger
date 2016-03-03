@@ -89,8 +89,8 @@ Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootComm
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist
 
 [Run]
-Filename: {tmp}\vc_redist.x86.exe; Parameters: "/passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...; Check: "not IsWin64"
-Filename: {tmp}\vc_redist.x64.exe; Parameters: "/passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...; Check: IsWin64
+Filename: {tmp}\vc_redist.x86.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...(Please wait a few minutes); Check: "not IsWin64"
+Filename: {tmp}\vc_redist.x64.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...(Please wait a few minutes); Check: IsWin64
 
 Filename: {app}\ActionMonitor.exe; Description: {cm:LaunchProgram,Piger}; Flags: nowait postinstall skipifsilent
 
