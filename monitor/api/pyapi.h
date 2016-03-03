@@ -3,7 +3,9 @@
 #include "helperapi.h"
 
 // this is the version number for that particular API
-static const double ACTIONMONITOR_API_PY_VERSION = 0.1f;
+// 0.1 was the old API, not idea what version of Python it was using.
+// 2.0 uses version 3.5 of Python.
+static const double ACTIONMONITOR_API_PY_VERSION = 2.0;
 
 // support for Python
 #include "python\include\Python.h"
