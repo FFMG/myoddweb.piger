@@ -1,6 +1,15 @@
 # Description
 
-Piger is a Launcher allowing you to run your own commands from your keyboard. Highlight a word hold the caps lock key and simply type 'Google' to search for it in your browser. You can create your own commands, in LUA, C++ and more.
+Piger is a Keyboard Launcher allowing you to run your own commands from your keyboard. Highlight a word hold the caps lock key and simply type 'Google' to search for it in your browser. You can create your own commands, in LUA, Python, C++ and more.
+
+You can start Typing [Caps Lock] + "Wi" and you will have options like ...
+ 
+- Winword
+- Wireshark
+- Winrar
+- ... and whatever else
+
+More importantly, you are in control, you can write scripts for your commands.  
 
 ## Remark
 
@@ -143,6 +152,17 @@ If you are writing your own plugin, note that debug and release versions don't p
 As a rule, remove all the actions and just leave your own plugin that you are developing.
 
 ## FAQ
+
+### What version of Python is needed?
+
+None, Python **3.5** is embedded in Piger, so it does not matter if you have python or not, it will all work just fine.
+
+### Can I submit scripts/plugins
+
+**Yes!** please, we want as many scripts as possible, we will add the best ones to the setup and have a list of all the scripts, (or maybe have a separate setup with all the plugins/scripts).
+
+Just send us a message with your scripts.
+
 
 ### How to debug
 
