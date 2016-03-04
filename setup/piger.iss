@@ -49,10 +49,31 @@ Name: english; MessagesFile: compiler:Default.isl
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: Piger; ValueData: """{app}\ActionMonitor.exe"""; Flags: uninsdeletevalue
 
 [Tasks]
-Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
-Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
+Name: pluginloader; Description: "Create a 'Learn/Unlearn' action to learn new simple actions."; GroupDescription: "Plugins";
+Name: pluginapppaths; Description: "Parse all the common applications on your system and create actions on the fly."; GroupDescription: "Plugins";
+Name: plugindolly; Description: "Hello Dolly sample plugin"; GroupDescription: "Plugins"; Flags: unchecked
 
 [Files]
+;
+; All the plugins
+; Remember to update the task list above!
+;
+; x86 plugins
+Source: {#APP_SOURCE}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginloader')
+Source: {#APP_SOURCE}AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginapppaths')
+Source: {#APP_SOURCE}Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('plugindolly')
+
+; x64 plugins
+Source: {#APP_SOURCE}LoaderPlugin64.amp; DestName:LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginloader')
+Source: {#APP_SOURCE}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginapppaths')
+Source: {#APP_SOURCE}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('plugindolly')
+
+; any commands we might want to add.
+Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
+;
+; All the plugins
+;
+
 Source: {#APP_INCLUDE}vc_redist.x86.exe; DestDir: {tmp}; Flags: deleteafterinstall; Check: "not IsWin64"
 Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinstall; Check: IsWin64
 ;
@@ -72,19 +93,6 @@ Source: {#APP_SOURCE}python6435.dll; DestDir: {app}; Flags: ignoreversion; Check
 ; common
 Source: {#APP_INCLUDE}python35.zip; DestDir: {app}; Flags: recursesubdirs createallsubdirs
 
-; x86 plugins
-Source: {#APP_SOURCE}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE}AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE}Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: "not IsWin64"
-
-; x64 plugins
-Source: {#APP_SOURCE}LoaderPlugin64.amp; DestName:LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64
-
-; any commands we might want to add.
-Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
-
 ; default config
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist
 
@@ -98,6 +106,4 @@ Filename: {app}\ActionMonitor.exe; Description: {cm:LaunchProgram,Piger}; Flags:
 Name: {group}\Piger; Filename: {app}\ActionMonitor.exe
 Name: {group}\{cm:ProgramOnTheWeb,Piger}; Filename: {#APP_URL}
 Name: {group}\{cm:UninstallProgram,Piger}; Filename: {uninstallexe}
-Name: {commondesktop}\Piger; Filename: {app}\ActionMonitor.exe; Tasks: desktopicon
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Piger; Filename: {app}\ActionMonitor.exe; Tasks: quicklaunchicon
 Name: {group}\{cm:UninstallProgram, Piger}; Filename: {uninstallexe}
