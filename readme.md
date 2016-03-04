@@ -11,6 +11,24 @@ You can start Typing [Caps Lock] + "Wi" and you will have options like ...
 
 More importantly, you are in control, you can write scripts for your commands.  
 
+## Install/Setup
+
+- Go grab the [latest release](https://github.com/FFMG/myoddweb.piger/releases/tag/0.4.4.0) and install it.
+- Start Piger, (last step of the setup).
+- Hold the [Caps Lock] key and type something, like 'this' and see what option appear.
+- Select "this.version" and release the [Caps Lock] key.
+- Admire the version number...
+
+### For extra points...
+
+- Write your own script, (see below).
+	- For Python, add the *.py extension
+	- For Lua, add the *.lua extension
+	- For batch files, add the *.bat extension
+- Put it in the Command folders, (select "Rootcommand" as an action).
+- Select the "this.reload" action.
+- Admire your handy work.
+
 ## Remark
 
 Piger is aimed at people that like to write their own plugins, so by default it does not come with a whole lot of actions.
