@@ -78,7 +78,6 @@
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetFileName) $(SolutionDir)\plugins\ /Y
 xcopy $(ProjectDir)amplugin.h $(SolutionDir)\plugins\ /Y
-xcopy $(ProjectDir)am_plugins.h $(SolutionDir)\plugins\ /Y
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -106,7 +105,6 @@ xcopy $(ProjectDir)am_plugins.h $(SolutionDir)\plugins\ /Y
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetFileName) $(SolutionDir)\plugins\ /Y
 xcopy $(ProjectDir)amplugin.h $(SolutionDir)\plugins\ /Y
-xcopy $(ProjectDir)am_plugins.h $(SolutionDir)\plugins\ /Y
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

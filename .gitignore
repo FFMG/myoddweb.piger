@@ -239,7 +239,6 @@ _Pvt_Extensions
 
 #custom
 /plugins/amplugind.lib
-/plugins/am_plugins.h
 /plugins/amplugin.h
 /plugins/amplugind.lib
 /plugins/amplugin.lib
