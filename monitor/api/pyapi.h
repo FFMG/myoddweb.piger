@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef ACTIONMONITOR_API_PY
+
 #include "helperapi.h"
 
 // this is the version number for that particular API
@@ -32,3 +34,5 @@ public:
   PyObject* getVersion(PyObject *self, PyObject *args);
   PyObject* findAction(PyObject *self, PyObject *args);
 };
+
+#endif /*# ACTIONMONITOR_API_PY*/

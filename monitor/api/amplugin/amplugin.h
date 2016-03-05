@@ -20,28 +20,28 @@ public:
 public:
   // the various functions
   double version ();
-  bool say( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
-  size_t getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  bool say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut);
+  size_t getCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer );
 
   // get the full action as given by the user
-  size_t getAction( DWORD nBufferLength, LPWSTR lpBuffer );
+  size_t getAction(unsigned int nBufferLength, wchar_t* lpBuffer );
 
   // get the number of parameters passed.
   size_t getCommandCount() const;
-  bool execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
-  int getString ( DWORD nBufferLength, LPWSTR lpBuffer );
-  size_t getFile   ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer) const;
-  size_t getFolder ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer) const;
-  size_t getURL    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer) const;
-  bool addAction( LPCWSTR szText, LPCTSTR szPath );
-  bool removeAction( LPCWSTR szText, LPCTSTR szPath );
-  bool findAction( UINT idx, LPCWSTR szText, DWORD nBufferLength, LPWSTR lpBuffer);
+  bool execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
+  int getString (unsigned int nBufferLength, wchar_t* lpBuffer );
+  size_t getFile   (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
+  size_t getFolder (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
+  size_t getURL    (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
+  bool addAction(const wchar_t* szText, const wchar_t* szPath );
+  bool removeAction(const wchar_t* szText, const wchar_t* szPath );
+  bool findAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer);
 
   //  add a definition
-  void Add( LPCTSTR name, void* );
+  void Add(const wchar_t* name, void* );
 
 private:
-  void* get( LPCTSTR name ) const;
+  void* get(const wchar_t* name ) const;
   // ---------------------------------------------------------------------------------------------
   typedef std::map< std::wstring, void *> FNC_CONTAINER;
   FNC_CONTAINER m_pFunction;

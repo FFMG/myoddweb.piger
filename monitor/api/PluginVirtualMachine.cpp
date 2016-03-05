@@ -1,4 +1,7 @@
 #include "stdafx.h"
+
+#ifdef ACTIONMONITOR_API_PLUGIN
+
 #include "PluginVirtualMachine.h"
 #include "helperapi.h"
 #include "..\ActionMonitor\ActionMonitor.h"
@@ -31,6 +34,9 @@ PluginVirtualMachine::~PluginVirtualMachine()
 
 pluginapi& PluginVirtualMachine::GetApi()
 {
+#ifndef ACTIONMONITOR_API_PLUGIN
+  throw - 1;
+#else
   // get our current self.
   PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
 
@@ -42,6 +48,7 @@ pluginapi& PluginVirtualMachine::GetApi()
     throw -1;
   }
   return *(it->second->api);
+#endif
 }
 
 /**
@@ -181,7 +188,7 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile )
   // it is up to the plugins to ensure that they don't block the main thread for too long
   try
   {
-    result = f-> fnMsg( AM_MSG_MAIN, 0, (LPARAM)_amPlugin );
+    result = f-> fnMsg( AM_MSG_MAIN, 0, (AM_INT)_amPlugin );
   }
   catch( ... )
   {
@@ -249,18 +256,18 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
     // set some of the paths that might be of interest.
     LPCWSTR lp = NULL;
     lp = myodd::config::get( _T("paths\\commands") );
-    pfMsg( AM_MSG_PATH_CMD, 0, (LPARAM)lp );
+    pfMsg( AM_MSG_PATH_CMD, 0, (AM_INT)lp );
     lp = myodd::config::get( _T("paths\\in"));
-    pfMsg( AM_MSG_PATH_IN, 0, (LPARAM)lp );
+    pfMsg( AM_MSG_PATH_IN, 0, (AM_INT)lp );
     lp = myodd::config::get( _T("paths\\out"));
-    pfMsg( AM_MSG_PATH_OUT, 0, (LPARAM)lp );
+    pfMsg( AM_MSG_PATH_OUT, 0, (AM_INT)lp );
     lp = myodd::config::get( _T("paths\\tmp"));
-    pfMsg( AM_MSG_PATH_TMP, 0, (LPARAM)lp );
+    pfMsg( AM_MSG_PATH_TMP, 0, (AM_INT)lp );
     lp = myodd::config::get( _T("paths\\plugin"));
-    pfMsg( AM_MSG_PATH_PLUGIN, 0, (LPARAM)lp );
+    pfMsg( AM_MSG_PATH_PLUGIN, 0, (AM_INT)lp );
 
     // call the init path
-    result = pfMsg( AM_MSG_INIT,     0, (LPARAM)_amPlugin );
+    result = pfMsg( AM_MSG_INIT,     0, (AM_INT)_amPlugin );
   }
   catch( ... )
   {
@@ -518,3 +525,5 @@ bool PluginVirtualMachine::findAction
       lpBuffer
     );
 }
+
+#endif /* ACTIONMONITOR_API_PLUGIN*/

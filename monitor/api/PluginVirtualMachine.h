@@ -4,6 +4,7 @@
 #include <map>
 #include "os/os.h"
 
+#ifdef ACTIONMONITOR_API_PLUGIN
 class PluginVirtualMachine
 {
 public:
@@ -35,7 +36,7 @@ protected:
 
 protected:
   // the plugin functions.
-  typedef AM_RESPONSE (*PFUNC_MSG)( AM_MSG msg, WPARAM wParam, LPARAM lParam );
+  typedef AM_RESPONSE (*PFUNC_MSG)(AM_MSG msg, AM_UINT wParam, AM_INT lParam);
 
   // the threads structures.
   struct PLUGIN_THREAD
@@ -72,3 +73,4 @@ public:
   static bool getVersion(DWORD nBufferLength, LPWSTR lpBuffer);
   static bool findAction(UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
 };
+#endif /*ACTIONMONITOR_API_PLUGIN*/

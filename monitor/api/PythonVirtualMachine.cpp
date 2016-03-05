@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#ifdef ACTIONMONITOR_API_PY
 
 #include "helperapi.h"
 #include "PythonVirtualMachine.h"
@@ -250,9 +251,13 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
 
 pyapi& PythonVirtualMachine::GetApi()
 {
+#ifndef ACTIONMONITOR_API_PY
+  throw - 1;
+#else
   // get our current self.
   PythonVirtualMachine* pvm = App().GetPythonVirtualMachine();
   return *pvm->_api;
+#endif
 }
 
 /**
@@ -422,3 +427,5 @@ PyObject* PythonVirtualMachine::findAction(PyObject *self, PyObject *args)
 {
   return GetApi().findAction(self, args);
 }
+
+#endif  /* ACTIONMONITOR_API_PY */

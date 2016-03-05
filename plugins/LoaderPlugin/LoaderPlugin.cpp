@@ -3,16 +3,12 @@
 #include "stdafx.h"
 #include "LoaderPlugin.h"
 
-#ifdef _DEBUG
-# define new DEBUG_NEW
-#endif
-
 // ---------------------------------------------------------------------------
 // The one and only CLoaderPluginApp object
 CLoaderPluginApp theApp;
 
 PLUGIN_API
-AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam  )
+AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
 {
   switch( msg )
   {

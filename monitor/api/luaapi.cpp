@@ -1,11 +1,7 @@
 #include "stdafx.h"
-
+#ifdef ACTIONMONITOR_API_LUA
 #include "luaapi.h"
 #include "luaVirtualMachine.h"
-
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
 
 /**
  * Todo
@@ -453,3 +449,5 @@ int luaapi::findAction( lua_State *lua )
   // one return variable.
   return 1;
 }
+
+#endif /* ACTIONMONITOR_API_LUA */

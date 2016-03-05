@@ -219,24 +219,6 @@
   <ItemGroup>
     <None Include="res\ActionMonitor.rc2" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\myodd\myodd.vcxproj">
-      <Project>{887c7e24-886c-4584-8ce4-89f45d7bb3d7}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\api\amplugin\amplugin.vcxproj">
-      <Project>{93af99d9-1217-4a51-bbf5-2794513d4136}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\api\lua\lua.vcxproj">
-      <Project>{29a050d6-5061-4511-80bb-c59f37ba7804}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\hook\hook.vcxproj">
-      <Project>{5173b5b4-a838-44c3-9cc3-5172504cf9ae}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

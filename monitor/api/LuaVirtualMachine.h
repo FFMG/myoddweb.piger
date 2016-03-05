@@ -1,21 +1,8 @@
 #pragma once
 
+#ifdef ACTIONMONITOR_API_LUA
+
 #include <mutex>
-
-// support for LUA
-extern "C" 
-{
-  #include "lua/src/lua.h"
-  #include "lua/src/lualib.h"
-  #include "lua/src/lauxlib.h"
-}
-
-// add the LUA libs
-#ifdef _WIN64
-# pragma comment(lib, "lua64.lib" )
-#else
-# pragma comment(lib, "lua.lib" )
-#endif
 
 // support for LUA
 #include "luaapi.h"
@@ -58,3 +45,5 @@ public:
   static int removeAction(lua_State *lua);
   static int findAction(lua_State *lua);
 };
+
+#endif /*ACTIONMONITOR_API_LUA*/

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#ifdef ACTIONMONITOR_API_LUA
 #include "luaapi.h"
 #include "luavirtualmachine.h"
 #include "..\ActionMonitor\ActionMonitor.h"
@@ -160,6 +161,9 @@ bool LuaVirtualMachine::IsLuaExt( LPCTSTR ext )
 
 luaapi& LuaVirtualMachine::GetApi(lua_State* lua)
 {
+#ifndef ACTIONMONITOR_API_LUA
+  throw - 1;
+#else
   // get our current self.
   LuaVirtualMachine* lvm = App().GetLuaVirtualMachine();
 
@@ -181,6 +185,7 @@ luaapi& LuaVirtualMachine::GetApi(lua_State* lua)
   lvm->_mutex.unlock();
 
   return *api;
+#endif
 }
 
 /**
@@ -322,3 +327,5 @@ int LuaVirtualMachine::findAction(lua_State *lua)
 {
   return GetApi(lua).findAction(lua);
 }
+
+#endif /* ACTIONMONITOR_API_LUA */

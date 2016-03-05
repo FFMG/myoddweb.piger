@@ -2,10 +2,7 @@
 #include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
 #include "ActionsImmediate.h"
-
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
+#include "os/os.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 	//{{AFX_MSG_MAP(CActionMonitorApp)

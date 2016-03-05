@@ -62,42 +62,18 @@
 #include "threads/threads.h"
 
 // and add the needed lib
-#if !defined(_MT)
-# error "You must have 'Multithreaded DLL' or 'Multithreaded' defined"
-#endif 
-
-#if _MSC_VER == 1900
-# if !defined(_DLL)
-#  ifdef _DEBUG
-#   ifdef _WIN64
-#    pragma comment(lib, "myodd64MT14d.lib" )
-#   else
-#    pragma comment(lib, "myoddMT14d.lib" )
-#   endif
-#  else
-#   ifdef _WIN64
-#    pragma comment(lib, "myodd64MT14.lib" )
-#   else
-#    pragma comment(lib, "myoddMT14.lib" )
-#   endif
-#  endif
-# else
-#  ifdef _DEBUG
-#   ifdef _WIN64
+#ifdef _DEBUG
+#  ifdef _WIN64
 #    pragma comment(lib, "myodd6414d.lib" )
-#   else
-#    pragma comment(lib, "myodd14d.lib" )
-#   endif
 #  else
-#   ifdef _WIN64
-#    pragma comment(lib, "myodd6414.lib" )
-#   else
-#    pragma comment(lib, "myodd14.lib" )
-#   endif
+#    pragma comment(lib, "myodd14d.lib" )
 #  endif
-# endif
 #else
-#   error "Unknown compilier version defined!"
+#  ifdef _WIN64
+#    pragma comment(lib, "myodd6414.lib" )
+#  else
+#    pragma comment(lib, "myodd14.lib" )
+#  endif
 #endif
 
 #endif // __myoddinclude_h__

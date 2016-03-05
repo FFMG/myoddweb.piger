@@ -82,6 +82,7 @@
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>
       </ImageHasSafeExceptionHandlers>
+      <AdditionalLibraryDirectories>$(SolutionDir)plugins\</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>if not exist "%25appdata%25\myoddweb" mkdir "%25appdata%25\myoddweb\"
@@ -120,6 +121,7 @@ copy /Y "$(OutDir)$(TargetName)$(TargetExt)" "%25appdata%25\myoddweb\ActionMonit
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalLibraryDirectories>$(SolutionDir)plugins\</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)Output\RootCommands\__in\ /Y 

@@ -1,4 +1,5 @@
 #pragma once
+#ifdef ACTIONMONITOR_API_PY
 
 #include "pyapi.h"
 
@@ -36,3 +37,5 @@ public:
   static PyObject* getVersion(PyObject *self, PyObject *args);
   static PyObject* findAction(PyObject *self, PyObject *args);
 };
+
+#endif /* ACTIONMONITOR_API_PY */

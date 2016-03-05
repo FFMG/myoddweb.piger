@@ -39,21 +39,6 @@
 // support for PluginAPI
 #include "../plugins/amplugin.h"
 
-// add the libs
-#ifdef _DEBUG
-# ifdef _WIN64
-#   pragma comment(lib, "../amplugin64d.lib" )
-#else
-#   pragma comment(lib, "../amplugind.lib" )
-# endif
-#else
-# ifdef _WIN64
-#   pragma comment(lib, "../amplugin64.lib" )
-# else
-#   pragma comment(lib, "../amplugin.lib" )
-# endif
-#endif
-
 //
 // Include all the common files.
 #include <myoddinclude.h>

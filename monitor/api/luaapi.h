@@ -1,5 +1,8 @@
 #pragma once
 
+// add the LUA libs
+#ifdef ACTIONMONITOR_API_LUA
+
 #include "helperapi.h"
 
 // this is the version number for that particular API
@@ -15,12 +18,11 @@ extern "C"
   #include "lua/src/lauxlib.h"
 }
 
-// add the LUA libs
-#ifdef _WIN64
-# pragma comment(lib, "lua64.lib" )
-#else
-# pragma comment(lib, "lua.lib" )
-#endif
+# ifdef _WIN64
+#  pragma comment(lib, "lua64.lib" )
+# else
+#  pragma comment(lib, "lua.lib" )
+# endif
 
 class luaapi : public helperapi
 {
@@ -46,3 +48,5 @@ public:
   int removeAction( lua_State *lua );
   int findAction( lua_State *lua );
 };
+
+#endif /* ACTIONMONITOR_API_LUA */

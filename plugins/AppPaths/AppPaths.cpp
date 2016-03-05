@@ -12,7 +12,7 @@
 static AppPaths* m_appPath = NULL;
 
 PLUGIN_API
-AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam  )
+AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
 {
   switch ( msg )
   {

@@ -311,6 +311,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* So MSVC users need not specify the .lib file in
 their Makefile (other compilers are generally
 taken care of by distutils.) */
+#    ifdef ACTIONMONITOR_API_PY
 #			if defined(_DEBUG)
 #       if defined( _WIN64 )
 # 				pragma comment(lib,"python6435_d.lib")
@@ -326,6 +327,7 @@ taken care of by distutils.) */
 #         pragma comment(lib,"python35.lib")
 #       endif
 #			endif /* _DEBUG */
+#    endif /*ACTIONMONITOR_API_PY*/
 #		endif /* _MSC_VER */
 #	endif /* Py_BUILD_CORE */
 #endif /* MS_COREDLL */

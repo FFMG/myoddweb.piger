@@ -4,18 +4,14 @@
 #include "stdafx.h"
 #include "amplugin.h"
 
-#ifdef _DEBUG
-# define new DEBUG_NEW
-#endif
-
-typedef bool (*PLUGIN_FNCSAY)(LPCWSTR, UINT, UINT );
+typedef bool (*PLUGIN_FNCSAY)(const wchar_t*, unsigned int, unsigned int);
 typedef double (*PLUGIN_FNCVERSION)( );
-typedef size_t (*PLUGIN_FNCGETS)( UINT, DWORD, LPTSTR );
-typedef int (*PLUGIN_FNCGET)( DWORD, LPTSTR );
+typedef size_t (*PLUGIN_FNCGETS)(unsigned int, unsigned int, wchar_t*);
+typedef int (*PLUGIN_FNCGET)(unsigned int, wchar_t*);
 typedef size_t (*PLUGIN_FNCGETCOUNT)(  );
-typedef bool (*PLUGIN_FNCEXECUTE)( LPCWSTR, LPCWSTR, bool );
-typedef bool (*PLUGIN_FNCOMMAND)( LPCWSTR, LPCWSTR );
-typedef bool (*PLUGIN_FINDCOMMAND)( UINT, LPCWSTR, DWORD, LPWSTR );
+typedef bool (*PLUGIN_FNCEXECUTE)(const wchar_t*, const wchar_t*, bool );
+typedef bool (*PLUGIN_FNCOMMAND)(const wchar_t*, const wchar_t*);
+typedef bool (*PLUGIN_FINDCOMMAND)(unsigned int, const wchar_t*, unsigned int, wchar_t*);
 
 /**
  * Todo
@@ -40,7 +36,7 @@ amplugin::~amplugin()
  * @param void
  * @return void
  */
-void amplugin::Add( LPCWSTR name, void* pFunc )
+void amplugin::Add(const wchar_t* name, void* pFunc )
 {
   m_pFunction[ name ] = pFunc;
 }
@@ -50,7 +46,7 @@ void amplugin::Add( LPCWSTR name, void* pFunc )
  * @param void
  * @return void
  */
-void* amplugin::get( LPCWSTR name ) const
+void* amplugin::get(const wchar_t* name ) const
 {
   FNC_CONTAINER::const_iterator iter = m_pFunction.find( name );
   if( iter == m_pFunction.end() )
@@ -67,9 +63,9 @@ void* amplugin::get( LPCWSTR name ) const
  * @param void
  * @return void
  */
-bool amplugin::say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
+bool amplugin::say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut)
 {
-  void* pFunc = get( _T("say") );
+  void* pFunc = get( L"say" );
   if( !pFunc )
   {
     return false;
@@ -84,7 +80,7 @@ bool amplugin::say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
  */
 double amplugin::version ()
 {
-  void* pFunc = get( _T("version") );
+  void* pFunc = get( L"version" );
   if( !pFunc )
   {
     return 0;
@@ -99,9 +95,9 @@ double amplugin::version ()
  * @param void
  * @return void
  */
-size_t amplugin::getCommand( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer )
+size_t amplugin::getCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer )
 {
-  void* pFunc = get( _T("getCommand") );
+  void* pFunc = get( L"getCommand" );
   if( !pFunc )
   {
     return 0;
@@ -116,9 +112,9 @@ size_t amplugin::getCommand( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer )
  * @param void
  * @return void
  */
-size_t amplugin::getFile( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
+size_t amplugin::getFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const
 {
-  void* pFunc = get( _T("getFile") );
+  void* pFunc = get( L"getFile" );
   if( !pFunc )
   {
     return 0;
@@ -133,9 +129,9 @@ size_t amplugin::getFile( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
  * @param void
  * @return void
  */
-size_t amplugin::getFolder( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
+size_t amplugin::getFolder(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const
 {
-  void* pFunc = get( _T("getFolder") );
+  void* pFunc = get( L"getFolder" );
   if( !pFunc )
   {
     return 0;
@@ -150,9 +146,9 @@ size_t amplugin::getFolder( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) cons
  * @param void
  * @return void
  */
-size_t amplugin::getURL( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
+size_t amplugin::getURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const
 {
-  void* pFunc = get( _T("getURL") );
+  void* pFunc = get( L"getURL" );
   if( !pFunc )
   {
     return 0;
@@ -167,9 +163,9 @@ size_t amplugin::getURL( UINT idx, DWORD nBufferLength, LPTSTR lpBuffer) const
  * @param void
  * @return void
  */
-int amplugin::getString(DWORD nBufferLength, LPTSTR lpBuffer)
+int amplugin::getString(unsigned int nBufferLength, wchar_t* lpBuffer)
 {
-  void* pFunc = get( _T("getString") );
+  void* pFunc = get( L"getString" );
   if( !pFunc )
   {
     return 0;
@@ -183,9 +179,9 @@ int amplugin::getString(DWORD nBufferLength, LPTSTR lpBuffer)
  * @param void
  * @return void
  */
-size_t amplugin::getAction(DWORD nBufferLength, LPTSTR lpBuffer)
+size_t amplugin::getAction(unsigned int nBufferLength, wchar_t* lpBuffer)
 {
-  void* pFunc = get( _T("getAction") );
+  void* pFunc = get( L"getAction" );
   if( !pFunc )
   {
     return 0;
@@ -200,7 +196,7 @@ size_t amplugin::getAction(DWORD nBufferLength, LPTSTR lpBuffer)
  */
 size_t amplugin::getCommandCount() const
 {
-  void* pFunc = get( _T("getCommandCount") );
+  void* pFunc = get( L"getCommandCount" );
   if( !pFunc )
   {
     return 0;
@@ -214,9 +210,9 @@ size_t amplugin::getCommandCount() const
  * @param void
  * @return void
  */
-bool amplugin::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged)
+bool amplugin::execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged)
 {
-  void* pFunc = get( _T("execute") );
+  void* pFunc = get( L"execute" );
   if( !pFunc )
   {
     return false;
@@ -230,9 +226,9 @@ bool amplugin::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged)
  * @param void
  * @return void
  */
-bool amplugin::addAction( LPCWSTR szText, LPCWSTR szPath )
+bool amplugin::addAction(const wchar_t* szText, const wchar_t* szPath )
 {
-  void* pFunc = get( _T("addAction") );
+  void* pFunc = get( L"addAction" );
   if( !pFunc )
   {
     return false;
@@ -246,9 +242,9 @@ bool amplugin::addAction( LPCWSTR szText, LPCWSTR szPath )
  * @param void
  * @return void
  */
-bool amplugin::removeAction( LPCWSTR szText, LPCWSTR szPath )
+bool amplugin::removeAction(const wchar_t* szText, const wchar_t* szPath )
 {
-  void* pFunc = get( _T("removeAction") );
+  void* pFunc = get( L"removeAction" );
   if( !pFunc )
   {
     return false;
@@ -259,15 +255,15 @@ bool amplugin::removeAction( LPCWSTR szText, LPCWSTR szPath )
 /**
  * Add a set of command to the list of commands.
  * Note that we do hardly any checks to see of the command already exists
- * @param UINT the index of the action we are looking for.
+ * @param unsigned int the index of the action we are looking for.
  * @param LPCTSTR the name of the command we want to find
- * @param DWORD the max size of the buffer.
- * @param LPWSTR& if the action exists, return the path for it.
+ * @param unsigned int the max size of the buffer.
+ * @param wchar_t* if the action exists, return the path for it.
  * @return bool if the action exits or not.
  */
-bool amplugin::findAction( UINT idx, LPCWSTR szText, DWORD nBufferLength, LPWSTR lpBuffer)
+bool amplugin::findAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer)
 {
-  void* pFunc = get( _T("findAction") );
+  void* pFunc = get( L"findAction" );
   if( !pFunc )
   {
     return false;

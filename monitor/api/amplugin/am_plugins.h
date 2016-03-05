@@ -43,6 +43,30 @@ enum AM_MSG
                               //  LPARAM = LPCWSTR the temp path.
 };
 
+#ifdef  _WIN64
+# define AM_UINT unsigned __int64
+# define AM_INT __int64
+#else
+# define AM_UINT unsigned int
+# define AM_INT long
+#endif //  _WIN64
+
+
 // The main message function
 // see the various messages to see what WPARAM/LPARAM are used for.
-extern "C" PLUGIN_API AM_RESPONSE am_Msg( AM_MSG msg, WPARAM wParam, LPARAM lParam );
+extern "C" PLUGIN_API AM_RESPONSE am_Msg( AM_MSG msg, AM_UINT wParam, AM_INT lParam );
+
+// add the libs
+#ifdef _DEBUG
+# ifdef _WIN64
+#   pragma comment(lib, "amplugin64d.lib" )
+#else
+#   pragma comment(lib, "amplugind.lib" )
+# endif
+#else
+# ifdef _WIN64
+#   pragma comment(lib, "amplugin64.lib" )
+# else
+#   pragma comment(lib, "amplugin.lib" )
+# endif
+#endif

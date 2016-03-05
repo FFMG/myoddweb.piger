@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#ifdef ACTIONMONITOR_API_PY
 #include "pyapi.h"
 
 /**
@@ -357,3 +358,4 @@ PyObject* pyapi::findAction(PyObject *self, PyObject *args)
   // we have a string
   return Py_BuildValue("s", T_T2A(sValue.c_str()) );
 }
+#endif /*ACTIONMONITOR_API_PY*/

@@ -5,23 +5,11 @@
 // this is the version number for that particular API
 static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 
+// add the LUA libs
+#ifdef ACTIONMONITOR_API_PLUGIN
+
 // support for PluginAPI
 #include "../plugins/amplugin.h"
-
-// add the LUA libs
-#ifdef _DEBUG
-# ifdef _WIN64
-#   pragma comment(lib, "../plugins/amplugin64d.lib" )
-#else
-#   pragma comment(lib, "../plugins/amplugind.lib" )
-# endif
-#else
-# ifdef _WIN64
-#   pragma comment(lib, "../plugins/amplugin64.lib" )
-# else
-#   pragma comment(lib, "../plugins/amplugin.lib" )
-# endif
-#endif
 
 class pluginapi : public helperapi
 {
@@ -46,3 +34,5 @@ public:
   bool getVersion  ( DWORD nBufferLength, LPWSTR lpBuffer);
   bool findAction  ( UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
 };
+
+#endif
