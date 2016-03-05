@@ -53,10 +53,15 @@ Name: pluginloader; Description: "Create a 'Learn/Unlearn' action to learn new s
 Name: pluginapppaths; Description: "Parse all the common applications on your system and create actions on the fly."; GroupDescription: "Plugins";
 Name: plugindolly; Description: "Hello Dolly sample plugin"; GroupDescription: "Plugins"; Flags: unchecked
 
+[InstallDelete]
+Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\LoaderPlugin.amp"
+Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\AppPaths.amp"
+Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp"
+
 [Files]
 ;
 ; All the plugins
-; Remember to update the task list above!
+; Remember to update the task list as well as the InstallDelete above!
 ;
 ; x86 plugins
 Source: {#APP_SOURCE}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginloader')
