@@ -34,7 +34,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
       // if the user passed NULL then all they want is the len of the string
       LPCWSTR lpName = L"Loader Plugin";
       unsigned long nBufferLength = (unsigned long)wParam;
-      LPWSTR lpBuffer = (LPWSTR)lParam;
+      const wchar_t* lpBuffer = (const wchar_t*)lParam;
       if( lpBuffer && nBufferLength > 0)
       {
         _tcsncpy_s( lpBuffer, nBufferLength, lpName, _TRUNCATE );
@@ -61,7 +61,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
   case AM_MSG_PATH_PLUGIN:
     {
       AFX_MANAGE_STATE(AfxGetStaticModuleState());
-      theApp.SetPluginPath( (LPWSTR)lParam );
+      theApp.SetPluginPath( (const wchar_t*)lParam );
       return AM_RESP_TRUE;
     }
     break;
