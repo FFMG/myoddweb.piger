@@ -34,7 +34,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
       // if the user passed NULL then all they want is the len of the string
       LPCWSTR lpName = L"Loader Plugin";
       unsigned long nBufferLength = (unsigned long)wParam;
-      const wchar_t* lpBuffer = (const wchar_t*)lParam;
+      wchar_t* lpBuffer = (wchar_t*)lParam;
       if( lpBuffer && nBufferLength > 0)
       {
         _tcsncpy_s( lpBuffer, nBufferLength, lpName, _TRUNCATE );
