@@ -26,25 +26,30 @@ enum AM_RESPONSE
 //
 enum AM_MSG
 {
-  AM_MSG_NONE = 0,            //
-  AM_MSG_NAME,                //  get the plugin name
-                              //  WPARAM = buffer size
-                              //  LPARAM = buffer
-  AM_MSG_INIT,                //
-                              //  LPARAM = amplugin*
-  AM_MSG_DEINIT,
-  AM_MSG_MAIN,                //  execute an operation, the main thread is waiting for a response.
-                              //  LPARAM = amplugin*
-  AM_MSG_PATH_CMD,            //  The root commands temp path (./).
-                              //  LPARAM = const wchar_t* the temp path.
-  AM_MSG_PATH_IN,             //  The root commands 'in' path (./__in).
-                              //  LPARAM = const wchar_t* the temp path.
-  AM_MSG_PATH_OUT,            //  The root commands 'out' path (./__out).
-                              //  LPARAM = const wchar_t* the temp path.
-  AM_MSG_PATH_TMP,            //  The root commands 'temp' path (./__tmp).
-                              //  LPARAM = const wchar_t* the temp path.
-  AM_MSG_PATH_PLUGIN,         //  The root commands 'plugin' path (./__tmp).
-                              //  LPARAM = const wchar_t* the temp path.
+  //
+  //  !DO NOT CHANGE THOSE NUMBERS!
+  //  !EVERYTHING WILL BREAK IF THEY NO LONGER MATCH!
+  AM_MSG_NONE         = 0,  //
+  AM_MSG_NAME         = 1,  //  get the plugin name
+                            //  WPARAM = buffer size
+                            //  LPARAM = buffer
+  AM_MSG_INIT         = 2,  //  Called when the plugin is loaded.
+                            //    LPARAM = amplugin*
+  AM_MSG_DEINIT       = 3,  //  Called when the plugin is about to get destroyed.
+                            //    LPARAM = 0 / WPARAM = 0
+  AM_MSG_MAIN         = 4,  //  Ask the plugin to execute the action.
+                            //    LPARAM = amplugin*
+                            //    return AM_RESP_TRUE|AM_RESP_FALSE
+  AM_MSG_PATH_CMD     = 5,  //  The root commands temp path (./).
+                            //  LPARAM = const wchar_t* the temp path.
+  AM_MSG_PATH_IN      = 6,  //  The root commands 'in' path (./__in).
+                            //  LPARAM = const wchar_t* the temp path.
+  AM_MSG_PATH_OUT     = 7,  //  The root commands 'out' path (./__out).
+                            //  LPARAM = const wchar_t* the temp path.
+  AM_MSG_PATH_TMP     = 8,  //  The root commands 'temp' path (./__tmp).
+                            //  LPARAM = const wchar_t* the temp path.
+  AM_MSG_PATH_PLUGIN  = 9,  //  The root commands 'plugin' path (./__tmp).
+                            //  LPARAM = const wchar_t* the temp path.
 };
 
 #ifdef  _WIN64
@@ -74,7 +79,9 @@ extern "C" PLUGIN_API AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lPar
 # endif
 #endif
 
-
+//
+// The amplugin path, we can call those functions to do extra operations.
+//
 class amplugin
 {
 public:
