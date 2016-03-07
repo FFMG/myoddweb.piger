@@ -1,4 +1,4 @@
-#include "..\ActionMonitor\StdAfx.h"
+#include "StdAfx.h"
 
 #ifdef ACTIONMONITOR_API_PY
 #include "pyapi.h"

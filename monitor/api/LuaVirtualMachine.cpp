@@ -2,7 +2,7 @@
 #ifdef ACTIONMONITOR_API_LUA
 #include "luaapi.h"
 #include "luavirtualmachine.h"
-#include "..\ActionMonitor\ActionMonitor.h"
+#include "ActionMonitor.h"
 
 /**
  * Todo

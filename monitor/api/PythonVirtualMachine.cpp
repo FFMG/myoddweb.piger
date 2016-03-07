@@ -4,7 +4,7 @@
 #include "helperapi.h"
 #include "PythonVirtualMachine.h"
 #include "files\files.h"
-#include "..\ActionMonitor\ActionMonitor.h"
+#include "ActionMonitor.h"
 
 static PyMethodDef amMethods[] = {
   { "say", PythonVirtualMachine::say, METH_VARARGS, "Display a message on the screen." },

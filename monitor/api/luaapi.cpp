@@ -1,4 +1,4 @@
-#include "..\ActionMonitor\StdAfx.h"
+#include "StdAfx.h"
 
 #ifdef ACTIONMONITOR_API_LUA
 #include "luaapi.h"

@@ -1,4 +1,4 @@
-#include "..\ActionMonitor\StdAfx.h"
+#include "StdAfx.h"
 
 #include "pluginapi.h"
 #include "pluginVirtualMachine.h"

@@ -4,7 +4,7 @@
 
 #include "PluginVirtualMachine.h"
 #include "helperapi.h"
-#include "..\ActionMonitor\ActionMonitor.h"
+#include "ActionMonitor.h"
 
 /**
  * Todo
