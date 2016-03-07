@@ -1,4 +1,5 @@
-#include "stdafx.h"
+#include "..\ActionMonitor\StdAfx.h"
+
 #ifdef ACTIONMONITOR_API_PY
 #include "pyapi.h"
 
@@ -45,7 +46,7 @@ PyObject* pyapi::say(PyObject *self, PyObject *args)
 
   // display the message
   // and we can now display the message.
-  bool result = __super::say( msg, nElapse, nFadeOut );
+  bool result = __super::say(helperapi::widen( msg ).c_str(), nElapse, nFadeOut );
   
   // return true.
   return Py_BuildValue("b", result );
@@ -127,7 +128,7 @@ PyObject* pyapi::getAction(PyObject *self, PyObject *args)
 PyObject* pyapi::getCommandCount(PyObject *self, PyObject *args)
 {
   // get it
-  int nSize = __super::getCommandCount();
+  size_t nSize = __super::getCommandCount();
 
   // and return it.
   return Py_BuildValue("i", nSize);
@@ -152,7 +153,7 @@ PyObject* pyapi::execute(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::execute( module, cmdLine, isPrivileged );
+  bool result = __super::execute(helperapi::widen( module ).c_str(), helperapi::widen( cmdLine ).c_str(), isPrivileged );
 
   // return the result.
   return Py_BuildValue("b", result );
@@ -282,7 +283,7 @@ PyObject* pyapi::addAction(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::addAction( szText, szPath );
+  bool result = __super::addAction(helperapi::widen( szText ).c_str(), helperapi::widen( szPath ).c_str() );
   return Py_BuildValue("b", result );
 }
 
@@ -305,7 +306,7 @@ PyObject* pyapi::removeAction(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::removeAction( szText, szPath );
+  bool result = __super::removeAction(helperapi::widen(szText).c_str(), helperapi::widen(szPath).c_str() );
   return Py_BuildValue("b", result );
 }
 
@@ -348,7 +349,7 @@ PyObject* pyapi::findAction(PyObject *self, PyObject *args)
   }
 
   STD_TSTRING sValue = _T("");
-  if( !__super::findAction( idx, szText, sValue ) )
+  if( !__super::findAction( idx, helperapi::widen( szText ).c_str(), sValue ) )
   {
     // we have nothing
     return Py_BuildValue("b", false);

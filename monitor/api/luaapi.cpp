@@ -1,4 +1,5 @@
-#include "stdafx.h"
+#include "..\ActionMonitor\StdAfx.h"
+
 #ifdef ACTIONMONITOR_API_LUA
 #include "luaapi.h"
 #include "luaVirtualMachine.h"
@@ -404,7 +405,7 @@ int luaapi::removeAction( lua_State *lua )
 
   LPCSTR szText = lua_tostring (lua, 1);
   LPCSTR szPath = lua_tostring (lua, 2);
-  bool r = __super::removeAction( szText, szPath );
+  bool r = __super::removeAction( helperapi::widen(szText).c_str(), helperapi::widen(szPath).c_str() );
   
   lua_pushboolean ( lua, r );
   return 1;
@@ -433,7 +434,7 @@ int luaapi::findAction( lua_State *lua )
   LPCSTR action = lua_tostring (lua, 2);
 
   STD_TSTRING sValue = _T("");
-  if( !__super::findAction( idx, action, sValue ) )
+  if( !__super::findAction( idx, helperapi::widen( action ).c_str(), sValue ) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );

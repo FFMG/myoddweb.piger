@@ -1,6 +1,11 @@
-#include "stdafx.h"
-
+#include "..\ActionMonitor\StdAfx.h"
 #include "helperapi.h"
+
+#include <locale>
+#include <iostream>
+#include <string>
+#include <sstream>
+
 #include "../actionmonitor/ActionMonitor.h"
 #include "../actionmonitor/ActionMonitorDlg.h"
 
@@ -28,24 +33,11 @@ helperapi::~helperapi(void)
 /**
  * Display a message on the string.
  * @param LPCSTR the message we want to display.
- * @param UINT how long, (in ms), we are displaying the message for.
- * @param UINT how fast we want to fade out.
+ * @param const unsigned int how long, (in ms), we are displaying the message for.
+ * @param const unsigned int how fast we want to fade out.
  * @return bool if the message was displayed properly.
  */
-bool helperapi::say( LPCSTR msg, UINT nElapse, UINT nFadeOut)
-{
-  USES_CONVERSION;
-  return say( A2T(msg), nElapse, nFadeOut );
-}
-
-/**
- * Display a message on the string.
- * @param LPCSTR the message we want to display.
- * @param UINT how long, (in ms), we are displaying the message for.
- * @param UINT how fast we want to fade out.
- * @return bool if the message was displayed properly.
- */
-bool helperapi::say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
+bool helperapi::say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
 {
   if( NULL == msg )
   {
@@ -78,7 +70,7 @@ bool helperapi::say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
  * @param void
  * @return boolean false if it does not exist
  */
-bool helperapi::getCommand( UINT idx, STD_TSTRING& sValue )
+bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -101,15 +93,15 @@ bool helperapi::getCommand( UINT idx, STD_TSTRING& sValue )
 
       // because the std::vector is 0 based
       // we must step the index back once to get the right number
-      --idx;
+      unsigned int actual_idx = idx-1;
 
       // if the number that the user wants is within our limits then we will add it.
-      if( idx >= params.size() )
+      if(actual_idx >= params.size() )
       {
         return false;
       }
 
-      sValue = params[ idx ].c_str();
+      sValue = params[actual_idx].c_str();
       return true;
     }
   }
@@ -185,22 +177,7 @@ size_t helperapi::getCommandCount()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool success or not
  */
-bool helperapi::execute( LPCSTR module, LPCSTR cmdLine, bool isPrivileged)
-{
-  USES_CONVERSION;
-  return execute( A2T(module), A2T(cmdLine), isPrivileged );
-}
-
-/**
- * Execute a module and a command line if the module is NULL then we try
- * and run the command line arguments only.
- *
- * @param LPCTSTR | NULL the name of the module/dll/exe we are trying to run
- * @param LPCTSTR | NULL the command line arguments we want to run.
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @return bool success or not
- */
-bool helperapi::execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
+bool helperapi::execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
 {
   if( NULL == module && NULL == cmdLine )
   {
@@ -283,11 +260,11 @@ bool helperapi::getString (STD_TSTRING& sValue )
 /**
  * Get a currently selected file in the clipboard.
  * Used by plugins who want to behave a certain way for files.
- * @param UINT the file number we are after
+ * @param const unsigned int the file number we are after
  * @param STD_TSTRING& the return value
  * @return bool success or not if there are no more files
  */
-bool helperapi::getFile(UINT idx, STD_TSTRING& sValue )
+bool helperapi::getFile(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -314,11 +291,11 @@ bool helperapi::getFile(UINT idx, STD_TSTRING& sValue )
 /**
  * Get a currently selected URL in the clipboard.
  * Used by plugins who want to behave a certain way for URLs.
- * @param UINT the URL number we are after
+ * @param const unsigned int the URL number we are after
  * @param STD_TSTRING& the return value
  * @return bool success or not if there are no more URLs
  */
-bool helperapi::getURL (UINT idx, STD_TSTRING& sValue )
+bool helperapi::getURL (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -348,11 +325,11 @@ bool helperapi::getURL (UINT idx, STD_TSTRING& sValue )
  * Get the currently selected folder, (if any)
  * This is used when plugins want to behave a certain way depending
  * on the currently selected folder.
- * @param UINT the folder number we are getting.
+ * @param const unsigned int the folder number we are getting.
  * @param STD_TSTRING& the value we are after.
  * @return bool success or not, we return false when there are no more folders.
  */
-bool helperapi::getFolder (UINT idx, STD_TSTRING& sValue )
+bool helperapi::getFolder (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -385,20 +362,7 @@ bool helperapi::getFolder (UINT idx, STD_TSTRING& sValue )
  * @param LPCTSTR the full path of the command that will be executed.
  * @return bool if the action was added properly or not.
  */
-bool helperapi::addAction( LPCSTR szText, LPCSTR szPath )
-{
-  USES_CONVERSION;
-  return addAction( A2T(szText), A2T(szPath) );
-}
-
-/**
- * Add a set of command to the list of commands.
- * Note that we do hardly any checks to see of the command already exists
- * @param LPCTSTR the name of the command we want to add.
- * @param LPCTSTR the full path of the command that will be executed.
- * @return bool if the action was added properly or not.
- */
-bool helperapi::addAction( LPCWSTR szText, LPCWSTR szPath )
+bool helperapi::addAction(const wchar_t* szText, const wchar_t* szPath )
 {
   if( NULL == szText || _tcslen(szText) == 0 )
   {
@@ -417,24 +381,11 @@ bool helperapi::addAction( LPCWSTR szText, LPCWSTR szPath )
 /**
  * Remove an action, if more than one action is found
  * Then the path will be compared against.
- * @param LPCWSTR the action we want to remove
- * @param LPCWSTR the path of the action we are removing.
+ * @param const wchar_t* the action we want to remove
+ * @param const wchar_t* the path of the action we are removing.
  * @return bool if the action was removed or not.
  */
-bool helperapi::removeAction( LPCSTR szText, LPCSTR szPath )
-{
-  USES_CONVERSION;
-  return removeAction( A2T(szText), A2T(szPath) );
-}
-
-/**
- * Remove an action, if more than one action is found
- * Then the path will be compared against.
- * @param LPCWSTR the action we want to remove
- * @param LPCWSTR the path of the action we are removing.
- * @return bool if the action was removed or not.
- */
-bool helperapi::removeAction( LPCWSTR szText, LPCWSTR szPath )
+bool helperapi::removeAction(const wchar_t* szText, const wchar_t* szPath )
 {
   if( NULL == szText || _tcslen(szText) == 0 )
   {
@@ -453,30 +404,25 @@ bool helperapi::removeAction( LPCWSTR szText, LPCWSTR szPath )
 /**
  * Add a set of command to the list of commands.
  * Note that we do hardly any checks to see of the command already exists
- * @param UINT the index of the action we are looking for.
+ * @param const unsigned int the index of the action we are looking for.
  * @param LPCTSTR the name of the command we want to find
  * @param STD_TSTRING& if the action exists, return the path for it.
  * @return bool if the action exits or not.
  */
-bool helperapi::findAction( UINT idx, LPCSTR szText, STD_TSTRING& stdPath )
-{
-  USES_CONVERSION;
-  return findAction( idx, T_A2T(szText), stdPath );
-}
-
-/**
- * Add a set of command to the list of commands.
- * Note that we do hardly any checks to see of the command already exists
- * @param UINT the index of the action we are looking for.
- * @param LPCTSTR the name of the command we want to find
- * @param STD_TSTRING& if the action exists, return the path for it.
- * @return bool if the action exits or not.
- */
-bool helperapi::findAction( UINT idx, LPCWSTR szText, STD_TSTRING& stdPath )
+bool helperapi::findAction(const unsigned int idx, const wchar_t* szText, STD_TSTRING& stdPath )
 {
   if( NULL == szText )
   {
     return false;
   }
   return App().PossibleActions().Find( idx, szText, stdPath );
+}
+
+std::wstring helperapi::widen(const std::string& str)
+{
+  std::wostringstream wstm;
+  const std::ctype<wchar_t>& ctfacet = std::use_facet< std::ctype<wchar_t> >(wstm.getloc());
+  for (size_t i = 0; i<str.size(); ++i)
+    wstm << ctfacet.widen(str[i]);
+  return wstm.str();
 }

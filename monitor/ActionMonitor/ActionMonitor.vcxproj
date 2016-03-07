@@ -165,12 +165,20 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\api\helperapi.cpp" />
-    <ClCompile Include="..\api\luaapi.cpp" />
+    <ClCompile Include="..\api\helperapi.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ActionMonitor\StdAfx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\api\luaapi.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ActionMonitor\StdAfx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="..\api\LuaVirtualMachine.cpp" />
-    <ClCompile Include="..\api\pluginapi.cpp" />
+    <ClCompile Include="..\api\pluginapi.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ActionMonitor\StdAfx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="..\api\PluginVirtualMachine.cpp" />
-    <ClCompile Include="..\api\pyapi.cpp" />
+    <ClCompile Include="..\api\pyapi.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ActionMonitor\StdAfx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="..\api\PythonVirtualMachine.cpp" />
     <ClCompile Include="..\common\Clipboard.cpp" />
     <ClCompile Include="..\common\TrayDialog.cpp" />
