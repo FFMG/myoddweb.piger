@@ -1,7 +1,4 @@
 //
-// courseplanner.RC2 - resources Microsoft Visual C++ does not edit directly
-//
-
 #ifdef APSTUDIO_INVOKED
 #error this file is not editable by Microsoft Visual C++
 #endif //APSTUDIO_INVOKED
@@ -15,7 +12,7 @@
 //
 // Version
 //
-#include "VersionNo.h"
+#include "version.h"
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION VERSION_NUMBER
  PRODUCTVERSION VERSION_NUMBER
