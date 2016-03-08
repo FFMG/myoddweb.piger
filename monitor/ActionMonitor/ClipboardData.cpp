@@ -90,7 +90,7 @@ void ClipboardData::NullAll()
  * @param HGLOBAL hData the clipboard data.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromFromClipboardHDrop(HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData)
 {
   //  https://msdn.microsoft.com/en-us/library/windows/desktop/bb776408%28v=vs.85%29.aspx
   std::vector<STD_TSTRING> res;
@@ -129,7 +129,7 @@ ClipboardData* ClipboardData::FromFromClipboardHDrop(HGLOBAL hData)
  * @param HGLOBAL hData the clipboard data.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromFromClipboardEnhmetafile(HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData)
 {
   // build the data clipboard so we can restore it.
   ClipboardData *cf = new ClipboardData();
@@ -149,7 +149,7 @@ ClipboardData* ClipboardData::FromFromClipboardEnhmetafile(HGLOBAL hData)
  * @param HGLOBAL hData the clipboard data. 
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromFromClipboardBitmap(HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardBitmap(HGLOBAL hData)
 {
   SIZE_T dataSize = sizeof(BITMAP);
   unsigned char* data = new unsigned char[dataSize];
@@ -178,7 +178,7 @@ ClipboardData* ClipboardData::FromFromClipboardBitmap(HGLOBAL hData)
  * @param HGLOBAL hData the clipboard data.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromFromClipboardDefault(UINT format, HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardDefault(UINT format, HGLOBAL hData)
 {
   // Get the size of the data
   SIZE_T dataSize = GlobalSize(hData);
@@ -250,7 +250,7 @@ wchar_t* ClipboardData::GetClipboardName(UINT format)
  * @param UINT format the format we want to copy/get.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromFromClipboard(UINT format)
+ClipboardData* ClipboardData::FromClipboard(UINT format)
 {
   if (!IsClipboardFormatAvailable(format))
   {
@@ -267,17 +267,17 @@ ClipboardData* ClipboardData::FromFromClipboard(UINT format)
   switch (format)
   {
   case CF_HDROP:
-    return ClipboardData::FromFromClipboardHDrop(hData);
+    return ClipboardData::FromClipboardHDrop(hData);
     break;
 
   case CF_ENHMETAFILE:
-    return ClipboardData::FromFromClipboardEnhmetafile(hData);
+    return ClipboardData::FromClipboardEnhmetafile(hData);
 
   case CF_BITMAP:
-    return ClipboardData::FromFromClipboardBitmap(hData);
+    return ClipboardData::FromClipboardBitmap(hData);
 
   default:
-    return ClipboardData::FromFromClipboardDefault(format, hData);
+    return ClipboardData::FromClipboardDefault(format, hData);
   }
 
   //  never reached

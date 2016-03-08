@@ -9,15 +9,15 @@ public:
   virtual ~ClipboardData();
 
 protected:
-  static ClipboardData* FromFromClipboardHDrop(HGLOBAL hData);
-  static ClipboardData* FromFromClipboardEnhmetafile(HGLOBAL hData);
-  static ClipboardData* FromFromClipboardBitmap(HGLOBAL hData);
-  static ClipboardData* FromFromClipboardDefault( UINT format, HGLOBAL hData);
+  static ClipboardData* FromClipboardHDrop(HGLOBAL hData);
+  static ClipboardData* FromClipboardEnhmetafile(HGLOBAL hData);
+  static ClipboardData* FromClipboardBitmap(HGLOBAL hData);
+  static ClipboardData* FromClipboardDefault( UINT format, HGLOBAL hData);
 
   static wchar_t* GetClipboardName( UINT format );
 
 public:
-  static ClipboardData* FromFromClipboard(UINT format);
+  static ClipboardData* FromClipboard(UINT format);
 
 private:
   // ty shall not copy...

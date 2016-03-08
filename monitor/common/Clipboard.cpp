@@ -626,7 +626,7 @@ void Clipboard::GetCurrentData
     while (uFormat) 
     { 
       //  read that data from the clipbaord
-      ClipboardData *current = ClipboardData::FromFromClipboard( uFormat );
+      ClipboardData *current = ClipboardData::FromClipboard( uFormat );
       if( current )
       {
         //  we cannot do much about NULL clipboard data
