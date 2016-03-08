@@ -232,6 +232,37 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
   unsigned char *data = NULL;
   switch (format)
   { 
+  case CF_HDROP:
+  {
+    //  https://msdn.microsoft.com/en-us/library/windows/desktop/bb776408%28v=vs.85%29.aspx
+    std::vector<STD_TSTRING> res;
+    DROPFILES* df = (DROPFILES*)GlobalLock(hData);
+    wchar_t* files = (wchar_t*)(df + 1);
+    wchar_t buf[MAX_PATH];
+    int bufLen = 0;
+    int i = 0;
+
+    while (true)
+    {
+      buf[bufLen++] = files[i];
+
+      if (files[i] == '\0')
+      {
+        if (bufLen == 1)
+          break;
+
+        res.push_back(buf);
+        bufLen = 0;
+      }
+
+      i++;
+    }
+    GlobalUnlock(hData);
+    dataSize = 0;
+    return NULL;
+  }
+  break;
+
   case CF_ENHMETAFILE:
     {
       dataSize = 0;
