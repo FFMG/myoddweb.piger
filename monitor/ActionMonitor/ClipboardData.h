@@ -9,6 +9,7 @@ public:
   virtual ~ClipboardData();
 
 protected:
+
   static ClipboardData* FromClipboardHDrop(HGLOBAL hData);
   static ClipboardData* FromClipboardEnhmetafile(HGLOBAL hData);
   static ClipboardData* FromClipboardBitmap(HGLOBAL hData);
@@ -19,13 +20,15 @@ protected:
 public:
   static ClipboardData* FromClipboard(UINT format);
 
+  void ToClipboard();
+
 private:
   // ty shall not copy...
   ClipboardData(const ClipboardData&cf);
   const ClipboardData& operator= (const ClipboardData&cf);
 
 public:
-  unsigned char* data;
+  void* data;
   SIZE_T  dataSize;
   UINT uFormat;
   wchar_t* dataName;
@@ -34,6 +37,9 @@ public:
   void Free();
   void FreeClipboardName();
   void FreeClipboardEnhmetafile();
+  void FreeClipboardBitmap();
   void FreeClipboardDefault();
   void NullAll();
+
+  static HBITMAP CopyBitmap(HBITMAP hBitmapSrc);
 };

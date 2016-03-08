@@ -464,9 +464,10 @@ bool Clipboard::RestoreClipboard
     return false;
   }
   
-  //  because we are restoring we need to remove the current value.
+  //  because we are restoring we need to remove the current value(s).
   EmptyClipboard();
   
+  // now go around and restore all the Clipboard data(s) to the clipboard itself.
   for( V_CF::const_iterator it = s_cf.begin(); it != s_cf.end(); it++ )
   {
     ClipboardData* cf = *it;
@@ -477,48 +478,7 @@ bool Clipboard::RestoreClipboard
 
     try
     {
-      UINT format = cf->uFormat;
-      if( cf->dataName != NULL )
-      {
-        UINT u = RegisterClipboardFormat( cf->dataName );
-        if( u > 0 )
-        {
-          format = u;
-        }
-      }
-      
-      HGLOBAL hMem = GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, cf->dataSize );
-
-      if (cf->dataSize > 0)
-      {
-        switch (format)
-        {
-          case CF_ENHMETAFILE:
-          {
-            SetClipboardData(CF_ENHMETAFILE, CopyEnhMetaFile( (HENHMETAFILE)cf->data, NULL ) );
-          }
-          break;
-
-          case CF_BITMAP:
-          {
-            SetClipboardData(CF_BITMAP, (HBITMAP)cf->data );
-          }
-          break;
-
-          default:
-          {
-            unsigned char* pMem = (unsigned char*)GlobalLock(hMem);
-            memcpy(pMem, cf->data, cf->dataSize);
-            GlobalUnlock(hMem);
-            SetClipboardData(format, hMem);
-          }
-          break;
-        }
-      }
-      else
-      {
-        SetClipboardData(format, 0 );
-      }
+      cf->ToClipboard();
     }
     catch(... )
     {

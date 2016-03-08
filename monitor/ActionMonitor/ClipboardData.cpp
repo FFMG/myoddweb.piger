@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "ClipboardData.h"
 
+#ifdef _DEBUG
+  #ifndef DBG_NEW
+    #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+  #define new DBG_NEW
+  #endif
+#endif  // _DEBUG
+
 ClipboardData::ClipboardData()
 {
   //  null all the values.
@@ -40,6 +47,19 @@ void ClipboardData::FreeClipboardDefault()
 }
 
 /**
+ * Free the default clipboard data if we have one.
+ */
+void ClipboardData::FreeClipboardBitmap()
+{
+  if (data)
+  {
+    DeleteObject((HBITMAP)data);
+    data = NULL;
+  }
+  FreeClipboardName();
+}
+
+/**
  * Free the clipboard name if we have one.
  */
 void ClipboardData::FreeClipboardName()
@@ -62,6 +82,10 @@ void ClipboardData::Free()
   {
   case CF_ENHMETAFILE:
     FreeClipboardEnhmetafile();
+    break;
+
+  case CF_BITMAP:
+    FreeClipboardBitmap();
     break;
 
   default:
@@ -151,20 +175,13 @@ ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData)
  */
 ClipboardData* ClipboardData::FromClipboardBitmap(HGLOBAL hData)
 {
-  SIZE_T dataSize = sizeof(BITMAP);
-  unsigned char* data = new unsigned char[dataSize];
-  if (!GetObject(hData, sizeof(BITMAP), (void *)data))
-  {
-    delete[] data;
-    return NULL;
-  }
-
+  
   // build the data clipboard so we can restore it.
   ClipboardData *cf = new ClipboardData();
 
   //  copy the meta file.
-  cf->data = data;
-  cf->dataSize = dataSize;
+  cf->data = (unsigned char*)CopyBitmap( (HBITMAP)hData );
+  cf->dataSize = 0;
   cf->uFormat = CF_BITMAP;
 
   // return the created filedata.
@@ -282,4 +299,73 @@ ClipboardData* ClipboardData::FromClipboard(UINT format)
 
   //  never reached
   return NULL;
+}
+
+void ClipboardData::ToClipboard()
+{
+  //  do we have a name to restore??
+  UINT format = uFormat;
+  if ( dataName != NULL)
+  {
+    UINT u = RegisterClipboardFormat( dataName);
+    if (u > 0)
+    {
+      //  the format has changed it seems.
+      format = u;
+    }
+  }
+
+  switch (format)
+  {
+  case CF_ENHMETAFILE:
+    SetClipboardData(CF_ENHMETAFILE, CopyEnhMetaFile((HENHMETAFILE)data, NULL));
+    break;
+
+  case CF_BITMAP:
+    SetClipboardData(CF_BITMAP, CopyBitmap( (HBITMAP)data ));
+    break;
+
+  default:
+    if (dataSize > 0)
+    {
+      //  get some data
+      HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, dataSize);
+      unsigned char* pMem = (unsigned char*)GlobalLock(hMem);
+      memcpy(pMem, data, dataSize);
+      GlobalUnlock(hMem);
+
+      // we can no save the data.
+      SetClipboardData(format, hMem);
+    }
+    else
+    {
+      //  there is no data to set...
+      SetClipboardData(format, 0);
+    }
+    break;
+  }
+}
+
+HBITMAP ClipboardData::CopyBitmap(HBITMAP hBitmapSrc)
+{
+  BITMAP  bitmap;
+  HBITMAP hBitmapDst;
+  HDC     hdcSrc, hdcDst;
+
+  GetObject(hBitmapSrc, sizeof(BITMAP), &bitmap);
+  hBitmapDst = CreateBitmapIndirect(&bitmap);
+
+  hdcSrc = CreateCompatibleDC(NULL);
+  hdcDst = CreateCompatibleDC(NULL);
+
+  SelectObject(hdcSrc, hBitmapSrc);
+  SelectObject(hdcDst, hBitmapDst);
+
+  BitBlt(hdcDst, 0, 0, bitmap.bmWidth, bitmap.bmHeight,
+    hdcSrc, 0, 0, SRCCOPY);
+
+  DeleteDC(hdcSrc);
+  DeleteDC(hdcDst);
+
+  return hBitmapDst;
 }
