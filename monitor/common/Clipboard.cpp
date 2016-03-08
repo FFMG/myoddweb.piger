@@ -225,29 +225,59 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
 
   // Get the size of the data
 #if defined(_WIN64)
-  unsigned __int64 dataSize
+  unsigned __int64 dataSize = 0;
 #else
-  unsigned long dataSize
+  unsigned long dataSize = 0;
 #endif
-                = GlobalSize(hData);
+  switch (format)
+  {
+  case CF_BITMAP:
+    dataSize = sizeof(BITMAP);
+    break;
 
+  case CF_ENHMETAFILE:
+    dataSize = 0;
+    break;
+
+  default:
+    dataSize = GlobalSize(hData);
+    break;
+  }
+  
   unsigned char *data = NULL;
 
   // if the size is zero, there isn't much we can do.
   if (dataSize > 0)
   {
-    unsigned char* lptstr = (unsigned char*)GlobalLock(hData);
-    if (lptstr == NULL)
+    switch (format)
     {
-      return NULL;
+      case CF_BITMAP:
+      {
+        data = new unsigned char[dataSize];
+        if (!GetObject(hData, sizeof(BITMAP), (void *)data))
+        {
+          return NULL;
+        }
+      }
+      break;
+
+      default:
+      {
+        unsigned char* lptstr = (unsigned char*)GlobalLock(hData);
+        if (lptstr == NULL)
+        {
+          return NULL;
+        }
+
+        // Allocate data and copy the data
+        data = new unsigned char[dataSize];
+        memcpy(data, lptstr, dataSize);
+
+        // we can now free the memory.
+        GlobalUnlock(data);
+      }
+      break;
     }
-
-    // Allocate data and copy the data
-    data = new unsigned char[dataSize];
-    memcpy(data, lptstr, dataSize);
-
-    // we can now free the memory.
-    GlobalUnlock(data);
   }
 
   // build the data clipboard so we can restore it.
@@ -259,7 +289,8 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
   cf->dataSize  = dataSize;
   cf->uFormat   = format;
   
-  if( format > CF_MAX )
+  // if it is a known type then we don't need/have the name
+  if( format < CF_MAX )
   {
     cf->dataName = NULL;
   }
@@ -520,8 +551,11 @@ BOOL Clipboard::RestoreClipboard
       return FALSE;
     }
   }
-  if( ! ::OpenClipboard( wnd->GetSafeHwnd() ) )
+
+  if (!::OpenClipboard(wnd->GetSafeHwnd()))
+  {
     return FALSE;
+  }
   
   //  because we are restoring we need to remove the current value.
   EmptyClipboard();
@@ -533,6 +567,7 @@ BOOL Clipboard::RestoreClipboard
     {
       continue;
     }
+
     try
     {
       UINT format = cf->uFormat;
@@ -549,10 +584,23 @@ BOOL Clipboard::RestoreClipboard
 
       if (cf->dataSize > 0)
       {
-        unsigned char* pMem = (unsigned char*)GlobalLock(hMem);
-        memcpy(pMem, cf->data, cf->dataSize);
-        GlobalUnlock(hMem);
-        SetClipboardData(format, hMem);
+        switch (format)
+        {
+          case CF_BITMAP:
+          {
+            SetClipboardData(CF_BITMAP, (HBITMAP)cf->data );
+          }
+          break;
+
+          default:
+          {
+            unsigned char* pMem = (unsigned char*)GlobalLock(hMem);
+            memcpy(pMem, cf->data, cf->dataSize);
+            GlobalUnlock(hMem);
+            SetClipboardData(format, hMem);
+          }
+          break;
+        }
       }
       else
       {
@@ -570,6 +618,7 @@ BOOL Clipboard::RestoreClipboard
   //  all done
   //  allow other apps to use the clipbaord.
   CloseClipboard();
+
   return TRUE;
 }
 
