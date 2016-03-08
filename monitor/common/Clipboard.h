@@ -70,14 +70,20 @@ protected:
     BYTE* data;
     SIZE_T  dataSize;
     UINT uFormat;
-    TCHAR* dataName;
+    wchar_t* dataName;
 
     HENHMETAFILE dataMetaFile;  //  special case only used with CF_ENHMETAFILE
 
     void ClearAll()
     {
-      if( data )      delete [] data;
-      if( dataName )  delete [] dataName;
+      if (data)
+      {
+        delete[] data;
+      }
+      if (dataName)
+      {
+        delete[] dataName;
+      }
       NullAll();
     }
     void NullAll()

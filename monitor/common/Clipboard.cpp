@@ -7,10 +7,6 @@
 
 #include <io.h>
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 #define GetPIDLFolder(pida) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[0])
 #define GetPIDLItem(pida, i) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[i+1])
 
@@ -227,38 +223,53 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
     return NULL;
   }
 
+  // Get the size of the data
+#if defined(_WIN64)
+  unsigned __int64 dataSize
+#else
+  unsigned long dataSize
+#endif
+                = GlobalSize(hData);
+
+  unsigned char *data = NULL;
+
+  // if the size is zero, there isn't much we can do.
+  if (dataSize > 0)
+  {
+    unsigned char* lptstr = (unsigned char*)GlobalLock(hData);
+    if (lptstr == NULL)
+    {
+      return NULL;
+    }
+
+    // Allocate data and copy the data
+    data = new unsigned char[dataSize];
+    memcpy(data, lptstr, dataSize);
+
+    // we can now free the memory.
+    GlobalUnlock(data);
+  }
+
+  // build the data clipboard so we can restore it.
   CLIPBOARD_FORMAT *cf = NULL;
 
-  // Get the size of the data
-  SIZE_T DataSize = GlobalSize(hData);
-  BYTE* lptstr = (BYTE*)GlobalLock(hData); 
-  if (lptstr == NULL) 
-  { 
-    return cf;
-  }
-  
-  // Allocate data and copy the data
-  BYTE *data = new BYTE[DataSize];
-  memcpy(data, lptstr, DataSize);
-  GlobalUnlock(data); 
-  
   //  save the data to the struct and add it to the vector.
   cf = new CLIPBOARD_FORMAT();
   cf->data      = data;
-  cf->dataSize  = DataSize;
+  cf->dataSize  = dataSize;
   cf->uFormat   = format;
   
-  if( format <= 14 /*CF_TEXT(1) -> CF_ENHMETAFILE(14)*/)
+  if( format > CF_MAX )
   {
     cf->dataName = NULL;
   }
   else 
   {
     //  get the text from the clipboard.
-    static const unsigned l = 128;  //  max len of the meta file
-    cf->dataName = new TCHAR[l+1];
+    static const unsigned l = 256;  //  max len of the meta file
+    cf->dataName = new wchar_t[l+1];
     memset( cf->dataName, 0, l+1 );
-    if( GetClipboardFormatName(format, cf->dataName, l) == 0 )
+    if( GetClipboardFormatNameW(format, cf->dataName, l) == 0 )
     {
       delete [] cf->dataName;
       cf->dataName = NULL;
@@ -276,6 +287,7 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
     cf->dataMetaFile = 0;
     break;
   }// special cases.
+
   return cf; 
 }
 
@@ -533,13 +545,19 @@ BOOL Clipboard::RestoreClipboard
         }
       }
       
-      HANDLE hMem = GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, cf->dataSize );
-      LPVOID pMem = GlobalLock( hMem );
-      
-      memcpy( pMem, cf->data, cf->dataSize );
-      
-      GlobalUnlock( hMem );
-      SetClipboardData( format, hMem );
+      HGLOBAL hMem = GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, cf->dataSize );
+
+      if (cf->dataSize > 0)
+      {
+        unsigned char* pMem = (unsigned char*)GlobalLock(hMem);
+        memcpy(pMem, cf->data, cf->dataSize);
+        GlobalUnlock(hMem);
+        SetClipboardData(format, hMem);
+      }
+      else
+      {
+        SetClipboardData(format, 0 );
+      }
     }
     catch(... )
     {
