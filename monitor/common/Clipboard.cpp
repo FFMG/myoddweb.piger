@@ -203,138 +203,6 @@ BOOL Clipboard::GetURL( STD_TSTRING& sText, UINT idx ) const
 }
 
 /**
- * Given a format try and read the info from the clipboard.
- * THIS FUNCTION ASSUMES THAT THE CLIPBOARD IS OPEN!
- * 
- * @param UINT the format we are reading
- * @return Clipboard::CLIPBOARD_FORMAT * the current clipboard data or NULL if we don't have anything for that format.
- */
-Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
-{
-  if (!IsClipboardFormatAvailable(format)) 
-  {
-    return NULL;
-  }
-  
-  // Get the handle of the Global memory that contains the text
-  HGLOBAL hData = GetClipboardData(format); 
-  if (hData == NULL) 
-  {
-    return NULL;
-  }
-
-  // Get the size of the data
-#if defined(_WIN64)
-  unsigned __int64 dataSize = 0;
-#else
-  unsigned long dataSize = 0;
-#endif
-  unsigned char *data = NULL;
-  switch (format)
-  { 
-  case CF_HDROP:
-  {
-    //  https://msdn.microsoft.com/en-us/library/windows/desktop/bb776408%28v=vs.85%29.aspx
-    std::vector<STD_TSTRING> res;
-    DROPFILES* df = (DROPFILES*)GlobalLock(hData);
-    wchar_t* files = (wchar_t*)(df + 1);
-    wchar_t buf[MAX_PATH];
-    int bufLen = 0;
-    int i = 0;
-
-    while (true)
-    {
-      buf[bufLen++] = files[i];
-
-      if (files[i] == '\0')
-      {
-        if (bufLen == 1)
-          break;
-
-        res.push_back(buf);
-        bufLen = 0;
-      }
-
-      i++;
-    }
-    GlobalUnlock(hData);
-    dataSize = 0;
-    return NULL;
-  }
-  break;
-
-  case CF_ENHMETAFILE:
-    {
-      dataSize = 0;
-      data = (unsigned char*)CopyEnhMetaFileW((HENHMETAFILE)hData, NULL);
-    }
-    break;
-
-  case CF_BITMAP:
-    {
-      dataSize = sizeof(BITMAP);
-      data = new unsigned char[dataSize];
-      if (!GetObject(hData, sizeof(BITMAP), (void *)data))
-      {
-        return NULL;
-      }
-    }
-    break;
-
-  default:
-    {
-      // if the size is zero, there isn't much we can do.
-      dataSize = GlobalSize(hData);
-      if (dataSize > 0)
-      {
-        unsigned char* lptstr = (unsigned char*)GlobalLock(hData);
-        if (lptstr == NULL)
-        {
-          return NULL;
-        }
-
-        // Allocate data and copy the data
-        data = new unsigned char[dataSize];
-        memcpy(data, lptstr, dataSize);
-
-        // we can now free the memory.
-        GlobalUnlock(data);
-      }
-    }
-    break;
-  }
-
-  // build the data clipboard so we can restore it.
-  CLIPBOARD_FORMAT *cf = NULL;
-
-  //  save the data to the struct and add it to the vector.
-  cf = new CLIPBOARD_FORMAT();
-  cf->data      = data;
-  cf->dataSize  = dataSize;
-  cf->uFormat   = format;
-  
-  // if it is a known type then we don't need/have the name
-  if( format < CF_MAX )
-  {
-    cf->dataName = NULL;
-  }
-  else 
-  {
-    //  get the text from the clipboard.
-    static const unsigned l = 256;  //  max len of the meta file
-    cf->dataName = new wchar_t[l+1];
-    memset( cf->dataName, 0, l+1 );
-    if( GetClipboardFormatNameW(format, cf->dataName, l) == 0 )
-    {
-      delete [] cf->dataName;
-      cf->dataName = NULL;
-    }
-  }
-
-  return cf; 
-}
-
-/**
  * All the structures are pointers so we must get each items and delete them all one by one
  * The structure has its own destructor and will be called for further cleanup
  *
@@ -401,11 +269,12 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
   {
     try
     {
-      CLIPBOARD_FORMAT* cf = *it;
+      ClipboardData* cf = *it;
       if( NULL == cf )
       {
         continue;
       }
+
       switch( cf->uFormat )
       {
       case 0x0c074: //  Shell IDList Array
@@ -447,18 +316,44 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
         }
         break;
         
-      case 0x0c006: /* FILENAME - (case 0x0c007: FILENAMEW )*/
+      case 0x0c006: /* FILENAME */
         {
           //  a file name was added
-          LPCTSTR lp = T_A2T((CHAR*)cf->data);
+          const wchar_t* lp = T_A2T((CHAR*)cf->data);
           AddFileName( lp );
         }
         break;
-        
+
+      case 0x0c007: /*FILENAMEW*/
+      {
+        //  a file name was added
+        const wchar_t* lp = (WCHAR*)cf->data;
+        AddFileName(lp);
+      }
+      break;
+
+      case CF_UNICODETEXT:
+        {
+          //  normal, selected text.
+          const wchar_t* lp = (WCHAR*)cf->data;
+          clipboard_data.cdTEXT = lp;
+
+          // it is posible that the text selected represents a file
+          // or a directory, in that case it is useful to display it to the APIs
+          if( myodd::files::IsFile( lp ) || 
+              myodd::files::IsDirectory( lp ) || 
+              myodd::files::IsURL( lp )           // this is only a basic syntax check
+            )
+          {
+            AddFileName( lp );
+          }
+        }
+        break;
+
       case CF_TEXT:
         {
           //  normal, selected text.
-          LPCTSTR lp = T_A2T( (CHAR*)cf->data );
+          const wchar_t* lp = T_A2T( (CHAR*)cf->data );
           clipboard_data.cdTEXT = lp;
 
           // it is posible that the text selected represents a file
@@ -548,7 +443,7 @@ void Clipboard::Init()
  * @param vector the array of Clipboard data we are trying to restore
  * @return BOOL success or not
  */
-BOOL Clipboard::RestoreClipboard
+bool Clipboard::RestoreClipboard
 (
  CWnd* wnd, 
  V_CF& s_cf 
@@ -560,13 +455,13 @@ BOOL Clipboard::RestoreClipboard
     wnd = CWnd::FromHandle( hCurrent );
     if( NULL == wnd )
     {
-      return FALSE;
+      return false;
     }
   }
 
   if (!::OpenClipboard(wnd->GetSafeHwnd()))
   {
-    return FALSE;
+    return false;
   }
   
   //  because we are restoring we need to remove the current value.
@@ -574,7 +469,7 @@ BOOL Clipboard::RestoreClipboard
   
   for( V_CF::const_iterator it = s_cf.begin(); it != s_cf.end(); it++ )
   {
-    CLIPBOARD_FORMAT* cf = *it;
+    ClipboardData* cf = *it;
     if( NULL == cf )
     {
       continue;
@@ -637,7 +532,7 @@ BOOL Clipboard::RestoreClipboard
   //  allow other apps to use the clipbaord.
   CloseClipboard();
 
-  return TRUE;
+  return true;
 }
 
 /**
@@ -714,20 +609,24 @@ void Clipboard::GetCurrentData
     }
 
     // do we have anything saved?
-    if (CountClipboardFormats() == 0) 
-      return; 
+    if (CountClipboardFormats() == 0)
+    {
+      return;
+    }
 
     //  open the clipboard for that window
-    if (!OpenClipboard( wnd->GetSafeHwnd() )) 
-      return; 
-    
+    if (!OpenClipboard(wnd->GetSafeHwnd()))
+    {
+      return;
+    }
+
     //  get the current text data 
     //  if there is nothing 
     UINT uFormat = EnumClipboardFormats(0); 
     while (uFormat) 
     { 
       //  read that data from the clipbaord
-      CLIPBOARD_FORMAT *current = GetDataFromClipboard( uFormat );
+      ClipboardData *current = ClipboardData::FromFromClipboard( uFormat );
       if( current )
       {
         //  we cannot do much about NULL clipboard data
@@ -741,7 +640,8 @@ void Clipboard::GetCurrentData
     
     //  empty the clipboard
     EmptyClipboard();
-    
+
+    // close the clipboard.
     CloseClipboard(); 
   }
   catch(... )

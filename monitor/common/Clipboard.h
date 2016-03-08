@@ -9,12 +9,13 @@
 
 #include <vector>
 #include <string>
+#include "ClipboardData.h"
 
 class Clipboard  
 {
 public:
 	Clipboard();
-	virtual ~Clipboard();
+  virtual ~Clipboard();
 
   void Get( CWnd* cwnd );
 
@@ -39,57 +40,9 @@ protected:
   //  the list of possible items
   CLIPBOARD_DATA clipboard_data;
 
-  struct CLIPBOARD_FORMAT
-  {
-    CLIPBOARD_FORMAT(){ NullAll(); };
-    ~CLIPBOARD_FORMAT(){ ClearAll(); }
-
-  private:
-    // ty shall not copy...
-    CLIPBOARD_FORMAT(const CLIPBOARD_FORMAT&cf) { NullAll(); *this = cf; };
-    const CLIPBOARD_FORMAT& operator= (const CLIPBOARD_FORMAT&cf);
-
-  public:
-    BYTE* data;
-    SIZE_T  dataSize;
-    UINT uFormat;
-    wchar_t* dataName;
-
-    void ClearAll()
-    {
-      if (data)
-      {
-        if (CF_ENHMETAFILE == uFormat )
-        {
-          DeleteEnhMetaFile((HENHMETAFILE)data);
-        }
-        else
-        {
-          delete[] data;
-        }
-        data = NULL;
-      }
-      if (dataName)
-      {
-        delete[] dataName;
-      }
-      NullAll();
-    }
-    void NullAll()
-    {
-      uFormat       = 0;
-      dataSize      = 0;
-      data          = NULL;
-      dataName      = NULL;
-    }
-  };  //  CLIPBOARD_FORMAT
-
-  typedef std::vector<CLIPBOARD_FORMAT *> V_CF;
+  typedef std::vector<ClipboardData *> V_CF;
 
   void ResetClipboardFormats(V_CF& cf) const;
-
-  // Returns the data got from the Clipboard, if not NULL
-  Clipboard::CLIPBOARD_FORMAT * GetDataFromClipboard( UINT format );
 
 protected:
   void ParseClipboard( V_CF& cf );
@@ -100,21 +53,21 @@ protected:
 
 protected:
   HRESULT GetNameFromPIDL
-  ( 
-   LPCWSTR pwzType,
-   IShellFolder* pFolder, 
-   LPCITEMIDLIST pidl,
-   LPTSTR buffer, 
-   DWORD lBuffer
-   );
+    (
+      LPCWSTR pwzType,
+      IShellFolder* pFolder,
+      LPCITEMIDLIST pidl,
+      LPTSTR buffer,
+      DWORD lBuffer
+    );
+
 protected:
   void GetCurrentData( CWnd* wnd, V_CF& cf );
   
 protected:
-  BOOL RestoreClipboard( CWnd* wnd, V_CF& cf );
+  bool RestoreClipboard( CWnd* wnd, V_CF& cf );
 
 protected:
   void CopyDataFromForgroundWindow( CWnd* cPossibleWindow );
 };
-
 #endif // _clipboard_h_

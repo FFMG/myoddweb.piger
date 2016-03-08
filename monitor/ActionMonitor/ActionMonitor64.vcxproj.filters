@@ -69,6 +69,9 @@
     <ClCompile Include="..\api\PythonVirtualMachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="ClipboardData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -138,6 +141,9 @@
     </ClInclude>
     <ClInclude Include="..\api\PythonVirtualMachine.h">
       <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="ClipboardData.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

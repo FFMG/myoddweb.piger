@@ -187,6 +187,7 @@
     <ClCompile Include="ActionMonitorDlg.cpp" />
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ActionsImmediate.cpp" />
+    <ClCompile Include="ClipboardData.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -213,6 +214,7 @@
     <ClInclude Include="ActionMonitorDlg.h" />
     <ClInclude Include="Actions.h" />
     <ClInclude Include="ActionsImmediate.h" />
+    <ClInclude Include="ClipboardData.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />
