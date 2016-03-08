@@ -229,39 +229,32 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
 #else
   unsigned long dataSize = 0;
 #endif
+  unsigned char *data = NULL;
   switch (format)
-  {
-  case CF_BITMAP:
-    dataSize = sizeof(BITMAP);
+  { 
+  case CF_ENHMETAFILE:
+    {
+      dataSize = 0;
+      data = (unsigned char*)CopyEnhMetaFileW((HENHMETAFILE)hData, NULL);
+    }
     break;
 
-  case CF_ENHMETAFILE:
-    dataSize = 0;
+  case CF_BITMAP:
+    {
+      dataSize = sizeof(BITMAP);
+      data = new unsigned char[dataSize];
+      if (!GetObject(hData, sizeof(BITMAP), (void *)data))
+      {
+        return NULL;
+      }
+    }
     break;
 
   default:
-    dataSize = GlobalSize(hData);
-    break;
-  }
-  
-  unsigned char *data = NULL;
-
-  // if the size is zero, there isn't much we can do.
-  if (dataSize > 0)
-  {
-    switch (format)
     {
-      case CF_BITMAP:
-      {
-        data = new unsigned char[dataSize];
-        if (!GetObject(hData, sizeof(BITMAP), (void *)data))
-        {
-          return NULL;
-        }
-      }
-      break;
-
-      default:
+      // if the size is zero, there isn't much we can do.
+      dataSize = GlobalSize(hData);
+      if (dataSize > 0)
       {
         unsigned char* lptstr = (unsigned char*)GlobalLock(hData);
         if (lptstr == NULL)
@@ -276,8 +269,8 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
         // we can now free the memory.
         GlobalUnlock(data);
       }
-      break;
     }
+    break;
   }
 
   // build the data clipboard so we can restore it.
@@ -306,18 +299,6 @@ Clipboard::CLIPBOARD_FORMAT * Clipboard::GetDataFromClipboard( UINT format )
       cf->dataName = NULL;
     }
   }
-  
-  // deal with special cases.
-  switch( format )
-  {
-  case CF_ENHMETAFILE:
-    cf->dataMetaFile = ::CopyEnhMetaFile((HENHMETAFILE)hData, NULL );
-    break;
-    
-  default:
-    cf->dataMetaFile = 0;
-    break;
-  }// special cases.
 
   return cf; 
 }
@@ -586,6 +567,12 @@ BOOL Clipboard::RestoreClipboard
       {
         switch (format)
         {
+          case CF_ENHMETAFILE:
+          {
+            SetClipboardData(CF_ENHMETAFILE, CopyEnhMetaFile( (HENHMETAFILE)cf->data, NULL ) );
+          }
+          break;
+
           case CF_BITMAP:
           {
             SetClipboardData(CF_BITMAP, (HBITMAP)cf->data );

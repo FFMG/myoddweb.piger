@@ -41,44 +41,33 @@ protected:
 
   struct CLIPBOARD_FORMAT
   {
-    CLIPBOARD_FORMAT( const CLIPBOARD_FORMAT&cf){ NullAll(); *this = cf;};
     CLIPBOARD_FORMAT(){ NullAll(); };
     ~CLIPBOARD_FORMAT(){ ClearAll(); }
-    const CLIPBOARD_FORMAT& operator= ( const CLIPBOARD_FORMAT&cf)
-    {
-      if( this != &cf )
-      {
-        ClearAll();
-        uFormat   = cf.uFormat;
-        dataSize  = cf.dataSize;
-        data = new BYTE[cf.dataSize];
-        memcpy( data, cf.data, cf.dataSize );
-        if( cf.dataName )
-        {
-          size_t l = _tcslen( cf.dataName );
-          dataName = new TCHAR[l+1];
-          memset( dataName, 0, l+1 );
-          _tcsncpy_s( dataName, l, cf.dataName, l);
-        }
-        
-        //  special cases.
-        dataMetaFile = cf.dataMetaFile;
-      }
-      return *this;
-    };
 
+  private:
+    // ty shall not copy...
+    CLIPBOARD_FORMAT(const CLIPBOARD_FORMAT&cf) { NullAll(); *this = cf; };
+    const CLIPBOARD_FORMAT& operator= (const CLIPBOARD_FORMAT&cf);
+
+  public:
     BYTE* data;
     SIZE_T  dataSize;
     UINT uFormat;
     wchar_t* dataName;
 
-    HENHMETAFILE dataMetaFile;  //  special case only used with CF_ENHMETAFILE
-
     void ClearAll()
     {
       if (data)
       {
-        delete[] data;
+        if (CF_ENHMETAFILE == uFormat )
+        {
+          DeleteEnhMetaFile((HENHMETAFILE)data);
+        }
+        else
+        {
+          delete[] data;
+        }
+        data = NULL;
       }
       if (dataName)
       {
@@ -88,7 +77,6 @@ protected:
     }
     void NullAll()
     {
-      dataMetaFile  = NULL;
       uFormat       = 0;
       dataSize      = 0;
       data          = NULL;
