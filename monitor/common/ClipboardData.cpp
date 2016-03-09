@@ -199,7 +199,7 @@ ClipboardData* ClipboardData::FromClipboardDefault(UINT format, HGLOBAL hData)
   if (dataSize > 0)
   {
     //  we have some data, so we can try and get it.
-    unsigned char* lptstr = (unsigned char*)GlobalLock(hData);
+    void* lptstr = GlobalLock(hData);
     if (lptstr == NULL)
     {
       return NULL;
@@ -323,7 +323,7 @@ void ClipboardData::ToClipboard()
     {
       //  get some data
       HGLOBAL hMem = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, dataSize);
-      unsigned char* pMem = (unsigned char*)GlobalLock(hMem);
+      void* pMem = GlobalLock(hMem);
       memcpy(pMem, data, dataSize);
       GlobalUnlock(hMem);
 
