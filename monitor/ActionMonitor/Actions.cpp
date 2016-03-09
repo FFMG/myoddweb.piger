@@ -277,7 +277,7 @@ size_t Actions::BuildMatchList( )
   // save our current position
   // so that if the user has selected the second item in the list
   // we still show the second item, even if the list has changed.
-  unsigned uSave = m_uCommand;
+  size_t uSave = m_uCommand;
 
   //  remove the previous list of items.
   ClearSearch();
@@ -557,9 +557,10 @@ void Actions::down()
 // -------------------------------------------------------------
 void Actions::up()
 {
-  if( m_uCommand == 0 )
+  if (m_uCommand == 0)
+  {
     m_uCommand = (m_ActionsMatch.size());
-
+  }
   m_uCommand--;
 }
 

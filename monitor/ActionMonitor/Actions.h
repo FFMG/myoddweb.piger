@@ -82,7 +82,7 @@ protected:
   void ClearSearch();
 
   // the command currently chosen
-  unsigned m_uCommand;
+  size_t m_uCommand;
 
 public:
   Action& getCommand( STD_TSTRING* cmdLine = NULL );
