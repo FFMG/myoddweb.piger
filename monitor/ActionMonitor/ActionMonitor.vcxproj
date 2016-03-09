@@ -181,13 +181,13 @@
     </ClCompile>
     <ClCompile Include="..\api\PythonVirtualMachine.cpp" />
     <ClCompile Include="..\common\Clipboard.cpp" />
+    <ClCompile Include="..\common\ClipboardData.cpp" />
     <ClCompile Include="..\common\TrayDialog.cpp" />
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="ActionMonitor.cpp" />
     <ClCompile Include="ActionMonitorDlg.cpp" />
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ActionsImmediate.cpp" />
-    <ClCompile Include="ClipboardData.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -208,13 +208,13 @@
     <ClInclude Include="..\api\pyconfig.h" />
     <ClInclude Include="..\api\PythonVirtualMachine.h" />
     <ClInclude Include="..\common\Clipboard.h" />
+    <ClInclude Include="..\common\ClipboardData.h" />
     <ClInclude Include="..\common\TrayDialog.h" />
     <ClInclude Include="Action.h" />
     <ClInclude Include="ActionMonitor.h" />
     <ClInclude Include="ActionMonitorDlg.h" />
     <ClInclude Include="Actions.h" />
     <ClInclude Include="ActionsImmediate.h" />
-    <ClInclude Include="ClipboardData.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />

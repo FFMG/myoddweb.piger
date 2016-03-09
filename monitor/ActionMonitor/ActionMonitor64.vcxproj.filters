@@ -69,7 +69,7 @@
     <ClCompile Include="..\api\PythonVirtualMachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
-    <ClCompile Include="ClipboardData.cpp">
+    <ClCompile Include="..\common\ClipboardData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -142,7 +142,7 @@
     <ClInclude Include="..\api\PythonVirtualMachine.h">
       <Filter>api</Filter>
     </ClInclude>
-    <ClInclude Include="ClipboardData.h">
+    <ClInclude Include="..\common\ClipboardData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
