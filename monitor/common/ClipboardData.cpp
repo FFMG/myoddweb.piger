@@ -322,7 +322,7 @@ void ClipboardData::ToClipboard()
     if (dataSize > 0)
     {
       //  get some data
-      HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, dataSize);
+      HGLOBAL hMem = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, dataSize);
       unsigned char* pMem = (unsigned char*)GlobalLock(hMem);
       memcpy(pMem, data, dataSize);
       GlobalUnlock(hMem);
