@@ -1,13 +1,6 @@
 #include "stdafx.h"
 #include "ClipboardData.h"
 
-#ifdef _DEBUG
-  #ifndef DBG_NEW
-    #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-  #define new DBG_NEW
-  #endif
-#endif  // _DEBUG
-
 ClipboardData::ClipboardData()
 {
   //  null all the values.
