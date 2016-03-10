@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ClipboardData.h"
+#include "ClipboardDropData.h"
 
 ClipboardData::ClipboardData()
 {
@@ -67,12 +68,29 @@ void ClipboardData::FreeClipboardName()
 }
 
 /**
+ * Free the clipboard hdrop files.
+ */
+void ClipboardData::FreeClipboardHDrop()
+{
+  if (data)
+  {
+    delete static_cast<ClipboardDropData*>(data);
+    data = NULL;
+  }
+  FreeClipboardName();
+}
+
+/**
  * Delete all the data and ensure that the resources are freed.
  */
 void ClipboardData::Free()
 {
   switch (uFormat)
   {
+  case CF_HDROP:
+    FreeClipboardHDrop();
+    break;
+
   case CF_ENHMETAFILE:
     FreeClipboardEnhmetafile();
     break;
@@ -111,33 +129,30 @@ ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData)
 {
   //  https://msdn.microsoft.com/en-us/library/windows/desktop/bb776408%28v=vs.85%29.aspx
   std::vector<STD_TSTRING> res;
-  DROPFILES* df = (DROPFILES*)GlobalLock(hData);
-  wchar_t* files = (wchar_t*)(df + 1);
-  wchar_t buf[MAX_PATH];
-  int bufLen = 0;
-  int i = 0;
 
-  while (true)
-  {
-    buf[bufLen++] = files[i];
-
-    if (files[i] == '\0')
-    {
-      if (bufLen == 1)
-      {
-        break;
-      }
-
-      res.push_back(buf);
-      bufLen = 0;
-    }
-
-    i++;
-  }
+  // get the files.
+  DROPFILES* dfs = (DROPFILES*)GlobalLock(hData);
+  ClipboardDropData* drop = ClipboardDropData::FromDROPFILES(dfs);
 
   // release the lock
   GlobalUnlock(hData);
-  return NULL;
+
+  // did we actually find anything orthwhile?
+  if (NULL == drop)
+  {
+    return NULL;
+  }
+
+  // build the data clipboard so we can restore it.
+  ClipboardData *cf = new ClipboardData();
+
+  //  copy the meta file.
+  cf->data = static_cast<void*>(drop);
+  cf->dataSize = 0;
+  cf->uFormat = CF_HDROP;
+
+  // return the format.
+  return cf;
 }
 
 /**
@@ -152,7 +167,7 @@ ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData)
   ClipboardData *cf = new ClipboardData();
 
   //  copy the meta file.
-  cf->data = (unsigned char*)CopyEnhMetaFileW((HENHMETAFILE)hData, NULL);
+  cf->data = CopyEnhMetaFile((HENHMETAFILE)hData, NULL);
   cf->dataSize = 0;
   cf->uFormat = CF_ENHMETAFILE;
 
@@ -339,6 +354,11 @@ void ClipboardData::ToClipboard()
   }
 }
 
+/**
+ * Copy an hbitmap.
+ * @param HBITMAP hBitmapSrc the source bitmap.
+ * @return HBITMAP the copy bitmap handle
+ */
 HBITMAP ClipboardData::CopyBitmap(HBITMAP hBitmapSrc)
 {
   BITMAP  bitmap;

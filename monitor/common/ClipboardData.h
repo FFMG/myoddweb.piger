@@ -37,6 +37,7 @@ public:
   void Free();
   void FreeClipboardName();
   void FreeClipboardEnhmetafile();
+  void FreeClipboardHDrop();
   void FreeClipboardBitmap();
   void FreeClipboardDefault();
   void NullAll();

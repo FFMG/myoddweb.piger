@@ -55,24 +55,26 @@ BOOL Clipboard::GetTextFromClipboard( STD_TSTRING& sText, BOOL bQuote /*= TRUE*/
   {
     return TRUE;
   }
-  else
-  if( clipboard_data.cdFILENAMES.size() > 0 )
+
+  if (!clipboard_data.cdFILENAMES.size() > 0)
   {
-    for( std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = clipboard_data.cdFILENAMES.begin();
-         it != clipboard_data.cdFILENAMES.end();
-         it++)
-    {
-      if( it != clipboard_data.cdFILENAMES.begin() )
-        sText += _T(" ");
-      sText += it->second;
-    }
-    if( bQuote )
-    {
-      sText = _T("\"") + sText + _T("\"");
-    }
-    return TRUE;
+    return FALSE;
   }
-  return FALSE;
+
+  for( std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = clipboard_data.cdFILENAMES.begin();
+        it != clipboard_data.cdFILENAMES.end();
+        it++)
+  {
+    if( it != clipboard_data.cdFILENAMES.begin() )
+      sText += _T(" ");
+    sText += it->second;
+  }
+
+  if( bQuote )
+  {
+    sText = _T("\"") + sText + _T("\"");
+  }
+  return TRUE;
 }
 
 /**
