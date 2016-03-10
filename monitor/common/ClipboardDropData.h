@@ -13,6 +13,8 @@ public:
 
   // return all the files.
   const std::vector<STD_TSTRING>& Files() const { return _files; }
+  int GetDropfilesSize() const;
+  bool PopulateDropFiles(DROPFILES *df, const int maxSize ) const;
 
 protected:
   //

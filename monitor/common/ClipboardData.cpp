@@ -188,7 +188,7 @@ ClipboardData* ClipboardData::FromClipboardBitmap(HGLOBAL hData)
   ClipboardData *cf = new ClipboardData();
 
   //  copy the meta file.
-  cf->data = (unsigned char*)CopyBitmap( (HBITMAP)hData );
+  cf->data = static_cast<void*>(CopyBitmap( (HBITMAP)hData ));
   cf->dataSize = 0;
   cf->uFormat = CF_BITMAP;
 
@@ -232,7 +232,7 @@ ClipboardData* ClipboardData::FromClipboardDefault(UINT format, HGLOBAL hData)
   ClipboardData *cf = new ClipboardData();
 
   //  save the data to the struct and add it to the vector.
-  cf->data = data;
+  cf->data = static_cast<void*>(data);
   cf->dataSize = dataSize;
   cf->uFormat = format;
   cf->dataName = ClipboardData::GetClipboardName(format);
@@ -325,6 +325,41 @@ void ClipboardData::ToClipboard()
 
   switch (format)
   {
+  case CF_HDROP:
+    {
+      ClipboardDropData* cdd = static_cast<ClipboardDropData*>(data);
+
+      // get the size of the clipboard.
+      int size = cdd->GetDropfilesSize();
+      if (size > 0)
+      {
+        // make some room for this DROPFILES item.
+        HGLOBAL hGlobal = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, size);
+
+        // lock it so we can now use it.
+        DROPFILES *df = (DROPFILES*)GlobalLock(hGlobal);
+        
+        // populate the data if we can.
+        if (cdd->PopulateDropFiles(df, size))
+        {
+          // release the lock
+          GlobalUnlock(hGlobal);
+
+          // set the data in the clipboard.
+          SetClipboardData(CF_HDROP, hGlobal);
+        }
+        else
+        {
+          // release the lock
+          GlobalUnlock(hGlobal);
+
+          // free the memory
+          GlobalFree(hGlobal);
+        }
+      }
+    }   
+    break;
+
   case CF_ENHMETAFILE:
     SetClipboardData(CF_ENHMETAFILE, CopyEnhMetaFile((HENHMETAFILE)data, NULL));
     break;
@@ -337,13 +372,13 @@ void ClipboardData::ToClipboard()
     if (dataSize > 0)
     {
       //  get some data
-      HGLOBAL hMem = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, dataSize);
-      void* pMem = GlobalLock(hMem);
+      HGLOBAL hGlobal = GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, dataSize);
+      void* pMem = GlobalLock(hGlobal);
       memcpy(pMem, data, dataSize);
-      GlobalUnlock(hMem);
+      GlobalUnlock(hGlobal);
 
       // we can no save the data.
-      SetClipboardData(format, hMem);
+      SetClipboardData(format, hGlobal);
     }
     else
     {
