@@ -123,6 +123,11 @@ void CActionMonitorApp::SetLastForegroundWindow( CWnd* w )
   cwndLastForegroundWindow = w;
 }
 
+/**
+ * Check if we can start the app or not.
+ * if the app is already running then we will not be able to get that mutex.
+ * @return bool if we can/cannot start the app.
+ */
 bool CActionMonitorApp::CanStartApp()
 {
   m_hMutex = CreateMutex( NULL,   // default security attributes
@@ -136,6 +141,20 @@ bool CActionMonitorApp::CanStartApp()
     return false;
   }
 
+  //
+  DWORD lErr = GetLastError();
+  switch (lErr)
+  {
+  case ERROR_ALREADY_EXISTS:
+    CloseHandle(m_hMutex);
+    m_hMutex = NULL;
+    return false;
+
+  case ERROR_SUCCESS:
+  default:
+    break; 
+  }
+ 
   //  if we are here we can start.
   return true;
 }
@@ -395,8 +414,15 @@ int CActionMonitorApp::ExitInstance()
   //  free/save the configuration file
   myodd::config::free();
 
-  //  close the mutext
-  CloseHandle(m_hMutex);
+  //  this should never not be null.
+  if (m_hMutex)
+  {
+    // releaste the mutex
+    ReleaseMutex(m_hMutex);
+
+    //  close the mutext
+    CloseHandle(m_hMutex);
+  }
   m_hMutex = NULL;
 
   return CWinApp::ExitInstance();
