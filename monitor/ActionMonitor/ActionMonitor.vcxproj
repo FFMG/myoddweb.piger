@@ -182,6 +182,7 @@
     <ClCompile Include="..\api\PythonVirtualMachine.cpp" />
     <ClCompile Include="..\common\Clipboard.cpp" />
     <ClCompile Include="..\common\ClipboardData.cpp" />
+    <ClCompile Include="..\common\ClipboardDropData.cpp" />
     <ClCompile Include="..\common\TrayDialog.cpp" />
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="ActionMonitor.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="..\api\PythonVirtualMachine.h" />
     <ClInclude Include="..\common\Clipboard.h" />
     <ClInclude Include="..\common\ClipboardData.h" />
+    <ClInclude Include="..\common\ClipboardDropData.h" />
     <ClInclude Include="..\common\TrayDialog.h" />
     <ClInclude Include="Action.h" />
     <ClInclude Include="ActionMonitor.h" />

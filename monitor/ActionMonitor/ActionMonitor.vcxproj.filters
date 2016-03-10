@@ -72,6 +72,9 @@
     <ClCompile Include="..\common\ClipboardData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\ClipboardDropData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -143,6 +146,9 @@
       <Filter>api</Filter>
     </ClInclude>
     <ClInclude Include="..\common\ClipboardData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ClipboardDropData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
