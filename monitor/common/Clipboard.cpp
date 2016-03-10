@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "clipboard.h"
+#include "ClipboardDropData.h"
 
 #include <atlbase.h>
 #include "shlObj.h"
@@ -327,12 +328,12 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
         break;
 
       case 0x0c007: /*FILENAMEW*/
-      {
-        //  a file name was added
-        const wchar_t* lp = (WCHAR*)cf->data;
-        AddFileName(lp);
-      }
-      break;
+        {
+          //  a file name was added
+          const wchar_t* lp = (WCHAR*)cf->data;
+          AddFileName(lp);
+        }
+        break;
 
       case CF_UNICODETEXT:
         {
@@ -366,6 +367,17 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
             )
           {
             AddFileName( lp );
+          }
+        }
+        break;
+
+      case CF_HDROP:
+        {
+          ClipboardDropData* cdd = (ClipboardDropData*)cf->data;
+          const std::vector<STD_TSTRING>& files = cdd->Files();
+          for (std::vector<STD_TSTRING>::const_iterator it = files.begin(); it != files.end(); ++it)
+          {
+            AddFileName( *it );
           }
         }
         break;
