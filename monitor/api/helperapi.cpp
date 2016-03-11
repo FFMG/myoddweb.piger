@@ -75,7 +75,12 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
   try
   {
     STD_TSTRING szCommandLine = _T( "" );
-    const Action& action = App().PossibleActions().getCommand( &szCommandLine );
+    const Action* action = App().PossibleActions().GetCommand( &szCommandLine );
+    if (NULL == action)
+    {
+      //  we don't have a command.
+      return false;
+    }
 
     // if the user wants command 0 then we want the full name
     // this is more consistent with the get commands normally work.
@@ -83,7 +88,7 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
     // argument 0 in our world is really the full name of the action.
     if( idx == 0 )
     {
-      sValue = action.CommandToFile( );
+      sValue = action->CommandToFile( );
     }
     else
     {
@@ -107,7 +112,7 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
   }
   catch(...)
   {
-    //  we don't have a command.
+    //  smething broke...
     sValue = _T("");
     return false;
   }
@@ -123,12 +128,17 @@ bool helperapi::getAction( STD_TSTRING& sValue )
 {
   try
   {
-    const Action& action = App().PossibleActions().getCommand();
-    sValue = action.toChar( );
+    const Action* action = App().PossibleActions().GetCommand();
+    if (NULL == action)
+    {
+      //  we don't have a command.
+      return false;
+    }
+    sValue = action->toChar( );
   }
   catch(...)
   {
-    //  we don't have a command.
+    // something broke...
     sValue = _T("");
     return false;
   }
@@ -147,7 +157,12 @@ size_t helperapi::getCommandCount()
   try
   {
     STD_TSTRING szCommandLine = _T( "" );
-    const Action& action = App().PossibleActions().getCommand( &szCommandLine );
+    const Action* action = App().PossibleActions().GetCommand(&szCommandLine);
+    if (NULL == action)
+    {
+      //  we don't have a command.
+      return false;
+    }
 
     if( 0 == szCommandLine.length() )
     {
@@ -232,8 +247,13 @@ bool helperapi::getString (STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = App().PossibleActions().getCommand();
-    const Clipboard& clipBoard = aCommand.GetClipBoard( );
+    const Action* action = App().PossibleActions().GetCommand();
+    if (NULL == action)
+    {
+      //  we don't have a command.
+      return false;
+    }
+    const Clipboard& clipBoard = action->GetClipBoard( );
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetText( sClipBoard ) )
     {
@@ -268,8 +288,13 @@ bool helperapi::getFile(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = App().PossibleActions().getCommand();
-    const Clipboard& clipBoard = aCommand.GetClipBoard( );
+    const Action* action = App().PossibleActions().GetCommand();
+    if (NULL == action)
+    {
+      //  we don't have a command.
+      return false;
+    }
+    const Clipboard& clipBoard = action->GetClipBoard( );
 
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetFile( sClipBoard, idx ) )
@@ -299,8 +324,13 @@ bool helperapi::getURL (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = App().PossibleActions().getCommand();
-    const Clipboard& clipBoard = aCommand.GetClipBoard( );
+    const Action* action = App().PossibleActions().GetCommand();
+    if (NULL == action)
+    {
+      //  we don't have a command.
+      return false;
+    }
+    const Clipboard& clipBoard = action->GetClipBoard( );
 
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetURL( sClipBoard, idx ) )
@@ -333,8 +363,13 @@ bool helperapi::getFolder (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    Action& aCommand = App().PossibleActions().getCommand();
-    const Clipboard& clipBoard = aCommand.GetClipBoard( );
+    const Action* action = App().PossibleActions().GetCommand();
+    if (NULL == action)
+    {
+      //  we don't have a command.
+      return false;
+    }
+    const Clipboard& clipBoard = action->GetClipBoard( );
 
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetFolder( sClipBoard, idx ) )

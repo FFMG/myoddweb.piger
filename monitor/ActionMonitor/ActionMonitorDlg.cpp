@@ -510,11 +510,13 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         //
         //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
         STD_TSTRING szCommandLine = _T( "" );
-        Action& aCommand = App().PossibleActions().getCommand( &szCommandLine );
-        
-        //  do the action now
-        //  we might not have any, but that's not for us to decides :).
-        aCommand.DoIt( szCommandLine, false  );
+        Action* action = App().PossibleActions().GetCommand(&szCommandLine);
+        if (NULL != action)
+        {
+          //  do the action now
+          //  we might not have any, but that's not for us to decides :).
+          action->DoIt(szCommandLine, false);
+        }
       }
       catch( ... )
       {

@@ -58,7 +58,7 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
     try
     {
       // The action.
-      Action& action = *(*it);
+      Action* action = *it;
 
       // We must tell the APIs who the current action will be
       // this one is because some APIs need to know the name of the current command
@@ -66,12 +66,12 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
       //
       // we cannot replace 'possibleActions' with 'this' as the APIs might
       // actually add or remove commands.
-      App().PossibleActions().SetAction( &action );
+      App().PossibleActions().SetAction( action );
 
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'DoIt(...)' function
       // and go directly to 'Launch(...)'
-      action.DoItDirect( _T( "" ), isPrivileged );
+      action->DoItDirect( _T( "" ), isPrivileged );
     }
     catch( ... )
     {

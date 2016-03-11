@@ -419,56 +419,61 @@ void Actions::SetAction( Action* tmpAction )
 
 // -------------------------------------------------------------
 //  get the currently selected command
-Action& Actions::getCommand( STD_TSTRING* cmdLine /*= NULL*/ ) throw( ... )
+Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
 {
+  //  do we have a posible action?
   if( m_tmpAction )
   {
-    return (*m_tmpAction);
+    return m_tmpAction;
   }
 
+  //  do we have a potential action?
+  // if not, then return NULL
   if( m_uCommand >= m_ActionsMatch.size() )
   {
-    throw -1;  //  we don't have a command.
+    return NULL;
   }
 
-  Action& action = *(m_ActionsMatch[ m_uCommand ]);
+  //  get the current action.
+  Action* action = m_ActionsMatch[ m_uCommand ];
 
   // Add the command line if we have anything.
-  if( cmdLine != NULL )
+  if (cmdLine == NULL)
   {
-    (*cmdLine) = _T("");
-
-    // how many words are in the command?
-    LPCTSTR lpAction = action.toChar();
-    std::vector<STD_TSTRING> exploded;
-    int nSize = myodd::strings::explode( exploded, m_sActionAsTyped, _T(' ') );
-
-    // we now need to see how many of those words are present in the select
-    // so if the actual command is 
-    //
-    // 'google earth'
-    // but the user selected the command and typed 
-    // 'goo home'
-    // then we need to remove only 'goo' as the other character make part of the command line.
-    STD_TSTRING wildAction = _T( "" );
-    std::vector<STD_TSTRING> wildActions;
-    for( std::vector<STD_TSTRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
-    {
-      wildActions.push_back( _T("(") + *it + _T("\\S*)") );
-      wildAction = myodd::strings::implode( wildActions, _T( "\\s+" ) );
-      wildAction = _T( "^" ) + wildAction + _T( ".*" );
-
-      if( !myodd::strings::wildcmp( (wildAction).c_str(), lpAction ) )
-      {
-        // this no longer match, so any words afterward make up the command.
-        (*cmdLine) = wildAction = myodd::strings::implode( _T( " " ), it, exploded.end() );
-        break;
-      }
-    }
-
-    // trim the unneeded chars.
-    myodd::strings::Trim( (*cmdLine) );
+    return action;
   }
+  (*cmdLine) = _T("");
+
+  // how many words are in the command?
+  LPCTSTR lpAction = action->toChar();
+  std::vector<STD_TSTRING> exploded;
+  int nSize = myodd::strings::explode( exploded, m_sActionAsTyped, _T(' ') );
+
+  // we now need to see how many of those words are present in the select
+  // so if the actual command is 
+  //
+  // 'google earth'
+  // but the user selected the command and typed 
+  // 'goo home'
+  // then we need to remove only 'goo' as the other character make part of the command line.
+  STD_TSTRING wildAction = _T( "" );
+  std::vector<STD_TSTRING> wildActions;
+  for( std::vector<STD_TSTRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
+  {
+    wildActions.push_back( _T("(") + *it + _T("\\S*)") );
+    wildAction = myodd::strings::implode( wildActions, _T( "\\s+" ) );
+    wildAction = _T( "^" ) + wildAction + _T( ".*" );
+
+    if( !myodd::strings::wildcmp( (wildAction).c_str(), lpAction ) )
+    {
+      // this no longer match, so any words afterward make up the command.
+      (*cmdLine) = wildAction = myodd::strings::implode( _T( " " ), it, exploded.end() );
+      break;
+    }
+  }
+
+  // trim the unneeded chars.
+  myodd::strings::Trim( (*cmdLine) );
 
   // return what we have.
   return action;
