@@ -186,10 +186,13 @@
     <ClCompile Include="..\common\ClipboardsData.cpp" />
     <ClCompile Include="..\common\TrayDialog.cpp" />
     <ClCompile Include="Action.cpp" />
+    <ClCompile Include="ActionBye.cpp" />
+    <ClCompile Include="ActionLoad.cpp" />
     <ClCompile Include="ActionMonitor.cpp" />
     <ClCompile Include="ActionMonitorDlg.cpp" />
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ActionsImmediate.cpp" />
+    <ClCompile Include="ActionVersion.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -215,10 +218,13 @@
     <ClInclude Include="..\common\ClipboardsData.h" />
     <ClInclude Include="..\common\TrayDialog.h" />
     <ClInclude Include="Action.h" />
+    <ClInclude Include="ActionBye.h" />
+    <ClInclude Include="ActionLoad.h" />
     <ClInclude Include="ActionMonitor.h" />
     <ClInclude Include="ActionMonitorDlg.h" />
     <ClInclude Include="Actions.h" />
     <ClInclude Include="ActionsImmediate.h" />
+    <ClInclude Include="ActionVersion.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />

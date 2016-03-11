@@ -2,18 +2,12 @@
 //
 
 #include "stdafx.h"
+#include "ActionsCore.h"
 #include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
 #include "MessageDlg.h"
 
 #define RECT_MIN_H 70
-
-//  common message
-static UINT UWM_KEYBOARD_CHAR   = RegisterWindowMessage(UWM_KEYBOARD_MSG_CHAR);
-static UINT UWM_KEYBOARD_UP     = RegisterWindowMessage(UWM_KEYBOARD_MSG_UP);
-static UINT UWM_KEYBOARD_DOWN   = RegisterWindowMessage(UWM_KEYBOARD_MSG_DOWN);
-static UINT UWM_KEYBOARD_RELOAD = RegisterWindowMessage(UWM_KEYBOARD_MSG_RELOAD);
-static UINT UWM_KEYBOARD_VERSION= RegisterWindowMessage(UWM_KEYBOARD_MSG_VERSION);
 
 // we are not running
 static bool g_isRunning = false;
@@ -517,7 +511,7 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
         STD_TSTRING szCommandLine = _T( "" );
         Action& aCommand = App().PossibleActions().getCommand( &szCommandLine );
-
+        
         //  do the action now
         //  we might not have any, but that's not for us to decides :).
         aCommand.DoIt( szCommandLine, false  );

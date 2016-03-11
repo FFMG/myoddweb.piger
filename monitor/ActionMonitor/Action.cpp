@@ -3,16 +3,10 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+#include "Action.h"
 #include "ActionMonitor.h"
 
 #include "os\os.h"
-
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
-static UINT UWM_KEYBOARD_RELOAD   = RegisterWindowMessage(UWM_KEYBOARD_MSG_RELOAD);
-static UINT UWM_KEYBOARD_VERSION  = RegisterWindowMessage(UWM_KEYBOARD_MSG_VERSION);
 
 /**
  * todo
@@ -122,103 +116,104 @@ void Action::SetCommandPath( LPCTSTR szPath )
 
 /**
  * Run the command, we take into account the current selection and command parameters given.
- *
- * @param STD_TSTRING
+ * @param const STD_TSTRING& szCommandLine the command line argument.
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-bool Action::DoIt( STD_TSTRING szCommandLine, bool isPrivileged)
+bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged)
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
   LPCTSTR command = toChar();
-
-  // first do our commands
-  // this goes against the idea of having any commands at all but i think we need to
-  // have at least one or two
-  if( _tcsicmp( ACTION_CORE_BYE, command ) == 0 )
+  
+  //  not sure how to do that...
+  if ( NULL == command || _tcslen(command) == 0)
   {
-    PostMessage( AfxGetMainWnd()->GetSafeHwnd(), WM_CLOSE, 0, 0 );
+    return false;
   }
-  //  tell us to reload the list of items
-  //  useful if new items are added to the directory
-  else if( _tcsicmp( ACTION_CORE_LOAD, command ) == 0 )
+
+  // we are about to execute a command, we don't know how long the command will last
+  // a badly written plugin could take forever to return.
+  BOOL bThen = hook_RejectKeyboad( FALSE );
+
+  // we must always get the clipboard because we never know for certain if the APIs might call
+  // some functions. This will also reset the values if need be.
+  //
+  // so copy the text that the user could have currently selected or copy the name of the file that is probably selected
+  // tell the clipboard to copy the data of the last known foreground window.
+  CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
+  m_clipBoard.Init( cwnd );
+
+  //  if we are here then we are going to load a user command
+  //
+  //  If the user did not pass any arguments/command line then we must get them from the clipboard.
+  bool bResult = false;
+  if( szCommandLine.length() == 0 )
   {
-    PostMessage( AfxGetMainWnd()->GetSafeHwnd(), UWM_KEYBOARD_RELOAD, 0, 0 );
+    bResult = DoItWithNoCommandLine(isPrivileged);
   }
-  else if( _tcsicmp( ACTION_CORE_VERSION, command ) == 0 )
+  else
   {
-    PostMessage( AfxGetMainWnd()->GetSafeHwnd(), UWM_KEYBOARD_VERSION, 0, 0 );
-  }
-  else if( _tcslen(command) > 0)
-  {
-    // we are about to execute a command, we don't know how long the command will last
-    // a badly written plugin could take forever to return.
-    BOOL bThen = hook_RejectKeyboad( FALSE );
-
-    // we must always get the clipboard because we never know for certain if the APIs might call
-    // some functions. This will also reset the values if need be.
-    //
-    // so copy the text that the user could have currently selected or copy the name of the file that is probably selected
-    // tell the clipboard to copy the data of the last known foreground window.
-    CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
-    m_clipBoard.Init( cwnd );
-
-    //  if we are here then we are going to load a user command
-    //
-    //  If the user did not pass any arguments/command line then we must get them from the clipboard.
-    if( szCommandLine.length() == 0 )
-    {
-      //
-      //  we need to wrap the whole clipboard around try/catch as not all clipboard cases have been tested
-      //  I try to restore data  to the clipboard without really knowing if the data itself is valid
-      //  so that can cause some kind of problem(s)
-      try
-      {
-        //  ask the system if anything was copied.
-        //  the clipboard function will ask us to get the most likely text
-        //  there will probably only be a conflict with explorer, (of any flavor)
-        //  that could copy text and/or file names.
-        //
-        //  any other values are rejected, (bitmaps and so on).
-        STD_TSTRING sText = _T("");
-        if( m_clipBoard.GetTextFromClipboard( sText ) )
-        {
-          //  we need to trim all the items into one single line
-          //  because command lines cannot accept multiple lines
-          //
-          //  or we might need to replace certain characters.
-          szCommandLine = toSingleLine( sText.c_str() );
-        }
-      }
-      catch( ... )
-      {
-        szCommandLine = _T("");
-        myodd::log::LogError( _T("Critical error while trying to run an action, [%s]." ), command );
-        _ASSERT(0);         //  the main reason for failure is probably because  
-                            //  there is a format in the Clipboard that I am not handling properly
-                            //  there should be a way of sending me a mail when this happens so we can look into fixing it.
-      }
-    }
-
     //  so now, at last we can call the command line
-    bool bResult = DoItDirect( szCommandLine.c_str(), isPrivileged);
-
-    // now that we are back from calling the plugin, restore the keyboard state.
-    hook_RejectKeyboad( bThen );
-
-    // return the result.
-    return bResult;
+    bResult = DoItDirect(szCommandLine.c_str(), isPrivileged);
   }
 
-  return true;
+  // now that we are back from calling the plugin, restore the keyboard state.
+  hook_RejectKeyboad( bThen );
+
+  // return the result.
+  return bResult;
+}
+
+/**
+ * Try and do it when we have no command line
+ * @param bool isPrivileged if this action is privileged or not.
+ * @return bool success or not.
+ */
+bool Action::DoItWithNoCommandLine( bool isPrivileged )
+{
+  //  the command line we will try and make.
+  STD_TSTRING szCommandLine = _T("");
+
+  //
+  //  we need to wrap the whole clipboard around try/catch as not all clipboard cases have been tested
+  //  I try to restore data  to the clipboard without really knowing if the data itself is valid
+  //  so that can cause some kind of problem(s)
+  try
+  {
+    //  ask the system if anything was copied.
+    //  the clipboard function will ask us to get the most likely text
+    //  there will probably only be a conflict with explorer, (of any flavor)
+    //  that could copy text and/or file names.
+    //
+    //  any other values are rejected, (bitmaps and so on).
+    STD_TSTRING sText = _T("");
+    if (m_clipBoard.GetTextFromClipboard(sText))
+    {
+      //  we need to trim all the items into one single line
+      //  because command lines cannot accept multiple lines
+      //
+      //  or we might need to replace certain characters.
+      szCommandLine = toSingleLine(sText.c_str());
+    }
+  }
+  catch (...)
+  {
+    szCommandLine = _T("");
+    myodd::log::LogError(_T("Critical error while trying to run an action, [%s]."), toChar() );
+    _ASSERT(0);         //  the main reason for failure is probably because  
+                        //  there is a format in the Clipboard that I am not handling properly
+                        //  there should be a way of sending me a mail when this happens so we can look into fixing it.
+  }
+
+  // we can now do it direct.
+  return DoItDirect(szCommandLine.c_str(), isPrivileged);
 }
 
 /**
  * Get a text an remove the single lines out of it/
  * TODO: Move this to the am_string namespace?
- *
- * @param LPCTSTR the text that we would like to enforce into a single line.
+ * @param const STD_TSTRING& szCommandLine the text that we would like to enforce into a single line.
  * @return STD_TSTRING a single line of text.
  */
 STD_TSTRING Action::toSingleLine( LPCTSTR sText ) const
@@ -348,11 +343,11 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
 /**
  * Launch a single action with all the command line arguments.
  * TODO : The API calls ignore the values been passed to them, so we should first check that we have all the values.
- * @param LPCTSTR the command and the arguments we are launching this file with.
+ * @param const STD_TSTRING& szCommandLine the command and the arguments we are launching this file with.
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL TRUE|FALSE success or not.
  */
-bool Action::DoItDirect( LPCTSTR szArgs, bool isPrivileged) const
+bool Action::DoItDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   // sanity check
   if( 0 == m_szFile.length() )
@@ -393,7 +388,7 @@ bool Action::DoItDirect( LPCTSTR szArgs, bool isPrivileged) const
 #endif // ACTIONMONITOR_API_PY
 
   LPCTSTR cmdLine = CommandToFile( );
-  if( NULL == cmdLine || NULL == szArgs )
+  if( NULL == cmdLine )
   {
     return false;
   }
@@ -401,7 +396,7 @@ bool Action::DoItDirect( LPCTSTR szArgs, bool isPrivileged) const
   //  join the two items together.
   std::vector<STD_TSTRING> argv;
   argv.push_back( cmdLine );
-  argv.push_back( szArgs );
+  argv.push_back( szCommandLine );
   bool bResult = Action::Execute( argv, isPrivileged);
 
   return bResult;

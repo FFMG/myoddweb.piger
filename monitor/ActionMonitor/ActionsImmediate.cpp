@@ -58,7 +58,7 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
     try
     {
       // The action.
-      Action& action = *it;
+      Action& action = *(*it);
 
       // We must tell the APIs who the current action will be
       // this one is because some APIs need to know the name of the current command

@@ -28,6 +28,21 @@ Actions::Actions() :
 // -------------------------------------------------------------
 Actions::~Actions()
 {
+  ClearAll();
+}
+
+// -------------------------------------------------------------
+void Actions::ClearAll()
+{
+  //  delete all the pointers.
+  for (array_of_actions::iterator it = m_Actions.begin(); it != m_Actions.end(); ++it)
+  {
+    delete *it;
+  }
+  m_Actions.clear();
+
+  //  clear all the searches.
+  ClearSearch();
 }
 
 /**
@@ -50,7 +65,7 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
   size_t size = m_Actions.size();
   for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
   {
-    const Action &a = (*i);
+    const Action &a = *(*i);
     // is it the command we were after?
     if( _tcsicmp( a.toChar(), szText ) == 0 )
     {
@@ -84,7 +99,8 @@ Actions::array_of_actions_it Actions::Find( LPCTSTR szText, LPCTSTR szPath )
   size_t size = m_Actions.size();
   for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
   {
-    const Action &a = (*i);  
+    const Action &a = *(*i);
+
     //  the command cannot be NULL
     if( _tcsicmp( a.toChar(), szText ) == 0 )
     {
@@ -111,28 +127,50 @@ Actions::array_of_actions_it Actions::Find( LPCTSTR szText, LPCTSTR szPath )
  * @param LPCTSTR the path of the file that will be executed.
  * @return bool success or not.
  */
-bool Actions::Add( LPCTSTR szText, LPCTSTR szPath )
+bool Actions::Add(LPCTSTR szText, LPCTSTR szPath)
 {
   //  sanity check
-  if( szText == NULL || _tcslen(szText) == 0 )
+  if (szText == NULL || _tcslen(szText) == 0)
   {
     return false;
   }
 
-  array_of_actions_it it = Find( szText, szPath );
+  Action* action = new Action(szText, szPath);
+  if (!Add(action))
+  {
+    delete action;
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Add an action name and path to the vector
+ * @param const Action& the action we want to add.
+ * @return bool success or not.
+ */
+bool Actions::Add( Action* action )
+{
+  if (NULL == action)
+  {
+    return false;
+  }
+
+  array_of_actions_it it = Find(action->toChar(), action->CommandToFile() );
   if( it != m_Actions.end() )
   {
     // this item already exists
     return false;
   }
-
+  
   // we can add the new item now
-  m_Actions.push_back( Action(szText, szPath ) );
+  m_Actions.push_back( action );
 
   // make sure we have not reached our limit this can be changed in the config file
   // but if you have more than 2048 then we might have problems with loading speed, memory and so forth.
   ASSERT( m_Actions.size() <= (size_t)myodd::config::get( _T("paths\\maxcommand"), 2048 ) );
   
+  // the action was added.
   return true;
 }
 
@@ -237,7 +275,7 @@ STD_TSTRING Actions::toChar( ) const
   {
     //  we need a break after the previous line, (even for the current action)
     szCurrentView += _T("<br>");
-    const Action &acc = *it;
+    const Action &acc = *(*it);
 
     szCurrentView += toChar( acc.toChar(), (count==m_uCommand) ? cvSel:cvDef );
     ++count;
@@ -253,7 +291,9 @@ STD_TSTRING Actions::toChar( ) const
 void Actions::ClearSearch()
 {
   // reset the posible matches
-  m_ActionsMatch.erase( m_ActionsMatch.begin(), m_ActionsMatch.end() );
+  // we don't delete all the pointers.
+  // because they do no belong to it.
+  m_ActionsMatch.clear();
 
   // and the currently selected command
   m_uCommand = 0;
@@ -348,12 +388,12 @@ size_t Actions::BuildMatchList( std::vector<STD_TSTRING>& exploded )
   for ( array_of_actions::const_iterator it = m_Actions.begin(); it != m_Actions.end(); ++it )
   {
     //  get the possible command.
-    const Action& acc = (*it);
+    const Action& acc = *(*it);
     
     //  look for that one item.
     if( myodd::strings::wildcmp( (wildAction).c_str(), acc.toChar()) )
     {
-      m_ActionsMatch.push_back( acc );
+      m_ActionsMatch.push_back( *it );
     }
   }
 
@@ -391,7 +431,7 @@ Action& Actions::getCommand( STD_TSTRING* cmdLine /*= NULL*/ ) throw( ... )
     throw -1;  //  we don't have a command.
   }
 
-  Action& action = m_ActionsMatch[ m_uCommand ];
+  Action& action = *(m_ActionsMatch[ m_uCommand ]);
 
   // Add the command line if we have anything.
   if( cmdLine != NULL )
@@ -431,7 +471,7 @@ Action& Actions::getCommand( STD_TSTRING* cmdLine /*= NULL*/ ) throw( ... )
   }
 
   // return what we have.
-  return (action);
+  return action;
 }
 
 // -------------------------------------------------------------

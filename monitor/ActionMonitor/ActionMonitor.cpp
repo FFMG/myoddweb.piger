@@ -4,6 +4,10 @@
 #include "ActionsImmediate.h"
 #include "os/os.h"
 
+#include "ActionBye.h"
+#include "ActionLoad.h"
+#include "ActionVersion.h"
+
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 	//{{AFX_MSG_MAP(CActionMonitorApp)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
@@ -332,9 +336,9 @@ void CActionMonitorApp::BuildActionsList()
 
   //TODO these really need to move out of here
   //  add the default commands
-  _possibleActions->Add( ACTION_CORE_BYE, NULL );
-  _possibleActions->Add( ACTION_CORE_LOAD, NULL);
-  _possibleActions->Add( ACTION_CORE_VERSION, NULL);
+  _possibleActions->Add( new ActionBye() );
+  _possibleActions->Add( new ActionLoad() );
+  _possibleActions->Add( new ActionVersion() );
 }
 
 /**

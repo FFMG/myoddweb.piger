@@ -1,17 +1,12 @@
 // Actions.h: interface for the Actions class.
-//
 //////////////////////////////////////////////////////////////////////
 
 #ifndef __Actions_h__
 #define __Actions_h__
 
 #pragma once
+#include "ActionsCore.h"
 #include "Action.h"
-
-//  some core functions
-static LPCTSTR ACTION_CORE_BYE      = _T("this.bye");       //  close the app
-static LPCTSTR ACTION_CORE_LOAD     = _T("this.reload");    //  reload the list of items
-static LPCTSTR ACTION_CORE_VERSION  = _T("this.version");   //  the version number
 
 // the name of protected directories
 static LPCTSTR AM_DIRECTORY_IN  = _T("__in");           //  dir of actions that will run at start
@@ -25,11 +20,15 @@ public:
 	Actions();
 	virtual ~Actions();
 
+  bool Add( Action* action );
   bool Add( LPCTSTR szText, LPCTSTR szPath );
   bool Remove( LPCTSTR szText, LPCTSTR szPath );
   bool Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath );
 
   STD_TSTRING toChar( ) const;
+
+protected:
+  DISALLOW_COPY_AND_ASSIGN(Actions);
 
 protected:
 
@@ -48,9 +47,7 @@ protected:
     {
     }
   protected:
-    //  we don't copy this data.
-    COMMANDS_VALUE( const COMMANDS_VALUE& );
-    const COMMANDS_VALUE& operator=( const COMMANDS_VALUE& );
+    DISALLOW_COPY_AND_ASSIGN(COMMANDS_VALUE);
   };
 
   static STD_TSTRING toChar( const STD_TSTRING& s, const COMMANDS_VALUE& cv );
@@ -58,7 +55,7 @@ protected:
 
 protected:
   //  vectors containing all the commands we can call
-  typedef std::vector<Action > array_of_actions;
+  typedef std::vector<Action*> array_of_actions;
   typedef Actions::array_of_actions::const_iterator array_of_actions_it;
   array_of_actions m_Actions;
   array_of_actions m_ActionsMatch;
@@ -108,6 +105,7 @@ public:
   void CurrentActionAdd( TCHAR c );
   void CurrentActionBack();
 
+  void ClearAll();
 protected:
   // this is the text that the user is currently typing
   STD_TSTRING m_sActionAsTyped;
