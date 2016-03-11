@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include "ClipboardData.h"
+#include "ClipboardsData.h"
 
 class Clipboard  
 {
@@ -20,25 +21,20 @@ public:
   void Get( CWnd* cwnd );
 
 public:
-  BOOL GetTextFromClipboard( STD_TSTRING& sText, BOOL bQuote = TRUE ) const;
-  BOOL GetText( STD_TSTRING& sText ) const;
-  BOOL GetFolder( STD_TSTRING& sText, UINT idx ) const;
-  BOOL GetFileNames( STD_TSTRING& sText, UINT idx ) const;
-  BOOL GetURL( STD_TSTRING& sText, UINT idx ) const;
+  bool GetTextFromClipboard( STD_TSTRING& sText, bool bQuote = true ) const;
+  bool GetText( STD_TSTRING& sText, bool bQuote = true) const;
+
+  bool GetFolder( STD_TSTRING& sText, size_t idx, bool bQuote = true) const;
+  bool GetFile( STD_TSTRING& sText, size_t idx, bool bQuote = true) const;
+  bool GetURL( STD_TSTRING& sText, size_t idx, bool bQuote = true) const;
   
 protected:  
   CWnd* cwndMain;
 
   void Init();
 
-  struct CLIPBOARD_DATA 
-  {
-    STD_TSTRING cdTEXT;
-    std::map<STD_TSTRING, STD_TSTRING > cdFILENAMES;
-  };  //  CLIPBOARD_DATA
-
   //  the list of possible items
-  CLIPBOARD_DATA clipboard_data;
+  ClipboardsData clipboard_data;
 
   typedef std::vector<ClipboardData *> V_CF;
 
@@ -50,6 +46,7 @@ protected:
 
   void ResetClipBoardData();
   void AddFileName( const STD_TSTRING& s );
+  void SetText(const STD_TSTRING& s);
 
 protected:
   HRESULT GetNameFromPIDL

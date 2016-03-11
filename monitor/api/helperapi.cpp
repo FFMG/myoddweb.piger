@@ -272,7 +272,7 @@ bool helperapi::getFile(const unsigned int idx, STD_TSTRING& sValue )
     const Clipboard& clipBoard = aCommand.GetClipBoard( );
 
     STD_TSTRING sClipBoard = _T("");
-    if( !clipBoard.GetFileNames( sClipBoard, idx ) )
+    if( !clipBoard.GetFile( sClipBoard, idx ) )
     {
       // could not find anything
       return false;

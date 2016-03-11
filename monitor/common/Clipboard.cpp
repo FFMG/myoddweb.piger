@@ -49,51 +49,19 @@ void Clipboard::Get(  CWnd* cwnd  )
  * @param string the container that will, (maybe), have hold our return string.
  * @return BOOL TRUE if we have something to return.
  */
-BOOL Clipboard::GetTextFromClipboard( STD_TSTRING& sText, BOOL bQuote /*= TRUE*/ ) const
+bool Clipboard::GetTextFromClipboard(STD_TSTRING& sText, bool bQuote /*= true */) const
 {
-  sText = _T(""); //  reset the contents
-  if( GetText( sText ) )
-  {
-    return TRUE;
-  }
-
-  if (!clipboard_data.cdFILENAMES.size() > 0)
-  {
-    return FALSE;
-  }
-
-  for( std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = clipboard_data.cdFILENAMES.begin();
-        it != clipboard_data.cdFILENAMES.end();
-        it++)
-  {
-    if( it != clipboard_data.cdFILENAMES.begin() )
-      sText += _T(" ");
-    sText += it->second;
-  }
-
-  if( bQuote )
-  {
-    sText = _T("\"") + sText + _T("\"");
-  }
-  return TRUE;
+  return clipboard_data.GetTextFromClipboard(sText, bQuote);
 }
 
 /**
  * Get the currently selected Text
- * 
  * @param string that will received the data
  * @return BOOL true if we have Data or FALSE if not.
  */
-BOOL Clipboard::GetText( STD_TSTRING& sText ) const
+bool Clipboard::GetText( STD_TSTRING& sText, bool bQuote ) const
 {
-  sText = _T(""); //  reset the contents
-  if( clipboard_data.cdTEXT.length() == 0 )
-  {
-    return FALSE;
-  }
-
-  sText = clipboard_data.cdTEXT;
-  return TRUE;
+  return clipboard_data.GetText(sText, bQuote);
 }
 
 /**
@@ -103,33 +71,9 @@ BOOL Clipboard::GetText( STD_TSTRING& sText ) const
  * @param int the filename number/index we are looking for.
  * @return BOOL true if we have Data or FALSE if not.
  */
-BOOL Clipboard::GetFileNames( STD_TSTRING& sText, UINT idx ) const
+bool Clipboard::GetFile( STD_TSTRING& sText, size_t idx, bool bQuote ) const
 {
-  sText = _T(""); //  reset the contents
-
-  // look around for the first item that match
-  int actual = 0;
-  for( std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = clipboard_data.cdFILENAMES.begin();
-       it != clipboard_data.cdFILENAMES.end();
-       it++)
-  {
-    if( !myodd::files::IsFile( it->second.c_str() ))
-    {
-      continue;
-    }
-    
-    // -- we found one more item
-    if( actual == idx )
-    {
-      // we found what we wanted.
-      sText = it->second;
-      return TRUE;
-    }
-    actual++;
-  }
-
-  // if we are here we found nothing.
-  return FALSE;
+  return clipboard_data.GetFile(sText, idx, bQuote );
 }
 
 /**
@@ -139,35 +83,10 @@ BOOL Clipboard::GetFileNames( STD_TSTRING& sText, UINT idx ) const
  * @param int the folder number/index we are looking for.
  * @return BOOL true if we have Data or FALSE if not.
  */
-BOOL Clipboard::GetFolder( STD_TSTRING& sText, UINT idx ) const
+bool Clipboard::GetFolder( STD_TSTRING& sText, size_t idx, bool bQuote ) const
 {
-  sText = _T(""); //  reset the contents
-
-  // look around for the first item that match
-  int actual = 0;
-  for( std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = clipboard_data.cdFILENAMES.begin();
-       it != clipboard_data.cdFILENAMES.end();
-       it++)
-  {
-    if( !myodd::files::IsDirectory( it->second.c_str() ))
-    {
-      continue;
-    }
-    
-    // -- we found one more item
-    if( actual == idx )
-    {
-      // we found what we wanted.
-      sText = it->second;
-      return TRUE;
-    }
-    actual++;
-  }
-
-  // if we are here we found nothing.
-  return FALSE;
+  return clipboard_data.GetFolder(sText, idx, bQuote );
 }
-
 
 /**
  * Get the URLS if we have anything.
@@ -176,33 +95,9 @@ BOOL Clipboard::GetFolder( STD_TSTRING& sText, UINT idx ) const
  * @param int the URL number/index we are looking for.
  * @return BOOL true if we have Data or FALSE if not.
  */
-BOOL Clipboard::GetURL( STD_TSTRING& sText, UINT idx ) const
+bool Clipboard::GetURL( STD_TSTRING& sText, size_t idx, bool bQuote ) const
 {
-  sText = _T(""); //  reset the contents
-
-  // look around for the first item that match
-  int actual = 0;
-  for( std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = clipboard_data.cdFILENAMES.begin();
-       it != clipboard_data.cdFILENAMES.end();
-       it++)
-  {
-    if( !myodd::files::IsURL( it->second.c_str() ))
-    {
-      continue;
-    }
-    
-    // -- we found one more item
-    if( actual == idx )
-    {
-      // we found what we wanted.
-      sText = it->second;
-      return TRUE;
-    }
-    actual++;
-  }
-
-  // if we are here we found nothing.
-  return FALSE;
+  return clipboard_data.GetURL(sText, idx, bQuote );
 }
 
 /**
@@ -339,17 +234,7 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
         {
           //  normal, selected text.
           const wchar_t* lp = (WCHAR*)cf->data;
-          clipboard_data.cdTEXT = lp;
-
-          // it is posible that the text selected represents a file
-          // or a directory, in that case it is useful to display it to the APIs
-          if( myodd::files::IsFile( lp ) || 
-              myodd::files::IsDirectory( lp ) || 
-              myodd::files::IsURL( lp )           // this is only a basic syntax check
-            )
-          {
-            AddFileName( lp );
-          }
+          SetText( lp );
         }
         break;
 
@@ -357,17 +242,7 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
         {
           //  normal, selected text.
           const wchar_t* lp = T_A2T( (CHAR*)cf->data );
-          clipboard_data.cdTEXT = lp;
-
-          // it is posible that the text selected represents a file
-          // or a directory, in that case it is useful to display it to the APIs
-          if( myodd::files::IsFile( lp ) || 
-              myodd::files::IsDirectory( lp ) || 
-              myodd::files::IsURL( lp )           // this is only a basic syntax check
-            )
-          {
-            AddFileName( lp );
-          }
+          SetText( lp );
         }
         break;
 
@@ -626,6 +501,21 @@ void Clipboard::GetCurrentData
   }
 }
 
+void Clipboard::AddFileName(const STD_TSTRING& s)
+{
+  clipboard_data.AddPossibleFileName(s);
+}
+
+void Clipboard::SetText(const STD_TSTRING& s)
+{
+  //  set the text value.
+  clipboard_data.SetText(s);
+
+  // it is posible that the text selected represents a file
+  // or a directory, in that case it is useful to display it to the APIs
+  AddFileName(s);
+}
+
 /**
  * Todo
  * @param void
@@ -753,34 +643,5 @@ BOOL Clipboard::ParseExplorerData(CWnd* cwnd )
 void Clipboard::ResetClipBoardData()
 {
   // emtpty everything
-  clipboard_data.cdFILENAMES.erase( clipboard_data.cdFILENAMES.begin(), 
-                                    clipboard_data.cdFILENAMES.end() );
-  clipboard_data.cdTEXT = _T("");
-}
-
-/**
- * Add a file name, folder name or URL to the list 
- * so when the API come and ask for the values they are all found in one place.
- *
- * @param void
- * @return void
- */
-void Clipboard::AddFileName( const STD_TSTRING& s )
-{
-  STD_TSTRING first = myodd::strings::lower( s );
-  if( myodd::files::IsDirectory( first.c_str() ) )
-  {
-    // Make sure the trailing slash looks similar for all
-    myodd::files::RemoveTrailingBackSlash( first );
-    myodd::files::AddTrailingBackSlash( first );
-  }
-
-  std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = clipboard_data.cdFILENAMES.find( first );
-  if( it != clipboard_data.cdFILENAMES.end() )
-  {
-    //  we already have it.
-    return;
-  }
-
-  clipboard_data.cdFILENAMES[ first ] = s;
+  clipboard_data.Reset();
 }

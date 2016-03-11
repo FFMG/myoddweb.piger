@@ -20,5 +20,9 @@ protected:
   //
   typedef std::vector<STD_TSTRING> DropFiles;
   DropFiles _files;
+
+private:
+  // ty shall not copy...
+  DISALLOW_COPY_AND_ASSIGN(ClipboardDropData);
 };
 

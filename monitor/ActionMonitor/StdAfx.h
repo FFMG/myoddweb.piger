@@ -22,6 +22,12 @@
 # pragma comment(lib, "hook.lib" )
 #endif
 
+#ifndef DISALLOW_COPY_AND_ASSIGN
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
+#endif
+
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
 
 // turns off MFC's hiding of some common and often safely ignored warning messages

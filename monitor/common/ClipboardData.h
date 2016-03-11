@@ -22,11 +22,6 @@ public:
 
   void ToClipboard();
 
-private:
-  // ty shall not copy...
-  ClipboardData(const ClipboardData&cf);
-  const ClipboardData& operator= (const ClipboardData&cf);
-
 public:
   void* data;
   SIZE_T  dataSize;
@@ -43,4 +38,8 @@ public:
   void NullAll();
 
   static HBITMAP CopyBitmap(HBITMAP hBitmapSrc);
+
+private:
+  // ty shall not copy...
+  DISALLOW_COPY_AND_ASSIGN(ClipboardData);
 };
