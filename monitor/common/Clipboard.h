@@ -18,7 +18,10 @@ public:
 	Clipboard();
   virtual ~Clipboard();
 
-  void Get( CWnd* cwnd );
+  Clipboard(const Clipboard& rhs);
+  const Clipboard& operator=(const Clipboard& rhs);
+
+  void Init(CWnd* mainWnd);
 
 public:
   bool GetTextFromClipboard( STD_TSTRING& sText, bool bQuote = true ) const;
@@ -29,13 +32,6 @@ public:
   bool GetURL( STD_TSTRING& sText, size_t idx, bool bQuote = true) const;
   
 protected:  
-  CWnd* cwndMain;
-
-  void Init();
-
-  //  the list of possible items
-  ClipboardsData clipboard_data;
-
   typedef std::vector<ClipboardData *> V_CF;
 
   void ResetClipboardFormats(V_CF& cf) const;
@@ -66,5 +62,9 @@ protected:
 
 protected:
   void CopyDataFromForgroundWindow( CWnd* cPossibleWindow );
+
+protected:
+  //  the list of possible items
+  ClipboardsData _clipboardData;
 };
 #endif // _clipboard_h_

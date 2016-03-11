@@ -162,7 +162,7 @@ bool Action::DoIt( STD_TSTRING szCommandLine, bool isPrivileged)
     // so copy the text that the user could have currently selected or copy the name of the file that is probably selected
     // tell the clipboard to copy the data of the last known foreground window.
     CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
-    m_clipBoard.Get( cwnd );
+    m_clipBoard.Init( cwnd );
 
     //  if we are here then we are going to load a user command
     //

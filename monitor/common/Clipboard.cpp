@@ -16,7 +16,7 @@
  * @param void
  * @return void
  */
-Clipboard::Clipboard( ) : cwndMain( NULL )
+Clipboard::Clipboard( )
 {
 }
 
@@ -29,15 +29,18 @@ Clipboard::~Clipboard()
 {
 }
 
-/**
- * Todo
- * @param void
- * @return void
- */
-void Clipboard::Get(  CWnd* cwnd  )
+Clipboard::Clipboard(const Clipboard& rhs)
 {
-  cwndMain = cwnd;
-  Init();
+  *this = rhs;
+}
+
+const Clipboard& Clipboard::operator=(const Clipboard& rhs)
+{
+  if (this != &rhs)
+  {
+    _clipboardData = rhs._clipboardData;
+  }
+  return *this;
 }
 
 /**
@@ -51,7 +54,7 @@ void Clipboard::Get(  CWnd* cwnd  )
  */
 bool Clipboard::GetTextFromClipboard(STD_TSTRING& sText, bool bQuote /*= true */) const
 {
-  return clipboard_data.GetTextFromClipboard(sText, bQuote);
+  return _clipboardData.GetTextFromClipboard(sText, bQuote);
 }
 
 /**
@@ -61,7 +64,7 @@ bool Clipboard::GetTextFromClipboard(STD_TSTRING& sText, bool bQuote /*= true */
  */
 bool Clipboard::GetText( STD_TSTRING& sText, bool bQuote ) const
 {
-  return clipboard_data.GetText(sText, bQuote);
+  return _clipboardData.GetText(sText, bQuote);
 }
 
 /**
@@ -73,7 +76,7 @@ bool Clipboard::GetText( STD_TSTRING& sText, bool bQuote ) const
  */
 bool Clipboard::GetFile( STD_TSTRING& sText, size_t idx, bool bQuote ) const
 {
-  return clipboard_data.GetFile(sText, idx, bQuote );
+  return _clipboardData.GetFile(sText, idx, bQuote );
 }
 
 /**
@@ -85,7 +88,7 @@ bool Clipboard::GetFile( STD_TSTRING& sText, size_t idx, bool bQuote ) const
  */
 bool Clipboard::GetFolder( STD_TSTRING& sText, size_t idx, bool bQuote ) const
 {
-  return clipboard_data.GetFolder(sText, idx, bQuote );
+  return _clipboardData.GetFolder(sText, idx, bQuote );
 }
 
 /**
@@ -97,7 +100,7 @@ bool Clipboard::GetFolder( STD_TSTRING& sText, size_t idx, bool bQuote ) const
  */
 bool Clipboard::GetURL( STD_TSTRING& sText, size_t idx, bool bQuote ) const
 {
-  return clipboard_data.GetURL(sText, idx, bQuote );
+  return _clipboardData.GetURL(sText, idx, bQuote );
 }
 
 /**
@@ -280,7 +283,7 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
  * @param none
  * @return none
  */
-void Clipboard::Init()
+void Clipboard::Init( CWnd* mainWnd )
 { 
   // the current clipboard data
   V_CF clipboard_format;
@@ -295,17 +298,17 @@ void Clipboard::Init()
     GetCurrentData(NULL, clipboard_format);
     
     //  then copy the data from the previous foreground window.
-    CopyDataFromForgroundWindow( cwndMain );
+    CopyDataFromForgroundWindow(mainWnd);
     
     // empty all the data we might have from previous calls.
     ResetClipBoardData();
 
     //  ok, so now we can get this window data
-    GetCurrentData( cwndMain, clipboard_format_new);
+    GetCurrentData(mainWnd, clipboard_format_new);
 
     // try and get as much info from the explorer window
     // those are selected files, current folders and so forth.
-    ParseExplorerData( cwndMain );
+    ParseExplorerData(mainWnd);
 
     //  now that we have a brand new array of clipboards simply
     //  add as much info as possible to our structure
@@ -501,19 +504,28 @@ void Clipboard::GetCurrentData
   }
 }
 
-void Clipboard::AddFileName(const STD_TSTRING& s)
+/**
+ * Add a filename to our list of filenames.
+ * @param const STD_TSTRING& fileName the filename we want to add.
+ */
+void Clipboard::AddFileName(const STD_TSTRING& fileName)
 {
-  clipboard_data.AddPossibleFileName(s);
+  // add it to our list.
+  _clipboardData.AddPossibleFileName(fileName);
 }
 
-void Clipboard::SetText(const STD_TSTRING& s)
+/**
+* Add a filename to our list of filenames.
+* @param const STD_TSTRING& fileName the filename we want to add.
+*/
+void Clipboard::SetText(const STD_TSTRING& srcText)
 {
   //  set the text value.
-  clipboard_data.SetText(s);
+  _clipboardData.SetText(srcText);
 
   // it is posible that the text selected represents a file
   // or a directory, in that case it is useful to display it to the APIs
-  AddFileName(s);
+  AddFileName(srcText);
 }
 
 /**
@@ -643,5 +655,5 @@ BOOL Clipboard::ParseExplorerData(CWnd* cwnd )
 void Clipboard::ResetClipBoardData()
 {
   // emtpty everything
-  clipboard_data.Reset();
+  _clipboardData.Reset();
 }
