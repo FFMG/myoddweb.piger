@@ -16,7 +16,6 @@ void Test();  //  test data
 void strip_extension( STD_TSTRING& f );
 void add_extension( STD_TSTRING& f, const STD_TSTRING& e, bool strip_current_if_exists );
 
-
 STD_TSTRING get_extension( const STD_TSTRING& f );
 bool is_extension( const STD_TSTRING& f, const STD_TSTRING& e );
 
@@ -57,9 +56,13 @@ bool CreateFullDirectory( LPCTSTR c, bool bIsFile );
 bool CreateFullDirectory( const STD_TSTRING& c, bool bIsFile );
 
 bool IsFile( LPCTSTR lp );
+bool IsFile(const STD_TSTRING& stdFile);
+
 bool IsDirectory( LPCTSTR lp );
 bool IsDirectory( const STD_TSTRING& stdDir );
+
 bool IsURL( LPCTSTR lp );
+bool IsURL(const STD_TSTRING& stdUrl );
 
 bool FileExists( const STD_TSTRING& c );
 bool FileExists( LPCTSTR c );

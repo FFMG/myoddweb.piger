@@ -1026,6 +1026,18 @@ bool CreateFullDirectory( LPCTSTR lpPath, bool bIsFile )
  * Check if the string given is a valid existing file on the drive.
  * the string is expanded.
  *
+ * @param const STD_TSTRING& stdFile the string we are checking for.
+ * @return bool true|false if it is a file or not.
+ */
+bool IsFile(const STD_TSTRING& stdFile)
+{
+  return IsFile(stdFile.c_str());
+}
+
+/**
+ * Check if the string given is a valid existing file on the drive.
+ * the string is expanded.
+ *
  * @param LPCTSTR the string we are checking for.
  * @return bool true|false if it is a file or not.
  */
@@ -1145,6 +1157,18 @@ bool IsDirectory( LPCTSTR lp )
   }
 
   return true;
+}
+
+/**
+* Check if the string given LOOKS like a valid URL
+* This is a very basic check, we cannot actually ping the site to enusre that it is valid.
+*
+* @param const STD_TSTRING& stdUrl the string we are checking for.
+* @return bool true|false if it is a directory or not.
+*/
+bool IsURL(const STD_TSTRING& stdUrl)
+{
+  return IsURL(stdUrl.c_str());
 }
 
 /**
