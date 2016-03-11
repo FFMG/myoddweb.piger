@@ -730,15 +730,15 @@ void CActionMonitorDlg::DisplayTime
         _tcsftime(szBuffer, _countof(szBuffer), _T("%A, %B %d, %Y, %H:%M"), &newtime);
 
         RECT r      = {0,0,0,0};
-        unsigned l = _tcslen(szBuffer);
-        if( 0 < l )
+        size_t bufferLen = _tcslen(szBuffer);
+        if( bufferLen > 0 )
         {
-          DrawText( hdc, szBuffer , l , &r, DT_DEFAULT | DT_CALCRECT);
+          DrawText( hdc, szBuffer , bufferLen, &r, DT_DEFAULT | DT_CALCRECT);
           r.left   = (rParent.right-rParent.left) - (r.right) - 5;
           r.right  = (rParent.right-rParent.left) - 5;
           r.top    = (rParent.top);
           r.bottom = (r.top+r.bottom);
-          DrawText( hdc, szBuffer , l , &r, DT_DEFAULT );
+          DrawText( hdc, szBuffer , bufferLen, &r, DT_DEFAULT );
         }
       }// if _tcsftime(...)
       

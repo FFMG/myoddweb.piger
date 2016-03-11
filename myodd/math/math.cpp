@@ -428,7 +428,7 @@ int __fastcall ToBase10(const TCHAR* udata, BYTE fromBase)
   }
 
   static const TCHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-  unsigned int udatalen = _tcslen( udata );
+  size_t udatalen = _tcslen( udata );
 
   long digitValue = 0;
   int retVal = 0;
