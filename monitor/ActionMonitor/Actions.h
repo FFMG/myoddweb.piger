@@ -82,7 +82,7 @@ protected:
   size_t m_uCommand;
 
 public:
-  Action* GetCommand( STD_TSTRING* cmdLine = NULL ) const;
+  const Action* GetCommand( STD_TSTRING* cmdLine = NULL ) const;
   void SetAction( Action* tmpAction );
 
 protected:

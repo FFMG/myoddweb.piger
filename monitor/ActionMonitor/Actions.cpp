@@ -415,7 +415,7 @@ void Actions::SetAction( Action* tmpAction )
 
 // -------------------------------------------------------------
 //  get the currently selected command
-Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
+const Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
 {
   //  do we have a posible action?
   if( m_tmpAction )
