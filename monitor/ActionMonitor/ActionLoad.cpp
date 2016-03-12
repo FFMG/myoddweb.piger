@@ -30,7 +30,7 @@ ActionLoad::~ActionLoad()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-bool ActionLoad::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged)
+bool ActionLoad::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   //  ask to reload the actions.
   PostMessage(AfxGetMainWnd()->GetSafeHwnd(), UWM_KEYBOARD_RELOAD, 0, 0);

@@ -14,7 +14,7 @@ public:
   ActionBye();
 	virtual ~ActionBye();
 
-  virtual bool DoIt( const STD_TSTRING& szCommandLine, bool isPrivileged);
+  virtual bool DoIt( const STD_TSTRING& szCommandLine, bool isPrivileged) const;
 };
 
 #endif // __Action_h__

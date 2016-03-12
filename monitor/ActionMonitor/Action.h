@@ -25,7 +25,7 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  virtual bool DoIt( const STD_TSTRING& szCommandLine, bool isPrivileged);
+  virtual bool DoIt( const STD_TSTRING& szCommandLine, bool isPrivileged) const;
 
   // Same as DoIt( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
@@ -42,7 +42,7 @@ public:
   size_t len() const { return m_szCommand.length();}
 
 protected:
-  bool DoItWithNoCommandLine( bool isPrivileged );
+  bool DoItWithNoCommandLine( bool isPrivileged ) const;
 
 #ifdef ACTIONMONITOR_API_PLUGIN
   bool DoItDirectPlugin( bool isPrivileged) const;

@@ -119,7 +119,7 @@ void Action::SetCommandPath( LPCTSTR szPath )
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged)
+bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
@@ -161,7 +161,7 @@ bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged)
  * @param bool isPrivileged if this action is privileged or not.
  * @return bool success or not.
  */
-bool Action::DoItWithNoCommandLine( bool isPrivileged )
+bool Action::DoItWithNoCommandLine( bool isPrivileged ) const
 {
   //  the command line we will try and make.
   STD_TSTRING szCommandLine = _T("");
