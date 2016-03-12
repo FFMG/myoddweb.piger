@@ -9,7 +9,7 @@
  * @param lua_State
  * @return void
  */
-luaapi::luaapi(  ) : helperapi()
+luaapi::luaapi(ActiveAction* action) : helperapi( action )
 {
 }
 

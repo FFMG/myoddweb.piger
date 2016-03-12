@@ -160,7 +160,7 @@ HMODULE PluginVirtualMachine::ExpandLoadLibrary( LPCTSTR lpFile )
  * @param void
  * @return void
  */
-int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile )
+int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, ActiveAction* action )
 {
   Initialize();
   if( NULL == _amPlugin )
@@ -178,7 +178,7 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile )
   if( NULL == f )
   {
     //  init this file.
-    return InitFile( pluginFile );
+    return Create( pluginFile, action );
   }
 
   // assume error 
@@ -203,14 +203,15 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile )
  * Initialize a plugin for the first time.
  * This is when we load the file.
  * @param LPCTSTR the plugin we are loading.
+ * @param ActiveAction* action the active action.
  * @return
  */
-int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
+int PluginVirtualMachine::Create( LPCTSTR pluginFile, ActiveAction* action)
 {
   HMODULE hModule = ExpandLoadLibrary( pluginFile );
   if( NULL == hModule )
   {
-    helperapi api;
+    helperapi api(action);
     myodd::os::ARCHITECTURE pe = myodd::os::GetImageArchitecture(pluginFile);
     if (pe == myodd::os::ARCHITECTURE_UNKNOWN)
     {
@@ -233,7 +234,7 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
   PFUNC_MSG pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
   if (NULL == pfMsg )
   {
-    helperapi api;
+    helperapi api(action);
     api.say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
     return -1;
   }
@@ -241,7 +242,7 @@ int PluginVirtualMachine::InitFile( LPCTSTR pluginFile )
   PLUGIN_THREAD* f = new PLUGIN_THREAD;
   f-> hModule = hModule;
   f-> fnMsg   = pfMsg;
-  f->api      = new pluginapi();
+  f->api      = new pluginapi(action);
 
   m_pluginsContainer[ pluginFile ] = f;
 

@@ -193,6 +193,7 @@
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ActionsImmediate.cpp" />
     <ClCompile Include="ActionVersion.cpp" />
+    <ClCompile Include="ActiveAction.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -226,6 +227,7 @@
     <ClInclude Include="ActionsCore.h" />
     <ClInclude Include="ActionsImmediate.h" />
     <ClInclude Include="ActionVersion.h" />
+    <ClInclude Include="ActiveAction.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />

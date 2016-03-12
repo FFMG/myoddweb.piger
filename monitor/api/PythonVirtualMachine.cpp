@@ -89,9 +89,6 @@ void PythonVirtualMachine::Initialize()
     return;
   }
 
-  delete _api;
-  _api = new pyapi();
-
   // first initialise the functions.
   InitializeFunctions();
 
@@ -134,7 +131,7 @@ bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
  * @param void
  * @return void
  */
-int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
+int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, ActiveAction* action )
 {
   Initialize();
 
@@ -142,6 +139,9 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
   {
     return -1;
   }
+
+  delete _api;
+  _api = new pyapi( action );
 
   USES_CONVERSION;
   // Python is not thread safe 
@@ -186,7 +186,6 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
 
   // we are done with the file.
   fclose(fp);
-
 
   PyObject *main_module = PyImport_AddModule("__main__");
   PyObject *main_dict = PyModule_GetDict(main_module);
@@ -234,7 +233,7 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile )
       Py_XDECREF(traceback);
 
       USES_CONVERSION;
-      helperapi h;
+      helperapi h(action);
       h.say(T_A2T( message.c_str() ), 500, 10);
     }
   }

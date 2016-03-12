@@ -80,7 +80,6 @@ const Action& Action::operator=(const Action& action)
     m_szCommand = action.m_szCommand; 
     m_szFile    = action.m_szFile;
     m_szExt     = action.m_szExt;
-    m_clipBoard = action.m_clipBoard;
   }
   return *this;
 }
@@ -136,14 +135,6 @@ bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged)
   // a badly written plugin could take forever to return.
   BOOL bThen = hook_RejectKeyboad( FALSE );
 
-  // we must always get the clipboard because we never know for certain if the APIs might call
-  // some functions. This will also reset the values if need be.
-  //
-  // so copy the text that the user could have currently selected or copy the name of the file that is probably selected
-  // tell the clipboard to copy the data of the last known foreground window.
-  CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
-  m_clipBoard.Init( cwnd );
-
   //  if we are here then we are going to load a user command
   //
   //  If the user did not pass any arguments/command line then we must get them from the clipboard.
@@ -186,9 +177,12 @@ bool Action::DoItWithNoCommandLine( bool isPrivileged )
     //  there will probably only be a conflict with explorer, (of any flavor)
     //  that could copy text and/or file names.
     //
+    CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
+    Clipboard clipboard( cwnd );
+
     //  any other values are rejected, (bitmaps and so on).
     STD_TSTRING sText = _T("");
-    if (m_clipBoard.GetTextFromClipboard(sText))
+    if (clipboard.GetTextFromClipboard(sText))
     {
       //  we need to trim all the items into one single line
       //  because command lines cannot accept multiple lines
@@ -359,9 +353,7 @@ bool Action::DoItDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) con
   //
   if(PluginVirtualMachine::IsPluginExt( m_szExt.c_str() ) )
   {
-    PluginVirtualMachine* pg = App().GetPluginVirtualMachine();
-    int s = pg->LoadFile( m_szFile.c_str() );
-    return ( s == 0 ); 
+    return DoItDirectPlugin( isPrivileged );
   }
 #endif // ACTIONMONITOR_API_PLUGIN
 
@@ -370,9 +362,7 @@ bool Action::DoItDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) con
   //
   if(LuaVirtualMachine::IsLuaExt( m_szExt.c_str() ) )
   {
-    LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
-    int s = lua->LoadFile( m_szFile.c_str() );
-    return ( s == 0 ); 
+    return DoItDirectLua( isPrivileged );
   }
 #endif // ACTIONMONITOR_API_LUA
 
@@ -381,9 +371,7 @@ bool Action::DoItDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) con
   //
   if(PythonVirtualMachine::IsPyExt( m_szExt.c_str() ) )
   {
-    PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-    int s = py->LoadFile( m_szFile.c_str() );
-    return ( s == 0 ); 
+    return DoItDirectPython( isPrivileged );
   }
 #endif // ACTIONMONITOR_API_PY
 
@@ -401,3 +389,36 @@ bool Action::DoItDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) con
 
   return bResult;
 }
+
+#ifdef ACTIONMONITOR_API_LUA
+bool Action::DoItDirectLua( bool isPrivileged) const
+{
+  ActiveAction* activeAction = new ActiveAction(*this);
+  LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
+  int s = lua->LoadFile(m_szFile.c_str(), activeAction);
+  delete activeAction;
+  return (s == 0);
+}
+#endif // ACTIONMONITOR_API_LUA
+
+#ifdef ACTIONMONITOR_API_PY
+bool Action::DoItDirectPython( bool isPrivileged ) const
+{
+  ActiveAction* activeAction = new ActiveAction(*this);
+  PythonVirtualMachine* py = App().GetPythonVirtualMachine();
+  int s = py->LoadFile(m_szFile.c_str(), activeAction);
+  delete activeAction;
+  return (s == 0);
+}
+#endif // ACTIONMONITOR_API_PY
+
+#ifdef ACTIONMONITOR_API_PLUGIN
+bool Action::DoItDirectPlugin( bool isPrivileged ) const
+{
+  ActiveAction* activeAction = new ActiveAction(*this);
+  PluginVirtualMachine* pg = App().GetPluginVirtualMachine();
+  int s = pg->LoadFile(m_szFile.c_str(), activeAction);
+  delete activeAction;
+  return (s == 0);
+}
+#endif // ACTIONMONITOR_API_PLUGIN

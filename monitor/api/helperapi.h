@@ -1,4 +1,6 @@
 #pragma once
+
+#include "ActiveAction.h"
 /**
  * Helper function used to make new APIs easier to create and most of them more standard.
  * So if one value is returned for one API the same should happen for another API
@@ -9,14 +11,19 @@
 class helperapi
 {
 public:
-  helperapi(void);
+  helperapi( ActiveAction* action );
   ~helperapi(void);
+
+protected:
+  const Clipboard& GetClipboard() const;
+
+private:
+  ActiveAction& _action;
 
 public:
   // helper function
   static std::wstring widen(const std::string& str);
-
-
+  
   // display a message onto the screen.
   bool say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut);
   

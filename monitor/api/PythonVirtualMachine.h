@@ -11,7 +11,7 @@ public:
 
   void Initialize(); 
 
-  int LoadFile( LPCTSTR pyFile );
+  int LoadFile( LPCTSTR pyFile, ActiveAction* action);
   static bool IsPyExt( LPCTSTR ext );
 
 protected:

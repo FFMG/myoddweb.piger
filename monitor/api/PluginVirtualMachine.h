@@ -12,7 +12,7 @@ public:
   virtual ~PluginVirtualMachine();
 
   void Initialize(); 
-  int LoadFile( LPCTSTR pluginFile );
+  int LoadFile( LPCTSTR pluginFile, ActiveAction* action);
   static bool IsPluginExt( LPCTSTR ext );
 
   bool Register( LPCTSTR, void* );
@@ -29,7 +29,7 @@ protected:
   void InitializeFunctions();
 
 protected:
-  int InitFile( LPCTSTR pluginFile );
+  int Create( LPCTSTR pluginFile, ActiveAction* action);
 
   // our own architecture.
   myodd::os::ARCHITECTURE _moduleArchitecture;

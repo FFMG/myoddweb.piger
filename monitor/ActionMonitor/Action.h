@@ -9,9 +9,6 @@
 
 #include <vector>
 
-//  the clipboard code
-#include "../common/clipboard.h"
-
 class Action  
 {
 public:
@@ -44,17 +41,24 @@ public:
   // ----------------------------
   size_t len() const { return m_szCommand.length();}
 
-  // ----------------------------
-  const Clipboard& GetClipBoard() const{ return m_clipBoard;}
-
 protected:
   bool DoItWithNoCommandLine( bool isPrivileged );
 
+#ifdef ACTIONMONITOR_API_PLUGIN
+  bool DoItDirectPlugin( bool isPrivileged) const;
+#endif
+
+#ifdef ACTIONMONITOR_API_PY
+  bool DoItDirectPython( bool isPrivileged ) const;
+#endif // ACTIONMONITOR_API_PY
+
+#ifdef ACTIONMONITOR_API_LUA
+  bool DoItDirectLua( bool isPrivileged ) const;
+#endif // ACTIONMONITOR_API_LUA
+
 protected:
   STD_TSTRING toSingleLine( LPCTSTR  ) const;
-  Clipboard m_clipBoard;
   
-
 public:
   static bool Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged );
 

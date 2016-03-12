@@ -17,7 +17,7 @@
  * @param void
  * @return void
  */
-helperapi::helperapi(void)
+helperapi::helperapi(ActiveAction* action) : _action( *action )
 {
 }
 
@@ -28,6 +28,15 @@ helperapi::helperapi(void)
  */
 helperapi::~helperapi(void)
 {
+}
+
+/**
+ * Get the current clipboard for this active action.
+ * @return const Clipboard& the current clipboard.
+ */
+const Clipboard& helperapi::GetClipboard() const
+{
+  return _action.GetClipboard();
 }
 
 /**
@@ -247,13 +256,7 @@ bool helperapi::getString (STD_TSTRING& sValue )
 {
   try
   {
-    const Action* action = App().PossibleActions().GetCommand();
-    if (NULL == action)
-    {
-      //  we don't have a command.
-      return false;
-    }
-    const Clipboard& clipBoard = action->GetClipBoard( );
+    const Clipboard& clipBoard = GetClipboard( );
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetText( sClipBoard ) )
     {
@@ -288,13 +291,7 @@ bool helperapi::getFile(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    const Action* action = App().PossibleActions().GetCommand();
-    if (NULL == action)
-    {
-      //  we don't have a command.
-      return false;
-    }
-    const Clipboard& clipBoard = action->GetClipBoard( );
+    const Clipboard& clipBoard = GetClipboard( );
 
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetFile( sClipBoard, idx ) )
@@ -324,13 +321,7 @@ bool helperapi::getURL (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    const Action* action = App().PossibleActions().GetCommand();
-    if (NULL == action)
-    {
-      //  we don't have a command.
-      return false;
-    }
-    const Clipboard& clipBoard = action->GetClipBoard( );
+    const Clipboard& clipBoard = GetClipboard( );
 
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetURL( sClipBoard, idx ) )
@@ -363,13 +354,7 @@ bool helperapi::getFolder (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    const Action* action = App().PossibleActions().GetCommand();
-    if (NULL == action)
-    {
-      //  we don't have a command.
-      return false;
-    }
-    const Clipboard& clipBoard = action->GetClipBoard( );
+    const Clipboard& clipBoard = GetClipboard( );
 
     STD_TSTRING sClipBoard = _T("");
     if( !clipBoard.GetFolder( sClipBoard, idx ) )

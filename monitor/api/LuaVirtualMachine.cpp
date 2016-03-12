@@ -79,9 +79,10 @@ void LuaVirtualMachine::Dispose(lua_State* lua)
 
 /**
  * Create a new lua state
+ * @param ActiveAction* action the current action
  * @return lua_State* a newly created lua state,
  */
-lua_State* LuaVirtualMachine::Create()
+lua_State* LuaVirtualMachine::Create(ActiveAction* action)
 {
   // create the new state
   lua_State* lua = luaL_newstate();
@@ -109,7 +110,7 @@ lua_State* LuaVirtualMachine::Create()
 
   // we can now add it to our list.
   _mutex.lock();
-  _lua_Api[lua] = new luaapi();
+  _lua_Api[lua] = new luaapi( action );
   _mutex.unlock();
 
   // finally return the lua.
@@ -118,12 +119,13 @@ lua_State* LuaVirtualMachine::Create()
 
 /**
  * Todo
- * @param void
+ * @param LPCTSTR* luaFile the file we would like to load.
+ * @param ActiveAction* action the current action.
  * @return void
  */
-int LuaVirtualMachine::LoadFile( LPCTSTR luaFile )
+int LuaVirtualMachine::LoadFile( LPCTSTR luaFile, ActiveAction* action)
 {
-  lua_State* lua = Create();
+  lua_State* lua = Create(action);
   if( NULL == lua )
   {
     return -1;

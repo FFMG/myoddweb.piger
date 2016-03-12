@@ -14,7 +14,7 @@ static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 class pluginapi : public helperapi
 {
 public:
-  pluginapi();
+  pluginapi(ActiveAction* action);
   virtual ~pluginapi();
 
 public:
