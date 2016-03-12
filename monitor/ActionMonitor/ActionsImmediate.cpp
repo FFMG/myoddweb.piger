@@ -2,10 +2,6 @@
 #include "ActionsImmediate.h"
 #include "ActionMonitor.h"
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 /**
  * todo
  * @param void

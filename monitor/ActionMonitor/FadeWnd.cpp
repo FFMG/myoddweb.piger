@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "FadeWnd.h"
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 /**
  * Todo
  * @param void

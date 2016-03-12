@@ -4,10 +4,6 @@
 #include "stdafx.h"
 #include "TrayDialog.h"
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 /**
  * Todo
  * @see CDialog::CDialog

@@ -7,10 +7,6 @@
 #include "ActionMonitor.h"
 #include <io.h>
 
-#ifdef _DEBUG
-#   define new DEBUG_NEW
-#endif
-
 //  the Dll hooks, (for the pause)
 #include "../hook/hook.h"
 

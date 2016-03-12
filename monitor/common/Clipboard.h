@@ -15,12 +15,13 @@
 class Clipboard  
 {
 public:
-	Clipboard();
+	Clipboard( CWnd* mainWnd);
   virtual ~Clipboard();
 
-  Clipboard(const Clipboard& rhs);
-  const Clipboard& operator=(const Clipboard& rhs);
+protected:
+  DISALLOW_COPY_AND_ASSIGN( Clipboard );
 
+protected:
   void Init(CWnd* mainWnd);
 
 public:
