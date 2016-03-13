@@ -30,6 +30,21 @@ Clipboard::~Clipboard()
 {
 }
 
+Clipboard::Clipboard(const Clipboard& rhs)
+{
+  *this = rhs;
+}
+
+const Clipboard& Clipboard::operator=(const Clipboard& rhs)
+{
+  if (this != &rhs)
+  {
+    _clipboardData = rhs._clipboardData;
+  }
+  return *this;
+}
+
+
 /**
  * The order is very important as some data is always present even when other data is selected.
  * For example if you have files you also have one filename, but if you have one file then you might not

@@ -17,9 +17,8 @@ class Clipboard
 public:
 	Clipboard( CWnd* mainWnd);
   virtual ~Clipboard();
-
-protected:
-  DISALLOW_COPY_AND_ASSIGN( Clipboard );
+  Clipboard(const Clipboard& rhs);
+  const Clipboard& operator=(const Clipboard& rhs);
 
 protected:
   void Init(CWnd* mainWnd);
