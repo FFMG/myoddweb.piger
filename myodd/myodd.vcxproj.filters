@@ -257,6 +257,12 @@
     <ClCompile Include="os\os.cpp">
       <Filter>os</Filter>
     </ClCompile>
+    <ClCompile Include="threads\workers.cpp">
+      <Filter>threads</Filter>
+    </ClCompile>
+    <ClCompile Include="threads\lock.cpp">
+      <Filter>threads</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -386,6 +392,12 @@
     </ClInclude>
     <ClInclude Include="os\os.h">
       <Filter>os</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\workers.h">
+      <Filter>threads</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\lock.h">
+      <Filter>threads</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

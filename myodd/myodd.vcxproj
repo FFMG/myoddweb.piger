@@ -594,7 +594,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="string\string.cpp" />
+    <ClCompile Include="threads\lock.cpp" />
     <ClCompile Include="threads\threads.cpp" />
+    <ClCompile Include="threads\workers.cpp" />
     <ClCompile Include="wnd\wnd.cpp" />
     <ClCompile Include="xml\tinyxml.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
@@ -669,7 +671,9 @@
     <ClInclude Include="stree\stree.h" />
     <ClInclude Include="string\string.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="threads\lock.h" />
     <ClInclude Include="threads\threads.h" />
+    <ClInclude Include="threads\workers.h" />
     <ClInclude Include="wnd\wnd.h" />
     <ClInclude Include="xml\tinyxml.h" />
   </ItemGroup>
