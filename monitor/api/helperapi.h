@@ -10,7 +10,7 @@
  *
  * All they need is to call this helper class.
  **/
-class helperapi : myodd::threads::Workers
+class helperapi : protected myodd::threads::Workers
 {
 public:
   helperapi(const ActiveAction& action );

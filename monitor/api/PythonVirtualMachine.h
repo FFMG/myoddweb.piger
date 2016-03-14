@@ -11,8 +11,11 @@ public:
 
   void Initialize(); 
 
-  int LoadFile( LPCTSTR pyFile, const ActiveAction& action);
+  int Execute( LPCTSTR pyFile, const ActiveAction& action);
   static bool IsPyExt( LPCTSTR ext );
+
+protected:
+  bool ReadFile( LPCTSTR pyFile, std::string& script) const;
 
 protected:
   bool m_isInitialized;

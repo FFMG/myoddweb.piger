@@ -123,9 +123,9 @@ void PythonVirtualMachine::InitializeFunctions()
 
 
 /**
- * Todo
- * @param void
- * @return void
+ * Check if the given extension can be handled by the vm.
+ * @param LPCTSTR ext the extension we want to check
+ * @return bool if the given extension can be used by this vm
  */
 bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
 {
@@ -133,33 +133,24 @@ bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * Read the given file and get the script out of it.
+ * @param LPCTSTR pyFile the python file we want to read.
+ * @param std::string& script the string that will contain the string.
+ * @return boolean success or not.
  */
-int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, const ActiveAction& action )
+bool PythonVirtualMachine::ReadFile(LPCTSTR pyFile, std::string& script) const
 {
-  Initialize();
+  // clear the scruot.
+  script = "";
 
-  if( !m_isInitialized )
-  {
-    return -1;
-  }
-
-  delete _api;
-  _api = new pyapi( action );
-
+  //  we need to convert strings.
   USES_CONVERSION;
-  // Python is not thread safe 
-  // and windows cannot lock the file properly
-  // so we need to read the file ourselves and pass it.
-  //
-  // this could be a memory problem at some stage.
+
   errno_t err;
   FILE *fp;
-  if( err = fopen_s(&fp, T_T2A( pyFile ), "rt" ) )
+  if (err = fopen_s(&fp, T_T2A(pyFile), "rt"))
   {
-    return -1;
+    return false;
   }
 
   //
@@ -167,18 +158,17 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, const ActiveAction& action )
   // We are using Multi Byte data.
   static const UINT FILE_READ_SIZE = 100;
   size_t  count, total = 0;
-  std::string script = "";
-  while( !feof( fp ) )
+  while (!feof(fp))
   {
     // Attempt to read
-    char buffer[ FILE_READ_SIZE + 1];
-    memset( buffer, '\0', FILE_READ_SIZE+1 );
-    count = fread( buffer, sizeof( char ), FILE_READ_SIZE, fp );
+    char buffer[FILE_READ_SIZE + 1];
+    memset(buffer, '\0', FILE_READ_SIZE + 1);
+    count = fread(buffer, sizeof(char), FILE_READ_SIZE, fp);
 
-    buffer[ count ] = '\0';
+    buffer[count] = '\0';
 
     // was there a problem?
-    if( ferror( fp ) ) 
+    if (ferror(fp))
     {
       break;
     }
@@ -192,6 +182,45 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, const ActiveAction& action )
 
   // we are done with the file.
   fclose(fp);
+
+  // success.
+  return true;
+}
+
+/**
+ * Load an execute a file for a given action.
+ * We are already inside the thread by the time this is called.
+ * @param LPCTSTR pyFile the file we are trying to load.
+ * @param const ActiveAction& action the active action been executed.
+ * @return void
+ */
+int PythonVirtualMachine::Execute( LPCTSTR pyFile, const ActiveAction& action )
+{
+  // initialize
+  Initialize();
+
+  if( !m_isInitialized )
+  {
+    return -1;
+  }
+
+  // Python is not thread safe 
+  // and windows cannot lock the file properly
+  // so we need to read the file ourselves and pass it.
+  //
+  // this could be a memory problem at some stage.
+  //
+  std::string script = "";
+  if (!ReadFile(pyFile, script))
+  {
+    return -1;
+  }
+
+  // remove the old api
+  // @todo once we are multithreaded this should get
+  // cleared up automagically.
+  delete _api;
+  _api = new pyapi( action );
 
   PyEval_AcquireLock(); // nb: get the GIL
   PyThreadState* pThreadState = Py_NewInterpreter();
@@ -245,9 +274,12 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, const ActiveAction& action )
       Py_XDECREF(value);
       Py_XDECREF(traceback);
 
+      // give the error message
       USES_CONVERSION;
-      helperapi h(action);
-      h.say(T_A2T( message.c_str() ), 500, 10);
+      const wchar_t* msg = T_A2T(message.c_str());
+      const unsigned int nElapse = 500;
+      const unsigned int nFadeOut = 10;
+      ((helperapi*)_api)->say( msg, nElapse, nFadeOut);
     }
   }
 
@@ -269,6 +301,10 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, const ActiveAction& action )
   return 0;
 }
 
+/**
+ * Get the current api for this thread.
+ * return pyapi& the python API for that thread.
+ */
 pyapi& PythonVirtualMachine::GetApi()
 {
 #ifndef ACTIONMONITOR_API_PY

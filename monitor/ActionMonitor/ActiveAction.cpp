@@ -143,7 +143,7 @@ void ActiveAction::DoItDirectPython() const
   const STD_TSTRING& szFile = File();
 
   PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-  py->LoadFile(szFile.c_str(), *this);
+  py->Execute(szFile.c_str(), *this);
 }
 #endif // ACTIONMONITOR_API_PY
 
