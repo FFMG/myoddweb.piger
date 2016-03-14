@@ -115,7 +115,15 @@ BOOL CActionMonitorDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	TraySetIcon(IDR_MAINFRAME);
-	TraySetToolTip( _T("Action Monitor") );
+
+  myodd::files::Version _ver;
+  STD_TSTRING strSay = myodd::strings::ToStringFmt(_T("Action Monitor : %d.%d.%d.%d"),
+    _ver.GetFileVersionMajor(),
+    _ver.GetFileVersionMinor(),
+    _ver.GetFileVersionMaintenance(),
+    _ver.GetFileVersionBuild());
+
+	TraySetToolTip( strSay.c_str() );
   TraySetMenu(IDR_TRAY );
   TrayShow();
 
