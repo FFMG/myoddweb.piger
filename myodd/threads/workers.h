@@ -2,6 +2,7 @@
 
 #include <thread>
 #include <vector>
+#include "lock.h"
 
 namespace myodd {
   namespace threads {
@@ -13,12 +14,12 @@ namespace myodd {
 
     protected:
       void WaitForAllWorkers();
-      void QueueWorker(std::thread* threadToQueue);
+      std::thread& QueueWorker(std::thread* threadToQueue);
 
       template< class Function, class... Args >
-      void QueueWorker(Function&& f, Args&&... args)
+      std::thread& QueueWorker(Function&& f, Args&&... args)
       {
-        QueueWorker(new std::thread(f, std::forward<Args>(args) ... ));
+        return QueueWorker(new std::thread(f, std::forward<Args>(args) ... ));
       }
 
     private:
@@ -26,6 +27,7 @@ namespace myodd {
       // all the messages we are waiting to complete.
       typedef std::vector<std::thread*> vWorkers;
       vWorkers _workers;
+      std::mutex _mutex;
     };
   }
 }
