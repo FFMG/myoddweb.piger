@@ -423,6 +423,9 @@ void pyapi::ExecuteInThread()
   PyEval_ReleaseLock();
 }
 
+/**
+ * Check for errors and log a message.
+ */
 void pyapi::CheckForPythonErrors()
 {
   PyObject* ex = PyErr_Occurred();

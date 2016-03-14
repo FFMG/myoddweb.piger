@@ -58,7 +58,6 @@ PyInit_am(void)
  */
 PythonVirtualMachine::PythonVirtualMachine() : 
   m_isInitialized( false ),
-  _api( NULL ),
   _mainThreadState( NULL )
 {
 }
@@ -81,7 +80,6 @@ PythonVirtualMachine::~PythonVirtualMachine()
     // simply close python
     Py_Finalize();
   }
-  delete _api;
 }
 
 /**
@@ -158,31 +156,6 @@ bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
 }
 
 /**
- * Load an execute a file for a given action.
- * We are already inside the thread by the time this is called.
- * @param LPCTSTR pyFile the file we are trying to load.
- * @param const ActiveAction& action the active action been executed.
- * @return void
- */
-int PythonVirtualMachine::Execute( LPCTSTR pyFile, const ActiveAction& action )
-{
-  // initialize
-  if (!Initialize())
-  {
-    return -1;
-  }
-
-  // remove the old api
-  // @todo once we are multithreaded this should get
-  // cleared up automagically.
-  delete _api;
-  _api = new pyapi( action, "", NULL );
-  _api->ExecuteInThread();
-  
-  return 0;
-}
-
-/**
  * Get the current api for this thread.
  * return pyapi& the python API for that thread.
  */
@@ -193,17 +166,52 @@ pyapi& PythonVirtualMachine::GetApi()
 #else
   // get our current self.
   PythonVirtualMachine* pvm = App().GetPythonVirtualMachine();
-  return *pvm->_api;
+
+  myodd::threads::Lock guard(pvm->_mutex);
+  Apis::const_iterator it = pvm->_apis.find( std::this_thread::get_id() );
+  if (it == pvm->_apis.end())
+  {
+    throw - 1;
+  }
+  return *it->second;
+#endif
+}
+
+void PythonVirtualMachine::AddApi(std::thread::id id, pyapi* api)
+{
+#ifndef ACTIONMONITOR_API_PY
+  throw - 1;
+#else
+  myodd::threads::Lock guard(_mutex);
+
+  // get our current self.
+  _apis[std::this_thread::get_id()] = api;
+#endif
+
+}
+
+void PythonVirtualMachine::RemoveApi(std::thread::id id )
+{
+#ifndef ACTIONMONITOR_API_PY
+  throw - 1;
+#else
+  myodd::threads::Lock guard(_mutex);
+  Apis::const_iterator it = _apis.find(std::this_thread::get_id());
+  if (it == _apis.end())
+  {
+    throw - 1;
+  }
+  _apis.erase(it);
 #endif
 }
 
 /**
-* Todo
-* @see helperapi::say
-* @param PyObject *
-* @param PyObject *
-* @return PyObject*
-*/
+ * Todo
+ * @see helperapi::say
+ * @param PyObject *
+ * @param PyObject *
+ * @return PyObject*
+ */
 PyObject* PythonVirtualMachine::say(PyObject *self, PyObject *args)
 {
   return GetApi().say(self, args);

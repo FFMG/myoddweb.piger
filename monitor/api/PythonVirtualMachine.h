@@ -2,6 +2,7 @@
 #ifdef ACTIONMONITOR_API_PY
 
 #include "pyapi.h"
+#include "../threads/lock.h"
 
 class PythonVirtualMachine
 {
@@ -11,17 +12,24 @@ public:
 
   bool Initialize(); 
 
-  int Execute( LPCTSTR pyFile, const ActiveAction& action);
+  //  check the extension.
   static bool IsPyExt( LPCTSTR ext );
 
   PyThreadState* GetMainPyThread() const {
     return _mainThreadState;
   }
+
+  void AddApi(std::thread::id id, pyapi* api);
+  void RemoveApi(std::thread::id id);
+
 protected:
   bool m_isInitialized;
   bool InitializeFunctions();
 
-  pyapi* _api;
+  std::mutex _mutex;
+
+  typedef std::map<std::thread::id, pyapi*> Apis;
+  Apis _apis;
   static pyapi& PythonVirtualMachine::GetApi();
 
   PyThreadState* _mainThreadState;
