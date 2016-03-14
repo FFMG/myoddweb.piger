@@ -195,6 +195,7 @@
     <ClCompile Include="ActionVersion.cpp" />
     <ClCompile Include="ActiveAction.cpp" />
     <ClCompile Include="ActiveActions.cpp" />
+    <ClCompile Include="ActivePythonAction.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -229,6 +230,7 @@
     <ClInclude Include="ActionVersion.h" />
     <ClInclude Include="ActiveAction.h" />
     <ClInclude Include="ActiveActions.h" />
+    <ClInclude Include="ActivePythonAction.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />

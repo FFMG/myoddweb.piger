@@ -6,6 +6,7 @@
 #include "Action.h"
 #include "ActionMonitor.h"
 #include "activeaction.h"
+#include "activepythonaction.h"
 
 #include "os\os.h"
 
@@ -349,5 +350,22 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
     return NULL;
   }
 
-  return new ActiveAction(*this, szCommandLine, isPrivileged);
+  const STD_TSTRING& szExt = Extension();
+#ifdef ACTIONMONITOR_API_PLUGIN
+  // Do the API calls.
+  //
+  if (PythonVirtualMachine::IsPyExt(szExt.c_str()))
+  {
+    ActivePythonAction* apa = new ActivePythonAction(*this, szCommandLine, isPrivileged);
+    if(apa->Initialize() )
+    { 
+      return apa;
+    }
+
+    // did not work, try the default way...
+    delete apa;
+  }
+#endif // ACTIONMONITOR_API_PLUGIN
+
+  return new ActiveAction( *this, szCommandLine, isPrivileged );
 }

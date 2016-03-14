@@ -16,18 +16,15 @@
     <Filter Include="api">
       <UniqueIdentifier>{90482882-b31f-43b1-81f8-680ac879de20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="actions">
+      <UniqueIdentifier>{2d953d28-c23a-43e2-b110-37b4ec827e8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Action.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ActionMonitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ActionMonitorDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Actions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ActionsImmediate.cpp">
@@ -78,17 +75,29 @@
     <ClCompile Include="..\common\ClipboardsData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Action.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
     <ClCompile Include="ActionBye.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="ActionLoad.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Actions.cpp">
+      <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="ActionVersion.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="ActiveAction.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveActions.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ActivePythonAction.cpp">
+      <Filter>actions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,16 +106,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Action.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ActionMonitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActionMonitorDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Actions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActionsImmediate.h">
@@ -169,20 +172,32 @@
     <ClInclude Include="..\common\ClipboardsData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ActionBye.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ActiveActions.h">
+      <Filter>actions</Filter>
     </ClInclude>
-    <ClInclude Include="ActionsCore.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Action.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionBye.h">
+      <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActionLoad.h">
-      <Filter>Header Files</Filter>
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionsCore.h">
+      <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActionVersion.h">
-      <Filter>Header Files</Filter>
+      <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveAction.h">
-      <Filter>Header Files</Filter>
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActivePythonAction.h">
+      <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

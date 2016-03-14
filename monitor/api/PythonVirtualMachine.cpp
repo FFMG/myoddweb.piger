@@ -59,7 +59,7 @@ PyInit_am(void)
 PythonVirtualMachine::PythonVirtualMachine() : 
   m_isInitialized( false ),
   _api( NULL ),
-  _pMainThreadState( NULL )
+  _mainThreadState( NULL )
 {
 }
 
@@ -72,7 +72,11 @@ PythonVirtualMachine::~PythonVirtualMachine()
 {
   if (m_isInitialized)
   {
-    PyEval_RestoreThread( _pMainThreadState);
+    // one last lock.
+    PyEval_AcquireLock();
+
+    // restore the thread
+    PyThreadState_Swap( _mainThreadState );
 
     // simply close python
     Py_Finalize();
@@ -85,40 +89,61 @@ PythonVirtualMachine::~PythonVirtualMachine()
  * @param void
  * @return void
  */
-void PythonVirtualMachine::Initialize()
+bool PythonVirtualMachine::Initialize()
 {
+  // has it been done already?
   if (m_isInitialized)
   {
-    return;
+    return true;
   }
 
   // first initialise the functions.
-  InitializeFunctions();
+  if (!InitializeFunctions())
+  {
+    return false;
+  }
 
+  // try and load the python core files.
   STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
   std::wstring python_path;
   python_path += exe_dir + L"python35.zip";
+  if (!myodd::files::FileExists(python_path))
+  {
+    return false;
+  }
   Py_SetPath(python_path.c_str());
 
+  // try and initialise it all.
   Py_Initialize();
   PyEval_InitThreads();
 
-  _pMainThreadState = PyEval_SaveThread();
+  // just double check that it is all fine.
+  if (!Py_IsInitialized())
+  {
+    return false;
+  }
 
+  _mainThreadState = PyThreadState_Get();
+  PyEval_ReleaseLock();
+
+  // success.
   m_isInitialized = true;
+
+  // done
+  return true;
 }
 
 /**
-* Todo
-* @param void
-* @return void
+* Initialise the python functions.
+* @return bool if the functions were properly inisalized or not.
 */
-void PythonVirtualMachine::InitializeFunctions()
+bool PythonVirtualMachine::InitializeFunctions()
 {
-  PyImport_AppendInittab(
-    "am",
-    &PyInit_am
-    );
+  return (
+    PyImport_AppendInittab(
+      "am",
+      &PyInit_am
+      ) != -1);
 }
 
 
@@ -133,61 +158,6 @@ bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
 }
 
 /**
- * Read the given file and get the script out of it.
- * @param LPCTSTR pyFile the python file we want to read.
- * @param std::string& script the string that will contain the string.
- * @return boolean success or not.
- */
-bool PythonVirtualMachine::ReadFile(LPCTSTR pyFile, std::string& script) const
-{
-  // clear the scruot.
-  script = "";
-
-  //  we need to convert strings.
-  USES_CONVERSION;
-
-  errno_t err;
-  FILE *fp;
-  if (err = fopen_s(&fp, T_T2A(pyFile), "rt"))
-  {
-    return false;
-  }
-
-  //
-  // Note that we are no longer in the realm of UNICODE here.
-  // We are using Multi Byte data.
-  static const UINT FILE_READ_SIZE = 100;
-  size_t  count, total = 0;
-  while (!feof(fp))
-  {
-    // Attempt to read
-    char buffer[FILE_READ_SIZE + 1];
-    memset(buffer, '\0', FILE_READ_SIZE + 1);
-    count = fread(buffer, sizeof(char), FILE_READ_SIZE, fp);
-
-    buffer[count] = '\0';
-
-    // was there a problem?
-    if (ferror(fp))
-    {
-      break;
-    }
-
-    // add it to the script
-    script += buffer;
-
-    // Total up actual bytes read
-    total += count;
-  }
-
-  // we are done with the file.
-  fclose(fp);
-
-  // success.
-  return true;
-}
-
-/**
  * Load an execute a file for a given action.
  * We are already inside the thread by the time this is called.
  * @param LPCTSTR pyFile the file we are trying to load.
@@ -197,21 +167,7 @@ bool PythonVirtualMachine::ReadFile(LPCTSTR pyFile, std::string& script) const
 int PythonVirtualMachine::Execute( LPCTSTR pyFile, const ActiveAction& action )
 {
   // initialize
-  Initialize();
-
-  if( !m_isInitialized )
-  {
-    return -1;
-  }
-
-  // Python is not thread safe 
-  // and windows cannot lock the file properly
-  // so we need to read the file ourselves and pass it.
-  //
-  // this could be a memory problem at some stage.
-  //
-  std::string script = "";
-  if (!ReadFile(pyFile, script))
+  if (!Initialize())
   {
     return -1;
   }
@@ -220,83 +176,8 @@ int PythonVirtualMachine::Execute( LPCTSTR pyFile, const ActiveAction& action )
   // @todo once we are multithreaded this should get
   // cleared up automagically.
   delete _api;
-  _api = new pyapi( action );
-
-  PyEval_AcquireLock(); // nb: get the GIL
-  PyThreadState* pThreadState = Py_NewInterpreter();
-  assert(pThreadState != NULL);
-  PyEval_ReleaseThread(pThreadState); // nb: this also releases the GIL
-
-  PyObject *main_module = PyImport_AddModule("__main__");
-  PyObject *main_dict = PyModule_GetDict(main_module);
-  
-  PyEval_AcquireThread(pThreadState);
-
-  // we can now run our script
-  LPCSTR s = script.c_str();
-  PyObject * PyRes = PyRun_String(s, Py_file_input, main_dict, main_dict);
-  PyObject* ex = PyErr_Occurred();
-  if( NULL != ex)
-  {
-    //  if this is a normal exist, then we don't need to show an error message.
-    if (!PyErr_ExceptionMatches(PyExc_SystemExit)) 
-    {
-      PyObject *type, *value, *traceback;
-      PyErr_Fetch(&type, &value, &traceback);
-      PyErr_Clear();
-
-      std::string message = "<b>Error : </b>An error was raised in the PyAPI.";
-      if (type) {
-        PyObject * temp_bytes = PyUnicode_AsEncodedString(type, "ASCII", "strict");
-        if (temp_bytes != NULL) {
-          message += "<br>";
-          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
-          Py_DECREF(temp_bytes);
-        }
-      }
-      if (value) {
-        PyObject * temp_bytes = PyUnicode_AsEncodedString(value, "ASCII", "strict");
-        if (temp_bytes != NULL) {
-          message += "<br>";
-          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
-          Py_DECREF(temp_bytes);
-        }
-      }
-      if (traceback) {
-        PyObject * temp_bytes = PyUnicode_AsEncodedString(traceback, "ASCII", "strict");
-        if (temp_bytes != NULL) {
-          message += "<br>";
-          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
-          Py_DECREF(temp_bytes);
-        }
-      }
-      Py_XDECREF(type);
-      Py_XDECREF(value);
-      Py_XDECREF(traceback);
-
-      // give the error message
-      USES_CONVERSION;
-      const wchar_t* msg = T_A2T(message.c_str());
-      const unsigned int nElapse = 500;
-      const unsigned int nFadeOut = 10;
-      ((helperapi*)_api)->say( msg, nElapse, nFadeOut);
-    }
-  }
-
-  // no more errors.
-  PyErr_Clear();
-
-  // switch out our interpreter
-  PyEval_ReleaseThread(pThreadState);
-
-  // release the interpreter 
-  PyEval_AcquireThread(pThreadState); // nb: this also locks the GIL
-  Py_EndInterpreter(pThreadState);
-  PyEval_ReleaseLock(); // nb: release the GIL
-
-  /*
-  (void) PyRun_SimpleFile(fp, pyFile );
-  */
+  _api = new pyapi( action, "", NULL );
+  _api->ExecuteInThread();
   
   return 0;
 }

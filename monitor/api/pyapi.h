@@ -15,7 +15,7 @@ static const double ACTIONMONITOR_API_PY_VERSION = 2.0;
 class pyapi : public helperapi
 {
 public:
-  pyapi( const ActiveAction& action);
+  pyapi( const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState );
   virtual ~pyapi();
 
 public:
@@ -33,6 +33,14 @@ public:
   PyObject* removeAction(PyObject *self, PyObject *args);
   PyObject* getVersion(PyObject *self, PyObject *args);
   PyObject* findAction(PyObject *self, PyObject *args);
+
+  void ExecuteInThread();
+protected:
+  const std::string _script;
+
+  PyThreadState* _mainThreadState;
+
+  void CheckForPythonErrors();
 };
 
 #endif /*# ACTIONMONITOR_API_PY*/

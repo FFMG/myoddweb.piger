@@ -81,7 +81,18 @@ void ActiveAction::CreateClipboard()
   _clipboard = new Clipboard(cwnd );
 }
 
-void ActiveAction::operator()()
+bool ActiveAction::Initialize()
+{
+  //  nothing to do.
+  return true;
+}
+
+bool ActiveAction::DeInitialize()
+{
+  return true;
+}
+
+void ActiveAction::ExecuteInThread()
 {
   const STD_TSTRING& szExt = Extension();
 
@@ -105,16 +116,6 @@ void ActiveAction::operator()()
   }
 #endif // ACTIONMONITOR_API_LUA
 
-#ifdef ACTIONMONITOR_API_PY
-  // Do the API calls.
-  //
-  if (PythonVirtualMachine::IsPyExt(szExt.c_str()))
-  {
-    DoItDirectPython();
-    return;
-  }
-#endif // ACTIONMONITOR_API_PY
-
   //  the file.
   const STD_TSTRING& szFile = File();
 
@@ -135,17 +136,6 @@ void ActiveAction::DoItDirectLua() const
   lua->LoadFile(szFile.c_str(), *this);
 }
 #endif // ACTIONMONITOR_API_LUA
-
-#ifdef ACTIONMONITOR_API_PY
-void ActiveAction::DoItDirectPython() const
-{
-  //  the file.
-  const STD_TSTRING& szFile = File();
-
-  PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-  py->Execute(szFile.c_str(), *this);
-}
-#endif // ACTIONMONITOR_API_PY
 
 #ifdef ACTIONMONITOR_API_PLUGIN
 void ActiveAction::DoItDirectPlugin() const

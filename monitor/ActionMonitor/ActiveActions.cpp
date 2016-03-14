@@ -60,7 +60,11 @@ void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
   QueueWorker(&ActiveActions::Execute, activeAction, this );
 }
 
-void ActiveActions::RemoveRunner(ActiveAction* runner)
+/**
+ * Remove an active action form the list of actions.
+ * @param ActiveAction* runner the runner we would like to remove from the list.
+ */
+void ActiveActions::RemoveRunner( ActiveAction* runner )
 {
   //  lock it.
   myodd::threads::Lock guard(_mutex);
@@ -80,10 +84,15 @@ void ActiveActions::RemoveRunner(ActiveAction* runner)
   _runners.erase(it);
 }
 
-void ActiveActions::Execute(ActiveAction* runner, ActiveActions* parent )
+/**
+ * Execute an active action
+ * @param ActiveAction* runner the action we will be running.
+ * @param ActiveActions* parent the parent actions holder so we can clean up once complete.
+ */
+void ActiveActions::Execute( ActiveAction* runner, ActiveActions* parent )
 {
   //  do the action.
-  (*runner)();
+  (*runner).ExecuteInThread();
 
   // and remove the runner.
   parent->RemoveRunner(runner);

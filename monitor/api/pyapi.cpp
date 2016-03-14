@@ -2,13 +2,17 @@
 
 #ifdef ACTIONMONITOR_API_PY
 #include "pyapi.h"
+#include "ActionMonitor.h"
 
 /**
  * Todo
  * @param void
  * @return void
  */
-pyapi::pyapi(const ActiveAction& action) : helperapi(action)
+pyapi::pyapi(const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState) :
+  helperapi(action),
+  _script( script ),
+  _mainThreadState(mainThreadState)
 {
 }
 
@@ -358,5 +362,118 @@ PyObject* pyapi::findAction(PyObject *self, PyObject *args)
   USES_CONVERSION;
   // we have a string
   return Py_BuildValue("s", T_T2A(sValue.c_str()) );
+}
+
+/**
+ * Execute the current script
+ * We are now in the thread.
+ */
+void pyapi::ExecuteInThread()
+{
+  assert(Py_IsInitialized() );
+  
+  // get the lock so we can change things.
+  PyEval_AcquireLock();
+
+  // make sure that the main thread is the active one.
+  PyInterpreterState* mainInterpreterState = _mainThreadState->interp;
+  PyThreadState_Swap(_mainThreadState);
+
+  // create a new thread.
+  PyThreadState * myThreadState =  PyThreadState_New(mainInterpreterState);
+
+  // make sure that the new thread has control
+  // https://docs.python.org/3/c-api/init.html
+  PyThreadState_Swap(myThreadState);
+
+  // release the lock one last time.
+  PyEval_ReleaseLock();
+
+  //  execute it...
+  {
+    PyObject *main_module = PyImport_AddModule("__main__");
+    PyObject *main_dict = PyModule_GetDict(main_module);
+
+    // we can now run our script
+    const char* s = _script.c_str();
+    PyObject * PyRes = PyRun_String(s, Py_file_input, main_dict, main_dict);
+
+    CheckForPythonErrors();
+    // pending calls must be cleared out
+  }
+
+  // get the lock so we can change things.
+  PyEval_AcquireLock();
+
+  // swap back to this thread.
+  PyThreadState_Swap(myThreadState);
+
+  // clear anything left behind.
+  PyThreadState_Clear(myThreadState);
+
+  PyThreadState_Swap(NULL);
+
+  // delete my thread.
+  PyThreadState_Delete(myThreadState);
+
+  //  give control back to main thread
+  PyThreadState_Swap(_mainThreadState);
+
+  // release the lock one last time.
+  PyEval_ReleaseLock();
+}
+
+void pyapi::CheckForPythonErrors()
+{
+  PyObject* ex = PyErr_Occurred();
+  if (NULL != ex)
+  {
+    //  if this is a normal exist, then we don't need to show an error message.
+    if (!PyErr_ExceptionMatches(PyExc_SystemExit))
+    {
+      PyObject *type, *value, *traceback;
+      PyErr_Fetch(&type, &value, &traceback);
+      PyErr_Clear();
+
+      std::string message = "<b>Error : </b>An error was raised in the PyAPI.";
+      if (type) {
+        PyObject * temp_bytes = PyUnicode_AsEncodedString(type, "ASCII", "strict");
+        if (temp_bytes != NULL) {
+          message += "<br>";
+          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
+          Py_DECREF(temp_bytes);
+        }
+      }
+      if (value) {
+        PyObject * temp_bytes = PyUnicode_AsEncodedString(value, "ASCII", "strict");
+        if (temp_bytes != NULL) {
+          message += "<br>";
+          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
+          Py_DECREF(temp_bytes);
+        }
+      }
+      if (traceback) {
+        PyObject * temp_bytes = PyUnicode_AsEncodedString(traceback, "ASCII", "strict");
+        if (temp_bytes != NULL) {
+          message += "<br>";
+          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
+          Py_DECREF(temp_bytes);
+        }
+      }
+      Py_XDECREF(type);
+      Py_XDECREF(value);
+      Py_XDECREF(traceback);
+
+      // give the error message
+      USES_CONVERSION;
+      const wchar_t* msg = T_A2T(message.c_str());
+      const unsigned int nElapse = 500;
+      const unsigned int nFadeOut = 10;
+      __super::say(msg, nElapse, nFadeOut);
+    }
+  }
+
+  // no more errors.
+  PyErr_Clear();
 }
 #endif /*ACTIONMONITOR_API_PY*/
