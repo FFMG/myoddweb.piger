@@ -27,7 +27,7 @@ extern "C"
 class luaapi : public helperapi
 {
 public:
-  luaapi(ActiveAction* action);
+  luaapi(const ActiveAction& action);
   virtual ~luaapi();
 
 public:

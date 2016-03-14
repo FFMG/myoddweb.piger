@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Actions.h"
+#include "ActiveActions.h"
 
 class ActionsImmediate :
-  public Actions
+  public Actions, ActiveActions
 {
 public:
   ActionsImmediate( LPCTSTR subDir );

@@ -9,6 +9,8 @@
 
 //  the Dll hooks, (for the pause)
 #include "../hook/hook.h"
+#include "threads/lock.h"
+
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -30,12 +32,17 @@ Actions::~Actions()
 // -------------------------------------------------------------
 void Actions::ClearAll()
 {
-  //  delete all the pointers.
-  for (array_of_actions::iterator it = m_Actions.begin(); it != m_Actions.end(); ++it)
   {
-    delete *it;
+    //  get the lock
+    myodd::threads::Lock guard(_mutex);
+
+    //  delete all the pointers.
+    for (array_of_actions::iterator it = m_Actions.begin(); it != m_Actions.end(); ++it)
+    {
+      delete *it;
+    }
+    m_Actions.clear();
   }
-  m_Actions.clear();
 
   //  clear all the searches.
   ClearSearch();
@@ -57,6 +64,9 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
     return false;
   }
 
+  //  get the lock
+  myodd::threads::Lock guard(_mutex);
+
   UINT currentIdx = 0;
   size_t size = m_Actions.size();
   for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
@@ -69,8 +79,7 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
       if( idx == currentIdx )
       {
         // this is what we were looking for.
-        LPCTSTR p = a.CommandToFile();
-        stdPath = (p?p:_T(""));
+        stdPath = a.File();
         return true;
       }
 
@@ -92,6 +101,9 @@ Actions::array_of_actions_it Actions::Find( LPCTSTR szText, LPCTSTR szPath )
     return m_Actions.end();
   }
 
+  //  get the lock
+  myodd::threads::Lock guard(_mutex);
+
   size_t size = m_Actions.size();
   for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
   {
@@ -101,7 +113,7 @@ Actions::array_of_actions_it Actions::Find( LPCTSTR szText, LPCTSTR szPath )
     if( _tcsicmp( a.toChar(), szText ) == 0 )
     {
       // But the path can be
-      LPCTSTR p = a.CommandToFile();
+      LPCTSTR p = a.File().c_str();
       if( NULL == p && NULL == szPath )
       {
         return i;
@@ -152,7 +164,10 @@ bool Actions::Add( Action* action )
     return false;
   }
 
-  array_of_actions_it it = Find(action->toChar(), action->CommandToFile() );
+  //  get the lock
+  myodd::threads::Lock guard(_mutex);
+
+  array_of_actions_it it = Find(action->toChar(), action->File().c_str() );
   if( it != m_Actions.end() )
   {
     // this item already exists
@@ -178,6 +193,9 @@ bool Actions::Add( Action* action )
  */
 bool Actions::Remove( LPCTSTR szText, LPCTSTR szPath )
 {
+  //  get the lock
+  myodd::threads::Lock guard(_mutex);
+
   array_of_actions_it it = Find( szText, szPath );
   if( it == m_Actions.end() )
   {
@@ -286,6 +304,9 @@ STD_TSTRING Actions::toChar( ) const
  */
 void Actions::ClearSearch()
 {
+  //  get the lock
+  myodd::threads::Lock guard(_mutex);
+
   // reset the posible matches
   // we don't delete all the pointers.
   // because they do no belong to it.
@@ -364,6 +385,9 @@ size_t Actions::BuildMatchList( )
  */
 size_t Actions::BuildMatchList( std::vector<STD_TSTRING>& exploded )
 {
+  //  get the lock
+  myodd::threads::Lock guard(_mutex);
+
   // we only want to check the first word in the command
   // so if the user passes
   // 'go french victories' then only the command 'google' should match

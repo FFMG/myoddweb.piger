@@ -8,7 +8,7 @@
  * @param void
  * @return void
  */
-pluginapi::pluginapi(ActiveAction* action) : helperapi(action )
+pluginapi::pluginapi(const ActiveAction& action) : helperapi(action )
 {
 }
 

@@ -12,12 +12,14 @@
 //  the clipboard code
 #include "../common/clipboard.h"
 
+#include "MessageDlg.h"
+
 /**
  * Todo
  * @param void
  * @return void
  */
-helperapi::helperapi(ActiveAction* action) : _action( *action )
+helperapi::helperapi(const ActiveAction& action) : _action( action )
 {
 }
 
@@ -26,8 +28,10 @@ helperapi::helperapi(ActiveAction* action) : _action( *action )
  * @param void
  * @return void 
  */
-helperapi::~helperapi(void)
+helperapi::~helperapi()
 {
+  //  wait for all the workers.
+  WaitForAllWorkers();
 }
 
 /**
@@ -68,7 +72,10 @@ bool helperapi::say(const wchar_t* msg, const unsigned int nElapse, const unsign
   }
 
   // simply display the message.
-  pThis->DisplayMessage( msg, nElapse, nFadeOut );
+//  pThis->DisplayMessage( msg, nElapse, nFadeOut );
+
+  std::thread& worker = QueueWorker( &MessageDlg::Show, pThis, new STD_TSTRING(msg), nElapse, nFadeOut );
+
   return true;
 }
 
@@ -97,7 +104,7 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
     // argument 0 in our world is really the full name of the action.
     if( idx == 0 )
     {
-      sValue = action->CommandToFile( );
+      sValue = action->File();
     }
     else
     {

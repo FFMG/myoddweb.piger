@@ -3,6 +3,7 @@
 #pragma once
 
 #include "FadeWnd.h"
+#include "ActiveActions.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CActionMonitorDlg dialog
@@ -16,7 +17,7 @@
 
 #include "../common/trayDialog.h" //  system tray icon item
 
-class CActionMonitorDlg : public CTrayDialog, FadeWnd
+class CActionMonitorDlg : public CTrayDialog, FadeWnd, ActiveActions
 {
 // Construction
 public:

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "Action.h"
 #include "ActionMonitor.h"
+#include "activeaction.h"
 
 #include "os\os.h"
 
@@ -119,7 +120,7 @@ void Action::SetCommandPath( LPCTSTR szPath )
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveAction(const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
@@ -128,7 +129,7 @@ bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged) const
   //  not sure how to do that...
   if ( NULL == command || _tcslen(command) == 0)
   {
-    return false;
+    return NULL;
   }
 
   // we are about to execute a command, we don't know how long the command will last
@@ -138,22 +139,21 @@ bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged) const
   //  if we are here then we are going to load a user command
   //
   //  If the user did not pass any arguments/command line then we must get them from the clipboard.
-  bool bResult = false;
+  ActiveAction* aa = NULL;
   if( szCommandLine.length() == 0 )
   {
-    bResult = DoItWithNoCommandLine(isPrivileged);
+    aa = CreateActiveActionWithNoCommandLine(isPrivileged);
   }
   else
   {
     //  so now, at last we can call the command line
-    bResult = DoItDirect(szCommandLine.c_str(), isPrivileged);
+    aa = CreateActiveActionDirect(szCommandLine.c_str(), isPrivileged);
   }
 
   // now that we are back from calling the plugin, restore the keyboard state.
   hook_RejectKeyboad( bThen );
 
-  // return the result.
-  return bResult;
+  return aa;
 }
 
 /**
@@ -161,7 +161,7 @@ bool Action::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged) const
  * @param bool isPrivileged if this action is privileged or not.
  * @return bool success or not.
  */
-bool Action::DoItWithNoCommandLine( bool isPrivileged ) const
+ActiveAction* Action::CreateActiveActionWithNoCommandLine( bool isPrivileged ) const
 {
   //  the command line we will try and make.
   STD_TSTRING szCommandLine = _T("");
@@ -201,7 +201,7 @@ bool Action::DoItWithNoCommandLine( bool isPrivileged ) const
   }
 
   // we can now do it direct.
-  return DoItDirect(szCommandLine.c_str(), isPrivileged);
+  return CreateActiveActionDirect(szCommandLine.c_str(), isPrivileged);
 }
 
 /**
@@ -341,84 +341,13 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL TRUE|FALSE success or not.
  */
-bool Action::DoItDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   // sanity check
-  if( 0 == m_szFile.length() )
+  if (0 == m_szFile.length())
   {
-    return false;
-  }
-#ifdef ACTIONMONITOR_API_PLUGIN
-  // Do the API calls.
-  //
-  if(PluginVirtualMachine::IsPluginExt( m_szExt.c_str() ) )
-  {
-    return DoItDirectPlugin( isPrivileged );
-  }
-#endif // ACTIONMONITOR_API_PLUGIN
-
-#ifdef ACTIONMONITOR_API_LUA
-  // Do the API calls.
-  //
-  if(LuaVirtualMachine::IsLuaExt( m_szExt.c_str() ) )
-  {
-    return DoItDirectLua( isPrivileged );
-  }
-#endif // ACTIONMONITOR_API_LUA
-
-#ifdef ACTIONMONITOR_API_PY
-  // Do the API calls.
-  //
-  if(PythonVirtualMachine::IsPyExt( m_szExt.c_str() ) )
-  {
-    return DoItDirectPython( isPrivileged );
-  }
-#endif // ACTIONMONITOR_API_PY
-
-  LPCTSTR cmdLine = CommandToFile( );
-  if( NULL == cmdLine )
-  {
-    return false;
+    return NULL;
   }
 
-  //  join the two items together.
-  std::vector<STD_TSTRING> argv;
-  argv.push_back( cmdLine );
-  argv.push_back( szCommandLine );
-  bool bResult = Action::Execute( argv, isPrivileged);
-
-  return bResult;
+  return new ActiveAction(*this, szCommandLine, isPrivileged);
 }
-
-#ifdef ACTIONMONITOR_API_LUA
-bool Action::DoItDirectLua( bool isPrivileged) const
-{
-  ActiveAction* activeAction = new ActiveAction(*this);
-  LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
-  int s = lua->LoadFile(m_szFile.c_str(), activeAction);
-  delete activeAction;
-  return (s == 0);
-}
-#endif // ACTIONMONITOR_API_LUA
-
-#ifdef ACTIONMONITOR_API_PY
-bool Action::DoItDirectPython( bool isPrivileged ) const
-{
-  ActiveAction* activeAction = new ActiveAction(*this);
-  PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-  int s = py->LoadFile(m_szFile.c_str(), activeAction);
-  delete activeAction;
-  return (s == 0);
-}
-#endif // ACTIONMONITOR_API_PY
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-bool Action::DoItDirectPlugin( bool isPrivileged ) const
-{
-  ActiveAction* activeAction = new ActiveAction(*this);
-  PluginVirtualMachine* pg = App().GetPluginVirtualMachine();
-  int s = pg->LoadFile(m_szFile.c_str(), activeAction);
-  delete activeAction;
-  return (s == 0);
-}
-#endif // ACTIONMONITOR_API_PLUGIN

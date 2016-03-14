@@ -160,7 +160,7 @@ HMODULE PluginVirtualMachine::ExpandLoadLibrary( LPCTSTR lpFile )
  * @param void
  * @return void
  */
-int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, ActiveAction* action )
+int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, const ActiveAction& action )
 {
   Initialize();
   if( NULL == _amPlugin )
@@ -170,7 +170,7 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, ActiveAction* action )
   }
 
   // we need to look for that module
-  // if it exists then all we need to do is send another 'doit'
+  // if it exists then all we need to do is send another 'CreateActiveAction'
   //
   // otherwise we need to ask it to restart again.
   PLUGIN_THREAD* f = Find( pluginFile );
@@ -206,7 +206,7 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, ActiveAction* action )
  * @param ActiveAction* action the active action.
  * @return
  */
-int PluginVirtualMachine::Create( LPCTSTR pluginFile, ActiveAction* action)
+int PluginVirtualMachine::Create( LPCTSTR pluginFile, const ActiveAction& action)
 {
   HMODULE hModule = ExpandLoadLibrary( pluginFile );
   if( NULL == hModule )

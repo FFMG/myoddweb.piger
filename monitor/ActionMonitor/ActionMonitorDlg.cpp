@@ -515,7 +515,7 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         {
           //  do the action now
           //  we might not have any, but that's not for us to decides :).
-          action->DoIt(szCommandLine, false);
+          QueueAndExecute( action->CreateActiveAction(szCommandLine, false) );
         }
       }
       catch( ... )

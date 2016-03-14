@@ -11,12 +11,13 @@ public:
 
   void Initialize(); 
 
-  int LoadFile( LPCTSTR pyFile, ActiveAction* action);
+  int LoadFile( LPCTSTR pyFile, const ActiveAction& action);
   static bool IsPyExt( LPCTSTR ext );
 
 protected:
   bool m_isInitialized;
   void InitializeFunctions();
+  PyThreadState* _pMainThreadState;
 
   pyapi* _api;
   static pyapi& PythonVirtualMachine::GetApi();

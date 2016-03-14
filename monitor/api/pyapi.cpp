@@ -8,7 +8,7 @@
  * @param void
  * @return void
  */
-pyapi::pyapi(ActiveAction* action) : helperapi(action)
+pyapi::pyapi(const ActiveAction& action) : helperapi(action)
 {
 }
 

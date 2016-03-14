@@ -9,6 +9,7 @@
 
 #include <vector>
 
+class ActiveAction;
 class Action  
 {
 public:
@@ -25,40 +26,30 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  virtual bool DoIt( const STD_TSTRING& szCommandLine, bool isPrivileged) const;
+  virtual ActiveAction* CreateActiveAction( const STD_TSTRING& szCommandLine, bool isPrivileged) const;
 
-  // Same as DoIt( ... ) but we don't get anything from the clipboard
+  // Same as CreateActiveAction( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  bool DoItDirect(const STD_TSTRING& szCommandLine, bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionDirect(const STD_TSTRING& szCommandLine, bool isPrivileged ) const;
 
   //  convert to a LPCTSTR
   LPCTSTR toChar() const;
 
   // ----------------------------
-  //  this is the full file name + extentions
-  LPCTSTR CommandToFile() const  { return m_szFile.c_str();  }
-
-  // ----------------------------
   size_t len() const { return m_szCommand.length();}
 
 protected:
-  bool DoItWithNoCommandLine( bool isPrivileged ) const;
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-  bool DoItDirectPlugin( bool isPrivileged) const;
-#endif
-
-#ifdef ACTIONMONITOR_API_PY
-  bool DoItDirectPython( bool isPrivileged ) const;
-#endif // ACTIONMONITOR_API_PY
-
-#ifdef ACTIONMONITOR_API_LUA
-  bool DoItDirectLua( bool isPrivileged ) const;
-#endif // ACTIONMONITOR_API_LUA
+  ActiveAction* CreateActiveActionWithNoCommandLine( bool isPrivileged ) const;
 
 protected:
   STD_TSTRING toSingleLine( LPCTSTR  ) const;
-  
+
+public:
+  // ----------------------------
+  //  this is the full file name + extentions
+  const STD_TSTRING& File() const { return m_szFile; }
+  const STD_TSTRING& Extension() const { return m_szExt; }
+
 public:
   static bool Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged );
 

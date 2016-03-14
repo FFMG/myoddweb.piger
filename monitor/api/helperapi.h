@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ActiveAction.h"
+#include "threads/workers.h"
+
 /**
  * Helper function used to make new APIs easier to create and most of them more standard.
  * So if one value is returned for one API the same should happen for another API
@@ -8,17 +10,17 @@
  *
  * All they need is to call this helper class.
  **/
-class helperapi
+class helperapi : myodd::threads::Workers
 {
 public:
-  helperapi( ActiveAction* action );
-  ~helperapi(void);
+  helperapi(const ActiveAction& action );
+  ~helperapi();
 
 protected:
   const Clipboard& GetClipboard() const;
 
 private:
-  ActiveAction& _action;
+  const ActiveAction& _action;
 
 public:
   // helper function

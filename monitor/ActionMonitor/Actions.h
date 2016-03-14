@@ -7,6 +7,7 @@
 #pragma once
 #include "ActionsCore.h"
 #include "Action.h"
+#include <mutex>
 
 // the name of protected directories
 static LPCTSTR AM_DIRECTORY_IN  = _T("__in");           //  dir of actions that will run at start
@@ -116,5 +117,7 @@ protected:
 
 protected:
   virtual bool IsReservedDir( LPCTSTR ) const;
+
+  std::mutex _mutex;
 };
 #endif // __Actions_h__

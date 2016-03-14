@@ -30,9 +30,9 @@ ActionBye::~ActionBye()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-bool ActionBye::DoIt(const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionBye::CreateActiveAction(const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   //  close use
   PostMessage( AfxGetMainWnd()->GetSafeHwnd(), WM_CLOSE, 0, 0 );
-  return true;
+  return NULL;
 }

@@ -36,6 +36,10 @@
 #include <afxwin.h>               // MFC core and standard components
 #include <afxext.h>               // MFC extensions
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
 //  the Dll hooks
 #include "../hook/hook.h"
 

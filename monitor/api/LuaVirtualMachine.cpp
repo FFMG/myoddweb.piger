@@ -82,7 +82,7 @@ void LuaVirtualMachine::Dispose(lua_State* lua)
  * @param ActiveAction* action the current action
  * @return lua_State* a newly created lua state,
  */
-lua_State* LuaVirtualMachine::Create(ActiveAction* action)
+lua_State* LuaVirtualMachine::Create( const ActiveAction& action)
 {
   // create the new state
   lua_State* lua = luaL_newstate();
@@ -123,7 +123,7 @@ lua_State* LuaVirtualMachine::Create(ActiveAction* action)
  * @param ActiveAction* action the current action.
  * @return void
  */
-int LuaVirtualMachine::LoadFile( LPCTSTR luaFile, ActiveAction* action)
+int LuaVirtualMachine::LoadFile( LPCTSTR luaFile, const ActiveAction& action)
 {
   lua_State* lua = Create(action);
   if( NULL == lua )

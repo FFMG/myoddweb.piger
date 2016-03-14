@@ -17,6 +17,8 @@ public:
 public:
   void Create( LPCTSTR pText, UINT nElapse, UINT nFadeOut);
 
+  static void Show( CWnd*parentWnd, STD_TSTRING* pText, UINT nElapse, UINT nFadeOut);
+
 protected:
   virtual HGDIOBJ SelDisplayFont( HDC hdc, UINT fontSize = 70 );
 
@@ -24,6 +26,8 @@ protected:
   UINT m_nFadeOut;          //  how fast the text will fade out
   STD_TSTRING m_stdMessage; //  the message
   UINT m_nElapse;           //  how long before we fade out.
+
+  void Fade();
 
 protected:
   UINT_PTR m_timerId;

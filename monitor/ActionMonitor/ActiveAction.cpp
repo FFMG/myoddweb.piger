@@ -12,9 +12,9 @@
  * @param void
  * @return void
  */
-ActiveAction::ActiveAction() : Action(), _clipboard(NULL)
+ActiveAction::ActiveAction( const ActiveAction& rhs ) : Action(), _clipboard(NULL)
 {
-  CreateClipboard();
+  *this = rhs;
 }
 
 /**
@@ -22,7 +22,10 @@ ActiveAction::ActiveAction() : Action(), _clipboard(NULL)
 * @param void
 * @return void
 */
-ActiveAction::ActiveAction(const Action& src ) : Action( src ), _clipboard(NULL)
+ActiveAction::ActiveAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged) : Action( src ), 
+  _clipboard(NULL),
+  _szCommandLine( szCommandLine ),
+  _isPrivileged( isPrivileged )
 {
 }
 
@@ -33,9 +36,31 @@ ActiveAction::ActiveAction(const Action& src ) : Action( src ), _clipboard(NULL)
  */
 ActiveAction::~ActiveAction()
 {
-  delete _clipboard;
+  ClearClipboard();
 }
 
+const ActiveAction& ActiveAction::operator=(const ActiveAction& rhs)
+{
+  if (this != &rhs)
+  {
+    ClearClipboard();
+
+    // base class.
+    Action::operator=(rhs);
+
+    _szCommandLine = rhs._szCommandLine;
+    _isPrivileged = rhs._isPrivileged;
+    if (rhs._clipboard)
+    {
+      _clipboard = new Clipboard(*rhs._clipboard);
+    }
+  }
+  return *this;
+}
+
+/**
+ * Clear the clipboard and free the memory.
+ */
 void ActiveAction::ClearClipboard()
 {
   delete _clipboard;
@@ -55,3 +80,80 @@ void ActiveAction::CreateClipboard()
   CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
   _clipboard = new Clipboard(cwnd );
 }
+
+void ActiveAction::operator()()
+{
+  const STD_TSTRING& szExt = Extension();
+
+#ifdef ACTIONMONITOR_API_PLUGIN
+  // Do the API calls.
+  //
+  if (PluginVirtualMachine::IsPluginExt(szExt.c_str()))
+  {
+    DoItDirectPlugin();
+    return;
+  }
+#endif // ACTIONMONITOR_API_PLUGIN
+
+#ifdef ACTIONMONITOR_API_LUA
+  // Do the API calls.
+  //
+  if (LuaVirtualMachine::IsLuaExt(szExt.c_str()))
+  {
+    DoItDirectLua();
+    return;
+  }
+#endif // ACTIONMONITOR_API_LUA
+
+#ifdef ACTIONMONITOR_API_PY
+  // Do the API calls.
+  //
+  if (PythonVirtualMachine::IsPyExt(szExt.c_str()))
+  {
+    DoItDirectPython();
+    return;
+  }
+#endif // ACTIONMONITOR_API_PY
+
+  //  the file.
+  const STD_TSTRING& szFile = File();
+
+  //  join the two items together.
+  std::vector<STD_TSTRING> argv;
+  argv.push_back(szFile);
+  argv.push_back( _szCommandLine);
+  Action::Execute(argv, _isPrivileged);
+}
+
+#ifdef ACTIONMONITOR_API_LUA
+void ActiveAction::DoItDirectLua() const
+{
+  //  the file.
+  const STD_TSTRING& szFile = File();
+
+  LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
+  lua->LoadFile(szFile.c_str(), *this);
+}
+#endif // ACTIONMONITOR_API_LUA
+
+#ifdef ACTIONMONITOR_API_PY
+void ActiveAction::DoItDirectPython() const
+{
+  //  the file.
+  const STD_TSTRING& szFile = File();
+
+  PythonVirtualMachine* py = App().GetPythonVirtualMachine();
+  py->LoadFile(szFile.c_str(), *this);
+}
+#endif // ACTIONMONITOR_API_PY
+
+#ifdef ACTIONMONITOR_API_PLUGIN
+void ActiveAction::DoItDirectPlugin() const
+{
+  //  the file.
+  const STD_TSTRING& szFile = File();
+
+  PluginVirtualMachine* pg = App().GetPluginVirtualMachine();
+  pg->LoadFile(szFile.c_str(), *this );
+}
+#endif // ACTIONMONITOR_API_PLUGIN

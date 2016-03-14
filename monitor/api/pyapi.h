@@ -15,7 +15,7 @@ static const double ACTIONMONITOR_API_PY_VERSION = 2.0;
 class pyapi : public helperapi
 {
 public:
-  pyapi(ActiveAction* action);
+  pyapi( const ActiveAction& action);
   virtual ~pyapi();
 
 public:

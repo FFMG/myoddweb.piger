@@ -65,9 +65,9 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
       App().PossibleActions().SetAction( action );
 
       // do the action, we don't have any arguments to pass to the action
-      // so we bypass the 'DoIt(...)' function
+      // so we bypass the 'CreateActiveAction(...)' function
       // and go directly to 'Launch(...)'
-      action->DoItDirect( _T( "" ), isPrivileged );
+      QueueAndExecute( action->CreateActiveActionDirect( _T( "" ), isPrivileged ) );
     }
     catch( ... )
     {

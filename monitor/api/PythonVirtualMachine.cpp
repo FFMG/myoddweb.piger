@@ -58,7 +58,8 @@ PyInit_am(void)
  */
 PythonVirtualMachine::PythonVirtualMachine() : 
   m_isInitialized( false ),
-  _api( NULL )
+  _api( NULL ),
+  _pMainThreadState( NULL )
 {
 }
 
@@ -71,6 +72,8 @@ PythonVirtualMachine::~PythonVirtualMachine()
 {
   if (m_isInitialized)
   {
+    PyEval_RestoreThread( _pMainThreadState);
+
     // simply close python
     Py_Finalize();
   }
@@ -98,6 +101,9 @@ void PythonVirtualMachine::Initialize()
   Py_SetPath(python_path.c_str());
 
   Py_Initialize();
+  PyEval_InitThreads();
+
+  _pMainThreadState = PyEval_SaveThread();
 
   m_isInitialized = true;
 }
@@ -131,7 +137,7 @@ bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
  * @param void
  * @return void
  */
-int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, ActiveAction* action )
+int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, const ActiveAction& action )
 {
   Initialize();
 
@@ -187,9 +193,16 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, ActiveAction* action )
   // we are done with the file.
   fclose(fp);
 
+  PyEval_AcquireLock(); // nb: get the GIL
+  PyThreadState* pThreadState = Py_NewInterpreter();
+  assert(pThreadState != NULL);
+  PyEval_ReleaseThread(pThreadState); // nb: this also releases the GIL
+
   PyObject *main_module = PyImport_AddModule("__main__");
   PyObject *main_dict = PyModule_GetDict(main_module);
   
+  PyEval_AcquireThread(pThreadState);
+
   // we can now run our script
   LPCSTR s = script.c_str();
   PyObject * PyRes = PyRun_String(s, Py_file_input, main_dict, main_dict);
@@ -240,6 +253,14 @@ int PythonVirtualMachine::LoadFile( LPCTSTR pyFile, ActiveAction* action )
 
   // no more errors.
   PyErr_Clear();
+
+  // switch out our interpreter
+  PyEval_ReleaseThread(pThreadState);
+
+  // release the interpreter 
+  PyEval_AcquireThread(pThreadState); // nb: this also locks the GIL
+  Py_EndInterpreter(pThreadState);
+  PyEval_ReleaseLock(); // nb: release the GIL
 
   /*
   (void) PyRun_SimpleFile(fp, pyFile );

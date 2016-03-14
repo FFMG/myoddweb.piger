@@ -142,25 +142,33 @@ void MessageDlg::OnTimer(UINT_PTR nIDEvent)
   CDialog::OnTimer(nIDEvent);
   if( nIDEvent == m_timerId )
   {
+    // kill the timer
     KillTimer( nIDEvent );
-    // 0 means that we move right away
-    if( m_nFadeOut > 0 )
-    {
-      BYTE bStart = myodd::config::get( _T("commands\\transparency"), 127);
-      for( BYTE b = bStart; b > 0; --b )
-      {
-        Transparent( b  );
-        DWORD d = (GetTickCount() + m_nFadeOut);
-        while( d > GetTickCount() )
-        {
-          MessagePump( m_hWnd );
-          Sleep( 0 );
-        }
-      }
-    }
+
+    // make it thread safe
+    Fade();
 
     //  if this is the timer event then we can close the window.
     FadeKillWindow();
+  }
+}
+
+void MessageDlg::Fade()
+{
+  // 0 means that we move right away
+  if (m_nFadeOut > 0)
+  {
+    BYTE bStart = myodd::config::get(_T("commands\\transparency"), 127);
+    for (BYTE b = bStart; b > 0; --b)
+    {
+      Transparent(b);
+      DWORD d = (GetTickCount() + m_nFadeOut);
+      while (d > GetTickCount())
+      {
+        MessagePump(m_hWnd);
+        Sleep(0);
+      }
+    }
   }
 }
 
@@ -242,4 +250,19 @@ void MessageDlg::FadeKillWindow()
 {
   //  if this is the timer event then we can close the window.
   DestroyWindow();
+}
+
+void MessageDlg::Show(CWnd*parentWnd, STD_TSTRING* pText, UINT nElapse, UINT nFadeOut)
+{
+  MessageDlg* messageDlg = new MessageDlg( parentWnd );
+  messageDlg->Create( (*pText).c_str(), nElapse, nFadeOut);
+
+  messageDlg->ShowWindow(SW_SHOW);
+  messageDlg->Transparent(myodd::config::get(_T("commands\\transparency"), 127));
+  messageDlg->Fade();
+
+  //  if this is the timer event then we can close the window.
+  messageDlg->FadeKillWindow();
+
+  delete pText;
 }
