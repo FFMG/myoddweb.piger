@@ -2,6 +2,8 @@
 
 #include "pluginapi.h"
 #include <map>
+#include <thread>
+#include <mutex>
 #include "os/os.h"
 
 #ifdef ACTIONMONITOR_API_PLUGIN
@@ -11,8 +13,7 @@ public:
   PluginVirtualMachine();
   virtual ~PluginVirtualMachine();
 
-  void Initialize(); 
-  int LoadFile( LPCTSTR pluginFile, const ActiveAction& action);
+  int ExecuteInThread( LPCTSTR pluginFile );
   static bool IsPluginExt( LPCTSTR ext );
 
   bool Register( LPCTSTR, void* );
@@ -21,15 +22,23 @@ public:
   void ErasePlugin( const STD_TSTRING& plugin);
 
 protected:
-  amplugin* _amPlugin;
-
+  typedef std::map< std::thread::id, pluginapi*> ListOfPlugins;
+  ListOfPlugins _apis;
+  
+  std::mutex _mutex;
   static pluginapi& GetApi();
 
+public:
+  void DisposeApi();
+  void AddApi(pluginapi* api );
+
 protected:
+  amplugin* _amPlugin;
+  void Initialize();
   void InitializeFunctions();
 
 protected:
-  int Create( LPCTSTR pluginFile, const ActiveAction& action);
+  int Create( LPCTSTR pluginFile );
 
   // our own architecture.
   myodd::os::ARCHITECTURE _moduleArchitecture;
@@ -43,7 +52,6 @@ protected:
   {
     HMODULE    hModule;
     PFUNC_MSG  fnMsg;
-    pluginapi* api;
   };
 
   // map of all the functions.
@@ -52,7 +60,7 @@ protected:
   PLUGIN_CONTAINER m_pluginsContainer;
 
   // find a module
-  PLUGIN_THREAD* Find( const STD_TSTRING& ) const;
+  PLUGIN_THREAD* Find( const STD_TSTRING& );
 
   HMODULE ExpandLoadLibrary( LPCTSTR lpFile );
 

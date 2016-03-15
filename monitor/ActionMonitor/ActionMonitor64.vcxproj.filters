@@ -102,6 +102,9 @@
     <ClCompile Include="ActiveLuaAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="ActivePluginAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -200,6 +203,9 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveLuaAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActivePluginAction.h">
       <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>

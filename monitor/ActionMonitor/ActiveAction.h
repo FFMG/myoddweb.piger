@@ -49,10 +49,6 @@ protected:
   void ClearClipboard();
   void CreateClipboard();
 
-#ifdef ACTIONMONITOR_API_PLUGIN
-  void DoItDirectPlugin() const;
-#endif
-
 protected:
   bool ReadFile(LPCTSTR pyFile, std::string& script) const;
 };

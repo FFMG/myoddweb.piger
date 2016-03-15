@@ -86,13 +86,13 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    STD_TSTRING szCommandLine = _T( "" );
-    const Action* action = App().PossibleActions().GetCommand( &szCommandLine );
+    const Action* action = &_action;
     if (NULL == action)
     {
       //  we don't have a command.
       return false;
     }
+    STD_TSTRING szCommandLine = action->toChar();
 
     // if the user wants command 0 then we want the full name
     // this is more consistent with the get commands normally work.
@@ -140,7 +140,7 @@ bool helperapi::getAction( STD_TSTRING& sValue )
 {
   try
   {
-    const Action* action = App().PossibleActions().GetCommand();
+    const Action* action = &_action;
     if (NULL == action)
     {
       //  we don't have a command.
@@ -168,14 +168,14 @@ size_t helperapi::getCommandCount()
 {
   try
   {
-    STD_TSTRING szCommandLine = _T( "" );
-    const Action* action = App().PossibleActions().GetCommand(&szCommandLine);
+    const Action* action = &_action;
     if (NULL == action)
     {
       //  we don't have a command.
       return false;
     }
 
+    STD_TSTRING szCommandLine = action->toChar();
     if( 0 == szCommandLine.length() )
     {
       return 0; //  we have no arguments.

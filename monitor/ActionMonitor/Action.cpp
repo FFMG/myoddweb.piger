@@ -8,6 +8,7 @@
 #include "activeaction.h"
 #include "activepythonaction.h"
 #include "activeluaaction.h"
+#include "activepluginaction.h"
 
 #include "os\os.h"
 
@@ -383,6 +384,22 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
     delete apa;
   }
 #endif // ACTIONMONITOR_API_PY
+
+#ifdef ACTIONMONITOR_API_PLUGIN
+  // Do the API calls.
+  //
+  if (PluginVirtualMachine::IsPluginExt(szExt.c_str()))
+  {
+    ActivePluginAction* apa = new ActivePluginAction(*this, szCommandLine, isPrivileged);
+    if (apa->Initialize())
+    {
+      return apa;
+    }
+
+    // did not work, try the default way...
+    delete apa;
+  }
+#endif // ACTIONMONITOR_API_PLUGIN
 
   return new ActiveAction( *this, szCommandLine, isPrivileged );
 }

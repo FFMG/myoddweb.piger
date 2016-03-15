@@ -5,6 +5,7 @@
 #include "PluginVirtualMachine.h"
 #include "helperapi.h"
 #include "ActionMonitor.h"
+#include "../threads/lock.h"
 
 /**
  * Todo
@@ -28,8 +29,50 @@ PluginVirtualMachine::~PluginVirtualMachine()
   //  destroy all the plugins.
   DestroyPlugins();
 
-  // clean the monitor.
+  // remove the plugins list
   delete _amPlugin;
+}
+
+/**
+ * Remove the current thread API from our list.
+ */
+void PluginVirtualMachine::DisposeApi()
+{
+  // lock it
+  myodd::threads::Lock guard( _mutex );
+  
+  // find this thread
+  ListOfPlugins::const_iterator it = _apis.find(std::this_thread::get_id());
+  if (it == _apis.end())
+  {
+    // not found...
+    return;
+  }
+
+  // remove it.
+  _apis.erase(it);
+}
+
+/**
+ * Add an api to our current list of plugins.
+ * this must be in thread
+ * @param pluginapi* api the api we would like to add.
+ */
+void PluginVirtualMachine::AddApi(pluginapi* api)
+{
+  // lock it
+  myodd::threads::Lock guard(_mutex);
+
+  ListOfPlugins::const_iterator it = _apis.find(std::this_thread::get_id());
+  if (it != _apis.end())
+  {
+    // we are trying to add an api
+    // to more than one thread.
+    throw - 1;
+  }
+
+  // add it
+  _apis[std::this_thread::get_id()] = api;
 }
 
 pluginapi& PluginVirtualMachine::GetApi()
@@ -42,12 +85,12 @@ pluginapi& PluginVirtualMachine::GetApi()
 
   // for now, get the first value...
   // @todo, we need to get the actual thread id running.
-  PLUGIN_CONTAINER::const_iterator it = pvm->m_pluginsContainer.begin();
-  if (it == pvm->m_pluginsContainer.end())
+  ListOfPlugins::const_iterator it = pvm->_apis.find(std::this_thread::get_id());
+  if (it == pvm->_apis.end() )
   {
     throw -1;
   }
-  return *(it->second->api);
+  return *(it->second);
 #endif
 }
 
@@ -59,13 +102,22 @@ pluginapi& PluginVirtualMachine::GetApi()
 void PluginVirtualMachine::Initialize()
 {
   //  only do it once
-  if( !_amPlugin )
+  if (_amPlugin == NULL)
   {
-    _amPlugin = new amplugin();
+    //  get the lock.
+    myodd::threads::Lock guard(_mutex);
 
-    // register our Plugin functions.
-    InitializeFunctions();
+    // double lock...
+    if (_amPlugin == NULL)
+    {
+      //  we can now create it.
+      _amPlugin = new amplugin();
+
+      // register our Plugin functions.
+      InitializeFunctions();
+    }
   }
+
 }
 
 /**
@@ -123,8 +175,11 @@ bool PluginVirtualMachine::IsPluginExt( LPCTSTR ext )
  * @param void
  * @return void
  */
-PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const STD_TSTRING& s) const
+PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const STD_TSTRING& s)
 {
+  //  get the lock.
+  myodd::threads::Lock guard( _mutex );
+
   PLUGIN_CONTAINER::const_iterator iter = m_pluginsContainer.find( s );
   if( iter == m_pluginsContainer.end() )
   {
@@ -160,12 +215,13 @@ HMODULE PluginVirtualMachine::ExpandLoadLibrary( LPCTSTR lpFile )
  * @param void
  * @return void
  */
-int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, const ActiveAction& action )
+int PluginVirtualMachine::ExecuteInThread( LPCTSTR pluginFile )
 {
   Initialize();
   if( NULL == _amPlugin )
   {
     // the plugin manager was not created?
+    // or could not be created properly
     return -1;
   }
 
@@ -174,11 +230,10 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, const ActiveAction& acti
   //
   // otherwise we need to ask it to restart again.
   PLUGIN_THREAD* f = Find( pluginFile );
-
   if( NULL == f )
   {
     //  init this file.
-    return Create( pluginFile, action );
+    return Create( pluginFile );
   }
 
   // assume error 
@@ -203,15 +258,16 @@ int PluginVirtualMachine::LoadFile( LPCTSTR pluginFile, const ActiveAction& acti
  * Initialize a plugin for the first time.
  * This is when we load the file.
  * @param LPCTSTR the plugin we are loading.
- * @param ActiveAction* action the active action.
  * @return
  */
-int PluginVirtualMachine::Create( LPCTSTR pluginFile, const ActiveAction& action)
+int PluginVirtualMachine::Create( LPCTSTR pluginFile )
 {
+  // we must have an api by now...
+  pluginapi& api = GetApi();
+
   HMODULE hModule = ExpandLoadLibrary( pluginFile );
   if( NULL == hModule )
   {
-    helperapi api(action);
     myodd::os::ARCHITECTURE pe = myodd::os::GetImageArchitecture(pluginFile);
     if (pe == myodd::os::ARCHITECTURE_UNKNOWN)
     {
@@ -234,7 +290,6 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile, const ActiveAction& action
   PFUNC_MSG pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
   if (NULL == pfMsg )
   {
-    helperapi api(action);
     api.say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
     return -1;
   }
@@ -242,8 +297,9 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile, const ActiveAction& action
   PLUGIN_THREAD* f = new PLUGIN_THREAD;
   f-> hModule = hModule;
   f-> fnMsg   = pfMsg;
-  f->api      = new pluginapi(action);
 
+  //  get the lock.
+  myodd::threads::Lock guard(_mutex);
   m_pluginsContainer[ pluginFile ] = f;
 
   // assume error 
@@ -285,6 +341,9 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile, const ActiveAction& action
  */
 void PluginVirtualMachine::ErasePlugin( const STD_TSTRING& plugin)
 {
+  //  get the lock.
+  myodd::threads::Lock guard(_mutex);
+
   PLUGIN_CONTAINER::const_iterator iter = m_pluginsContainer.find( plugin );
   if( iter == m_pluginsContainer.end() )
   {
@@ -300,7 +359,6 @@ void PluginVirtualMachine::ErasePlugin( const STD_TSTRING& plugin)
     f-> fnMsg( AM_MSG_DEINIT, 0, 0 );
 
     //  free the memory
-    delete f->api;
     delete f;
   }
   catch( ... )
@@ -319,6 +377,9 @@ void PluginVirtualMachine::ErasePlugin( const STD_TSTRING& plugin)
  */
 void PluginVirtualMachine::DestroyPlugins()
 {
+  //  get the lock.
+  myodd::threads::Lock guard(_mutex);
+
   //  we must clear all the thread.
   for( PLUGIN_CONTAINER::const_iterator it = m_pluginsContainer.begin(); 
        it != m_pluginsContainer.end(); 
@@ -334,7 +395,6 @@ void PluginVirtualMachine::DestroyPlugins()
     FreeLibrary( f->hModule );
 
     // and with the pointer
-    delete f->api;
     delete f;
     f = NULL;
   }// for each modules.

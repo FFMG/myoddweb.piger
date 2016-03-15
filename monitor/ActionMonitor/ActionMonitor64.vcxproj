@@ -196,6 +196,7 @@
     <ClCompile Include="ActiveAction.cpp" />
     <ClCompile Include="ActiveActions.cpp" />
     <ClCompile Include="ActiveLuaAction.cpp" />
+    <ClCompile Include="ActivePluginAction.cpp" />
     <ClCompile Include="ActivePythonAction.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="ActiveAction.h" />
     <ClInclude Include="ActiveActions.h" />
     <ClInclude Include="ActiveLuaAction.h" />
+    <ClInclude Include="ActivePluginAction.h" />
     <ClInclude Include="ActivePythonAction.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="MemDC.h" />

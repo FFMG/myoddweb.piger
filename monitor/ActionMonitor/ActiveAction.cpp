@@ -115,16 +115,6 @@ void ActiveAction::ExecuteInThread()
 {
   const STD_TSTRING& szExt = Extension();
 
-#ifdef ACTIONMONITOR_API_PLUGIN
-  // Do the API calls.
-  //
-  if (PluginVirtualMachine::IsPluginExt(szExt.c_str()))
-  {
-    DoItDirectPlugin();
-    return;
-  }
-#endif // ACTIONMONITOR_API_PLUGIN
-
   //  the file.
   const STD_TSTRING& szFile = File();
 
@@ -134,17 +124,6 @@ void ActiveAction::ExecuteInThread()
   argv.push_back( _szCommandLine);
   Action::Execute(argv, _isPrivileged);
 }
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-void ActiveAction::DoItDirectPlugin() const
-{
-  //  the file.
-  const STD_TSTRING& szFile = File();
-
-  PluginVirtualMachine* pg = App().GetPluginVirtualMachine();
-  pg->LoadFile(szFile.c_str(), *this );
-}
-#endif // ACTIONMONITOR_API_PLUGIN
 
 /**
  * Read the given file and get the script out of it.
