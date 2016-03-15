@@ -21,12 +21,6 @@ bool ActiveLuaAction::OnDeInitialize()
 
 bool ActiveLuaAction::OnInitialize()
 {
-  PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-  if (!py->Initialize())
-  {
-    return false;
-  }
-
   //  all good
   return true;
 }
