@@ -7,6 +7,7 @@
 #include "ActionMonitor.h"
 #include "activeaction.h"
 #include "activepythonaction.h"
+#include "activeluaaction.h"
 
 #include "os\os.h"
 
@@ -351,7 +352,23 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
   }
 
   const STD_TSTRING& szExt = Extension();
-#ifdef ACTIONMONITOR_API_PLUGIN
+#ifdef ACTIONMONITOR_API_LUA
+  // Do the API calls.
+  //
+  if (LuaVirtualMachine::IsLuaExt(szExt.c_str()))
+  {
+    ActiveLuaAction* ala = new ActiveLuaAction(*this, szCommandLine, isPrivileged);
+    if (ala->Initialize())
+    {
+      return ala;
+    }
+
+    // did not work, try the default way...
+    delete ala;
+  }
+#endif // ACTIONMONITOR_API_LUA
+
+#ifdef ACTIONMONITOR_API_PY
   // Do the API calls.
   //
   if (PythonVirtualMachine::IsPyExt(szExt.c_str()))
@@ -365,7 +382,7 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
     // did not work, try the default way...
     delete apa;
   }
-#endif // ACTIONMONITOR_API_PLUGIN
+#endif // ACTIONMONITOR_API_PY
 
   return new ActiveAction( *this, szCommandLine, isPrivileged );
 }

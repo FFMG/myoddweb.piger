@@ -106,16 +106,6 @@ void ActiveAction::ExecuteInThread()
   }
 #endif // ACTIONMONITOR_API_PLUGIN
 
-#ifdef ACTIONMONITOR_API_LUA
-  // Do the API calls.
-  //
-  if (LuaVirtualMachine::IsLuaExt(szExt.c_str()))
-  {
-    DoItDirectLua();
-    return;
-  }
-#endif // ACTIONMONITOR_API_LUA
-
   //  the file.
   const STD_TSTRING& szFile = File();
 
@@ -125,17 +115,6 @@ void ActiveAction::ExecuteInThread()
   argv.push_back( _szCommandLine);
   Action::Execute(argv, _isPrivileged);
 }
-
-#ifdef ACTIONMONITOR_API_LUA
-void ActiveAction::DoItDirectLua() const
-{
-  //  the file.
-  const STD_TSTRING& szFile = File();
-
-  LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
-  lua->LoadFile(szFile.c_str(), *this);
-}
-#endif // ACTIONMONITOR_API_LUA
 
 #ifdef ACTIONMONITOR_API_PLUGIN
 void ActiveAction::DoItDirectPlugin() const
@@ -147,3 +126,58 @@ void ActiveAction::DoItDirectPlugin() const
   pg->LoadFile(szFile.c_str(), *this );
 }
 #endif // ACTIONMONITOR_API_PLUGIN
+
+/**
+ * Read the given file and get the script out of it.
+ * @param LPCTSTR pyFile the python file we want to read.
+ * @param std::string& script the string that will contain the string.
+ * @return boolean success or not.
+ */
+bool ActiveAction::ReadFile(LPCTSTR pyFile, std::string& script) const
+{
+  // clear the scruot.
+  script = "";
+
+  //  we need to convert strings.
+  USES_CONVERSION;
+
+  errno_t err;
+  FILE *fp;
+  if (err = fopen_s(&fp, T_T2A(pyFile), "rt"))
+  {
+    return false;
+  }
+
+  //
+  // Note that we are no longer in the realm of UNICODE here.
+  // We are using Multi Byte data.
+  static const UINT FILE_READ_SIZE = 100;
+  size_t  count, total = 0;
+  while (!feof(fp))
+  {
+    // Attempt to read
+    char buffer[FILE_READ_SIZE + 1];
+    memset(buffer, '\0', FILE_READ_SIZE + 1);
+    count = fread(buffer, sizeof(char), FILE_READ_SIZE, fp);
+
+    buffer[count] = '\0';
+
+    // was there a problem?
+    if (ferror(fp))
+    {
+      break;
+    }
+
+    // add it to the script
+    script += buffer;
+
+    // Total up actual bytes read
+    total += count;
+  }
+
+  // we are done with the file.
+  fclose(fp);
+
+  // success.
+  return true;
+}

@@ -49,9 +49,8 @@ protected:
   void DoItDirectPlugin() const;
 #endif
 
-#ifdef ACTIONMONITOR_API_LUA
-  void DoItDirectLua() const; 
-#endif // ACTIONMONITOR_API_LUA
+protected:
+  bool ReadFile(LPCTSTR pyFile, std::string& script) const;
 };
 
 #endif // __ActiveAction_h__

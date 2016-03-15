@@ -99,6 +99,9 @@
     <ClCompile Include="ActivePythonAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="ActiveLuaAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -194,6 +197,9 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActivePythonAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveLuaAction.h">
       <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>

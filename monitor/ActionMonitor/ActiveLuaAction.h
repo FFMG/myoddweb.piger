@@ -1,11 +1,11 @@
 #pragma once
 #include "ActiveAction.h"
-class ActivePythonAction :
+class ActiveLuaAction :
   public ActiveAction
 {
 public:
-  ActivePythonAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged);
-  virtual ~ActivePythonAction();
+  ActiveLuaAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged);
+  virtual ~ActiveLuaAction();
 
   virtual void ExecuteInThread();
   virtual bool Initialize();
