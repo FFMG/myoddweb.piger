@@ -2,6 +2,7 @@
 
 //  flicker free dc.
 #include "MemDC.h"
+#include <mutex>
 
 #define DT_DEFAULT ( DT_NOCLIP | DT_LEFT )
 
