@@ -72,9 +72,10 @@ bool helperapi::say(const wchar_t* msg, const unsigned int nElapse, const unsign
   }
 
   // simply display the message.
-//  pThis->DisplayMessage( msg, nElapse, nFadeOut );
-
-  std::thread& worker = QueueWorker( &MessageDlg::Show, pThis, new STD_TSTRING(msg), nElapse, nFadeOut );
+  // pThis->DisplayMessage( msg, nElapse, nFadeOut );
+  CWnd* pWnd = CWnd::FromHandle( ::GetDesktopWindow() );
+  std::thread& worker = QueueWorker( &MessageDlg::Show, pWnd, new STD_TSTRING(msg), nElapse, nFadeOut );
+  worker.join();
 
   return true;
 }
