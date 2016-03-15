@@ -13,12 +13,12 @@ public:
   LuaVirtualMachine(void);
   virtual ~LuaVirtualMachine(void);
   
-  int LoadFile( LPCTSTR luaFile, const ActiveAction& action);
+  int ExecuteInThread(const STD_TSTRING& szFile, luaapi* api );
 
   static bool IsLuaExt( LPCTSTR ext );
 
 protected:
-  lua_State* Create( const ActiveAction& action);
+  lua_State* CreateState( luaapi* api );
   void Dispose(lua_State* lua);
   void Dispose();
 

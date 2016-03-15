@@ -21,6 +21,7 @@ LuaVirtualMachine::LuaVirtualMachine()
 LuaVirtualMachine::~LuaVirtualMachine(void)
 {
   //  dispose all 
+  Dispose();
 }
 
 /**
@@ -39,9 +40,6 @@ void LuaVirtualMachine::Dispose()
   {
     // close the lua
     lua_close( it->first );
-
-    // delete the api
-    delete it->second;
   }
 
   // we can now remove everything.
@@ -67,10 +65,7 @@ void LuaVirtualMachine::Dispose(lua_State* lua)
   {
     // close the lua
     lua_close(lua);
-
-    // delete the api
-    delete it->second;
-
+    
     //  yes, so we can remove it.
     _lua_Api.erase(it);
   }
@@ -82,7 +77,7 @@ void LuaVirtualMachine::Dispose(lua_State* lua)
  * @param ActiveAction* action the current action
  * @return lua_State* a newly created lua state,
  */
-lua_State* LuaVirtualMachine::Create( const ActiveAction& action)
+lua_State* LuaVirtualMachine::CreateState(luaapi* api)
 {
   // create the new state
   lua_State* lua = luaL_newstate();
@@ -110,7 +105,7 @@ lua_State* LuaVirtualMachine::Create( const ActiveAction& action)
 
   // we can now add it to our list.
   _mutex.lock();
-  _lua_Api[lua] = new luaapi( action );
+  _lua_Api[lua] = api;
   _mutex.unlock();
 
   // finally return the lua.
@@ -119,13 +114,13 @@ lua_State* LuaVirtualMachine::Create( const ActiveAction& action)
 
 /**
  * Todo
- * @param LPCTSTR* luaFile the file we would like to load.
- * @param ActiveAction* action the current action.
- * @return void
+ * @param const STD_TSTRING& szFile the file/script we would like to load.
+ * @param luaapi api the created api we will be using.
+ * @return int result of the operation.
  */
-int LuaVirtualMachine::LoadFile( LPCTSTR luaFile, const ActiveAction& action)
+int LuaVirtualMachine::ExecuteInThread(const STD_TSTRING& szFile, luaapi* api)
 {
-  lua_State* lua = Create(action);
+  lua_State* lua = CreateState(api);
   if( NULL == lua )
   {
     return -1;
@@ -133,7 +128,7 @@ int LuaVirtualMachine::LoadFile( LPCTSTR luaFile, const ActiveAction& action)
 
   USES_CONVERSION;
 
-  int resultOfCall = luaL_loadfile( lua , T_T2A(luaFile) );
+  int resultOfCall = luaL_loadfile( lua , T_T2A(szFile.c_str() ) );
   if(resultOfCall != 0 )
   {
     STD_TSTRING sErr = T_A2T( lua_tostring( lua, -1) );
@@ -145,7 +140,6 @@ int LuaVirtualMachine::LoadFile( LPCTSTR luaFile, const ActiveAction& action)
     resultOfCall = lua_pcall(lua, 0, LUA_MULTRET, 0);
   }
 
-  // we can now dispose of the lua
   Dispose(lua);
 
   return resultOfCall;
