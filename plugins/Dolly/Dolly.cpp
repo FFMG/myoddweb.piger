@@ -82,6 +82,9 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
 
       // and then just say it...
       ((amplugin*)(lParam))->say( lyric, 200, 5 );
+
+      //  all good.
+      return AM_RESP_SUCCESS;
     }
     break;
 
