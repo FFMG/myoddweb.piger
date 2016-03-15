@@ -13,13 +13,13 @@ ActiveLuaAction::~ActiveLuaAction()
   DeInitialize();
 }
 
-bool ActiveLuaAction::DeInitialize()
+bool ActiveLuaAction::OnDeInitialize()
 {
-  assert(Py_IsInitialized());
+  // nothing to do.
   return true;
 }
 
-bool ActiveLuaAction::Initialize()
+bool ActiveLuaAction::OnInitialize()
 {
   PythonVirtualMachine* py = App().GetPythonVirtualMachine();
   if (!py->Initialize())

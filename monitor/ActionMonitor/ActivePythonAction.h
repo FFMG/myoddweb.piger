@@ -8,7 +8,9 @@ public:
   virtual ~ActivePythonAction();
 
   virtual void ExecuteInThread();
-  virtual bool Initialize();
-  virtual bool DeInitialize();
+  
+protected:
+  virtual bool OnInitialize();
+  virtual bool OnDeInitialize();
 };
 

@@ -81,15 +81,34 @@ void ActiveAction::CreateClipboard()
   _clipboard = new Clipboard(cwnd );
 }
 
+bool ActiveAction::OnInitialize()
+{
+  return true;
+}
+
+bool ActiveAction::OnDeInitialize()
+{
+  return true;
+}
+
 bool ActiveAction::Initialize()
 {
-  //  nothing to do.
-  return true;
+  //  just create the clipboard.
+  CreateClipboard();
+
+  // all done.
+  return OnInitialize();
 }
 
 bool ActiveAction::DeInitialize()
 {
-  return true;
+  bool result = OnDeInitialize();
+
+  // clear the cipboard.
+  ClearClipboard();
+
+  // all done
+  return result;
 }
 
 void ActiveAction::ExecuteInThread()

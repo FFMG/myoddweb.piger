@@ -25,8 +25,12 @@ public:
   // ----------------------------
   // @todo those should be pure virtual.
   virtual void ExecuteInThread();
-  virtual bool Initialize();
-  virtual bool DeInitialize();
+  bool Initialize();
+  bool DeInitialize();
+
+protected:
+  virtual bool OnInitialize();
+  virtual bool OnDeInitialize();
 
 private:
   ActiveAction(const ActiveAction& rhs);

@@ -13,13 +13,13 @@ ActivePythonAction::~ActivePythonAction()
   DeInitialize();
 }
 
-bool ActivePythonAction::DeInitialize()
+bool ActivePythonAction::OnDeInitialize()
 {
   assert(Py_IsInitialized());
   return true;
 }
 
-bool ActivePythonAction::Initialize()
+bool ActivePythonAction::OnInitialize()
 {
   PythonVirtualMachine* py = App().GetPythonVirtualMachine();
   if (!py->Initialize())

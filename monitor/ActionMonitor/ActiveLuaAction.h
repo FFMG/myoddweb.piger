@@ -8,7 +8,9 @@ public:
   virtual ~ActiveLuaAction();
 
   virtual void ExecuteInThread();
-  virtual bool Initialize();
-  virtual bool DeInitialize();
+  
+protected:
+  virtual bool OnInitialize();
+  virtual bool OnDeInitialize();
 };
 
