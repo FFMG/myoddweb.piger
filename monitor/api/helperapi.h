@@ -16,7 +16,7 @@ public:
   helperapi(const ActiveAction& action );
   ~helperapi();
 
-protected:
+private:
   const Clipboard& GetClipboard() const;
 
 private:
