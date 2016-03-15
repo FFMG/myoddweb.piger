@@ -15,9 +15,27 @@ public:
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 
 public:
-  void Create( LPCTSTR pText, UINT nElapse, UINT nFadeOut);
+  class Msg {
+  public:
+    Msg(LPCTSTR pText, UINT nElapse, UINT nFadeOut) {
+      _pText = new STD_TSTRING(pText);
+      _nElapse = nElapse;
+      _nFadeOut = nFadeOut;
+    }
+    virtual ~Msg() {
+      delete _pText;
+    }
+    LPCTSTR Text() const { return _pText->c_str(); }
+    UINT Elapse() const { return _nElapse; }
+    UINT FadeOut() const { return _nFadeOut; }
 
-  static void Show( CWnd*parentWnd, STD_TSTRING* pText, UINT nElapse, UINT nFadeOut);
+  protected:
+    STD_TSTRING* _pText;
+    UINT _nElapse;
+    UINT _nFadeOut;
+  };
+
+  void Create( LPCTSTR pText, UINT nElapse, UINT nFadeOut);
 
 protected:
   virtual HGDIOBJ SelDisplayFont( HDC hdc, UINT fontSize = 70 );

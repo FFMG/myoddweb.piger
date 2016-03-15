@@ -14,6 +14,9 @@ static UINT UWM_KEYBOARD_DOWN = RegisterWindowMessage(UWM_KEYBOARD_MSG_DOWN);
 static UINT UWM_KEYBOARD_RELOAD = RegisterWindowMessage(UWM_KEYBOARD_MSG_RELOAD);
 static UINT UWM_KEYBOARD_VERSION = RegisterWindowMessage(UWM_KEYBOARD_MSG_VERSION);
 
+// IPC messages display.
+static UINT UWM_DISPLAYMESSAGE = RegisterWindowMessage( L"UWM_MSG_DISPLAYMESSAGE" );
+
 //  some core functions
 static LPCTSTR ACTION_CORE_BYE = _T("this.bye");       //  close the app
 static LPCTSTR ACTION_CORE_LOAD = _T("this.reload");    //  reload the list of items

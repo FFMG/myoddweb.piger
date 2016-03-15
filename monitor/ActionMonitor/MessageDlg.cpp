@@ -251,18 +251,3 @@ void MessageDlg::FadeKillWindow()
   //  if this is the timer event then we can close the window.
   DestroyWindow();
 }
-
-void MessageDlg::Show(CWnd*parentWnd, STD_TSTRING* pText, UINT nElapse, UINT nFadeOut)
-{
-  MessageDlg* messageDlg = new MessageDlg( parentWnd );
-  messageDlg->Create( (*pText).c_str(), nElapse, nFadeOut);
-
-  messageDlg->ShowWindow(SW_SHOW);
-  messageDlg->Transparent(myodd::config::get(_T("commands\\transparency"), 127));
-  messageDlg->Fade();
-
-  //  if this is the timer event then we can close the window.
-  messageDlg->FadeKillWindow();
-
-  delete pText;
-}

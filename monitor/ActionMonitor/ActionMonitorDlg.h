@@ -85,12 +85,14 @@ protected:
   POINT m_ptMaxValues;
   void CalcMaxes();
 
-  afx_msg LRESULT OnHookKeyChar (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyDown (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyUp   (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnReload      (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnVersion     (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnHookKeyChar   (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnHookKeyDown   (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnHookKeyUp     (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnReload        (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnVersion       (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnDisplayMessage(WPARAM wParam, LPARAM lParam);
   afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
+
   // Generated message map functions
 	//{{AFX_MSG(CActionMonitorDlg)
 	virtual BOOL OnInitDialog();
@@ -111,4 +113,8 @@ public:
 //  virtual void PostNcDestroy();
 public:
   afx_msg void OnDestroy();
+
+protected:
+  std::thread::id _main_threadId;
+  bool IsMainThread() const;
 };

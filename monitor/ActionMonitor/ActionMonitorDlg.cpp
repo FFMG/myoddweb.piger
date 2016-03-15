@@ -36,6 +36,9 @@ CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=NULL*/)
 {
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+  // save the main thread id.
+  _main_threadId = std::this_thread::get_id();
 }
 
 /**
@@ -71,6 +74,7 @@ BEGIN_MESSAGE_MAP(CActionMonitorDlg, CTrayDialog)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_UP     , OnHookKeyUp)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD , OnReload)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION, OnVersion)
+  ON_REGISTERED_MESSAGE(UWM_DISPLAYMESSAGE  , OnDisplayMessage )
   ON_WM_WINDOWPOSCHANGING()
   ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
 	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
@@ -558,6 +562,34 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
 }
 
 /**
+ * Check if the current thread is the main thread or not.
+ * We only know we are the main thread because that number was set at construction.
+ * @return bool if this thread is main or not.
+ */
+bool CActionMonitorDlg::IsMainThread() const
+{
+  return (std::this_thread::get_id() == _main_threadId);
+}
+
+/**
+ * Display a message, this comes from another thread.
+ * @param WPARAM unused/reserved
+ * @param LPARAM unused/reserved
+ * @return LRESULT unused/reserved
+ */
+LRESULT CActionMonitorDlg::OnDisplayMessage
+(
+  WPARAM,
+  LPARAM l
+  )
+{
+  MessageDlg::Msg* msg = (MessageDlg::Msg*)l;
+  bool result = DisplayMessage(msg->Text(), msg->Elapse(), msg->FadeOut());
+  delete msg;
+  return result ? 1 : 0;
+}
+
+/**
  * todo
  * @param void
  * @param void
@@ -574,8 +606,19 @@ bool CActionMonitorDlg::DisplayMessage
   // Sanity check
   if( NULL == pText )
   {
+
     return false;
   }
+
+  if (!IsMainThread())
+  {
+
+    // if this is not the main thread
+    // then we need to POST to oursleves and wait for the message to complete.
+    PostMessage(UWM_DISPLAYMESSAGE, 0, (LPARAM)(new MessageDlg::Msg(pText, nElapse, nFadeOut)) );
+    return true;
+  }
+
 
   //  look for old messages to remove
   ClearUnusedMessages( );
