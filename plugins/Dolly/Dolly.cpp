@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "Dolly.h"
+#include <chrono>
 
 PLUGIN_API
 AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
@@ -10,11 +11,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
   switch( msg )
   {
   case AM_MSG_INIT:
-    {
-      //  seed me up...
-      unsigned int seed = (unsigned)time(NULL);
-      srand(seed);
-
+    {      
       //
       // the plugin manager.
       amplugin* p = (amplugin*)(lParam);
@@ -37,6 +34,10 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
 
   case AM_MSG_MAIN:
     {
+      //  seed me up...
+      unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+      std::srand(seed);
+
       // just say something.
       const
       WCHAR* lyrics[] = {L"Hello, Dolly",
@@ -73,7 +74,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
       const double range_max = _countof(lyrics);
 
       // get the random number
-      const double rnd = static_cast<double>(rand());
+      const double rnd = static_cast<double>( std::rand());
 
       // make sure it is in range.
       const int u = static_cast<int>( rnd / (RAND_MAX + 1) * (range_max));
