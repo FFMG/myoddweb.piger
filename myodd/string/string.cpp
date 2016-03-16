@@ -454,6 +454,20 @@ TCHAR lower( TCHAR c )
 }
 
 /**
+ * I can't shake the feeling that we might really need something a
+ * little bit more powerful.
+ * Or at least something that follows the regex standard(s).
+ *
+ * @param LPCTSTR the wild search, something like "^(5){1}"
+ * @param LPCTSTR the string we will be comparing against.
+ * @return int
+ */
+bool wildcmp(const STD_TSTRING& wild, const STD_TSTRING& string)
+{
+  return wildcmp(wild.c_str(), string.c_str());
+}
+
+/**
  * I can't shake the feeling that we might really need something a 
  * little bit more powerful.
  * Or at least something that follows the regex standard(s).

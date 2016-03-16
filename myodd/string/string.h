@@ -87,6 +87,7 @@ namespace myodd{ namespace strings{
 
   // regex compare.
   bool wildcmp(LPCTSTR wild, LPCTSTR string);
+  bool wildcmp(const STD_TSTRING& wild, const STD_TSTRING& string);
 
   bool IntToString( STD_TSTRING& value, int i, LPCTSTR pszFormat );
   bool FloatToString( STD_TSTRING& value, float f, LPCTSTR pszFormat );
