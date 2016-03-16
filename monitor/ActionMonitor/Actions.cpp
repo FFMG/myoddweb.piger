@@ -95,6 +95,14 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
 // -------------------------------------------------------------
 Actions::array_of_actions_it Actions::Find(const STD_TSTRING& szText, const STD_TSTRING& szPath )
 {
+  STD_TSTRING stdExpendedPath;
+  if (!myodd::files::ExpandEnvironment(szPath, stdExpendedPath))
+  {
+    //  probably not a valid file for us to work with.
+    //  so make the 2 values the same so we can use it.
+    stdExpendedPath = szPath;
+  }
+
   //  get the lock
   myodd::threads::Lock guard(_mutex);
 
@@ -106,7 +114,7 @@ Actions::array_of_actions_it Actions::Find(const STD_TSTRING& szText, const STD_
     //  the command cannot be NULL
     if( myodd::strings::icompare( a.Command(), szText ) == 0 )
     {
-      if( myodd::strings::icompare(a.File(), szPath ) == 0 )
+      if( myodd::strings::icompare(a.File(), stdExpendedPath) == 0 )
       {
         return i;
       }

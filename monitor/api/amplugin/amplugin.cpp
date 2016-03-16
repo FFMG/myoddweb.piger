@@ -244,7 +244,7 @@ bool amplugin::AddAction(const wchar_t* szText, const wchar_t* szPath )
  */
 bool amplugin::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
 {
-  void* pFunc = Get( L"RemoveAction" );
+  void* pFunc = Get( L"removeAction" );
   if( !pFunc )
   {
     return false;
