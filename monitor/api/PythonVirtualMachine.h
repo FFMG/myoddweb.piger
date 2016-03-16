@@ -35,20 +35,20 @@ protected:
   PyThreadState* _mainThreadState;
 
 public:
-  static PyObject* say(PyObject *self, PyObject *args);
-  static PyObject* version(PyObject *self, PyObject *args);
-  static PyObject* getCommand(PyObject *self, PyObject *args);
-  static PyObject* getAction(PyObject *self, PyObject *args);
-  static PyObject* getCommandCount(PyObject *self, PyObject *args);
-  static PyObject* execute(PyObject *self, PyObject *args);
-  static PyObject* getstring(PyObject *self, PyObject *args);
-  static PyObject* getfile(PyObject *self, PyObject *args);
-  static PyObject* getfolder(PyObject *self, PyObject *args);
-  static PyObject* geturl(PyObject *self, PyObject *args);
-  static PyObject* addAction(PyObject *self, PyObject *args);
-  static PyObject* removeAction(PyObject *self, PyObject *args);
-  static PyObject* getVersion(PyObject *self, PyObject *args);
-  static PyObject* findAction(PyObject *self, PyObject *args);
+  static PyObject* Say(PyObject *self, PyObject *args);
+  static PyObject* Version(PyObject *self, PyObject *args);
+  static PyObject* GetCommand(PyObject *self, PyObject *args);
+  static PyObject* GetAction(PyObject *self, PyObject *args);
+  static PyObject* GetCommandCount(PyObject *self, PyObject *args);
+  static PyObject* Execute(PyObject *self, PyObject *args);
+  static PyObject* Getstring(PyObject *self, PyObject *args);
+  static PyObject* Getfile(PyObject *self, PyObject *args);
+  static PyObject* Getfolder(PyObject *self, PyObject *args);
+  static PyObject* Geturl(PyObject *self, PyObject *args);
+  static PyObject* AddAction(PyObject *self, PyObject *args);
+  static PyObject* RemoveAction(PyObject *self, PyObject *args);
+  static PyObject* GetVersion(PyObject *self, PyObject *args);
+  static PyObject* FindAction(PyObject *self, PyObject *args);
 };
 
 #endif /* ACTIONMONITOR_API_PY */

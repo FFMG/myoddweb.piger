@@ -30,20 +30,20 @@ protected:
   static luaapi& GetApi(lua_State* lua);
 
 public:
-  static int version(lua_State *lua);
-  static int say(lua_State *lua);
-  static int getAction(lua_State *lua);
-  static int getCommand(lua_State *lua);
-  static int getCommandCount(lua_State *lua);
-  static int execute(lua_State *lua);
-  static int getstring(lua_State *lua);
-  static int getVersion(lua_State *lua);
-  static int getfile(lua_State *lua);
-  static int getfolder(lua_State *lua);
-  static int geturl(lua_State *lua);
-  static int addAction(lua_State *lua);
-  static int removeAction(lua_State *lua);
-  static int findAction(lua_State *lua);
+  static int Version(lua_State *lua);
+  static int Say(lua_State *lua);
+  static int GetAction(lua_State *lua);
+  static int GetCommand(lua_State *lua);
+  static int GetCommandCount(lua_State *lua);
+  static int Execute(lua_State *lua);
+  static int Getstring(lua_State *lua);
+  static int GetVersion(lua_State *lua);
+  static int Getfile(lua_State *lua);
+  static int Getfolder(lua_State *lua);
+  static int Geturl(lua_State *lua);
+  static int AddAction(lua_State *lua);
+  static int RemoveAction(lua_State *lua);
+  static int FindAction(lua_State *lua);
 };
 
 #endif /*ACTIONMONITOR_API_LUA*/

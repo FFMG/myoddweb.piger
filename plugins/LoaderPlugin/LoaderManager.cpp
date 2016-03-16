@@ -27,11 +27,11 @@ void LoaderManager::Init( amplugin* p  )
 {
   // Add our own commands.
   WCHAR thisPath[ MAX_PATH ];
-  int l = p->getCommand( 0, _countof(thisPath), thisPath );
+  int l = p->GetCommand( 0, _countof(thisPath), thisPath );
   if( l > 0 )
   {
     m_thisPath = thisPath;
-    p->addAction( LOADER_LEARN, thisPath );
+    p->AddAction( LOADER_LEARN, thisPath );
   }
 
   // we now need to load all the items we already have in our XML
@@ -58,10 +58,10 @@ void LoaderManager::Main( amplugin* p  )
   int l = 0;
   //  get the name of the action
   WCHAR asAction[ 1024 ];
-  l = p->getAction( _countof(asAction), asAction );
+  l = p->GetAction( _countof(asAction), asAction );
   if( l == 0 )
   {
-    p->say( L"Error : Could not get action name.", 100, 5 );
+    p->Say( L"Error : Could not get action name.", 100, 5 );
     return;
   }
 
@@ -81,7 +81,7 @@ void LoaderManager::Main( amplugin* p  )
   }
   else
   {
-    p->say( L"Error : Unknown action.", 100, 5 );
+    p->Say( L"Error : Unknown action.", 100, 5 );
     return;
   }
 }
@@ -96,7 +96,7 @@ void LoaderManager::UnLearn( amplugin* p, LPCWSTR lpName  )
 {
   if( NULL == lpName )
   {
-    p->say( L"Error : Remove as <i>... what</i>?", 100, 5 );
+    p->Say( L"Error : Remove as <i>... what</i>?", 100, 5 );
     return;
   }
 
@@ -110,7 +110,7 @@ void LoaderManager::UnLearn( amplugin* p, LPCWSTR lpName  )
     s = L"The command : <i>";
     s+= lpName;
     s+= L"</i> has been removed.";
-    p->say( s.c_str(), 100, 5 );
+    p->Say( s.c_str(), 100, 5 );
   }
   else
   {
@@ -118,7 +118,7 @@ void LoaderManager::UnLearn( amplugin* p, LPCWSTR lpName  )
     s = L"The command : <i>";
     s+= lpName;
     s+= L"</i> could not be removed.";
-    p->say( s.c_str(), 100, 5 );
+    p->Say( s.c_str(), 100, 5 );
   }
 }
 
@@ -127,10 +127,10 @@ void LoaderManager::UnLearn( amplugin* p, LPCWSTR lpName  )
 void LoaderManager::Learn( amplugin* p  )
 {
   // the user could have entered a multi word command.
-  int count = p->getCommandCount();
+  int count = p->GetCommandCount();
   if( 0 == count)
   {
-    p->say( L"Error : Open as <i>... what</i>?", 100, 5 );
+    p->Say( L"Error : Open as <i>... what</i>?", 100, 5 );
     return;
   }
 
@@ -139,7 +139,7 @@ void LoaderManager::Learn( amplugin* p  )
   {
     //  get the command we are adding.
     WCHAR asName[ MAX_PATH ];
-    int l = p->getCommand( i, _countof(asName), asName );
+    int l = p->GetCommand( i, _countof(asName), asName );
     if( l == 0 )
     {
       continue;
@@ -155,16 +155,16 @@ void LoaderManager::Learn( amplugin* p  )
   // we must get the name of the file currently selected.
   // this will what we execute/open when the user enters the command.
   WCHAR asPath[ MAX_PATH ];
-  int l = p->getFile( 0, _countof(asPath), asPath );
+  int l = p->GetFile( 0, _countof(asPath), asPath );
   if( l == 0 )
   {
-    l = p->getFolder( 0, _countof(asPath), asPath );
+    l = p->GetFolder( 0, _countof(asPath), asPath );
     if( l == 0 )
     {
-      l = p->getURL( 0, _countof(asPath), asPath );
+      l = p->GetURL( 0, _countof(asPath), asPath );
       if( l == 0 )
       {
-        p->say( L"Error : Learn as <i>... what file</i>?", 100, 5 );
+        p->Say( L"Error : Learn as <i>... what file</i>?", 100, 5 );
         return;
       }
     }
@@ -174,7 +174,7 @@ void LoaderManager::Learn( amplugin* p  )
   std::wstring fileName;
   if( !SaveLUAFile( fileName, command, asPath ) )
   {
-    p->say( L"Error : Could not create command file. Do you have the right permissions?", 100, 5 );
+    p->Say( L"Error : Could not create command file. Do you have the right permissions?", 100, 5 );
     return;
   }
 
@@ -189,7 +189,7 @@ void LoaderManager::Learn( amplugin* p  )
     s = L"The command : <i>";
     s+= command;
     s+= L"</i> has been added.";
-    p->say( s.c_str(), 100, 5 );
+    p->Say( s.c_str(), 100, 5 );
   }
   else
   {
@@ -197,7 +197,7 @@ void LoaderManager::Learn( amplugin* p  )
     s = L"The command : <i>";
     s+= command;
     s+= L"</i> could not be added.";
-    p->say( s.c_str(), 100, 5 );
+    p->Say( s.c_str(), 100, 5 );
   }
 }
 
@@ -300,7 +300,7 @@ bool LoaderManager::RemoveCommand( amplugin* p, LPCWSTR name )
   }
 
   // remove it from the list and from action monitor.
-  p->removeAction( name, it->second.c_str() );
+  p->RemoveAction( name, it->second.c_str() );
   
   // and then delete the actual file itself as that command no longer exists.
   myodd::files::DeleteFile( it->second );
@@ -327,7 +327,7 @@ bool LoaderManager::AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path )
   m_openAs[ lowerName.c_str() ] = path;
 
   // and to the action monitor.
-  if( !p->addAction( lowerName.c_str(), path ) )
+  if( !p->AddAction( lowerName.c_str(), path ) )
   {
     return false;
   }
@@ -336,7 +336,7 @@ bool LoaderManager::AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path )
   std::wstring sUnLearn = LOADER_UNLEARN;
   sUnLearn += L" ";
   sUnLearn += lowerName.c_str();
-  p->addAction( sUnLearn.c_str(), GetThisPath().c_str() );
+  p->AddAction( sUnLearn.c_str(), GetThisPath().c_str() );
   return true;
 }
 

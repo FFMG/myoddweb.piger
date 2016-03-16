@@ -88,20 +88,20 @@ lua_State* LuaVirtualMachine::CreateState(luaapi* api)
   luaL_openlibs( lua ); // provides io.*
 
   // register our LUA functions.
-  lua_register( lua, "am_say", LuaVirtualMachine::say);
-  lua_register( lua, "am_version", LuaVirtualMachine::version);
-  lua_register( lua, "am_getCommand", LuaVirtualMachine::getCommand);
-  lua_register( lua, "am_getAction", LuaVirtualMachine::getAction);
-  lua_register( lua, "am_getCommandCount", LuaVirtualMachine::getCommandCount);
-  lua_register( lua, "am_execute", LuaVirtualMachine::execute);
-  lua_register( lua, "am_getstring", LuaVirtualMachine::getstring);
-  lua_register( lua, "am_getfile", LuaVirtualMachine::getfile);
-  lua_register( lua, "am_getfolder", LuaVirtualMachine::getfolder);
-  lua_register( lua, "am_geturl", LuaVirtualMachine::geturl);
-  lua_register( lua, "am_addAction", LuaVirtualMachine::addAction);
-  lua_register( lua, "am_removeAction", LuaVirtualMachine::removeAction);
-  lua_register( lua, "am_getVersion", LuaVirtualMachine::getVersion);
-  lua_register( lua, "am_findAction", LuaVirtualMachine::findAction);
+  lua_register( lua, "am_say", LuaVirtualMachine::Say);
+  lua_register( lua, "am_version", LuaVirtualMachine::Version);
+  lua_register( lua, "am_getCommand", LuaVirtualMachine::GetCommand);
+  lua_register( lua, "am_getAction", LuaVirtualMachine::GetAction);
+  lua_register( lua, "am_getCommandCount", LuaVirtualMachine::GetCommandCount);
+  lua_register( lua, "am_execute", LuaVirtualMachine::Execute);
+  lua_register( lua, "am_getstring", LuaVirtualMachine::Getstring);
+  lua_register( lua, "am_getfile", LuaVirtualMachine::Getfile);
+  lua_register( lua, "am_getfolder", LuaVirtualMachine::Getfolder);
+  lua_register( lua, "am_geturl", LuaVirtualMachine::Geturl);
+  lua_register( lua, "am_addAction", LuaVirtualMachine::AddAction);
+  lua_register( lua, "am_removeAction", LuaVirtualMachine::RemoveAction);
+  lua_register( lua, "am_getVersion", LuaVirtualMachine::GetVersion);
+  lua_register( lua, "am_findAction", LuaVirtualMachine::FindAction);
 
   // we can now add it to our list.
   _mutex.lock();
@@ -189,9 +189,9 @@ luaapi& LuaVirtualMachine::GetApi(lua_State* lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::version(lua_State *lua)
+int LuaVirtualMachine::Version(lua_State *lua)
 {
-  return GetApi(lua).version( lua );
+  return GetApi(lua).Version( lua );
 }
 
 /**
@@ -199,9 +199,9 @@ int LuaVirtualMachine::version(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::execute(lua_State *lua)
+int LuaVirtualMachine::Execute(lua_State *lua)
 {
-  return GetApi(lua).execute(lua);
+  return GetApi(lua).Execute(lua);
 }
 
 /**
@@ -209,9 +209,9 @@ int LuaVirtualMachine::execute(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::getCommandCount(lua_State *lua)
+int LuaVirtualMachine::GetCommandCount(lua_State *lua)
 {
-  return GetApi(lua).getCommandCount(lua);
+  return GetApi(lua).GetCommandCount(lua);
 }
 
 /**
@@ -219,9 +219,9 @@ int LuaVirtualMachine::getCommandCount(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::getCommand(lua_State *lua)
+int LuaVirtualMachine::GetCommand(lua_State *lua)
 {
-  return GetApi(lua).getCommand(lua);
+  return GetApi(lua).GetCommand(lua);
 }
 
 /**
@@ -229,9 +229,9 @@ int LuaVirtualMachine::getCommand(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::getAction(lua_State *lua)
+int LuaVirtualMachine::GetAction(lua_State *lua)
 {
-  return GetApi(lua).getAction(lua);
+  return GetApi(lua).GetAction(lua);
 }
 
 /**
@@ -239,9 +239,9 @@ int LuaVirtualMachine::getAction(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::say(lua_State *lua)
+int LuaVirtualMachine::Say(lua_State *lua)
 {
-  return GetApi(lua).say(lua);
+  return GetApi(lua).Say(lua);
 }
 
 /**
@@ -249,9 +249,9 @@ int LuaVirtualMachine::say(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::getstring(lua_State *lua)
+int LuaVirtualMachine::Getstring(lua_State *lua)
 {
-  return GetApi(lua).getstring(lua);
+  return GetApi(lua).Getstring(lua);
 }
 
 /**
@@ -259,9 +259,9 @@ int LuaVirtualMachine::getstring(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::getVersion(lua_State *lua)
+int LuaVirtualMachine::GetVersion(lua_State *lua)
 {
-  return GetApi(lua).getVersion(lua);
+  return GetApi(lua).GetVersion(lua);
 }
 
 /**
@@ -269,9 +269,9 @@ int LuaVirtualMachine::getVersion(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::getfile(lua_State *lua)
+int LuaVirtualMachine::Getfile(lua_State *lua)
 {
-  return GetApi(lua).getfile(lua);
+  return GetApi(lua).Getfile(lua);
 }
 
 /**
@@ -279,9 +279,9 @@ int LuaVirtualMachine::getfile(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::getfolder(lua_State *lua)
+int LuaVirtualMachine::Getfolder(lua_State *lua)
 {
-  return GetApi(lua).getfolder(lua);
+  return GetApi(lua).Getfolder(lua);
 }
 
 /**
@@ -289,9 +289,9 @@ int LuaVirtualMachine::getfolder(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::geturl(lua_State *lua)
+int LuaVirtualMachine::Geturl(lua_State *lua)
 {
-  return GetApi(lua).geturl(lua);
+  return GetApi(lua).Geturl(lua);
 }
 
 /**
@@ -299,9 +299,9 @@ int LuaVirtualMachine::geturl(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::addAction(lua_State *lua)
+int LuaVirtualMachine::AddAction(lua_State *lua)
 {
-  return GetApi(lua).addAction(lua);
+  return GetApi(lua).AddAction(lua);
 }
 
 /**
@@ -309,9 +309,9 @@ int LuaVirtualMachine::addAction(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::removeAction(lua_State *lua)
+int LuaVirtualMachine::RemoveAction(lua_State *lua)
 {
-  return GetApi(lua).removeAction(lua);
+  return GetApi(lua).RemoveAction(lua);
 }
 
 /**
@@ -319,9 +319,9 @@ int LuaVirtualMachine::removeAction(lua_State *lua)
 * @param lua_State *
 * @return int
 */
-int LuaVirtualMachine::findAction(lua_State *lua)
+int LuaVirtualMachine::FindAction(lua_State *lua)
 {
-  return GetApi(lua).findAction(lua);
+  return GetApi(lua).FindAction(lua);
 }
 
 #endif /* ACTIONMONITOR_API_LUA */

@@ -33,20 +33,20 @@ public:
 public:
 
   // static functions
-  int version (lua_State *lua);
-  int say (lua_State *lua);
-  int getAction (lua_State *lua);
-  int getCommand (lua_State *lua);
-  int getCommandCount (lua_State *lua);
-  int execute (lua_State *lua);
-  int getstring( lua_State *lua );
-  int getVersion( lua_State *lua );
-  int getfile( lua_State *lua );
-  int getfolder( lua_State *lua );
-  int geturl( lua_State *lua );
-  int addAction( lua_State *lua );
-  int removeAction( lua_State *lua );
-  int findAction( lua_State *lua );
+  int Version (lua_State *lua);
+  int Say (lua_State *lua);
+  int GetAction (lua_State *lua);
+  int GetCommand (lua_State *lua);
+  int GetCommandCount (lua_State *lua);
+  int Execute (lua_State *lua);
+  int Getstring( lua_State *lua );
+  int GetVersion( lua_State *lua );
+  int Getfile( lua_State *lua );
+  int Getfolder( lua_State *lua );
+  int Geturl( lua_State *lua );
+  int AddAction( lua_State *lua );
+  int RemoveAction( lua_State *lua );
+  int FindAction( lua_State *lua );
 };
 
 #endif /* ACTIONMONITOR_API_LUA */

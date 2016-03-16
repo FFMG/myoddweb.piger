@@ -19,20 +19,20 @@ public:
   virtual ~pyapi();
 
 public:
-  PyObject* say(PyObject *self, PyObject *args);
-  PyObject* version(PyObject *self, PyObject *args);
-  PyObject* getCommand(PyObject *self, PyObject *args);
-  PyObject* getAction(PyObject *self, PyObject *args);
-  PyObject* getCommandCount(PyObject *self, PyObject *args);
-  PyObject* execute(PyObject *self, PyObject *args);
-  PyObject* getstring(PyObject *self, PyObject *args);
-  PyObject* getfile(PyObject *self, PyObject *args);
-  PyObject* getfolder(PyObject *self, PyObject *args);
-  PyObject* geturl(PyObject *self, PyObject *args);
-  PyObject* addAction(PyObject *self, PyObject *args);
-  PyObject* removeAction(PyObject *self, PyObject *args);
-  PyObject* getVersion(PyObject *self, PyObject *args);
-  PyObject* findAction(PyObject *self, PyObject *args);
+  PyObject* Say(PyObject *self, PyObject *args);
+  PyObject* Version(PyObject *self, PyObject *args);
+  PyObject* GetCommand(PyObject *self, PyObject *args);
+  PyObject* GetAction(PyObject *self, PyObject *args);
+  PyObject* GetCommandCount(PyObject *self, PyObject *args);
+  PyObject* Execute(PyObject *self, PyObject *args);
+  PyObject* Getstring(PyObject *self, PyObject *args);
+  PyObject* Getfile(PyObject *self, PyObject *args);
+  PyObject* Getfolder(PyObject *self, PyObject *args);
+  PyObject* Geturl(PyObject *self, PyObject *args);
+  PyObject* AddAction(PyObject *self, PyObject *args);
+  PyObject* RemoveAction(PyObject *self, PyObject *args);
+  PyObject* GetVersion(PyObject *self, PyObject *args);
+  PyObject* FindAction(PyObject *self, PyObject *args);
 
   void ExecuteInThread();
 protected:

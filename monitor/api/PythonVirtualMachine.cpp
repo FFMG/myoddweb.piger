@@ -7,20 +7,20 @@
 #include "ActionMonitor.h"
 
 static PyMethodDef amMethods[] = {
-  { "say", PythonVirtualMachine::say, METH_VARARGS, "Display a message on the screen." },
-  { "version", PythonVirtualMachine::version, METH_VARARGS, "Get this API version number." },
-  { "getCommand", PythonVirtualMachine::getCommand, METH_VARARGS, "Get a certain command, return false if it does not exist." },
-  { "getAction", PythonVirtualMachine::getAction, METH_VARARGS, "Get the action entered by the user." },
-  { "getCommandCount", PythonVirtualMachine::getCommandCount, METH_VARARGS, "Get the number of commands." },
-  { "execute", PythonVirtualMachine::execute, METH_VARARGS, "Execute a command, (app, command)." },
-  { "getstring", PythonVirtualMachine::getstring, METH_VARARGS, "Get the currently selected text if any." },
-  { "getfile", PythonVirtualMachine::getfile, METH_VARARGS, "Get a file by index, return false if not found." },
-  { "getfolder", PythonVirtualMachine::getfolder, METH_VARARGS, "Get a folder by index, return false if not found." },
-  { "geturl", PythonVirtualMachine::geturl, METH_VARARGS, "Get a URL by index, return false if not found." },
-  { "addAction", PythonVirtualMachine::addAction, METH_VARARGS, "Add an action and path to the list of actions." },
-  { "removeAction", PythonVirtualMachine::removeAction, METH_VARARGS, "Remove an action from the list." },
-  { "getVersion", PythonVirtualMachine::getVersion, METH_VARARGS, "Get the full version string." },
-  { "findAction", PythonVirtualMachine::findAction, METH_VARARGS, "Find an action given an index, return false or the path." },
+  { "say", PythonVirtualMachine::Say, METH_VARARGS, "Display a message on the screen." },
+  { "version", PythonVirtualMachine::Version, METH_VARARGS, "Get this API version number." },
+  { "getCommand", PythonVirtualMachine::GetCommand, METH_VARARGS, "Get a certain command, return false if it does not exist." },
+  { "getAction", PythonVirtualMachine::GetAction, METH_VARARGS, "Get the action entered by the user." },
+  { "getCommandCount", PythonVirtualMachine::GetCommandCount, METH_VARARGS, "Get the number of commands." },
+  { "execute", PythonVirtualMachine::Execute, METH_VARARGS, "Execute a command, (app, command)." },
+  { "getstring", PythonVirtualMachine::Getstring, METH_VARARGS, "Get the currently selected text if any." },
+  { "getfile", PythonVirtualMachine::Getfile, METH_VARARGS, "Get a file by index, return false if not found." },
+  { "getfolder", PythonVirtualMachine::Getfolder, METH_VARARGS, "Get a folder by index, return false if not found." },
+  { "geturl", PythonVirtualMachine::Geturl, METH_VARARGS, "Get a URL by index, return false if not found." },
+  { "addAction", PythonVirtualMachine::AddAction, METH_VARARGS, "Add an action and path to the list of actions." },
+  { "removeAction", PythonVirtualMachine::RemoveAction, METH_VARARGS, "Remove an action from the list." },
+  { "getVersion", PythonVirtualMachine::GetVersion, METH_VARARGS, "Get the full version string." },
+  { "findAction", PythonVirtualMachine::FindAction, METH_VARARGS, "Find an action given an index, return false or the path." },
   { NULL, NULL, 0, NULL }
 };
 
@@ -212,9 +212,9 @@ void PythonVirtualMachine::RemoveApi(std::thread::id id )
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* PythonVirtualMachine::say(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::Say(PyObject *self, PyObject *args)
 {
-  return GetApi().say(self, args);
+  return GetApi().Say(self, args);
 }
 
 /**
@@ -224,9 +224,9 @@ PyObject* PythonVirtualMachine::say(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::version(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::Version(PyObject *self, PyObject *args)
 {
-  return GetApi().version(self, args);
+  return GetApi().Version(self, args);
 }
 
 /**
@@ -236,9 +236,9 @@ PyObject* PythonVirtualMachine::version(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::getCommand(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetCommand(PyObject *self, PyObject *args)
 {
-  return GetApi().getCommand(self, args);
+  return GetApi().GetCommand(self, args);
 }
 
 /**
@@ -248,9 +248,9 @@ PyObject* PythonVirtualMachine::getCommand(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::getAction(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetAction(PyObject *self, PyObject *args)
 {
-  return GetApi().getAction(self, args);
+  return GetApi().GetAction(self, args);
 }
 
 /**
@@ -260,9 +260,9 @@ PyObject* PythonVirtualMachine::getAction(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::getCommandCount(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetCommandCount(PyObject *self, PyObject *args)
 {
-  return GetApi().getCommandCount(self, args);
+  return GetApi().GetCommandCount(self, args);
 }
 
 /**
@@ -272,9 +272,9 @@ PyObject* PythonVirtualMachine::getCommandCount(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::execute(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::Execute(PyObject *self, PyObject *args)
 {
-  return GetApi().execute(self, args);
+  return GetApi().Execute(self, args);
 }
 
 /**
@@ -284,9 +284,9 @@ PyObject* PythonVirtualMachine::execute(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::getstring(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::Getstring(PyObject *self, PyObject *args)
 {
-  return GetApi().getstring(self, args);
+  return GetApi().Getstring(self, args);
 }
 
 /**
@@ -296,9 +296,9 @@ PyObject* PythonVirtualMachine::getstring(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::getfile(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::Getfile(PyObject *self, PyObject *args)
 {
-  return GetApi().getfile(self, args);
+  return GetApi().Getfile(self, args);
 }
 
 /**
@@ -308,9 +308,9 @@ PyObject* PythonVirtualMachine::getfile(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::getfolder(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::Getfolder(PyObject *self, PyObject *args)
 {
-  return GetApi().getfolder(self, args);
+  return GetApi().Getfolder(self, args);
 }
 
 /**
@@ -320,9 +320,9 @@ PyObject* PythonVirtualMachine::getfolder(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::geturl(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::Geturl(PyObject *self, PyObject *args)
 {
-  return GetApi().geturl(self, args);
+  return GetApi().Geturl(self, args);
 }
 
 /**
@@ -332,21 +332,21 @@ PyObject* PythonVirtualMachine::geturl(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::addAction(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::AddAction(PyObject *self, PyObject *args)
 {
-  return GetApi().addAction(self, args);
+  return GetApi().AddAction(self, args);
 }
 
 /**
 * Todo
-* @see helperapi::removeAction
+* @see helperapi::RemoveAction
 * @param PyObject *
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::removeAction(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::RemoveAction(PyObject *self, PyObject *args)
 {
-  return GetApi().removeAction(self, args);
+  return GetApi().RemoveAction(self, args);
 }
 
 /**
@@ -356,9 +356,9 @@ PyObject* PythonVirtualMachine::removeAction(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::getVersion(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetVersion(PyObject *self, PyObject *args)
 {
-  return GetApi().getVersion(self, args);
+  return GetApi().GetVersion(self, args);
 }
 
 /**
@@ -368,9 +368,9 @@ PyObject* PythonVirtualMachine::getVersion(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject* false or the path of that action.
 */
-PyObject* PythonVirtualMachine::findAction(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::FindAction(PyObject *self, PyObject *args)
 {
-  return GetApi().findAction(self, args);
+  return GetApi().FindAction(self, args);
 }
 
 #endif  /* ACTIONMONITOR_API_PY */

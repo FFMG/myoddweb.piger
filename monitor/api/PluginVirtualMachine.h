@@ -65,20 +65,20 @@ protected:
   HMODULE ExpandLoadLibrary( LPCTSTR lpFile );
 
 public:
-  static double version();
-  static size_t getCommandCount();
+  static double Version();
+  static size_t GetCommandCount();
 
-  static bool say(LPCWSTR msg, UINT nElapse, UINT nFadeOut);
-  static bool execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
-  static int getString(DWORD nBufferLength, LPWSTR lpBuffer);
-  static size_t getCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  static int getAction(DWORD nBufferLength, LPWSTR lpBuffer);
-  static int getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  static int getFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  static int getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  static bool addAction(LPCWSTR szText, LPCWSTR szPath);
-  static bool removeAction(LPCWSTR szText, LPCWSTR szPath);
-  static bool getVersion(DWORD nBufferLength, LPWSTR lpBuffer);
-  static bool findAction(UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
+  static bool Say(LPCWSTR msg, UINT nElapse, UINT nFadeOut);
+  static bool Execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
+  static int GetString(DWORD nBufferLength, LPWSTR lpBuffer);
+  static size_t GetCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static int GetAction(DWORD nBufferLength, LPWSTR lpBuffer);
+  static int GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static int GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static int GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static bool AddAction(LPCWSTR szText, LPCWSTR szPath);
+  static bool RemoveAction(LPCWSTR szText, LPCWSTR szPath);
+  static bool GetVersion(DWORD nBufferLength, LPWSTR lpBuffer);
+  static bool FindAction(UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
 };
 #endif /*ACTIONMONITOR_API_PLUGIN*/

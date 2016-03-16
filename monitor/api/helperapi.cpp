@@ -28,8 +28,6 @@ helperapi::helperapi(const ActiveAction& action) : _action( action )
  */
 helperapi::~helperapi()
 {
-  //  wait for all the workers.
-  WaitForAllWorkers();
 }
 
 /**
@@ -48,7 +46,7 @@ const Clipboard& helperapi::GetClipboard() const
  * @param const unsigned int how fast we want to fade out.
  * @return bool if the message was displayed properly.
  */
-bool helperapi::say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
+bool helperapi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
 {
   if( NULL == msg )
   {
@@ -82,7 +80,7 @@ bool helperapi::say(const wchar_t* msg, const unsigned int nElapse, const unsign
  * @param void
  * @return boolean false if it does not exist
  */
-bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
+bool helperapi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -138,7 +136,7 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
  * @param STD_TSTRING& sValue the value will be put here.
  * @return bool if we were able to get the command or not.
  */
-bool helperapi::getAction( STD_TSTRING& sValue )
+bool helperapi::GetAction( STD_TSTRING& sValue )
 {
   try
   {
@@ -168,7 +166,7 @@ bool helperapi::getAction( STD_TSTRING& sValue )
  * one command count, ( 'Home' );
  * @return void
  */
-size_t helperapi::getCommandCount()
+size_t helperapi::GetCommandCount()
 {
   try
   {
@@ -208,7 +206,7 @@ size_t helperapi::getCommandCount()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool success or not
  */
-bool helperapi::execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
+bool helperapi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
 {
   if( NULL == module && NULL == cmdLine )
   {
@@ -243,7 +241,7 @@ bool helperapi::execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
  * @param STD_TSTRING& the return string that will contain the FULL version number.
  * @return bool true|false
  */
-bool helperapi::getVersion (STD_TSTRING& sValue )
+bool helperapi::GetVersion (STD_TSTRING& sValue )
 {
   myodd::files::Version _ver;
   sValue = myodd::strings::ToStringFmt( _T("%d.%d.%d.%d"),
@@ -259,7 +257,7 @@ bool helperapi::getVersion (STD_TSTRING& sValue )
  * @param STD_TSTRING& the return value.
  * @return bool if we have a string selected or not.
  */
-bool helperapi::getString (STD_TSTRING& sValue )
+bool helperapi::GetString (STD_TSTRING& sValue )
 {
   try
   {
@@ -294,7 +292,7 @@ bool helperapi::getString (STD_TSTRING& sValue )
  * @param STD_TSTRING& the return value
  * @return bool success or not if there are no more files
  */
-bool helperapi::getFile(const unsigned int idx, STD_TSTRING& sValue )
+bool helperapi::GetFile(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -324,7 +322,7 @@ bool helperapi::getFile(const unsigned int idx, STD_TSTRING& sValue )
  * @param STD_TSTRING& the return value
  * @return bool success or not if there are no more URLs
  */
-bool helperapi::getURL (const unsigned int idx, STD_TSTRING& sValue )
+bool helperapi::GetURL (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -357,7 +355,7 @@ bool helperapi::getURL (const unsigned int idx, STD_TSTRING& sValue )
  * @param STD_TSTRING& the value we are after.
  * @return bool success or not, we return false when there are no more folders.
  */
-bool helperapi::getFolder (const unsigned int idx, STD_TSTRING& sValue )
+bool helperapi::GetFolder (const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -389,7 +387,7 @@ bool helperapi::getFolder (const unsigned int idx, STD_TSTRING& sValue )
  * @param LPCTSTR the full path of the command that will be executed.
  * @return bool if the action was added properly or not.
  */
-bool helperapi::addAction(const wchar_t* szText, const wchar_t* szPath )
+bool helperapi::AddAction(const wchar_t* szText, const wchar_t* szPath )
 {
   if( NULL == szText || _tcslen(szText) == 0 )
   {
@@ -412,7 +410,7 @@ bool helperapi::addAction(const wchar_t* szText, const wchar_t* szPath )
  * @param const wchar_t* the path of the action we are removing.
  * @return bool if the action was removed or not.
  */
-bool helperapi::removeAction(const wchar_t* szText, const wchar_t* szPath )
+bool helperapi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
 {
   if( NULL == szText || _tcslen(szText) == 0 )
   {
@@ -436,7 +434,7 @@ bool helperapi::removeAction(const wchar_t* szText, const wchar_t* szPath )
  * @param STD_TSTRING& if the action exists, return the path for it.
  * @return bool if the action exits or not.
  */
-bool helperapi::findAction(const unsigned int idx, const wchar_t* szText, STD_TSTRING& stdPath )
+bool helperapi::FindAction(const unsigned int idx, const wchar_t* szText, STD_TSTRING& stdPath )
 {
   if( NULL == szText )
   {

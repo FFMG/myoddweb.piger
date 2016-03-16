@@ -20,11 +20,11 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
       // get the full path of this plugin
       // call 'getCommand( 0, ... ) and it will return this file.
       WCHAR szPath[MAX_PATH];
-      size_t l = p->getCommand( 0, MAX_PATH, szPath );
+      size_t l = p->GetCommand( 0, MAX_PATH, szPath );
 
       //
       // add an actio called 'dolly'
-      p->addAction( L"Hello, Dolly!", szPath );
+      p->AddAction( L"Hello, Dolly!", szPath );
     }
     break;
 
@@ -82,7 +82,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
       const WCHAR* lyric = lyrics[u];
 
       // and then just say it...
-      ((amplugin*)(lParam))->say( lyric, 200, 5 );
+      ((amplugin*)(lParam))->Say( lyric, 200, 5 );
 
       //  all good.
       return AM_RESP_SUCCESS;

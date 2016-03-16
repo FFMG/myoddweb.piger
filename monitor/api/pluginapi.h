@@ -18,21 +18,21 @@ public:
   virtual ~pluginapi();
 
 public:
-  double version ();
-  size_t getCommandCount();
+  double Version ();
+  size_t GetCommandCount();
 
-  bool say         ( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
-  bool execute     ( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
-  int getString    ( DWORD nBufferLength, LPWSTR lpBuffer);
-  size_t getCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  int getAction    ( DWORD nBufferLength, LPWSTR lpBuffer );
-  int getFile      ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  int getFolder    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  int getURL       ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  bool addAction   ( LPCWSTR szText, LPCWSTR szPath );
-  bool removeAction( LPCWSTR szText, LPCWSTR szPath );
-  bool getVersion  ( DWORD nBufferLength, LPWSTR lpBuffer);
-  bool findAction  ( UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
+  bool Say         ( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
+  bool Execute     ( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
+  int GetString    ( DWORD nBufferLength, LPWSTR lpBuffer);
+  size_t GetCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  int GetAction    ( DWORD nBufferLength, LPWSTR lpBuffer );
+  int GetFile      ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  int GetFolder    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  int GetURL       ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  bool AddAction   ( LPCWSTR szText, LPCWSTR szPath );
+  bool RemoveAction( LPCWSTR szText, LPCWSTR szPath );
+  bool GetVersion  ( DWORD nBufferLength, LPWSTR lpBuffer);
+  bool FindAction  ( UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
 };
 
 #endif

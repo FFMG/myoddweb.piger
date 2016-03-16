@@ -127,20 +127,20 @@ void PluginVirtualMachine::Initialize()
 */
 void PluginVirtualMachine::InitializeFunctions()
 {
-  Register(_T("say"), PluginVirtualMachine::say);
-  Register(_T("version"), PluginVirtualMachine::version);
-  Register(_T("getCommand"), PluginVirtualMachine::getCommand);
-  Register(_T("getAction"), PluginVirtualMachine::getAction);
-  Register(_T("getCommandCount"), PluginVirtualMachine::getCommandCount);
-  Register(_T("execute"), PluginVirtualMachine::execute);
-  Register(_T("getString"), PluginVirtualMachine::getString);
-  Register(_T("getFile"), PluginVirtualMachine::getFile);
-  Register(_T("getFolder"), PluginVirtualMachine::getFolder);
-  Register(_T("getURL"), PluginVirtualMachine::getURL);
-  Register(_T("addAction"), PluginVirtualMachine::addAction);
-  Register(_T("removeAction"), PluginVirtualMachine::removeAction);
-  Register(_T("getVersion"), PluginVirtualMachine::getVersion);
-  Register(_T("findAction"), PluginVirtualMachine::findAction);
+  Register(_T("say"), PluginVirtualMachine::Say);
+  Register(_T("version"), PluginVirtualMachine::Version);
+  Register(_T("getCommand"), PluginVirtualMachine::GetCommand);
+  Register(_T("getAction"), PluginVirtualMachine::GetAction);
+  Register(_T("getCommandCount"), PluginVirtualMachine::GetCommandCount);
+  Register(_T("execute"), PluginVirtualMachine::Execute);
+  Register(_T("getString"), PluginVirtualMachine::GetString);
+  Register(_T("getFile"), PluginVirtualMachine::GetFile);
+  Register(_T("getFolder"), PluginVirtualMachine::GetFolder);
+  Register(_T("getURL"), PluginVirtualMachine::GetURL);
+  Register(_T("addAction"), PluginVirtualMachine::AddAction);
+  Register(_T("removeAction"), PluginVirtualMachine::RemoveAction);
+  Register(_T("getVersion"), PluginVirtualMachine::GetVersion);
+  Register(_T("findAction"), PluginVirtualMachine::FindAction);
 }
 
 /**
@@ -271,17 +271,17 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
     myodd::os::ARCHITECTURE pe = myodd::os::GetImageArchitecture(pluginFile);
     if (pe == myodd::os::ARCHITECTURE_UNKNOWN)
     {
-      api.say(_T("<b>Error : </b> Plugin could not be loaded."), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded."), 3000, 5);
     }
     else
     if (pe != _moduleArchitecture )
     {
-      api.say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 3000, 5);
     }
     else
     {
       //  it is not unknown, but somehow we could not load it.
-      api.say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 3000, 5);
     }
     return -1;
   }
@@ -290,7 +290,7 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   PFUNC_MSG pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
   if (NULL == pfMsg )
   {
-    api.say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
+    api.Say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
     return -1;
   }
 
@@ -409,9 +409,9 @@ void PluginVirtualMachine::DestroyPlugins()
 * @param void
 * @return void
 */
-double PluginVirtualMachine::version()
+double PluginVirtualMachine::Version()
 {
-  return GetApi().version();
+  return GetApi().Version();
 }
 
 /**
@@ -422,9 +422,9 @@ double PluginVirtualMachine::version()
 * @param void
 * @return void
 */
-bool PluginVirtualMachine::say(LPCWSTR msg, UINT nElapse, UINT nFadeOut)
+bool PluginVirtualMachine::Say(LPCWSTR msg, UINT nElapse, UINT nFadeOut)
 {
-  return GetApi().say(msg, nElapse, nFadeOut);
+  return GetApi().Say(msg, nElapse, nFadeOut);
 }
 
 /**
@@ -435,9 +435,9 @@ bool PluginVirtualMachine::say(LPCWSTR msg, UINT nElapse, UINT nFadeOut)
 * @param void
 * @return void
 */
-size_t PluginVirtualMachine::getCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+size_t PluginVirtualMachine::GetCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
 {
-  return GetApi().getCommand( idx, nBufferLength, lpBuffer);
+  return GetApi().GetCommand( idx, nBufferLength, lpBuffer);
 }
 
 /**
@@ -448,9 +448,9 @@ size_t PluginVirtualMachine::getCommand(UINT idx, DWORD nBufferLength, LPWSTR lp
 * @param void
 * @return void
 */
-int PluginVirtualMachine::getAction(DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetAction(DWORD nBufferLength, LPWSTR lpBuffer)
 {
-  return GetApi().getAction( nBufferLength, lpBuffer);
+  return GetApi().GetAction( nBufferLength, lpBuffer);
 }
 
 /**
@@ -458,9 +458,9 @@ int PluginVirtualMachine::getAction(DWORD nBufferLength, LPWSTR lpBuffer)
 * @see __super::getCommandCount
 * @return in the number of commanded entered by the user
 */
-size_t PluginVirtualMachine::getCommandCount()
+size_t PluginVirtualMachine::GetCommandCount()
 {
-  return GetApi().getCommandCount();
+  return GetApi().GetCommandCount();
 }
 
 /**
@@ -471,9 +471,9 @@ size_t PluginVirtualMachine::getCommandCount()
 * @param bool isPrivileged if we need administrator privilege to run this.
 * @return void
 */
-bool PluginVirtualMachine::execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged)
+bool PluginVirtualMachine::Execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged)
 {
-  return GetApi().execute(module, cmdLine, isPrivileged);
+  return GetApi().Execute(module, cmdLine, isPrivileged);
 }
 
 /**
@@ -483,9 +483,9 @@ bool PluginVirtualMachine::execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivi
 * @param void
 * @return void
 */
-int PluginVirtualMachine::getString(DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetString(DWORD nBufferLength, LPWSTR lpBuffer)
 {
-  return GetApi().getString(nBufferLength, lpBuffer);
+  return GetApi().GetString(nBufferLength, lpBuffer);
 }
 
 /**
@@ -496,9 +496,9 @@ int PluginVirtualMachine::getString(DWORD nBufferLength, LPWSTR lpBuffer)
 * @param void
 * @return void
 */
-int PluginVirtualMachine::getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
 {
-  return GetApi().getFile( idx, nBufferLength, lpBuffer);
+  return GetApi().GetFile( idx, nBufferLength, lpBuffer);
 }
 
 /**
@@ -509,9 +509,9 @@ int PluginVirtualMachine::getFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer
 * @param void
 * @return void
 */
-int PluginVirtualMachine::getFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
 {
-  return GetApi().getFolder( idx, nBufferLength, lpBuffer);
+  return GetApi().GetFolder( idx, nBufferLength, lpBuffer);
 }
 
 /**
@@ -522,9 +522,9 @@ int PluginVirtualMachine::getFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuff
 * @param void
 * @return void
 */
-int PluginVirtualMachine::getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
 {
-  return GetApi().getURL( idx,  nBufferLength,  lpBuffer);
+  return GetApi().GetURL( idx,  nBufferLength,  lpBuffer);
 }
 
 /**
@@ -534,21 +534,21 @@ int PluginVirtualMachine::getURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
 * @param void
 * @return void
 */
-bool PluginVirtualMachine::addAction(LPCWSTR szText, LPCWSTR szPath)
+bool PluginVirtualMachine::AddAction(LPCWSTR szText, LPCWSTR szPath)
 {
-  return GetApi().addAction(szText, szPath);
+  return GetApi().AddAction(szText, szPath);
 }
 
 /**
 * Todo
-* @see __super::removeAction
+* @see __super::RemoveAction
 * @param void
 * @param void
 * @return void
 */
-bool PluginVirtualMachine::removeAction(LPCWSTR szText, LPCWSTR szPath)
+bool PluginVirtualMachine::RemoveAction(LPCWSTR szText, LPCWSTR szPath)
 {
-  return GetApi().removeAction( szText, szPath);
+  return GetApi().RemoveAction( szText, szPath);
 }
 
 /**
@@ -557,9 +557,9 @@ bool PluginVirtualMachine::removeAction(LPCWSTR szText, LPCWSTR szPath)
 * @param LPWSTR the buffer that will contain the return data, (version).
 * @return bool success or not if there was an error.
 */
-bool PluginVirtualMachine::getVersion(DWORD nBufferLength, LPWSTR lpBuffer)
+bool PluginVirtualMachine::GetVersion(DWORD nBufferLength, LPWSTR lpBuffer)
 {
-  return GetApi().getVersion( nBufferLength, lpBuffer);
+  return GetApi().GetVersion( nBufferLength, lpBuffer);
 }
 
 /**
@@ -570,7 +570,7 @@ bool PluginVirtualMachine::getVersion(DWORD nBufferLength, LPWSTR lpBuffer)
 * @param LPWSTR the buffer that will contain the return data, (version).
 * @return bool if the command exists or not.
 */
-bool PluginVirtualMachine::findAction
+bool PluginVirtualMachine::FindAction
 (
   UINT idx,
   LPCWSTR lpCommand,
@@ -578,7 +578,7 @@ bool PluginVirtualMachine::findAction
   LPWSTR lpBuffer
 )
 {
-  return GetApi().findAction
+  return GetApi().FindAction
     (
       idx,
       lpCommand,

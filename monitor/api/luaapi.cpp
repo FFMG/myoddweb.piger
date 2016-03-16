@@ -27,7 +27,7 @@ luaapi::~luaapi(void)
  * @param lua_State *
  * @return int
  */
-int luaapi::version (lua_State *lua)
+int luaapi::Version (lua_State *lua)
 {
   // short and sweet
   // all we need is the version number.
@@ -42,7 +42,7 @@ int luaapi::version (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::execute (lua_State *lua)
+int luaapi::Execute (lua_State *lua)
 {
   // get the number of arguments.
   // we can only have one or 2 arguments 
@@ -52,7 +52,7 @@ int luaapi::execute (lua_State *lua)
   int n = lua_gettop( lua );
   if( n < 1 || n > 3 )
   {
-    __super::say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
@@ -67,7 +67,7 @@ int luaapi::execute (lua_State *lua)
   {
     if (!lua_isboolean(lua, 3))
     {
-      __super::say(_T("<b>Error : </b> The third argument, (privileged), can only be true|false"), 3000, 5);
+      __super::Say(_T("<b>Error : </b> The third argument, (privileged), can only be true|false"), 3000, 5);
       lua_pushboolean(lua, false);
       return 1;
     }
@@ -75,7 +75,7 @@ int luaapi::execute (lua_State *lua)
   }
 
   // run the query
-  bool result = __super::execute(module, cmdLine, isPrivileged );
+  bool result = __super::Execute(module, cmdLine, isPrivileged );
 
   // push the result.
   lua_pushboolean ( lua, result );
@@ -89,10 +89,10 @@ int luaapi::execute (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::getCommandCount(lua_State *lua)
+int luaapi::GetCommandCount(lua_State *lua)
 {
   // get it
-  size_t nSize = __super::getCommandCount();
+  size_t nSize = __super::GetCommandCount();
   
   // and push it to LUA.
   lua_pushinteger(lua, nSize );
@@ -106,13 +106,13 @@ int luaapi::getCommandCount(lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::getCommand (lua_State *lua)
+int luaapi::GetCommand (lua_State *lua)
 {
   static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
   if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getCommand( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getCommand( <b>index</b> )</i>"), 3000, 5 );
     lua_pushboolean( lua, false );
     
     // return the number of results
@@ -121,7 +121,7 @@ int luaapi::getCommand (lua_State *lua)
 
   size_t idx = (size_t)lua_tointeger (lua, ARGUMENT_NUMBER);
   STD_TSTRING sValue;
-  if( !__super::getCommand( idx, sValue ) )
+  if( !__super::GetCommand( idx, sValue ) )
   {
     lua_pushboolean( lua, false );
 
@@ -143,13 +143,13 @@ int luaapi::getCommand (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::getAction (lua_State *lua)
+int luaapi::GetAction (lua_State *lua)
 {
   static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
   if( n != 0 )
   {
-    __super::say( _T("<b>Error : </b>.<br>Format is <i>am_getAction( )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b>.<br>Format is <i>am_getAction( )</i>"), 3000, 5 );
     lua_pushboolean( lua, false );
     
     // return the number of results
@@ -157,7 +157,7 @@ int luaapi::getAction (lua_State *lua)
   }
 
   STD_TSTRING sValue;
-  if( !__super::getAction( sValue ) )
+  if( !__super::GetAction( sValue ) )
   {
     lua_pushboolean( lua, false );
 
@@ -179,7 +179,7 @@ int luaapi::getAction (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::say (lua_State *lua)
+int luaapi::Say (lua_State *lua)
 {
   USES_CONVERSION;
 
@@ -188,7 +188,7 @@ int luaapi::say (lua_State *lua)
   UINT nElapse = (UINT)lua_tointeger (lua, 2);
   if(  nElapse == 0 )                                                               
   {
-    __super::say( _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>, fade=0)</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>, fade=0)</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
@@ -197,7 +197,7 @@ int luaapi::say (lua_State *lua)
   UINT nFadeOut = (UINT)lua_tointeger (lua, 3);
 
   // and we can now display the message.
-  bool result = __super::say( msg, nElapse, nFadeOut );
+  bool result = __super::Say( msg, nElapse, nFadeOut );
   lua_pushboolean ( lua, result );
 
   // return the number of results
@@ -209,10 +209,10 @@ int luaapi::say (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::getstring( lua_State *lua )
+int luaapi::Getstring( lua_State *lua )
 {
   STD_TSTRING sValue = _T("");
-  if( !__super::getString( sValue ) )
+  if( !__super::GetString( sValue ) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );
@@ -234,10 +234,10 @@ int luaapi::getstring( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::getVersion( lua_State *lua )
+int luaapi::GetVersion( lua_State *lua )
 {
   STD_TSTRING sValue = _T("");
-  if( !__super::getVersion( sValue ) )
+  if( !__super::GetVersion( sValue ) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );
@@ -259,20 +259,20 @@ int luaapi::getVersion( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::getfile( lua_State *lua )
+int luaapi::Getfile( lua_State *lua )
 {
   static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
   if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b> )</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
 
   UINT idx = (UINT)lua_tointeger (lua, 1);
   STD_TSTRING sValue = _T("");
-  if( !__super::getFile( idx, sValue ) )
+  if( !__super::GetFile( idx, sValue ) )
   {
     lua_pushboolean ( lua, false );
     return 1;
@@ -292,20 +292,20 @@ int luaapi::getfile( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::getfolder( lua_State *lua )
+int luaapi::Getfolder( lua_State *lua )
 {
   static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
   if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b> )</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
 
   UINT idx = (UINT)lua_tointeger (lua, 1);
   STD_TSTRING sValue = _T("");
-  if( !__super::getFolder( idx, sValue) )
+  if( !__super::GetFolder( idx, sValue) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );
@@ -327,20 +327,20 @@ int luaapi::getfolder( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::geturl( lua_State *lua )
+int luaapi::Geturl( lua_State *lua )
 {
   static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
   if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    __super::say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
 
   UINT idx = (UINT)lua_tointeger (lua, 1);
   STD_TSTRING sValue = _T("");
-  if( !__super::getURL( idx, sValue) )
+  if( !__super::GetURL( idx, sValue) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );
@@ -362,7 +362,7 @@ int luaapi::geturl( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::addAction( lua_State *lua )
+int luaapi::AddAction( lua_State *lua )
 {
   //  get the number of arguments
   int n = lua_gettop( lua );
@@ -370,7 +370,7 @@ int luaapi::addAction( lua_State *lua )
   // we must have 2 items
   if( n != 2 )
   {
-    __super::say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
@@ -379,7 +379,7 @@ int luaapi::addAction( lua_State *lua )
 
   LPCTSTR szText = T_A2T( lua_tostring (lua, 1) );
   LPCTSTR szPath = T_A2T( lua_tostring (lua, 2) );
-  bool r = __super::addAction( szText, szPath );
+  bool r = __super::AddAction( szText, szPath );
   
   lua_pushboolean ( lua, r );
   return 1;
@@ -390,7 +390,7 @@ int luaapi::addAction( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::removeAction( lua_State *lua )
+int luaapi::RemoveAction( lua_State *lua )
 {
   //  get the number of arguments
   int n = lua_gettop( lua );
@@ -398,14 +398,14 @@ int luaapi::removeAction( lua_State *lua )
   // we must have 1 or 2
   if( n != 2 )
   {
-    __super::say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
 
   LPCSTR szText = lua_tostring (lua, 1);
   LPCSTR szPath = lua_tostring (lua, 2);
-  bool r = __super::removeAction( helperapi::widen(szText).c_str(), helperapi::widen(szPath).c_str() );
+  bool r = __super::RemoveAction( helperapi::widen(szText).c_str(), helperapi::widen(szPath).c_str() );
   
   lua_pushboolean ( lua, r );
   return 1;
@@ -416,7 +416,7 @@ int luaapi::removeAction( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::findAction( lua_State *lua )
+int luaapi::FindAction( lua_State *lua )
 {
   //  get the number of arguments
   int n = lua_gettop( lua );
@@ -424,7 +424,7 @@ int luaapi::findAction( lua_State *lua )
   // we must have 2 arguments.
   if( n != 2 )
   {
-    __super::say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
@@ -434,7 +434,7 @@ int luaapi::findAction( lua_State *lua )
   LPCSTR action = lua_tostring (lua, 2);
 
   STD_TSTRING sValue = _T("");
-  if( !__super::findAction( idx, helperapi::widen( action ).c_str(), sValue ) )
+  if( !__super::FindAction( idx, helperapi::widen( action ).c_str(), sValue ) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );

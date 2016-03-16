@@ -323,11 +323,11 @@ void AppPaths::QueryRegistry( amplugin& am )
     //
     // if the action exists we do not want to overwright it.
     WCHAR lpPath[ MAX_PATH ];
-    if( !am.findAction( 0, action.c_str(), MAX_PATH, lpPath ) )
+    if( !am.FindAction( 0, action.c_str(), MAX_PATH, lpPath ) )
     {
       //
       // it all looks good, we can add this command.
-      am.addAction( action.c_str(), filePath.c_str() );
+      am.AddAction( action.c_str(), filePath.c_str() );
     }
   }
 }
