@@ -167,6 +167,7 @@ void MessageDlg::Fade()
       {
         MessagePump(m_hWnd);
         Sleep(0);
+        MessagePump(NULL);
       }
     }
   }

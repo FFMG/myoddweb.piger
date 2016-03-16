@@ -118,9 +118,7 @@ HGDIOBJ FadeWnd::SelDisplayFont( HDC hdc, UINT fontSize /*= 70*/  )
 void FadeWnd::MessagePump(  HWND hWnd )
 {
   //  lock up to make sure we only do one at a time
-  static std::mutex _mutex;
-  std::lock_guard<std::mutex> guard(_mutex);
-	MSG msg;
+  MSG msg;
 	while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
 	{         
 		TranslateMessage(&msg);
