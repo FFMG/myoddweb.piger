@@ -121,7 +121,11 @@ BOOL CActionMonitorDlg::OnInitDialog()
 	TraySetIcon(IDR_MAINFRAME);
 
   myodd::files::Version _ver;
+#ifdef _DEBUG
+  STD_TSTRING strSay = myodd::strings::ToStringFmt(_T("Action Monitor [Debug]: %d.%d.%d.%d"),
+#else
   STD_TSTRING strSay = myodd::strings::ToStringFmt(_T("Action Monitor : %d.%d.%d.%d"),
+#endif
     _ver.GetFileVersionMajor(),
     _ver.GetFileVersionMinor(),
     _ver.GetFileVersionMaintenance(),
