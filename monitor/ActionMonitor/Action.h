@@ -17,7 +17,7 @@ public:
   
   const Action& operator=(const Action& );
   Action( const Action&);
-  Action( LPCTSTR szText, LPCTSTR szPath = NULL );
+  Action( LPCTSTR szCommand, LPCTSTR szPath = NULL );
 
 	virtual ~Action();
 
@@ -33,10 +33,10 @@ public:
   ActiveAction* CreateActiveActionDirect(const STD_TSTRING& szCommandLine, bool isPrivileged ) const;
 
   //  convert to a LPCTSTR
-  LPCTSTR toChar() const;
-
-  // ----------------------------
-  size_t len() const { return m_szCommand.length();}
+  const STD_TSTRING& Command() const;
+  
+  // the lenght of the command.
+  size_t Len() const { return _szCommand.length();}
 
 protected:
   ActiveAction* CreateActiveActionWithNoCommandLine( bool isPrivileged ) const;
@@ -54,7 +54,7 @@ public:
   static bool Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged );
 
 private:  
-  STD_TSTRING m_szCommand;  //  the command line only.
+  STD_TSTRING _szCommand;  //  the command line only.
   STD_TSTRING m_szFile;     //  the full path+extention
   STD_TSTRING m_szExt;      //  the extention
 };

@@ -61,7 +61,7 @@ protected:
   array_of_actions m_Actions;
   array_of_actions m_ActionsMatch;
 
-  array_of_actions::const_iterator Find( LPCTSTR szText, LPCTSTR szPath );
+  array_of_actions::const_iterator Find( const STD_TSTRING& szText, const STD_TSTRING& szPath );
 public:
   //  select one item down in the list
   void down();

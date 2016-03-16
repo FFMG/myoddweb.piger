@@ -28,6 +28,16 @@ public:
   bool Initialize();
   bool DeInitialize();
 
+  /**
+   * this is the command line arguments as given by the user.
+   * So if the action is ""learn" and the user typed "Lea aaaa bbbb"
+   * the command line is aaaa bbbb and the command is "learn"
+   * @return const STD_TSTRING& the command line.
+   */
+  const STD_TSTRING& CommandLine() const {
+    return _szCommandLine;
+  }
+
 protected:
   virtual bool OnInitialize();
   virtual bool OnDeInitialize();

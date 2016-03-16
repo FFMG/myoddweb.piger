@@ -86,13 +86,13 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
-    const Action* action = &_action;
+    const ActiveAction* action = &_action;
     if (NULL == action)
     {
       //  we don't have a command.
       return false;
     }
-    STD_TSTRING szCommandLine = action->toChar();
+    const STD_TSTRING& szCommandLine = action->CommandLine();
 
     // if the user wants command 0 then we want the full name
     // this is more consistent with the get commands normally work.
@@ -132,21 +132,24 @@ bool helperapi::getCommand(const unsigned int idx, STD_TSTRING& sValue )
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * Get the command line that the user tried to use
+ * for example if the command is "lean" and the user entered "Lea" 
+ * this function will return "lean"
+ * @param STD_TSTRING& sValue the value will be put here.
+ * @return bool if we were able to get the command or not.
  */
 bool helperapi::getAction( STD_TSTRING& sValue )
 {
   try
   {
+    //  we only need the action and not the 'active' action.
     const Action* action = &_action;
     if (NULL == action)
     {
       //  we don't have a command.
       return false;
     }
-    sValue = action->toChar( );
+    sValue = action->Command( );
   }
   catch(...)
   {
@@ -155,6 +158,7 @@ bool helperapi::getAction( STD_TSTRING& sValue )
     return false;
   }
 
+  //  it worked.
   return true;
 }
 
@@ -168,14 +172,14 @@ size_t helperapi::getCommandCount()
 {
   try
   {
-    const Action* action = &_action;
+    const ActiveAction* action = &_action;
     if (NULL == action)
     {
       //  we don't have a command.
       return false;
     }
 
-    STD_TSTRING szCommandLine = action->toChar();
+    const STD_TSTRING& szCommandLine = action->CommandLine();
     if( 0 == szCommandLine.length() )
     {
       return 0; //  we have no arguments.

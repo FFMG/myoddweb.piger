@@ -24,21 +24,32 @@ Action::Action()
 
 /**
  * constructor
- * @param LPCTSTR the name of the action, (the the user will enter)
+ * @param LPCTSTR szCommand the name of the action, (the the user will enter)
  * @param LPCTSTR the full path of the action that we will execute.
  * @return none
  */
-Action::Action( LPCTSTR szText, LPCTSTR szPath /* = NULL  */)
+Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = NULL  */)
 {
-  if( NULL == szText )
+  if( NULL == szCommand)
   {
     //  we cannot have NULL commands.
     throw -1;
   }
 
+  //  reset everything
   Reset();
-  m_szCommand = szText;
-  
+
+  // set the command and make sure it is valid.
+  _szCommand = szCommand;
+  myodd::strings::Trim(_szCommand);
+
+  //  make sure that the command is valid.
+  if ( 0 == Len() )
+  {
+    //  we cannot have NULL commands.
+    throw - 1;
+  }
+
   // expand the path
   if( szPath )
   {
@@ -81,9 +92,9 @@ const Action& Action::operator=(const Action& action)
 {
   if( this != &action )
   {
-    m_szCommand = action.m_szCommand; 
-    m_szFile    = action.m_szFile;
-    m_szExt     = action.m_szExt;
+    _szCommand = action._szCommand; 
+    m_szFile   = action.m_szFile;
+    m_szExt    = action.m_szExt;
   }
   return *this;
 }
@@ -104,7 +115,7 @@ Action::~Action()
  */
 void Action::Reset()
 {
-  m_szExt = m_szFile = m_szCommand = _T("");
+  m_szExt = m_szFile = _szCommand = _T("");
 }
 
 /**
@@ -127,10 +138,10 @@ ActiveAction* Action::CreateActiveAction(const STD_TSTRING& szCommandLine, bool 
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
-  LPCTSTR command = toChar();
+  LPCTSTR command = Command().c_str();
   
   //  not sure how to do that...
-  if ( NULL == command || _tcslen(command) == 0)
+  if ( Len() == 0)
   {
     return NULL;
   }
@@ -197,7 +208,7 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine( bool isPrivileged ) c
   catch (...)
   {
     szCommandLine = _T("");
-    myodd::log::LogError(_T("Critical error while trying to run an action, [%s]."), toChar() );
+    myodd::log::LogError(_T("Critical error while trying to run an action, [%s]."), Command() );
     _ASSERT(0);         //  the main reason for failure is probably because  
                         //  there is a format in the Clipboard that I am not handling properly
                         //  there should be a way of sending me a mail when this happens so we can look into fixing it.
@@ -247,9 +258,9 @@ STD_TSTRING Action::toSingleLine( LPCTSTR sText ) const
  * @param void
  * @return LPCTSTR the command, (the name the user has to enter).
  */
-LPCTSTR Action::toChar() const
+const STD_TSTRING& Action::Command() const
 {
-  return m_szCommand.c_str();
+  return _szCommand;
 }
 
 /**

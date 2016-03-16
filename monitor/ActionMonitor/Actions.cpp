@@ -73,7 +73,7 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
   {
     const Action &a = *(*i);
     // is it the command we were after?
-    if( _tcsicmp( a.toChar(), szText ) == 0 )
+    if( myodd::strings::icompare( a.Command(), szText ) == 0 )
     {
       // but is it the right index?
       if( idx == currentIdx )
@@ -93,14 +93,8 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
 }
 
 // -------------------------------------------------------------
-Actions::array_of_actions_it Actions::Find( LPCTSTR szText, LPCTSTR szPath )
+Actions::array_of_actions_it Actions::Find(const STD_TSTRING& szText, const STD_TSTRING& szPath )
 {
-  if( NULL == szText )
-  {
-    // this is not valid
-    return m_Actions.end();
-  }
-
   //  get the lock
   myodd::threads::Lock guard(_mutex);
 
@@ -110,15 +104,9 @@ Actions::array_of_actions_it Actions::Find( LPCTSTR szText, LPCTSTR szPath )
     const Action &a = *(*i);
 
     //  the command cannot be NULL
-    if( _tcsicmp( a.toChar(), szText ) == 0 )
+    if( myodd::strings::icompare( a.Command(), szText ) == 0 )
     {
-      // But the path can be
-      LPCTSTR p = a.File().c_str();
-      if( NULL == p && NULL == szPath )
-      {
-        return i;
-      }
-      else if( NULL != p && NULL != szPath && _tcsicmp( p, szPath ) == 0 )
+      if( myodd::strings::icompare(a.File(), szPath ) == 0 )
       {
         return i;
       }
@@ -167,7 +155,7 @@ bool Actions::Add( Action* action )
   //  get the lock
   myodd::threads::Lock guard(_mutex);
 
-  array_of_actions_it it = Find(action->toChar(), action->File().c_str() );
+  array_of_actions_it it = Find(action->Command(), action->File() );
   if( it != m_Actions.end() )
   {
     // this item already exists
@@ -291,7 +279,7 @@ STD_TSTRING Actions::toChar( ) const
     szCurrentView += _T("<br>");
     const Action &acc = *(*it);
 
-    szCurrentView += toChar( acc.toChar(), (count==m_uCommand) ? cvSel:cvDef );
+    szCurrentView += toChar( acc.Command(), (count==m_uCommand) ? cvSel:cvDef );
     ++count;
   }
   return szCurrentView;
@@ -411,7 +399,7 @@ size_t Actions::BuildMatchList( std::vector<STD_TSTRING>& exploded )
     const Action& acc = *(*it);
     
     //  look for that one item.
-    if( myodd::strings::wildcmp( (wildAction).c_str(), acc.toChar()) )
+    if( myodd::strings::wildcmp( (wildAction), acc.Command()) )
     {
       m_ActionsMatch.push_back( *it );
     }
@@ -433,7 +421,7 @@ void Actions::SetAction( Action* tmpAction )
   m_tmpAction = tmpAction;
   if( tmpAction )
   {
-    m_sActionAsTyped = tmpAction->toChar();
+    m_sActionAsTyped = tmpAction->Command();
   }
 }
 
@@ -465,7 +453,7 @@ const Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
   (*cmdLine) = _T("");
 
   // how many words are in the command?
-  LPCTSTR lpAction = action->toChar();
+  LPCTSTR lpAction = action->Command().c_str();
   std::vector<STD_TSTRING> exploded;
   int nSize = myodd::strings::explode( exploded, m_sActionAsTyped, _T(' ') );
 

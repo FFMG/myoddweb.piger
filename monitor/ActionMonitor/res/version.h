@@ -3,9 +3,9 @@
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 5
 #define VERSION_MAINTENANCE 12
-#define VERSION_BUILD 0
-#define VERSION_BUILD_DATE  _T("15/03/2016")
-#define VERSION_BUILD_TIME  _T("21:03:23UTC")
+#define VERSION_BUILD 1
+#define VERSION_BUILD_DATE  _T("16/03/2016")
+#define VERSION_BUILD_TIME  _T("06:19:03UTC")
 
 //
 // No need to edit below... (or maybe the year...)
