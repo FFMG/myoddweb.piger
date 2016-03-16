@@ -92,7 +92,12 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
   return false;
 }
 
-// -------------------------------------------------------------
+/**
+ * Look for a command/path in the list of actions.
+ * @param const STD_TSTRING& szText the command we are looking for.
+ * @param const STD_TSTRING& szPath the path for that command.
+ * @return Actions::array_of_actions_it the iterator for that command, (if there is one).
+ */
 Actions::array_of_actions_it Actions::Find(const STD_TSTRING& szText, const STD_TSTRING& szPath )
 {
   STD_TSTRING stdExpendedPath;
@@ -106,6 +111,7 @@ Actions::array_of_actions_it Actions::Find(const STD_TSTRING& szText, const STD_
   //  get the lock
   myodd::threads::Lock guard(_mutex);
 
+  // loop around looking for the matching action.
   size_t size = m_Actions.size();
   for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
   {
@@ -189,9 +195,7 @@ bool Actions::Add( Action* action )
  */
 bool Actions::Remove( LPCTSTR szText, LPCTSTR szPath )
 {
-  //  get the lock
-  myodd::threads::Lock guard(_mutex);
-
+  //  look for this path and this command.
   array_of_actions_it it = Find( szText, szPath );
   if( it == m_Actions.end() )
   {
@@ -199,7 +203,14 @@ bool Actions::Remove( LPCTSTR szText, LPCTSTR szPath )
     return false;
   }
 
-  // just erase it
+  //  get the lock
+  myodd::threads::Lock guard(_mutex);
+
+
+  // delete the no longer used action.
+  delete *it;
+
+  // ajust erase it
   m_Actions.erase( it );
   return true;
 }
