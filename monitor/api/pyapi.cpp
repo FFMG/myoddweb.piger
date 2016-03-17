@@ -162,15 +162,15 @@ PyObject* pyapi::Execute(PyObject *self, PyObject *args)
 {
   CHAR* module = NULL;
   CHAR* cmdLine = NULL;
-  bool isPrivileged;
+  int isPrivileged = 0;
   if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
   {
-    __super::Say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged]])</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged=False]])</i>"), 3000, 5 );
     return Fail();
   }
 
   // run it
-  bool result = __super::Execute(helperapi::widen( module ).c_str(), helperapi::widen( cmdLine ).c_str(), isPrivileged );
+  bool result = __super::Execute(helperapi::widen( module ).c_str(), helperapi::widen( cmdLine ).c_str(), (isPrivileged==1) );
 
   // return the result.
   return Py_BuildValue("b", result );
@@ -188,7 +188,7 @@ PyObject* pyapi::Getstring(PyObject *self, PyObject *args)
   int iQuote = 1;
   if (!PyArg_ParseTuple(args, "|p", &iQuote))  
   {
-    __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [<b>quote</b>] )</i>"), 3000, 5);
+    __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [quote=True] )</i>"), 3000, 5);
     return Fail();
   }
 
@@ -213,16 +213,16 @@ PyObject* pyapi::Getstring(PyObject *self, PyObject *args)
  */
 PyObject* pyapi::Getfile(PyObject *self, PyObject *args)
 {
-  bool bQuote = true;
   UINT idx = 0;
-  if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
+  int iQuote = 1;
+  if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote ))
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[, <b>quote</b>] )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[,quote=True] )</i>"), 3000, 5 );
     return Fail();
   }
   
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFile( idx, sValue, bQuote ) )
+  if( !__super::GetFile( idx, sValue, (iQuote == 1) ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -243,15 +243,15 @@ PyObject* pyapi::Getfile(PyObject *self, PyObject *args)
 PyObject* pyapi::Getfolder(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
-  bool bQuote = true;
-  if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
+  int iQuote = 1;
+  if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote ))
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b>   [,<b>quote</b>] )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> [,quote=True] )</i>"), 3000, 5 );
     return Fail();
   }
 
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFolder( idx, sValue, bQuote ) )
+  if( !__super::GetFolder( idx, sValue, (iQuote == 1) ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -272,15 +272,15 @@ PyObject* pyapi::Getfolder(PyObject *self, PyObject *args)
 PyObject* pyapi::Geturl(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
-  bool bQuote = true;
-  if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
+  int iQuote = 1;
+  if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote ))
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( index [,quote=True] )</i>"), 3000, 5 );
     return Fail();
   }
 
   STD_TSTRING sValue = _T("");
-  if( !__super::GetURL( idx, sValue, bQuote ) )
+  if( !__super::GetURL( idx, sValue, (iQuote == 1)) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
