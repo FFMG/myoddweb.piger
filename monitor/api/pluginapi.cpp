@@ -294,3 +294,13 @@ bool PluginApi::FindAction
   wcsncpy_s( lpBuffer, nBufferLength, stdActionPath.c_str(), nBufferLength );
   return true;
 }
+
+/**
+ * Get the last foreground window. This is the window that was last on top.
+ * It is posible to return NULL if the window is not
+ * @return HWND the last top window.
+ */
+HWND PluginApi::GetForegroundWindow() const
+{
+  return __super::GetForegroundWindow();
+}

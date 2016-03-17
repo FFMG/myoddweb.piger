@@ -447,6 +447,29 @@ bool helperapi::FindAction(const unsigned int idx, const wchar_t* szText, STD_TS
   return App().PossibleActions().Find( idx, szText, stdPath );
 }
 
+/** 
+ * Get the last foreground window. This is the window that was last on top.
+ * It is posible to return NULL if the window is not 
+ * @return HWND the last top window.
+ */
+HWND helperapi::GetForegroundWindow() const
+{
+  //  is it NULL?
+  if (NULL == _action.TopHWnd())
+  {
+    return NULL;
+  }
+
+  // is it still valid?
+  if (0 == ::GetWindowLongPtr(_action.TopHWnd(), GWLP_HWNDPARENT))
+  {
+    return NULL;
+  }
+
+  // looks good, so we can return it.
+  return _action.TopHWnd();
+}
+
 std::wstring helperapi::widen(const std::string& str)
 {
   std::wostringstream wstm;

@@ -71,4 +71,8 @@ public:
   // find an action, we return true when we find it
   // there can be more than one action with the same name.
   bool FindAction(const unsigned int idx, const wchar_t* szText, STD_TSTRING& stdPath );
+
+  // Get the last foreground window.
+  // this is the window that was in the foreground at the time the call was made.
+  HWND GetForegroundWindow() const;
 };

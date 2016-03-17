@@ -141,6 +141,7 @@ void PluginVirtualMachine::InitializeFunctions()
   Register(_T("removeAction"), PluginVirtualMachine::RemoveAction);
   Register(_T("getVersion"), PluginVirtualMachine::GetVersion);
   Register(_T("findAction"), PluginVirtualMachine::FindAction);
+  Register(_T("getForegroundWindow"), PluginVirtualMachine::GetForegroundWindow);
 }
 
 /**
@@ -585,6 +586,15 @@ bool PluginVirtualMachine::FindAction
       nBufferLength,
       lpBuffer
     );
+}
+
+/**
+ * Get the last foreground window.
+ * @return HWND the last foregorund window.
+ */
+HWND PluginVirtualMachine::GetForegroundWindow()
+{
+  return GetApi().GetForegroundWindow();
 }
 
 #endif /* ACTIONMONITOR_API_PLUGIN*/

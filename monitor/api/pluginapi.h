@@ -33,6 +33,7 @@ public:
   bool RemoveAction( LPCWSTR szText, LPCWSTR szPath );
   bool GetVersion  ( DWORD nBufferLength, LPWSTR lpBuffer);
   bool FindAction  ( UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
+  HWND GetForegroundWindow() const;
 };
 
 #endif

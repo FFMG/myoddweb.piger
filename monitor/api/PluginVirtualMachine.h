@@ -80,5 +80,6 @@ public:
   static bool RemoveAction(LPCWSTR szText, LPCWSTR szPath);
   static bool GetVersion(DWORD nBufferLength, LPWSTR lpBuffer);
   static bool FindAction(UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
+  static HWND GetForegroundWindow();
 };
 #endif /*ACTIONMONITOR_API_PLUGIN*/
