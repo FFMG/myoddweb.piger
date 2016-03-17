@@ -26,6 +26,19 @@ pyapi::~pyapi()
 }
 
 /**
+ * Return a 'false' message and swallow any errors.
+ * @return PyObject* a 'false' python object.
+ */
+PyObject* pyapi::Fail()
+{
+  //  clear all the errors.
+  PyErr_Clear();
+
+  // and return a failure.
+  return Py_BuildValue("b", false );
+}
+
+/**
  * Todo
  * @see __super::say
  * @param PyObject *
@@ -42,10 +55,10 @@ PyObject* pyapi::Say(PyObject *self, PyObject *args)
   // the last argument is optional
   if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
   {
-    __super::Say( _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am.say( msg, <b>elapse</b>, fade=0)</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>"), 3000, 5 );
     
     //  just return false.
-    return Py_BuildValue("b", 0 );
+    return Fail();
   }
 
   // display the message
@@ -86,14 +99,14 @@ PyObject* pyapi::GetCommand(PyObject *self, PyObject *args)
     __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getCommand( <b>index</b> )</i>"), 3000, 5 );
 
     //  just return false.
-    return Py_BuildValue("b", 0 );
+    return Fail();
   }
 
   STD_TSTRING sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
     //  just return false.
-    return Py_BuildValue("b", 0 );
+    return Fail();
   }
 
   USES_CONVERSION;
@@ -114,7 +127,7 @@ PyObject* pyapi::GetAction(PyObject *self, PyObject *args)
   if( !__super::GetAction( sValue ) )
   {
     //  just return false.
-    return Py_BuildValue("b", 0 );
+    return Fail();
   }
 
   USES_CONVERSION;
@@ -153,7 +166,7 @@ PyObject* pyapi::Execute(PyObject *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
   {
     __super::Say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged]])</i>"), 3000, 5 );
-    return Py_BuildValue("b", false );
+    return Fail();
   }
 
   // run it
@@ -173,9 +186,10 @@ PyObject* pyapi::Execute(PyObject *self, PyObject *args)
 PyObject* pyapi::Getstring(PyObject *self, PyObject *args)
 {
   int iQuote = 1;
-  if (!PyArg_ParseTuple(args, "|p", &iQuote))  {
+  if (!PyArg_ParseTuple(args, "|p", &iQuote))  
+  {
     __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [<b>quote</b>] )</i>"), 3000, 5);
-    return Py_BuildValue("b", false);
+    return Fail();
   }
 
   STD_TSTRING sValue = _T("");
@@ -204,7 +218,7 @@ PyObject* pyapi::Getfile(PyObject *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
   {
     __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[, <b>quote</b>] )</i>"), 3000, 5 );
-    return Py_BuildValue("b", false );
+    return Fail();
   }
   
   STD_TSTRING sValue = _T("");
@@ -233,7 +247,7 @@ PyObject* pyapi::Getfolder(PyObject *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
   {
     __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b>   [,<b>quote</b>] )</i>"), 3000, 5 );
-    return Py_BuildValue("b", false );
+    return Fail();
   }
 
   STD_TSTRING sValue = _T("");
@@ -262,7 +276,7 @@ PyObject* pyapi::Geturl(PyObject *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
   {
     __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( <b>index</b> )</i>"), 3000, 5 );
-    return Py_BuildValue("b", false );
+    return Fail();
   }
 
   STD_TSTRING sValue = _T("");
@@ -292,7 +306,7 @@ PyObject* pyapi::AddAction(PyObject *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
   {
     __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
-    return Py_BuildValue("b", false );
+    return Fail();
   }
 
   // run it
@@ -315,7 +329,7 @@ PyObject* pyapi::RemoveAction(PyObject *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
   {
     __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
-    return Py_BuildValue("b", false );
+    return Fail();
   }
 
   // run it
@@ -358,7 +372,7 @@ PyObject* pyapi::FindAction(PyObject *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "Is", &idx, &szText ))
   {
     __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>"), 3000, 5 );
-    return Py_BuildValue("b", false );
+    return Fail();
   }
 
   STD_TSTRING sValue = _T("");

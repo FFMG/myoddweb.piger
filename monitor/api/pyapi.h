@@ -41,6 +41,8 @@ protected:
   PyThreadState* _mainThreadState;
 
   void CheckForPythonErrors();
+
+  PyObject* Fail();
 };
 
 #endif /*# ACTIONMONITOR_API_PY*/
