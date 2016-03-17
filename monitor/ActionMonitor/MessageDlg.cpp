@@ -149,7 +149,7 @@ void MessageDlg::OnTimer(UINT_PTR nIDEvent)
     Fade();
 
     //  if this is the timer event then we can close the window.
-    FadeKillWindow();
+    DestroyWindow();
   }
 }
 
@@ -165,6 +165,17 @@ void MessageDlg::Fade()
       DWORD d = (GetTickCount() + m_nFadeOut);
       while (d > GetTickCount())
       {
+        if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
+        {
+          break;
+        }
+
+        //  are we stopping everything?
+        // then bail out now!
+        if (Stopped())
+        {
+          return;
+        }
         MessagePump(m_hWnd);
         Sleep(0);
         MessagePump(NULL);
@@ -249,6 +260,15 @@ void MessageDlg::FadeShowWindow()
  */
 void MessageDlg::FadeKillWindow()
 {
-  //  if this is the timer event then we can close the window.
-  DestroyWindow();
+  if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
+  {
+    return;
+  }
+
+  // stop all
+  Stop();
+
+  // pump the remaining messages
+  MessagePump( m_hWnd );
+  MessagePump( NULL );
 }

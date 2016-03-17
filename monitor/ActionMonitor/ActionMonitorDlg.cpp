@@ -5,7 +5,6 @@
 #include "ActionsCore.h"
 #include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
-#include "MessageDlg.h"
 
 #define RECT_MIN_H 70
 
@@ -635,11 +634,11 @@ bool CActionMonitorDlg::DisplayMessage
   {
     messageDlg->FadeShowWindow();
     // add it to our list of messages.
-    m_displayWindows.push_back( messageDlg->GetSafeHwnd() );
+    _displayWindows.push_back( messageDlg );
   }
   else
   {
-    messageDlg->FadeKillWindow();
+    messageDlg->DestroyWindow();
   }
 
   return true;
@@ -977,8 +976,6 @@ void CActionMonitorDlg::OnClose()
   //  remove the hooks
   hook_clear( m_hWnd );
 
-  App().DoEndActionsList();
-
   WaitForActiveWindows( );
 
   __super::OnClose();
@@ -991,23 +988,53 @@ void CActionMonitorDlg::OnClose()
  */
 void CActionMonitorDlg::ClearUnusedMessages()
 {
-  while( m_displayWindows.size() > 0 )
+  while( _displayWindows.size() > 0 )
   {
-    std::vector<HWND>::iterator it = m_displayWindows.begin();
-    if( it == m_displayWindows.end() )
+    vMessages::iterator it = _displayWindows.begin();
+    if( it == _displayWindows.end() )
     {
       break;
     }
 
-    if( 0 != ::GetWindowLongPtr( *it, GWLP_HWNDPARENT) )
+    MessageDlg* dlg = (MessageDlg*)(*it);
+    if (dlg != NULL)
     {
-      // no need to go past this one
-      break;
+      HWND hwnd = dlg->GetSafeHwnd();
+      if (0 != ::GetWindowLongPtr(hwnd, GWLP_HWNDPARENT))
+      {
+        // no need to go past this one
+        break;
+      }
     }
-
     //  otherwise we can remove it from the list
-    m_displayWindows.erase( it );
+    _displayWindows.erase( it );
   }
+}
+
+/**
+ * Kill all the currently active message windows.
+ */
+void CActionMonitorDlg::KillAllActiveWindows()
+{
+  //  remove what is complete.
+  ClearUnusedMessages();
+
+  // kill the other messages;
+  for (vMessages::iterator it = _displayWindows.begin();
+       it != _displayWindows.end();
+       ++it)
+  {
+    //  clear what is still good.
+    MessageDlg* dlg = (MessageDlg*)(*it);
+    if (dlg != NULL)
+    {
+      dlg->FadeKillWindow();
+    }
+  }
+
+  // now that we asked for windows to be closed.
+  // we can wait for them to close.
+  WaitForActiveWindows();
 }
 
 /**
@@ -1023,27 +1050,57 @@ void CActionMonitorDlg::WaitForActiveWindows()
   // and as such we must wait for it.
   while( true )
   {
-    std::vector<HWND>::iterator it = m_displayWindows.begin();
-    if( it == m_displayWindows.end() )
+    vMessages::iterator it = _displayWindows.begin();
+    if( it == _displayWindows.end() )
       break;
 
-    if( 0 != ::GetWindowLongPtr( *it, GWLP_HWNDPARENT ) )
+    MessageDlg* dlg = (MessageDlg*)(*it);
+    if (dlg != NULL)
     {
-      // just do one message at a time
-      // so we don't block others.
-      // the peek message should allow all message to be handled
-      static MSG   msg;
-      if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+      // then try and process the remaining messages
+      // if the window has not been killed properly.
+      HWND hWnd = dlg->GetSafeHwnd();
+      if (0 != ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
       {
-	      TranslateMessage(&msg);
-	      DispatchMessage(&msg);
-        Sleep( 0 );
+        //  give the other apps/classes one last chance to do some work.
+        MessagePump(NULL);
+
+        // let go of the thread.
+        Sleep(0);
+
+        // just do one message at a time
+        // so we don't block others.
+        // the peek message should allow all message to be handled
+        MessagePump(hWnd);
+        
+        // go around one last time
+        // to give everyone a chance to close.
+        continue;
       }
-      continue;
     }
 
     //  otherwise we can remove it
-    m_displayWindows.erase( it );
+    _displayWindows.erase( it );
+  }
+}
+
+/**
+* Todo
+* @param void
+* @return void
+*/
+void CActionMonitorDlg::MessagePump(HWND hWnd)
+{
+  //  lock up to make sure we only do one at a time
+  MSG msg;
+  while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
+  {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+    if (0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
+    {
+      break;
+    }
   }
 }
 

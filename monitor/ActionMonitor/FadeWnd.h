@@ -30,4 +30,11 @@ protected:
 
   //
   void MessagePump( HWND hWnd );
+  void Stop() {
+    m_stop = true;
+  }
+  bool m_stop;
+  bool Stopped() const {
+    return m_stop;
+  }
 };

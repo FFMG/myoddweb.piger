@@ -195,6 +195,7 @@
     <ClCompile Include="ActionVersion.cpp" />
     <ClCompile Include="ActiveAction.cpp" />
     <ClCompile Include="ActiveActions.cpp" />
+    <ClCompile Include="ActiveByeAction.cpp" />
     <ClCompile Include="ActiveLuaAction.cpp" />
     <ClCompile Include="ActivePluginAction.cpp" />
     <ClCompile Include="ActivePythonAction.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="ActionVersion.h" />
     <ClInclude Include="ActiveAction.h" />
     <ClInclude Include="ActiveActions.h" />
+    <ClInclude Include="ActiveByeAction.h" />
     <ClInclude Include="ActiveLuaAction.h" />
     <ClInclude Include="ActivePluginAction.h" />
     <ClInclude Include="ActivePythonAction.h" />

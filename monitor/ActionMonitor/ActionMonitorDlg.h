@@ -4,6 +4,7 @@
 
 #include "FadeWnd.h"
 #include "ActiveActions.h"
+#include "MessageDlg.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CActionMonitorDlg dialog
@@ -60,10 +61,15 @@ protected:
   DWORD m_keyState;
   
 protected:
-  std::vector<HWND> m_displayWindows;
+  typedef std::vector<MessageDlg*> vMessages;
+  vMessages _displayWindows;
+
+  void MessagePump(HWND hWnd);
 
 public:
   bool DisplayMessage( LPCTSTR pText, UINT nElapse, UINT nFadeOut );
+
+  void KillAllActiveWindows();
 
 protected:
   bool DisplayCommand( HDC hdc = NULL );

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "ActionBye.h"
 #include "ActionsCore.h"
+#include "ActiveByeAction.h"
 
 /**
  * todo
@@ -32,7 +33,5 @@ ActionBye::~ActionBye()
  */
 ActiveAction* ActionBye::CreateActiveAction(const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
-  //  close use
-  PostMessage( AfxGetMainWnd()->GetSafeHwnd(), WM_CLOSE, 0, 0 );
-  return NULL;
+  return new ActiveByeAction( *this );
 }

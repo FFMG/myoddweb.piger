@@ -9,7 +9,8 @@
 FadeWnd::FadeWnd(void) :
   m_byteVisible( 0 ),
   m_hFade( NULL ),
-  fontDisplay( NULL )
+  fontDisplay( NULL ),
+  m_stop( false )
 {
 }
 
@@ -20,7 +21,8 @@ FadeWnd::FadeWnd(void) :
  */
 FadeWnd::~FadeWnd(void)
 {
-  if( fontDisplay ){
+  if( fontDisplay )
+  {
     fontDisplay->DeleteObject();
     delete fontDisplay;
   }
@@ -123,5 +125,9 @@ void FadeWnd::MessagePump(  HWND hWnd )
 	{         
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+    if (0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
+    {
+      break;
+    }
 	}
 }
