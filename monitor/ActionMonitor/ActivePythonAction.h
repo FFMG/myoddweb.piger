@@ -4,7 +4,7 @@ class ActivePythonAction :
   public ActiveAction
 {
 public:
-  ActivePythonAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged);
+  ActivePythonAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged);
   virtual ~ActivePythonAction();
 
   virtual void ExecuteInThread();

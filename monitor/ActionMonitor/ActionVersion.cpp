@@ -30,7 +30,7 @@ ActionVersion::~ActionVersion()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-ActiveAction* ActionVersion::CreateActiveAction(const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionVersion::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   //  display the version.
   PostMessage(AfxGetMainWnd()->GetSafeHwnd(), UWM_KEYBOARD_VERSION, 0, 0);

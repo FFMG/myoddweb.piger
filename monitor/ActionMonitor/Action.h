@@ -26,11 +26,11 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  virtual ActiveAction* CreateActiveAction( const STD_TSTRING& szCommandLine, bool isPrivileged) const;
+  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const;
 
   // Same as CreateActiveAction( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  ActiveAction* CreateActiveActionDirect(const STD_TSTRING& szCommandLine, bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionDirect(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged ) const;
 
   //  convert to a LPCTSTR
   const STD_TSTRING& Command() const;
@@ -39,7 +39,7 @@ public:
   size_t Len() const { return _szCommand.length();}
 
 protected:
-  ActiveAction* CreateActiveActionWithNoCommandLine( bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const;
 
 protected:
   STD_TSTRING toSingleLine( LPCTSTR  ) const;

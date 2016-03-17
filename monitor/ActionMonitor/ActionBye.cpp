@@ -27,11 +27,12 @@ ActionBye::~ActionBye()
 
 /**
  * Run the command, we take into account the current selection and command parameters given.
- * @param const STD_TSTRING& szCommandLine the command line argument.
- * @param bool isPrivileged if we need administrator privilege to run this.
+ * @param HWND hTopWindow the last foreground window
  * @return BOOL true.
  */
-ActiveAction* ActionBye::CreateActiveAction(const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionBye::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
-  return new ActiveByeAction( *this );
+  //  get the last forground window handle
+  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
+  return new ActiveByeAction( *this, hTopHWnd );
 }

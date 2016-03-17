@@ -130,11 +130,12 @@ void Action::SetCommandPath( LPCTSTR szPath )
 
 /**
  * Run the command, we take into account the current selection and command parameters given.
+ * @param CWnd* pWnd the last forground window.
  * @param const STD_TSTRING& szCommandLine the command line argument.
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-ActiveAction* Action::CreateActiveAction(const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
@@ -156,12 +157,12 @@ ActiveAction* Action::CreateActiveAction(const STD_TSTRING& szCommandLine, bool 
   ActiveAction* aa = NULL;
   if( szCommandLine.length() == 0 )
   {
-    aa = CreateActiveActionWithNoCommandLine(isPrivileged);
+    aa = CreateActiveActionWithNoCommandLine( pWnd, isPrivileged);
   }
   else
   {
     //  so now, at last we can call the command line
-    aa = CreateActiveActionDirect(szCommandLine.c_str(), isPrivileged);
+    aa = CreateActiveActionDirect( pWnd, szCommandLine.c_str(), isPrivileged);
   }
 
   // now that we are back from calling the plugin, restore the keyboard state.
@@ -172,10 +173,11 @@ ActiveAction* Action::CreateActiveAction(const STD_TSTRING& szCommandLine, bool 
 
 /**
  * Try and do it when we have no command line
+ * @param CWnd* pWnd the last forground window.
  * @param bool isPrivileged if this action is privileged or not.
  * @return bool success or not.
  */
-ActiveAction* Action::CreateActiveActionWithNoCommandLine( bool isPrivileged ) const
+ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const
 {
   //  the command line we will try and make.
   STD_TSTRING szCommandLine = _T("");
@@ -215,7 +217,7 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine( bool isPrivileged ) c
   }
 
   // we can now do it direct.
-  return CreateActiveActionDirect(szCommandLine.c_str(), isPrivileged);
+  return CreateActiveActionDirect( pWnd, szCommandLine.c_str(), isPrivileged);
 }
 
 /**
@@ -351,11 +353,12 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
 /**
  * Launch a single action with all the command line arguments.
  * TODO : The API calls ignore the values been passed to them, so we should first check that we have all the values.
+ * @param CWnd* pWnd the last forground window.
  * @param const STD_TSTRING& szCommandLine the command and the arguments we are launching this file with.
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL TRUE|FALSE success or not.
  */
-ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
   // sanity check
   if (0 == m_szFile.length())
@@ -363,13 +366,16 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
     return NULL;
   }
 
+  //  get the last forground window handle
+  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
+
   const STD_TSTRING& szExt = Extension();
 #ifdef ACTIONMONITOR_API_LUA
   // Do the API calls.
   //
   if (LuaVirtualMachine::IsLuaExt(szExt.c_str()))
   {
-    ActiveLuaAction* ala = new ActiveLuaAction(*this, szCommandLine, isPrivileged);
+    ActiveLuaAction* ala = new ActiveLuaAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (ala->Initialize())
     {
       return ala;
@@ -385,7 +391,7 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
   //
   if (PythonVirtualMachine::IsPyExt(szExt.c_str()))
   {
-    ActivePythonAction* apa = new ActivePythonAction(*this, szCommandLine, isPrivileged);
+    ActivePythonAction* apa = new ActivePythonAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if(apa->Initialize() )
     { 
       return apa;
@@ -401,7 +407,7 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
   //
   if (PluginVirtualMachine::IsPluginExt(szExt.c_str()))
   {
-    ActivePluginAction* apa = new ActivePluginAction(*this, szCommandLine, isPrivileged);
+    ActivePluginAction* apa = new ActivePluginAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
     {
       return apa;
@@ -412,5 +418,5 @@ ActiveAction* Action::CreateActiveActionDirect(const STD_TSTRING& szCommandLine,
   }
 #endif // ACTIONMONITOR_API_PLUGIN
 
-  return new ActiveAction( *this, szCommandLine, isPrivileged );
+  return new ActiveAction( *this, hTopHWnd, szCommandLine, isPrivileged );
 }

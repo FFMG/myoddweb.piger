@@ -4,7 +4,7 @@ class ActiveLuaAction :
   public ActiveAction
 {
 public:
-  ActiveLuaAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged);
+  ActiveLuaAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged);
   virtual ~ActiveLuaAction();
 
   virtual void ExecuteInThread();

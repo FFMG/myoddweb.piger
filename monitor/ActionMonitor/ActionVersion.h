@@ -14,7 +14,7 @@ public:
   ActionVersion();
 	virtual ~ActionVersion();
 
-  virtual ActiveAction* CreateActiveAction( const STD_TSTRING& szCommandLine, bool isPrivileged) const;
+  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const;
 };
 
 #endif // __Action_h__

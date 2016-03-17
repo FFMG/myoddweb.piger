@@ -67,7 +67,7 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'CreateActiveAction(...)' function
       // and go directly to 'Launch(...)'
-      QueueAndExecute( action->CreateActiveActionDirect( _T( "" ), isPrivileged ) );
+      QueueAndExecute( action->CreateActiveActionDirect( NULL, _T( "" ), isPrivileged ) );
     }
     catch( ... )
     {

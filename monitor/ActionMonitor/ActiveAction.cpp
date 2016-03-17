@@ -8,24 +8,21 @@
 #include "ActionMonitor.h"
 
 /**
- * todo
- * @param void
- * @return void
+ * The contructor
+ * @param const Action& src the action that is now active.
+ * @param HWND hTopHWnd the window that was on top at the time the command was given.
+ * @param const STD_TSTRING& szCommandLine the given command line that is, the words after the command itself
+ * @param bool isPrivileged if this action is privileged or not.
  */
-ActiveAction::ActiveAction( const ActiveAction& rhs ) : Action(), _clipboard(NULL)
-{
-  *this = rhs;
-}
-
-/**
-* todo
-* @param void
-* @return void
-*/
-ActiveAction::ActiveAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged) : Action( src ), 
+ActiveAction::ActiveAction(const Action& src, 
+                           HWND hTopHWnd,
+                           const STD_TSTRING& szCommandLine, 
+                           bool isPrivileged) : 
+  Action( src ), 
   _clipboard(NULL),
   _szCommandLine( szCommandLine ),
-  _isPrivileged( isPrivileged )
+  _isPrivileged( isPrivileged ),
+  _hTopHWnd( hTopHWnd )
 {
 }
 
@@ -37,25 +34,6 @@ ActiveAction::ActiveAction(const Action& src, const STD_TSTRING& szCommandLine, 
 ActiveAction::~ActiveAction()
 {
   ClearClipboard();
-}
-
-const ActiveAction& ActiveAction::operator=(const ActiveAction& rhs)
-{
-  if (this != &rhs)
-  {
-    ClearClipboard();
-
-    // base class.
-    Action::operator=(rhs);
-
-    _szCommandLine = rhs._szCommandLine;
-    _isPrivileged = rhs._isPrivileged;
-    if (rhs._clipboard)
-    {
-      _clipboard = new Clipboard(*rhs._clipboard);
-    }
-  }
-  return *this;
 }
 
 /**

@@ -12,11 +12,10 @@
 // the clipboard data at the time we createed it.
 #include "../common/clipboard.h"
 
-
 class ActiveAction : public Action
 {
 public:
-  ActiveAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged);
+  ActiveAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged);
 	virtual ~ActiveAction();
 
   // ----------------------------
@@ -38,23 +37,28 @@ public:
     return _szCommandLine;
   }
 
+  /** 
+   * Get the window that is/was the top most at the time the command was enteered.
+   * return HWND the window at the time the call was made.
+   */
+  HWND TopHWnd() const
+  {
+    return _hTopHWnd;
+  }
+
 protected:
   virtual bool OnInitialize();
   virtual bool OnDeInitialize();
 
 private:
-  ActiveAction(const ActiveAction& rhs);
-  const ActiveAction& operator=(const ActiveAction& rhs);
+  DISALLOW_COPY_AND_ASSIGN(ActiveAction);
 
-protected:
-  // we cannot call this directly.
-  ActiveAction();
-
-protected:
+private:
   // the current clipboard.
   Clipboard* _clipboard;
   STD_TSTRING _szCommandLine;
   bool _isPrivileged;
+  HWND _hTopHWnd;
 
   void ClearClipboard();
   void CreateClipboard();

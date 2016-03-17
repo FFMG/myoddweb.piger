@@ -5,7 +5,7 @@ class ActivePluginAction :
   public ActiveAction
 {
 public:
-  ActivePluginAction(const Action& src, const STD_TSTRING& szCommandLine, bool isPrivileged);
+  ActivePluginAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged);
   virtual ~ActivePluginAction();
 
   virtual void ExecuteInThread();

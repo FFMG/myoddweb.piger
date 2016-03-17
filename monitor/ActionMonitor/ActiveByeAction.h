@@ -4,7 +4,7 @@ class ActiveByeAction :
   public ActiveAction
 {
 public:
-  ActiveByeAction(const Action& src );
+  ActiveByeAction(const Action& src, HWND hTopHWnd );
   virtual ~ActiveByeAction();
 
   virtual void ExecuteInThread();

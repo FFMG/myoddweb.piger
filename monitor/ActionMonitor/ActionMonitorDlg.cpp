@@ -530,7 +530,8 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         {
           //  do the action now
           //  we might not have any, but that's not for us to decides :).
-          QueueAndExecute( action->CreateActiveAction(szCommandLine, false) );
+          CWnd* pWnd = CActionMonitorApp::GetLastForegroundWindow();
+          QueueAndExecute( action->CreateActiveAction( pWnd, szCommandLine, false) );
         }
       }
       catch( ... )
