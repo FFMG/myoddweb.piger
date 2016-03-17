@@ -172,11 +172,17 @@ PyObject* pyapi::Execute(PyObject *self, PyObject *args)
  */
 PyObject* pyapi::Getstring(PyObject *self, PyObject *args)
 {
+  int iQuote = 1;
+  if (!PyArg_ParseTuple(args, "|p", &iQuote))  {
+    __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [<b>quote</b>] )</i>"), 3000, 5);
+    return Py_BuildValue("b", false);
+  }
+
   STD_TSTRING sValue = _T("");
-  if( !__super::GetString( sValue ) )
+  if( !__super::GetString( sValue, iQuote == 1) )
   {
     // we have nothing
-    return Py_BuildValue("b", false);
+    return Py_BuildValue("b", false );
   }
 
   USES_CONVERSION;
@@ -193,15 +199,16 @@ PyObject* pyapi::Getstring(PyObject *self, PyObject *args)
  */
 PyObject* pyapi::Getfile(PyObject *self, PyObject *args)
 {
+  bool bQuote = true;
   UINT idx = 0;
-  if (!PyArg_ParseTuple(args, "I", &idx ))
+  if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[, <b>quote</b>] )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
-
+  
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFile( idx, sValue ) )
+  if( !__super::GetFile( idx, sValue, bQuote ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -222,14 +229,15 @@ PyObject* pyapi::Getfile(PyObject *self, PyObject *args)
 PyObject* pyapi::Getfolder(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
-  if (!PyArg_ParseTuple(args, "I", &idx ))
+  bool bQuote = true;
+  if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b>   [,<b>quote</b>] )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFolder( idx, sValue ) )
+  if( !__super::GetFolder( idx, sValue, bQuote ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -250,14 +258,15 @@ PyObject* pyapi::Getfolder(PyObject *self, PyObject *args)
 PyObject* pyapi::Geturl(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
-  if (!PyArg_ParseTuple(args, "I", &idx ))
+  bool bQuote = true;
+  if (!PyArg_ParseTuple(args, "I|p", &idx, &bQuote ))
   {
     __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( <b>index</b> )</i>"), 3000, 5 );
     return Py_BuildValue("b", false );
   }
 
   STD_TSTRING sValue = _T("");
-  if( !__super::GetURL( idx, sValue ) )
+  if( !__super::GetURL( idx, sValue, bQuote ) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );

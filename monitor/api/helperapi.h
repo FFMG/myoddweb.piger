@@ -43,22 +43,22 @@ public:
   bool Execute(const wchar_t* module, LPCTSTR cmdLine, bool isPrivileged);
 
   // get the currently selected text, or false if none.
-  bool GetString (STD_TSTRING& sValue );
+  bool GetString (STD_TSTRING& sValue, bool bQuote);
 
   // get the action monitor version number.
   bool GetVersion (STD_TSTRING& sValue );
   
   // get one of x _file_ currently selected by index.
   // if 3 files and 4 folders are selected, only the files are counted.
-  bool GetFile   (const unsigned int idx, STD_TSTRING& sValue );
+  bool GetFile   (const unsigned int idx, STD_TSTRING& sValue, bool bQuote );
 
   // get one of x _folders_ currently selected by index.
   // if 3 files and 4 folders are selected, only the folders are counted.
-  bool GetFolder (const unsigned int idx, STD_TSTRING& sValue );
+  bool GetFolder (const unsigned int idx, STD_TSTRING& sValue, bool bQuote);
 
   // get one of x _URL_ currently selected by index.
   // note that this is only syntax check, we don't actually check if the URL resolves.
-  bool GetURL (const unsigned int idx, STD_TSTRING& sValue );
+  bool GetURL (const unsigned int idx, STD_TSTRING& sValue, bool bQuote);
 
   // add a set of command to the list of commands.
   // note that we do hardly any checks to see of the command already exists

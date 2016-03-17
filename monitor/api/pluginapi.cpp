@@ -135,10 +135,10 @@ bool pluginapi::Execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
  * @param void
  * @return void
  */
-int pluginapi::GetString( DWORD nBufferLength, LPWSTR lpBuffer)
+int pluginapi::GetString( DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote )
 {
   STD_TSTRING sValue = _T("");
-  if( !__super::GetString ( sValue ) )
+  if( !__super::GetString ( sValue, bQuote ) )
   {
     return 0;
   }
@@ -160,10 +160,10 @@ int pluginapi::GetString( DWORD nBufferLength, LPWSTR lpBuffer)
  * @param void
  * @return void
  */
-int pluginapi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
+int pluginapi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFile(idx, sValue ) )
+  if( !__super::GetFile(idx, sValue, bQuote ) )
   {
     return 0;
   }
@@ -185,10 +185,10 @@ int pluginapi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
  * @param void
  * @return void
  */
-int pluginapi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
+int pluginapi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFolder (idx, sValue ) )
+  if( !__super::GetFolder (idx, sValue, bQuote ) )
   {
     return 0;
   }
@@ -210,10 +210,10 @@ int pluginapi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
  * @param void
  * @return void
  */
-int pluginapi::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
+int pluginapi::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
   STD_TSTRING sValue = _T("");
-  if( !__super::GetURL (idx, sValue ) )
+  if( !__super::GetURL (idx, sValue, bQuote ) )
   {
     return 0;
   }

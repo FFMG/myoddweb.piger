@@ -24,12 +24,12 @@ protected:
   void Init(CWnd* mainWnd);
 
 public:
-  bool GetTextFromClipboard( STD_TSTRING& sText, bool bQuote = true ) const;
-  bool GetText( STD_TSTRING& sText, bool bQuote = true) const;
+  bool GetTextFromClipboard( STD_TSTRING& sText, bool bQuote ) const;
+  bool GetText( STD_TSTRING& sText, bool bQuote ) const;
 
-  bool GetFolder( STD_TSTRING& sText, size_t idx, bool bQuote = true) const;
-  bool GetFile( STD_TSTRING& sText, size_t idx, bool bQuote = true) const;
-  bool GetURL( STD_TSTRING& sText, size_t idx, bool bQuote = true) const;
+  bool GetFolder( STD_TSTRING& sText, size_t idx, bool bQuote ) const;
+  bool GetFile( STD_TSTRING& sText, size_t idx, bool bQuote ) const;
+  bool GetURL( STD_TSTRING& sText, size_t idx, bool bQuote ) const;
   
 protected:  
   typedef std::vector<ClipboardData *> V_CF;

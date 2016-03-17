@@ -23,12 +23,12 @@ public:
 
   bool Say         ( LPCWSTR msg, UINT nElapse, UINT nFadeOut);
   bool Execute     ( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
-  int GetString    ( DWORD nBufferLength, LPWSTR lpBuffer);
+  int GetString    ( DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
   size_t GetCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
   int GetAction    ( DWORD nBufferLength, LPWSTR lpBuffer );
-  int GetFile      ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  int GetFolder    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
-  int GetURL       ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer );
+  int GetFile      ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
+  int GetFolder    ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
+  int GetURL       ( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
   bool AddAction   ( LPCWSTR szText, LPCWSTR szPath );
   bool RemoveAction( LPCWSTR szText, LPCWSTR szPath );
   bool GetVersion  ( DWORD nBufferLength, LPWSTR lpBuffer);

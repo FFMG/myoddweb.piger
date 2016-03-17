@@ -196,7 +196,7 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine( bool isPrivileged ) c
 
     //  any other values are rejected, (bitmaps and so on).
     STD_TSTRING sText = _T("");
-    if (clipboard.GetTextFromClipboard(sText))
+    if (clipboard.GetTextFromClipboard(sText, true ))
     {
       //  we need to trim all the items into one single line
       //  because command lines cannot accept multiple lines

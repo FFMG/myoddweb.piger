@@ -255,15 +255,16 @@ bool helperapi::GetVersion (STD_TSTRING& sValue )
 /**
  * Get the string that is currently selected when the action was called.
  * @param STD_TSTRING& the return value.
+ * @param bool bQuote if we want to quote the text or not.
  * @return bool if we have a string selected or not.
  */
-bool helperapi::GetString (STD_TSTRING& sValue )
+bool helperapi::GetString (STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
     STD_TSTRING sClipBoard = _T("");
-    if( !clipBoard.GetText( sClipBoard ) )
+    if( !clipBoard.GetText( sClipBoard, bQuote ) )
     {
       // we have nothing.
       return false;
@@ -290,16 +291,17 @@ bool helperapi::GetString (STD_TSTRING& sValue )
  * Used by plugins who want to behave a certain way for files.
  * @param const unsigned int the file number we are after
  * @param STD_TSTRING& the return value
+ * @param bool bQuote if we want to quote or not.
  * @return bool success or not if there are no more files
  */
-bool helperapi::GetFile(const unsigned int idx, STD_TSTRING& sValue )
+bool helperapi::GetFile(const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
     STD_TSTRING sClipBoard = _T("");
-    if( !clipBoard.GetFile( sClipBoard, idx ) )
+    if( !clipBoard.GetFile( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
       return false;
@@ -320,16 +322,17 @@ bool helperapi::GetFile(const unsigned int idx, STD_TSTRING& sValue )
  * Used by plugins who want to behave a certain way for URLs.
  * @param const unsigned int the URL number we are after
  * @param STD_TSTRING& the return value
+ * @param bool bQuote if we want to quote the string or not.
  * @return bool success or not if there are no more URLs
  */
-bool helperapi::GetURL (const unsigned int idx, STD_TSTRING& sValue )
+bool helperapi::GetURL (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
     STD_TSTRING sClipBoard = _T("");
-    if( !clipBoard.GetURL( sClipBoard, idx ) )
+    if( !clipBoard.GetURL( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
       return false;
@@ -353,16 +356,17 @@ bool helperapi::GetURL (const unsigned int idx, STD_TSTRING& sValue )
  * on the currently selected folder.
  * @param const unsigned int the folder number we are getting.
  * @param STD_TSTRING& the value we are after.
+ * @param bool bQuote if we want to quote the string or not.
  * @return bool success or not, we return false when there are no more folders.
  */
-bool helperapi::GetFolder (const unsigned int idx, STD_TSTRING& sValue )
+bool helperapi::GetFolder (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
     STD_TSTRING sClipBoard = _T("");
-    if( !clipBoard.GetFolder( sClipBoard, idx ) )
+    if( !clipBoard.GetFolder( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
       return false;

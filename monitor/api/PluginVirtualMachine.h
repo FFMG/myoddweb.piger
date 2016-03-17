@@ -70,12 +70,12 @@ public:
 
   static bool Say(LPCWSTR msg, UINT nElapse, UINT nFadeOut);
   static bool Execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
-  static int GetString(DWORD nBufferLength, LPWSTR lpBuffer);
+  static int GetString(DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
   static size_t GetCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
   static int GetAction(DWORD nBufferLength, LPWSTR lpBuffer);
-  static int GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  static int GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  static int GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
+  static int GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
+  static int GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
+  static int GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
   static bool AddAction(LPCWSTR szText, LPCWSTR szPath);
   static bool RemoveAction(LPCWSTR szText, LPCWSTR szPath);
   static bool GetVersion(DWORD nBufferLength, LPWSTR lpBuffer);

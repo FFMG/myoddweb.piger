@@ -206,12 +206,13 @@ bool Actions::Remove( LPCTSTR szText, LPCTSTR szPath )
   //  get the lock
   myodd::threads::Lock guard(_mutex);
 
-
   // delete the no longer used action.
   delete *it;
 
   // ajust erase it
   m_Actions.erase( it );
+
+  // all good.
   return true;
 }
 
@@ -462,7 +463,7 @@ const Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
   }
 
   //  get the current action.
-  Action* action = m_ActionsMatch[ m_uCommand ];
+  const Action* action = m_ActionsMatch[ m_uCommand ];
 
   // Add the command line if we have anything.
   if (cmdLine == NULL)

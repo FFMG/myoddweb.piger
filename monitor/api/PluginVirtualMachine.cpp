@@ -483,9 +483,9 @@ bool PluginVirtualMachine::Execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivi
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetString(DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetString(DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
-  return GetApi().GetString(nBufferLength, lpBuffer);
+  return GetApi().GetString(nBufferLength, lpBuffer, bQuote );
 }
 
 /**
@@ -496,9 +496,9 @@ int PluginVirtualMachine::GetString(DWORD nBufferLength, LPWSTR lpBuffer)
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
-  return GetApi().GetFile( idx, nBufferLength, lpBuffer);
+  return GetApi().GetFile( idx, nBufferLength, lpBuffer, bQuote );
 }
 
 /**
@@ -509,9 +509,9 @@ int PluginVirtualMachine::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
-  return GetApi().GetFolder( idx, nBufferLength, lpBuffer);
+  return GetApi().GetFolder( idx, nBufferLength, lpBuffer, bQuote );
 }
 
 /**
@@ -522,9 +522,9 @@ int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuff
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
-  return GetApi().GetURL( idx,  nBufferLength,  lpBuffer);
+  return GetApi().GetURL( idx,  nBufferLength,  lpBuffer, bQuote );
 }
 
 /**

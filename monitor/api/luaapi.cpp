@@ -211,8 +211,19 @@ int luaapi::Say (lua_State *lua)
  */
 int luaapi::Getstring( lua_State *lua )
 {
+  const int ARGUMENT_QUOTE = 1;
+
+  int n = lua_gettop(lua);
+
+  // the quote
+  boolean bQuote = true;
+  if (n >= 1)
+  {
+    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+  }
+
   STD_TSTRING sValue = _T("");
-  if( !__super::GetString( sValue ) )
+  if( !__super::GetString( sValue, bQuote ) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );
@@ -261,18 +272,29 @@ int luaapi::GetVersion( lua_State *lua )
  */
 int luaapi::Getfile( lua_State *lua )
 {
-  static const int ARGUMENT_NUMBER = 1;
+  const int ARGUMENT_NUMBER = 1;
+  const int ARGUMENT_QUOTE = 2;
+
   int n = lua_gettop( lua );
-  if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
+  if( n < 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
 
-  UINT idx = (UINT)lua_tointeger (lua, 1);
+  //  get the nunber
+  UINT idx = (UINT)lua_tointeger (lua, ARGUMENT_NUMBER );
+
+  // the quote
+  boolean bQuote = true;
+  if (n >= 2)
+  {
+    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+  }
+
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFile( idx, sValue ) )
+  if( !__super::GetFile( idx, sValue, bQuote ) )
   {
     lua_pushboolean ( lua, false );
     return 1;
@@ -294,18 +316,29 @@ int luaapi::Getfile( lua_State *lua )
  */
 int luaapi::Getfolder( lua_State *lua )
 {
-  static const int ARGUMENT_NUMBER = 1;
+  const int ARGUMENT_NUMBER = 1;
+  const int ARGUMENT_QUOTE = 2;
+
   int n = lua_gettop( lua );
-  if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
+  if( n < 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b> )</i>"), 3000, 5 );
+    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b>[, quote] )</i>"), 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
 
-  UINT idx = (UINT)lua_tointeger (lua, 1);
+  //  the number.
+  UINT idx = (UINT)lua_tointeger (lua, ARGUMENT_NUMBER);
+
+  // the quote
+  boolean bQuote = true;
+  if (n >= 2)
+  {
+    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+  }
+
   STD_TSTRING sValue = _T("");
-  if( !__super::GetFolder( idx, sValue) )
+  if( !__super::GetFolder( idx, sValue, bQuote ) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );
@@ -329,7 +362,9 @@ int luaapi::Getfolder( lua_State *lua )
  */
 int luaapi::Geturl( lua_State *lua )
 {
-  static const int ARGUMENT_NUMBER = 1;
+  const int ARGUMENT_NUMBER = 1;
+  const int ARGUMENT_QUOTE = 2;
+
   int n = lua_gettop( lua );
   if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
@@ -338,9 +373,18 @@ int luaapi::Geturl( lua_State *lua )
     return 1;
   }
 
+  //  get the index.
   UINT idx = (UINT)lua_tointeger (lua, 1);
+
+  // the quote
+  boolean bQuote = true;
+  if (n >= 2)
+  {
+    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+  }
+
   STD_TSTRING sValue = _T("");
-  if( !__super::GetURL( idx, sValue) )
+  if( !__super::GetURL( idx, sValue, bQuote) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );
