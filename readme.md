@@ -64,10 +64,10 @@ import module, **import am**, (only usable within Piger of course).
 - getAction, get the selected action.
 - getCommandCount, get the number of commands including the action.
 - execute, execute a certain app/event/batch file. You can also ask for elevated permission, (if piger is not running elevated).
-- getstring, get a string that the user might have selected at the time of calling the action.
-- getfile, get a file that the user might have selected at the time of calling the action.
-- getfolder, get a folder that the user might have selected at the time of calling the action.
-- geturl, get a url that the user might have selected at the time of calling the action.
+- getString, get a string that the user might have selected at the time of calling the action.
+- getFile, get a file that the user might have selected at the time of calling the action.
+- getFolder, get a folder that the user might have selected at the time of calling the action.
+- getUrl, get a url that the user might have selected at the time of calling the action.
 - addAction, add an action to our current list of actions. (lost when the app restarts!)
 - removeAction, remove an action from the list.
 - getVersion, get the piger version number.
