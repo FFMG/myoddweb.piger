@@ -56,9 +56,9 @@ void PluginVirtualMachine::DisposeApi()
 /**
  * Add an api to our current list of plugins.
  * this must be in thread
- * @param pluginapi* api the api we would like to add.
+ * @param PluginApi* api the api we would like to add.
  */
-void PluginVirtualMachine::AddApi(pluginapi* api)
+void PluginVirtualMachine::AddApi(PluginApi* api)
 {
   // lock it
   myodd::threads::Lock guard(_mutex);
@@ -75,7 +75,7 @@ void PluginVirtualMachine::AddApi(pluginapi* api)
   _apis[std::this_thread::get_id()] = api;
 }
 
-pluginapi& PluginVirtualMachine::GetApi()
+PluginApi& PluginVirtualMachine::GetApi()
 {
 #ifndef ACTIONMONITOR_API_PLUGIN
   throw - 1;
@@ -263,7 +263,7 @@ int PluginVirtualMachine::ExecuteInThread( LPCTSTR pluginFile )
 int PluginVirtualMachine::Create( LPCTSTR pluginFile )
 {
   // we must have an api by now...
-  pluginapi& api = GetApi();
+  PluginApi& api = GetApi();
 
   HMODULE hModule = ExpandLoadLibrary( pluginFile );
   if( NULL == hModule )

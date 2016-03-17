@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pluginapi.h"
+#include "PluginApi.h"
 #include <map>
 #include <thread>
 #include <mutex>
@@ -22,15 +22,15 @@ public:
   void ErasePlugin( const STD_TSTRING& plugin);
 
 protected:
-  typedef std::map< std::thread::id, pluginapi*> ListOfPlugins;
+  typedef std::map< std::thread::id, PluginApi*> ListOfPlugins;
   ListOfPlugins _apis;
   
   std::mutex _mutex;
-  static pluginapi& GetApi();
+  static PluginApi& GetApi();
 
 public:
   void DisposeApi();
-  void AddApi(pluginapi* api );
+  void AddApi(PluginApi* api );
 
 protected:
   amplugin* _amPlugin;

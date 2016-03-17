@@ -8,14 +8,14 @@ static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 // add the LUA libs
 #ifdef ACTIONMONITOR_API_PLUGIN
 
-// support for PluginAPI
+// support for PluginApi
 #include "../plugins/amplugin.h"
 
-class pluginapi : public helperapi
+class PluginApi : public helperapi
 {
 public:
-  pluginapi(const ActiveAction& action);
-  virtual ~pluginapi();
+  PluginApi(const ActiveAction& action);
+  virtual ~PluginApi();
 
 public:
   double Version ();

@@ -39,7 +39,7 @@ void ActivePluginAction::ExecuteInThread()
 
   // create the Python Api.
   PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
-  pluginapi* api = new pluginapi( *this );
+  PluginApi* api = new PluginApi( *this );
 
   //add it to the list
   pvm->AddApi(api);

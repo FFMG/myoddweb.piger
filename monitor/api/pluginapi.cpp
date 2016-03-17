@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "pluginapi.h"
+#include "PluginApi.h"
 #include "pluginVirtualMachine.h"
 
 /**
@@ -8,7 +8,7 @@
  * @param void
  * @return void
  */
-pluginapi::pluginapi(const ActiveAction& action) : helperapi(action )
+PluginApi::PluginApi(const ActiveAction& action) : helperapi(action )
 {
 }
 
@@ -17,7 +17,7 @@ pluginapi::pluginapi(const ActiveAction& action) : helperapi(action )
  * @param void
  * @return void
  */
-pluginapi::~pluginapi()
+PluginApi::~PluginApi()
 {
 }
 
@@ -27,7 +27,7 @@ pluginapi::~pluginapi()
  * @param void
  * @return void
  */
-double pluginapi::Version ( )
+double PluginApi::Version ( )
 {
   // short and sweet
   // all we need is the version number.
@@ -42,7 +42,7 @@ double pluginapi::Version ( )
  * @param void
  * @return void
  */
-bool pluginapi::Say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
+bool PluginApi::Say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
 {
   // display the message
   // and we can now display the message.
@@ -57,7 +57,7 @@ bool pluginapi::Say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
  * @param LPWSTR lpBuffer the buffer that will contain the command, if it is NULL only the size will be returned.
  * @return void
  */
-size_t pluginapi::GetCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
+size_t PluginApi::GetCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 {
   // first get the command
   STD_TSTRING sValue = _T("");
@@ -87,7 +87,7 @@ size_t pluginapi::GetCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
  * @param void
  * @return void
  */
-int pluginapi::GetAction( DWORD nBufferLength, LPWSTR lpBuffer )
+int PluginApi::GetAction( DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING sValue = _T("");
   if( !__super::GetAction( sValue ) )
@@ -110,7 +110,7 @@ int pluginapi::GetAction( DWORD nBufferLength, LPWSTR lpBuffer )
  * @see __super::getCommandCount
  * @return in the number of commanded entered by the user
  */
-size_t pluginapi::GetCommandCount()
+size_t PluginApi::GetCommandCount()
 {
   return __super::GetCommandCount();
 }
@@ -123,7 +123,7 @@ size_t pluginapi::GetCommandCount()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return void
  */
-bool pluginapi::Execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
+bool PluginApi::Execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
 {
   return __super::Execute( module, cmdLine, isPrivileged );
 }
@@ -135,7 +135,7 @@ bool pluginapi::Execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
  * @param void
  * @return void
  */
-int pluginapi::GetString( DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote )
+int PluginApi::GetString( DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote )
 {
   STD_TSTRING sValue = _T("");
   if( !__super::GetString ( sValue, bQuote ) )
@@ -160,7 +160,7 @@ int pluginapi::GetString( DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote )
  * @param void
  * @return void
  */
-int pluginapi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
+int PluginApi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
   STD_TSTRING sValue = _T("");
   if( !__super::GetFile(idx, sValue, bQuote ) )
@@ -185,7 +185,7 @@ int pluginapi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuo
  * @param void
  * @return void
  */
-int pluginapi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
+int PluginApi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
   STD_TSTRING sValue = _T("");
   if( !__super::GetFolder (idx, sValue, bQuote ) )
@@ -210,7 +210,7 @@ int pluginapi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool b
  * @param void
  * @return void
  */
-int pluginapi::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
+int PluginApi::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
   STD_TSTRING sValue = _T("");
   if( !__super::GetURL (idx, sValue, bQuote ) )
@@ -234,7 +234,7 @@ int pluginapi::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuot
  * @param void
  * @return void
  */
-bool pluginapi::AddAction( LPCWSTR szText, LPCWSTR szPath )
+bool PluginApi::AddAction( LPCWSTR szText, LPCWSTR szPath )
 {
   // pass it straight to the helper API as it will do all the needed validations
   return __super::AddAction( szText, szPath );
@@ -247,7 +247,7 @@ bool pluginapi::AddAction( LPCWSTR szText, LPCWSTR szPath )
  * @param void
  * @return void
  */
-bool pluginapi::RemoveAction( LPCWSTR szText, LPCWSTR szPath )
+bool PluginApi::RemoveAction( LPCWSTR szText, LPCWSTR szPath )
 {
   // pass it straight to the helper API as it will do all the needed validations
   return __super::RemoveAction( szText, szPath );
@@ -259,7 +259,7 @@ bool pluginapi::RemoveAction( LPCWSTR szText, LPCWSTR szPath )
  * @param LPWSTR the buffer that will contain the return data, (version).
  * @return bool success or not if there was an error.
  */
-bool pluginapi::GetVersion(DWORD nBufferLength, LPWSTR lpBuffer )
+bool PluginApi::GetVersion(DWORD nBufferLength, LPWSTR lpBuffer )
 {
   STD_TSTRING stdVersion;
   if( !__super::GetVersion( stdVersion ) )
@@ -278,7 +278,7 @@ bool pluginapi::GetVersion(DWORD nBufferLength, LPWSTR lpBuffer )
  * @param LPWSTR the buffer that will contain the return data, (version).
  * @return bool if the command exists or not.
  */
-bool pluginapi::FindAction
+bool PluginApi::FindAction
 ( 
   UINT idx, 
   LPCWSTR lpCommand, 
