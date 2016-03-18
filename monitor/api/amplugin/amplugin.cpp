@@ -12,7 +12,7 @@ typedef size_t (*PLUGIN_FNCGETCOUNT)(  );
 typedef bool (*PLUGIN_FNCEXECUTE)(const wchar_t*, const wchar_t*, bool );
 typedef bool (*PLUGIN_FNCOMMAND)(const wchar_t*, const wchar_t*);
 typedef bool (*PLUGIN_FINDCOMMAND)(unsigned int, const wchar_t*, unsigned int, wchar_t*);
-typedef bool(*PLUGIN_FOREGROUNDWINDOW)( );
+typedef void* (*PLUGIN_FOREGROUNDWINDOW)( );
 
 /**
  * Todo
@@ -270,4 +270,18 @@ bool amplugin::FindAction(unsigned int idx, const wchar_t* szText, unsigned int 
     return false;
   }
   return ((PLUGIN_FINDCOMMAND)(pFunc))( idx, szText, nBufferLength, lpBuffer );
+}
+
+/**
+* Get the last foreground window.
+* @return void* the last foregorund window.
+*/
+void * amplugin::GetForegroundWindow() const
+{
+  void* pFunc = Get(L"getForegroundWindow");
+  if (!pFunc)
+  {
+    return NULL;
+  }
+  return ((PLUGIN_FOREGROUNDWINDOW)(pFunc))();
 }

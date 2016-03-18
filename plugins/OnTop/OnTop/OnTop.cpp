@@ -46,8 +46,28 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
       // Our action as called!
       amplugin* p = (amplugin*)(lParam);
 
-      // try and say something
-      p->Say(L"Hello from Sample plugin!", 100, 100);
+      // get the window
+      HWND hWnd = (HWND)p->GetForegroundWindow();
+
+      //  is it a valid handle?
+      if (NULL != hWnd)
+      {
+        if (::GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_TOPMOST)
+        {
+          // Revert back
+          ::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+        else
+        {
+          // Make topmost
+          ::SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        }
+        MessageBeep(MB_ICONINFORMATION);
+      }
+      else
+      {
+        MessageBeep(MB_ICONERROR);
+      }
     }
     break;
 

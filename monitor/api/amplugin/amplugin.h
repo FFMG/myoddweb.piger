@@ -107,6 +107,7 @@ public:
   bool AddAction(const wchar_t* szText, const wchar_t* szPath);
   bool RemoveAction(const wchar_t* szText, const wchar_t* szPath);
   bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer);
+  void * GetForegroundWindow() const;
 
   //  add a definition
   void Add(const wchar_t* name, void*);

@@ -461,7 +461,7 @@ HWND helperapi::GetForegroundWindow() const
   }
 
   // is it still valid?
-  if (0 == ::GetWindowLongPtr(_action.TopHWnd(), GWLP_HWNDPARENT))
+  if ( !::IsWindow(_action.TopHWnd() ))
   {
     return NULL;
   }
