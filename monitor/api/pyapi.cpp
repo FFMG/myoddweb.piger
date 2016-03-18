@@ -409,9 +409,6 @@ void pyapi::ExecuteInThread()
   // https://docs.python.org/3/c-api/init.html
   PyThreadState_Swap(myThreadState);
 
-  // release the lock one last time.
-  PyEval_ReleaseLock();
-
   //  execute it...
   {
     PyObject *main_module = PyImport_AddModule("__main__");
@@ -424,9 +421,6 @@ void pyapi::ExecuteInThread()
     CheckForPythonErrors();
     // pending calls must be cleared out
   }
-
-  // get the lock so we can change things.
-  PyEval_AcquireLock();
 
   // swap back to this thread.
   PyThreadState_Swap(myThreadState);
