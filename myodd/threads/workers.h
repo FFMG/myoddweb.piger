@@ -8,6 +8,11 @@ namespace myodd {
   namespace threads {
     class Workers
     {
+    private:
+      // no copies.
+      Workers( const Workers& );
+      const Workers& operator=( const Workers& );
+
     public:
       Workers();
       virtual ~Workers();

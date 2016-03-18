@@ -359,7 +359,7 @@ void CActionMonitorApp::DoStartActionsList()
  * @param void
  * @return void
  */
-void CActionMonitorApp::DoEndActionsList()
+void CActionMonitorApp::DoEndActionsList( )
 {
   ActionsImmediate aI( AM_DIRECTORY_OUT );
   aI.Init();

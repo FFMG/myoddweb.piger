@@ -69,7 +69,11 @@ protected:
 public:
   bool DisplayMessage( LPCTSTR pText, UINT nElapse, UINT nFadeOut );
 
+  // kill all the active windows.
   void KillAllActiveWindows();
+
+  // before we close the dlg we must wait for our last messages
+  void WaitForActiveWindows();
 
 protected:
   bool DisplayCommand( HDC hdc = NULL );
@@ -79,9 +83,6 @@ protected:
   CFont *fontTime;    //  the time font
 
   HGDIOBJ SelTimeFont( HDC hdc );
-
-  // before we close the dlg we must wait for our last messages
-  void WaitForActiveWindows();
 
   // remove old/unused messages clogging up the vector
   void ClearUnusedMessages();
@@ -121,6 +122,7 @@ public:
   afx_msg void OnDestroy();
 
 protected:
+  std::mutex _mutex;
   std::thread::id _main_threadId;
   bool IsMainThread() const;
 };

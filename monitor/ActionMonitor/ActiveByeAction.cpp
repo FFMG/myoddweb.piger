@@ -33,6 +33,11 @@ void ActiveByeAction::ExecuteInThread()
   // we are creating a thread within a thread.
   App().DoEndActionsList();
 
+  // while the app is running, we might still have some windows
+  // that are still visible.
+  // so before closing anything we have to wait for them to complete.
+  pThis->WaitForActiveWindows();
+
   //  close us
   CWnd* pWnd = App().GetMainWnd();
   if (pWnd)

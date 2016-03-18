@@ -622,8 +622,7 @@ bool CActionMonitorDlg::DisplayMessage
     PostMessage(UWM_DISPLAYMESSAGE, 0, (LPARAM)(new MessageDlg::Msg(pText, nElapse, nFadeOut)) );
     return true;
   }
-
-
+  
   //  look for old messages to remove
   ClearUnusedMessages( );
 
@@ -634,6 +633,10 @@ bool CActionMonitorDlg::DisplayMessage
   if( CActionMonitorDlg::IsRunning() )
   {
     messageDlg->FadeShowWindow();
+
+    // protected the vector for a short while.
+    myodd::threads::Lock guard(_mutex);
+
     // add it to our list of messages.
     _displayWindows.push_back( messageDlg );
   }
@@ -991,6 +994,9 @@ void CActionMonitorDlg::ClearUnusedMessages()
 {
   while( _displayWindows.size() > 0 )
   {
+    // protected the vector for a short while.
+    myodd::threads::Lock guard(_mutex);
+
     vMessages::iterator it = _displayWindows.begin();
     if( it == _displayWindows.end() )
     {
@@ -1019,6 +1025,9 @@ void CActionMonitorDlg::KillAllActiveWindows()
 {
   //  remove what is complete.
   ClearUnusedMessages();
+
+  // protected the vector for a short while.
+  myodd::threads::Lock guard(_mutex);
 
   // kill the other messages;
   for (vMessages::iterator it = _displayWindows.begin();
@@ -1051,6 +1060,9 @@ void CActionMonitorDlg::WaitForActiveWindows()
   // and as such we must wait for it.
   while( true )
   {
+    // protected the vector for a short while.
+    myodd::threads::Lock guard(_mutex);
+
     vMessages::iterator it = _displayWindows.begin();
     if( it == _displayWindows.end() )
       break;

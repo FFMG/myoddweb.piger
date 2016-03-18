@@ -396,7 +396,7 @@ bool Clipboard::RestoreClipboard
  */
 void Clipboard::CopyDataFromForgroundWindow( CWnd* cPossibleWindow  )
 {
-  if( NULL == cPossibleWindow )
+  if (NULL == cPossibleWindow || !::IsWindow(cPossibleWindow->GetSafeHwnd())) 
   {
     return;
   }
