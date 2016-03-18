@@ -125,7 +125,7 @@ void FadeWnd::MessagePump(  HWND hWnd )
 	{         
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-    if (0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
+    if ( NULL != hWnd && 0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
     {
       break;
     }
