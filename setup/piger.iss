@@ -51,12 +51,14 @@ Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 [Tasks]
 Name: pluginloader; Description: "Create a 'Learn/Unlearn' action to learn new simple actions."; GroupDescription: "Plugins";
 Name: pluginapppaths; Description: "Parse all the common applications on your system and create actions on the fly."; GroupDescription: "Plugins";
+Name: pluginontop; Description: "Create 'OnTop' command to keep any window as the topmost window, (like vlc/winamp etc...)."; GroupDescription: "Plugins";
 Name: plugindolly; Description: "Hello Dolly sample plugin"; GroupDescription: "Plugins"; Flags: unchecked
 
 [InstallDelete]
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\LoaderPlugin.amp"
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\AppPaths.amp"
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp"
+Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\OnTop.amp"
 
 [Files]
 ;
@@ -67,11 +69,13 @@ Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Dolly
 Source: {#APP_SOURCE}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginloader')
 Source: {#APP_SOURCE}AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginapppaths')
 Source: {#APP_SOURCE}Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('plugindolly')
+Source: {#APP_SOURCE}OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginontop')
 
 ; x64 plugins
 Source: {#APP_SOURCE}LoaderPlugin64.amp; DestName:LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginloader')
 Source: {#APP_SOURCE}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginapppaths')
 Source: {#APP_SOURCE}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('plugindolly')
+Source: {#APP_SOURCE}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginontop')
 
 ; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
