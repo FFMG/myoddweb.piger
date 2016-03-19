@@ -413,13 +413,22 @@ void pyapi::ExecuteInThread()
   {
     PyObject *main_module = PyImport_AddModule("__main__");
     PyObject *main_dict = PyModule_GetDict(main_module);
+    Py_XINCREF(main_module);
+ 
+    PyObject *local_dic = PyDict_New();
+    Py_XINCREF(local_dic);
 
     // we can now run our script
     const char* s = _script.c_str();
-    PyObject * PyRes = PyRun_String(s, Py_file_input, main_dict, main_dict);
+    PyObject * PyRes = PyRun_String(s, Py_file_input, main_dict, local_dic);
 
     CheckForPythonErrors();
+
+    PyDict_Clear(local_dic);
+    Py_XDECREF(local_dic);
+
     // pending calls must be cleared out
+    Py_XDECREF(main_module);
   }
 
   // swap back to this thread.
