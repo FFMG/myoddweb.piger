@@ -101,15 +101,19 @@ bool PythonVirtualMachine::Initialize()
     return false;
   }
 
-  // try and load the python core files.
-  STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
-  std::wstring python_path;
-  python_path += exe_dir + L"python35.zip";
-  if (!myodd::files::FileExists(python_path))
+  bool embedded = (bool)myodd::config::get(_T("python\\useembedded"), true);
+  if (embedded)
   {
-    return false;
+    // try and load the python core files.
+    STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
+    std::wstring python_path;
+    python_path += exe_dir + L"python35.zip";
+    if (!myodd::files::FileExists(python_path))
+    {
+      return false;
+    }
+    Py_SetPath(python_path.c_str());
   }
-  Py_SetPath(python_path.c_str());
 
   // try and initialise it all.
   Py_Initialize();
