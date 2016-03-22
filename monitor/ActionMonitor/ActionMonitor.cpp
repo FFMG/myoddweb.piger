@@ -389,13 +389,13 @@ void CActionMonitorApp::InitMaxClipboardSize()
   if (!myodd::config::isset(path))
   {
     //  yes, it does, simply use the value and return.
-    size_t maxClipboardSize = (size_t)myodd::config::get(path, 1024);
-    _maxClipboardSize = maxClipboardSize;
+    _maxClipboardSize = 0;
     return;
   }
 
   // do we have a valid value in the config?
   size_t maxClipboardSize = (size_t)myodd::config::get( path, 1024 );
+  _maxClipboardSize = maxClipboardSize;
 }
 
 /**
