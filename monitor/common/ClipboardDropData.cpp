@@ -11,6 +11,47 @@ ClipboardDropData::~ClipboardDropData()
 }
 
 /**
+ * Calculate how many bits all the files will take.
+ * @param DROPFILES * the data containter that has all the files
+ * @return size_t the total number of bits we need.
+ */
+size_t ClipboardDropData::CalculateBits(DROPFILES *df)
+{
+  // all the files sepatrated by '\0' and end with '\0\0'
+  wchar_t* files = (wchar_t*)(df + 1);
+
+  // the total size
+  int totalLen = 0;
+
+  // the current files size.
+  int currentLen = 0;
+  while (true)
+  {
+    // add one character
+    currentLen++;
+
+    // is that character an end of file?
+    if (files[totalLen] == '\0')
+    {
+      // did we find 2 in a row?
+      if (currentLen == 1)
+      {
+        break;
+      }
+      // reset the position of the buffer.
+      currentLen = 0;
+    }
+
+    // increase the size.
+    totalLen++;
+  }
+
+  // return the total lenght together with 
+  // the size of a wchar_t
+  return (totalLen*sizeof(wchar_t));
+}
+
+/**
  * Create the clipboard data from a DROPFILES
  * If the pointer is created, it is up to the calling function to delete.
  * @param DROPFILES* dropFiles the dropfiles pointer.
@@ -19,6 +60,12 @@ ClipboardDropData::~ClipboardDropData()
  */
 ClipboardDropData* ClipboardDropData::FromDROPFILES(DROPFILES* dropFiles, size_t maxMemory)
 {
+  // will this use more memory than we want to?
+  if (maxMemory > 0 && ClipboardDropData::CalculateBits(dropFiles) > maxMemory)
+  {
+    return NULL;
+  }
+
   // the return pointer.
   ClipboardDropData* df = new ClipboardDropData();
 

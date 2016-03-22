@@ -17,6 +17,9 @@ public:
   bool PopulateDropFiles(DROPFILES *df, const int maxSize ) const;
 
 protected:
+  static size_t CalculateBits(DROPFILES *df);
+
+protected:
   //
   typedef std::vector<STD_TSTRING> DropFiles;
   DropFiles _files;

@@ -212,7 +212,7 @@ ClipboardData* ClipboardData::FromClipboardDefault(UINT format, HGLOBAL hData, s
   SIZE_T dataSize = GlobalSize(hData);
 
   //  is it too big?
-  if (dataSize > maxMemory)
+  if (maxMemory > 0 && dataSize > maxMemory)
   {
     return NULL;
   }
