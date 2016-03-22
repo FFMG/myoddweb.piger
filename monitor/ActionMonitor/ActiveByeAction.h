@@ -8,5 +8,9 @@ public:
   virtual ~ActiveByeAction();
 
   virtual void ExecuteInThread();
+
+protected:
+  virtual bool OnInitialize();
+  virtual bool OnDeInitialize();
 };
 

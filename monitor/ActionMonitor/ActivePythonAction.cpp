@@ -12,12 +12,10 @@
 ActivePythonAction::ActivePythonAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) :
   ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
 {
-  Initialize();
 }
 
 ActivePythonAction::~ActivePythonAction()
 {
-  DeInitialize();
 }
 
 bool ActivePythonAction::OnDeInitialize()

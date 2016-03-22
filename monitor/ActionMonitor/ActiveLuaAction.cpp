@@ -12,12 +12,10 @@
 ActiveLuaAction::ActiveLuaAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) :
   ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
 {
-  Initialize();
 }
 
 ActiveLuaAction::~ActiveLuaAction()
 {
-  DeInitialize();
 }
 
 bool ActiveLuaAction::OnDeInitialize()

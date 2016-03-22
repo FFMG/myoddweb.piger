@@ -11,11 +11,22 @@
 ActiveByeAction::ActiveByeAction(const Action& src, HWND hTopHWnd ) :
   ActiveAction( src, hTopHWnd, L"", false  )
 {
-  Initialize();
 }
 
 ActiveByeAction::~ActiveByeAction()
 {
+}
+
+bool ActiveByeAction::OnInitialize()
+{
+  // do nothing
+  return true;
+}
+
+bool ActiveByeAction::OnDeInitialize()
+{
+  // do nothing
+  return true;
 }
 
 /**

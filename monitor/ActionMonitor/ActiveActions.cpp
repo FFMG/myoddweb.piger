@@ -77,6 +77,9 @@ void ActiveActions::RemoveRunner( ActiveAction* runner )
     return;
   }
 
+  // de-initialize it
+  runner->DeInitialize();
+
   // delete it
   delete it->second;
 
