@@ -22,7 +22,9 @@ END_MESSAGE_MAP()
  * @return void
  */
 CActionMonitorApp::CActionMonitorApp() :
-  m_hMutex( NULL )
+  m_hMutex( NULL ),
+  _maxClipboardSize( NULL ),
+  _cwndLastForegroundWindow( NULL )
 #ifdef ACTIONMONITOR_API_LUA
   , _lvm(NULL)
 #endif
@@ -103,18 +105,21 @@ CActionMonitorApp& App()
 };
 
 /**
- * @param CWnd* The window that last had the focus when we pressed the special key.
- */
-static CWnd* cwndLastForegroundWindow = NULL;
-
-/**
  * todo
  * @param void
  * @return void
  */
 CWnd* CActionMonitorApp::GetLastForegroundWindow()
 {
-  return cwndLastForegroundWindow;
+  return App()._cwndLastForegroundWindow;
+}
+
+/**
+ * Get the max clipboard size.
+ */
+size_t CActionMonitorApp::GetMaxClipboardMemory()
+{
+  return App()._maxClipboardSize;
 }
 
 /**
@@ -124,7 +129,7 @@ CWnd* CActionMonitorApp::GetLastForegroundWindow()
  */
 void CActionMonitorApp::SetLastForegroundWindow( CWnd* w )
 {
-  cwndLastForegroundWindow = w;
+  App()._cwndLastForegroundWindow = w;
 }
 
 /**
@@ -286,6 +291,9 @@ BOOL CActionMonitorApp::InitInstance()
   // we now need to add the default reserved paths.
   InitReservedPaths();
 
+  // set the cliboard size.
+  InitMaxClipboardSize();
+
   CFrameWnd *noTaskBar=new CFrameWnd();
   noTaskBar->Create(0,0,WS_OVERLAPPEDWINDOW);
 	CActionMonitorDlg dlg( noTaskBar );
@@ -363,6 +371,31 @@ void CActionMonitorApp::DoEndActionsList( )
 {
   ActionsImmediate aI( AM_DIRECTORY_OUT );
   aI.Init();
+}
+
+/**
+ * Set the max cliboard size that we don't want to use more of.
+ * depending on the windows version/memory available.
+ */
+void CActionMonitorApp::InitMaxClipboardSize()
+{
+  //  reset the value.
+  _maxClipboardSize = 0;
+
+  // the path
+  const STD_TSTRING path = _T("clipboard\\maxmemory");
+
+  //  does the value exist?
+  if (!myodd::config::isset(path))
+  {
+    //  yes, it does, simply use the value and return.
+    size_t maxClipboardSize = (size_t)myodd::config::get(path, 1024);
+    _maxClipboardSize = maxClipboardSize;
+    return;
+  }
+
+  // do we have a valid value in the config?
+  size_t maxClipboardSize = (size_t)myodd::config::get( path, 1024 );
 }
 
 /**

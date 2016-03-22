@@ -10,15 +10,15 @@ public:
 
 protected:
 
-  static ClipboardData* FromClipboardHDrop(HGLOBAL hData);
-  static ClipboardData* FromClipboardEnhmetafile(HGLOBAL hData);
-  static ClipboardData* FromClipboardBitmap(HGLOBAL hData);
-  static ClipboardData* FromClipboardDefault( UINT format, HGLOBAL hData);
+  static ClipboardData* FromClipboardHDrop(HGLOBAL hData, size_t maxMemory);
+  static ClipboardData* FromClipboardEnhmetafile(HGLOBAL hData, size_t maxMemory);
+  static ClipboardData* FromClipboardBitmap(HGLOBAL hData, size_t maxMemory);
+  static ClipboardData* FromClipboardDefault( UINT format, HGLOBAL hData, size_t maxMemory);
 
   static wchar_t* GetClipboardName( UINT format );
 
 public:
-  static ClipboardData* FromClipboard(UINT format);
+  static ClipboardData* FromClipboard(UINT format, size_t maxMemory);
 
   void ToClipboard();
 

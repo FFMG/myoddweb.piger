@@ -15,7 +15,7 @@
 class Clipboard  
 {
 public:
-	Clipboard( CWnd* mainWnd);
+	Clipboard( CWnd* mainWnd, size_t maxMemory );
   virtual ~Clipboard();
   Clipboard(const Clipboard& rhs);
   const Clipboard& operator=(const Clipboard& rhs);
@@ -66,5 +66,6 @@ protected:
 protected:
   //  the list of possible items
   ClipboardsData _clipboardData;
+  size_t _maxMemory;
 };
 #endif // _clipboard_h_

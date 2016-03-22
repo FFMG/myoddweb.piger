@@ -56,7 +56,9 @@ void ActiveAction::CreateClipboard()
   // so copy the text that the user could have currently selected or copy the name of the file that is probably selected
   // tell the clipboard to copy the data of the last known foreground window.
   CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
-  _clipboard = new Clipboard(cwnd );
+  size_t maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
+
+  _clipboard = new Clipboard(cwnd, maxClipboardMemory);
 }
 
 bool ActiveAction::OnInitialize()

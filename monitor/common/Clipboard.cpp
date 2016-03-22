@@ -16,7 +16,7 @@
  * @param void
  * @return void
  */
-Clipboard::Clipboard( CWnd* mainWnd)
+Clipboard::Clipboard( CWnd* mainWnd, size_t maxMemory ) : _maxMemory( maxMemory )
 {
   Init(mainWnd);
 }
@@ -30,7 +30,7 @@ Clipboard::~Clipboard()
 {
 }
 
-Clipboard::Clipboard(const Clipboard& rhs)
+Clipboard::Clipboard(const Clipboard& rhs) : _maxMemory( 0 )
 {
   *this = rhs;
 }
@@ -40,10 +40,10 @@ const Clipboard& Clipboard::operator=(const Clipboard& rhs)
   if (this != &rhs)
   {
     _clipboardData = rhs._clipboardData;
+    _maxMemory = rhs._maxMemory;
   }
   return *this;
 }
-
 
 /**
  * The order is very important as some data is always present even when other data is selected.
@@ -480,7 +480,7 @@ void Clipboard::GetCurrentData
     while (uFormat) 
     { 
       //  read that data from the clipbaord
-      ClipboardData *current = ClipboardData::FromClipboard( uFormat );
+      ClipboardData *current = ClipboardData::FromClipboard( uFormat, _maxMemory );
       if( current )
       {
         //  we cannot do much about NULL clipboard data

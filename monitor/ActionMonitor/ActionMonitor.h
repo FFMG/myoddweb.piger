@@ -38,10 +38,13 @@ public:
 protected:
   void InitConfig();
   void InitReservedPaths();
+  void InitMaxClipboardSize();
 
 public:
   static CWnd* GetLastForegroundWindow();
   static void SetLastForegroundWindow( CWnd *w);
+
+  static size_t GetMaxClipboardMemory();
 
 public:
   void BuildActionsList();
@@ -63,6 +66,15 @@ public:
   // the handle of the mutex
   HANDLE m_hMutex; 
 
+  /**
+   * @param CWnd* The window that last had the focus when we pressed the special key.
+   */
+  CWnd* _cwndLastForegroundWindow;
+
+  /**
+   * @param size_t the maximum memory we want to use when getting clipboard data.
+   */
+  size_t _maxClipboardSize;
 public:
   const Actions& PossibleActions() const {
     return *_possibleActions;

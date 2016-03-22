@@ -123,16 +123,17 @@ void ClipboardData::NullAll()
  * Create the clipboard data for a given format.
  * This assumes that the clipboard is open.
  * @param HGLOBAL hData the clipboard data.
+ * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData, size_t maxMemory)
 {
   //  https://msdn.microsoft.com/en-us/library/windows/desktop/bb776408%28v=vs.85%29.aspx
   std::vector<STD_TSTRING> res;
 
   // get the files.
   DROPFILES* dfs = (DROPFILES*)GlobalLock(hData);
-  ClipboardDropData* drop = ClipboardDropData::FromDROPFILES(dfs);
+  ClipboardDropData* drop = ClipboardDropData::FromDROPFILES(dfs, maxMemory);
 
   // release the lock
   GlobalUnlock(hData);
@@ -159,15 +160,16 @@ ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData)
  * Create the clipboard data for a given format. 
  * This assumes that the clipboard is open.
  * @param HGLOBAL hData the clipboard data.
+ * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData, size_t maxMemory)
 {
   // build the data clipboard so we can restore it.
   ClipboardData *cf = new ClipboardData();
 
   //  copy the meta file.
-  cf->data = CopyEnhMetaFile((HENHMETAFILE)hData, NULL);
+  cf->data = CopyEnhMetaFileW((HENHMETAFILE)hData, NULL);
   cf->dataSize = 0;
   cf->uFormat = CF_ENHMETAFILE;
 
@@ -179,11 +181,11 @@ ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData)
  * Create the clipboard data for a given format.
  * This assumes that the clipboard is open.
  * @param HGLOBAL hData the clipboard data. 
+ * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromClipboardBitmap(HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardBitmap(HGLOBAL hData, size_t maxMemory)
 {
-  
   // build the data clipboard so we can restore it.
   ClipboardData *cf = new ClipboardData();
 
@@ -201,12 +203,20 @@ ClipboardData* ClipboardData::FromClipboardBitmap(HGLOBAL hData)
  * This assumes that the clipboard is open.
  * @param UINT format the format we are looking for.
  * @param HGLOBAL hData the clipboard data.
+ * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromClipboardDefault(UINT format, HGLOBAL hData)
+ClipboardData* ClipboardData::FromClipboardDefault(UINT format, HGLOBAL hData, size_t maxMemory)
 {
   // Get the size of the data
   SIZE_T dataSize = GlobalSize(hData);
+
+  //  is it too big?
+  if (dataSize > maxMemory)
+  {
+    return NULL;
+  }
+
   unsigned char *data = NULL;
 
   //  if the size is zero then there is no data.
@@ -254,7 +264,7 @@ wchar_t* ClipboardData::GetClipboardName(UINT format)
   }
 
   //  get the text from the clipboard.
-  static const unsigned l = 256;  //  max len of the meta file
+  static const unsigned l = 1024;  //  max len of the meta file
   wchar_t* dataName = new wchar_t[l + 1];
   memset(dataName, 0, l + 1);
   if (GetClipboardFormatNameW(format, dataName, l) == 0)
@@ -273,9 +283,10 @@ wchar_t* ClipboardData::GetClipboardName(UINT format)
  * Create the clipboard data for a given format.
  * This assumes that the clipboard is open.
  * @param UINT format the format we want to copy/get.
+ * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
-ClipboardData* ClipboardData::FromClipboard(UINT format)
+ClipboardData* ClipboardData::FromClipboard(UINT format, size_t maxMemory)
 {
   if (!IsClipboardFormatAvailable(format))
   {
@@ -292,17 +303,16 @@ ClipboardData* ClipboardData::FromClipboard(UINT format)
   switch (format)
   {
   case CF_HDROP:
-    return ClipboardData::FromClipboardHDrop(hData);
-    break;
+    return ClipboardData::FromClipboardHDrop(hData, maxMemory );
 
   case CF_ENHMETAFILE:
-    return ClipboardData::FromClipboardEnhmetafile(hData);
+    return ClipboardData::FromClipboardEnhmetafile(hData, maxMemory );
 
   case CF_BITMAP:
-    return ClipboardData::FromClipboardBitmap(hData);
+    return ClipboardData::FromClipboardBitmap(hData, maxMemory );
 
   default:
-    return ClipboardData::FromClipboardDefault(format, hData);
+    return ClipboardData::FromClipboardDefault(format, hData, maxMemory );
   }
 
   //  never reached

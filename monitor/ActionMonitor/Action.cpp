@@ -182,6 +182,8 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPri
   //  the command line we will try and make.
   STD_TSTRING szCommandLine = _T("");
 
+  size_t maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
+
   //
   //  we need to wrap the whole clipboard around try/catch as not all clipboard cases have been tested
   //  I try to restore data  to the clipboard without really knowing if the data itself is valid
@@ -194,7 +196,7 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPri
     //  that could copy text and/or file names.
     //
     CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
-    Clipboard clipboard( cwnd );
+    Clipboard clipboard( cwnd, maxClipboardMemory );
 
     //  any other values are rejected, (bitmaps and so on).
     STD_TSTRING sText = _T("");

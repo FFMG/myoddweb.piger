@@ -14,9 +14,10 @@ ClipboardDropData::~ClipboardDropData()
  * Create the clipboard data from a DROPFILES
  * If the pointer is created, it is up to the calling function to delete.
  * @param DROPFILES* dropFiles the dropfiles pointer.
+ * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
  * @return ClipboardDropData* pointer to this class.
  */
-ClipboardDropData* ClipboardDropData::FromDROPFILES(DROPFILES* dropFiles )
+ClipboardDropData* ClipboardDropData::FromDROPFILES(DROPFILES* dropFiles, size_t maxMemory)
 {
   // the return pointer.
   ClipboardDropData* df = new ClipboardDropData();

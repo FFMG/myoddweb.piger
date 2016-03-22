@@ -9,7 +9,7 @@ public:
   virtual ~ClipboardDropData();
 
 public:
-  static ClipboardDropData* FromDROPFILES(DROPFILES* dropFiles);
+  static ClipboardDropData* FromDROPFILES(DROPFILES* dropFiles, size_t maxMemory);
 
   // return all the files.
   const std::vector<STD_TSTRING>& Files() const { return _files; }
