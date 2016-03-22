@@ -19,6 +19,17 @@ More importantly, you are in control, you can write scripts for your commands.
 - Select "this.version" and release the [Caps Lock] key.
 - Admire the version number...
 
+## Configuration
+
+All the configuration of piger is contained in the profile.xml file.
+
+[Read more](profile.md)
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <Config>
+    ...
+    </Config>
+
 ### For extra points...
 
 - Write your own script, (see below).
