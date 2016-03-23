@@ -138,8 +138,7 @@
     <Field3Value Condition="$(UseTestMarker) == 'true'">$([msbuild]::Add($(Field3Value), 9000))</Field3Value>
     
     <!-- The name of the resulting pythonXY.dll (without the extension) -->
-    <PyDllName Condition="$(ArchName) == 'win32'">python$(MajorVersionNumber)$(MinorVersionNumber)$(PyDebugExt)</PyDllName>
-    <PyDllName Condition="$(ArchName) == 'amd64'">python64$(MajorVersionNumber)$(MinorVersionNumber)$(PyDebugExt)</PyDllName>
+    <PyDllName>python$(MajorVersionNumber)$(MinorVersionNumber)$(PyDebugExt)</PyDllName>
 
     <!-- The version and platform tag to include in .pyd filenames -->
     <PydTag Condition="$(ArchName) == 'win32'">.cp$(MajorVersionNumber)$(MinorVersionNumber)-win32</PydTag>
