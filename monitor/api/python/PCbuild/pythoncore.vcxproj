@@ -61,11 +61,11 @@
       <BaseAddress>0x1e000000</BaseAddress>
     </Link>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xcopy "$(SolutionDir)includes\python\*.*" "$(OutDir)python\" /Y 
-xcopy "$(SolutionDir)includes\pythond\*.*" "$(OutDir)python\" /Y </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xcopy "$(SolutionDir)includes\python86\*.*" "$(OutDir)python\" /Y 
+xcopy "$(SolutionDir)includes\python86d\*.*" "$(OutDir)python\" /Y </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xcopy "$(SolutionDir)includes\python\*.*" "$(OutDir)python\" /Y </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xcopy "$(SolutionDir)includes\python86\*.*" "$(OutDir)python\" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
