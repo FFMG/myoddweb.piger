@@ -55,10 +55,16 @@ Name: pluginontop; Description: "Create 'OnTop' command to keep any window as th
 Name: plugindolly; Description: "Hello Dolly sample plugin"; GroupDescription: "Plugins"; Flags: unchecked
 
 [InstallDelete]
+; remove old files that the user might no longer want
+; we remove them to make sure that they don't cause some weird conflict
+; and that they are not present if the user does not want them.
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\LoaderPlugin.amp"
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\AppPaths.amp"
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp"
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\OnTop.amp"
+
+; remove old python file as things are now moved to {app}\python\ folder.
+Type: files; Name: "{app}\python35.zip"
 
 [Files]
 ;
@@ -100,7 +106,7 @@ Source: {#APP_SOURCE}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: Is
 Source: {#APP_SOURCE}python6435.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 
 ; common
-Source: {#APP_INCLUDE}python35.zip; DestDir: {app}; Flags: recursesubdirs createallsubdirs
+Source: {#APP_INCLUDE}python\*.*; DestDir: {app}\python\; Flags: recursesubdirs createallsubdirs
 
 ; default config
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist

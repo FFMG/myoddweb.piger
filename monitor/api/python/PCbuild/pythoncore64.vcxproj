@@ -62,10 +62,11 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy /Y "$(SolutionDir)includes\python35.zip" "$(OutDir)"  /L</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xcopy "$(SolutionDir)includes\python\*.*" "$(OutDir)python\" /Y </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy /Y "$(SolutionDir)includes\python35.zip" "$(OutDir)"  /L</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xcopy "$(SolutionDir)includes\python\*.*" "$(OutDir)python\" /Y 
+xcopy "$(SolutionDir)includes\pythond\*.*" "$(OutDir)python\" /Y </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

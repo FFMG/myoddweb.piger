@@ -106,17 +106,32 @@ bool PythonVirtualMachine::Initialize()
   {
     // try and load the python core files.
     STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
-    std::wstring python_path;
-    python_path += exe_dir + L"python35.zip";
-    if (!myodd::files::FileExists(python_path))
-    {
-      return false;
-    }
-    Py_SetPath(python_path.c_str());
+    std::wstring python_path1;
+    myodd::files::Join(python_path1, exe_dir, L"python\\");
+
+    std::wstring python_path2;
+    myodd::files::Join(python_path2, exe_dir, L"python\\python35.zip");
+
+    // join the two together
+    std::wstring python_path3 = python_path1 + L";" + python_path2;
+    Py_SetPath(python_path3.c_str());
   }
 
   // try and initialise it all.
   Py_Initialize();
+  if (embedded)
+  {
+    STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
+    std::wstring python_path1;
+    myodd::files::Join(python_path1, exe_dir, L"python\\");
+
+    std::wstring python_path2;
+    myodd::files::Join(python_path2, exe_dir, L"python\\python35.zip");
+
+    // join the two together
+    std::wstring python_path3 = python_path1 + L";" + python_path2;
+    PySys_SetPath(python_path3.c_str());
+  }
   PyEval_InitThreads();
 
   // just double check that it is all fine.
