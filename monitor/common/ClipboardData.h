@@ -38,6 +38,7 @@ public:
   void NullAll();
 
   static HBITMAP CopyBitmap(HBITMAP hBitmapSrc);
+  static size_t GetBitmapSize(HBITMAP hBitmapSrc);
 
 private:
   // ty shall not copy...

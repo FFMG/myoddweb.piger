@@ -103,7 +103,7 @@ void ClipboardData::Free()
     FreeClipboardDefault();
     break;
   }
-  
+
   // Null everything.
   NullAll();
 }
@@ -157,7 +157,7 @@ ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData, size_t maxMemory
 }
 
 /**
- * Create the clipboard data for a given format. 
+ * Create the clipboard data for a given format.
  * This assumes that the clipboard is open.
  * @param HGLOBAL hData the clipboard data.
  * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
@@ -165,6 +165,13 @@ ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData, size_t maxMemory
  */
 ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData, size_t maxMemory)
 {
+  // check the size of the enhenced meta file.
+  // in case it is too large.
+  if (maxMemory > 0 && GetEnhMetaFileBits((HENHMETAFILE)hData, 0, NULL) > maxMemory)
+  {
+    return NULL;
+  }
+
   // build the data clipboard so we can restore it.
   ClipboardData *cf = new ClipboardData();
 
@@ -180,15 +187,21 @@ ClipboardData* ClipboardData::FromClipboardEnhmetafile(HGLOBAL hData, size_t max
 /**
  * Create the clipboard data for a given format.
  * This assumes that the clipboard is open.
- * @param HGLOBAL hData the clipboard data. 
+ * @param HGLOBAL hData the clipboard data.
  * @param size_t maxMemory the max memory we want to allow to prevent lock-up.
  * @return ClipboardData*|NULL either the data or NULL if the format does not exist.
  */
 ClipboardData* ClipboardData::FromClipboardBitmap(HGLOBAL hData, size_t maxMemory)
 {
+  // check the memory size.
+  if (maxMemory > 0 && GetBitmapSize((HBITMAP)hData) > maxMemory)
+  {
+    return NULL;
+  }
+
   // build the data clipboard so we can restore it.
   ClipboardData *cf = new ClipboardData();
-
+  
   //  copy the meta file.
   cf->data = static_cast<void*>(CopyBitmap( (HBITMAP)hData ));
   cf->dataSize = 0;
@@ -397,6 +410,22 @@ void ClipboardData::ToClipboard()
     }
     break;
   }
+}
+
+/**
+ * Get the size, in bits, of the source bitmap.
+ * @param HBITMAP hBitmapSrc the bitmap we want to get the size of.
+ * @return size_t the size of the bitmap.
+ */
+size_t ClipboardData::GetBitmapSize(HBITMAP hBitmapSrc)
+{
+  BITMAP  bitmap;
+  if (0 == GetObject(hBitmapSrc, sizeof(BITMAP), &bitmap))
+  {
+    //  this failed, we don't know the size.
+    return 0;
+  }
+  return (bitmap.bmHeight*bitmap.bmWidth*bitmap.bmBitsPixel);
 }
 
 /**
