@@ -9,7 +9,7 @@ function getdrive(p)
 end
 
 -- do we have a folder?
-local thisFolder =  am_getfolder( 0 );
+local thisFolder =  am_getfolder( 0, false );
 
 -- if we don't have a folder, guess what we are looking for.
 if thisFolder == false  then
