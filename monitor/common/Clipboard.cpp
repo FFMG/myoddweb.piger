@@ -2,15 +2,6 @@
 #include "clipboard.h"
 #include "ClipboardDropData.h"
 
-#include <atlbase.h>
-#include "shlObj.h"
-#include "shlGuid.h"    // IID_IShellFolder
-
-#include <io.h>
-
-#define GetPIDLFolder(pida) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[0])
-#define GetPIDLItem(pida, i) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[i+1])
-
 /**
  * Todo
  * @param void
@@ -180,45 +171,6 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
 
       switch( cf->uFormat )
       {
-      case 0x0c074: //  Shell IDList Array
-        {
-          // this is really the clipboard version of ParseExplorerData(...) it does not
-          // work as well but at least allows us to cover the clipboard properly.
-          IShellFolder* spDesktop;
-          if( SUCCEEDED(SHGetDesktopFolder(&spDesktop))) 
-          {
-            CIDA* cida = (CIDA*)cf->data;
-            LPCITEMIDLIST lpFolder  = GetPIDLFolder( cida );
-            //  Get the folder name
-            TCHAR szFolder[ T_MAX_PATH ]; 
-            if ( SUCCEEDED(GetNameFromPIDL( L"Folder", spDesktop, lpFolder, szFolder, T_MAX_PATH )))
-            {
-              //  save this folder name
-              AddFileName( szFolder );
-            }// GetNameFromPIDL(...)
-
-            for (UINT i=0; i<cida->cidl; ++i)
-            {
-              IShellFolder* spFolder;
-              if( SUCCEEDED( spDesktop->BindToObject(lpFolder, 0, IID_IShellFolder, (void**)&spFolder)))
-              {
-                LPCITEMIDLIST pidlMachine = GetPIDLItem(cida, i);
-                TCHAR szFileName[T_MAX_PATH]; 
-                if( SUCCEEDED( GetNameFromPIDL( L"Item", spFolder, pidlMachine, szFileName, T_MAX_PATH )))
-                {
-                  // save the selected file name
-                  AddFileName( szFileName );
-                }
-                spFolder->Release();
-              }// BindToObject
-              
-            }// each items in the folder
-           
-            spDesktop->Release();
-          }// SHGetDesktopFolder(...)
-        }
-        break;
-        
       case 0x0c006: /* FILENAME */
         {
           //  a file name was added
@@ -307,10 +259,6 @@ void Clipboard::Init( CWnd* mainWnd )
 
     //  ok, so now we can get this window data
     GetCurrentData(mainWnd, clipboard_format_new);
-
-    // try and get as much info from the explorer window
-    // those are selected files, current folders and so forth.
-    ParseExplorerData(mainWnd);
 
     //  now that we have a brand new array of clipboards simply
     //  add as much info as possible to our structure
@@ -528,125 +476,6 @@ void Clipboard::SetText(const STD_TSTRING& srcText)
   // it is posible that the text selected represents a file
   // or a directory, in that case it is useful to display it to the APIs
   AddFileName(srcText);
-}
-
-/**
- * Todo
- * @param void
- * @return void
- */
-BOOL Clipboard::ParseExplorerData(CWnd* cwnd )
-{
-  if( NULL == cwnd )
-  {
-    return FALSE;
-  }
-
-  HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |  COINIT_DISABLE_OLE1DDE);
-
-  // the window we are looking for.
-  HWND hwndFind = cwnd->GetSafeHwnd();
-
-  // this is the folder data
-  TCHAR szPath[T_MAX_PATH];
-  BOOL fFound = FALSE;
-
-  IShellWindows *psw;
-  if (SUCCEEDED(CoCreateInstance(CLSID_ShellWindows, NULL,  CLSCTX_LOCAL_SERVER, IID_PPV_ARGS(&psw))))
-  {
-    VARIANT v;
-    V_VT(&v) = VT_I4;
-    IDispatch  *pdisp;
-    for (V_I4(&v) = 0; !fFound && psw->Item(v, &pdisp) == S_OK;  V_I4(&v)++) 
-    {
-      IWebBrowserApp *pwba;
-      if (SUCCEEDED(pdisp->QueryInterface(IID_IWebBrowserApp, (void**)&pwba))) 
-      {
-        HWND hwndWBA;
-        if (SUCCEEDED(pwba->get_HWND((LONG_PTR*)&hwndWBA)) && hwndWBA == hwndFind) 
-        {
-          fFound = TRUE;
-          IServiceProvider *psp;
-          if (SUCCEEDED(pwba->QueryInterface(IID_IServiceProvider, (void**)&psp))) 
-          {
-            IShellBrowser *psb;
-            if (SUCCEEDED(psp->QueryService(SID_STopLevelBrowser,IID_IShellBrowser, (void**)&psb))) 
-            {
-              IShellView *psv;
-              if (SUCCEEDED(psb->QueryActiveShellView(&psv))) 
-              {
-                IFolderView *pfv;
-                if (SUCCEEDED(psv->QueryInterface(IID_IFolderView, (void**)&pfv))) 
-                {
-                  IPersistFolder2 *ppf2;
-                  if (SUCCEEDED(pfv->GetFolder(IID_IPersistFolder2, (void**)&ppf2))) 
-                  {
-                    LPITEMIDLIST pidlFolder;
-                    if (SUCCEEDED(ppf2->GetCurFolder(&pidlFolder))) 
-                    {
-                      if (!SHGetPathFromIDList(pidlFolder, szPath)) 
-                      {
-                        // this is not a directory 
-                        // or we don't have a valid directory
-                        memset(szPath, 0, T_MAX_PATH);
-                      }
-
-                      // make sure it is properly formated
-                      myodd::files::AddTrailingBackSlash( szPath, T_MAX_PATH );
-
-                      // this folder has to be added as well...
-                      AddFileName( szPath );
-
-                      // look for all the selected items.
-                      IEnumIDList *ieIDList;
-                      if (SUCCEEDED(pfv->Items( SVGIO_SELECTION, IID_IEnumIDList,(void**)&ieIDList)))
-                      {
-                        LPITEMIDLIST pidlItem = NULL;
-                        while (S_OK == ieIDList->Next( 1, &pidlItem, NULL ) )
-                        {
-                          IShellFolder *psf;
-                          if (SUCCEEDED(ppf2->QueryInterface(IID_IShellFolder,(void**)&psf))) 
-                          {
-                            STRRET str;
-                            if (SUCCEEDED(psf->GetDisplayNameOf(pidlItem,SHGDN_INFOLDER, &str))) 
-                            {
-                              TCHAR szFileName[T_MAX_PATH];
-                              StrRetToBuf(&str, pidlItem, szFileName, T_MAX_PATH);
-
-                              STD_TSTRING s = szPath;
-                              s += szFileName;
-
-                              // then add this item to the list
-                              AddFileName( s );
-                            }
-                            psf->Release();
-                          }
-                          CoTaskMemFree(pidlItem); 
-                        }
-                      }
-                      CoTaskMemFree(pidlFolder);
-                    }
-                    ppf2->Release();
-                  }
-                  pfv->Release();
-                }
-                psv->Release();
-              }
-              psb->Release();
-            }
-            psp->Release();
-          }
-        }
-        pwba->Release();
-      }
-      pdisp->Release();
-    }
-    psw->Release();
-  }
-
-  CoUninitialize();
-
-  return fFound;
 }
 
 /**

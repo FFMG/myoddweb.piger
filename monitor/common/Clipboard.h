@@ -38,7 +38,6 @@ protected:
 
 protected:
   void ParseClipboard( V_CF& cf );
-  BOOL ParseExplorerData( CWnd* cwnd );
 
   void ResetClipBoardData();
   void AddFileName( const STD_TSTRING& s );
