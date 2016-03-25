@@ -908,6 +908,9 @@ LRESULT CActionMonitorDlg::OnReload
 {
   // stop everything and wait for them.
   App().DoEndActionsList( );
+  
+  // wait all the active windows.
+  WaitForActiveWindows();
 
 #ifdef ACTIONMONITOR_API_PLUGIN
   // We have to kill all the API plugins.
@@ -915,8 +918,6 @@ LRESULT CActionMonitorDlg::OnReload
   PluginVirtualMachine* pg = App().GetPluginVirtualMachine( );
   pg->DestroyPlugins();
 #endif // ACTIONMONITOR_API_PLUGIN
-
-  WaitForActiveWindows( );
 
   //  set up up the command window for the first time, (hidden)
   InitWindow();
