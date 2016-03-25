@@ -4,7 +4,6 @@
 namespace myodd {
   namespace threads {
     Lock::Lock(std::mutex &mutex) :
-      _mustUnlock(false),
       _mutex(mutex),
       _guard(NULL)
     {
@@ -13,14 +12,24 @@ namespace myodd {
         _guard = new std::lock_guard<std::mutex>(_mutex);
       }
       catch (const std::system_error& e) {
-        int x = 1;
-        x = x + 1;
       }
     }
 
+    /**
+     * Free memory, release the lock.
+     */
     Lock::~Lock()
     {
+      Release();
+    }
+
+    /**
+     * Release the lock straightaway.
+     */
+    void Lock::Release()
+    {
       delete _guard;
+      _guard = NULL;
     }
   }
 }

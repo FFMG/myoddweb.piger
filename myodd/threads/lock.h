@@ -10,8 +10,9 @@ namespace myodd {
       Lock( std::mutex& mutex );
       virtual ~Lock();
 
+      void Release();
+
     private:
-      bool _mustUnlock;
       std::mutex& _mutex;
       std::lock_guard<std::mutex>* _guard;
     };

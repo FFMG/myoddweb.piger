@@ -3,11 +3,10 @@
 #include "ActionMonitor.h"
 
 /**
- * todo
- * @param void
- * @return void
+ * Constructor
+ * @param LPCTSTR subDir the directory we want to parse.
  */
-ActionsImmediate::ActionsImmediate(LPCTSTR subDir ) : 
+ActionsImmediate::ActionsImmediate( LPCTSTR subDir ) : 
   Actions(),
   m_subDir( subDir )
 {
@@ -15,9 +14,7 @@ ActionsImmediate::ActionsImmediate(LPCTSTR subDir ) :
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * Destructor
  */
 ActionsImmediate::~ActionsImmediate(void)
 {
@@ -37,16 +34,16 @@ void ActionsImmediate::Init()
   }
 
   //  we must now do all the actions
-  DoThem( false );
+  DoThem( );
 }
 
 /**
- * todo
- * @param bool isPrivileged if we need administrator privilege to run this.
+ * Do all the action right away.
  * @return void
  */
-void ActionsImmediate::DoThem(  bool isPrivileged )
+void ActionsImmediate::DoThem(  )
 {
+  const bool isPrivileged = true;
   for( array_of_actions::iterator it = m_Actions.begin(); it != m_Actions.end(); ++it )
   {
     // we must be carefull that we replace all the values properly
@@ -74,6 +71,9 @@ void ActionsImmediate::DoThem(  bool isPrivileged )
       _ASSERT(0);
     }// catch
   }// for loop
+
+  // wait for all the workers to finish.
+  WaitForAllWorkers();
 
   // reset the current action to the default.
   App().PossibleActions().SetAction( NULL );

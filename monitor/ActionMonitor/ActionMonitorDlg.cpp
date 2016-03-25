@@ -908,16 +908,21 @@ LRESULT CActionMonitorDlg::OnReload
 {
   // stop everything and wait for them.
   App().DoEndActionsList( );
-  
+
   // wait all the active windows.
+  // those are the ones created by the end Action list.
   WaitForActiveWindows();
 
 #ifdef ACTIONMONITOR_API_PLUGIN
   // We have to kill all the API plugins.
-  //
+  // they should be all done and completed.
   PluginVirtualMachine* pg = App().GetPluginVirtualMachine( );
   pg->DestroyPlugins();
 #endif // ACTIONMONITOR_API_PLUGIN
+
+  //
+  //  Restart everything.
+  //
 
   //  set up up the command window for the first time, (hidden)
   InitWindow();
@@ -925,12 +930,17 @@ LRESULT CActionMonitorDlg::OnReload
   //  setup the hooks and the key
   InitHook();
 
-  // build the action list
+  // (re)build the action list
   App().BuildActionsList();
 
   //  and restart everything
   App().DoStartActionsList( );
 
+  // wait all the active windows.
+  // those we just re-started.
+  WaitForActiveWindows();
+
+  //  we are now done.
   return 0L;
 }
 
@@ -1055,6 +1065,15 @@ void CActionMonitorDlg::KillAllActiveWindows()
  */
 void CActionMonitorDlg::WaitForActiveWindows()
 {
+  // first give our window a chance to process UWM_DISPLAYMESSAGE.
+  // but we don't want to do other messages only the pending display messages.
+  MSG msg;
+  while (PeekMessage(&msg, m_hWnd, UWM_DISPLAYMESSAGE, UWM_DISPLAYMESSAGE, PM_REMOVE))
+  {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+  }
+
   // Wait for pending messages
   // we try and get the parent window
   // and if we cannot locate it, then it must be because the window no longer exists
@@ -1080,7 +1099,7 @@ void CActionMonitorDlg::WaitForActiveWindows()
         MessagePump(NULL);
 
         // let go of the thread.
-        Sleep(0);
+        std::this_thread::yield();
 
         // just do one message at a time
         // so we don't block others.

@@ -28,14 +28,13 @@ ActiveActions::~ActiveActions()
 
   // the map should now be empty
   // otherwise we will simply delete the items.
+  myodd::threads::Lock guard(_mutex);
+  for (Runners::iterator it = _runners.begin(); it != _runners.end(); ++it)
   {
-    myodd::threads::Lock guard(_mutex);
-    for (Runners::iterator it = _runners.begin(); it != _runners.end(); ++it)
-    {
-      delete it->second;
-    }
-    _runners.clear();
+    delete it->second;
   }
+  _runners.clear();
+  guard.Release();
 }
 
 /**
@@ -51,10 +50,14 @@ void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
   }
 
   // add this item to our list.
+  // make sure that we keep the lock for as little as posible..
   myodd::threads::Lock guard(_mutex);
 
   // add it to the list
   _runners[activeAction] = activeAction;
+
+  //  release the lock
+  guard.Release();
 
   // start the thread.
   QueueWorker(&ActiveActions::Execute, activeAction, this );
@@ -99,4 +102,7 @@ void ActiveActions::Execute( ActiveAction* runner, ActiveActions* parent )
 
   // and remove the runner.
   parent->RemoveRunner(runner);
+
+  // give other threads a chance to run.
+  std::this_thread::yield();
 }

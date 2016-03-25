@@ -24,6 +24,8 @@ namespace myodd {
 
     /**
      * Add this thread to the queue.
+     * @param std::thread* the thread we want to queue.
+     * @return std::thread& the thread that we just added.
      */
     std::thread& Workers::QueueWorker(std::thread* threadToQueue)
     {
@@ -56,6 +58,9 @@ namespace myodd {
 
         // now that it is done, we can free the memory
         delete (*it);
+
+        // give threads a chance to run...
+        std::this_thread::yield();
       }
 
       //  we can now get rid of all the workers.
