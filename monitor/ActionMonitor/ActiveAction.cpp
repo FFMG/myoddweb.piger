@@ -57,7 +57,6 @@ void ActiveAction::CreateClipboard()
   // tell the clipboard to copy the data of the last known foreground window.
   CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
   size_t maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
-
   _clipboard = new Clipboard(cwnd, maxClipboardMemory);
 }
 

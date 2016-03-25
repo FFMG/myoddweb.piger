@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "ActionLoad.h"
 #include "ActionsCore.h"
+#include "ActiveUserMessageAction.h"
 
 /**
  * todo
@@ -32,7 +33,7 @@ ActionLoad::~ActionLoad()
  */
 ActiveAction* ActionLoad::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
-  //  ask to reload the actions.
-  PostMessage(AfxGetMainWnd()->GetSafeHwnd(), UWM_KEYBOARD_RELOAD, 0, 0);
-  return NULL;
+  //  get the last forground window handle
+  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
+  return new ActiveUserMessageAction(*this, hTopHWnd, UWM_KEYBOARD_RELOAD);
 }

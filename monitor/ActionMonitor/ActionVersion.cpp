@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "ActionVersion.h"
 #include "ActionsCore.h"
+#include "ActiveUserMessageAction.h"
 
 /**
  * todo
@@ -32,7 +33,9 @@ ActionVersion::~ActionVersion()
  */
 ActiveAction* ActionVersion::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
 {
+  //  get the last forground window handle
+  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
+
   //  display the version.
-  PostMessage(AfxGetMainWnd()->GetSafeHwnd(), UWM_KEYBOARD_VERSION, 0, 0);
-  return NULL;
+  return new ActiveUserMessageAction(*this, hTopHWnd, UWM_KEYBOARD_VERSION);
 }
