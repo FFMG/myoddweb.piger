@@ -77,7 +77,7 @@ void LuaVirtualMachine::Dispose(lua_State* lua)
  * @param ActiveAction* action the current action
  * @return lua_State* a newly created lua state,
  */
-lua_State* LuaVirtualMachine::CreateState(luaapi* api)
+lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
 {
   // create the new state
   lua_State* lua = luaL_newstate();
@@ -115,10 +115,10 @@ lua_State* LuaVirtualMachine::CreateState(luaapi* api)
 /**
  * Todo
  * @param const STD_TSTRING& szFile the file/script we would like to load.
- * @param luaapi api the created api we will be using.
+ * @param LuaApi api the created api we will be using.
  * @return int result of the operation.
  */
-int LuaVirtualMachine::ExecuteInThread(const STD_TSTRING& szFile, luaapi* api)
+int LuaVirtualMachine::ExecuteInThread(const STD_TSTRING& szFile, LuaApi* api)
 {
   lua_State* lua = CreateState(api);
   if( NULL == lua )
@@ -155,7 +155,7 @@ bool LuaVirtualMachine::IsLuaExt( LPCTSTR ext )
   return ( _tcsicmp( ext, _T("lua") ) == 0 );
 }
 
-luaapi& LuaVirtualMachine::GetApi(lua_State* lua)
+LuaApi& LuaVirtualMachine::GetApi(lua_State* lua)
 {
 #ifndef ACTIONMONITOR_API_LUA
   throw - 1;
@@ -177,7 +177,7 @@ luaapi& LuaVirtualMachine::GetApi(lua_State* lua)
   }
 
   //  get the value before we lock it...
-  luaapi* api = it->second;
+  LuaApi* api = it->second;
   lvm->_mutex.unlock();
 
   return *api;

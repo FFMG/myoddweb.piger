@@ -13,21 +13,21 @@ public:
   LuaVirtualMachine(void);
   virtual ~LuaVirtualMachine(void);
   
-  int ExecuteInThread(const STD_TSTRING& szFile, luaapi* api );
+  int ExecuteInThread(const STD_TSTRING& szFile, LuaApi* api );
 
   static bool IsLuaExt( LPCTSTR ext );
 
 protected:
-  lua_State* CreateState( luaapi* api );
+  lua_State* CreateState(LuaApi* api );
   void Dispose(lua_State* lua);
   void Dispose();
 
 protected:
   std::mutex _mutex;
-  typedef std::map<lua_State*, luaapi*> state_api;
+  typedef std::map<lua_State*, LuaApi*> state_api;
   state_api _lua_Api;
 
-  static luaapi& GetApi(lua_State* lua);
+  static LuaApi& GetApi(lua_State* lua);
 
 public:
   static int Version(lua_State *lua);

@@ -24,11 +24,11 @@ extern "C"
 #  pragma comment(lib, "lua.lib" )
 # endif
 
-class luaapi : public HelperApi
+class LuaApi : public HelperApi
 {
 public:
-  luaapi(const ActiveAction& action);
-  virtual ~luaapi();
+  LuaApi(const ActiveAction& action);
+  virtual ~LuaApi();
 
 public:
 

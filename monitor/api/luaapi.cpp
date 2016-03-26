@@ -9,7 +9,7 @@
  * @param lua_State
  * @return void
  */
-luaapi::luaapi(const ActiveAction& action) : HelperApi( action )
+LuaApi::LuaApi(const ActiveAction& action) : HelperApi( action )
 {
 }
 
@@ -18,7 +18,7 @@ luaapi::luaapi(const ActiveAction& action) : HelperApi( action )
  * @param void
  * @return void
  */
-luaapi::~luaapi(void)
+LuaApi::~LuaApi(void)
 {
 }
 
@@ -27,7 +27,7 @@ luaapi::~luaapi(void)
  * @param lua_State *
  * @return int
  */
-int luaapi::Version (lua_State *lua)
+int LuaApi::Version (lua_State *lua)
 {
   // short and sweet
   // all we need is the version number.
@@ -42,7 +42,7 @@ int luaapi::Version (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::Execute (lua_State *lua)
+int LuaApi::Execute (lua_State *lua)
 {
   // get the number of arguments.
   // we can only have one or 2 arguments 
@@ -89,7 +89,7 @@ int luaapi::Execute (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::GetCommandCount(lua_State *lua)
+int LuaApi::GetCommandCount(lua_State *lua)
 {
   // get it
   size_t nSize = __super::GetCommandCount();
@@ -106,7 +106,7 @@ int luaapi::GetCommandCount(lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::GetCommand (lua_State *lua)
+int LuaApi::GetCommand (lua_State *lua)
 {
   static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
@@ -143,7 +143,7 @@ int luaapi::GetCommand (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::GetAction (lua_State *lua)
+int LuaApi::GetAction (lua_State *lua)
 {
   static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
@@ -179,7 +179,7 @@ int luaapi::GetAction (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::Say (lua_State *lua)
+int LuaApi::Say (lua_State *lua)
 {
   USES_CONVERSION;
 
@@ -209,7 +209,7 @@ int luaapi::Say (lua_State *lua)
  * @param lua_State *
  * @return int
  */
-int luaapi::Getstring( lua_State *lua )
+int LuaApi::Getstring( lua_State *lua )
 {
   const int ARGUMENT_QUOTE = 1;
 
@@ -245,7 +245,7 @@ int luaapi::Getstring( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::GetVersion( lua_State *lua )
+int LuaApi::GetVersion( lua_State *lua )
 {
   STD_TSTRING sValue = _T("");
   if( !__super::GetVersion( sValue ) )
@@ -270,7 +270,7 @@ int luaapi::GetVersion( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::Getfile( lua_State *lua )
+int LuaApi::Getfile( lua_State *lua )
 {
   const int ARGUMENT_NUMBER = 1;
   const int ARGUMENT_QUOTE = 2;
@@ -314,7 +314,7 @@ int luaapi::Getfile( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::Getfolder( lua_State *lua )
+int LuaApi::Getfolder( lua_State *lua )
 {
   const int ARGUMENT_NUMBER = 1;
   const int ARGUMENT_QUOTE = 2;
@@ -360,7 +360,7 @@ int luaapi::Getfolder( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::Geturl( lua_State *lua )
+int LuaApi::Geturl( lua_State *lua )
 {
   const int ARGUMENT_NUMBER = 1;
   const int ARGUMENT_QUOTE = 2;
@@ -406,7 +406,7 @@ int luaapi::Geturl( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::AddAction( lua_State *lua )
+int LuaApi::AddAction( lua_State *lua )
 {
   //  get the number of arguments
   int n = lua_gettop( lua );
@@ -434,7 +434,7 @@ int luaapi::AddAction( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::RemoveAction( lua_State *lua )
+int LuaApi::RemoveAction( lua_State *lua )
 {
   //  get the number of arguments
   int n = lua_gettop( lua );
@@ -460,7 +460,7 @@ int luaapi::RemoveAction( lua_State *lua )
  * @param lua_State *
  * @return int
  */
-int luaapi::FindAction( lua_State *lua )
+int LuaApi::FindAction( lua_State *lua )
 {
   //  get the number of arguments
   int n = lua_gettop( lua );
