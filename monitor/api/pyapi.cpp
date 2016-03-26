@@ -9,7 +9,7 @@
  * @param void
  * @return void
  */
-pyapi::pyapi(const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState) :
+PyApi::PyApi(const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState) :
   HelperApi(action),
   _script( script ),
   _mainThreadState(mainThreadState)
@@ -21,7 +21,7 @@ pyapi::pyapi(const ActiveAction& action, const std::string& script, PyThreadStat
  * @param void
  * @return void
  */
-pyapi::~pyapi()
+PyApi::~PyApi()
 {
 }
 
@@ -29,7 +29,7 @@ pyapi::~pyapi()
  * Return a 'false' message and swallow any errors.
  * @return PyObject* a 'false' python object.
  */
-PyObject* pyapi::Fail()
+PyObject* PyApi::Fail()
 {
   //  clear all the errors.
   PyErr_Clear();
@@ -45,7 +45,7 @@ PyObject* pyapi::Fail()
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::Say(PyObject *self, PyObject *args)
+PyObject* PyApi::Say(PyObject *self, PyObject *args)
 {
   CHAR* msg;
   int slen;
@@ -76,7 +76,7 @@ PyObject* pyapi::Say(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::Version (PyObject *self, PyObject *args)
+PyObject* PyApi::Version (PyObject *self, PyObject *args)
 {
   // short and sweet
   // all we need is the version number.
@@ -90,7 +90,7 @@ PyObject* pyapi::Version (PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::GetCommand(PyObject *self, PyObject *args)
+PyObject* PyApi::GetCommand(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
   // get the index number
@@ -121,7 +121,7 @@ PyObject* pyapi::GetCommand(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::GetAction(PyObject *self, PyObject *args)
+PyObject* PyApi::GetAction(PyObject *self, PyObject *args)
 {
   STD_TSTRING sValue;
   if( !__super::GetAction( sValue ) )
@@ -142,7 +142,7 @@ PyObject* pyapi::GetAction(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::GetCommandCount(PyObject *self, PyObject *args)
+PyObject* PyApi::GetCommandCount(PyObject *self, PyObject *args)
 {
   // get it
   size_t nSize = __super::GetCommandCount();
@@ -158,7 +158,7 @@ PyObject* pyapi::GetCommandCount(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::Execute(PyObject *self, PyObject *args)
+PyObject* PyApi::Execute(PyObject *self, PyObject *args)
 {
   CHAR* module = NULL;
   CHAR* cmdLine = NULL;
@@ -183,7 +183,7 @@ PyObject* pyapi::Execute(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::Getstring(PyObject *self, PyObject *args)
+PyObject* PyApi::Getstring(PyObject *self, PyObject *args)
 {
   int iQuote = 1;
   if (!PyArg_ParseTuple(args, "|p", &iQuote))  
@@ -211,7 +211,7 @@ PyObject* pyapi::Getstring(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::Getfile(PyObject *self, PyObject *args)
+PyObject* PyApi::Getfile(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
   int iQuote = 1;
@@ -240,7 +240,7 @@ PyObject* pyapi::Getfile(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::Getfolder(PyObject *self, PyObject *args)
+PyObject* PyApi::Getfolder(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
   int iQuote = 1;
@@ -269,7 +269,7 @@ PyObject* pyapi::Getfolder(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::Geturl(PyObject *self, PyObject *args)
+PyObject* PyApi::Geturl(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
   int iQuote = 1;
@@ -298,7 +298,7 @@ PyObject* pyapi::Geturl(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::AddAction(PyObject *self, PyObject *args)
+PyObject* PyApi::AddAction(PyObject *self, PyObject *args)
 {
   CHAR* szText = NULL;
   CHAR* szPath = NULL;
@@ -321,7 +321,7 @@ PyObject* pyapi::AddAction(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::RemoveAction(PyObject *self, PyObject *args)
+PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
 {
   CHAR* szText = NULL;
   CHAR* szPath = NULL;
@@ -344,7 +344,7 @@ PyObject* pyapi::RemoveAction(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject*
  */
-PyObject* pyapi::GetVersion(PyObject *self, PyObject *args)
+PyObject* PyApi::GetVersion(PyObject *self, PyObject *args)
 {
   STD_TSTRING sValue = _T("");
   if( !__super::GetVersion( sValue ) )
@@ -365,7 +365,7 @@ PyObject* pyapi::GetVersion(PyObject *self, PyObject *args)
  * @param PyObject *
  * @return PyObject* false or the path of that action.
  */
-PyObject* pyapi::FindAction(PyObject *self, PyObject *args)
+PyObject* PyApi::FindAction(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
   CHAR* szText = NULL;
@@ -391,7 +391,7 @@ PyObject* pyapi::FindAction(PyObject *self, PyObject *args)
  * Execute the current script
  * We are now in the thread.
  */
-void pyapi::ExecuteInThread()
+void PyApi::ExecuteInThread()
 {
   assert(Py_IsInitialized() );
   
@@ -452,7 +452,7 @@ void pyapi::ExecuteInThread()
 /**
  * Check for errors and log a message.
  */
-void pyapi::CheckForPythonErrors()
+void PyApi::CheckForPythonErrors()
 {
   PyObject* ex = PyErr_Occurred();
   if (NULL != ex)

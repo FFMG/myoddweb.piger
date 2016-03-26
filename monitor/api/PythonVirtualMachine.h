@@ -20,7 +20,7 @@ public:
     return _mainThreadState;
   }
 
-  void AddApi(std::thread::id id, pyapi* api);
+  void AddApi(std::thread::id id, PyApi* api);
   void RemoveApi(std::thread::id id);
 
 protected:
@@ -29,9 +29,9 @@ protected:
 
   std::mutex _mutex;
 
-  typedef std::map<std::thread::id, pyapi*> Apis;
+  typedef std::map<std::thread::id, PyApi*> Apis;
   Apis _apis;
-  static pyapi& PythonVirtualMachine::GetApi();
+  static PyApi& PythonVirtualMachine::GetApi();
 
   PyThreadState* _mainThreadState;
 

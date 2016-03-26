@@ -12,11 +12,11 @@ static const double ACTIONMONITOR_API_PY_VERSION = 2.0;
 // support for Python
 #include "python\include\Python.h"
 
-class pyapi : public HelperApi
+class PyApi : public HelperApi
 {
 public:
-  pyapi( const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState );
-  virtual ~pyapi();
+  PyApi( const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState );
+  virtual ~PyApi();
 
 public:
   PyObject* Say(PyObject *self, PyObject *args);

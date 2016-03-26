@@ -176,9 +176,9 @@ bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
 
 /**
  * Get the current api for this thread.
- * return pyapi& the python API for that thread.
+ * return PyApi& the python API for that thread.
  */
-pyapi& PythonVirtualMachine::GetApi()
+PyApi& PythonVirtualMachine::GetApi()
 {
 #ifndef ACTIONMONITOR_API_PY
   throw - 1;
@@ -196,7 +196,7 @@ pyapi& PythonVirtualMachine::GetApi()
 #endif
 }
 
-void PythonVirtualMachine::AddApi(std::thread::id id, pyapi* api)
+void PythonVirtualMachine::AddApi(std::thread::id id, PyApi* api)
 {
 #ifndef ACTIONMONITOR_API_PY
   throw - 1;
