@@ -11,7 +11,7 @@ static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 // support for PluginApi
 #include "../plugins/amplugin.h"
 
-class PluginApi : public helperapi
+class PluginApi : public HelperApi
 {
 public:
   PluginApi(const ActiveAction& action);

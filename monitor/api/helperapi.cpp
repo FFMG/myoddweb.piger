@@ -17,7 +17,7 @@
  * @param void
  * @return void
  */
-helperapi::helperapi(const ActiveAction& action) : _action( action )
+HelperApi::HelperApi(const ActiveAction& action) : _action( action )
 {
 }
 
@@ -26,7 +26,7 @@ helperapi::helperapi(const ActiveAction& action) : _action( action )
  * @param void
  * @return void 
  */
-helperapi::~helperapi()
+HelperApi::~HelperApi()
 {
 }
 
@@ -34,7 +34,7 @@ helperapi::~helperapi()
  * Get the current clipboard for this active action.
  * @return const Clipboard& the current clipboard.
  */
-const Clipboard& helperapi::GetClipboard() const
+const Clipboard& HelperApi::GetClipboard() const
 {
   return _action.GetClipboard();
 }
@@ -46,7 +46,7 @@ const Clipboard& helperapi::GetClipboard() const
  * @param const unsigned int how fast we want to fade out.
  * @return bool if the message was displayed properly.
  */
-bool helperapi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
+bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
 {
   if( NULL == msg )
   {
@@ -80,7 +80,7 @@ bool helperapi::Say(const wchar_t* msg, const unsigned int nElapse, const unsign
  * @param void
  * @return boolean false if it does not exist
  */
-bool helperapi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
+bool HelperApi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
 {
   try
   {
@@ -136,7 +136,7 @@ bool helperapi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
  * @param STD_TSTRING& sValue the value will be put here.
  * @return bool if we were able to get the command or not.
  */
-bool helperapi::GetAction( STD_TSTRING& sValue )
+bool HelperApi::GetAction( STD_TSTRING& sValue )
 {
   try
   {
@@ -166,7 +166,7 @@ bool helperapi::GetAction( STD_TSTRING& sValue )
  * one command count, ( 'Home' );
  * @return void
  */
-size_t helperapi::GetCommandCount()
+size_t HelperApi::GetCommandCount()
 {
   try
   {
@@ -206,7 +206,7 @@ size_t helperapi::GetCommandCount()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool success or not
  */
-bool helperapi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
+bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
 {
   if( NULL == module && NULL == cmdLine )
   {
@@ -241,7 +241,7 @@ bool helperapi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
  * @param STD_TSTRING& the return string that will contain the FULL version number.
  * @return bool true|false
  */
-bool helperapi::GetVersion (STD_TSTRING& sValue )
+bool HelperApi::GetVersion (STD_TSTRING& sValue )
 {
   myodd::files::Version _ver;
   sValue = myodd::strings::ToStringFmt( _T("%d.%d.%d.%d"),
@@ -258,7 +258,7 @@ bool helperapi::GetVersion (STD_TSTRING& sValue )
  * @param bool bQuote if we want to quote the text or not.
  * @return bool if we have a string selected or not.
  */
-bool helperapi::GetString (STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetString (STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
@@ -294,7 +294,7 @@ bool helperapi::GetString (STD_TSTRING& sValue, bool bQuote)
  * @param bool bQuote if we want to quote or not.
  * @return bool success or not if there are no more files
  */
-bool helperapi::GetFile(const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetFile(const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
@@ -325,7 +325,7 @@ bool helperapi::GetFile(const unsigned int idx, STD_TSTRING& sValue, bool bQuote
  * @param bool bQuote if we want to quote the string or not.
  * @return bool success or not if there are no more URLs
  */
-bool helperapi::GetURL (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetURL (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
@@ -359,7 +359,7 @@ bool helperapi::GetURL (const unsigned int idx, STD_TSTRING& sValue, bool bQuote
  * @param bool bQuote if we want to quote the string or not.
  * @return bool success or not, we return false when there are no more folders.
  */
-bool helperapi::GetFolder (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetFolder (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
 {
   try
   {
@@ -391,7 +391,7 @@ bool helperapi::GetFolder (const unsigned int idx, STD_TSTRING& sValue, bool bQu
  * @param LPCTSTR the full path of the command that will be executed.
  * @return bool if the action was added properly or not.
  */
-bool helperapi::AddAction(const wchar_t* szText, const wchar_t* szPath )
+bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
 {
   if( NULL == szText || _tcslen(szText) == 0 )
   {
@@ -414,7 +414,7 @@ bool helperapi::AddAction(const wchar_t* szText, const wchar_t* szPath )
  * @param const wchar_t* the path of the action we are removing.
  * @return bool if the action was removed or not.
  */
-bool helperapi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
+bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
 {
   if( NULL == szText || _tcslen(szText) == 0 )
   {
@@ -438,7 +438,7 @@ bool helperapi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
  * @param STD_TSTRING& if the action exists, return the path for it.
  * @return bool if the action exits or not.
  */
-bool helperapi::FindAction(const unsigned int idx, const wchar_t* szText, STD_TSTRING& stdPath )
+bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, STD_TSTRING& stdPath )
 {
   if( NULL == szText )
   {
@@ -452,7 +452,7 @@ bool helperapi::FindAction(const unsigned int idx, const wchar_t* szText, STD_TS
  * It is posible to return NULL if the window is not 
  * @return HWND the last top window.
  */
-HWND helperapi::GetForegroundWindow() const
+HWND HelperApi::GetForegroundWindow() const
 {
   //  is it NULL?
   if (NULL == _action.TopHWnd())
@@ -470,7 +470,7 @@ HWND helperapi::GetForegroundWindow() const
   return _action.TopHWnd();
 }
 
-std::wstring helperapi::widen(const std::string& str)
+std::wstring HelperApi::widen(const std::string& str)
 {
   std::wostringstream wstm;
   const std::ctype<wchar_t>& ctfacet = std::use_facet< std::ctype<wchar_t> >(wstm.getloc());

@@ -9,7 +9,7 @@
  * @param lua_State
  * @return void
  */
-luaapi::luaapi(const ActiveAction& action) : helperapi( action )
+luaapi::luaapi(const ActiveAction& action) : HelperApi( action )
 {
 }
 
@@ -449,7 +449,7 @@ int luaapi::RemoveAction( lua_State *lua )
 
   LPCSTR szText = lua_tostring (lua, 1);
   LPCSTR szPath = lua_tostring (lua, 2);
-  bool r = __super::RemoveAction( helperapi::widen(szText).c_str(), helperapi::widen(szPath).c_str() );
+  bool r = __super::RemoveAction(HelperApi::widen(szText).c_str(), HelperApi::widen(szPath).c_str() );
   
   lua_pushboolean ( lua, r );
   return 1;
@@ -478,7 +478,7 @@ int luaapi::FindAction( lua_State *lua )
   LPCSTR action = lua_tostring (lua, 2);
 
   STD_TSTRING sValue = _T("");
-  if( !__super::FindAction( idx, helperapi::widen( action ).c_str(), sValue ) )
+  if( !__super::FindAction( idx, HelperApi::widen( action ).c_str(), sValue ) )
   {
     //  just return false.
     lua_pushboolean ( lua, false );

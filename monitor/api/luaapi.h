@@ -24,7 +24,7 @@ extern "C"
 #  pragma comment(lib, "lua.lib" )
 # endif
 
-class luaapi : public helperapi
+class luaapi : public HelperApi
 {
 public:
   luaapi(const ActiveAction& action);

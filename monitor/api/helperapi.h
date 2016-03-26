@@ -9,11 +9,11 @@
  *
  * All they need is to call this helper class.
  **/
-class helperapi
+class HelperApi
 {
 public:
-  helperapi(const ActiveAction& action );
-  ~helperapi();
+  HelperApi(const ActiveAction& action );
+  ~HelperApi();
 
 private:
   const Clipboard& GetClipboard() const;

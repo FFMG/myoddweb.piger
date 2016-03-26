@@ -10,7 +10,7 @@
  * @return void
  */
 pyapi::pyapi(const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState) :
-  helperapi(action),
+  HelperApi(action),
   _script( script ),
   _mainThreadState(mainThreadState)
 {
@@ -63,7 +63,7 @@ PyObject* pyapi::Say(PyObject *self, PyObject *args)
 
   // display the message
   // and we can now display the message.
-  bool result = __super::Say(helperapi::widen( msg ).c_str(), nElapse, nFadeOut );
+  bool result = __super::Say(HelperApi::widen( msg ).c_str(), nElapse, nFadeOut );
   
   // return true.
   return Py_BuildValue("b", result );
@@ -170,7 +170,7 @@ PyObject* pyapi::Execute(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::Execute(helperapi::widen( module ).c_str(), helperapi::widen( cmdLine ).c_str(), (isPrivileged==1) );
+  bool result = __super::Execute(HelperApi::widen( module ).c_str(), HelperApi::widen( cmdLine ).c_str(), (isPrivileged==1) );
 
   // return the result.
   return Py_BuildValue("b", result );
@@ -310,7 +310,7 @@ PyObject* pyapi::AddAction(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::AddAction(helperapi::widen( szText ).c_str(), helperapi::widen( szPath ).c_str() );
+  bool result = __super::AddAction(HelperApi::widen( szText ).c_str(), HelperApi::widen( szPath ).c_str() );
   return Py_BuildValue("b", result );
 }
 
@@ -333,7 +333,7 @@ PyObject* pyapi::RemoveAction(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::RemoveAction(helperapi::widen(szText).c_str(), helperapi::widen(szPath).c_str() );
+  bool result = __super::RemoveAction(HelperApi::widen(szText).c_str(), HelperApi::widen(szPath).c_str() );
   return Py_BuildValue("b", result );
 }
 
@@ -376,7 +376,7 @@ PyObject* pyapi::FindAction(PyObject *self, PyObject *args)
   }
 
   STD_TSTRING sValue = _T("");
-  if( !__super::FindAction( idx, helperapi::widen( szText ).c_str(), sValue ) )
+  if( !__super::FindAction( idx, HelperApi::widen( szText ).c_str(), sValue ) )
   {
     // we have nothing
     return Py_BuildValue("b", false);
