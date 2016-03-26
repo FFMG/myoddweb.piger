@@ -77,6 +77,12 @@ PythonVirtualMachine::~PythonVirtualMachine()
     // restore the thread
     PyThreadState_Swap( _mainThreadState );
 
+    if (PyGILState_Check()) {
+      /* I have the GIL */
+      // 
+      PyEval_ReleaseLock();
+    }
+
     // simply close python
     Py_Finalize();
   }
