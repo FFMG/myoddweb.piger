@@ -1,11 +1,11 @@
 #include <tchar.h>
 
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 5
-#define VERSION_MAINTENANCE 16
-#define VERSION_BUILD 8
-#define VERSION_BUILD_DATE  _T("26/03/2016")
-#define VERSION_BUILD_TIME  _T("06:54:47UTC")
+#define VERSION_MINOR 6
+#define VERSION_MAINTENANCE 0
+#define VERSION_BUILD 0
+#define VERSION_BUILD_DATE  _T("01/04/2016")
+#define VERSION_BUILD_TIME  _T("16:27:54UTC")
 
 //
 // No need to edit below... (or maybe the year...)
