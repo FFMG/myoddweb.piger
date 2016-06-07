@@ -60,16 +60,6 @@ void ActiveAction::CreateClipboard()
   _clipboard = new Clipboard(cwnd, maxClipboardMemory);
 }
 
-bool ActiveAction::OnInitialize()
-{
-  return true;
-}
-
-bool ActiveAction::OnDeInitialize()
-{
-  return true;
-}
-
 bool ActiveAction::Initialize()
 {
   //  just create the clipboard.
@@ -92,16 +82,7 @@ bool ActiveAction::DeInitialize()
 
 void ActiveAction::ExecuteInThread()
 {
-  const STD_TSTRING& szExt = Extension();
-
-  //  the file.
-  const STD_TSTRING& szFile = File();
-
-  //  join the two items together.
-  std::vector<STD_TSTRING> argv;
-  argv.push_back(szFile);
-  argv.push_back( _szCommandLine);
-  Action::Execute(argv, _isPrivileged);
+	//	nothing to do here.
 }
 
 /**

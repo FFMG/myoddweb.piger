@@ -37,6 +37,14 @@ public:
     return _szCommandLine;
   }
 
+  /**
+   * check if this is a priviledged command
+   * @return bool
+   */
+  const bool IsPrivileged() const {
+    return _isPrivileged;
+  }
+
   /** 
    * Get the window that is/was the top most at the time the command was enteered.
    * return HWND the window at the time the call was made.
@@ -47,8 +55,8 @@ public:
   }
 
 protected:
-  virtual bool OnInitialize();
-  virtual bool OnDeInitialize();
+  virtual bool OnInitialize() = 0;
+  virtual bool OnDeInitialize() = 0;
 
 private:
   DISALLOW_COPY_AND_ASSIGN(ActiveAction);
