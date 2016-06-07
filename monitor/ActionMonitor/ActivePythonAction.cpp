@@ -36,7 +36,7 @@ bool ActivePythonAction::OnInitialize()
   return true;
 }
 
-void ActivePythonAction::ExecuteInThread()
+void ActivePythonAction::OnExecuteInThread()
 {
   //  the file.
   const STD_TSTRING& szFile = File();

@@ -22,8 +22,7 @@ public:
   const Clipboard& GetClipboard() const { return *_clipboard; }
 
   // ----------------------------
-  // @todo those should be pure virtual.
-  virtual void ExecuteInThread();
+  void ExecuteInThread();
   bool Initialize();
   bool DeInitialize();
 
@@ -37,6 +36,14 @@ public:
     return _szCommandLine;
   }
 
+  /**
+   * check if this is a priviledged command
+   * @return bool
+   */
+  const bool IsPrivileged() const {
+    return _isPrivileged;
+  }
+
   /** 
    * Get the window that is/was the top most at the time the command was enteered.
    * return HWND the window at the time the call was made.
@@ -47,8 +54,9 @@ public:
   }
 
 protected:
-  virtual bool OnInitialize();
-  virtual bool OnDeInitialize();
+  virtual void OnExecuteInThread() = 0;
+  virtual bool OnInitialize() = 0;
+  virtual bool OnDeInitialize() = 0;
 
 private:
   DISALLOW_COPY_AND_ASSIGN(ActiveAction);

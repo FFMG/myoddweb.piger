@@ -33,7 +33,7 @@ bool ActiveByeAction::OnDeInitialize()
  * Execute the action in thread.
  * Call to close this app.
  */
-void ActiveByeAction::ExecuteInThread()
+void ActiveByeAction::OnExecuteInThread()
 {
   // close all the active windows
   // we no longer need them.
