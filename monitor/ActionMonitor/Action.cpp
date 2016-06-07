@@ -9,6 +9,7 @@
 #include "activepythonaction.h"
 #include "activeluaaction.h"
 #include "activepluginaction.h"
+#include "activedefaultaction.h"
 
 #include "os\os.h"
 
@@ -420,5 +421,5 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const STD_TSTRING& sz
   }
 #endif // ACTIONMONITOR_API_PLUGIN
 
-  return new ActiveAction( *this, hTopHWnd, szCommandLine, isPrivileged );
+  return new ActiveDefaultAction( *this, hTopHWnd, szCommandLine, isPrivileged );
 }

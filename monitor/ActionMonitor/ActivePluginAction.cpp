@@ -30,7 +30,7 @@ bool ActivePluginAction::OnInitialize()
   return true;
 }
 
-void ActivePluginAction::ExecuteInThread()
+void ActivePluginAction::OnExecuteInThread()
 {
   //  the file.
   const STD_TSTRING& szFile = File();

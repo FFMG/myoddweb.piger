@@ -30,7 +30,7 @@ bool ActiveLuaAction::OnInitialize()
   return true;
 }
 
-void ActiveLuaAction::ExecuteInThread()
+void ActiveLuaAction::OnExecuteInThread()
 {
   //  the file.
   const STD_TSTRING& szFile = File();
