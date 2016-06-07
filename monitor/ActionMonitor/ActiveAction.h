@@ -22,8 +22,7 @@ public:
   const Clipboard& GetClipboard() const { return *_clipboard; }
 
   // ----------------------------
-  // @todo those should be pure virtual.
-  virtual void ExecuteInThread();
+  void ExecuteInThread();
   bool Initialize();
   bool DeInitialize();
 
@@ -55,6 +54,7 @@ public:
   }
 
 protected:
+  virtual void OnExecuteInThread() = 0;
   virtual bool OnInitialize() = 0;
   virtual bool OnDeInitialize() = 0;
 

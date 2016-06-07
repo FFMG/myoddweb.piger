@@ -30,7 +30,7 @@ bool ActiveDefaultAction::OnInitialize()
   return true;
 }
 
-void ActiveDefaultAction::ExecuteInThread()
+void ActiveDefaultAction::OnExecuteInThread()
 {
 	const STD_TSTRING& szExt = Extension();
 

@@ -80,9 +80,13 @@ bool ActiveAction::DeInitialize()
   return result;
 }
 
+/** 
+ * This is where we will be executing the code.
+ */
 void ActiveAction::ExecuteInThread()
 {
-	//	nothing to do here.
+	//	call the derived class
+  OnExecuteInThread();
 }
 
 /**

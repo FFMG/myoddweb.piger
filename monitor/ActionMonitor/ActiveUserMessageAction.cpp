@@ -25,7 +25,7 @@ bool ActiveUserMessageAction::OnDeInitialize()
   return true;
 }
 
-void ActiveUserMessageAction::ExecuteInThread()
+void ActiveUserMessageAction::OnExecuteInThread()
 {
   //  ask to reload the actions.
   CWnd* pWnd = App().GetMainWnd();
