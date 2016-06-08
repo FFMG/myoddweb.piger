@@ -77,6 +77,8 @@ protected:
 private:
   void UpdateEnvironmentVariables();
   void UpdateEnvironmentPath();
+  void UpdateEnvironmentTmp();
+  void UpdateEnvironmentTemp();
   void UpdateEnvironmentPathExt();
 };
 

@@ -199,3 +199,49 @@ void ActiveAction::UpdateEnvironmentPathExt()
   // set it.
   SetEnvironmentVariable(_T("PATHEXT"), sValue.c_str());
 }
+
+/**
+ * Update the environment variables temp path
+ * to make sure it is up to date.
+ */
+void ActiveAction::UpdateEnvironmentTemp()
+{
+  // get the value
+  STD_TSTRING sValue;
+  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("TEMP"), sValue, HKEY_LOCAL_MACHINE))
+  {
+    return;
+  }
+
+  // expand the value
+  if (!myodd::files::ExpandEnvironment(sValue, sValue))
+  {
+    return;
+  }
+
+  // set it.
+  SetEnvironmentVariable(_T("TEMP"), sValue.c_str());
+}
+
+/**
+* Update the environment variables path
+* to make sure it is up to date.
+*/
+void ActiveAction::UpdateEnvironmentTmp()
+{
+  // get the value
+  STD_TSTRING sValue;
+  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("TMP"), sValue, HKEY_LOCAL_MACHINE))
+  {
+    return;
+  }
+
+  // expand the value
+  if (!myodd::files::ExpandEnvironment(sValue, sValue))
+  {
+    return;
+  }
+
+  // set it.
+  SetEnvironmentVariable(_T("TMP"), sValue.c_str());
+}
