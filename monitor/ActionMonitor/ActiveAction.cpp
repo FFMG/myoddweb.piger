@@ -175,8 +175,26 @@ void ActiveAction::UpdateEnvironmentPath(const STD_TSTRING& keyName)
     return;
   }
 
-  // set it.
-  SetEnvironmentVariable( keyName.c_str(), sValue.c_str());
+  DWORD l = GetEnvironmentVariable(keyName.c_str(), NULL, 0);
+  if (l == 0)
+  {
+    // the value does not even exist ...
+    return;
+  }
+
+  // current value
+  TCHAR* sCurrentValue = new TCHAR[l + 1];
+  GetEnvironmentVariable(keyName.c_str(), sCurrentValue, l );
+
+  // if the two are not the same, then we need to update it.
+  if (myodd::strings::icompare(sCurrentValue, sValue) != 0)
+  {
+    // the two values are not the same, so set it.
+    SetEnvironmentVariable(keyName.c_str(), sValue.c_str());
+  }
+
+  // clean up
+  delete[] sCurrentValue;
 }
 
 /**
