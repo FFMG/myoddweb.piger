@@ -77,6 +77,7 @@ protected:
 private:
   void UpdateEnvironmentVariables();
   void UpdateEnvironmentPath();
+  void UpdateEnvironmentPathExt();
 };
 
 #endif // __ActiveAction_h__

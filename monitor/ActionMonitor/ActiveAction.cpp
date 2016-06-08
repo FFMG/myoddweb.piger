@@ -151,6 +151,13 @@ void ActiveAction::UpdateEnvironmentVariables()
 {
   // the path
   UpdateEnvironmentPath();
+
+  // the path ext
+  UpdateEnvironmentPathExt();
+
+  // the temp paths
+  UpdateEnvironmentTmp();
+  UpdateEnvironmentTemp();
 }
 
 /**
@@ -165,7 +172,7 @@ void ActiveAction::UpdateEnvironmentPath()
   {
     return;
   }
-  
+
   // expand the value
   if (!myodd::files::ExpandEnvironment(sValue, sValue))
   {
@@ -174,4 +181,21 @@ void ActiveAction::UpdateEnvironmentPath()
 
   // set it.
   SetEnvironmentVariable(_T("Path"), sValue.c_str());
+}
+
+/**
+ * Update the environment variables path extenstions
+ * to make sure it is up to date.
+ */
+void ActiveAction::UpdateEnvironmentPathExt()
+{
+  // get the value
+  STD_TSTRING sValue;
+  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("PATHEXT"), sValue, HKEY_LOCAL_MACHINE))
+  {
+    return;
+  }
+
+  // set it.
+  SetEnvironmentVariable(_T("PATHEXT"), sValue.c_str());
 }
