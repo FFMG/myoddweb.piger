@@ -85,6 +85,9 @@ bool ActiveAction::DeInitialize()
  */
 void ActiveAction::ExecuteInThread()
 {
+  // try and refresh the environment variables.
+  UpdateEnvironmentVariables();
+
 	//	call the derived class
   OnExecuteInThread();
 }
@@ -142,4 +145,33 @@ bool ActiveAction::ReadFile(LPCTSTR pyFile, std::string& script) const
 
   // success.
   return true;
+}
+
+void ActiveAction::UpdateEnvironmentVariables()
+{
+  // the path
+  UpdateEnvironmentPath();
+}
+
+/**
+ * Update the environment variables path
+ * to make sure it is up to date.
+ */
+void ActiveAction::UpdateEnvironmentPath()
+{
+  // get the value
+  STD_TSTRING sValue;
+  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("Path"), sValue, HKEY_LOCAL_MACHINE))
+  {
+    return;
+  }
+  
+  // expand the value
+  if (!myodd::files::ExpandEnvironment(sValue, sValue))
+  {
+    return;
+  }
+
+  // set it.
+  SetEnvironmentVariable(_T("Path"), sValue.c_str());
 }
