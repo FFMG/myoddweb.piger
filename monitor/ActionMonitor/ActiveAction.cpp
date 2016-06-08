@@ -160,27 +160,32 @@ void ActiveAction::UpdateEnvironmentVariables()
   UpdateEnvironmentTemp();
 }
 
-/**
- * Update the environment variables path
- * to make sure it is up to date.
- */
-void ActiveAction::UpdateEnvironmentPath()
+void ActiveAction::UpdateEnvironmentPath(const STD_TSTRING& keyName)
 {
   // get the value
   STD_TSTRING sValue;
-  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("Path"), sValue, HKEY_LOCAL_MACHINE))
+  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), keyName.c_str(), sValue, HKEY_LOCAL_MACHINE))
   {
     return;
   }
 
-  // expand the value
+  // expand the value(s)
   if (!myodd::files::ExpandEnvironment(sValue, sValue))
   {
     return;
   }
 
   // set it.
-  SetEnvironmentVariable(_T("Path"), sValue.c_str());
+  SetEnvironmentVariable( keyName.c_str(), sValue.c_str());
+}
+
+/**
+ * Update the environment variables path
+ * to make sure it is up to date.
+ */
+void ActiveAction::UpdateEnvironmentPath()
+{
+  UpdateEnvironmentPath(_T("Path"));
 }
 
 /**
@@ -206,21 +211,7 @@ void ActiveAction::UpdateEnvironmentPathExt()
  */
 void ActiveAction::UpdateEnvironmentTemp()
 {
-  // get the value
-  STD_TSTRING sValue;
-  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("TEMP"), sValue, HKEY_LOCAL_MACHINE))
-  {
-    return;
-  }
-
-  // expand the value
-  if (!myodd::files::ExpandEnvironment(sValue, sValue))
-  {
-    return;
-  }
-
-  // set it.
-  SetEnvironmentVariable(_T("TEMP"), sValue.c_str());
+  UpdateEnvironmentPath(_T("TEMP"));
 }
 
 /**
@@ -229,19 +220,5 @@ void ActiveAction::UpdateEnvironmentTemp()
 */
 void ActiveAction::UpdateEnvironmentTmp()
 {
-  // get the value
-  STD_TSTRING sValue;
-  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("TMP"), sValue, HKEY_LOCAL_MACHINE))
-  {
-    return;
-  }
-
-  // expand the value
-  if (!myodd::files::ExpandEnvironment(sValue, sValue))
-  {
-    return;
-  }
-
-  // set it.
-  SetEnvironmentVariable(_T("TMP"), sValue.c_str());
+  UpdateEnvironmentPath(_T("TMP"));
 }

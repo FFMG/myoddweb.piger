@@ -76,6 +76,7 @@ protected:
 
 private:
   void UpdateEnvironmentVariables();
+  void UpdateEnvironmentPath( const STD_TSTRING& keyName );
   void UpdateEnvironmentPath();
   void UpdateEnvironmentTmp();
   void UpdateEnvironmentTemp();
