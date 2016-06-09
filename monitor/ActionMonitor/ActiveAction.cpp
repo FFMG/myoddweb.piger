@@ -85,6 +85,9 @@ bool ActiveAction::DeInitialize()
  */
 void ActiveAction::ExecuteInThread()
 {
+  // try and refresh the environment variables.
+  UpdateEnvironmentVariables();
+
 	//	call the derived class
   OnExecuteInThread();
 }
@@ -142,4 +145,98 @@ bool ActiveAction::ReadFile(LPCTSTR pyFile, std::string& script) const
 
   // success.
   return true;
+}
+
+void ActiveAction::UpdateEnvironmentVariables()
+{
+  // the path
+  UpdateEnvironmentPath();
+
+  // the path ext
+  UpdateEnvironmentPathExt();
+
+  // the temp paths
+  UpdateEnvironmentTmp();
+  UpdateEnvironmentTemp();
+}
+
+void ActiveAction::UpdateEnvironmentPath(const STD_TSTRING& keyName)
+{
+  // get the value
+  STD_TSTRING sValue;
+  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), keyName.c_str(), sValue, HKEY_LOCAL_MACHINE))
+  {
+    return;
+  }
+
+  // expand the value(s)
+  if (!myodd::files::ExpandEnvironment(sValue, sValue))
+  {
+    return;
+  }
+
+  DWORD l = GetEnvironmentVariable(keyName.c_str(), NULL, 0);
+  if (l == 0)
+  {
+    // the value does not even exist ...
+    return;
+  }
+
+  // current value
+  TCHAR* sCurrentValue = new TCHAR[l + 1];
+  GetEnvironmentVariable(keyName.c_str(), sCurrentValue, l );
+
+  // if the two are not the same, then we need to update it.
+  if (myodd::strings::icompare(sCurrentValue, sValue) != 0)
+  {
+    // the two values are not the same, so set it.
+    SetEnvironmentVariable(keyName.c_str(), sValue.c_str());
+  }
+
+  // clean up
+  delete[] sCurrentValue;
+}
+
+/**
+ * Update the environment variables path
+ * to make sure it is up to date.
+ */
+void ActiveAction::UpdateEnvironmentPath()
+{
+  UpdateEnvironmentPath(_T("Path"));
+}
+
+/**
+ * Update the environment variables path extenstions
+ * to make sure it is up to date.
+ */
+void ActiveAction::UpdateEnvironmentPathExt()
+{
+  // get the value
+  STD_TSTRING sValue;
+  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("PATHEXT"), sValue, HKEY_LOCAL_MACHINE))
+  {
+    return;
+  }
+
+  // set it.
+  SetEnvironmentVariable(_T("PATHEXT"), sValue.c_str());
+}
+
+/**
+ * Update the environment variables temp path
+ * to make sure it is up to date.
+ */
+void ActiveAction::UpdateEnvironmentTemp()
+{
+  UpdateEnvironmentPath(_T("TEMP"));
+}
+
+/**
+* Update the environment variables path
+* to make sure it is up to date.
+*/
+void ActiveAction::UpdateEnvironmentTmp()
+{
+  UpdateEnvironmentPath(_T("TMP"));
 }

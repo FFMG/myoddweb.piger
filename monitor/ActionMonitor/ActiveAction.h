@@ -73,6 +73,14 @@ private:
 
 protected:
   bool ReadFile(LPCTSTR pyFile, std::string& script) const;
+
+private:
+  void UpdateEnvironmentVariables();
+  void UpdateEnvironmentPath( const STD_TSTRING& keyName );
+  void UpdateEnvironmentPath();
+  void UpdateEnvironmentTmp();
+  void UpdateEnvironmentTemp();
+  void UpdateEnvironmentPathExt();
 };
 
 #endif // __ActiveAction_h__
