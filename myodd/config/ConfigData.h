@@ -274,6 +274,9 @@ public:
     case type_int64:
       return ((__int64)data == m_dContainer.i64Content ); // check that (__int64)1 == 123456789... rather than 1 == (int)123456789...
 
+    case type_long:
+      return ((long)data == m_dContainer.iContent);
+
     case type_double:
       return ((double)data == m_dContainer.dContent);     // check that (double)1 == 1.0 rather than 1 == (int)1.5
 
@@ -296,6 +299,9 @@ public:
 
     case type_int64:
       return ((long double)data == (long double)m_dContainer.i64Content);
+
+    case type_long:
+      return (data == (double)m_dContainer.iContent);
 
     case type_double:
       return (data == m_dContainer.dContent);
