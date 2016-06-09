@@ -255,15 +255,18 @@ bool LoaderManager::SaveLUAFile
 
   //
   // add the execute command itself.
-  sData += "am_execute( \"";
+  sData += "am_execute( ";
 
   // unexpand the app path.
   // this is just cosmetic but also allows the user to copy their command
   // files from one machine to another.
   std::wstring unAppPath = appPath;
   myodd::files::UnExpandEnvironment(unAppPath, unAppPath);
-  sData += T_T2A(myodd::strings::replace(unAppPath, L"\\", L"\\\\").c_str());
-  sData += "\", \"\"";
+
+  //  remember, we cannot add spaces or anything...
+  sData += "[[";
+  sData += T_T2A(unAppPath.c_str());
+  sData += "]], \"\"";
   if (true == isPrivileged)
   {
     sData += ", true";
