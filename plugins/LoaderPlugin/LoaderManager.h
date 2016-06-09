@@ -40,6 +40,7 @@ protected:
 
   bool SaveLUAFile( std::wstring& fileName, 
                     const std::wstring command,
-                    const std::wstring appPath
+                    const std::wstring appPath,
+                    bool isPrivileged
                   );
 };

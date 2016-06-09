@@ -174,7 +174,7 @@ void LoaderManager::Learn( amplugin* p  )
 
   // create the command file.
   std::wstring fileName;
-  if( !SaveLUAFile( fileName, command, asPath ) )
+  if( !SaveLUAFile( fileName, command, asPath, false ) )
   {
     p->Say( L"Error : Could not create command file. Do you have the right permissions?", 100, 5 );
     return;
@@ -213,10 +213,11 @@ void LoaderManager::Learn( amplugin* p  )
  * @return bool success or not.
  */
 bool LoaderManager::SaveLUAFile
-( 
-  std::wstring& fileName, 
+(
+  std::wstring& fileName,
   const std::wstring command,
-  const std::wstring appPath
+  const std::wstring appPath,
+  bool isPrivileged
 )
 {
   // create the filename.
@@ -224,9 +225,9 @@ bool LoaderManager::SaveLUAFile
   luaFileName += L".lua";
 
   // make sure it is valid.
-  myodd::files::CleanFileName( luaFileName );
+  myodd::files::CleanFileName(luaFileName);
   std::wstring luaFilePath;
-  myodd::files::Join( luaFilePath, GetPluginPath(), luaFileName );
+  myodd::files::Join(luaFilePath, GetPluginPath(), luaFileName);
 
   USES_CONVERSION;
 
@@ -237,8 +238,8 @@ bool LoaderManager::SaveLUAFile
   FILE *stream;
   errno_t err;
   std::wstring exLuaFilePath;
-  myodd::files::ExpandEnvironment( luaFilePath, exLuaFilePath );
-  if( (err  = fopen_s( &stream, T_T2A(exLuaFilePath.c_str()), "wb" )) !=0 )
+  myodd::files::ExpandEnvironment(luaFilePath, exLuaFilePath);
+  if ((err = fopen_s(&stream, T_T2A(exLuaFilePath.c_str()), "wb")) != 0)
   {
     return false;
   }
@@ -248,7 +249,7 @@ bool LoaderManager::SaveLUAFile
   std::string sData;
   sData += "--\n";
   sData += "-- Loaded version 0.2\n";
-  sData += "-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\" );\n";
+  sData += "-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
   sData += "-- remove this command with 'unlearn ...'\n";
   sData += "--\n";
 
@@ -260,9 +261,18 @@ bool LoaderManager::SaveLUAFile
   // this is just cosmetic but also allows the user to copy their command
   // files from one machine to another.
   std::wstring unAppPath = appPath;
-  myodd::files::UnExpandEnvironment( unAppPath, unAppPath );
-  sData += T_T2A( myodd::strings::replace( unAppPath, L"\\", L"\\\\").c_str() );
-  sData += "\", \"\");\n";
+  myodd::files::UnExpandEnvironment(unAppPath, unAppPath);
+  sData += T_T2A(myodd::strings::replace(unAppPath, L"\\", L"\\\\").c_str());
+  sData += "\", \"\"";
+  if (true == isPrivileged)
+  {
+    sData += ", true";
+  }
+  else
+  {
+     sData += ", false";
+  }
+  sData += ");\n";
 
   //
   // write the data.
