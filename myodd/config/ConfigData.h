@@ -237,6 +237,73 @@ public:
     return ( data.m_ctType == m_ctType && data.m_dContainer == m_dContainer );
   }
 
+  /**
+   * Boolean operator.
+   * @param int the data we are comparing to
+   * @return bool true|false the two values are not equal
+   */
+  inline bool operator!=(int data) const
+  {
+    //  return the oposite of ==
+    return !(*this == data);
+  }
+
+  /**
+   * Boolean operator.
+   * @param double the data we are comparing to
+   * @return bool true|false the two values are not equal
+   */
+  inline bool operator!=(double data) const
+  {
+    //  return the oposite of ==
+    return !(*this == data);
+  }
+
+  /**
+   * Boolean operator.
+   * @param int the data we are comparing to
+   * @return bool true|false the two values are equal
+   */
+  inline bool operator==(int data) const
+  {
+    switch (m_ctType)
+    {
+    case type_int:
+      return (data == m_dContainer.iContent);
+
+    case type_int64:
+      return ((__int64)data == m_dContainer.i64Content ); // check that (__int64)1 == 123456789... rather than 1 == (int)123456789...
+
+    case type_double:
+      return ((double)data == m_dContainer.dContent);     // check that (double)1 == 1.0 rather than 1 == (int)1.5
+
+    default:
+      return false;
+    }
+  }
+
+  /**
+  * Boolean operator.
+  * @param int the data we are comparing to
+  * @return bool true|false the two values are equal
+  */
+  inline bool operator==(double data) const
+  {
+    switch (m_ctType)
+    {
+    case type_int:
+      return (data == (double)m_dContainer.iContent);
+
+    case type_int64:
+      return ((long double)data == (long double)m_dContainer.i64Content);
+
+    case type_double:
+      return (data == m_dContainer.dContent);
+
+    default:
+      return false;
+    }
+  }
 protected:
   template<typename ValueType>
   ValueType _get( ) const
