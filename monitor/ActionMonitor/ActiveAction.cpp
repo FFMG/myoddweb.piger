@@ -160,8 +160,57 @@ void ActiveAction::UpdateEnvironmentVariables()
   UpdateEnvironmentTemp();
 }
 
-void ActiveAction::UpdateEnvironmentPath(const STD_TSTRING& keyName)
+/**
+ * Update the environment value, (if needed).
+ * We also check if the value can/should be updated.
+ * @param const VariableType variableType the variable we are expanding.
+ * @return none.
+ */
+void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
 {
+  // values we will be using
+  STD_TSTRING keyConfig;
+  STD_TSTRING keyName;
+  bool expandValue = false;
+  
+  // set the values depending on the type.
+  switch (variableType)
+  {
+  case Path:
+    keyConfig = _T("path");
+    keyName = _T("Path");
+    expandValue = true;
+    break;
+
+  case PathExt:
+    keyConfig = _T("pathext");
+    keyName = _T("PATHEXT");
+    expandValue = false;  //  no expanding of that value.
+    break;
+
+  case Tmp:
+    keyConfig = _T("tmp");
+    keyName = _T("TMP");
+    expandValue = true;
+    break;
+
+  case Temp:
+    keyConfig = _T("temp");
+    keyName = _T("TEMP");
+    expandValue = true;
+    break;
+
+  default:
+    assert(!"Unknown value type!" ); // 
+    return;
+  }
+
+  STD_TSTRING configName = _T("os\\setenvironment\\") + keyConfig;
+  if (myodd::config::get(configName, 1) != 1)
+  {
+    return;
+  }
+
   // get the value
   STD_TSTRING sValue;
   if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), keyName.c_str(), sValue, HKEY_LOCAL_MACHINE))
@@ -169,10 +218,13 @@ void ActiveAction::UpdateEnvironmentPath(const STD_TSTRING& keyName)
     return;
   }
 
-  // expand the value(s)
-  if (!myodd::files::ExpandEnvironment(sValue, sValue))
+  if (true == expandValue)
   {
-    return;
+    // expand the value(s)
+    if (!myodd::files::ExpandEnvironment(sValue, sValue))
+    {
+      return;
+    }
   }
 
   DWORD l = GetEnvironmentVariable(keyName.c_str(), NULL, 0);
@@ -203,7 +255,7 @@ void ActiveAction::UpdateEnvironmentPath(const STD_TSTRING& keyName)
  */
 void ActiveAction::UpdateEnvironmentPath()
 {
-  UpdateEnvironmentPath(_T("Path"));
+  UpdateEnvironmentValue(ActiveAction::Path);
 }
 
 /**
@@ -212,15 +264,7 @@ void ActiveAction::UpdateEnvironmentPath()
  */
 void ActiveAction::UpdateEnvironmentPathExt()
 {
-  // get the value
-  STD_TSTRING sValue;
-  if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), _T("PATHEXT"), sValue, HKEY_LOCAL_MACHINE))
-  {
-    return;
-  }
-
-  // set it.
-  SetEnvironmentVariable(_T("PATHEXT"), sValue.c_str());
+  UpdateEnvironmentValue(ActiveAction::PathExt);
 }
 
 /**
@@ -229,7 +273,7 @@ void ActiveAction::UpdateEnvironmentPathExt()
  */
 void ActiveAction::UpdateEnvironmentTemp()
 {
-  UpdateEnvironmentPath(_T("TEMP"));
+  UpdateEnvironmentValue(ActiveAction::Temp);
 }
 
 /**
@@ -238,5 +282,5 @@ void ActiveAction::UpdateEnvironmentTemp()
 */
 void ActiveAction::UpdateEnvironmentTmp()
 {
-  UpdateEnvironmentPath(_T("TMP"));
+  UpdateEnvironmentValue( ActiveAction::Tmp );
 }

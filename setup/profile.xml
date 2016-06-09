@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Config>
+	<os>
+		<setenvironment>
+			<path type="8">1</path>
+			<pathext type="8">1</pathext>
+			<temp type="8">1</temp>
+			<tmp type="8">1</tmp>
+		</setenvironment>
+	</os>
     <commands>
         <current.bold type="8">0</current.bold>
         <current.color type="1">000000</current.color>

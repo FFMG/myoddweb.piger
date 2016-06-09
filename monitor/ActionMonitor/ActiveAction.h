@@ -75,8 +75,15 @@ protected:
   bool ReadFile(LPCTSTR pyFile, std::string& script) const;
 
 private:
+  enum VariableType {
+    Path,
+    PathExt,
+    Tmp,
+    Temp
+  };
+
   void UpdateEnvironmentVariables();
-  void UpdateEnvironmentPath( const STD_TSTRING& keyName );
+  void UpdateEnvironmentValue( const VariableType variableType );
   void UpdateEnvironmentPath();
   void UpdateEnvironmentTmp();
   void UpdateEnvironmentTemp();
