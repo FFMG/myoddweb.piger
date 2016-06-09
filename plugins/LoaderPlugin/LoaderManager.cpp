@@ -9,6 +9,7 @@
 #include <myoddinclude.h>
 
 static LPCWSTR LOADER_LEARN = L"learn";
+static LPCWSTR LOADER_LEARN_PRIVILEGED = L"learn (privileged)";
 static LPCWSTR LOADER_UNLEARN = L"unlearn";
 
 // -------------------------------------------------------------
@@ -32,6 +33,7 @@ void LoaderManager::Init( amplugin* p  )
   {
     m_thisPath = thisPath;
     p->AddAction( LOADER_LEARN, thisPath );
+    p->AddAction(LOADER_LEARN_PRIVILEGED, thisPath);
   }
 
   // we now need to load all the items we already have in our XML
@@ -67,7 +69,11 @@ void LoaderManager::Main( amplugin* p  )
 
   if( _wcsicmp( LOADER_LEARN, asAction ) == 0 )
   {
-    Learn( p );
+    Learn( p, false );
+  }
+  else if (_wcsicmp(LOADER_LEARN_PRIVILEGED, asAction) == 0)
+  {
+    Learn(p, true);
   }
   else if( _wcsnicmp( LOADER_UNLEARN, asAction, wcslen(LOADER_UNLEARN) ) == 0 )
   {
@@ -126,7 +132,7 @@ void LoaderManager::UnLearn( amplugin* p, LPCWSTR lpName  )
 
 // -------------------------------------------------------------
 //  add an item to the list to open
-void LoaderManager::Learn( amplugin* p  )
+void LoaderManager::Learn( amplugin* p, bool isPrivileged)
 {
   // the user could have entered a multi word command.
   int count = p->GetCommandCount();
@@ -174,7 +180,7 @@ void LoaderManager::Learn( amplugin* p  )
 
   // create the command file.
   std::wstring fileName;
-  if( !SaveLUAFile( fileName, command, asPath, false ) )
+  if( !SaveLUAFile( fileName, command, asPath, isPrivileged) )
   {
     p->Say( L"Error : Could not create command file. Do you have the right permissions?", 100, 5 );
     return;
@@ -256,7 +262,7 @@ bool LoaderManager::SaveLUAFile
   //
   // add the execute command itself.
   sData += "am_execute( ";
-
+    
   // unexpand the app path.
   // this is just cosmetic but also allows the user to copy their command
   // files from one machine to another.

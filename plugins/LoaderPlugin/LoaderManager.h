@@ -11,7 +11,7 @@ public:
   void Main( amplugin* p  );
 
 protected:
-  void Learn( amplugin* p  );
+  void Learn( amplugin* p, bool isPrivileged );
   void UnLearn( amplugin* p, LPCWSTR lpName );
 
   bool RemoveCommand( amplugin* p, LPCWSTR name );
