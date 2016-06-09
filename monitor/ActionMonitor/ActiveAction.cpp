@@ -6,6 +6,7 @@
 #include "ActiveAction.h"
 #include "ActionsCore.h"
 #include "ActionMonitor.h"
+#include "../myodd/threads/threads.h"
 
 /**
  * The contructor
@@ -227,26 +228,38 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
     }
   }
 
-  DWORD l = GetEnvironmentVariable(keyName.c_str(), NULL, 0);
-  if (l == 0)
-  {
-    // the value does not even exist ...
-    return;
+  try {
+    // get a single critical section
+    static myodd::threads::CritSection cs;
+
+    // lock it.
+    myodd::threads::AutoLock lock(cs);
+
+    DWORD l = GetEnvironmentVariable(keyName.c_str(), NULL, 0);
+    if (l == 0)
+    {
+      // the value does not even exist ...
+      return;
+    }
+
+    // current value
+    TCHAR* sCurrentValue = new TCHAR[l + 1];
+    GetEnvironmentVariable(keyName.c_str(), sCurrentValue, l);
+
+    // if the two are not the same, then we need to update it.
+    if (myodd::strings::icompare(sCurrentValue, sValue) != 0)
+    {
+      // the two values are not the same, so set it.
+      SetEnvironmentVariable(keyName.c_str(), sValue.c_str());
+    }
+
+    // clean up
+    delete[] sCurrentValue;
   }
-
-  // current value
-  TCHAR* sCurrentValue = new TCHAR[l + 1];
-  GetEnvironmentVariable(keyName.c_str(), sCurrentValue, l );
-
-  // if the two are not the same, then we need to update it.
-  if (myodd::strings::icompare(sCurrentValue, sValue) != 0)
+  catch (...)
   {
-    // the two values are not the same, so set it.
-    SetEnvironmentVariable(keyName.c_str(), sValue.c_str());
+    myodd::log::LogError(_T("Unable to updateenvironment variable: %s.", keyName.c_str()));
   }
-
-  // clean up
-  delete[] sCurrentValue;
 }
 
 /**
