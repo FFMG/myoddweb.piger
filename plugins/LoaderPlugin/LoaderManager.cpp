@@ -186,6 +186,9 @@ void LoaderManager::Learn( amplugin* p, bool isPrivileged)
     return;
   }
 
+  // does that command already exist???
+  bool alreadyExists = m_openAs.find(myodd::strings::lower(command)) != m_openAs.end();
+
   // Then add the command to the list.
   // note that the path that we are adding is our own file.
   if( AddCommand( p, command.c_str(), fileName.c_str() ) )
@@ -196,7 +199,14 @@ void LoaderManager::Learn( amplugin* p, bool isPrivileged)
     std::wstring s;
     s = L"The command : <i>";
     s+= command;
-    s+= L"</i> has been added.";
+    if (alreadyExists)
+    {
+      s += L"</i> has been updated.";
+    }
+    else
+    {
+      s += L"</i> has been added.";
+    }
     p->Say( s.c_str(), 100, 5 );
   }
   else
