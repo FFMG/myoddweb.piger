@@ -9,6 +9,7 @@
 #include <myoddinclude.h>
 
 static LPCWSTR LOADER_LEARN = L"learn";
+static LPCWSTR LOADER_LEARN_PRIVILEGED = L"learn (privileged)";
 static LPCWSTR LOADER_UNLEARN = L"unlearn";
 
 // -------------------------------------------------------------
@@ -32,6 +33,7 @@ void LoaderManager::Init( amplugin* p  )
   {
     m_thisPath = thisPath;
     p->AddAction( LOADER_LEARN, thisPath );
+    p->AddAction(LOADER_LEARN_PRIVILEGED, thisPath);
   }
 
   // we now need to load all the items we already have in our XML
@@ -67,7 +69,11 @@ void LoaderManager::Main( amplugin* p  )
 
   if( _wcsicmp( LOADER_LEARN, asAction ) == 0 )
   {
-    Learn( p );
+    Learn( p, false );
+  }
+  else if (_wcsicmp(LOADER_LEARN_PRIVILEGED, asAction) == 0)
+  {
+    Learn(p, true);
   }
   else if( _wcsnicmp( LOADER_UNLEARN, asAction, wcslen(LOADER_UNLEARN) ) == 0 )
   {
@@ -126,7 +132,7 @@ void LoaderManager::UnLearn( amplugin* p, LPCWSTR lpName  )
 
 // -------------------------------------------------------------
 //  add an item to the list to open
-void LoaderManager::Learn( amplugin* p  )
+void LoaderManager::Learn( amplugin* p, bool isPrivileged)
 {
   // the user could have entered a multi word command.
   int count = p->GetCommandCount();
@@ -174,11 +180,14 @@ void LoaderManager::Learn( amplugin* p  )
 
   // create the command file.
   std::wstring fileName;
-  if( !SaveLUAFile( fileName, command, asPath ) )
+  if( !SaveLUAFile( fileName, command, asPath, isPrivileged) )
   {
     p->Say( L"Error : Could not create command file. Do you have the right permissions?", 100, 5 );
     return;
   }
+
+  // does that command already exist???
+  bool alreadyExists = m_openAs.find(myodd::strings::lower(command)) != m_openAs.end();
 
   // Then add the command to the list.
   // note that the path that we are adding is our own file.
@@ -190,7 +199,14 @@ void LoaderManager::Learn( amplugin* p  )
     std::wstring s;
     s = L"The command : <i>";
     s+= command;
-    s+= L"</i> has been added.";
+    if (alreadyExists)
+    {
+      s += L"</i> has been updated.";
+    }
+    else
+    {
+      s += L"</i> has been added.";
+    }
     p->Say( s.c_str(), 100, 5 );
   }
   else
@@ -213,10 +229,11 @@ void LoaderManager::Learn( amplugin* p  )
  * @return bool success or not.
  */
 bool LoaderManager::SaveLUAFile
-( 
-  std::wstring& fileName, 
+(
+  std::wstring& fileName,
   const std::wstring command,
-  const std::wstring appPath
+  const std::wstring appPath,
+  bool isPrivileged
 )
 {
   // create the filename.
@@ -224,9 +241,9 @@ bool LoaderManager::SaveLUAFile
   luaFileName += L".lua";
 
   // make sure it is valid.
-  myodd::files::CleanFileName( luaFileName );
+  myodd::files::CleanFileName(luaFileName);
   std::wstring luaFilePath;
-  myodd::files::Join( luaFilePath, GetPluginPath(), luaFileName );
+  myodd::files::Join(luaFilePath, GetPluginPath(), luaFileName);
 
   USES_CONVERSION;
 
@@ -237,8 +254,8 @@ bool LoaderManager::SaveLUAFile
   FILE *stream;
   errno_t err;
   std::wstring exLuaFilePath;
-  myodd::files::ExpandEnvironment( luaFilePath, exLuaFilePath );
-  if( (err  = fopen_s( &stream, T_T2A(exLuaFilePath.c_str()), "wb" )) !=0 )
+  myodd::files::ExpandEnvironment(luaFilePath, exLuaFilePath);
+  if ((err = fopen_s(&stream, T_T2A(exLuaFilePath.c_str()), "wb")) != 0)
   {
     return false;
   }
@@ -248,21 +265,33 @@ bool LoaderManager::SaveLUAFile
   std::string sData;
   sData += "--\n";
   sData += "-- Loaded version 0.2\n";
-  sData += "-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\" );\n";
+  sData += "-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
   sData += "-- remove this command with 'unlearn ...'\n";
   sData += "--\n";
 
   //
   // add the execute command itself.
-  sData += "am_execute( \"";
-
+  sData += "am_execute( ";
+    
   // unexpand the app path.
   // this is just cosmetic but also allows the user to copy their command
   // files from one machine to another.
   std::wstring unAppPath = appPath;
-  myodd::files::UnExpandEnvironment( unAppPath, unAppPath );
-  sData += T_T2A( myodd::strings::replace( unAppPath, L"\\", L"\\\\").c_str() );
-  sData += "\", \"\");\n";
+  myodd::files::UnExpandEnvironment(unAppPath, unAppPath);
+
+  //  remember, we cannot add spaces or anything...
+  sData += "[[";
+  sData += T_T2A(unAppPath.c_str());
+  sData += "]], \"\"";
+  if (true == isPrivileged)
+  {
+    sData += ", true";
+  }
+  else
+  {
+     sData += ", false";
+  }
+  sData += ");\n";
 
   //
   // write the data.
@@ -294,22 +323,61 @@ LoaderManager::OPENAS_NAMES::const_iterator LoaderManager::Find( LPCWSTR name )
 // -------------------------------------------------------------
 bool LoaderManager::RemoveCommand( amplugin* p, LPCWSTR name )
 {
-  OPENAS_NAMES::const_iterator it = Find( name );
+  auto it = Find( name );
   if( m_openAs.end() == it )
   {
     //  not one of ours.
     return false;
   }
 
-  // remove it from the list and from action monitor.
-  p->RemoveAction( name, it->second.c_str() );
-  
-  // and then delete the actual file itself as that command no longer exists.
-  myodd::files::DeleteFile( it->second );
+  //  remove action in list.
+  return RemoveActionIfInList(p, name, true );
+}
 
-  m_openAs.erase( it );
-  
-  // the remove action could return false if it has already been removed.
+/**
+ * Remove an action if it is in _our_ list.
+ * We ill return false if we could _not_ remove it.
+ * We will return true, if it is not in our list or if we removed it.
+ * @param const std::wstring& lowerName the command to remove.
+ * @param bool deleteFileIfExists if we wish to remove a file or not.
+ * @return bool success or not.
+ */
+bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerName, bool deleteFileIfExists)
+{
+  // lowercase TCHAR
+  const wchar_t* cpLowerName = lowerName.c_str();
+
+  // we now need to check if it exists already
+  // if it does, then we will able to replace it.
+  auto itCommand = m_openAs.find(lowerName);
+  if (itCommand == m_openAs.end())
+  {
+    // it does not exist.
+    // so ther eis nothing to remove really.
+    return true;
+  }
+
+  //  this is one of our item, so we muse remove it.
+  if (!p->RemoveAction(cpLowerName, itCommand->second.c_str()))
+  {
+    // we could not remove it.
+    return false;
+  }
+
+  //  delete the file if we want to.
+  if (deleteFileIfExists == true)
+  {
+    myodd::files::DeleteFile(itCommand->second);
+  }
+
+  // unlearn the function as well.
+  std::wstring sUnLearn = GetUnLearnCommand(lowerName);
+  p->RemoveAction(sUnLearn.c_str(), GetThisPath().c_str());
+
+  // and now remove it from our own list.
+  m_openAs.erase(itCommand);
+
+  // success
   return true;
 }
 
@@ -323,23 +391,41 @@ bool LoaderManager::RemoveCommand( amplugin* p, LPCWSTR name )
 bool LoaderManager::AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path )
 {
   std::wstring lowerName = myodd::strings::lower( name );
+  const TCHAR* cpLowerName = lowerName.c_str();
 
-  // add it to the list
-  // if it already exists then nothing bad will happen.
-  m_openAs[ lowerName.c_str() ] = path;
+  // we now need to check if it exists already
+  // if it does, then we will able to replace it.
+  if (!RemoveActionIfInList( p, lowerName, false ))
+  {
+    //  could not remove it.
+    return false;
+  }
+
+  // (re)add it to the list with the new path.
+  m_openAs[lowerName] = path;
 
   // and to the action monitor.
-  if( !p->AddAction( lowerName.c_str(), path ) )
+  if( !p->AddAction(cpLowerName, path ) )
   {
     return false;
   }
 
   // add the unlearn function as well so the user can remove this command.
-  std::wstring sUnLearn = LOADER_UNLEARN;
-  sUnLearn += L" ";
-  sUnLearn += lowerName.c_str();
+  std::wstring sUnLearn = GetUnLearnCommand( lowerName );
   p->AddAction( sUnLearn.c_str(), GetThisPath().c_str() );
   return true;
+}
+
+/**
+ * @param const std::wstring& lowerName get the unlearn command name.
+ * @return std::wstring the UNLEARN command name.
+ */
+std::wstring LoaderManager::GetUnLearnCommand(const std::wstring& lowerName)
+{
+  std::wstring sUnLearn = LOADER_UNLEARN;
+  sUnLearn += L" ";
+  sUnLearn += lowerName;
+  return sUnLearn;
 }
 
 // -------------------------------------------------------------

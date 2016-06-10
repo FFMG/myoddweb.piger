@@ -11,7 +11,7 @@ public:
   void Main( amplugin* p  );
 
 protected:
-  void Learn( amplugin* p  );
+  void Learn( amplugin* p, bool isPrivileged );
   void UnLearn( amplugin* p, LPCWSTR lpName );
 
   bool RemoveCommand( amplugin* p, LPCWSTR name );
@@ -40,6 +40,10 @@ protected:
 
   bool SaveLUAFile( std::wstring& fileName, 
                     const std::wstring command,
-                    const std::wstring appPath
+                    const std::wstring appPath,
+                    bool isPrivileged
                   );
+
+  bool RemoveActionIfInList(amplugin* p, const std::wstring& lowerName, bool deleteFileIfExists );
+  static std::wstring GetUnLearnCommand( const std::wstring& lowerName);
 };

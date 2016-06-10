@@ -172,6 +172,12 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args)
   // run it
   bool result = __super::Execute(HelperApi::widen( module ).c_str(), HelperApi::widen( cmdLine ).c_str(), (isPrivileged==1) );
 
+  // tell the user it did not work
+  if (false == result)
+  {
+    __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
+  }
+
   // return the result.
   return Py_BuildValue("b", result );
 }
