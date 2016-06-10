@@ -43,4 +43,7 @@ protected:
                     const std::wstring appPath,
                     bool isPrivileged
                   );
+
+  bool RemoveActionIfInList(amplugin* p, const std::wstring& lowerName, bool deleteFileIfExists );
+  static std::wstring GetUnLearnCommand( const std::wstring& lowerName);
 };

@@ -313,22 +313,61 @@ LoaderManager::OPENAS_NAMES::const_iterator LoaderManager::Find( LPCWSTR name )
 // -------------------------------------------------------------
 bool LoaderManager::RemoveCommand( amplugin* p, LPCWSTR name )
 {
-  OPENAS_NAMES::const_iterator it = Find( name );
+  auto it = Find( name );
   if( m_openAs.end() == it )
   {
     //  not one of ours.
     return false;
   }
 
-  // remove it from the list and from action monitor.
-  p->RemoveAction( name, it->second.c_str() );
-  
-  // and then delete the actual file itself as that command no longer exists.
-  myodd::files::DeleteFile( it->second );
+  //  remove action in list.
+  return RemoveActionIfInList(p, name, true );
+}
 
-  m_openAs.erase( it );
-  
-  // the remove action could return false if it has already been removed.
+/**
+ * Remove an action if it is in _our_ list.
+ * We ill return false if we could _not_ remove it.
+ * We will return true, if it is not in our list or if we removed it.
+ * @param const std::wstring& lowerName the command to remove.
+ * @param bool deleteFileIfExists if we wish to remove a file or not.
+ * @return bool success or not.
+ */
+bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerName, bool deleteFileIfExists)
+{
+  // lowercase TCHAR
+  const wchar_t* cpLowerName = lowerName.c_str();
+
+  // we now need to check if it exists already
+  // if it does, then we will able to replace it.
+  auto itCommand = m_openAs.find(lowerName);
+  if (itCommand == m_openAs.end())
+  {
+    // it does not exist.
+    // so ther eis nothing to remove really.
+    return true;
+  }
+
+  //  this is one of our item, so we muse remove it.
+  if (!p->RemoveAction(cpLowerName, itCommand->second.c_str()))
+  {
+    // we could not remove it.
+    return false;
+  }
+
+  //  delete the file if we want to.
+  if (deleteFileIfExists == true)
+  {
+    myodd::files::DeleteFile(itCommand->second);
+  }
+
+  // unlearn the function as well.
+  std::wstring sUnLearn = GetUnLearnCommand(lowerName);
+  p->RemoveAction(sUnLearn.c_str(), GetThisPath().c_str());
+
+  // and now remove it from our own list.
+  m_openAs.erase(itCommand);
+
+  // success
   return true;
 }
 
@@ -342,23 +381,41 @@ bool LoaderManager::RemoveCommand( amplugin* p, LPCWSTR name )
 bool LoaderManager::AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path )
 {
   std::wstring lowerName = myodd::strings::lower( name );
+  const TCHAR* cpLowerName = lowerName.c_str();
 
-  // add it to the list
-  // if it already exists then nothing bad will happen.
-  m_openAs[ lowerName.c_str() ] = path;
+  // we now need to check if it exists already
+  // if it does, then we will able to replace it.
+  if (!RemoveActionIfInList( p, lowerName, false ))
+  {
+    //  could not remove it.
+    return false;
+  }
+
+  // (re)add it to the list with the new path.
+  m_openAs[lowerName] = path;
 
   // and to the action monitor.
-  if( !p->AddAction( lowerName.c_str(), path ) )
+  if( !p->AddAction(cpLowerName, path ) )
   {
     return false;
   }
 
   // add the unlearn function as well so the user can remove this command.
-  std::wstring sUnLearn = LOADER_UNLEARN;
-  sUnLearn += L" ";
-  sUnLearn += lowerName.c_str();
+  std::wstring sUnLearn = GetUnLearnCommand( lowerName );
   p->AddAction( sUnLearn.c_str(), GetThisPath().c_str() );
   return true;
+}
+
+/**
+ * @param const std::wstring& lowerName get the unlearn command name.
+ * @return std::wstring the UNLEARN command name.
+ */
+std::wstring LoaderManager::GetUnLearnCommand(const std::wstring& lowerName)
+{
+  std::wstring sUnLearn = LOADER_UNLEARN;
+  sUnLearn += L" ";
+  sUnLearn += lowerName;
+  return sUnLearn;
 }
 
 // -------------------------------------------------------------
