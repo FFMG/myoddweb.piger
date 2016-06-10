@@ -294,6 +294,7 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
   // Expand the values that might have been passed.
   if( !myodd::files::ExpandEnvironment( argv[ 0 ].c_str(), argvModule ) )
   {
+    myodd::log::LogError(_T("Could not execute statement: Unable to expand command line '%s'"), argv[0].c_str());
     return false;
   }
 
@@ -303,6 +304,7 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
     // Expand the values that might have been passed.
     if( !myodd::files::ExpandEnvironment( argv[ 1 ].c_str(), argvCmd ) )
     {
+      myodd::log::LogError(_T("Could not execute statement: Unable to expand arguments '%s'"), argv[1].c_str());
       delete [] argvModule;
       return false;
     }
@@ -344,6 +346,9 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
   else
   {
     result = false;
+
+    myodd::log::LogError( _T("Could not execute statement: could not execute '%s'"), argvModule );
+    myodd::log::LogError(_T("Could not execute statement: Last error '%d'"), ::GetLastError() );
   }
 
   // clean up the expended variable.
