@@ -80,6 +80,12 @@ int LuaApi::Execute (lua_State *lua)
   // push the result.
   lua_pushboolean ( lua, result );
 
+  // tell the user it did not work
+  if (false == result)
+  {
+	  __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
+  }
+
   // return the number of results
   return 1;
 }

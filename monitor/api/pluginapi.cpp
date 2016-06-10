@@ -125,7 +125,13 @@ size_t PluginApi::GetCommandCount()
  */
 bool PluginApi::Execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
 {
-  return __super::Execute( module, cmdLine, isPrivileged );
+  if (!__super::Execute(module, cmdLine, isPrivileged))
+  {
+    // tell the user it did not work
+    __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
+    return false;
+  }
+  return true;
 }
 
 /**
