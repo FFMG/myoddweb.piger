@@ -24,6 +24,8 @@ namespace myodd{ namespace log{
     bool Open();
     bool Create();
 
+    bool Queue(unsigned int uiType, LPCTSTR pszLine);
+
     STD_TSTRING m_sPrefix;
     STD_TSTRING m_sExtention;
     STD_TSTRING m_sDirectory;
@@ -31,6 +33,14 @@ namespace myodd{ namespace log{
     bool m_bInOpenCall;
     FILE* m_fp;
     __int64 m_uCurrentSize;
+
+    struct MessageQueue
+    {
+      unsigned int uiType;
+      std::wstring wLine;
+    };
+    typedef std::vector<MessageQueue> MessagesQueue;
+    MessagesQueue _messagesQueue;
   };
 } //  log
 } //  myodd
