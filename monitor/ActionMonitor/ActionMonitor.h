@@ -37,6 +37,7 @@ public:
 
 protected:
   void InitConfig();
+  void InitLog();
   void InitReservedPaths();
   void InitMaxClipboardSize();
 

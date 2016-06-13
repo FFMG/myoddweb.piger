@@ -288,6 +288,9 @@ BOOL CActionMonitorApp::InitInstance()
     myodd::config::set( _T("paths\\commands"), lpPath );
   }
 
+  // setup the log
+  InitLog();
+  
   // we now need to add the default reserved paths.
   InitReservedPaths();
 
@@ -439,6 +442,14 @@ void CActionMonitorApp::InitConfig()
   // remember that calling ::init(...) will cause the current values to be saved.
   // so witting to the xml while the app is running will have no effect.
   myodd::config::init( CONF_FULLPATH );
+}
+
+/**
+ * Initialise the log path and values.
+ */
+void CActionMonitorApp::InitLog()
+{
+  myodd::log::Initialise(LOG_PATH, _T("myodd"), _T("log") );
 }
 
 /**

@@ -172,7 +172,7 @@ namespace myodd{ namespace log{
     while( iSend >= 0 )
     {
       _LogMessage& lm = m_logMessages[ iSend-- ];
-      fnNotif( lm.GetType(), lm.GetMessage(), (void*)lParam );
+      fnNotif((unsigned int)lm.GetType(), lm.GetMessage(), (void*)lParam );
     }
 
     // add it to the list
