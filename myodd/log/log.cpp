@@ -15,7 +15,7 @@ static char THIS_FILE[]=__FILE__;
 static unsigned short MAX_NUM_LOG_MESSAGES = 25;
 
 namespace myodd{ namespace log{
-  void LogDebug( LogEvent::LogType uiType, LPCTSTR pszFmt, ...)
+  void LogDebug( LogType uiType, LPCTSTR pszFmt, ...)
   {
 #ifdef _DEBUG
     va_list argp;
@@ -33,7 +33,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_None, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::None, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -41,7 +41,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Success, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::Success, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -49,7 +49,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Error, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::Error, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -57,7 +57,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Warning, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::Warning, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -65,7 +65,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Message, pszFmt, argp);
+	  LogEvent::Instance().Log( LogType::Message, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -79,7 +79,7 @@ namespace myodd{ namespace log{
   {
     va_list argp;
     va_start(argp, pszFmt);
-    LogEvent::Instance().Log( LogEvent::LogType_System, pszFmt, argp);
+    LogEvent::Instance().Log( LogType::System, pszFmt, argp);
     va_end(argp);
   }
 
@@ -231,7 +231,7 @@ namespace myodd{ namespace log{
     unsigned idx = 0;
     while( GetNotif( idx++, fnNotif, lParam ) )
     {
-      (*fnNotif)( uiType, pszLine ? pszLine : _T(""), (void*)lParam );
+      (*fnNotif)( (unsigned int)uiType, pszLine ? pszLine : _T(""), (void*)lParam );
     }
 
     // log it to the file
@@ -298,7 +298,7 @@ namespace myodd{ namespace log{
     // Lock the thread
     myodd::threads::AutoLock autoLock( *this );
 
-    return m_logFile.LogToFile( uiType, pszLine );
+    return m_logFile.LogToFile((unsigned int)uiType, pszLine );
   }
 } //  log
 } //  myodd

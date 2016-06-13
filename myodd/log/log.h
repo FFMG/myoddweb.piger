@@ -14,6 +14,17 @@
 typedef void ( *NOTIFY_LOG )(unsigned int uiType, LPCTSTR pszLine, void* pContext);
 
 namespace myodd{ namespace log{
+
+  enum class LogType : unsigned int
+  {
+    None = 0,
+    Success,
+    Error,
+    Warning,
+    Message,
+    System,
+  };
+
   // the helper functions
   void Log(LPCTSTR pszLine, ...);
   void LogSuccess(LPCTSTR pszLine, ...);
@@ -21,6 +32,10 @@ namespace myodd{ namespace log{
   void LogWarning(LPCTSTR pszLine, ...);
   void LogMessage(LPCTSTR pszLine, ...);
   void LogSystem(LPCTSTR pszLine, ...);
+
+  //  add the debug log message
+  void LogDebug(LogType uiType, LPCTSTR pszFmt, ...);  //  log in _DEBUG messages only
+
   
   bool AddNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam, size_t iSendLast = 100 );
   bool RemoveNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam );
@@ -31,15 +46,6 @@ namespace myodd{ namespace log{
   class LogEvent : public myodd::notif::Notifications<NOTIFY_LOG>
   {
   public:
-    enum LogType
-    {
-      LogType_None    = 0,
-      LogType_Success ,
-      LogType_Error,
-      LogType_Warning,
-      LogType_Message,
-      LogType_System,
-    };
     virtual ~LogEvent(void);
 
     const STD_TSTRING& GetCurrentLogFile() const{
@@ -56,7 +62,7 @@ namespace myodd{ namespace log{
     class _LogMessage
     {
     public:
-      _LogMessage( LogType lt = LogType_None, LPCTSTR lpMessage = NULL ) : 
+      _LogMessage( LogType lt = LogType::None, LPCTSTR lpMessage = NULL ) :
           _uiType(lt),
           _szLogLine( lpMessage )
           {
@@ -100,8 +106,8 @@ namespace myodd{ namespace log{
     static LogEvent& Instance();
   };
 
-  //  add the debug log message
-  void LogDebug( LogEvent::LogType uiType, LPCTSTR pszFmt, ...);  //  log in _DEBUG messages only
+  //  initialise the various events.
+  bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention);
 } //  log
 } //  myodd
 #endif // _Log_h
