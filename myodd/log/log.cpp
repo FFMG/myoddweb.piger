@@ -86,14 +86,14 @@ namespace myodd{ namespace log{
   /**
    * Set the log path directory.
    * If we pass a NULL argument then we want to stop/disable the logging.
-   * @param LPCTSTR the log path we will be using.
-   * @param LPCTSTR the prefix of the filename we will create, (default is blank).
-   * @param LPCTSTR the file extension.
+   * @param const std::wstring& wPath the log path we will be using.
+   * @param const std::wstring& wPrefix the prefix of the filename we will create, (default is blank).
+   * @param const std::wstring& wExtention the file extension.
    * @return bool success or not
    */
-  bool SetLogDirectory( LPCTSTR lpPath, LPCTSTR lpPrefix /*= NULL*/, LPCTSTR lpExtention /*= _T("log")*/ )
+  bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention )
   {
-    return LogEvent::Instance().SetLogDirectory( lpPath, lpPrefix, lpExtention );
+    return LogEvent::Instance().Initialise( wPath.c_str(), wPrefix.c_str(), wExtention.c_str() );
   }
 
   /**
@@ -254,30 +254,36 @@ namespace myodd{ namespace log{
   * @param LPCTSTR the file extension.
   * @return bool success or not
   */
-  bool LogEvent::SetLogDirectory( LPCTSTR lpPath, LPCTSTR lpPrefix /*= NULL*/, LPCTSTR lpExtention /*= _T("log")*/ )
+  bool LogEvent::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
   {
-    if( !m_logFile.SetLogDirectory( lpPath, lpPrefix, lpExtention ) )
-      return false;
-
-    if( lpPath )
+    if (!m_logFile.Initialise(wPath, wPrefix, wExtention))
     {
-      // Lock the thread
-      // if we cannot lock those message then they are lost forever
-      // but at least we don't have a deadlock
-      myodd::threads::AutoLockTry autoLockTry( *this );
-      if( autoLockTry.HasLock() )
-      {
-        // send the last few messages
-        for( std::vector<_LogMessage>::const_iterator it = m_logMessages.begin();
-             it != m_logMessages.end();
-             ++it
-           )
-        {
-          const _LogMessage& lm = (*it);
-          LogToFile( lm.GetType(), lm.GetMessage() );
-        }// each messages.
-      }// try to lock
+      return false;
     }
+
+    //  of the path is zero then we are not really creating anything
+    // this just mean that we are not logging anything.
+    if (wPath.length() == 0)
+    {
+      return true;
+    }
+
+    // Lock the thread
+    // if we cannot lock those message then they are lost forever
+    // but at least we don't have a deadlock
+    myodd::threads::AutoLockTry autoLockTry( *this );
+    if( autoLockTry.HasLock() )
+    {
+      // send the last few messages
+      for( std::vector<_LogMessage>::const_iterator it = m_logMessages.begin();
+            it != m_logMessages.end();
+            ++it
+          )
+      {
+        const _LogMessage& lm = (*it);
+        LogToFile( lm.GetType(), lm.GetMessage() );
+      }// each messages.
+    }// try to lock
     return true;
   }
 

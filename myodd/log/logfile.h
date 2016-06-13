@@ -13,7 +13,7 @@ namespace myodd{ namespace log{
     virtual ~LogFile();
 
     bool Close();
-    bool SetLogDirectory( LPCTSTR lpPath, LPCTSTR lpPrefix = NULL, LPCTSTR lpExtention = _T("log") );
+    bool Initialise(const std::wstring& lpPath, const std::wstring& lpPrefix, const std::wstring& lpExtention);
     bool IsOpen() const;
     bool LogToFile( unsigned int uiType, LPCTSTR pszLine );
     const STD_TSTRING& GetCurrentLogFile() const{

@@ -25,8 +25,6 @@ namespace myodd{ namespace log{
   bool AddNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam, size_t iSendLast = 100 );
   bool RemoveNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam );
 
-  bool SetLogDirectory( LPCTSTR lpPath, LPCTSTR lpPrefix = NULL, LPCTSTR lpExtention = _T("log") );
-
   const STD_TSTRING& GetCurrentLogFile();
 
   // the actual log class
@@ -35,8 +33,8 @@ namespace myodd{ namespace log{
   public:
     enum LogType
     {
-      LogType_None = 0,
-      LogType_Success,
+      LogType_None    = 0,
+      LogType_Success ,
       LogType_Error,
       LogType_Warning,
       LogType_Message,
@@ -47,6 +45,9 @@ namespace myodd{ namespace log{
     const STD_TSTRING& GetCurrentLogFile() const{
       return m_logFile.GetCurrentLogFile();
     }
+
+    bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention);
+
   protected:
     LogEvent(void);
     const LogEvent& operator=(const LogEvent&);      // Prevent assignment
@@ -90,8 +91,6 @@ namespace myodd{ namespace log{
     void LogInLockedThread( LogType uiType, LPCTSTR pszLine );
 
   public:
-    bool SetLogDirectory( LPCTSTR lpPath, LPCTSTR lpPrefix = NULL, LPCTSTR lpExtention = _T("log") );
-    
     // notification messages
     bool AddNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam, size_t iSendLast );
     bool RemoveNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam );
