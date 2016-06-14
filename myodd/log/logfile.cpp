@@ -133,15 +133,7 @@ namespace myodd{ namespace log{
     //  we are no longer in open call.
     m_bInOpenCall = false;
 
-    // unqueue all the messages.
-    for (MessagesQueue::const_iterator it = _messagesQueue.begin();
-      it != _messagesQueue.end();
-      ++it)
-    {
-      LogToFile((*it).uiType, (*it).wLine.c_str());
-    }
-    _messagesQueue.clear();
-
+    // return if this worked.
     return bResult;
   }
 
@@ -226,23 +218,6 @@ namespace myodd{ namespace log{
     return bResult;
   }
 
-  bool LogFile::Queue(unsigned int uiType, LPCTSTR pszLine)
-  {
-    // lock us.
-    myodd::threads::AutoLock lock(*this);
-
-    MessageQueue mq = {};
-    mq.uiType = uiType;
-    mq.wLine = pszLine;
-    _messagesQueue.push_back(mq);
-
-    // make sure that the vector is not too big
-    static const size_t maxVectorSize = 100;
-    std::vector<decltype(_messagesQueue)::value_type>(_messagesQueue.begin() + maxVectorSize, _messagesQueue.end()).swap(_messagesQueue);
-
-    return true;
-  }
-
   /**
    * Log an entry to the file.
    * @param unsigned int uiType the log type
@@ -259,7 +234,7 @@ namespace myodd{ namespace log{
 
     if (!Open())
     {
-      return Queue(uiType, pszLine);
+      return false;
     }
 
     // lock the current

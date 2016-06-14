@@ -12,7 +12,7 @@ static char THIS_FILE[]=__FILE__;
 
 // this is the maximum number of messages we will keep in memory
 // those messages are kept when new apps log in so they can have the last handful of messages.
-static unsigned short MAX_NUM_LOG_MESSAGES = 25;
+static size_t MAX_NUM_LOG_MESSAGES = 25;
 
 namespace myodd{ namespace log{
   void LogDebug( LogType uiType, LPCTSTR pszFmt, ...)
@@ -240,10 +240,9 @@ namespace myodd{ namespace log{
     //  and add it to the list, in case we have future registrations.
     _LogMessage lm( uiType, pszLine );
     m_logMessages.push_back( lm );
-    while( m_logMessages.size() > MAX_NUM_LOG_MESSAGES )
-    {
-      m_logMessages.erase( m_logMessages.begin() );
-    }
+
+    //  remove if we have too many.
+    std::vector<decltype(m_logMessages)::value_type>(m_logMessages.begin() + MAX_NUM_LOG_MESSAGES, m_logMessages.end()).swap(m_logMessages);
   }
 
   /**
