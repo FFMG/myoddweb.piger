@@ -255,11 +255,11 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::desc desc;
   desc.add_options()
 #ifdef UNICODE
+    ("c", myodd::po::wvalue<std::wstring>(), "the oath of the config file.")
     ("d", myodd::po::wvalue<std::wstring>(), "the full path of the root commands.")
-    ("opt", myodd::po::wvalue<std::wstring>(), "the path of the options file.")
 #else
+    ("c", myodd::po::wvalue<std::string>(), "the oath of the config file.")
     ("d", myodd::po::value<std::string>(), "the full path of the root commands.")
-    ("opt", myodd::po::value<std::string>(), "the path of the options file.")
 #endif
     ;
 
@@ -271,7 +271,11 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::variables vm( __argc, args, desc );
 
   // We need to init the registry so that everybody can use it.
-  InitConfig();
+  if (!InitConfig(vm))
+  {
+    // we could not load the config, this is critical, we can go no further.
+    return FALSE;
+  }
 
   // if the user passed something then it will override what we have
   if( 1 == vm.count( "d") )
@@ -431,14 +435,42 @@ void CActionMonitorApp::InitReservedPaths()
 
 /**
  * Initialize the path of the configurations file.
- * @param void
- * @return void
+ * @param const myodd::variables& vm the given variables.
+ * @return bool success or not.
  */
-void CActionMonitorApp::InitConfig()
+bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
 {
+#ifdef UNICODE
+  std::wstring sAPath = CONF_FULLPATH;
+#else
+  std::string sAPath = CONF_FULLPATH;
+#endif
+
+  if (1 == vm.count("c"))
+  {
+    // get the path
+#ifdef UNICODE
+    sAPath = vm["c"].as< std::wstring >();
+#else
+    sAPath = vm["c"].as< std::string >();
+#endif
+  }
+
+  // does the file exist?
+  if (!myodd::files::FileExists(sAPath))
+  {
+    MessageBox( NULL, _T("I was unable to locate the configuration file, this is a critical problem!"), _T("Cannot find config"), MB_ICONERROR | MB_OK);
+    return false;
+  }
+
   // remember that calling ::init(...) will cause the current values to be saved.
   // so witting to the xml while the app is running will have no effect.
-  myodd::config::init( CONF_FULLPATH );
+  if (!myodd::config::init(sAPath))
+  {
+    MessageBox(NULL, _T("There was a problem with the given config, is it valid XML?"), _T("Cannot load config"), MB_OK);
+    return false;
+  }
+  return true;
 }
 
 /**

@@ -30,6 +30,13 @@ All the configuration of piger is contained in the profile.xml file.
     ...
     </Config>
 
+### Commandline arguments
+
+- --c [configpath]     
+The full path of the config 
+- --d [commandspath]    
+The full path of the commands directory.
+
 ### For extra points...
 
 - Write your own script, (see below).
@@ -90,7 +97,6 @@ import module, **import am**, (only usable within Piger of course).
     import am
     am.say( "Run - calc ...", 400, 10 );
     am.execute( "%SystemRoot%\\system32\\calc.exe" );
-
 
 ## Lua
 ### Code

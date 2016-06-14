@@ -53,10 +53,7 @@ bool init( const STD_TSTRING& sz )
 
   // configure the base now,
   m_staticContainer = new ConfigBase( lpDest.c_str() );
-  m_staticContainer->load_values();
-
-  // done
-  return true;
+  return m_staticContainer->LoadValuesFromFile();
 }
 
 /**

@@ -36,7 +36,7 @@ public:
 	DECLARE_MESSAGE_MAP()
 
 protected:
-  void InitConfig();
+  bool InitConfig(const myodd::variables& vm);
   void InitReservedPaths();
   void InitMaxClipboardSize();
 

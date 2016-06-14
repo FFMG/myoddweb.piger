@@ -22,7 +22,7 @@ public:
   virtual ~ConfigBase();
 
 public:
-  void load_values();
+  bool LoadValuesFromFile();
 
   /**
   * Save all the values if the class is 'dirty'

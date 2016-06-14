@@ -61,8 +61,6 @@ You should not really change those as they are used internally, but you can name
 	...
     </Config>
 
-### Paths
-
 * **commands** - where all the commands are located.
 * **in** - the commands that will be run when piger stars.
 * **out** - the commands that will be run when piger exists.
@@ -73,6 +71,27 @@ You should not really change those as they are used internally, but you can name
 
 The maximum number of commands we will load in memory.   
 The commands are loaded in order.
+
+## Operating system, (os)
+
+By default the environment variables are reloaded everytime we launch a new command.
+But you can prevent this behaviour by changing the os/setenvironment values.
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <Config>
+    ...
+      <os>
+        <setenvironment>
+          <path type="8">1</path>
+          <pathext type="8">1</pathext>
+          <temp type="8">1</temp>
+          <tmp type="8">1</tmp>
+        </setenvironment>
+      </os>
+	...
+    </Config>
+
+All the values listed are environment variables, (Path/PATHEXT/TMP/TEMP), and they are reloaded by default.
 
 ## Clipboard
 

@@ -146,24 +146,22 @@ void ConfigBase::_addLoadElements
 
 /**
  * Load all the config values from the XML
- *
- * @param none
- * @return none.
+ * @return boolean if we were able to load the file or not.
  */
-void ConfigBase::load_values()
+bool ConfigBase::LoadValuesFromFile()
 {
   // Open this file and look for values.
   TiXmlDocument doc( m_szRegPath.c_str() );
   if (!doc.LoadFile())
   {
-    return;
+    return false;
   }
 
   // get the config document.
   TiXmlElement* pElemConfig = doc.FirstChildElement( _T("Config"));
   if( !pElemConfig )
   {
-    return;
+    return false;
   }
 
   // starting from the beginning we look for sub nodes
@@ -175,6 +173,9 @@ void ConfigBase::load_values()
   // loading the values will, by default set the values to dirty
   // so we need to force the value to false.
   SetDirty( false );
+
+  // looks good
+  return true;
 }
 
 /**
