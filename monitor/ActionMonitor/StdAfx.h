@@ -46,10 +46,10 @@
 //  the config files && path.
 #ifdef _DEBUG
 static const TCHAR CONF_FULLPATH[]	= _T("%appdata%\\MyOddWeb\\ActionMonitor_d\\profile.xml");
-static const TCHAR LOG_PATH[] = _T("%appdata%\\MyOddWeb\\ActionMonitor_d\\");
+static const TCHAR LOG_PATH[] = _T("%appdata%\\MyOddWeb\\ActionMonitor_d\\Logs\\");
 #else
 static const TCHAR CONF_FULLPATH[]	= _T("%appdata%\\MyOddWeb\\ActionMonitor\\profile.xml");
-static const TCHAR LOG_PATH[] = _T("%appdata%\\MyOddWeb\\ActionMonitor\\");
+static const TCHAR LOG_PATH[] = _T("%appdata%\\MyOddWeb\\ActionMonitor\\Logs\\");
 #endif
 
 static const TCHAR CONF_MUTEXT[]	  = _T("MyOddweb_com_ActionMonitor"); //  if you are going to change it
