@@ -482,7 +482,7 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
 void CActionMonitorApp::InitLog()
 {
   // check if enabled
-  if (myodd::config::get(_T("log\\enable", 1)) != 1)
+  if (myodd::config::get(_T("log\\file\\enable", 1)) != 1)
   {
     return;
   }
