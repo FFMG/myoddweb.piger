@@ -109,6 +109,33 @@ This can be important in case you have very large useless data in memory, (somet
 	...
     </Config>
 
+## Logs
+
+Setup the log information, (where warnings/errors etc), are logged.
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <Config>
+    ...
+      <log>
+        <file>
+          <enable type="1">1</enable> 
+          <path type="1">%appdata%\myoddweb\ActionMonitor\Logs</path> 
+          <prefix type="1">myodd</prefix> 
+          <extension type="1">log</extension> 
+        </file>
+      </log>
+	...
+    </Config>
+
+### File
+
+When saving to files, the options available are ... 
+
+- Enable : If you want to enable logging or not.
+- Path : The log directory where log files will be created/added/edited.
+- Prefix : The prefix that will be appended to the file, (for ease of searching at a later stage).
+- Extension : The log file extension.
+
 ## Python
 
 You might want to execute your own python code using your own modules and so on. 
