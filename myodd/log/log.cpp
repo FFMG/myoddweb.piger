@@ -12,10 +12,10 @@ static char THIS_FILE[]=__FILE__;
 
 // this is the maximum number of messages we will keep in memory
 // those messages are kept when new apps log in so they can have the last handful of messages.
-static unsigned short MAX_NUM_LOG_MESSAGES = 25;
+static size_t MAX_NUM_LOG_MESSAGES = 25;
 
 namespace myodd{ namespace log{
-  void LogDebug( LogEvent::LogType uiType, LPCTSTR pszFmt, ...)
+  void LogDebug( LogType uiType, LPCTSTR pszFmt, ...)
   {
 #ifdef _DEBUG
     va_list argp;
@@ -33,7 +33,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_None, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::None, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -41,7 +41,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Success, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::Success, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -49,7 +49,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Error, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::Error, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -57,7 +57,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Warning, pszFmt, argp);
+	  LogEvent::Instance().Log(LogType::Warning, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -65,7 +65,7 @@ namespace myodd{ namespace log{
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
-	  LogEvent::Instance().Log( LogEvent::LogType_Message, pszFmt, argp);
+	  LogEvent::Instance().Log( LogType::Message, pszFmt, argp);
 	  va_end(argp);
   }
 
@@ -79,21 +79,21 @@ namespace myodd{ namespace log{
   {
     va_list argp;
     va_start(argp, pszFmt);
-    LogEvent::Instance().Log( LogEvent::LogType_System, pszFmt, argp);
+    LogEvent::Instance().Log( LogType::System, pszFmt, argp);
     va_end(argp);
   }
 
   /**
    * Set the log path directory.
    * If we pass a NULL argument then we want to stop/disable the logging.
-   * @param LPCTSTR the log path we will be using.
-   * @param LPCTSTR the prefix of the filename we will create, (default is blank).
-   * @param LPCTSTR the file extension.
+   * @param const std::wstring& wPath the log path we will be using.
+   * @param const std::wstring& wPrefix the prefix of the filename we will create, (default is blank).
+   * @param const std::wstring& wExtention the file extension.
    * @return bool success or not
    */
-  bool SetLogDirectory( LPCTSTR lpPath, LPCTSTR lpPrefix /*= NULL*/, LPCTSTR lpExtention /*= _T("log")*/ )
+  bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention )
   {
-    return LogEvent::Instance().SetLogDirectory( lpPath, lpPrefix, lpExtention );
+    return LogEvent::Instance().Initialise( wPath.c_str(), wPrefix.c_str(), wExtention.c_str() );
   }
 
   /**
@@ -172,7 +172,7 @@ namespace myodd{ namespace log{
     while( iSend >= 0 )
     {
       _LogMessage& lm = m_logMessages[ iSend-- ];
-      fnNotif( lm.GetType(), lm.GetMessage(), (void*)lParam );
+      fnNotif((unsigned int)lm.GetType(), lm.GetMessage(), (void*)lParam );
     }
 
     // add it to the list
@@ -231,7 +231,7 @@ namespace myodd{ namespace log{
     unsigned idx = 0;
     while( GetNotif( idx++, fnNotif, lParam ) )
     {
-      (*fnNotif)( uiType, pszLine ? pszLine : _T(""), (void*)lParam );
+      (*fnNotif)( (unsigned int)uiType, pszLine ? pszLine : _T(""), (void*)lParam );
     }
 
     // log it to the file
@@ -240,10 +240,9 @@ namespace myodd{ namespace log{
     //  and add it to the list, in case we have future registrations.
     _LogMessage lm( uiType, pszLine );
     m_logMessages.push_back( lm );
-    while( m_logMessages.size() > MAX_NUM_LOG_MESSAGES )
-    {
-      m_logMessages.erase( m_logMessages.begin() );
-    }
+
+    //  remove if we have too many.
+    std::vector<decltype(m_logMessages)::value_type>(m_logMessages.begin() + MAX_NUM_LOG_MESSAGES, m_logMessages.end()).swap(m_logMessages);
   }
 
   /**
@@ -254,30 +253,36 @@ namespace myodd{ namespace log{
   * @param LPCTSTR the file extension.
   * @return bool success or not
   */
-  bool LogEvent::SetLogDirectory( LPCTSTR lpPath, LPCTSTR lpPrefix /*= NULL*/, LPCTSTR lpExtention /*= _T("log")*/ )
+  bool LogEvent::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
   {
-    if( !m_logFile.SetLogDirectory( lpPath, lpPrefix, lpExtention ) )
-      return false;
-
-    if( lpPath )
+    if (!m_logFile.Initialise(wPath, wPrefix, wExtention))
     {
-      // Lock the thread
-      // if we cannot lock those message then they are lost forever
-      // but at least we don't have a deadlock
-      myodd::threads::AutoLockTry autoLockTry( *this );
-      if( autoLockTry.HasLock() )
-      {
-        // send the last few messages
-        for( std::vector<_LogMessage>::const_iterator it = m_logMessages.begin();
-             it != m_logMessages.end();
-             ++it
-           )
-        {
-          const _LogMessage& lm = (*it);
-          LogToFile( lm.GetType(), lm.GetMessage() );
-        }// each messages.
-      }// try to lock
+      return false;
     }
+
+    //  of the path is zero then we are not really creating anything
+    // this just mean that we are not logging anything.
+    if (wPath.length() == 0)
+    {
+      return true;
+    }
+
+    // Lock the thread
+    // if we cannot lock those message then they are lost forever
+    // but at least we don't have a deadlock
+    myodd::threads::AutoLockTry autoLockTry( *this );
+    if( autoLockTry.HasLock() )
+    {
+      // send the last few messages
+      for( std::vector<_LogMessage>::const_iterator it = m_logMessages.begin();
+            it != m_logMessages.end();
+            ++it
+          )
+      {
+        const _LogMessage& lm = (*it);
+        LogToFile( lm.GetType(), lm.GetMessage() );
+      }// each messages.
+    }// try to lock
     return true;
   }
 
@@ -292,7 +297,7 @@ namespace myodd{ namespace log{
     // Lock the thread
     myodd::threads::AutoLock autoLock( *this );
 
-    return m_logFile.LogToFile( uiType, pszLine );
+    return m_logFile.LogToFile((unsigned int)uiType, pszLine );
   }
 } //  log
 } //  myodd

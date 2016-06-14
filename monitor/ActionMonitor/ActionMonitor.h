@@ -37,6 +37,7 @@ public:
 
 protected:
   bool InitConfig(const myodd::variables& vm);
+  void InitLog();
   void InitReservedPaths();
   void InitMaxClipboardSize();
 

@@ -133,6 +133,7 @@ namespace myodd{ namespace log{
     //  we are no longer in open call.
     m_bInOpenCall = false;
 
+    // return if this worked.
     return bResult;
   }
 
@@ -226,11 +227,15 @@ namespace myodd{ namespace log{
   bool LogFile::LogToFile( unsigned int uiType, LPCTSTR pszLine )
   {
     //  are we logging?
-    if( m_sCurrentFile.empty() )
+    if (m_sCurrentFile.empty())
+    {
       return false;
+    }
 
-    if( !Open() )
+    if (!Open())
+    {
       return false;
+    }
 
     // lock the current
     myodd::threads::AutoLock lock( *this );
@@ -283,17 +288,12 @@ namespace myodd{ namespace log{
   /**
   * Set the log path directory.
   * If we pass a NULL argument then we want to stop/disable the logging.
-  * @param LPCTSTR the log path we will be using.
-  * @param LPCTSTR the prefix of the filename we will create, (default is blank).
-  * @param LPCTSTR the file extension.
+  * @param const std::wstring& wPath the log path we will be using.
+  * @param const std::wstring& wPrefix the prefix of the filename we will create, (default is blank).
+  * @param const std::wstring& wExtention the file extension.
   * @return bool success or not
   */
-  bool LogFile::SetLogDirectory
-  ( 
-    LPCTSTR lpPath, 
-    LPCTSTR lpPrefix /*= NULL*/, 
-    LPCTSTR lpExtention /*= _T("log")*/ 
-  )
+  bool LogFile::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
   {
     // lock the current
     myodd::threads::AutoLock lock( *this );
@@ -303,7 +303,7 @@ namespace myodd{ namespace log{
 
     // is the new, given path valid?
     // or is the user telling us that they want to close it?
-    if( NULL == lpPath )
+    if( wPath.length() == 0 )
     {
       m_sPrefix = m_sExtention = m_sDirectory = _T("");
       return true;
@@ -311,14 +311,17 @@ namespace myodd{ namespace log{
 
     //  set the prefix and extension.
     // if the user is giving us some silly values then there is nothing we can do about really.
-    m_sPrefix     = lpPrefix    ? lpPrefix    : LogFile_default_Prefix;
-    m_sExtention  = lpExtention ? lpExtention : LogFile_default_Extention;
+    m_sPrefix     = wPrefix.length() > 0    ? wPrefix    : LogFile_default_Prefix;
+    m_sExtention  = wExtention.length() > 0 ? wExtention : LogFile_default_Extention;
 
     // It seems to be valid, so we can set the path here.
-    m_sDirectory = lpPath;
+    m_sDirectory = wPath;
 
     //  expand the file name
-    myodd::files::ExpandEnvironment( m_sDirectory, m_sDirectory );
+    if (!myodd::files::ExpandEnvironment(m_sDirectory, m_sDirectory))
+    {
+      return false;
+    }
 
     //  add a trailing backslash
     myodd::files::AddTrailingBackSlash( m_sDirectory );

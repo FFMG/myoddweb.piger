@@ -292,6 +292,9 @@ BOOL CActionMonitorApp::InitInstance()
     myodd::config::set( _T("paths\\commands"), lpPath );
   }
 
+  // setup the log
+  InitLog();
+  
   // we now need to add the default reserved paths.
   InitReservedPaths();
 
@@ -471,6 +474,30 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
     return false;
   }
   return true;
+}
+
+/**
+ * Initialise the log path and values.
+ */
+void CActionMonitorApp::InitLog()
+{
+  // check if enabled
+  if (myodd::config::get(_T("log\\enable", 1)) != 1)
+  {
+    return;
+  }
+
+  //  the directory we will be logging to.
+  std::wstring logPath = myodd::config::get(_T("log\\file\\path", LOG_PATH));
+
+  // the prefix of the filename.
+  std::wstring logPrefix = myodd::config::get(_T("log\\file\\prefix", _T("myodd")));
+
+  // the file extension
+  std::wstring logExtension = myodd::config::get(_T("log\\file\\extension", _T("log")));
+
+  // we can now try and initialise the log.
+  myodd::log::Initialise(logPath, logPrefix, logExtension);
 }
 
 /**
