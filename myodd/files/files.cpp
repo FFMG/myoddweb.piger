@@ -2455,5 +2455,35 @@ TCHAR* Byte2Char
 #endif
 }
 
+long GetFileSize(const STD_TSTRING& stdFullPathFileName)
+{
+  STD_TSTRING cleannedFileName = stdFullPathFileName;
+  if (!ExpandEnvironment(cleannedFileName, cleannedFileName))
+  {
+    return -1;
+  }
+
+  //  http://linux.die.net/man/2/stat
+  // https ://msdn.microsoft.com/en-us/library/14h5k7ff(VS.71).aspx
+  long fileSize = -1;
+#ifdef UNICODE
+  struct _stat64i32 filestatus;
+  if (-1 == _wstat(cleannedFileName.c_str(), &filestatus))
+  {
+    return fileSize;
+  }
+  fileSize = static_cast<long>(filestatus.st_size);
+#else
+  struct stat filestatus;
+  if (-1 == stat(cleannedFileName.c_str(), &filestatus))
+  {
+    return fileSize;
+  }
+  fileSize = static_cast<long>filestatus.st_size;
+#endif // UNICODE
+
+  return static_cast<long>(filestatus.st_size);
+}
+
 } //  files
 } //  myodd
