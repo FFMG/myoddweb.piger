@@ -6,7 +6,7 @@
 #include "../threads/threads.h"
 
 namespace myodd{ namespace log{
-  class LogFile : myodd::threads::CritSection
+  class LogFile
   {
   public:
     LogFile();

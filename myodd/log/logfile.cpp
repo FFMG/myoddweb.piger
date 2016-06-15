@@ -47,7 +47,6 @@ namespace myodd{ namespace log{
       return true;
 
     // lock the current
-    myodd::threads::AutoLock lock( *this );
     if( m_bInOpenCall )
     {
       return false;
@@ -149,7 +148,6 @@ namespace myodd{ namespace log{
       return true;
 
     // lock the current
-    myodd::threads::AutoLock lock( *this );
     if( m_bInOpenCall )
     {
       return false;
@@ -208,9 +206,6 @@ namespace myodd{ namespace log{
     if (!IsOpen() )
       return true;
 
-    // lock the current
-    myodd::threads::AutoLock lock( *this );
-
     // close it.
     bool bResult = (fclose(m_fp) == 0);
     m_fp = NULL;
@@ -236,9 +231,6 @@ namespace myodd{ namespace log{
     {
       return false;
     }
-
-    // lock the current
-    myodd::threads::AutoLock lock( *this );
 
     bool bResult = false;
     try
@@ -295,9 +287,6 @@ namespace myodd{ namespace log{
   */
   bool LogFile::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
   {
-    // lock the current
-    myodd::threads::AutoLock lock( *this );
-
     //  close the file
     Close();
 
