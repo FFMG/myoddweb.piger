@@ -124,17 +124,20 @@ namespace myodd { namespace log {
     m_logMessages.push_back(lm);
 
     //  remove if we have too many.
-    std::vector<decltype(m_logMessages)::value_type>(m_logMessages.begin() + MAX_NUM_LOG_MESSAGES, m_logMessages.end()).swap(m_logMessages);
+    while (m_logMessages.size() > MAX_NUM_LOG_MESSAGES)
+    {
+      m_logMessages.erase( m_logMessages.begin() );
+    }
   }
 
   /**
-  * Set the log path directory.
-  * If we pass a NULL argument then we want to stop/disable the logging.
-  * @param LPCTSTR the log path we will be using.
-  * @param LPCTSTR the prefix of the filename we will create, (default is blank).
-  * @param LPCTSTR the file extension.
-  * @return bool success or not
-  */
+   * Set the log path directory.
+   * If we pass a NULL argument then we want to stop/disable the logging.
+   * @param LPCTSTR the log path we will be using.
+   * @param LPCTSTR the prefix of the filename we will create, (default is blank).
+   * @param LPCTSTR the file extension.
+   * @return bool success or not
+   */
   bool LogEvent::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
   {
     // we cannot do that more than once.
