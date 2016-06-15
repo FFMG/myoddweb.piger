@@ -13,6 +13,12 @@ static char THIS_FILE[]=__FILE__;
 #include <io.h>
 #include "../files/files.h"
 
+#include "../math/math.h"
+#include "../files/files.h"
+
+// the maxfile size we want to use.
+static size_t MAX_FILE_SIZE_IN_MEGABYTES = 5;
+
 static LPCTSTR LogFile_default_Prefix = _T("myodd");
 static LPCTSTR LogFile_default_Extention = _T("log");
 
@@ -20,7 +26,8 @@ namespace myodd{ namespace log{
   LogFile::LogFile() : 
     m_fp( NULL ),
     m_uCurrentSize( 0 ),
-    m_bInOpenCall( false )
+    m_bInOpenCall( false ),
+    _maxFileSizeInMegabytes(MAX_FILE_SIZE_IN_MEGABYTES)
   {
   }
 
@@ -43,8 +50,10 @@ namespace myodd{ namespace log{
   bool LogFile::Create()
   {
     //  is the file open already.
-    if ( IsOpen() )
+    if (IsOpen())
+    {
       return true;
+    }
 
     // lock the current
     if( m_bInOpenCall )
@@ -60,10 +69,9 @@ namespace myodd{ namespace log{
     try
     {
       __time64_t tTime;
-      struct tm tStarted;
       _time64( &tTime ); 
 
-      errno_t err = _localtime64_s( &tStarted, &tTime );
+      errno_t err = _localtime64_s( &_tStarted, &tTime );
       if( err )
       {
         //  there was a problem.
@@ -71,13 +79,29 @@ namespace myodd{ namespace log{
         return false;
       }
 
-      //  get the log file.
-      TCHAR szDateLogStarted[40];
-      _tcsftime( szDateLogStarted, _countof(szDateLogStarted), _T("%Y.%m.%d"), &tStarted );
+      for ( unsigned int i = 0;; ++i )
+      {
+        //  get the log file.
+        TCHAR szDateLogStarted[40] = {};
+        _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y-%m-%d"), &_tStarted );
 
-      //  we have already added a back slash at the end of the directory.
-      // the file could exist already.
-      m_sCurrentFile = m_sDirectory + m_sPrefix + szDateLogStarted + _T(".") + m_sExtention;
+        TCHAR szFileCount[10] = {};
+        if (i > 0) 
+        {
+          swprintf(szFileCount, _T("-%d"), i);
+        }
+
+        //  we have already added a back slash at the end of the directory.
+        // the file could exist already.
+        std::wstring proposedCurrentFile = m_sDirectory + m_sPrefix + szDateLogStarted + szFileCount + _T(".") + m_sExtention;
+
+        double fileSizeInMegabytes = myodd::math::BytesToMegabytes(myodd::files::GetFileSizeInBytes(proposedCurrentFile));
+        if (fileSizeInMegabytes < GetMaxFileSizeInMegabytes())
+        {
+          m_sCurrentFile = proposedCurrentFile;
+          break;
+        }
+      }
 
       // try and open the new file.
       m_fp = _tfsopen(m_sCurrentFile.c_str(), _T("a+b"), _SH_DENYWR);
@@ -137,6 +161,55 @@ namespace myodd{ namespace log{
   }
 
   /**
+   * Ensure that the file is not too big and not out of date.
+   */
+  void LogFile::ValidateDateAndSize()
+  {
+    if (!IsOpen())
+    {
+      return;
+    }
+
+    // recreate?
+    bool bRecreate = false;
+
+    // check the size.
+    double fileSizeInMegabytes = myodd::math::BytesToMegabytes(myodd::files::GetFileSizeInBytes( GetCurrentLogFile()));
+    if (fileSizeInMegabytes > GetMaxFileSizeInMegabytes())
+    {
+      bRecreate = true;
+    }
+    else
+    {
+      // check how old the file is
+      __time64_t tTime;
+      struct tm tStarted;
+      _time64(&tTime);
+
+      errno_t err = _localtime64_s(&tStarted, &tTime);
+      if (err == 0)
+      {
+        auto tm = GetStartedDate();
+        if (tm.tm_yday != tStarted.tm_yday)
+        {
+          //  close the old one and force a re-open
+          // this will force a check to be done.
+          bRecreate = true;
+        }
+      }
+    }
+
+    if (bRecreate)
+    {
+      // close the old file
+      Close();
+
+      // create a new one.
+      Create();
+    }
+  }
+
+  /**
    * Open the file for login.
    * @param none
    * @return none
@@ -144,8 +217,10 @@ namespace myodd{ namespace log{
   bool LogFile::Open()
   {
     //  is the file open already.
-    if ( IsOpen() )
+    if (IsOpen())
+    {
       return true;
+    }
 
     // lock the current
     if( m_bInOpenCall )
@@ -203,8 +278,10 @@ namespace myodd{ namespace log{
   bool LogFile::Close()
   {
     // is it open?
-    if (!IsOpen() )
+    if (!IsOpen())
+    {
       return true;
+    }
 
     // close it.
     bool bResult = (fclose(m_fp) == 0);
@@ -231,6 +308,9 @@ namespace myodd{ namespace log{
     {
       return false;
     }
+
+    // check the size and date
+    ValidateDateAndSize();
 
     bool bResult = false;
     try
@@ -283,9 +363,10 @@ namespace myodd{ namespace log{
   * @param const std::wstring& wPath the log path we will be using.
   * @param const std::wstring& wPrefix the prefix of the filename we will create, (default is blank).
   * @param const std::wstring& wExtention the file extension.
+  * @param size_t maxFileSize the max file size in megabytes.
   * @return bool success or not
   */
-  bool LogFile::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
+  bool LogFile::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention, size_t maxFileSize)
   {
     //  close the file
     Close();

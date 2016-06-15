@@ -2461,7 +2461,7 @@ TCHAR* Byte2Char
  * @param const STD_TSTRING& stdFullPathFileName the file we are checking.
  * @return long Total size, in bytes
  */
-long GetFileSize( const STD_TSTRING& stdFullPathFileName )
+long GetFileSizeInBytes( const STD_TSTRING& stdFullPathFileName )
 {
   STD_TSTRING cleannedFileName = stdFullPathFileName;
   if (!ExpandEnvironment(cleannedFileName, cleannedFileName))

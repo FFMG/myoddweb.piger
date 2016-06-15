@@ -363,8 +363,9 @@ public:
 private:
   T databits_;
 };
-
 double DotProduct( const Vector& v1, const Vector& v2 );
+
+double BytesToMegabytes(double bytes);
 } //  math
 } //  myodd
 

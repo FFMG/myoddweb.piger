@@ -12,17 +12,28 @@ namespace myodd{ namespace log{
     LogFile();
     virtual ~LogFile();
 
-    bool Close();
-    bool Initialise(const std::wstring& lpPath, const std::wstring& lpPrefix, const std::wstring& lpExtention);
+    bool Initialise(const std::wstring& lpPath, const std::wstring& lpPrefix, const std::wstring& lpExtention, size_t maxFileSize );
     bool IsOpen() const;
     bool LogToFile( unsigned int uiType, LPCTSTR pszLine );
     const STD_TSTRING& GetCurrentLogFile() const{
       return m_sCurrentFile;
     }
-  protected:
 
+    /** 
+     * Get when this log file was started.
+     */
+    const struct tm& GetStartedDate() const {
+      return _tStarted;
+    }
+
+    const size_t GetMaxFileSizeInMegabytes() const {
+      return _maxFileSizeInMegabytes;
+    }
+  protected:
+    bool Close();
     bool Open();
     bool Create();
+    void ValidateDateAndSize();
 
     STD_TSTRING m_sPrefix;
     STD_TSTRING m_sExtention;
@@ -31,6 +42,8 @@ namespace myodd{ namespace log{
     bool m_bInOpenCall;
     FILE* m_fp;
     __int64 m_uCurrentSize;
+    struct tm _tStarted;
+    size_t _maxFileSizeInMegabytes;
   };
 } //  log
 } //  myodd

@@ -985,6 +985,9 @@ void CActionMonitorDlg::OnTrayVersion()
  */
 void CActionMonitorDlg::OnClose()
 {
+  // log that we are closing down
+  myodd::log::LogMessage(_T("Piger is shutting down."));
+
   //  hide the main window
   ShowWindow(0);
 

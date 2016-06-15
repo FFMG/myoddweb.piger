@@ -27,6 +27,6 @@ namespace myodd{ namespace log{
   const STD_TSTRING& GetCurrentLogFile();
 
   //  initialise the various events.
-  bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention);
+  bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention, size_t maxFileSize);
 } //  log
 } //  myodd

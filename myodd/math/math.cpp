@@ -1057,5 +1057,10 @@ double DotProduct( const Vector& v1, const Vector& v2 )
   return (v1.x_ * v2.x_) + (v1.y_ * v2.y_);
 }
 
+double BytesToMegabytes(double bytes)
+{
+  return bytes / (1024. * 1024.);
+}
+
 } //  math
 } //  myodd

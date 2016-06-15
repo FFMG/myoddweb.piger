@@ -104,7 +104,7 @@ bool GetFullTempFileName( LPTSTR& lpFullPathFileName, LPCTSTR lpFileName );
 bool is_dot( const STD_TSTRING& stdFile );
 bool is_dot( LPCTSTR lpFile );
 
-long GetFileSize( const STD_TSTRING& stdFullPathFileName);
+long GetFileSizeInBytes( const STD_TSTRING& stdFullPathFileName);
 
 size_t GetKeys
 ( 

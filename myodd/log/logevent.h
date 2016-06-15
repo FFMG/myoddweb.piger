@@ -19,7 +19,7 @@ namespace log {
       return m_logFile.GetCurrentLogFile();
     }
 
-    bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention);
+    bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention, size_t maxFileSize);
     bool Initialised() const;
 
   protected:
@@ -75,6 +75,8 @@ namespace log {
     // the actual log messages.
     void Log(LogType uFlags, LPCTSTR pszFmt, va_list argp);
     static LogEvent& Instance();
+
+
   };
 
 } //  logevent

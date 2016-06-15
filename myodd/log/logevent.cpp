@@ -133,12 +133,13 @@ namespace myodd { namespace log {
   /**
    * Set the log path directory.
    * If we pass a NULL argument then we want to stop/disable the logging.
-   * @param LPCTSTR the log path we will be using.
-   * @param LPCTSTR the prefix of the filename we will create, (default is blank).
-   * @param LPCTSTR the file extension.
+   * @param const std::wstring& wPath the log path we will be using.
+   * @param const std::wstring& wPrefix the prefix of the filename we will create, (default is blank).
+   * @param const std::wstring& wExtention the file extension.
+   * @param size_t maxFileSize the max file size in megabytes.
    * @return bool success or not
    */
-  bool LogEvent::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
+  bool LogEvent::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention, size_t maxFileSize )
   {
     // we cannot do that more than once.
     if (Initialised())
@@ -156,7 +157,7 @@ namespace myodd { namespace log {
     }
 
     // initialise the log file.
-    if (!m_logFile.Initialise(wPath, wPrefix, wExtention))
+    if (!m_logFile.Initialise(wPath, wPrefix, wExtention, maxFileSize ))
     {
       return false;
     }
@@ -195,6 +196,7 @@ namespace myodd { namespace log {
     // Lock the thread
     myodd::threads::AutoLock autoLock(*this);
 
+    //
     return m_logFile.LogToFile((unsigned int)uiType, pszLine);
   }
 } //  logevent

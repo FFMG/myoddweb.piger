@@ -497,7 +497,7 @@ void CActionMonitorApp::InitLog()
   std::wstring logExtension = myodd::config::get(_T("log\\file\\extension"), _T("log") );
 
   // we can now try and initialise the log.
-  myodd::log::Initialise(logPath, logPrefix, logExtension);
+  myodd::log::Initialise(logPath, logPrefix, logExtension, 10 );
 }
 
 /**

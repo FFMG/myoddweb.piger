@@ -79,9 +79,9 @@ namespace myodd{ namespace log{
    * @param const std::wstring& wExtention the file extension.
    * @return bool success or not
    */
-  bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention )
+  bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention, size_t maxFileSize)
   {
-    return LogEvent::Instance().Initialise( wPath.c_str(), wPrefix.c_str(), wExtention.c_str() );
+    return LogEvent::Instance().Initialise( wPath.c_str(), wPrefix.c_str(), wExtention.c_str(), maxFileSize );
   }
 
   /**
