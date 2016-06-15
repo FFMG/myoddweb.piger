@@ -5,7 +5,8 @@
 
 #include "../common/includes.h"
 #include "../threads/threads.h"
-#include "logevent.h"
+
+#include "logtype.h"
 
 namespace myodd{ namespace log{
   // the helper functions
@@ -20,8 +21,8 @@ namespace myodd{ namespace log{
   void LogDebug(LogType uiType, LPCTSTR pszFmt, ...);  //  log in _DEBUG messages only
 
   
-  bool AddNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam, size_t iSendLast = 100 );
-  bool RemoveNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam );
+  bool AddNotif( const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast = 100 );
+  bool RemoveNotif( const LogEventCallback& fnNotif, LPARAM lParam );
 
   const STD_TSTRING& GetCurrentLogFile();
 

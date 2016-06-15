@@ -4,25 +4,13 @@
 #include "../notif/notif.h"
 
 #include "logfile.h"
+#include "logtype.h"
 #include <vector>
-
-typedef void(*NOTIFY_LOG)(unsigned int uiType, LPCTSTR pszLine, void* pContext);
 
 namespace myodd {
 namespace log {
-
-  enum class LogType : unsigned int
-  {
-    None = 0,
-    Success,
-    Error,
-    Warning,
-    Message,
-    System,
-  };
-  
   // the actual log class
-  class LogEvent : public myodd::notif::Notifications<NOTIFY_LOG>
+  class LogEvent : public myodd::notif::Notifications<LogEventCallback>
   {
   public:
     virtual ~LogEvent(void);
@@ -81,8 +69,8 @@ namespace log {
 
   public:
     // notification messages
-    bool AddNotif(const NOTIFY_LOG& fnNotif, LPARAM lParam, size_t iSendLast);
-    bool RemoveNotif(const NOTIFY_LOG& fnNotif, LPARAM lParam);
+    bool AddNotif(const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast);
+    bool RemoveNotif(const LogEventCallback& fnNotif, LPARAM lParam);
 
     // the actual log messages.
     void Log(LogType uFlags, LPCTSTR pszFmt, va_list argp);

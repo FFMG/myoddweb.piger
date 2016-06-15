@@ -405,5 +405,8 @@
     <ClInclude Include="log\logevent.h">
       <Filter>log</Filter>
     </ClInclude>
+    <ClInclude Include="log\logtype.h">
+      <Filter>log</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

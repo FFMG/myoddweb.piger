@@ -34,7 +34,7 @@ namespace myodd { namespace log {
   * @param LPARAM the param we want to remove
   * @return bool if something was removed we will return true.
   */
-  bool LogEvent::RemoveNotif(const NOTIFY_LOG& fnNotif, LPARAM lParam)
+  bool LogEvent::RemoveNotif(const LogEventCallback& fnNotif, LPARAM lParam)
   {
     myodd::threads::AutoLock autoLock(*this);
     return __super::RemoveNotif(fnNotif, lParam);
@@ -47,7 +47,7 @@ namespace myodd { namespace log {
   * @param size_t the number of last notifications we want to receive.
   * @return bool true if the item was added, false if it already exists.
   */
-  bool LogEvent::AddNotif(const NOTIFY_LOG& fnNotif, LPARAM lParam, size_t iSendLast)
+  bool LogEvent::AddNotif(const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast)
   {
     // Lock the thread
     myodd::threads::AutoLock autoLock(*this);
@@ -57,7 +57,7 @@ namespace myodd { namespace log {
     while (iSend >= 0)
     {
       _LogMessage& lm = m_logMessages[iSend--];
-      fnNotif((unsigned int)lm.GetType(), lm.GetMessage(), (void*)lParam);
+      fnNotif(lm.GetType(), lm.GetMessage(), (void*)lParam);
     }
 
     // add it to the list
@@ -109,11 +109,11 @@ namespace myodd { namespace log {
   {
     //  then we need to notify all this new message.
     LPARAM lParam;
-    NOTIFY_LOG fnNotif;
+    LogEventCallback fnNotif;
     unsigned idx = 0;
     while (GetNotif(idx++, fnNotif, lParam))
     {
-      (*fnNotif)((unsigned int)uiType, pszLine ? pszLine : _T(""), (void*)lParam);
+      (*fnNotif)(uiType, pszLine ? pszLine : _T(""), (void*)lParam);
     }
 
     // log it to the file

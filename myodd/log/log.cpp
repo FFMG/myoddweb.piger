@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "log.h"
+#include "logevent.h"
 
 namespace myodd{ namespace log{
   void LogDebug( LogType uiType, LPCTSTR pszFmt, ...)
@@ -99,7 +100,7 @@ namespace myodd{ namespace log{
    * @param LPARAM the param we want to remove
    * @return bool if something was removed we will return true.
    */
-  bool RemoveNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam )
+  bool RemoveNotif( const LogEventCallback& fnNotif, LPARAM lParam )
   {
     return LogEvent::Instance().RemoveNotif( fnNotif, lParam );
   }
@@ -111,7 +112,7 @@ namespace myodd{ namespace log{
    * @param size_t the number of last notifications we want to receive.
    * @return bool true if the item was added, false if it already exists.
    */
-  bool AddNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam, size_t iSendLast /*= 100*/  )
+  bool AddNotif( const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast /*= 100*/  )
   {
     return LogEvent::Instance().AddNotif( fnNotif, lParam, iSendLast );
   }
