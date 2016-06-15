@@ -551,6 +551,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="log\log.cpp" />
+    <ClCompile Include="log\logevent.cpp" />
     <ClCompile Include="log\logfile.cpp" />
     <ClCompile Include="math\math.cpp" />
     <ClCompile Include="myodd.cpp" />
@@ -651,6 +652,7 @@
     <ClInclude Include="html\TokenStrikeout.h" />
     <ClInclude Include="html\TokenUnderline.h" />
     <ClInclude Include="log\log.h" />
+    <ClInclude Include="log\logevent.h" />
     <ClInclude Include="log\logfile.h" />
     <ClInclude Include="math\math.h" />
     <ClInclude Include="myodd.h" />

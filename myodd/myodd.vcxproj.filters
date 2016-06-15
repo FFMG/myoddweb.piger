@@ -263,6 +263,9 @@
     <ClCompile Include="threads\lock.cpp">
       <Filter>threads</Filter>
     </ClCompile>
+    <ClCompile Include="log\logevent.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -398,6 +401,9 @@
     </ClInclude>
     <ClInclude Include="threads\lock.h">
       <Filter>threads</Filter>
+    </ClInclude>
+    <ClInclude Include="log\logevent.h">
+      <Filter>log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
