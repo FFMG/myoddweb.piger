@@ -482,19 +482,19 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
 void CActionMonitorApp::InitLog()
 {
   // check if enabled
-  if (myodd::config::get(_T("log\\file\\enable", 1)) != 1)
+  if (myodd::config::get(_T("log\\file\\enable"), 1 ) != 1)
   {
     return;
   }
 
   //  the directory we will be logging to.
-  std::wstring logPath = myodd::config::get(_T("log\\file\\path", LOG_PATH));
+  std::wstring logPath = myodd::config::get(_T("log\\file\\path"), LOG_PATH );
 
   // the prefix of the filename.
-  std::wstring logPrefix = myodd::config::get(_T("log\\file\\prefix", _T("myodd")));
+  std::wstring logPrefix = myodd::config::get(_T("log\\file\\prefix"), _T("myodd"));
 
   // the file extension
-  std::wstring logExtension = myodd::config::get(_T("log\\file\\extension", _T("log")));
+  std::wstring logExtension = myodd::config::get(_T("log\\file\\extension"), _T("log") );
 
   // we can now try and initialise the log.
   myodd::log::Initialise(logPath, logPrefix, logExtension);
