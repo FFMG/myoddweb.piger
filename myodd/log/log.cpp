@@ -138,10 +138,17 @@ namespace myodd{ namespace log{
   LogEvent::~LogEvent(void)
   {
     //  the log will close itself.
+    _initialised = false;
+  }
+   
+  LogEvent::LogEvent(void) : _initialised( false )
+  {
   }
 
-  LogEvent::LogEvent(void)
+  bool LogEvent::Initialised() const
   {
+    myodd::threads::AutoLock al(*this);
+    return _initialised;
   }
 
   /**
@@ -152,6 +159,7 @@ namespace myodd{ namespace log{
    */
   bool LogEvent::RemoveNotif( const NOTIFY_LOG& fnNotif, LPARAM lParam )
   {
+    myodd::threads::AutoLock autoLock(*this);
     return __super::RemoveNotif( fnNotif, lParam );
   }
 
@@ -188,13 +196,6 @@ namespace myodd{ namespace log{
    */
   void LogEvent::Log(LogType uiType, LPCTSTR pszLine, va_list argp)
   {
-    // try and Lock the thread
-    myodd::threads::AutoLockTry autoLockTry( *this );
-    if( !autoLockTry.TryLock( 20 ) )
-    {
-      return;
-    }
-
     ASSERT(pszLine != NULL);
 
     TCHAR* buffer = NULL;
@@ -207,9 +208,13 @@ namespace myodd{ namespace log{
       _vsntprintf_s(buffer, len, len, pszLine, argp);
     }
 
-    // we still have the lock!
-    LogInLockedThread( uiType, buffer );
-
+    // try and Lock the thread
+    myodd::threads::AutoLockTry autoLockTry(*this);
+    if ( autoLockTry.TryLock(20) )
+    {
+      LogInLockedThread(uiType, buffer);
+    }
+    
     if( NULL != buffer )
     {
       delete [] buffer;
@@ -255,10 +260,29 @@ namespace myodd{ namespace log{
   */
   bool LogEvent::Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention)
   {
+    // we cannot do that more than once.
+    if (Initialised())
+    {
+      return false;
+    }
+
+    // try and get the lock
+    myodd::threads::AutoLock autoLock(*this);
+
+    // check again if we are initialised.
+    if ( Initialised() )
+    {
+      return false;
+    }
+
+    // initialise the log file.
     if (!m_logFile.Initialise(wPath, wPrefix, wExtention))
     {
       return false;
     }
+
+    // we are now initialised
+    _initialised = true;
 
     //  of the path is zero then we are not really creating anything
     // this just mean that we are not logging anything.
@@ -267,22 +291,16 @@ namespace myodd{ namespace log{
       return true;
     }
 
-    // Lock the thread
-    // if we cannot lock those message then they are lost forever
-    // but at least we don't have a deadlock
-    myodd::threads::AutoLockTry autoLockTry( *this );
-    if( autoLockTry.HasLock() )
+    // send the last few messages
+    for( auto it = m_logMessages.begin();
+          it != m_logMessages.end();
+          ++it
+        )
     {
-      // send the last few messages
-      for( std::vector<_LogMessage>::const_iterator it = m_logMessages.begin();
-            it != m_logMessages.end();
-            ++it
-          )
-      {
-        const _LogMessage& lm = (*it);
-        LogToFile( lm.GetType(), lm.GetMessage() );
-      }// each messages.
-    }// try to lock
+      const _LogMessage& lm = (*it);
+      LogToFile( lm.GetType(), lm.GetMessage() );
+    }// each messages.
+
     return true;
   }
 

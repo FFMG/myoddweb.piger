@@ -53,10 +53,14 @@ namespace myodd{ namespace log{
     }
 
     bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention);
+    bool Initialised() const;
 
   protected:
+
     LogEvent(void);
     const LogEvent& operator=(const LogEvent&);      // Prevent assignment
+
+    bool _initialised;
 
     //  all the messages.
     class _LogMessage
