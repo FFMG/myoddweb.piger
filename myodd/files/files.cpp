@@ -2455,7 +2455,13 @@ TCHAR* Byte2Char
 #endif
 }
 
-long GetFileSize(const STD_TSTRING& stdFullPathFileName)
+/** 
+ * Get the size of a file
+ * We return -1 if the file does not exist, we do not have permission and/or there was some other error.
+ * @param const STD_TSTRING& stdFullPathFileName the file we are checking.
+ * @return long Total size, in bytes
+ */
+long GetFileSize( const STD_TSTRING& stdFullPathFileName )
 {
   STD_TSTRING cleannedFileName = stdFullPathFileName;
   if (!ExpandEnvironment(cleannedFileName, cleannedFileName))
@@ -2463,8 +2469,8 @@ long GetFileSize(const STD_TSTRING& stdFullPathFileName)
     return -1;
   }
 
-  //  http://linux.die.net/man/2/stat
-  // https ://msdn.microsoft.com/en-us/library/14h5k7ff(VS.71).aspx
+  // http://linux.die.net/man/2/stat
+  // https://msdn.microsoft.com/en-us/library/14h5k7ff(VS.71).aspx
   long fileSize = -1;
 #ifdef UNICODE
   struct _stat64i32 filestatus;
