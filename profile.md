@@ -118,10 +118,11 @@ Setup the log information, (where warnings/errors etc), are logged.
     ...
       <log>
         <file>
-          <enable type="1">1</enable> 
+          <enable type="8">1</enable> 
           <path type="1">%appdata%\myoddweb\ActionMonitor\Logs</path> 
           <prefix type="1">myodd</prefix> 
-          <extension type="1">log</extension> 
+          <extension type="1">log</extension>
+          <maxFileSize type="8">10</maxFileSize>
         </file>
       </log>
 	...
@@ -135,6 +136,7 @@ When saving to files, the options available are ...
 - Path : The log directory where log files will be created/added/edited.
 - Prefix : The prefix that will be appended to the file, (for ease of searching at a later stage).
 - Extension : The log file extension.
+- maxFileSize : The max log file size, (before we roll over to a new file).
 
 ## Python
 

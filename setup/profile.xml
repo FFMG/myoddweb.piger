@@ -34,10 +34,11 @@
   </paths>
   <log>
     <file>
-      <enable type="1">1</enable> 
+      <enable type="8">1</enable> 
       <path type="1">%appdata%\myoddweb\ActionMonitor\Logs</path> 
       <prefix type="1">myodd</prefix> 
       <extension type="1">log</extension> 
+      <maxFileSize type="8">10</maxFileSize>
     </file>
   </log>
 </Config>

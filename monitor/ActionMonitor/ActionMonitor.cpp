@@ -496,8 +496,18 @@ void CActionMonitorApp::InitLog()
   // the file extension
   std::wstring logExtension = myodd::config::get(_T("log\\file\\extension"), _T("log") );
 
+  //  get the max file size.
+  size_t maxFileSize = myodd::config::get(_T("log\\file\\maxFileSize"), 10 );
+
+  //  sanity check
+  if (maxFileSize > 10 || maxFileSize < 1)
+  {
+    myodd::log::LogError(_T("The given max log size, (%d), is invalid"), maxFileSize);
+    maxFileSize = 10;
+  }
+
   // we can now try and initialise the log.
-  myodd::log::Initialise(logPath, logPrefix, logExtension, 10 );
+  myodd::log::Initialise(logPath, logPrefix, logExtension, maxFileSize );
 }
 
 /**
