@@ -136,7 +136,8 @@ When saving to files, the options available are ...
 - Path : The log directory where log files will be created/added/edited.
 - Prefix : The prefix that will be appended to the file, (for ease of searching at a later stage).
 - Extension : The log file extension.
-- maxFileSize : The max log file size, (before we roll over to a new file).
+- maxFileSize : The max log file size, (before we roll over to a new file).    
+  The value has to be between 1Mb and 10Mb.
 
 ## Python
 
