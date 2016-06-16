@@ -280,6 +280,9 @@ public:
     case type_double:
       return ((double)data == m_dContainer.dContent);     // check that (double)1 == 1.0 rather than 1 == (int)1.5
 
+    case type_string:
+      return m_dContainer.isNumeric && ((double)data == m_dContainer.dContent);  // same as above, if it is numerc, (else we might get "aaaa" == 0)
+
     default:
       return false;
     }
