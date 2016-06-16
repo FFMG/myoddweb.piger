@@ -309,6 +309,9 @@ public:
     case type_double:
       return (data == m_dContainer.dContent);
 
+    case type_string:
+      return m_dContainer.isNumeric && (data == m_dContainer.dContent);
+
     default:
       return false;
     }
