@@ -3,7 +3,7 @@
 class LoaderManager
 {
 public:
-  LoaderManager( const std::string& pluginPath );
+  LoaderManager( const std::wstring& pluginPath );
   ~LoaderManager(void);
 
   void Init( amplugin* p  );
@@ -12,26 +12,26 @@ public:
 
 protected:
   void Learn( amplugin* p, bool isPrivileged );
-  void UnLearn( amplugin* p, LPCWSTR lpName );
+  void UnLearn( amplugin* p, const std::wstring& lpName );
 
-  bool RemoveCommand( amplugin* p, LPCWSTR name );
-  bool AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path );
+  bool RemoveCommand( amplugin* p, const std::wstring& name );
+  bool AddCommand( amplugin* p, const std::wstring& name, const std::wstring& path );
 
   typedef std::map< std::wstring, std::wstring > OPENAS_NAMES;
   OPENAS_NAMES  m_openAs;
 
-  OPENAS_NAMES::const_iterator Find( LPCWSTR name );
+  OPENAS_NAMES::const_iterator Find(const std::wstring& name ) const;
 
 protected:
   // the XML file.
-  std::string m_lpFilePath;
-  std::string m_pluginPath;
-  std::string m_thisPath;
+  std::wstring m_lpFilePath;
+  std::wstring m_pluginPath;
+  std::wstring m_thisPath;
 
-  const std::string& GetPluginPath() const{
+  const std::wstring& GetPluginPath() const{
     return m_pluginPath;
   }
-  const std::string& GetThisPath() const{
+  const std::wstring& GetThisPath() const{
     return m_thisPath;
   }
 
