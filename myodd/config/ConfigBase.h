@@ -8,7 +8,7 @@
 #include "ConfigData.h"
 #include "ConfigObject.h"
 
-#include "../xml/tinyxml.h"
+#include "../xml/tinyxml2.h"
 
 namespace myodd{ namespace config{
 
@@ -18,7 +18,7 @@ class ConfigBase :
   public myodd::threads::CritSection
 {
 public:
-  ConfigBase( LPCTSTR szRegPath );
+  ConfigBase(const STD_TSTRING& szPath );
   virtual ~ConfigBase();
 
 public:
@@ -28,11 +28,11 @@ public:
   * Save all the values if the class is 'dirty'
   * @return none
   */
-  void save_values();
+  void Save();
 protected:
-  TiXmlElement* _getSaveElement( TiXmlElement& root, const std::vector<STD_TSTRING>& parents );
-  void _addLoadElements( TiXmlElement& root, std::vector<STD_TSTRING>& parents );
-  void _addLoadElement( TiXmlElement& root, std::vector<STD_TSTRING>& parents );
+  tinyxml2::XMLElement* _getSaveElement(tinyxml2::XMLElement& root, const std::vector<STD_TSTRING>& parents );
+  void _addLoadElements( const tinyxml2::XMLElement& root, std::vector<STD_TSTRING>& parents );
+  void _addLoadElement( const tinyxml2::XMLElement& root, std::vector<STD_TSTRING>& parents );
 
 protected:
   //  prevent copies
@@ -104,11 +104,15 @@ protected:
 
   //
   // The full path of the XML
-  STD_TSTRING m_szRegPath;
+  std::string m_szRegPath;
 
   //
   // If the data is dirty, (and must be saved).
   bool m_bIsDirty;
+
+  // the current document
+  tinyxml2::XMLDocument* _doc;
+  void CloseDoc();
   //  ---------------------------------------------------------------------------------------------------
 };
 

@@ -66,7 +66,7 @@ void free()
 {
   if( m_staticContainer )
   {
-    m_staticContainer->save_values();
+    m_staticContainer->Save();
     delete m_staticContainer;
     m_staticContainer = NULL;
   }

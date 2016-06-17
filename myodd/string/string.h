@@ -227,7 +227,8 @@ namespace myodd{ namespace strings{
   LPTSTR _tcsistr(const STD_TSTRING& string, const STD_TSTRING& strCharSet);
   LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet);
 
-  wchar_t *char2wchar(const char * mbcs2Convert, UINT codepage = CP_ACP );
+  std::wstring String2WString( const std::string& s2Convert );
+  std::string WString2String(const std::wstring& ws2Convert);
 } //  strings
 } //  myodd
 
