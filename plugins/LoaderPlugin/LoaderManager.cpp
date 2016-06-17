@@ -386,6 +386,7 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
   if (!p->RemoveAction(cpLowerName, itCommand->second.c_str()))
   {
     // we could not remove it.
+    myodd::log::LogError(_T("[Loader] I was unable to remove the command '%s' - '%s'"), cpLowerName, itCommand->second.c_str());
     return false;
   }
 
@@ -395,9 +396,11 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
     myodd::files::DeleteFile(itCommand->second);
   }
 
-  // unlearn the function as well.
-  std::wstring sUnLearn = GetUnLearnCommand(lowerName);
+  // log it  
+  myodd::log::LogSuccess(_T("[Loader] Removed command '%s' - '%s'"), cpLowerName, itCommand->second.c_str());
 
+  // unlearn the unlearn function as well.
+  std::wstring sUnLearn = GetUnLearnCommand(lowerName);
   p->RemoveAction(sUnLearn.c_str(), GetThisPath().c_str());
 
   // and now remove it from our own list.
@@ -424,6 +427,7 @@ bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std
   if (!RemoveActionIfInList( p, lowerName, false ))
   {
     //  could not remove it.
+    myodd::log::LogError(_T("[Loader] I was unable to remove the command '%s' - '%s' to (re)add it."), name.c_str(), path.c_str());
     return false;
   }
 
@@ -433,12 +437,16 @@ bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std
   // and to the action monitor.
   if( !p->AddAction(cpLowerName, path.c_str() ) )
   {
+    myodd::log::LogError(_T("[Loader] I was unable to add the command '%s' - '%s'"), name.c_str(), path.c_str());
     return false;
   }
 
   // add the unlearn function as well so the user can remove this command.
   std::wstring sUnLearn = GetUnLearnCommand( lowerName );
   p->AddAction( sUnLearn.c_str(), GetThisPath().c_str() );
+
+  // it seems to have worked.
+  myodd::log::LogSuccess(_T("[Loader] Added command '%s' - '%s'"), name.c_str(), path.c_str());
   return true;
 }
 
