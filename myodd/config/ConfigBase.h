@@ -95,7 +95,9 @@ public:
   bool IsDirty() const{ return m_bIsDirty; }
 
 protected:
-  void SetDirty( bool bIs ){  m_bIsDirty = bIs;  }
+  void SetDirty( bool bIs ){  
+    m_bIsDirty = bIs;  
+  }
 
 protected:
   //
