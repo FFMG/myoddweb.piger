@@ -3,7 +3,7 @@
 class LoaderManager
 {
 public:
-  LoaderManager( const std::wstring& pluginPath );
+  LoaderManager( const std::string& pluginPath );
   ~LoaderManager(void);
 
   void Init( amplugin* p  );
@@ -24,19 +24,19 @@ protected:
 
 protected:
   // the XML file.
-  std::wstring m_lpFilePath;
-  std::wstring m_pluginPath;
-  std::wstring m_thisPath;
+  std::string m_lpFilePath;
+  std::string m_pluginPath;
+  std::string m_thisPath;
 
-  const std::wstring& GetPluginPath() const{
+  const std::string& GetPluginPath() const{
     return m_pluginPath;
   }
-  const std::wstring& GetThisPath() const{
+  const std::string& GetThisPath() const{
     return m_thisPath;
   }
 
   bool LoadXML( amplugin* p  );
-  bool SaveXML();
+  bool SaveXML() const;
 
   bool SaveLUAFile( std::wstring& fileName, 
                     const std::wstring command,

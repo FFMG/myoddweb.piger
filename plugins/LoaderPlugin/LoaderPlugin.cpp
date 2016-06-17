@@ -121,7 +121,7 @@ void CLoaderPluginApp::SetPluginPath( LPCWSTR lpPath )
 void CLoaderPluginApp::InitPlugin( amplugin* p )
 {
   delete m_loadManager;
-  m_loadManager = new LoaderManager( m_pluginPath );
+  m_loadManager = new LoaderManager( myodd::strings::WString2String( m_pluginPath ) );
   m_loadManager->Init( p );
 }
 
