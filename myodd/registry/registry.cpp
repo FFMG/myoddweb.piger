@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include <tchar.h>
+#include "../string/string.h"
 #include "registry.h"
 
 namespace myodd{ namespace reg{
@@ -80,7 +80,7 @@ namespace myodd{ namespace reg{
 				               0,									// must be zero 
 				               REG_SZ,						// value type 
 				               (LPBYTE)newVal,		// pointer to value data 
-				               (DWORD)_tcslen(newVal)     // length of value data 
+				               (DWORD)myodd::strings::Length(newVal)     // length of value data 
                       );
 			  //
 			  //	clean
@@ -219,7 +219,11 @@ namespace myodd{ namespace reg{
 				  {
 					  // the data size is 0 so just return 0
 					  bRet	  =	true;
-					  oldVal	=	_T("");
+#ifdef UNICODE
+            oldVal = L"";
+#else
+            oldVal = "";
+#endif // UNICODE
 				  }
 			  }
 			  //
