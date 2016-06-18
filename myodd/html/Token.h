@@ -1,7 +1,6 @@
 #pragma once
 
-#include <windows.h>
-#include <tchar.h>
+#include "../myoddinclude.h"
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
   TypeName(const TypeName&);               \
