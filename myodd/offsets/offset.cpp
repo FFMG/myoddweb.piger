@@ -1,9 +1,9 @@
 #include "stdafx.h"
 
-#include <tchar.h>
 #include <assert.h>
 #include "offset.h"
 #include "../files/files.h"
+#include "../string/string.h"
 
 namespace myodd{ namespace offset{
   /**
@@ -38,7 +38,7 @@ namespace myodd{ namespace offset{
 #ifdef UNICODE
       if( 0 == _wfopen_s( &hf, expanded.c_str(), L"rb") )
 #else
-      if (0 == fopen_s(&hf, expanded.c_str(), L"rb"))
+      if (0 == fopen_s(&hf, expanded.c_str(), "rb"))
 #endif
       {
         // obtain file size.
@@ -105,7 +105,7 @@ namespace myodd{ namespace offset{
   template<>
   void write<TCHAR>( const TCHAR*& item, BYTE*& pData, size_t& ulOffset )
   {
-    size_t uiLength = (item ? _tcslen( item ) : 0) * sizeof(TCHAR);
+    size_t uiLength = myodd::strings::Length( item ) * sizeof(TCHAR);
     size_t uiSize = uiLength;
     uiSize += sizeof(unsigned int); //  the length
     if( ulOffset > 0 )
@@ -238,7 +238,11 @@ namespace myodd{ namespace offset{
     }
 
     FILE* hf = NULL;
-    if( 0 != _tfopen_s( &hf, fileName, _T("wb")) )
+#ifdef UNICODE
+      if (0 == _wfopen_s(&hf, fileName, L"wb"))
+#else
+      if (0 == fopen_s(&hf, fileName, "wb"))
+#endif
     {
       return;
     }

@@ -857,7 +857,7 @@ STD_TSTRING ToStringFmt( LPCTSTR pszFormat, ... )
 template<>
 size_t Length<const wchar_t*>(const wchar_t* src)
 {
-  return wcslen(src);
+  return src ? wcslen(src) : 0;
 }
 
 template<>
@@ -869,7 +869,7 @@ size_t Length<const std::wstring&>(const std::wstring& src)
 template<>
 size_t Length<const char*>(const char* src)
 {
-  return strlen(src);
+  return src ? strlen(src) : 0;
 }
 
 template<>
