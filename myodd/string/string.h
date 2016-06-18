@@ -4,6 +4,10 @@
 #define __Strings_h__
 
 #include "../common/includes.h"
+
+#include <atlbase.h>
+#include <atlconv.h>
+
 #include <sstream> 
 #include <vector>
 

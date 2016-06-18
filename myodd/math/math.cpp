@@ -1,13 +1,6 @@
 #include "stdafx.h"
 
-#ifdef __AFXWIN_H__
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif // _DEBUG
-#endif // __AFXWIN_H__
-
+#include <tchar.h>
 #include "string.h"
 #include "math.h"
 #include <limits>
