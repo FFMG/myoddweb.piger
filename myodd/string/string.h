@@ -233,6 +233,9 @@ namespace myodd{ namespace strings{
   LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet);
 
   wchar_t *char2wchar(const char * mbcs2Convert, UINT codepage = CP_ACP );
+
+  template<typename T>
+  size_t Length(T src);
 } //  strings
 } //  myodd
 

@@ -863,6 +863,29 @@ STD_TSTRING ToStringFmt( LPCTSTR pszFormat, ... )
   return result;
 }
 
+template<>
+size_t Length<const wchar_t*>(const wchar_t* src)
+{
+  return wcslen(src);
+}
+
+template<>
+size_t Length<const std::wstring&>(const std::wstring& src)
+{
+  return src.length();
+}
+
+template<>
+size_t Length<const char*>(const char* src)
+{
+  return strlen(src);
+}
+
+template<>
+size_t Length<const std::string&>(const std::string& src)
+{
+  return src.length();
+}
 
 } //  strings
 } //  myodd
