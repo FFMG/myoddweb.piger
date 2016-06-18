@@ -1,17 +1,7 @@
 #include "stdafx.h"
-
-#ifdef __AFXWIN_H__
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif // _DEBUG
-#endif // __AFXWIN_H__
-
 #include "../files/files.h"
 #include "Config.h"
 #include <assert.h>
-#include <tchar.h>
 
 // --------------------------------------------------------------------------
 #define IS_VALID_CONTAINER  if( NULL == m_staticContainer ) \
