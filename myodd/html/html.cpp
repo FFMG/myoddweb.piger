@@ -3,20 +3,10 @@
 */
 #include "..\myodd.h"
 
-#ifdef __AFXWIN_H__
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif // _DEBUG
-#endif // __AFXWIN_H__
-
-
-#include <windows.h>
-#include <tchar.h>
-#include <assert.h>
+#include "../myoddinclude.h"
 #include "../string/string.h"
 #include "../math/math.h"
+#include <assert.h>
 #include "html.h"
 #include "parser.h"
 
