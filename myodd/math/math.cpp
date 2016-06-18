@@ -1,9 +1,9 @@
 #include "stdafx.h"
-
-#include <tchar.h>
 #include "string.h"
+#include "../string/string.h"
 #include "math.h"
 #include <limits>
+#include <assert.h>
 
 namespace myodd{ namespace math{
 void Test()
@@ -151,7 +151,7 @@ unsigned int factorial( unsigned int n )
  */
 double _Ni(unsigned int n, unsigned int i)
 {
-  ASSERT( n >= i );
+  assert( n >= i );
   double ni;
   double a1 = static_cast<double>(factorial(n));
   double a2 = static_cast<double>(factorial(i));
@@ -421,7 +421,7 @@ int __fastcall ToBase10(const TCHAR* udata, BYTE fromBase)
   }
 
   static const TCHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-  size_t udatalen = _tcslen( udata );
+  size_t udatalen = myodd::strings::Length( udata );
 
   long digitValue = 0;
   int retVal = 0;
@@ -514,7 +514,7 @@ LPCTSTR __fastcall ToBase( STD_TSTRING& ret, unsigned int base10number, BYTE bas
 double modulo( double y, double x)
 {
   double mod = y - x * floor(y/x);
-  ASSERT( 0 <= mod && mod <= x );
+  assert( 0 <= mod && mod <= x );
   return mod;
 }
 
@@ -553,9 +553,76 @@ double std_tstof(const STD_TSTRING& s)
  * @param const STD_TSTRING& the number we want to convert.
  * @return long the long conversion of the string
  */
-long std_tstol(const STD_TSTRING& s)
+template<>
+long Convert<const wchar_t*, long>(const wchar_t* src )
 {
-  return _tstol( s.c_str() );
+  return _wtol( src );
+}
+
+template<>
+long Convert<const std::wstring&, long>(const std::wstring& src)
+{
+  return _wtol( src.c_str() );
+}
+
+template<>
+long Convert<const char*, long>(const char* src)
+{
+  return atol(src);
+}
+
+template<>
+long Convert<const std::string&, long>(const std::string& src)
+{
+  return atol(src.c_str());
+}
+
+template<>
+int Convert<const wchar_t*, int>(const wchar_t* src)
+{
+  return _wtoi(src);
+}
+
+template<>
+int Convert<const std::wstring&, int>(const std::wstring& src)
+{
+  return _wtoi(src.c_str());
+}
+
+template<>
+int Convert<const char*, int>(const char* src)
+{
+  return atoi(src);
+}
+
+template<>
+int Convert<const std::string&, int>(const std::string& src)
+{
+  return atoi(src.c_str());
+}
+
+template<>
+double Convert<const wchar_t*, double>(const wchar_t* src)
+{
+  return _wtof(src);
+}
+
+template<>
+double Convert<const std::wstring&, double>(const std::wstring& src)
+{
+  return _wtof(src.c_str());
+}
+
+template<>
+double Convert<const char*, double>(const char* src)
+{
+  return atof(src);
+}
+
+template<>
+double Convert<const std::string&, double>(const std::string& src)
+{
+  return atof(src.c_str());
 }
 
 /**

@@ -84,9 +84,8 @@ double modulo( double y, double x);
 int random_range(int lowest_number, int highest_number);
 
 // ----------------------------------------------------------------------
-double std_tstof(const STD_TSTRING& s);
-long std_tstol(const STD_TSTRING& s);
-int std_tstoi(const STD_TSTRING& s);
+template <typename T, typename U>
+U Convert(T src );
 
 // return the maximum of two values
 template <typename T>
