@@ -30,7 +30,7 @@
 #include "log/log.h"
 
 // XML files.
-#include "xml/tinyxml.h"
+#include "xml/tinyxml2.h"
 
 // config files.
 #include "config/config.h"

@@ -1,10 +1,17 @@
 #include "stdafx.h"
+#include <locale>
+#include <codecvt>
 #include "string.h"
 
 namespace myodd{ namespace strings{
 void Test()
 #ifdef _DEBUG
 {
+  assert("a" == WString2String(_T("a")));
+  assert("abcdef" == WString2String(_T("abcdef")));
+  assert(_T("a") == String2WString( "a"));
+  assert(_T("abcdef") == String2WString("abcdef"));
+
   STD_TSTRING s1 = ToStringFmt( _T("%10.2f"), 10.27 );
   assert( s1 == _T("     10.27"));
   assert( IsEmptyString( _T("    " )));
@@ -779,41 +786,26 @@ bool StringToString( STD_TSTRING& value, LPCTSTR l, LPCTSTR pszFormat )
  * @param UINT the code page
  * @return wchar_t* the converted wide char.
  */
-wchar_t* char2wchar(const char * mbcs2Convert, UINT codepage)
+std::wstring String2WString(const std::string& s2Convert)
 {
-  wchar_t* _wideCharStr = NULL;
-  try
-  {
-    static const size_t initSize = 512;
-    _wideCharStr = new wchar_t[initSize];
-    size_t   _wideCharAllocLen = initSize;
-
-    int len = MultiByteToWideChar(codepage, 0, mbcs2Convert, -1, _wideCharStr, 0);
-    if (len > 0)
-    {
-      if ((size_t)len > _wideCharAllocLen)
-      {
-        delete [] _wideCharStr;
-        _wideCharAllocLen = len;
-        _wideCharStr = new wchar_t[_wideCharAllocLen];
-      }
-      MultiByteToWideChar(codepage, 0, mbcs2Convert, -1, _wideCharStr, len);
-    }
-    else
-    {
-      _wideCharStr[0] = 0;
-    }
-  }
-  catch( ... )
-  {
-    // not enough memory?
-    if( _wideCharStr ){
-      delete [] _wideCharStr;
-    }
-    _wideCharStr = NULL;
-  }
-  return _wideCharStr;
+  using convert_typeX = std::codecvt_utf8<wchar_t>;
+  std::wstring_convert<convert_typeX, wchar_t> converterX;
+  return converterX.from_bytes(s2Convert);
 }
+
+/**
+* Convert a AscII string to a wide char.
+* @param const char* the string we want to convert.
+* @param UINT the code page
+* @return wchar_t* the converted wide char.
+*/
+std::string WString2String(const std::wstring& ws2Convert)
+{
+  using convert_typeX = std::codecvt_utf8<wchar_t>;
+  std::wstring_convert<convert_typeX, wchar_t> converterX;
+  return converterX.to_bytes(ws2Convert);
+}
+
 
 STD_TSTRING ToStringFmt( LPCTSTR pszFormat, ... )
 {

@@ -83,15 +83,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xml\tinyxml.cpp">
-      <Filter>XML</Filter>
-    </ClCompile>
-    <ClCompile Include="xml\tinyxmlerror.cpp">
-      <Filter>XML</Filter>
-    </ClCompile>
-    <ClCompile Include="xml\tinyxmlparser.cpp">
-      <Filter>XML</Filter>
-    </ClCompile>
     <ClCompile Include="common\program_options.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -266,6 +257,9 @@
     <ClCompile Include="log\logevent.cpp">
       <Filter>log</Filter>
     </ClCompile>
+    <ClCompile Include="xml\tinyxml2.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -284,9 +278,6 @@
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="xml\tinyxml.h">
-      <Filter>XML</Filter>
     </ClInclude>
     <ClInclude Include="common\includes.h">
       <Filter>Common</Filter>
@@ -407,6 +398,9 @@
     </ClInclude>
     <ClInclude Include="log\logtype.h">
       <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="xml\tinyxml2.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ static char THIS_FILE[]=__FILE__;
 #include "ConfigBase.h"
 
 #include "../files/files.h"
-#include "../xml/tinyxml.h"
+#include "../xml/tinyxml2.h"
 
 namespace myodd{ namespace config{
 /**
@@ -19,10 +19,15 @@ namespace myodd{ namespace config{
  * @param LPCTSTR the path of the config file.
  * @return none.
  */
-ConfigBase::ConfigBase( LPCTSTR szPath ) : 
-  m_szRegPath( szPath ),
+ConfigBase::ConfigBase( const STD_TSTRING& szPath ) : 
+  _doc( NULL ),
   m_bIsDirty( false )
 {
+#ifdef UNICODE
+  m_szRegPath = myodd::strings::WString2String(szPath);
+#else
+  m_szRegPath = szPath;
+#endif
 }
 
 /**
@@ -37,30 +42,54 @@ ConfigBase::~ConfigBase()
   DeleteNotifyParts();
 
   erase();
+
+  // close the document, (if need be).
+  CloseDoc();
+}
+
+/**
+ * Close the document if need be.
+ */
+void ConfigBase::CloseDoc()
+{
+  if (_doc)
+  {
+    delete _doc;
+  }
+  _doc = NULL;
 }
 
 /**
  * In that node look for a 'type' attribute, if it exists then we will look for a value.
- * @param TiXmlElement& the current node
+ * @param tinyxml2::XMLElement& the current node
  * @param std::vector<STD_TSTRING>& the current list of parent names.
  * @return none.
  */
 void ConfigBase::_addLoadElement
 ( 
-  TiXmlElement& root, 
+  const tinyxml2::XMLElement& root,
   std::vector<STD_TSTRING>& parents 
 )
 {
   //  get the type
-  STD_TSTRING stdType;
   static const STD_TSTRING sep = _T("\\");
-  if( TIXML_SUCCESS == root.QueryValueAttribute( _T("type"), &stdType ) )
+  const tinyxml2::XMLAttribute* attributeType = root.FindAttribute("type");
+  if( attributeType != NULL )
   {
+    // get the value
+#ifdef UNICODE
+    STD_TSTRING stdType = myodd::strings::String2WString( attributeType->Value() );
+    STD_TSTRING stdRoot = myodd::strings::String2WString( root.Value() );
+    STD_TSTRING stdText = myodd::strings::String2WString(root.GetText());
+#else
+    STD_TSTRING stdType = attributeType->Value;
+    STD_TSTRING stdRoot = root.Value();
+    STD_TSTRING stdText = root.GetText();
+#endif // UNICODE    
+    
+
     //  create the name of the object that we will be adding.
     STD_TSTRING stdName = myodd::strings::implode( parents, sep );
-
-    // get the value that we saved.
-    LPCTSTR szValue = root.GetText();
 
     // and get the type of the object
     long ltype = _tstol( stdType.c_str() );
@@ -70,27 +99,27 @@ void ConfigBase::_addLoadElement
     {
     case Data::type_string:
       //  Set as an string
-      Add( stdName, szValue ? szValue : _T("") );
+      Add( stdName, stdText);
       break;
 
     case Data::type_long:
       //  Set as an long
-      Add( stdName, szValue ? _tstol( szValue ) : 0 );
+      Add( stdName,  _tstol(stdText.c_str()) );
       break;
 
     case Data::type_double:
       //  Set as an double
-      Add( stdName, szValue ? _tstof( szValue ) : 0.f );
+      Add( stdName, _tstof(stdText.c_str()));
       break;
 
     case Data::type_int:
       //  Set as an int
-      Add( stdName, szValue ? _tstoi( szValue ) : 0 );
+      Add( stdName, _tstoi(stdText.c_str()));
       break;
 
     case Data::type_int64:
       //  Set as an int64
-      Add( stdName, szValue ? _tstoi64( szValue ) : 0 );
+      Add( stdName, _tstoi64(stdText.c_str()));
       break;
 
     default:
@@ -111,22 +140,26 @@ void ConfigBase::_addLoadElement
  *   ...
  * <Config>
  *
- * @param TiXmlElement& the current node we are traversing.
+ * @param tinyxml2::XMLElement& the current node we are traversing.
  * @param std::vector<STD_TSTRING>& the current names of the parents, (so we can rebuild them in a single string).
  * @return none.
  */
 void ConfigBase::_addLoadElements
 ( 
-  TiXmlElement& root, 
+  const tinyxml2::XMLElement& root,
   std::vector<STD_TSTRING>& parents 
 )
 {
   // Look for all the child nodes, they can all be valid item.
-  TiXmlElement* pValues = root.FirstChildElement( );
+  const tinyxml2::XMLElement* pValues = root.FirstChildElement( );
   while( pValues )
   {
     // we must add that new name to the list.
-    parents.push_back( pValues->Value() );
+#ifdef UNICODE
+    parents.push_back( myodd::strings::String2WString( pValues->Value() ) );
+#else
+    parents.push_back(pValues->Value());
+#endif // UNICODE
 
     // add that element if there is anything to actually add.
     // @see _addLoadElement( ... )
@@ -151,14 +184,16 @@ void ConfigBase::_addLoadElements
 bool ConfigBase::LoadValuesFromFile()
 {
   // Open this file and look for values.
-  TiXmlDocument doc( m_szRegPath.c_str() );
-  if (!doc.LoadFile())
+  CloseDoc();
+  _doc = new tinyxml2::XMLDocument();
+  if (tinyxml2::XMLError::XML_SUCCESS != _doc->LoadFile( m_szRegPath.c_str() ))
   {
+    CloseDoc();
     return false;
   }
 
   // get the config document.
-  TiXmlElement* pElemConfig = doc.FirstChildElement( _T("Config"));
+  const tinyxml2::XMLElement* pElemConfig = _doc->FirstChildElement( "Config" );
   if( !pElemConfig )
   {
     return false;
@@ -174,6 +209,9 @@ bool ConfigBase::LoadValuesFromFile()
   // so we need to force the value to false.
   SetDirty( false );
 
+  // we can close the doc as we no longer need it.
+  CloseDoc();
+
   // looks good
   return true;
 }
@@ -182,13 +220,13 @@ bool ConfigBase::LoadValuesFromFile()
  * Given an array of variables we create/look for various node.
  * So if the user creates a node "something/else" we will create the nodes "something->else"
  *
- * @param TiXmlElement& the current node we are adding elements to.
+ * @param tinyxml2::XMLElement& the current node we are adding elements to.
  * @param const std::vector<STD_TSTRING>& the array of elements we are traversing.
- * @return TiXmlElement* the last element that we will be adding data to.
+ * @return tinyxml2::XMLElement* the last element that we will be adding data to.
  */
-TiXmlElement* ConfigBase::_getSaveElement
+tinyxml2::XMLElement* ConfigBase::_getSaveElement
 ( 
-  TiXmlElement& root, 
+  tinyxml2::XMLElement& root,
   const std::vector<STD_TSTRING>& parents 
 )
 {
@@ -199,18 +237,22 @@ TiXmlElement* ConfigBase::_getSaveElement
   }
 
   // get the first parent in the list as a starting point.
-  LPCTSTR parent = parents[ 0 ].c_str();
+#ifdef UNICODE
+  auto parent = myodd::strings::WString2String( parents[0] );
+#else
+  auto * parent = parents[0].c_str();
+#endif // UNICODE
 
   // Look for that element
   // if it does not exist then we must add it to the parent/root items
-  TiXmlElement* pElement = root.FirstChildElement( parent );
+  tinyxml2::XMLElement* pElement = root.FirstChildElement(parent.c_str());
   if( NULL == pElement )
   {
     // we could not find it, so we must add it to the list.
-    pElement = new TiXmlElement( parent );
+    pElement = _doc->NewElement( parent.c_str() );
     
     // add this node to the parent
-    root.LinkEndChild( pElement );
+    root.InsertEndChild( pElement );
   }
 
   // If this was the last item then 
@@ -238,7 +280,7 @@ TiXmlElement* ConfigBase::_getSaveElement
  * @param none
  * @return none
  */
-void ConfigBase::save_values()
+void ConfigBase::Save()
 {
   //  do we have anything to save?
   if( !IsDirty() )
@@ -247,16 +289,21 @@ void ConfigBase::save_values()
   }
 
   // create a new plan
-  TiXmlDocument doc;
+  CloseDoc();
+  _doc = new tinyxml2::XMLDocument();
+
+  tinyxml2::XMLDeclaration* decl = _doc->NewDeclaration();
+  decl->SetValue("xml version=\"1.0\" encoding=\"UTF-8\"");
+  _doc->InsertEndChild(decl);
 
   // save the basic items
   // the declaration
-  TiXmlDeclaration * decl = new TiXmlDeclaration( _T("1.0"), _T("UTF-8"), _T("") );
-  doc.LinkEndChild( decl );
+  // tinyxml2::XMLDocument * decl = new tinyxml2::XMLDocument( "1.0", "UTF-8", "" );
+  // doc.LinkEndChild( decl );
 
-  TiXmlElement* pElemConfig = new TiXmlElement( _T("Config"));
-  doc.LinkEndChild( pElemConfig );
-
+  tinyxml2::XMLElement* pElemConfig = _doc->NewElement( "Config");
+  _doc->LinkEndChild( pElemConfig );
+  
   //  and then we go around adding values to the values node.
   static TCHAR sep = _T('\\');
   BOOST_FOREACH( MAP_CONFIGOBJECTS::value_type& it, m_pData )
@@ -265,11 +312,6 @@ void ConfigBase::save_values()
 
     // first check if the data is temp.
     // if it is temp then the user does not want to save it.
-    if( !c->IsSet() )
-    {
-      continue;
-    }
-
     if( !c->IsSet() )
     {
       continue;
@@ -287,38 +329,33 @@ void ConfigBase::save_values()
 
     std::vector<STD_TSTRING> parents;
     myodd::strings::explode( parents, c->GetObjectName(), sep );
-    TiXmlElement* pValue = _getSaveElement( *pElemConfig, parents );
+    tinyxml2::XMLElement* pValue = _getSaveElement( *pElemConfig, parents );
     
-    TiXmlText* text = NULL;
     switch( data.type() )
     {
     case Data::type_string:
-      pValue->SetAttribute( _T("type"), Data::type_string );
-      text = new TiXmlText( (LPCTSTR)(data) );
+      pValue->SetAttribute( "type", Data::type_string );
+      pValue->SetText( myodd::strings::WString2String(data).c_str() );
       break;
 
     case Data::type_long:
-      pValue->SetAttribute( _T("type"), Data::type_long );
-      text = new TiXmlText( myodd::strings::ToString( (long)data ));
+      pValue->SetAttribute( "type", Data::type_long );
+      pValue->SetText(myodd::strings::WString2String( myodd::strings::ToString( (long)data )).c_str() );
       break;
 
     case Data::type_double:
-      pValue->SetAttribute( _T("type"), Data::type_double );
-      text = new TiXmlText( myodd::strings::ToString( (double)data ));
+      pValue->SetAttribute( "type", Data::type_double );
+      pValue->SetText(myodd::strings::WString2String(myodd::strings::ToString( (double)data )).c_str() );
       break;
 
     case Data::type_int:
-      {
-      pValue->SetAttribute( _T("type"), Data::type_int );
-      text = new TiXmlText( myodd::strings::ToString( (int)data ));
-      }
+      pValue->SetAttribute( "type", Data::type_int );
+      pValue->SetText(myodd::strings::WString2String(myodd::strings::ToString( (int)data )).c_str());
       break;
 
     case Data::type_int64:
-      {
-        pValue->SetAttribute( _T("type"), Data::type_int64 );
-        text = new TiXmlText( myodd::strings::ToString( (__int64)data ));
-      }
+      pValue->SetAttribute( "type", Data::type_int64 );
+      pValue->SetText( myodd::strings::WString2String(myodd::strings::ToString( (__int64)data )).c_str());
       break;
 
     default:
@@ -329,10 +366,10 @@ void ConfigBase::save_values()
       continue;
       break;
     }
-    pValue->LinkEndChild( text );
   }
-
-  doc.SaveFileUTF8( m_szRegPath.c_str() );
+  _doc->SetBOM( true );
+  _doc->SaveFile( m_szRegPath.c_str() );
+  CloseDoc();
 }
 
 /**

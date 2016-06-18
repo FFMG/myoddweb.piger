@@ -12,15 +12,15 @@ public:
 
 protected:
   void Learn( amplugin* p, bool isPrivileged );
-  void UnLearn( amplugin* p, LPCWSTR lpName );
+  void UnLearn( amplugin* p, const std::wstring& lpName );
 
-  bool RemoveCommand( amplugin* p, LPCWSTR name );
-  bool AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path );
+  bool RemoveCommand( amplugin* p, const std::wstring& name );
+  bool AddCommand( amplugin* p, const std::wstring& name, const std::wstring& path );
 
   typedef std::map< std::wstring, std::wstring > OPENAS_NAMES;
   OPENAS_NAMES  m_openAs;
 
-  OPENAS_NAMES::const_iterator Find( LPCWSTR name );
+  OPENAS_NAMES::const_iterator Find(const std::wstring& name ) const;
 
 protected:
   // the XML file.
@@ -36,7 +36,7 @@ protected:
   }
 
   bool LoadXML( amplugin* p  );
-  bool SaveXML();
+  bool SaveXML() const;
 
   bool SaveLUAFile( std::wstring& fileName, 
                     const std::wstring command,

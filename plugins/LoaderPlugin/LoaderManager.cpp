@@ -23,29 +23,55 @@ LoaderManager::~LoaderManager(void)
 {
 }
 
-// -------------------------------------------------------------
+/**
+ * Initialise the loader with the plugin.
+ * @param amplugin* p the plugin itself.
+ */
 void LoaderManager::Init( amplugin* p  )
 {
+  // assume that we have no path.
+  m_lpFilePath = m_thisPath = L"";
+
   // Add our own commands.
-  WCHAR thisPath[ MAX_PATH ];
+  wchar_t thisPath[ MAX_PATH ];
   int l = p->GetCommand( 0, _countof(thisPath), thisPath );
   if( l > 0 )
   {
+    // convert this path to std::string as we use it 
     m_thisPath = thisPath;
     p->AddAction( LOADER_LEARN, thisPath );
-    p->AddAction(LOADER_LEARN_PRIVILEGED, thisPath);
+    p->AddAction( LOADER_LEARN_PRIVILEGED, thisPath );
+  }
+  else
+  {
+    myodd::log::LogError(_T("[Loader] I was unable to get the path of this command."));
+    return;
   }
 
   // we now need to load all the items we already have in our XML
   std::wstring stdXml;
-  myodd::files::Join( stdXml, GetPluginPath(), L"loader.xml" );
-  if( myodd::files::ExpandEnvironment( stdXml, m_lpFilePath ) )
+  myodd::files::Join(stdXml, GetPluginPath(), L"loader.xml");
+
+  // expand the path.
+  std::wstring wFilePath;
+  if( myodd::files::ExpandEnvironment( stdXml, wFilePath) )
   {
     //  make sure that this file path does exist.
-    if( myodd::files::CreateFullDirectory( m_lpFilePath, true ) )
+    if( myodd::files::CreateFullDirectory(wFilePath, true ) )
     {
+      m_lpFilePath = wFilePath;
       LoadXML( p );
     }
+    else
+    {
+      myodd::log::LogError(_T("[Loader] Could create the directry '%s'.", wFilePath));
+      return;
+    }
+  }
+  else
+  {
+    myodd::log::LogError(_T("[Loader] Could not expand the environment '%s'.", stdXml ));
+    return;
   }
 }
 
@@ -81,8 +107,8 @@ void LoaderManager::Main( amplugin* p  )
     {
       // get the command name
       // and be sure to add a char for the space
-      LPCWSTR lpName =  asAction+wcslen(LOADER_UNLEARN) + 1;
-      UnLearn( p, wcslen(lpName) == 0 ? NULL : lpName );
+      std::wstring lpName =  asAction+wcslen(LOADER_UNLEARN) + 1;
+      UnLearn( p, lpName );
     }
   }
   else
@@ -97,12 +123,12 @@ void LoaderManager::Main( amplugin* p  )
 /**
  * remove one of OUR commands from the list.
  * @param amplugin* the plugin manager
- * @param LPCWSTR the name of the command we are removing.
+ * @param const std::wstring& the name of the command we are removing.
  * @return none
  */
-void LoaderManager::UnLearn( amplugin* p, LPCWSTR lpName  )
+void LoaderManager::UnLearn( amplugin* p, const std::wstring& lpName  )
 {
-  if( NULL == lpName )
+  if( myodd::strings::IsEmptyString(lpName) )
   {
     p->Say( L"Error : Remove as <i>... what</i>?", 100, 5 );
     return;
@@ -264,7 +290,7 @@ bool LoaderManager::SaveLUAFile
   // build the comments at the top of the file.
   std::string sData;
   sData += "--\n";
-  sData += "-- Loaded version 0.2\n";
+  sData += "-- Loaded version 0.3\n";
   sData += "-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
   sData += "-- remove this command with 'unlearn ...'\n";
   sData += "--\n";
@@ -310,18 +336,17 @@ bool LoaderManager::SaveLUAFile
 /**
  * Find a OPENAS_NAMES iterator 
  * The search is not case sensitive.
- * @param LPCWSTR the name we are looking for.
+ * @param const std::wstring& the name we are looking for.
  * @return OPENAS_NAMES::const_iterator end()|the iterator we are looking for.
  */
-LoaderManager::OPENAS_NAMES::const_iterator LoaderManager::Find( LPCWSTR name )
+LoaderManager::OPENAS_NAMES::const_iterator LoaderManager::Find(const std::wstring& name ) const
 {
   std::wstring lowerName = myodd::strings::lower( name );
-  OPENAS_NAMES::const_iterator it = m_openAs.find( lowerName.c_str() );
-  return it;
+  return m_openAs.find( lowerName.c_str() );
 }
 
 // -------------------------------------------------------------
-bool LoaderManager::RemoveCommand( amplugin* p, LPCWSTR name )
+bool LoaderManager::RemoveCommand( amplugin* p, const std::wstring& name )
 {
   auto it = Find( name );
   if( m_openAs.end() == it )
@@ -361,6 +386,7 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
   if (!p->RemoveAction(cpLowerName, itCommand->second.c_str()))
   {
     // we could not remove it.
+    myodd::log::LogError(_T("[Loader] I was unable to remove the command '%s' - '%s'"), cpLowerName, itCommand->second.c_str());
     return false;
   }
 
@@ -370,7 +396,10 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
     myodd::files::DeleteFile(itCommand->second);
   }
 
-  // unlearn the function as well.
+  // log it  
+  myodd::log::LogSuccess(_T("[Loader] Removed command '%s' - '%s'"), cpLowerName, itCommand->second.c_str());
+
+  // unlearn the unlearn function as well.
   std::wstring sUnLearn = GetUnLearnCommand(lowerName);
   p->RemoveAction(sUnLearn.c_str(), GetThisPath().c_str());
 
@@ -384,20 +413,21 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
 /**
  * Add a command to the list of commands.
  * @param amplugin* the plugin manager
- * @param LPCWSTR the name of the coammnd
- * @param LPCWSTR the path of the command we want to execute.
+ * @param const std::wstring& the name of the coammnd
+ * @param const std::wstring& the path of the command we want to execute.
  * @return bool success or not.
  */
-bool LoaderManager::AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path )
+bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std::wstring& path )
 {
   std::wstring lowerName = myodd::strings::lower( name );
-  const TCHAR* cpLowerName = lowerName.c_str();
+  const wchar_t* cpLowerName = lowerName.c_str();
 
   // we now need to check if it exists already
   // if it does, then we will able to replace it.
   if (!RemoveActionIfInList( p, lowerName, false ))
   {
     //  could not remove it.
+    myodd::log::LogError(_T("[Loader] I was unable to remove the command '%s' - '%s' to (re)add it."), name.c_str(), path.c_str());
     return false;
   }
 
@@ -405,14 +435,18 @@ bool LoaderManager::AddCommand( amplugin* p, LPCWSTR name, LPCWSTR path )
   m_openAs[lowerName] = path;
 
   // and to the action monitor.
-  if( !p->AddAction(cpLowerName, path ) )
+  if( !p->AddAction(cpLowerName, path.c_str() ) )
   {
+    myodd::log::LogError(_T("[Loader] I was unable to add the command '%s' - '%s'"), name.c_str(), path.c_str());
     return false;
   }
 
   // add the unlearn function as well so the user can remove this command.
   std::wstring sUnLearn = GetUnLearnCommand( lowerName );
   p->AddAction( sUnLearn.c_str(), GetThisPath().c_str() );
+
+  // it seems to have worked.
+  myodd::log::LogSuccess(_T("[Loader] Added command '%s' - '%s'"), name.c_str(), path.c_str());
   return true;
 }
 
@@ -432,40 +466,41 @@ std::wstring LoaderManager::GetUnLearnCommand(const std::wstring& lowerName)
 bool LoaderManager::LoadXML( amplugin* p )
 {
   //  simply go around all the values
-  TiXmlDocument doc( m_lpFilePath.c_str() );
-  if (!doc.LoadFile() )
+  std::string sFilePath = myodd::strings::WString2String(m_lpFilePath);
+  tinyxml2::XMLDocument doc;
+  if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile(sFilePath.c_str() ))
   {
     return false;
   }
 
   // get the files document.
-  TiXmlElement* pElemLoadManager = doc.FirstChildElement( _T("LoadManager") );
+  tinyxml2::XMLElement* pElemLoadManager = doc.FirstChildElement( "LoadManager");
   if( !pElemLoadManager )
   {
     return false;
   }
 
   // get the files document.
-  TiXmlElement* pElemLoadCommands = pElemLoadManager->FirstChildElement( _T("Commands") );
+  tinyxml2::XMLElement* pElemLoadCommands = pElemLoadManager->FirstChildElement( "Commands" );
   if( pElemLoadCommands )
   {
-    TiXmlElement* pValues = pElemLoadCommands->FirstChildElement( _T("Command") );
+    tinyxml2::XMLElement* pValues = pElemLoadCommands->FirstChildElement( "Command" );
     while( pValues )
     {
-      TiXmlElement* pName = pValues->FirstChildElement( _T("Name") );
-      TiXmlElement* pPath = pValues->FirstChildElement( _T("Path") );
+      tinyxml2::XMLElement* pName = pValues->FirstChildElement( "Name");
+      tinyxml2::XMLElement* pPath = pValues->FirstChildElement( "Path" );
 
       // we have to have both values.
       if( pName && pPath )
       {
         //  add that name to the list.
-        LPCTSTR name = pName->GetText();
-        LPCTSTR path = pPath->GetText();
+        std::wstring name = myodd::strings::String2WString( pName->GetText() );
+        std::wstring path = myodd::strings::String2WString( pPath->GetText() );
 
         if( myodd::files::FileExists( path ) )
         {
           // and add it to the list of commands.
-          AddCommand( p, name, path );
+          AddCommand( p, name.c_str(), path.c_str());
         }
       }
 
@@ -477,39 +512,44 @@ bool LoaderManager::LoadXML( amplugin* p )
 }
 
 // -------------------------------------------------------------
-bool LoaderManager::SaveXML()
+bool LoaderManager::SaveXML() const
 {
   // create a new plan
-  TiXmlDocument doc;
+  tinyxml2::XMLDocument doc;
+  doc.SetBOM(true);
 
   // save the basic items
   // the declaration
-  TiXmlDeclaration * decl = new TiXmlDeclaration( _T("1.0"), _T("UTF-8"), _T("") );
-  doc.LinkEndChild( decl );
+  tinyxml2::XMLDeclaration* decl = doc.NewDeclaration();
+  decl->SetValue("xml version=\"1.0\" encoding=\"UTF-8\"");
+  doc.InsertEndChild(decl);
 
-  TiXmlElement* pElemLoadManager = new TiXmlElement( _T("LoadManager") );
-  doc.LinkEndChild( pElemLoadManager );
+  tinyxml2::XMLElement* pElemLoadManager = doc.NewElement( "LoadManager" );
+  doc.InsertEndChild( pElemLoadManager );
 
-  TiXmlElement* pElemLoadCommands = new TiXmlElement( _T("Commands") );
-  pElemLoadManager->LinkEndChild( pElemLoadCommands );
+  tinyxml2::XMLElement* pElemLoadCommands = doc.NewElement( "Commands" );
+  pElemLoadManager->InsertEndChild( pElemLoadCommands );
 
   for( OPENAS_NAMES::const_iterator it = m_openAs.begin(); it != m_openAs.end(); ++it )
   {
-    TiXmlElement* pValue = new TiXmlElement( _T("Command") );
-    pElemLoadCommands->LinkEndChild( pValue );
+    tinyxml2::XMLElement* pValue = doc.NewElement( "Command" );
+    pElemLoadCommands->InsertEndChild( pValue );
 
-    TiXmlElement* pName = new TiXmlElement( _T("Name") );
-    pName->LinkEndChild( new TiXmlText( it->first.c_str() ) );
+    tinyxml2::XMLElement* pName = doc.NewElement( "Name" );
+    std::string sName = myodd::strings::WString2String(it->first.c_str());
+    pName->SetText( sName.c_str() );
 
-    TiXmlElement* pPath = new TiXmlElement( _T("Path") );
-    pPath->LinkEndChild( new TiXmlText( it->second.c_str()) );
+    tinyxml2::XMLElement* pPath = doc.NewElement("Path" );
+    std::string sPath = myodd::strings::WString2String(it->second.c_str());
+    pPath->SetText( sPath.c_str());
 
-    pValue->LinkEndChild( pName );
-    pValue->LinkEndChild( pPath );
+    pValue->InsertEndChild( pName );
+    pValue->InsertEndChild( pPath );
   }
 
   // save the file.
-  doc.SaveFile( m_lpFilePath.c_str() );
+  std::string sFilePath = myodd::strings::WString2String(m_lpFilePath);
+  doc.SaveFile( sFilePath.c_str() );
 
   return true;
 }

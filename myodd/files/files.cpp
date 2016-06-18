@@ -2397,11 +2397,11 @@ TCHAR* Byte2Char
   memset( tbuf, 0, len );
   memcpy( tbuf, buf, len );
 #else
-  TCHAR* tbuf = 0;
+  std::wstring convertedString = _T("");
   switch( fileEncoding )
   {
   case uni8Bit:
-    tbuf = myodd::strings::char2wchar( buf, CP_ACP );
+    convertedString = myodd::strings::String2WString( buf );
     break;
 
   case uni16BE: 
@@ -2439,7 +2439,7 @@ TCHAR* Byte2Char
       // size_t actual = pCur - (Utf8_16::ubyte*)cbuf;
 
       // convert to TCHAR
-      tbuf = myodd::strings::char2wchar( cbuf, CP_UTF8 );
+      convertedString = myodd::strings::String2WString( cbuf );
 
       // clean up
       delete [] cbuf;
@@ -2448,9 +2448,14 @@ TCHAR* Byte2Char
     break;
 
   default:
-    tbuf = myodd::strings::char2wchar( buf, CP_UTF8 );
+    convertedString = myodd::strings::String2WString( buf );
     break;
   }
+
+  size_t l = convertedString.length();
+  wchar_t* tbuf = new wchar_t[ l + sizeof(wchar_t)];
+  lstrcpy(tbuf, convertedString.c_str());
+
   return tbuf;
 #endif
 }
