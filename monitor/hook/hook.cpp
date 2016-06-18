@@ -40,7 +40,7 @@ BOOL APIENTRY DllMain
 
 // -----------------------------------------------------------------------
 //  stop us from monitoring messages
-HOOKLIB BOOL hook_clear( HWND hWnd )
+HOOKLIB int hook_clear( HWND hWnd )
 {
   // if we have no keyboard class then we have already offloaded the dll
   if( NULL == keyboardMonitor )
@@ -53,7 +53,7 @@ HOOKLIB BOOL hook_clear( HWND hWnd )
 
 // -----------------------------------------------------------------------
 //  hook into a message
-HOOKLIB BOOL hook_set( HWND hWnd, WPARAM vK )
+HOOKLIB int hook_set( HWND hWnd, WPARAM vK )
 {
   // if we have no keyboard class then something is wrong.
   if( NULL == keyboardMonitor )
@@ -72,7 +72,7 @@ HOOKLIB BOOL hook_set( HWND hWnd, WPARAM vK )
  * @param bool set the reject flag, true to reject all the keyboards inputs.
  * @return none.
  */
-HOOKLIB BOOL hook_RejectKeyboad( BOOL bReject )
+HOOKLIB int hook_RejectKeyboad( int bReject )
 {
   // if we have no keyboard class then we cannot reject the keyboard.
   if( NULL == keyboardMonitor )

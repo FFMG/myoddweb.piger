@@ -1,9 +1,7 @@
+#pragma once
+
 #ifndef HOOK_HEADER
 #define HOOK_HEADER
-
-#include <tchar.h>
-
-#pragma once
 
 #ifdef HOOK_CPP
   #define HOOKLIB __declspec(dllexport)
@@ -11,17 +9,24 @@
   #define HOOKLIB __declspec(dllimport)
 #endif
 
-HOOKLIB BOOL hook_set( HWND, WPARAM );
-HOOKLIB BOOL hook_clear( HWND );
+HOOKLIB int hook_set( HWND, WPARAM );
+HOOKLIB int hook_clear( HWND );
 
 //  return the previous state of the keyboard
 // this tells the system to reject every single key strokes.
-HOOKLIB BOOL hook_RejectKeyboad( BOOL );
+HOOKLIB int hook_RejectKeyboad( int );
 
-static LPCTSTR UWM_KEYBOARD_MSG_CHAR    = _T("UWM_KEYBOARD_MSG_CHAR");
-static LPCTSTR UWM_KEYBOARD_MSG_UP      = _T("UWM_KEYBOARD_MSG_UP");
-static LPCTSTR UWM_KEYBOARD_MSG_DOWN    = _T("UWM_KEYBOARD_MSG_DOWN");
-static LPCTSTR UWM_KEYBOARD_MSG_RELOAD  = _T("UWM_KEYBOARD_MSG_RELOAD");
-static LPCTSTR UWM_KEYBOARD_MSG_VERSION = _T("UWM_KEYBOARD_MSG_VERSION");
-
+  #ifdef UNICODE
+    static const wchar_t* UWM_KEYBOARD_MSG_CHAR = L"UWM_KEYBOARD_MSG_CHAR";
+    static const wchar_t* UWM_KEYBOARD_MSG_UP = L"UWM_KEYBOARD_MSG_UP";
+    static const wchar_t* UWM_KEYBOARD_MSG_DOWN = L"UWM_KEYBOARD_MSG_DOWN";
+    static const wchar_t* UWM_KEYBOARD_MSG_RELOAD = L"UWM_KEYBOARD_MSG_RELOAD";
+    static const wchar_t* UWM_KEYBOARD_MSG_VERSION = L"UWM_KEYBOARD_MSG_VERSION";
+  #else
+    static const char* UWM_KEYBOARD_MSG_CHAR = "UWM_KEYBOARD_MSG_CHAR";
+    static const char* UWM_KEYBOARD_MSG_UP = "UWM_KEYBOARD_MSG_UP";
+    static const char* UWM_KEYBOARD_MSG_DOWN = "UWM_KEYBOARD_MSG_DOWN";
+    static const char* UWM_KEYBOARD_MSG_RELOAD = "UWM_KEYBOARD_MSG_RELOAD";
+    static const char* UWM_KEYBOARD_MSG_VERSION = "UWM_KEYBOARD_MSG_VERSION";
+  #endif // UNICODE
 #endif  //  HOOK_HEADER
