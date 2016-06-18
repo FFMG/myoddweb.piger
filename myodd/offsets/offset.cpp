@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <tchar.h>
+#include <assert.h>
 #include "offset.h"
 #include "../files/files.h"
 
@@ -34,7 +35,11 @@ namespace myodd{ namespace offset{
       }
 
       FILE* hf;
-      if( 0 == _tfopen_s( &hf, expanded.c_str(), _T("rb")) )
+#ifdef UNICODE
+      if( 0 == _wfopen_s( &hf, expanded.c_str(), L"rb") )
+#else
+      if (0 == fopen_s(&hf, expanded.c_str(), L"rb"))
+#endif
       {
         // obtain file size.
         fseek (hf , 0 , SEEK_END);
@@ -50,7 +55,7 @@ namespace myodd{ namespace offset{
         if( bRead )
         {
           size_t ulRead = _fread_nolock(bRead, sizeof(BYTE), bufferLen, hf);
-          ASSERT( ulRead == (size_t)bufferLen );
+          assert( ulRead == (size_t)bufferLen );
           myodd::offset::write( bRead, ulRead, pData, ulOffset );
           delete [] bRead;
         }
@@ -247,7 +252,7 @@ namespace myodd{ namespace offset{
 
     // write the data to the file.
     size_t nWriten = fwrite( pBuffer, sizeof(BYTE), bufferLen, hf );
-    ASSERT( nWriten == (size_t)bufferLen );
+    assert( nWriten == (size_t)bufferLen );
 
     // close the file.
     fclose( hf );
