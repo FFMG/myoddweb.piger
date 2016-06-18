@@ -5,6 +5,7 @@
 
 #include "../common/includes.h"
 #include <sstream> 
+#include <vector>
 
 namespace myodd{ namespace strings{
   void Test();  //  test data

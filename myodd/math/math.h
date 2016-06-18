@@ -6,6 +6,8 @@
 #include <limits>
 #include <assert.h>
 #include <math.h>
+#include <vector>
+#include <map>
 
 namespace myodd{ namespace math{
 void Test();  //  test data

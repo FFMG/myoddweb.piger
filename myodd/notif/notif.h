@@ -5,6 +5,7 @@
 #include "../myodd.h"
 #include "../threads/threads.h"
 #include <assert.h>
+#include <vector>
 
 namespace myodd{ namespace notif{
 

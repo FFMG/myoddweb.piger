@@ -4,15 +4,10 @@
 #pragma once
 
 #include <windows.h>
-#include <vector>
-#include <string>
-
-#include <map>
-#include <windows.h>
-#include <tchar.h>
-
 #include <atlbase.h>
 #include <atlconv.h>
+
+#include <string>
 
 #ifndef STD_TSTRING
 #   ifdef _UNICODE

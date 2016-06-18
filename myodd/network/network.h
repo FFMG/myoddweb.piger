@@ -9,6 +9,7 @@
 
 #include "../common/includes.h"
 #include "wininet.h"
+#include <vector>
 
 namespace myodd{ namespace net{
   // go to a site, launch the user browser.

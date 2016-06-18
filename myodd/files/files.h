@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../common/includes.h"
+#include <vector>
 
 namespace myodd{ namespace files{
 void Test();  //  test data
