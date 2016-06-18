@@ -1,15 +1,7 @@
 #include "stdafx.h"
-
-#ifdef __AFXWIN_H__
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif // _DEBUG
-#endif // __AFXWIN_H__
-
 #include "wnd.h"
 #include "../math/math.h"
+#include <assert.h>
 
 namespace myodd{ namespace wnd{
 /**
@@ -21,7 +13,7 @@ namespace myodd{ namespace wnd{
 HWND _getDlgItem( HWND hwndParent, WORD id )
 {
   HWND hWnd = GetDlgItem( hwndParent, id );
-  ASSERT( hWnd ); //  was this the intent?
+  assert( hWnd ); //  was this the intent?
   return hWnd;
 }
 
@@ -375,7 +367,7 @@ bool SetSel( HWND hWndParent, WORD id, int nStartChar, int nEndChar )
 */
 void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
 {
-  ASSERT(nMin <= nMax );
+  assert(nMin <= nMax );
   if( nMin > nMax )
   {
     myodd::math::swap( nMax, nMin );
@@ -393,7 +385,7 @@ void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
   }
 
   // now make sure that it is withing ranges.
-  int nActual = myodd::math::std_tstoi( sValue );
+  int nActual = myodd::math::Convert<STD_TSTRING, int>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax );
@@ -463,7 +455,7 @@ void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, L
   }
 
   // now make sure that it is withing ranges.
-  double nActual = myodd::math::std_tstof( sValue );
+  double nActual = myodd::math::Convert<STD_TSTRING, int>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax, lpszFormat );
