@@ -60,7 +60,7 @@ bool PluginApi::Say( LPCWSTR msg, UINT nElapse, UINT nFadeOut)
 size_t PluginApi::GetCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
 {
   // first get the command
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetCommand( idx, sValue ) )
   {
     return 0;
@@ -89,7 +89,7 @@ size_t PluginApi::GetCommand( UINT idx, DWORD nBufferLength, LPWSTR lpBuffer )
  */
 int PluginApi::GetAction( DWORD nBufferLength, LPWSTR lpBuffer )
 {
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetAction( sValue ) )
   {
     return 0;
@@ -143,7 +143,7 @@ bool PluginApi::Execute( LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged )
  */
 int PluginApi::GetString( DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote )
 {
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetString ( sValue, bQuote ) )
   {
     return 0;
@@ -168,7 +168,7 @@ int PluginApi::GetString( DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote )
  */
 int PluginApi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetFile(idx, sValue, bQuote ) )
   {
     return 0;
@@ -193,7 +193,7 @@ int PluginApi::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuo
  */
 int PluginApi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetFolder (idx, sValue, bQuote ) )
   {
     return 0;
@@ -218,7 +218,7 @@ int PluginApi::GetFolder (UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool b
  */
 int PluginApi::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
 {
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetURL (idx, sValue, bQuote ) )
   {
     return 0;
@@ -267,7 +267,7 @@ bool PluginApi::RemoveAction( LPCWSTR szText, LPCWSTR szPath )
  */
 bool PluginApi::GetVersion(DWORD nBufferLength, LPWSTR lpBuffer )
 {
-  STD_TSTRING stdVersion;
+  MYODD_STRING stdVersion;
   if( !__super::GetVersion( stdVersion ) )
   {
     return false;
@@ -292,7 +292,7 @@ bool PluginApi::FindAction
   LPWSTR lpBuffer
 )
 {
-  STD_TSTRING stdActionPath;
+  MYODD_STRING stdActionPath;
   if( !__super::FindAction( idx, lpCommand, stdActionPath ) )
   {
     return false;

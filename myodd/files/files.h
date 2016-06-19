@@ -14,14 +14,14 @@ namespace myodd{ namespace files{
 void Test();  //  test data
 
 // remove the file extension
-void strip_extension( STD_TSTRING& f );
-void add_extension( STD_TSTRING& f, const STD_TSTRING& e, bool strip_current_if_exists );
+void strip_extension( MYODD_STRING& f );
+void add_extension( MYODD_STRING& f, const MYODD_STRING& e, bool strip_current_if_exists );
 
-STD_TSTRING get_extension( const STD_TSTRING& f );
-bool is_extension( const STD_TSTRING& f, const STD_TSTRING& e );
+MYODD_STRING get_extension( const MYODD_STRING& f );
+bool is_extension( const MYODD_STRING& f, const MYODD_STRING& e );
 
 // remove a leading back slash
-void RemoveLeadingBackSlash( STD_TSTRING& szPath);
+void RemoveLeadingBackSlash( MYODD_STRING& szPath);
 void RemoveLeadingBackSlash
 (
   LPTSTR szPath,	      // pointer to buffer to receive module path
@@ -29,7 +29,7 @@ void RemoveLeadingBackSlash
 );
 
 // remove a trialling back slash
-void RemoveTrailingBackSlash( STD_TSTRING& szPath);
+void RemoveTrailingBackSlash( MYODD_STRING& szPath);
 void RemoveTrailingBackSlash
 (
   LPTSTR szPath,	      // pointer to buffer to receive module path
@@ -37,7 +37,7 @@ void RemoveTrailingBackSlash
 );
 
 // add a trialling backlash
-void AddTrailingBackSlash( STD_TSTRING& subPath );
+void AddTrailingBackSlash( MYODD_STRING& subPath );
 void AddTrailingBackSlash
 (
   LPTSTR szPath,	    // pointer to buffer to receive module path
@@ -46,71 +46,71 @@ void AddTrailingBackSlash
 
 // expand the environment variables.
 bool ExpandEnvironment( LPCTSTR src, LPTSTR& dest );
-bool ExpandEnvironment( const STD_TSTRING& src, STD_TSTRING& dest );
+bool ExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest );
 
 // un-expand the path and replace environment variables.
 bool UnExpandEnvironment( LPCTSTR src, LPTSTR& dest );
-bool UnExpandEnvironment( const STD_TSTRING& src, STD_TSTRING& dest );
+bool UnExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest );
 
 // create a full path variable.
 bool CreateFullDirectory( LPCTSTR c, bool bIsFile );
-bool CreateFullDirectory( const STD_TSTRING& c, bool bIsFile );
+bool CreateFullDirectory( const MYODD_STRING& c, bool bIsFile );
 
 bool IsFile( LPCTSTR lp );
-bool IsFile(const STD_TSTRING& stdFile);
+bool IsFile(const MYODD_STRING& stdFile);
 
 bool IsDirectory( LPCTSTR lp );
-bool IsDirectory( const STD_TSTRING& stdDir );
+bool IsDirectory( const MYODD_STRING& stdDir );
 
 bool IsURL( LPCTSTR lp );
-bool IsURL(const STD_TSTRING& stdUrl );
+bool IsURL(const MYODD_STRING& stdUrl );
 
-bool FileExists( const STD_TSTRING& c );
+bool FileExists( const MYODD_STRING& c );
 bool FileExists( LPCTSTR c );
 
-bool DirectoryExists( const STD_TSTRING& c );
+bool DirectoryExists( const MYODD_STRING& c );
 bool DirectoryExists( LPCTSTR c );
 
 bool DeleteFile( LPCTSTR c );
-bool DeleteFile( const STD_TSTRING& c );
+bool DeleteFile( const MYODD_STRING& c );
 
-bool CopyFile( const STD_TSTRING& lpExistingFileName, const STD_TSTRING& lpNewFileName, DWORD* dwErr = 0 ); 
+bool CopyFile( const MYODD_STRING& lpExistingFileName, const MYODD_STRING& lpNewFileName, DWORD* dwErr = 0 ); 
 bool CopyFile( LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, DWORD* dwErr = 0 );
 
-bool HasFileInformationChanged( const STD_TSTRING& file, const BY_HANDLE_FILE_INFORMATION& info );
+bool HasFileInformationChanged( const MYODD_STRING& file, const BY_HANDLE_FILE_INFORMATION& info );
 bool HasFileInformationChanged( LPCTSTR file, const BY_HANDLE_FILE_INFORMATION& info );
 
-bool GetFileInformationByName( const STD_TSTRING& file, BY_HANDLE_FILE_INFORMATION& info );
+bool GetFileInformationByName( const MYODD_STRING& file, BY_HANDLE_FILE_INFORMATION& info );
 bool GetFileInformationByName( LPCTSTR file, BY_HANDLE_FILE_INFORMATION& info );
 
-STD_TSTRING GetFileName( LPCTSTR lpPath, bool bExpand = true );
-STD_TSTRING GetFileName( const STD_TSTRING& stdPath, bool bExpand = true );
+MYODD_STRING GetFileName( LPCTSTR lpPath, bool bExpand = true );
+MYODD_STRING GetFileName( const MYODD_STRING& stdPath, bool bExpand = true );
 
-STD_TSTRING GetBaseFromFile( LPCTSTR lpPath, bool bExpand = true, bool bAddTrailling = true );
-STD_TSTRING GetBaseFromFile( const STD_TSTRING& stdPath, bool bExpand = true, bool bAddTrailling = true );
+MYODD_STRING GetBaseFromFile( LPCTSTR lpPath, bool bExpand = true, bool bAddTrailling = true );
+MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, bool bAddTrailling = true );
 
-STD_TSTRING GetAppPath( bool bAddTrailling =true);
+MYODD_STRING GetAppPath( bool bAddTrailling =true);
 
 bool GetAbsolutePath( LPTSTR& dest, LPCTSTR lpRelative, LPCTSTR lpOrigin = NULL );
-bool GetAbsolutePath( STD_TSTRING& dest, const STD_TSTRING& lpRelative, LPCTSTR lpOrigin = NULL );
+bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& lpRelative, LPCTSTR lpOrigin = NULL );
 
-void CleanFileName( STD_TSTRING& dirtyFileName );
+void CleanFileName( MYODD_STRING& dirtyFileName );
 
-bool GetFullTempFileName( STD_TSTRING& stdFileName, LPCTSTR lpPrefix, LPCTSTR lpExt );
+bool GetFullTempFileName( MYODD_STRING& stdFileName, LPCTSTR lpPrefix, LPCTSTR lpExt );
 bool GetFullTempFileName( LPTSTR& lpFileName, LPCTSTR lpPrefix, LPCTSTR lpExt );
 
-bool GetFullTempFileName( STD_TSTRING& stdFullPathFileName, LPCTSTR lpFileName );
+bool GetFullTempFileName( MYODD_STRING& stdFullPathFileName, LPCTSTR lpFileName );
 bool GetFullTempFileName( LPTSTR& lpFullPathFileName, LPCTSTR lpFileName );
 
-bool is_dot( const STD_TSTRING& stdFile );
+bool is_dot( const MYODD_STRING& stdFile );
 bool is_dot( LPCTSTR lpFile );
 
-long GetFileSizeInBytes( const STD_TSTRING& stdFullPathFileName);
+long GetFileSizeInBytes( const MYODD_STRING& stdFullPathFileName);
 
 size_t GetKeys
 ( 
   LPCTSTR lpFileName, 
-  std::vector<STD_TSTRING>& tokens,
+  std::vector<MYODD_STRING>& tokens,
   LPCTSTR lpAppName,
   LPCTSTR lpWild =NULL
 );
@@ -132,7 +132,7 @@ TCHAR* ReadFile( LPCTSTR file, __int64 nStartPos = -1, __int64 nEndPos = -1 );
 
 TCHAR* Byte2Char( const char* buf, size_t len, FileEncode fileEncoding );
 
-void Join( STD_TSTRING& returnPath, const STD_TSTRING& pathPartA, const STD_TSTRING& pathPartB );
+void Join( MYODD_STRING& returnPath, const MYODD_STRING& pathPartA, const MYODD_STRING& pathPartB );
 
 // get the version of a given file.
 class Version

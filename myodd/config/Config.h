@@ -6,41 +6,41 @@
 
 namespace myodd{ namespace config{
 
-bool init( const STD_TSTRING& sz );
+bool init( const MYODD_STRING& sz );
 void free();
 bool HasBeenInitialized();
 
-bool set ( const STD_TSTRING& stdNotifyName, const DATA_CONTAINER& data );
+bool set ( const MYODD_STRING& stdNotifyName, const DATA_CONTAINER& data );
 
 // set a group of values.
-bool set ( const STD_TSTRING& stdVarName, const Data &d );
-bool setTemp ( const STD_TSTRING& stdVarName, const Data &d );
+bool set ( const MYODD_STRING& stdVarName, const Data &d );
+bool setTemp ( const MYODD_STRING& stdVarName, const Data &d );
 
 // get a value, return a default if it does not exits.
-const Data& get( const STD_TSTRING& stdVarName,  const Data& defaultValue = Data() );
-const Data& getTemp( const STD_TSTRING& stdVarName,  const Data& defaultValue = Data() );
+const Data& get( const MYODD_STRING& stdVarName,  const Data& defaultValue = Data() );
+const Data& getTemp( const MYODD_STRING& stdVarName,  const Data& defaultValue = Data() );
 
 // return true if a value is set
-bool isset( const STD_TSTRING& stdVarName );
+bool isset( const MYODD_STRING& stdVarName );
 
 // unset a value.
-void unset( const STD_TSTRING& stdVarName );
+void unset( const MYODD_STRING& stdVarName );
 
 // add an item to monitor
 // call the function if/when the item change
-void AddConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, LPARAM lParam );
+void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam );
 
 template <class T>
-void AddConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, T* lParam ){
+void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, T* lParam ){
   AddConfigurationMonitor( s, notif, (LPARAM)lParam );
 }
 
 // add an item to monitor
 // call the function if/when the item change
-void RemoveConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, LPARAM lParam );
+void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam );
 
 template <class T>
-void RemoveConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, T* lParam ){
+void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, T* lParam ){
   RemoveConfigurationMonitor( s, notif, (LPARAM)lParam );
 }
 

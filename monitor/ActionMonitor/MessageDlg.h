@@ -18,7 +18,7 @@ public:
   class Msg {
   public:
     Msg(LPCTSTR pText, UINT nElapse, UINT nFadeOut) {
-      _pText = new STD_TSTRING(pText);
+      _pText = new MYODD_STRING(pText);
       _nElapse = nElapse;
       _nFadeOut = nFadeOut;
     }
@@ -30,7 +30,7 @@ public:
     UINT FadeOut() const { return _nFadeOut; }
 
   protected:
-    STD_TSTRING* _pText;
+    MYODD_STRING* _pText;
     UINT _nElapse;
     UINT _nFadeOut;
   };
@@ -42,7 +42,7 @@ protected:
 
 protected:
   UINT m_nFadeOut;          //  how fast the text will fade out
-  STD_TSTRING m_stdMessage; //  the message
+  MYODD_STRING m_stdMessage; //  the message
   UINT m_nElapse;           //  how long before we fade out.
 
   void Fade();

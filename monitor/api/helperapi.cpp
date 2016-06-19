@@ -80,7 +80,7 @@ bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsign
  * @param void
  * @return boolean false if it does not exist
  */
-bool HelperApi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
+bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue )
 {
   try
   {
@@ -90,7 +90,7 @@ bool HelperApi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
       //  we don't have a command.
       return false;
     }
-    const STD_TSTRING& szCommandLine = action->CommandLine();
+    const MYODD_STRING& szCommandLine = action->CommandLine();
 
     // if the user wants command 0 then we want the full name
     // this is more consistent with the get commands normally work.
@@ -103,7 +103,7 @@ bool HelperApi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
     else
     {
       // get the number of elements.
-      std::vector<STD_TSTRING> params;
+      std::vector<MYODD_STRING> params;
       myodd::strings::explode( params, szCommandLine , _T(' '), -1, false );
 
       // because the std::vector is 0 based
@@ -133,10 +133,10 @@ bool HelperApi::GetCommand(const unsigned int idx, STD_TSTRING& sValue )
  * Get the command line that the user tried to use
  * for example if the command is "lean" and the user entered "Lea" 
  * this function will return "lean"
- * @param STD_TSTRING& sValue the value will be put here.
+ * @param MYODD_STRING& sValue the value will be put here.
  * @return bool if we were able to get the command or not.
  */
-bool HelperApi::GetAction( STD_TSTRING& sValue )
+bool HelperApi::GetAction( MYODD_STRING& sValue )
 {
   try
   {
@@ -177,14 +177,14 @@ size_t HelperApi::GetCommandCount()
       return false;
     }
 
-    const STD_TSTRING& szCommandLine = action->CommandLine();
+    const MYODD_STRING& szCommandLine = action->CommandLine();
     if( 0 == szCommandLine.length() )
     {
       return 0; //  we have no arguments.
     }
 
     // get the action commands and get the number of argument .
-    std::vector<STD_TSTRING> params;
+    std::vector<MYODD_STRING> params;
     size_t nSize = myodd::strings::explode(  params, szCommandLine, _T(' '), -1, false );
     
     // return the number of arguments we have.
@@ -215,7 +215,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
 
   // prepare each items to be returned.
   // 
-  std::vector<STD_TSTRING> argv;
+  std::vector<MYODD_STRING> argv;
 
   // we must have at least the module
   if( NULL == module )
@@ -238,10 +238,10 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
 
 /**
  * Get the version number of the action monitor.
- * @param STD_TSTRING& the return string that will contain the FULL version number.
+ * @param MYODD_STRING& the return string that will contain the FULL version number.
  * @return bool true|false
  */
-bool HelperApi::GetVersion (STD_TSTRING& sValue )
+bool HelperApi::GetVersion (MYODD_STRING& sValue )
 {
   myodd::files::Version _ver;
   sValue = myodd::strings::ToStringFmt( _T("%d.%d.%d.%d"),
@@ -254,16 +254,16 @@ bool HelperApi::GetVersion (STD_TSTRING& sValue )
 
 /**
  * Get the string that is currently selected when the action was called.
- * @param STD_TSTRING& the return value.
+ * @param MYODD_STRING& the return value.
  * @param bool bQuote if we want to quote the text or not.
  * @return bool if we have a string selected or not.
  */
-bool HelperApi::GetString (STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetString (MYODD_STRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
-    STD_TSTRING sClipBoard = _T("");
+    MYODD_STRING sClipBoard = _T("");
     if( !clipBoard.GetText( sClipBoard, bQuote ) )
     {
       // we have nothing.
@@ -290,17 +290,17 @@ bool HelperApi::GetString (STD_TSTRING& sValue, bool bQuote)
  * Get a currently selected file in the clipboard.
  * Used by plugins who want to behave a certain way for files.
  * @param const unsigned int the file number we are after
- * @param STD_TSTRING& the return value
+ * @param MYODD_STRING& the return value
  * @param bool bQuote if we want to quote or not.
  * @return bool success or not if there are no more files
  */
-bool HelperApi::GetFile(const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetFile(const unsigned int idx, MYODD_STRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
-    STD_TSTRING sClipBoard = _T("");
+    MYODD_STRING sClipBoard = _T("");
     if( !clipBoard.GetFile( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
@@ -321,17 +321,17 @@ bool HelperApi::GetFile(const unsigned int idx, STD_TSTRING& sValue, bool bQuote
  * Get a currently selected URL in the clipboard.
  * Used by plugins who want to behave a certain way for URLs.
  * @param const unsigned int the URL number we are after
- * @param STD_TSTRING& the return value
+ * @param MYODD_STRING& the return value
  * @param bool bQuote if we want to quote the string or not.
  * @return bool success or not if there are no more URLs
  */
-bool HelperApi::GetURL (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetURL (const unsigned int idx, MYODD_STRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
-    STD_TSTRING sClipBoard = _T("");
+    MYODD_STRING sClipBoard = _T("");
     if( !clipBoard.GetURL( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
@@ -355,17 +355,17 @@ bool HelperApi::GetURL (const unsigned int idx, STD_TSTRING& sValue, bool bQuote
  * This is used when plugins want to behave a certain way depending
  * on the currently selected folder.
  * @param const unsigned int the folder number we are getting.
- * @param STD_TSTRING& the value we are after.
+ * @param MYODD_STRING& the value we are after.
  * @param bool bQuote if we want to quote the string or not.
  * @return bool success or not, we return false when there are no more folders.
  */
-bool HelperApi::GetFolder (const unsigned int idx, STD_TSTRING& sValue, bool bQuote)
+bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, bool bQuote)
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
-    STD_TSTRING sClipBoard = _T("");
+    MYODD_STRING sClipBoard = _T("");
     if( !clipBoard.GetFolder( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
@@ -435,10 +435,10 @@ bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
  * Note that we do hardly any checks to see of the command already exists
  * @param const unsigned int the index of the action we are looking for.
  * @param LPCTSTR the name of the command we want to find
- * @param STD_TSTRING& if the action exists, return the path for it.
+ * @param MYODD_STRING& if the action exists, return the path for it.
  * @return bool if the action exits or not.
  */
-bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, STD_TSTRING& stdPath )
+bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath )
 {
   if( NULL == szText )
   {

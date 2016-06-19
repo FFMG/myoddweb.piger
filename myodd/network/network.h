@@ -19,10 +19,10 @@ namespace myodd{ namespace net{
   bool InternetReadWholeFile( LPCTSTR lpUrl, LPVOID lpBuffer, unsigned int dwNumberOfBytesToRead, unsigned int* lpNumberOfBytesRead, LPCTSTR lpszAgent );
 
   //  get information about ourselves.
-  bool GetLocalNetworkInfo( STD_TSTRING& networkName, STD_TSTRING& networkIP );
+  bool GetLocalNetworkInfo( MYODD_STRING& networkName, MYODD_STRING& networkIP );
 
   //  ping a HOST/IP address.
-  bool ping( const STD_TSTRING& host, int maxAttempts = 3, std::vector<STD_TSTRING>* m_pAliases = NULL, std::vector<STD_TSTRING>* m_pAddress = NULL );
+  bool ping( const MYODD_STRING& host, int maxAttempts = 3, std::vector<MYODD_STRING>* m_pAliases = NULL, std::vector<MYODD_STRING>* m_pAddress = NULL );
 } //  net
 } //  myodd
 #endif // __Network_h__ 

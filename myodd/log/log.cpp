@@ -87,9 +87,9 @@ namespace myodd{ namespace log{
   /**
    * Get the current logfile.
    * @param none
-   * @return STD_TSTRING get the current log file.
+   * @return MYODD_STRING get the current log file.
    */
-  const STD_TSTRING& GetCurrentLogFile()
+  const MYODD_STRING& GetCurrentLogFile()
   {
     return LogEvent::Instance().GetCurrentLogFile();
   }

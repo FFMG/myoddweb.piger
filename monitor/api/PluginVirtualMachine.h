@@ -19,7 +19,7 @@ public:
   bool Register( LPCTSTR, void* );
 
   void DestroyPlugins();
-  void ErasePlugin( const STD_TSTRING& plugin);
+  void ErasePlugin( const MYODD_STRING& plugin);
 
 protected:
   typedef std::map< std::thread::id, PluginApi*> ListOfPlugins;
@@ -55,12 +55,12 @@ protected:
   };
 
   // map of all the functions.
-  typedef std::map< STD_TSTRING, PLUGIN_THREAD*> PLUGIN_CONTAINER;
+  typedef std::map< MYODD_STRING, PLUGIN_THREAD*> PLUGIN_CONTAINER;
 
   PLUGIN_CONTAINER m_pluginsContainer;
 
   // find a module
-  PLUGIN_THREAD* Find( const STD_TSTRING& );
+  PLUGIN_THREAD* Find( const MYODD_STRING& );
 
   HMODULE ExpandLoadLibrary( LPCTSTR lpFile );
 

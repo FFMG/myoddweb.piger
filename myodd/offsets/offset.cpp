@@ -28,7 +28,7 @@ namespace myodd{ namespace offset{
     }
     else
     {
-      STD_TSTRING expanded;
+      MYODD_STRING expanded;
       if( !myodd::files::ExpandEnvironment( fileName, expanded ))
       {
         expanded = fileName;
@@ -129,7 +129,7 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  void write<STD_TSTRING>( const STD_TSTRING& item, BYTE*& pData, size_t& ulOffset )
+  void write<MYODD_STRING>( const MYODD_STRING& item, BYTE*& pData, size_t& ulOffset )
   {
     const TCHAR* lp = item.c_str();
     write( lp, pData, ulOffset );
@@ -172,9 +172,9 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  bool read<STD_TSTRING>
+  bool read<MYODD_STRING>
   ( 
-    STD_TSTRING& item, 
+    MYODD_STRING& item, 
     const void* pData, 
     size_t& ulOffset,
     size_t uiMaxSize

@@ -12,7 +12,7 @@ void Test()
   assert(_T("a") == String2WString( "a"));
   assert(_T("abcdef") == String2WString("abcdef"));
 
-  STD_TSTRING s1 = ToStringFmt( _T("%10.2f"), 10.27 );
+  MYODD_STRING s1 = ToStringFmt( _T("%10.2f"), 10.27 );
   assert( s1 == _T("     10.27"));
   assert( IsEmptyString( _T("    " )));
   assert( IsEmptyString( NULL ));
@@ -20,7 +20,7 @@ void Test()
   assert( !IsEmptyString( _T("    A" )));
   assert( !IsEmptyString( _T("A" )));
 
-  std::vector<STD_TSTRING> s;
+  std::vector<MYODD_STRING> s;
   assert( 5 == explode( s, _T(",, ,A,"), _T(',') ));
   assert( 5 == explode( s, _T(",,,A,"), _T(',') ));
   assert( 2 == explode( s, _T(","), _T(',') ));
@@ -92,20 +92,20 @@ void Test()
 /**
  * Explode a string that is separated with '\0' chars.
  * This is used with items like GetPrivateProfileString( ... ) when we want to list all the keys.
- * @param std::vector<STD_TSTRING>& the return container.
+ * @param std::vector<MYODD_STRING>& the return container.
  * @param LPCTSTR the string with null chars '\0' finished by '\0\0'
  * @param size_t the length of the string. 
  * @return int the number of items returned.
  */
 size_t explode_by_null_char
 (
- std::vector<STD_TSTRING>& ret,
+ std::vector<MYODD_STRING>& ret,
  LPCTSTR s_keys, 
  size_t nLen
  )
 {
   size_t retSize = 0;
-  STD_TSTRING stdToken;
+  MYODD_STRING stdToken;
   for(size_t nPos = 0; nPos < nLen; ++nPos )
   {
     if( s_keys[ nPos ] == _T('\0') )
@@ -129,16 +129,16 @@ size_t explode_by_null_char
 /**
  * Explode a given string given a delimiter string
  *
- * @param std::vector<STD_TSTRING>& the return container.
- * @param STD_TSTRING the string we want to explode
+ * @param std::vector<MYODD_STRING>& the return container.
+ * @param MYODD_STRING the string we want to explode
  * @param LPCTSTR Set of delimiter characters.
  * @param int the max number of items we want to return.
  * @return int the number of item that we found.
  */
 size_t explode
 (
-  std::vector<STD_TSTRING>& ret,
-  const STD_TSTRING& s, 
+  std::vector<MYODD_STRING>& ret,
+  const MYODD_STRING& s, 
   TCHAR strDelimit, 
   int nCount /*=-1*/,
   bool bAddEmpty /*= true*/
@@ -196,16 +196,16 @@ size_t explode
 /**
  * Implode a string
  * 
- * @param const std::vector<STD_TSTRING> & vector of strings.
- * @param STD_TSTRING& the character that we will use to join the strings
+ * @param const std::vector<MYODD_STRING> & vector of strings.
+ * @param MYODD_STRING& the character that we will use to join the strings
  * @param int where we start joinning the items from, (default is 0).
  * @param int iToPiece = -1
- * @return STD_TSTRING the replaced string
+ * @return MYODD_STRING the replaced string
  */
-STD_TSTRING implode
+MYODD_STRING implode
 (
-  const std::vector<STD_TSTRING> &s, 
-  const STD_TSTRING& glue,
+  const std::vector<MYODD_STRING> &s, 
+  const MYODD_STRING& glue,
   int iFromPiece,
   int iToPiece
 )
@@ -216,7 +216,7 @@ STD_TSTRING implode
   if( iFromPiece >= (int)s.size() || iFromPiece < 0 )
     return _T("");
 
-  std::vector<STD_TSTRING>::const_iterator itEnd;
+  std::vector<MYODD_STRING>::const_iterator itEnd;
   if( iToPiece >= (int)s.size() || iToPiece < 0 )
     itEnd = s.end();
   else
@@ -229,20 +229,20 @@ STD_TSTRING implode
  * Implode/Join/Glue a string.
  * Using an array of strings, join them into a single string.
  * @see implode( ... )
- * @param const STD_TSTRING& the string that will glue all the strings together.
- * @param std::vector<STD_TSTRING>::const_iterator the iterator we want to start joining from.
- * @param std::vector<STD_TSTRING>::const_iterator the iterator we want to stop joining to
- * @return STD_TSTRING the recreated string
+ * @param const MYODD_STRING& the string that will glue all the strings together.
+ * @param std::vector<MYODD_STRING>::const_iterator the iterator we want to start joining from.
+ * @param std::vector<MYODD_STRING>::const_iterator the iterator we want to stop joining to
+ * @return MYODD_STRING the recreated string
  */
-STD_TSTRING implode
+MYODD_STRING implode
 (
-  const STD_TSTRING& glue,
-  std::vector<STD_TSTRING>::const_iterator itStart,
-  std::vector<STD_TSTRING>::const_iterator itEnd
+  const MYODD_STRING& glue,
+  std::vector<MYODD_STRING>::const_iterator itStart,
+  std::vector<MYODD_STRING>::const_iterator itEnd
 )
 {
-	STD_TSTRING r = _T("");
-	for( std::vector<STD_TSTRING>::const_iterator it = itStart; 
+	MYODD_STRING r = _T("");
+	for( std::vector<MYODD_STRING>::const_iterator it = itStart; 
        it != itEnd; 
        ++it
       ) 
@@ -254,14 +254,14 @@ STD_TSTRING implode
 
 /**
  * Compare 2 string but case insensitive.
- * @param const STD_TSTRING& the lefthand string
- * @param const STD_TSTRING& the right hand string
+ * @param const MYODD_STRING& the lefthand string
+ * @param const MYODD_STRING& the right hand string
  * @return int 0 if they are the same or -1/1 depending on the strings length
  */
-int icompare( const STD_TSTRING& s1, const STD_TSTRING& s2 )
+int icompare( const MYODD_STRING& s1, const MYODD_STRING& s2 )
 {
-  STD_TSTRING::const_iterator it1=s1.begin();
-  STD_TSTRING::const_iterator it2=s2.begin();
+  MYODD_STRING::const_iterator it1=s1.begin();
+  MYODD_STRING::const_iterator it2=s2.begin();
 
   //stop when either string's end has been reached
   while ( (it1!=s1.end()) && (it2!=s2.end()) ) 
@@ -289,28 +289,28 @@ int icompare( const STD_TSTRING& s1, const STD_TSTRING& s2 )
 
 /**
  * Case insensitivce search
- * @see STD_TSTRING::find( ...)
- * @param const STD_TSTRING& the string we will be searching in.
- * @param const STD_TSTRING& the string we are looking for, (int the original string)
+ * @see MYODD_STRING::find( ...)
+ * @param const MYODD_STRING& the string we will be searching in.
+ * @param const MYODD_STRING& the string we are looking for, (int the original string)
  * @param unsigned int the position we want to start searching for. 
- * @return int the position of the string or STD_TSTRING::npos if the string could not be found.
+ * @return int the position of the string or MYODD_STRING::npos if the string could not be found.
  */
 size_t ifind
 ( 
-  const STD_TSTRING& origStr, 
-  const STD_TSTRING& srchStr, 
+  const MYODD_STRING& origStr, 
+  const MYODD_STRING& srchStr, 
   const size_t nFrom /*= 0*/ 
 )
 {
   // make sure we are not searching past the length of the string
   // otherwise we know it cannot exist.
   if( nFrom >= origStr.length() )
-    return STD_TSTRING::npos;  // cannot find it.
+    return MYODD_STRING::npos;  // cannot find it.
 
   // look for that string
   LPTSTR lpFind = _tcsistr( origStr.c_str()+ nFrom, srchStr.c_str() );
   if( NULL == lpFind )
-    return STD_TSTRING::npos;  //  not found
+    return MYODD_STRING::npos;  //  not found
 
   return (size_t)(lpFind - origStr.c_str());
 }
@@ -319,19 +319,19 @@ size_t ifind
  * Normal string search and replace, case insensitive,
  * Note that we don't change the original value
  *
- * @param const STD_TSTRING& the original text we are searching in
- * @param const STD_TSTRING& the string we are looking for, case insensitive
- * @param const STD_TSTRING& the string we will be replacing it with.
- * @return STD_TSTRING the replaced string
+ * @param const MYODD_STRING& the original text we are searching in
+ * @param const MYODD_STRING& the string we are looking for, case insensitive
+ * @param const MYODD_STRING& the string we will be replacing it with.
+ * @return MYODD_STRING the replaced string
  */
-STD_TSTRING ireplace
+MYODD_STRING ireplace
 (
-  const STD_TSTRING& origStr,
-  const STD_TSTRING& srchStr, 
-  const STD_TSTRING& replaceStr
+  const MYODD_STRING& origStr,
+  const MYODD_STRING& srchStr, 
+  const MYODD_STRING& replaceStr
 )
 {
-  STD_TSTRING retVal(origStr);
+  MYODD_STRING retVal(origStr);
   ireplace_inplace( retVal, srchStr, replaceStr );
   return retVal;
 }
@@ -340,16 +340,16 @@ STD_TSTRING ireplace
  * Normal string search and replace, case insensitive,
  * This is 'inplace' meaning that the return value will be changed.
  *
- * @param const STD_TSTRING& the original text we are searching in
- * @param const STD_TSTRING& the string we are looking for, case insensitive
- * @param const STD_TSTRING& the string we will be replacing it with.
+ * @param const MYODD_STRING& the original text we are searching in
+ * @param const MYODD_STRING& the string we are looking for, case insensitive
+ * @param const MYODD_STRING& the string we will be replacing it with.
  * @return none
  */
 void ireplace_inplace
 (
-  STD_TSTRING& origStr,
-  const STD_TSTRING& srchStr, 
-  const STD_TSTRING& replaceStr
+  MYODD_STRING& origStr,
+  const MYODD_STRING& srchStr, 
+  const MYODD_STRING& replaceStr
 )
 {
   const size_t len = replaceStr.length();
@@ -359,8 +359,8 @@ void ireplace_inplace
     return; //  what are we looking for?
   }
 
-  STD_TSTRING::size_type loc = ifind(origStr, srchStr);
-  while (loc != STD_TSTRING::npos)
+  MYODD_STRING::size_type loc = ifind(origStr, srchStr);
+  while (loc != MYODD_STRING::npos)
   {
     origStr.replace(loc, lens, replaceStr);
     loc = ifind(origStr, srchStr, loc + len );
@@ -371,19 +371,19 @@ void ireplace_inplace
  * Normal string search and replace,
  * This is 'inplace' meaning that the return value will be changed.
  *
- * @param const STD_TSTRING& the original text we are searching in
- * @param const STD_TSTRING& the string we are looking for
- * @param const STD_TSTRING& the string we will be replacing it with.
- * @return STD_TSTRING the replaced string
+ * @param const MYODD_STRING& the original text we are searching in
+ * @param const MYODD_STRING& the string we are looking for
+ * @param const MYODD_STRING& the string we will be replacing it with.
+ * @return MYODD_STRING the replaced string
  */
-STD_TSTRING replace
+MYODD_STRING replace
 (
-  const STD_TSTRING& origStr,
-  const STD_TSTRING& srchStr, 
-  const STD_TSTRING& replaceStr
+  const MYODD_STRING& origStr,
+  const MYODD_STRING& srchStr, 
+  const MYODD_STRING& replaceStr
 )
 {
-  STD_TSTRING retVal(origStr);
+  MYODD_STRING retVal(origStr);
   replace_inplace( retVal, srchStr, replaceStr );
   return retVal;
 }
@@ -392,16 +392,16 @@ STD_TSTRING replace
  * Normal string search and replace,
  * Note that we don't change the original value
  *
- * @param const STD_TSTRING& the original text we are searching in
- * @param const STD_TSTRING& the string we are looking for
- * @param const STD_TSTRING& the string we will be replacing it with.
- * @return STD_TSTRING the replaced string
+ * @param const MYODD_STRING& the original text we are searching in
+ * @param const MYODD_STRING& the string we are looking for
+ * @param const MYODD_STRING& the string we will be replacing it with.
+ * @return MYODD_STRING the replaced string
  */
 void replace_inplace
 (
-  STD_TSTRING& origStr,
-  const STD_TSTRING& srchStr, 
-  const STD_TSTRING& replaceStr
+  MYODD_STRING& origStr,
+  const MYODD_STRING& srchStr, 
+  const MYODD_STRING& replaceStr
 )
 {
   const size_t len = replaceStr.length();
@@ -411,8 +411,8 @@ void replace_inplace
     return; //  what are we looking for?
   }
 
-  STD_TSTRING::size_type loc = origStr.find(srchStr);
-  while (loc != STD_TSTRING::npos)
+  MYODD_STRING::size_type loc = origStr.find(srchStr);
+  while (loc != MYODD_STRING::npos)
   {
     origStr.replace(loc, lens, replaceStr);
     loc = origStr.find(srchStr, loc + len );
@@ -423,12 +423,12 @@ void replace_inplace
  * convert a string to the lower case equivalent.
  * @see boost/foreach.hpp
  *
- * @param STD_TSTRING the character we want to convert.
- * @return STD_TSTRING the lower string
+ * @param MYODD_STRING the character we want to convert.
+ * @return MYODD_STRING the lower string
  */
-STD_TSTRING lower(const STD_TSTRING& s)
+MYODD_STRING lower(const MYODD_STRING& s)
 {
-  STD_TSTRING ret = _T("");
+  MYODD_STRING ret = _T("");
   BOOST_FOREACH( TCHAR tch, s )
   {
     ret += lower( tch );
@@ -460,7 +460,7 @@ TCHAR lower( TCHAR c )
  * @param LPCTSTR the string we will be comparing against.
  * @return int
  */
-bool wildcmp(const STD_TSTRING& wild, const STD_TSTRING& string)
+bool wildcmp(const MYODD_STRING& wild, const MYODD_STRING& string)
 {
   return wildcmp(wild.c_str(), string.c_str());
 }
@@ -509,11 +509,11 @@ bool wildcmp(LPCTSTR wild, LPCTSTR string)
 
 /**
  * Check if the given string is a number or not.
- * @param const STD_TSTRING& the string we are checking
+ * @param const MYODD_STRING& the string we are checking
  * @param bool if we want to allow the number to be a decimal.
  * @return bool if the string is a number or not.
  */
-bool IsNumeric( const STD_TSTRING& s, bool allowDecimal /*= true*/ )
+bool IsNumeric( const MYODD_STRING& s, bool allowDecimal /*= true*/ )
 {
 #ifdef _UNICODE
   typedef boost::wcmatch boost_match;
@@ -548,11 +548,11 @@ bool IsNumeric( const STD_TSTRING& s, bool allowDecimal /*= true*/ )
 
 /**
  * Trim left && right character(s)
- * @param STD_TSTRING& str the string we want to edit.
+ * @param MYODD_STRING& str the string we want to edit.
  * @param const TCHAR* the char(s) we want to trim off.
  * @return none
  */
-void Trim( STD_TSTRING& str, const TCHAR* chars /*= _T( " " )*/ )
+void Trim( MYODD_STRING& str, const TCHAR* chars /*= _T( " " )*/ )
 {
   TrimLeft( str, chars );
   TrimRight( str, chars );
@@ -560,11 +560,11 @@ void Trim( STD_TSTRING& str, const TCHAR* chars /*= _T( " " )*/ )
 
 /**
  * Trim right character(s)
- * @param STD_TSTRING& str the string we want to edit.
+ * @param MYODD_STRING& str the string we want to edit.
  * @param const TCHAR* the char(s) we want to trim off.
  * @return none
  */
-void TrimRight( STD_TSTRING& str, const TCHAR* chars )
+void TrimRight( MYODD_STRING& str, const TCHAR* chars )
 {
   if (!str.empty())
   {
@@ -582,11 +582,11 @@ void TrimRight( STD_TSTRING& str, const TCHAR* chars )
 
 /**
  * Trim left character(s)
- * @param STD_TSTRING& str the string we want to edit.
+ * @param MYODD_STRING& str the string we want to edit.
  * @param const TCHAR* the char(s) we want to trim off.
  * @return none
  */
-void TrimLeft( STD_TSTRING& str, const TCHAR* chars )
+void TrimLeft( MYODD_STRING& str, const TCHAR* chars )
 {
   if (!str.empty())
   {
@@ -636,13 +636,13 @@ LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet)
  * that fall in the ANSI range a-z and A-Z.
  * @see ::_tcsstr( ... )
  * @see _tcsistr( ... )
- * @param const STD_TSTRING& string to search
- * @param const STD_TSTRING& string to search for
+ * @param const MYODD_STRING& string to search
+ * @param const MYODD_STRING& string to search for
  * @return LPTSTR - if successful, returns a pointer to the first 
  *                  occurrence of strCharSet in string;  otherwise, 
  *                  returns NULL
  */ 
-LPTSTR _tcsistr(const STD_TSTRING& string, const STD_TSTRING& strCharSet)
+LPTSTR _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet)
 {
   return _tcsistr( string.c_str(), strCharSet.c_str() );
 }
@@ -650,7 +650,7 @@ LPTSTR _tcsistr(const STD_TSTRING& string, const STD_TSTRING& strCharSet)
 /**
 * Check if a given string is empty
 * "     " even if the len of the string is not 0
-* @param const STD_TSTRING
+* @param const MYODD_STRING
 * @return bool if the string is empty or not.
 */
 bool IsEmptyString( LPCTSTR s )
@@ -672,22 +672,22 @@ bool IsEmptyString( LPCTSTR s )
 /**
  * Check if a given string is empty
  * "     " even if the len of the string is not 0
- * @param const STD_TSTRING
+ * @param const MYODD_STRING
  * @return bool if the string is empty or not.
  */
-bool IsEmptyString( const STD_TSTRING& s )
+bool IsEmptyString( const MYODD_STRING& s )
 {
   return IsEmptyString( s.c_str() );
 }
 
 /**
  * Convert a double value to an string given a format.
- * @param STD_TSTRING& 
+ * @param MYODD_STRING& 
  * @param float the number we want to use.
  * @param LPCTSTR|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool IntToString( STD_TSTRING& value, int i, LPCTSTR pszFormat )
+bool IntToString( MYODD_STRING& value, int i, LPCTSTR pszFormat )
 {
   try
   {
@@ -707,12 +707,12 @@ bool IntToString( STD_TSTRING& value, int i, LPCTSTR pszFormat )
 
 /**
  * Convert a double value to an string given a format.
- * @param STD_TSTRING& 
+ * @param MYODD_STRING& 
  * @param float the number we want to use.
  * @param LPCTSTR|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool DoubleToString( STD_TSTRING& value, double d, LPCTSTR pszFormat )
+bool DoubleToString( MYODD_STRING& value, double d, LPCTSTR pszFormat )
 {
   try
   {
@@ -732,12 +732,12 @@ bool DoubleToString( STD_TSTRING& value, double d, LPCTSTR pszFormat )
 
 /**
  * Convert a float value to an string given a format.
- * @param STD_TSTRING& 
+ * @param MYODD_STRING& 
  * @param float the number we want to use.
  * @param LPCTSTR|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool FloatToString( STD_TSTRING& value, float f, LPCTSTR pszFormat )
+bool FloatToString( MYODD_STRING& value, float f, LPCTSTR pszFormat )
 {
   try
   {
@@ -757,12 +757,12 @@ bool FloatToString( STD_TSTRING& value, float f, LPCTSTR pszFormat )
 
 /**
  * Convert a float value to an string given a format.
- * @param STD_TSTRING& the return value.
+ * @param MYODD_STRING& the return value.
  * @param LPCTSTR the string we would like to format.
  * @param LPCTSTR|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool StringToString( STD_TSTRING& value, LPCTSTR l, LPCTSTR pszFormat )
+bool StringToString( MYODD_STRING& value, LPCTSTR l, LPCTSTR pszFormat )
 {
   try
   {
@@ -807,7 +807,7 @@ std::string WString2String(const std::wstring& ws2Convert)
 }
 
 
-STD_TSTRING ToStringFmt( LPCTSTR pszFormat, ... )
+MYODD_STRING ToStringFmt( LPCTSTR pszFormat, ... )
 {
   va_list argp;
   va_start(argp, pszFormat);
@@ -820,20 +820,20 @@ STD_TSTRING ToStringFmt( LPCTSTR pszFormat, ... )
     va_end(argp);
 
     // return nothing
-    return STD_TSTRING(_T(""));
+    return MYODD_STRING(_T(""));
   }
 
   // _vscprintf doesn't count + 1; terminating '\0'
   ++len;
   
-  STD_TSTRING result = _T("");
+  MYODD_STRING result = _T("");
 
   // create the new buffer.
   TCHAR* buffer = new TCHAR[len];
   if( _vsntprintf_s(buffer, len, len, pszFormat, argp) > 0 )
   {
     // set the return the value
-    result = STD_TSTRING(buffer);
+    result = MYODD_STRING(buffer);
   }
   
   // free the arguments.

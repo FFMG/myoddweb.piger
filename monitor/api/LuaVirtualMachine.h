@@ -13,7 +13,7 @@ public:
   LuaVirtualMachine(void);
   virtual ~LuaVirtualMachine(void);
   
-  int ExecuteInThread(const STD_TSTRING& szFile, LuaApi* api );
+  int ExecuteInThread(const MYODD_STRING& szFile, LuaApi* api );
 
   static bool IsLuaExt( LPCTSTR ext );
 

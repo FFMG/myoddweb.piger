@@ -176,7 +176,7 @@ bool PluginVirtualMachine::IsPluginExt( LPCTSTR ext )
  * @param void
  * @return void
  */
-PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const STD_TSTRING& s)
+PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const MYODD_STRING& s)
 {
   //  get the lock.
   myodd::threads::Lock guard( _mutex );
@@ -340,7 +340,7 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
  * Look for a single plugin and remove it from the list.
  * We do not wait for the thread to end, we simply kill it.
  */
-void PluginVirtualMachine::ErasePlugin( const STD_TSTRING& plugin)
+void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
 {
   //  get the lock.
   myodd::threads::Lock guard(_mutex);

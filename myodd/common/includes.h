@@ -9,12 +9,12 @@
 
 #include <string>
 
-#ifndef STD_TSTRING
+#ifndef MYODD_STRING
 #   ifdef _UNICODE
-      typedef std::wstring STD_TSTRING;
+      typedef std::wstring MYODD_STRING;
 #   else
-      typedef std::string STD_TSTRING;
+      typedef std::string MYODD_STRING;
 #   endif
-#endif  //  STD_TSTRING
+#endif  //  MYODD_STRING
 
 #endif  //  __Includes_h__

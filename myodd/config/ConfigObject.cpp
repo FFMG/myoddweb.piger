@@ -36,10 +36,10 @@ ConfigObject::ConfigObject( const ConfigObject& c)
 /**
  * Constructor.
  *
- * @param const STD_TSTRING& the name of the value we are setting.
+ * @param const MYODD_STRING& the name of the value we are setting.
  * @return none
  */ 
-ConfigObject::ConfigObject( const STD_TSTRING& stdVarName )
+ConfigObject::ConfigObject( const MYODD_STRING& stdVarName )
 {
   _Construct( );
   SetObjectName( stdVarName );
@@ -48,11 +48,11 @@ ConfigObject::ConfigObject( const STD_TSTRING& stdVarName )
 /**
  * Constructor with a value.
  *
- * @param const STD_TSTRING& the name of the value we are setting.
+ * @param const MYODD_STRING& the name of the value we are setting.
  * @param const Data& the value we are setting.
  * @return none
  */ 
-ConfigObject::ConfigObject( const STD_TSTRING& stdVarName, const Data& cod )
+ConfigObject::ConfigObject( const MYODD_STRING& stdVarName, const Data& cod )
 {
   _Construct( );
   SetObjectName( stdVarName );
@@ -109,10 +109,10 @@ ConfigObject::~ConfigObject()
 
 /**
  * Set the name of the Config Object
- * @param const STD_TSTRING& the new name of the object.
+ * @param const MYODD_STRING& the new name of the object.
  * @return none
  */ 
-void ConfigObject::SetObjectName( const STD_TSTRING& s )
+void ConfigObject::SetObjectName( const MYODD_STRING& s )
 {
   m_unicodeName = s;
 }
@@ -166,7 +166,7 @@ void ConfigObject::RemoveAllNotifs()
  */ 
 void ConfigObject::Notify( Data::config_type type )
 {
-  const STD_TSTRING& name = GetObjectName();
+  const MYODD_STRING& name = GetObjectName();
   LPCTSTR lpName = name.c_str();
 
   LPARAM lParam;

@@ -12,13 +12,13 @@
 
 namespace myodd{ namespace config{
 
-typedef std::map<STD_TSTRING, Data> DATA_CONTAINER;
+typedef std::map<MYODD_STRING, Data> DATA_CONTAINER;
 //  ---------------------------------------------------------------------------------------------------
 class ConfigBase : 
   public myodd::threads::CritSection
 {
 public:
-  ConfigBase(const STD_TSTRING& szPath );
+  ConfigBase(const MYODD_STRING& szPath );
   virtual ~ConfigBase();
 
 public:
@@ -30,9 +30,9 @@ public:
   */
   void Save();
 protected:
-  tinyxml2::XMLElement* _getSaveElement(tinyxml2::XMLElement& root, const std::vector<STD_TSTRING>& parents );
-  void _addLoadElements( const tinyxml2::XMLElement& root, std::vector<STD_TSTRING>& parents );
-  void _addLoadElement( const tinyxml2::XMLElement& root, std::vector<STD_TSTRING>& parents );
+  tinyxml2::XMLElement* _getSaveElement(tinyxml2::XMLElement& root, const std::vector<MYODD_STRING>& parents );
+  void _addLoadElements( const tinyxml2::XMLElement& root, std::vector<MYODD_STRING>& parents );
+  void _addLoadElement( const tinyxml2::XMLElement& root, std::vector<MYODD_STRING>& parents );
 
 protected:
   //  prevent copies
@@ -52,44 +52,44 @@ public:
   * All the get/set functions
   * You can use get_x when you want a specific type to be returned
   */
-  bool AddMonitor ( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
-  bool RemoveMonitor ( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
+  bool AddMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
+  bool RemoveMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
 
-  void AddPartMonitor( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
-  void RemovePartMonitor( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
+  void AddPartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
+  void RemovePartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
 
   /**
   * Add an object to the array of ConfigBase objects
   */
-  bool Add( const STD_TSTRING& stdVarName, const Data& d, bool isTemp = false );
-  bool Add( const STD_TSTRING& stdNotifyName, const DATA_CONTAINER& data );
+  bool Add( const MYODD_STRING& stdVarName, const Data& d, bool isTemp = false );
+  bool Add( const MYODD_STRING& stdNotifyName, const DATA_CONTAINER& data );
 
-  const Data& Get( const STD_TSTRING& stdVarName, const Data& default, bool isTemp = false );
+  const Data& Get( const MYODD_STRING& stdVarName, const Data& default, bool isTemp = false );
 private:
 
   struct  CONFIG_NOTIFY_PARTS
   {
     size_t stParts;
     LPARAM lParam;
-    STD_TSTRING stdVarName;
+    MYODD_STRING stdVarName;
   };
   myodd::notif::Notifications<CONFIG_NOTIFY> m_pDataNotify;
-  void NotifyParts( Data::config_type type, const STD_TSTRING& stdVarName );
+  void NotifyParts( Data::config_type type, const MYODD_STRING& stdVarName );
   void DeleteNotifyParts( );
 
 protected:
   //
   // Find a variable.
-  bool Find( const STD_TSTRING &szVarName, ConfigObject*& obj ) const;
+  bool Find( const MYODD_STRING &szVarName, ConfigObject*& obj ) const;
 
 public:
   //
   // Check if a value is set or not.
-  bool Isset( const STD_TSTRING& stdVarName ) const;
+  bool Isset( const MYODD_STRING& stdVarName ) const;
 
   //
   // Unset the object value.
-  bool Unset( const STD_TSTRING& stdVarName );
+  bool Unset( const MYODD_STRING& stdVarName );
 
 public:
   bool IsDirty() const{ return m_bIsDirty; }

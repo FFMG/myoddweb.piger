@@ -31,7 +31,7 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  void write<STD_TSTRING>( const STD_TSTRING& item, BYTE*& pData, size_t& ulOffset );
+  void write<MYODD_STRING>( const MYODD_STRING& item, BYTE*& pData, size_t& ulOffset );
 
   template <typename T>
   void write( const T*& item, BYTE*& pData, size_t& ulOffset )
@@ -60,7 +60,7 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  bool read<STD_TSTRING>( STD_TSTRING& item, const void* pData, size_t& ulOffset, size_t uiMaxSize );
+  bool read<MYODD_STRING>( MYODD_STRING& item, const void* pData, size_t& ulOffset, size_t uiMaxSize );
 
   template<typename T>
   bool read( T*& item, const void* pData, size_t& ulOffset, size_t uiMaxSize )

@@ -24,10 +24,10 @@ static LPCTSTR FILE_APPPATH = _T("%apppath%");
  * TODO : Why are we getting dead chars in the first place? 
  * This came from casting in the Clipboard, so maybe data is not copied properly.
  *
- * @param STD_TSTRING& the string we want to remove dead code from
+ * @param MYODD_STRING& the string we want to remove dead code from
  * @return none 
  */
-inline void _trimDeadChars( STD_TSTRING& s )
+inline void _trimDeadChars( MYODD_STRING& s )
 {
   size_t l = s.length();
   while( l>1 && s[l-1] == 0 )
@@ -48,7 +48,7 @@ namespace myodd{ namespace files{
 void Test()
 #ifdef _DEBUG
 {
-  STD_TSTRING sPath = _T("\\Hello");
+  MYODD_STRING sPath = _T("\\Hello");
   RemoveLeadingBackSlash( sPath );
   ASSERT( sPath == _T("Hello") );
 
@@ -180,7 +180,7 @@ void Test()
   // this should not work because of the depth of the path
   ASSERT( !GetAbsolutePath( lpdest, _T( "../../../somefile.txt" ), _T( "c:\\dira\\dirb\\" ) ) );
 
-  STD_TSTRING appPath = GetAppPath( false );
+  MYODD_STRING appPath = GetAppPath( false );
   ASSERT( ExpandEnvironment( FILE_APPPATH, lpdest ) );
   ASSERT( _tcsicmp( lpdest, appPath.c_str() ) == 0 );
   delete [] lpdest;
@@ -189,7 +189,7 @@ void Test()
   delete [] lpdest;
   lpdest = NULL;
   ASSERT( ExpandEnvironment( _T("%AppPath%\\somedir\\somefile.txt"), lpdest ) );   //  case insensitive
-  STD_TSTRING s = appPath + _T("\\somedir\\somefile.txt" );
+  MYODD_STRING s = appPath + _T("\\somedir\\somefile.txt" );
   ASSERT( _tcsicmp( lpdest, s.c_str() ) == 0 );
   delete [] lpdest;
   lpdest = NULL;
@@ -202,7 +202,7 @@ void Test()
   delete [] lpdest;
   lpdest = NULL;
 
-  STD_TSTRING dirtyFileName = _T("[bad]^*£");
+  MYODD_STRING dirtyFileName = _T("[bad]^*£");
   CleanFileName( dirtyFileName );
   ASSERT( dirtyFileName == _T("_bad___£"));
 
@@ -219,7 +219,7 @@ void Test()
   ASSERT( IsURL( _T("https:\\www.google.com")) );
   ASSERT( IsURL( _T("ftps:\\www.google.com")) );
 
-  STD_TSTRING f = _T("somefile");
+  MYODD_STRING f = _T("somefile");
   add_extension( f, _T("txt"), false );  // strip extension false.
   ASSERT( f == _T("somefile.txt") );
 
@@ -256,15 +256,15 @@ void Test()
 /**
  * Add an extension to a given string/filename
  * The extension does not need to have a '.', a check is already made.
- * @param const STD_TSTRING& the 'file' or string we want to add the extension to.
- * @param const STD_TSTRING& the extension we want to add to the string.
+ * @param const MYODD_STRING& the 'file' or string we want to add the extension to.
+ * @param const MYODD_STRING& the extension we want to add to the string.
  * @param bool strip the current extension if there is one.
  * @return none
  */
 void add_extension
 ( 
-  STD_TSTRING& f, 
-  const STD_TSTRING& e, 
+  MYODD_STRING& f, 
+  const MYODD_STRING& e, 
   bool strip_current_if_exists  
 )
 {
@@ -306,10 +306,10 @@ void add_extension
  * I program Apache and '.htaccess' is a valid file name, (but why would it be used as a command lord only knows).
  * But that way you can create commands starting with a '.' for what ever reason.
  *
- * @param STD_TSTRING& the string we want to remove the extension from.
+ * @param MYODD_STRING& the string we want to remove the extension from.
  * @return none 
  */
-void strip_extension( STD_TSTRING& f )
+void strip_extension( MYODD_STRING& f )
 {
   _trimDeadChars( f );
 
@@ -328,30 +328,30 @@ void strip_extension( STD_TSTRING& f )
 
 /**
  * get the file extension, if any. Return an empty string if there isn't one.
- * @param STD_TSTRING the file name
- * @return STD_TSTRING the extension, (or empty string if there are none).
+ * @param MYODD_STRING the file name
+ * @return MYODD_STRING the extension, (or empty string if there are none).
  */
-STD_TSTRING get_extension( const STD_TSTRING& fOriginal )
+MYODD_STRING get_extension( const MYODD_STRING& fOriginal )
 {
-  STD_TSTRING f( fOriginal );
+  MYODD_STRING f( fOriginal );
   _trimDeadChars( f );
 
   LPCTSTR pdest = _tcsrchr( f.c_str(), '.' );
-  return (pdest ? STD_TSTRING(pdest+1) : _T(""));
+  return (pdest ? MYODD_STRING(pdest+1) : _T(""));
 }
 
 /**
  * Check if a files extension is the one given
- * @param STD_TSTRING the file name
- * @param STD_TSTRING the extension we are checking for.
+ * @param MYODD_STRING the file name
+ * @param MYODD_STRING the extension we are checking for.
  * @return bool if the file extension is the one we wanted.
  */
-bool is_extension( const STD_TSTRING& fOriginal, const STD_TSTRING& fExt )
+bool is_extension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
 {
-  STD_TSTRING f( fOriginal );
+  MYODD_STRING f( fOriginal );
   _trimDeadChars( f );
 
-  STD_TSTRING e( fExt );
+  MYODD_STRING e( fExt );
   _trimDeadChars( e );
   if( e.length() > 1 && e[0] == '.' )
   {
@@ -365,7 +365,7 @@ bool is_extension( const STD_TSTRING& fOriginal, const STD_TSTRING& fExt )
 
   e = myodd::strings::replace( e, _T("\\."), _T("." ));     //  in case the user escaped it already
   e = myodd::strings::replace( e, _T("."), _T("\\." ));     //  escape it now.
-  STD_TSTRING stdMatches = _T("^(.*)\\.(") + e + _T(")$");
+  MYODD_STRING stdMatches = _T("^(.*)\\.(") + e + _T(")$");
 #ifdef _UNICODE
   boost::wsmatch matches;
   const boost::wregex aStringregex( stdMatches.c_str(), boost::regex_constants::icase );
@@ -397,9 +397,9 @@ void RemoveLeadingBackSlash
   if( NULL == szPath )
     return;
 
-  STD_TSTRING s( szPath, _tcslen(szPath) );
+  MYODD_STRING s( szPath, _tcslen(szPath) );
 
-  // the the STD_TSTRING version
+  // the the MYODD_STRING version
   RemoveLeadingBackSlash( s );
 
   // re-copy it across
@@ -411,10 +411,10 @@ void RemoveLeadingBackSlash
 /**
  * Remove a leading backslash at the start of a path
  * This is normally used so we can joining 2 paths together.
- * @param STD_TSTRING the path we want to remove the backslash from
+ * @param MYODD_STRING the path we want to remove the backslash from
  * @return none
  */
-void RemoveLeadingBackSlash( STD_TSTRING& szPath)
+void RemoveLeadingBackSlash( MYODD_STRING& szPath)
 {
   _trimDeadChars( szPath );
 
@@ -447,9 +447,9 @@ void RemoveTrailingBackSlash
   if( NULL == szPath )
     return;
 
-  STD_TSTRING s( szPath, _tcslen(szPath) );
+  MYODD_STRING s( szPath, _tcslen(szPath) );
 
-  // the the STD_TSTRING version
+  // the the MYODD_STRING version
   RemoveTrailingBackSlash( s );
 
   // re-copy it across
@@ -460,12 +460,12 @@ void RemoveTrailingBackSlash
 
 /**
  * Look for a trailing back slash at the end of the path and strip it.
- * @param STD_TSTRING& the string we want to remove the trailing back slash
+ * @param MYODD_STRING& the string we want to remove the trailing back slash
  * @return none 
  */
 void RemoveTrailingBackSlash
 (	
- STD_TSTRING& szPath
+ MYODD_STRING& szPath
 )
 {
   _trimDeadChars( szPath );
@@ -484,7 +484,7 @@ void RemoveTrailingBackSlash
 
 /**
  * Add a trailing back slash at the end of a directory
- * @see AddTrailingBackSlash( STD_TSTRING& s )
+ * @see AddTrailingBackSlash( MYODD_STRING& s )
  *
  * @param LPTSTR the path we are editing
  * @param DWORD the max size of the file.
@@ -499,9 +499,9 @@ void AddTrailingBackSlash
   if( NULL == szPath )
     return;
 
-	STD_TSTRING s( szPath, _tcslen(szPath) );
+	MYODD_STRING s( szPath, _tcslen(szPath) );
 
-  // the the STD_TSTRING version
+  // the the MYODD_STRING version
   AddTrailingBackSlash( s );
 
 	// re-copy it across
@@ -512,12 +512,12 @@ void AddTrailingBackSlash
 
 /**
  * Add a trailing back slash at the end of a directory
- * @see AddTrailingBackSlash( STD_TSTRING& s )
+ * @see AddTrailingBackSlash( MYODD_STRING& s )
  *
- * @param STD_TSTRING& the string we want to add a trailing back slash
+ * @param MYODD_STRING& the string we want to add a trailing back slash
  * @return none 
  */
-void AddTrailingBackSlash( STD_TSTRING& subPath )
+void AddTrailingBackSlash( MYODD_STRING& subPath )
 {
   _trimDeadChars( subPath );
 
@@ -539,11 +539,11 @@ void AddTrailingBackSlash( STD_TSTRING& subPath )
  * This ensures that the user can change/rename paths and we should still be able to locate the files.
  * the calling function is responsible for cleaning the code.
  *
- * @param const STD_TSTRING the path we are editing
- * @param STD_TSTRING& the return file we are unexpanding.
+ * @param const MYODD_STRING the path we are editing
+ * @param MYODD_STRING& the return file we are unexpanding.
  * @return bool false if there was a problem with the string 
  */
-bool UnExpandEnvironment( const STD_TSTRING& src, STD_TSTRING& dest )
+bool UnExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest )
 {
   LPTSTR unExpandEd;
   if( !myodd::files::UnExpandEnvironment( src.c_str(), unExpandEd ))
@@ -582,14 +582,14 @@ bool UnExpandEnvironment( LPCTSTR lpSrc, LPTSTR& dest )
     return true;
   }
 
-  STD_TSTRING stdUnDst = _T("");
+  MYODD_STRING stdUnDst = _T("");
   size_t unExpandSize = 0;
 
-  STD_TSTRING stdSrc = lpSrc;
+  MYODD_STRING stdSrc = lpSrc;
 
   //  we don't want the trailing back slash
-  static STD_TSTRING appPath = GetAppPath( false );
-  if( STD_TSTRING::npos != myodd::strings::ifind( lpSrc, appPath) )
+  static MYODD_STRING appPath = GetAppPath( false );
+  if( MYODD_STRING::npos != myodd::strings::ifind( lpSrc, appPath) )
   {
     // we have to expand the app path first
     // otherwise the drive letter will be replaced by %systemdrive%
@@ -635,11 +635,11 @@ bool UnExpandEnvironment( LPCTSTR lpSrc, LPTSTR& dest )
  * that way the user can pass things like %appdata% in the API and we will expand them.
  * the calling function is responsible for cleaning the code.
  *
- * @param const STD_TSTRING& the path we are editing
- * @param STD_TSTRING& the destination.
+ * @param const MYODD_STRING& the path we are editing
+ * @param MYODD_STRING& the destination.
  * @return bool false if there was a problem with the string 
  */
-bool ExpandEnvironment( const STD_TSTRING& src, STD_TSTRING& dest )
+bool ExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest )
 {
 	LPTSTR expandEd;
   if( !myodd::files::ExpandEnvironment( src.c_str(), expandEd ))
@@ -680,13 +680,13 @@ bool ExpandEnvironment( LPCTSTR lpSrc, LPTSTR& dest )
 
   // we might expand the value
   // so convert it to a string
-  STD_TSTRING stdSrc = lpSrc;
+  MYODD_STRING stdSrc = lpSrc;
 
   // look for the %apppath% in case we need to expand it.
-  if( STD_TSTRING::npos != myodd::strings::ifind( lpSrc, FILE_APPPATH) )
+  if( MYODD_STRING::npos != myodd::strings::ifind( lpSrc, FILE_APPPATH) )
   {
     //  we don't want the trailing back slash
-    static STD_TSTRING appPath = GetAppPath( false );
+    static MYODD_STRING appPath = GetAppPath( false );
 
     //  replace the string
     stdSrc = myodd::strings::ireplace( stdSrc, FILE_APPPATH, appPath );
@@ -728,10 +728,10 @@ bool ExpandEnvironment( LPCTSTR lpSrc, LPTSTR& dest )
 /**
 * Delete a file, try and expand it first.
 * @see ::DeleteFile( ... )
-* @param const STD_TSTRING& the file we want to delete
+* @param const MYODD_STRING& the file we want to delete
 * @return bool if the file was deleted or not.
 */
-bool DeleteFile( const STD_TSTRING& c )
+bool DeleteFile( const MYODD_STRING& c )
 {
   return DeleteFile( c.c_str() );
 }
@@ -763,20 +763,20 @@ bool DeleteFile( LPCTSTR c )
 
 /**
  * Copy a file to a new file.
- * @param const STD_TSTRING& the existing filename 
- * @param const STD_TSTRING& the name of the new file.
+ * @param const MYODD_STRING& the existing filename 
+ * @param const MYODD_STRING& the name of the new file.
  * @param DWORD* if not NULL we will pass the last error code
  * @return bool success or not.
  */
-bool CopyFile( const STD_TSTRING& lpExistingFileName, const STD_TSTRING& lpNewFileName, DWORD* dwErr /*= 0*/ )
+bool CopyFile( const MYODD_STRING& lpExistingFileName, const MYODD_STRING& lpNewFileName, DWORD* dwErr /*= 0*/ )
 {
   return CopyFile( lpExistingFileName.c_str(), lpNewFileName.c_str(), dwErr );
 }
 
 /**
 * Copy a file to a new file.
-* @param const STD_TSTRING& the existing filename 
-* @param const STD_TSTRING& the name of the new file.
+* @param const MYODD_STRING& the existing filename 
+* @param const MYODD_STRING& the name of the new file.
 * @param DWORD* if not NULL we will pass the last error code
 * @return bool success or not.
 */
@@ -787,7 +787,7 @@ bool CopyFile( LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, DWORD* dwErr /
     *dwErr = ERROR_SUCCESS;
   }
 
-  STD_TSTRING stdExistingFileName( lpExistingFileName );
+  MYODD_STRING stdExistingFileName( lpExistingFileName );
   if( !ExpandEnvironment( stdExistingFileName, stdExistingFileName ) )
   {
     //  cannot even expand it.
@@ -797,7 +797,7 @@ bool CopyFile( LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, DWORD* dwErr /
     }
     return false;
   }
-  STD_TSTRING stdNewFileName( lpNewFileName );
+  MYODD_STRING stdNewFileName( lpNewFileName );
   if( !ExpandEnvironment( stdNewFileName, stdNewFileName ) )
   {
     //  cannot even expand it.
@@ -832,10 +832,10 @@ bool CopyFile( LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, DWORD* dwErr /
 
 /**
 * check if a file is valid and exists on the hard drive or the network.
-* @param const STD_TSTRING& the full path of the file we want to check for
+* @param const MYODD_STRING& the full path of the file we want to check for
 * @return bool if the file exists or not.
 */
-bool FileExists( const STD_TSTRING& c )
+bool FileExists( const MYODD_STRING& c )
 {
   return FileExists( c.c_str() );
 }
@@ -877,7 +877,7 @@ bool FileExists( LPCTSTR c )
 * @param LPCTSTR the full path of the file we want to check for
 * @return bool if the directory exists or not.
 */
-bool DirectoryExists( const STD_TSTRING& c )
+bool DirectoryExists( const MYODD_STRING& c )
 {
   return DirectoryExists( c.c_str() );
 }
@@ -892,7 +892,7 @@ bool DirectoryExists( LPCTSTR c )
 
   // look for that file
   // if it exists then there is nothing to do really.
-  STD_TSTRING findFile = (c);
+  MYODD_STRING findFile = (c);
   AddTrailingBackSlash( findFile );
   findFile += _T("*.*"); 
   
@@ -903,11 +903,11 @@ bool DirectoryExists( LPCTSTR c )
  * Create a full directly including all the sub directory.
  * the function looks for the first existing directory and creates directories from then on.
  *
- * @param const STD_TSTRING& the path we trying to created
+ * @param const MYODD_STRING& the path we trying to created
  * @param bool true|false if the file includes a file, we need to know that so we don't create a directory with the file name.
  * @return bool false if there was a problem with the string / creating the dir.
  */
-bool CreateFullDirectory( const STD_TSTRING& c, bool bIsFile )
+bool CreateFullDirectory( const MYODD_STRING& c, bool bIsFile )
 {
   return CreateFullDirectory( c.c_str(), bIsFile );
 }
@@ -1026,10 +1026,10 @@ bool CreateFullDirectory( LPCTSTR lpPath, bool bIsFile )
  * Check if the string given is a valid existing file on the drive.
  * the string is expanded.
  *
- * @param const STD_TSTRING& stdFile the string we are checking for.
+ * @param const MYODD_STRING& stdFile the string we are checking for.
  * @return bool true|false if it is a file or not.
  */
-bool IsFile(const STD_TSTRING& stdFile)
+bool IsFile(const MYODD_STRING& stdFile)
 {
   return IsFile(stdFile.c_str());
 }
@@ -1090,7 +1090,7 @@ bool IsFile( LPCTSTR lp )
  * @param LPCTSTR the string we are checking for.
  * @return bool true|false if it is a directory or not.
  */
-bool IsDirectory( const STD_TSTRING& stdDir )
+bool IsDirectory( const MYODD_STRING& stdDir )
 {
   return IsDirectory( stdDir.c_str() );
 }
@@ -1124,7 +1124,7 @@ bool IsDirectory( LPCTSTR lp )
   intptr_t ffhandle = _tfindfirst( lpExpand, &fdata );
   if( -1 == ffhandle )
   {
-    STD_TSTRING s = lpExpand;
+    MYODD_STRING s = lpExpand;
     AddTrailingBackSlash( s );
     s += _T("*.*");
 
@@ -1163,10 +1163,10 @@ bool IsDirectory( LPCTSTR lp )
 * Check if the string given LOOKS like a valid URL
 * This is a very basic check, we cannot actually ping the site to enusre that it is valid.
 *
-* @param const STD_TSTRING& stdUrl the string we are checking for.
+* @param const MYODD_STRING& stdUrl the string we are checking for.
 * @return bool true|false if it is a directory or not.
 */
-bool IsURL(const STD_TSTRING& stdUrl)
+bool IsURL(const MYODD_STRING& stdUrl)
 {
   return IsURL(stdUrl.c_str());
 }
@@ -1221,7 +1221,7 @@ bool IsURL( LPCTSTR lp )
  * @param const BY_HANDLE_FILE_INFORMATION& the file information we are comparing.
  * @return bool if the file has changed at all or not.
  */
-bool HasFileInformationChanged( const STD_TSTRING& file, const BY_HANDLE_FILE_INFORMATION& info )
+bool HasFileInformationChanged( const MYODD_STRING& file, const BY_HANDLE_FILE_INFORMATION& info )
 {
   return HasFileInformationChanged( file.c_str(), info );
 }
@@ -1264,7 +1264,7 @@ bool HasFileInformationChanged( LPCTSTR file, const BY_HANDLE_FILE_INFORMATION& 
  * @param BY_HANDLE_FILE_INFORMATION& the item information
  * @return bool if there was an error or not.
  */
-bool GetFileInformationByName( const STD_TSTRING& file, BY_HANDLE_FILE_INFORMATION& info )
+bool GetFileInformationByName( const MYODD_STRING& file, BY_HANDLE_FILE_INFORMATION& info )
 {
   return GetFileInformationByName( file.c_str(), info );
 }
@@ -1313,11 +1313,11 @@ bool GetFileInformationByName( LPCTSTR file, BY_HANDLE_FILE_INFORMATION& info )
 /**
  * Get the path of the current exe, could return an empty string if there is a problems.
  * @param bool add the trailing backslash or remove it.
- * @return STD_TSTRING the path of the current exe.
+ * @return MYODD_STRING the path of the current exe.
  */
-STD_TSTRING GetAppPath( bool bAddtrailing /*=true*/)
+MYODD_STRING GetAppPath( bool bAddtrailing /*=true*/)
 {
-  STD_TSTRING sReturn = _T("");
+  MYODD_STRING sReturn = _T("");
   TCHAR* lpBuffer = new TCHAR[ T_MAX_PATH ];
   if (GetModuleFileName( NULL, lpBuffer, T_MAX_PATH ) != 0)
   {
@@ -1350,11 +1350,11 @@ STD_TSTRING GetAppPath( bool bAddtrailing /*=true*/)
  * @param LPCTSTR the full path we are getting.
  * @param bool if we want to expand the string or not, used to prevent recursive calls.
  * @param bool add a trailling backslash or not.
- * @return STD_TSTRING the directory of the file given
+ * @return MYODD_STRING the directory of the file given
  */
-STD_TSTRING GetBaseFromFile
+MYODD_STRING GetBaseFromFile
 ( 
-  const STD_TSTRING& stdPath, 
+  const MYODD_STRING& stdPath, 
   bool bExpand /*= true*/,
   bool bAddTrailling /*= true*/
 )
@@ -1368,9 +1368,9 @@ STD_TSTRING GetBaseFromFile
  * @see GetFileName( ... ) for the file name
  * @param LPCTSTR the full path we are getting.
  * @param bool if we want to expand the string or not, used to prevent recursive calls.
- * @return STD_TSTRING the directory of the file given
+ * @return MYODD_STRING the directory of the file given
  */
-STD_TSTRING GetBaseFromFile
+MYODD_STRING GetBaseFromFile
 ( 
   LPCTSTR lpPath, 
   bool bExpand /*= true*/, 
@@ -1430,7 +1430,7 @@ STD_TSTRING GetBaseFromFile
     tmpDir[ r2 ] = '\0';
   }
 
-  STD_TSTRING s = ( tmpDir );
+  MYODD_STRING s = ( tmpDir );
   if( bAddTrailling )
   {
     //  we have to add the trailing in case there was none to start with.
@@ -1447,15 +1447,15 @@ STD_TSTRING GetBaseFromFile
 /**
 * Get the absolute path given a relative path.
 * It is up to the user to delete the container value.
-* @param STD_TSTRING& container for the return value, unset in case of error. 
-* @param const STD_TSTRING& the relative path we would like to get the absolute path from.
+* @param MYODD_STRING& container for the return value, unset in case of error. 
+* @param const MYODD_STRING& the relative path we would like to get the absolute path from.
 * @param LPCTSTR the original path, if NULL we will use the current directory as origin.
 * @return bool if we were able to get the absolute path, false if the given path is unrealistic/impossible.
 */
 bool GetAbsolutePath
 ( 
- STD_TSTRING& dest, 
- const STD_TSTRING& stdRelative, 
+ MYODD_STRING& dest, 
+ const MYODD_STRING& stdRelative, 
  LPCTSTR lpOrigin /*= NULL*/ 
  )
 {
@@ -1495,8 +1495,8 @@ bool GetAbsolutePath
     return false;
   }
 
-  STD_TSTRING sRelative( lpRelative );
-  STD_TSTRING sOrigin( _T("") );
+  MYODD_STRING sRelative( lpRelative );
+  MYODD_STRING sOrigin( _T("") );
   if( NULL == lpOrigin )
   {
     TCHAR lpBuffer[ T_MAX_PATH ] = {0};
@@ -1527,16 +1527,16 @@ bool GetAbsolutePath
   bool addtrailing = (sRelative[ sRelative.length() -1 ] == SEPARATOR_REPLACE_C );
 
   // split them all
-  std::vector<STD_TSTRING> e_sRelative;
+  std::vector<MYODD_STRING> e_sRelative;
   myodd::strings::explode( e_sRelative, sRelative, SEPARATOR_REPLACE_C, -1, false );
 
-  std::vector<STD_TSTRING> e_sOrigin;
+  std::vector<MYODD_STRING> e_sOrigin;
   myodd::strings::explode( e_sOrigin, sOrigin, SEPARATOR_REPLACE_C, -1, false );
   // reverse from the origin path we only reverse the ../
 
   size_t dotdotCount = 0;
   size_t dotCount = 0;
-  for( std::vector<STD_TSTRING>::const_iterator it = e_sRelative.begin();
+  for( std::vector<MYODD_STRING>::const_iterator it = e_sRelative.begin();
        it != e_sRelative.end();
        ++it )
   {
@@ -1574,14 +1574,14 @@ bool GetAbsolutePath
     // relative = "example/something/"
     // origin = "c:/origin/path/"
     // return = "c:/origin/path/example/something/"
-    if( sRelative.find( _T("%") ) !=  STD_TSTRING::npos )
+    if( sRelative.find( _T("%") ) !=  MYODD_STRING::npos )
     {
-      STD_TSTRING expanded = _T("");
+      MYODD_STRING expanded = _T("");
       if( ExpandEnvironment( sRelative, expanded ) )
       {
         if( GetAbsolutePath( dest, expanded.c_str(), sOrigin.c_str() ) )
         {
-          STD_TSTRING absolute = dest;
+          MYODD_STRING absolute = dest;
           delete [] dest;
           dest = NULL;
 
@@ -1589,12 +1589,12 @@ bool GetAbsolutePath
         }
       }
     }
-    else if( sRelative.find( _T(":") ) ==  STD_TSTRING::npos )
+    else if( sRelative.find( _T(":") ) ==  MYODD_STRING::npos )
     {
       // so what we will do is actually add the origin to the given path
       // and try and see if we can get that to work.
       AddTrailingBackSlash(sOrigin);
-      STD_TSTRING correctedPath = sOrigin + sRelative;
+      MYODD_STRING correctedPath = sOrigin + sRelative;
       return GetAbsolutePath( dest, correctedPath.c_str(), sOrigin.c_str() );
     }
   }
@@ -1613,8 +1613,8 @@ bool GetAbsolutePath
     e_sOrigin.push_back( e_sRelative[push_back] );
 
   // finally clean everything up.
-  std::vector<STD_TSTRING> e_sClean;
-  for( std::vector<STD_TSTRING>::const_iterator it = e_sOrigin.begin();
+  std::vector<MYODD_STRING> e_sClean;
+  for( std::vector<MYODD_STRING>::const_iterator it = e_sOrigin.begin();
        it != e_sOrigin.end();
        ++it
     )
@@ -1640,7 +1640,7 @@ bool GetAbsolutePath
   // putting it all together...
   // note that we use MYODD_FILE_SEPARATOR and not SEPARATOR_REPLACE
   // this is in case both are not the same.
-  STD_TSTRING imp = myodd::strings::implode( e_sClean, MYODD_FILE_SEPARATOR );
+  MYODD_STRING imp = myodd::strings::implode( e_sClean, MYODD_FILE_SEPARATOR );
   if( addtrailing )
   {
     imp += MYODD_FILE_SEPARATOR;
@@ -1658,10 +1658,10 @@ bool GetAbsolutePath
 /**
  * Remove illegal characters in a file name.
  * Do not pass a full path name as '/' will be replaced.
- * @param STD_TSTRING& the file been cleaned.
+ * @param MYODD_STRING& the file been cleaned.
  * @return none
  */
-void CleanFileName( STD_TSTRING& dirtyFileName )
+void CleanFileName( MYODD_STRING& dirtyFileName )
 {
   static TCHAR* badChars = _T("?[]/\\=+<>:;\",*|^\"");
   BOOST_FOREACH( TCHAR &tch, dirtyFileName )
@@ -1680,14 +1680,14 @@ void CleanFileName( STD_TSTRING& dirtyFileName )
 /**
  * Create a temp filename and return the FULL path
  * The file will be be unique
- * @param STD_TSTRING& the return value.
+ * @param MYODD_STRING& the return value.
  * @param LPCTSTR the prefix or NULL if no prefix is needed.
  * @param LPCTSTR the prefix or NULL if no extension is needed, (if NULL '.tmp' will be added).
  * @return bool success or not if there was an error
  */
-bool GetFullTempFileName( STD_TSTRING& stdFileName, LPCTSTR lpPrefix, LPCTSTR lpExt )
+bool GetFullTempFileName( MYODD_STRING& stdFileName, LPCTSTR lpPrefix, LPCTSTR lpExt )
 {
-  // use the STD_TSTRING function.
+  // use the MYODD_STRING function.
   TCHAR* lpFileName = NULL;
   if( !GetFullTempFileName( lpFileName, lpPrefix, lpExt ) )
   {
@@ -1737,11 +1737,11 @@ bool GetFullTempFileName( LPTSTR& lpFileName, LPCTSTR lpPrefix, LPCTSTR lpExt )
 
 /**
  * Add a file name to the temp path
- * @param STD_TSTRING& the return buffer that will contain the file+full path.
+ * @param MYODD_STRING& the return buffer that will contain the file+full path.
  * @param LPCTSTR the given filename.
  * @return bool success or not
  */
-bool GetFullTempFileName( STD_TSTRING& stdFullPathFileName, LPCTSTR lpFileName )
+bool GetFullTempFileName( MYODD_STRING& stdFullPathFileName, LPCTSTR lpFileName )
 {
   TCHAR* lpFullPathFileName = NULL;
   if( !GetFullTempFileName( lpFullPathFileName, lpFileName ) )
@@ -1804,7 +1804,7 @@ bool GetFullTempFileName( LPTSTR& lpFullPathFileName, LPCTSTR lpFileName )
  * @param LPCTSTR the file we are checking.
  * @return bool if it is a directory or not
  */
-bool is_dot( const STD_TSTRING& stdFile )
+bool is_dot( const MYODD_STRING& stdFile )
 {
   return is_dot( stdFile.c_str() );
 }
@@ -1817,10 +1817,10 @@ bool is_dot( const STD_TSTRING& stdFile )
 bool is_dot( LPCTSTR lpFile )
 {
   // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
-  STD_TSTRING sOrigin = lpFile;
+  MYODD_STRING sOrigin = lpFile;
   sOrigin = myodd::strings::replace( sOrigin, _T("/"), _T("\\") );
   
-  std::vector<STD_TSTRING> e_sOrigin;
+  std::vector<MYODD_STRING> e_sOrigin;
   size_t size = myodd::strings::explode( e_sOrigin, sOrigin, _T('\\'), -1, false );
   if( size == 0 )
   {
@@ -1843,9 +1843,9 @@ bool is_dot( LPCTSTR lpFile )
 * @see GetBaseFromFile( ... )
 * @param LPCTSTR the full path we are getting.
 * @param bool if we want to expand the string or not, used to prevent recursive calls.
-* @return STD_TSTRING the filename of the file given without the directory
+* @return MYODD_STRING the filename of the file given without the directory
 */
-STD_TSTRING GetFileName( const STD_TSTRING& stdPath, bool bExpand /*= true*/ )
+MYODD_STRING GetFileName( const MYODD_STRING& stdPath, bool bExpand /*= true*/ )
 {
   return GetFileName( stdPath.c_str(), bExpand );
 }
@@ -1856,9 +1856,9 @@ STD_TSTRING GetFileName( const STD_TSTRING& stdPath, bool bExpand /*= true*/ )
  * @see GetBaseFromFile( ... )
  * @param LPCTSTR the full path we are getting.
  * @param bool if we want to expand the string or not, used to prevent recursive calls.
- * @return STD_TSTRING the filename of the file given without the directory
+ * @return MYODD_STRING the filename of the file given without the directory
  */
-STD_TSTRING GetFileName( LPCTSTR lpPath, bool bExpand /*= true*/ )
+MYODD_STRING GetFileName( LPCTSTR lpPath, bool bExpand /*= true*/ )
 {
   // expand the full path
   // this is in case the user uses some weird environment variable that contains the file name in it.
@@ -1899,7 +1899,7 @@ STD_TSTRING GetFileName( LPCTSTR lpPath, bool bExpand /*= true*/ )
     return tmpDir;  // return was was passed.
   }
 
-  STD_TSTRING s = _T("");
+  MYODD_STRING s = _T("");
   if( r1 > r2 )
   {
     s = tmpDir + r1;
@@ -2074,10 +2074,10 @@ TCHAR* ReadFile( LPCTSTR file, __int64 nStartPos, __int64 nEndPos )
   return tbuf_;
 }
 
-void Join( STD_TSTRING& returnPath, const STD_TSTRING& pathPartA, const STD_TSTRING& pathPartB )
+void Join( MYODD_STRING& returnPath, const MYODD_STRING& pathPartA, const MYODD_STRING& pathPartB )
 {
-  STD_TSTRING partA = pathPartA;
-  STD_TSTRING partB = pathPartB;
+  MYODD_STRING partA = pathPartA;
+  MYODD_STRING partB = pathPartB;
 
   // make sure we have a trailing backslash
   AddTrailingBackSlash( partA );
@@ -2193,15 +2193,15 @@ void Version::DetermineFileVersion( LPCTSTR lpFileName )
 /**
  * Get all the app keys from a .cfg filename.
  * @param LPCTSTR the name of the file
- * @param std::vector<STD_TSTRING>& the various keys.
+ * @param std::vector<MYODD_STRING>& the various keys.
  * @param LPCTSTR the app name, NULL if we want all the keys.
  * @param LPCTSTR | NULL the wild search to limit certain keys only or NULL to get all the keys.
- * @return std::vector<STD_TSTRING> list of all the keys or some that match the seatch.
+ * @return std::vector<MYODD_STRING> list of all the keys or some that match the seatch.
  */
 size_t GetKeys
 ( 
   LPCTSTR lpFileName, 
-  std::vector<STD_TSTRING>& tokens,
+  std::vector<MYODD_STRING>& tokens,
   LPCTSTR lpAppName,
   LPCTSTR lpWild /*=NULL*/
 )
@@ -2222,9 +2222,9 @@ size_t GetKeys
     else
     {
       //  get the tokens.
-      std::vector<STD_TSTRING> tokensTmp;
+      std::vector<MYODD_STRING> tokensTmp;
       myodd::strings::explode_by_null_char( tokensTmp, keys, nLen );
-      for( std::vector<STD_TSTRING>::const_iterator it = tokensTmp.begin(); 
+      for( std::vector<MYODD_STRING>::const_iterator it = tokensTmp.begin(); 
            it != tokensTmp.end();
            ++it
          )
@@ -2463,12 +2463,12 @@ TCHAR* Byte2Char
 /** 
  * Get the size of a file
  * We return -1 if the file does not exist, we do not have permission and/or there was some other error.
- * @param const STD_TSTRING& stdFullPathFileName the file we are checking.
+ * @param const MYODD_STRING& stdFullPathFileName the file we are checking.
  * @return long Total size, in bytes
  */
-long GetFileSizeInBytes( const STD_TSTRING& stdFullPathFileName )
+long GetFileSizeInBytes( const MYODD_STRING& stdFullPathFileName )
 {
-  STD_TSTRING cleannedFileName = stdFullPathFileName;
+  MYODD_STRING cleannedFileName = stdFullPathFileName;
   if (!ExpandEnvironment(cleannedFileName, cleannedFileName))
   {
     return -1;

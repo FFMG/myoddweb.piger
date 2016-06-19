@@ -15,7 +15,7 @@ namespace log {
   public:
     virtual ~LogEvent(void);
 
-    const STD_TSTRING& GetCurrentLogFile() const {
+    const MYODD_STRING& GetCurrentLogFile() const {
       return m_logFile.GetCurrentLogFile();
     }
 
@@ -55,7 +55,7 @@ namespace log {
         _szLogLine = lm._szLogLine;
         _uiType = lm._uiType;
       }
-      STD_TSTRING _szLogLine;
+      MYODD_STRING _szLogLine;
       LogType _uiType;
     };
 

@@ -434,7 +434,7 @@ void decimalToDegree
  */
 double positionToDecimal( LPCTSTR lpString )
 {
-  STD_TSTRING sPos( lpString );
+  MYODD_STRING sPos( lpString );
   sPos = myodd::strings::replace( sPos, _T("&apos;"), _T("'") );
   sPos = myodd::strings::replace( sPos, _T("&quot;"), _T("\"") );
 

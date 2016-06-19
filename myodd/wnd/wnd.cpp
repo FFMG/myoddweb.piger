@@ -55,10 +55,10 @@ bool SetText( HWND hwndParent, WORD id, LPCTSTR lp )
  * Set the text to a given window.
  * @param HWND the parent window we are setting the text to.
  * @param WORD the id of the window.
- * @param const STD_TSTRING& the text we want to set.
+ * @param const MYODD_STRING& the text we want to set.
  * @return bool true|false if the value is set or not.
  */
-bool SetText( HWND hwndParent, WORD id, const STD_TSTRING& s )
+bool SetText( HWND hwndParent, WORD id, const MYODD_STRING& s )
 {
   return SetText( hwndParent, id, s.c_str() );
 }
@@ -107,7 +107,7 @@ int GetInt( HWND hwndParent, WORD id, int iDefault/*=0*/ )
   }
 
   // get the text
-  STD_TSTRING s = GetText( hwndParent, id );
+  MYODD_STRING s = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -142,7 +142,7 @@ long GetLong( HWND hwndParent, WORD id, long lDefault/*=0*/ )
   }
 
   // get the text
-  STD_TSTRING s = GetText( hwndParent, id );
+  MYODD_STRING s = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -177,7 +177,7 @@ double GetDouble( HWND hwndParent, WORD id, double dDefault/*=0*/ )
   }
 
   // get the text
-  STD_TSTRING s = GetText( hwndParent, id );
+  MYODD_STRING s = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -198,9 +198,9 @@ double GetDouble( HWND hwndParent, WORD id, double dDefault/*=0*/ )
  * @param HWND the parent window that holds the control
  * @param WORD the ID of the control we are getting the text from.
  * @param bool if we want to trim the return value.
- * @return STD_TSTRING the value been held by the control.
+ * @return MYODD_STRING the value been held by the control.
  */
-STD_TSTRING GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ )
+MYODD_STRING GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ )
 {
   HWND hwnd = _getDlgItem( hwndParent, id );
   if( NULL == hwnd )
@@ -216,7 +216,7 @@ STD_TSTRING GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ )
   memset( t, 0, (lenght+1)*sizeof(TCHAR) );
   GetWindowText( hwnd, t,(lenght+1)*sizeof(TCHAR) ); 
 
-  STD_TSTRING returnValue = t;
+  MYODD_STRING returnValue = t;
   delete [] t;
 
   if( bTrim )
@@ -322,11 +322,11 @@ bool SetText( HWND hwndParent, WORD id, double d, LPCTSTR pszFormat)
 */
 void MakeValidInt( HWND hWndParent, WORD id )
 {
-  STD_TSTRING sValue = myodd::wnd::GetText( hWndParent, id );
+  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, false ) )
   {
     // the new value
-    STD_TSTRING sActual = myodd::strings::ToString( _tstoi(sValue.c_str()) );
+    MYODD_STRING sActual = myodd::strings::ToString( _tstoi(sValue.c_str()) );
     
     // set it.
     myodd::wnd::SetText( hWndParent, id, sActual );
@@ -373,7 +373,7 @@ void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
     myodd::math::swap( nMax, nMin );
   }
 
-  STD_TSTRING sValue = myodd::wnd::GetText( hWndParent, id );
+  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, false ) )
   {
     sValue = myodd::strings::ToString( _tstoi(sValue.c_str()) );
@@ -385,7 +385,7 @@ void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
   }
 
   // now make sure that it is withing ranges.
-  int nActual = myodd::math::Convert<STD_TSTRING, int>( sValue );
+  int nActual = myodd::math::Convert<MYODD_STRING, int>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax );
@@ -414,7 +414,7 @@ void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
 */
 void MakeValidUInt( HWND hWndParent, WORD id )
 {
-  STD_TSTRING sValue = myodd::wnd::GetText( hWndParent, id );
+  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, false ) )
   {
     int iActual = _tstoi(sValue.c_str());
@@ -423,7 +423,7 @@ void MakeValidUInt( HWND hWndParent, WORD id )
       iActual = 0;
     }
 
-    STD_TSTRING sActual = myodd::strings::ToString( iActual );
+    MYODD_STRING sActual = myodd::strings::ToString( iActual );
     myodd::wnd::SetText( hWndParent, id, sActual );
 
     int nStartChar = (int)sActual.length();
@@ -443,7 +443,7 @@ void MakeValidUInt( HWND hWndParent, WORD id )
 */
 void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, LPCTSTR lpszFormat )
 {
-  STD_TSTRING sValue = myodd::wnd::GetText( hWndParent, id );
+  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, true ) )
   {
     sValue = myodd::strings::ToString( _tstof( sValue.c_str()), lpszFormat );
@@ -455,7 +455,7 @@ void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, L
   }
 
   // now make sure that it is withing ranges.
-  double nActual = myodd::math::Convert<STD_TSTRING, int>( sValue );
+  double nActual = myodd::math::Convert<MYODD_STRING, int>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax, lpszFormat );
@@ -485,10 +485,10 @@ void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, L
 */
 void MakeValidDouble( HWND hWndParent, WORD id, LPCTSTR lpszFormat )
 {
-  STD_TSTRING sValue = myodd::wnd::GetText( hWndParent, id );
+  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, true ) )
   {
-    STD_TSTRING sActual = myodd::strings::ToString( _tstof(sValue.c_str()), lpszFormat );
+    MYODD_STRING sActual = myodd::strings::ToString( _tstof(sValue.c_str()), lpszFormat );
     myodd::wnd::SetText( hWndParent, id, sValue );
 
     int nStartChar = (int)sValue.length();

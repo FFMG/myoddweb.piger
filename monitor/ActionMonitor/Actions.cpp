@@ -53,10 +53,10 @@ void Actions::ClearAll()
  * This is because we can have more than one action with the same name.
  * @param UINT the index number we are looking for.
  * @param LPCTSTR the action name we are after.
- * @param STD_TSTRING& if found, the path of the action.
+ * @param MYODD_STRING& if found, the path of the action.
  * @return bool if the action was found or not.
  */
-bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
+bool Actions::Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath )
 {
   if( NULL == szText )
   {
@@ -94,13 +94,13 @@ bool Actions::Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath )
 
 /**
  * Look for a command/path in the list of actions.
- * @param const STD_TSTRING& szText the command we are looking for.
- * @param const STD_TSTRING& szPath the path for that command.
+ * @param const MYODD_STRING& szText the command we are looking for.
+ * @param const MYODD_STRING& szPath the path for that command.
  * @return Actions::array_of_actions_it the iterator for that command, (if there is one).
  */
-Actions::array_of_actions_it Actions::Find(const STD_TSTRING& szText, const STD_TSTRING& szPath )
+Actions::array_of_actions_it Actions::Find(const MYODD_STRING& szText, const MYODD_STRING& szPath )
 {
-  STD_TSTRING stdExpendedPath;
+  MYODD_STRING stdExpendedPath;
   if (!myodd::files::ExpandEnvironment(szPath, stdExpendedPath))
   {
     //  probably not a valid file for us to work with.
@@ -217,19 +217,19 @@ bool Actions::Remove( LPCTSTR szText, LPCTSTR szPath )
 }
 
 // ------------------------------------------------------------------------------------
-STD_TSTRING Actions::toChar(  const STD_TSTRING& s, const COMMANDS_VALUE& cv )
+MYODD_STRING Actions::toChar(  const MYODD_STRING& s, const COMMANDS_VALUE& cv )
 {
   if( s.length() == 0 )
   {
     return _T("");
   }
 
-  STD_TSTRING sBold     = _T("");
-  STD_TSTRING sItalic   = _T("");
-  STD_TSTRING sColor    = _T("");
+  MYODD_STRING sBold     = _T("");
+  MYODD_STRING sItalic   = _T("");
+  MYODD_STRING sColor    = _T("");
   
-  STD_TSTRING sBold_c   = _T("");
-  STD_TSTRING sItalic_c = _T("");
+  MYODD_STRING sBold_c   = _T("");
+  MYODD_STRING sItalic_c = _T("");
   
   sBold     = cv.bBold? _T("<b>"): _T("");
   sBold_c   = cv.bBold? _T("</b>"): _T("");
@@ -242,7 +242,7 @@ STD_TSTRING Actions::toChar(  const STD_TSTRING& s, const COMMANDS_VALUE& cv )
     sColor    = _T(" color='#") + cv.color + _T("'");;
   }
   
-  STD_TSTRING ret = _T("");
+  MYODD_STRING ret = _T("");
   //ret += _T("<font") + sColor + _T(">");
   ret +=  sBold;
   ret +=    sItalic;
@@ -257,7 +257,7 @@ STD_TSTRING Actions::toChar(  const STD_TSTRING& s, const COMMANDS_VALUE& cv )
 // -------------------------------------------------------------
 void Actions::GetCommandValue( LPCTSTR lpName, COMMANDS_VALUE& cv ) const
 {
-  STD_TSTRING sFullName = _T("commands\\");
+  MYODD_STRING sFullName = _T("commands\\");
   sFullName += lpName;
 
   LPCTSTR x = (LPCTSTR)myodd::config::get(sFullName + _T(".color"), cv.color);
@@ -275,7 +275,7 @@ void Actions::GetCommandValue( LPCTSTR lpName, COMMANDS_VALUE& cv ) const
  * remember that we need to escape all the '.' that are in the commands, (file names can have special chars).
  * If a user is looking for "google.bat" are they looking for "google\.bat" or "google(.*)bat" or "google(.)bat"?
  */
-STD_TSTRING Actions::toChar( ) const
+MYODD_STRING Actions::toChar( ) const
 {
   //  get the current command, colors and style
   COMMANDS_VALUE cv( _T("000000"), 0, 0 );
@@ -291,7 +291,7 @@ STD_TSTRING Actions::toChar( ) const
 
   //  the return string
   //  we keep it as global 'cause we are returning it.
-  STD_TSTRING szCurrentView = toChar( getActionAsTyped(), cv );
+  MYODD_STRING szCurrentView = toChar( getActionAsTyped(), cv );
   size_t count =  0;
   for ( array_of_actions::const_iterator it =  m_ActionsMatch.begin(); it != m_ActionsMatch.end(); it++ )
   {
@@ -355,10 +355,10 @@ size_t Actions::BuildMatchList( )
   }
 
   // Prepare the regex string.
-  STD_TSTRING regEx( getActionAsTyped() );
+  MYODD_STRING regEx( getActionAsTyped() );
 
   //  explode all the 'words'
-  std::vector<STD_TSTRING> exploded;
+  std::vector<MYODD_STRING> exploded;
   myodd::strings::explode(  exploded, regEx, _T(' ') );
 
   // go back and look for as many matches as possible.
@@ -388,10 +388,10 @@ size_t Actions::BuildMatchList( )
 /**
  * Given a number of (partial)words find a list of actions that would match.
  *
- * @param std::vector<STD_TSTRING>& the list of partial|full words.
+ * @param std::vector<MYODD_STRING>& the list of partial|full words.
  * @return size_t the number of items we matched.
  */
-size_t Actions::BuildMatchList( std::vector<STD_TSTRING>& exploded )
+size_t Actions::BuildMatchList( std::vector<MYODD_STRING>& exploded )
 {
   //  get the lock
   myodd::threads::Lock guard(_mutex);
@@ -400,9 +400,9 @@ size_t Actions::BuildMatchList( std::vector<STD_TSTRING>& exploded )
   // so if the user passes
   // 'go french victories' then only the command 'google' should match
   // otherwise we might match other commands, 'french' or 'victories', (there are hundreds!)
-  STD_TSTRING wildAction = _T( "" );
-  std::vector<STD_TSTRING> wildActions;
-  for( std::vector<STD_TSTRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
+  MYODD_STRING wildAction = _T( "" );
+  std::vector<MYODD_STRING> wildActions;
+  for( std::vector<MYODD_STRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
   {
     wildActions.push_back( _T("(") + *it + _T("\\S*)") );
   }
@@ -447,7 +447,7 @@ void Actions::SetAction( Action* tmpAction )
 
 // -------------------------------------------------------------
 //  get the currently selected command
-const Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
+const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
 {
   //  do we have a posible action?
   if( m_tmpAction )
@@ -474,7 +474,7 @@ const Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
 
   // how many words are in the command?
   LPCTSTR lpAction = action->Command().c_str();
-  std::vector<STD_TSTRING> exploded;
+  std::vector<MYODD_STRING> exploded;
   int nSize = myodd::strings::explode( exploded, m_sActionAsTyped, _T(' ') );
 
   // we now need to see how many of those words are present in the select
@@ -484,9 +484,9 @@ const Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
   // but the user selected the command and typed 
   // 'goo home'
   // then we need to remove only 'goo' as the other character make part of the command line.
-  STD_TSTRING wildAction = _T( "" );
-  std::vector<STD_TSTRING> wildActions;
-  for( std::vector<STD_TSTRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
+  MYODD_STRING wildAction = _T( "" );
+  std::vector<MYODD_STRING> wildActions;
+  for( std::vector<MYODD_STRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
   {
     wildActions.push_back( _T("(") + *it + _T("\\S*)") );
     wildAction = myodd::strings::implode( wildActions, _T( "\\s+" ) );
@@ -511,7 +511,7 @@ const Action* Actions::GetCommand( STD_TSTRING* cmdLine /*= NULL*/ ) const
 void Actions::Init()
 {
   //  get the root directory
-  STD_TSTRING sPath = myodd::config::get( _T("paths\\commands") );
+  MYODD_STRING sPath = myodd::config::get( _T("paths\\commands") );
   if( myodd::files::ExpandEnvironment( sPath, sPath ) )
   {
     ParseDirectory( sPath.c_str(), _T("") );
@@ -554,7 +554,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   //  *.bat, *.exe, *.pl
   //  but I am not sure we really need to restrict anything
   // it is up to the user to ensure that they have 
-  STD_TSTRING sPath = STD_TSTRING(directory) + STD_TSTRING( _T("*.*") );
+  MYODD_STRING sPath = MYODD_STRING(directory) + MYODD_STRING( _T("*.*") );
 
   LPTSTR fullPath = NULL;
   if( !myodd::files::ExpandEnvironment( sPath.c_str(), fullPath ) )
@@ -586,7 +586,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
           continue;
         }
         
-        STD_TSTRING subPath( extentionPath );
+        MYODD_STRING subPath( extentionPath );
         subPath += fdata.name;
         myodd::files::AddTrailingBackSlash( subPath );
 
@@ -595,10 +595,10 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
       }
 
       //  ok add this command
-      STD_TSTRING szFullPath( directory);
+      MYODD_STRING szFullPath( directory);
       szFullPath += fdata.name;
 
-      STD_TSTRING szName( fdata.name);
+      MYODD_STRING szName( fdata.name);
       szName = myodd::strings::lower(szName );
       
       //  if we don't want to show the extension then strip it.

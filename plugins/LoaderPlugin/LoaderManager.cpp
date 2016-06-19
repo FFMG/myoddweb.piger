@@ -113,7 +113,7 @@ void LoaderManager::Main( amplugin* p  )
   }
   else
   {
-    STD_TSTRING s = _T("Error : Unknown action : ");
+    MYODD_STRING s = _T("Error : Unknown action : ");
     s += asAction;
     p->Say( s.c_str(), 100, 5 );
     return;

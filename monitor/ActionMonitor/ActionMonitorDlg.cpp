@@ -121,9 +121,9 @@ BOOL CActionMonitorDlg::OnInitDialog()
 
   myodd::files::Version _ver;
 #ifdef _DEBUG
-  STD_TSTRING strSay = myodd::strings::ToStringFmt(_T("Action Monitor [Debug]: %d.%d.%d.%d"),
+  MYODD_STRING strSay = myodd::strings::ToStringFmt(_T("Action Monitor [Debug]: %d.%d.%d.%d"),
 #else
-  STD_TSTRING strSay = myodd::strings::ToStringFmt(_T("Action Monitor : %d.%d.%d.%d"),
+  MYODD_STRING strSay = myodd::strings::ToStringFmt(_T("Action Monitor : %d.%d.%d.%d"),
 #endif
     _ver.GetFileVersionMajor(),
     _ver.GetFileVersionMinor(),
@@ -524,7 +524,7 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         //  we will use the first command 'google' with the arguments 'french victories'
         //
         //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
-        STD_TSTRING szCommandLine = _T( "" );
+        MYODD_STRING szCommandLine = _T( "" );
         const Action* action = App().PossibleActions().GetCommand(&szCommandLine);
         if (NULL != action)
         {
@@ -663,7 +663,7 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= NULL*/ )
   }
   //  get the current text as well as the possible commands.
   //  we pass what ever the user entered to whatever commands are saved.
-  STD_TSTRING sCommand = App().PossibleActions().toChar( );
+  MYODD_STRING sCommand = App().PossibleActions().toChar( );
   size_t len = sCommand.length();
 
   HDC localHdc = NULL;
@@ -881,7 +881,7 @@ LRESULT CActionMonitorDlg::OnVersion
 )
 {
   myodd::files::Version _ver;
-  STD_TSTRING strSay = myodd::strings::ToStringFmt( _T("<b>Version : </b>%d.%d.%d.%d"),
+  MYODD_STRING strSay = myodd::strings::ToStringFmt( _T("<b>Version : </b>%d.%d.%d.%d"),
     _ver.GetFileVersionMajor(),
     _ver.GetFileVersionMinor(),
     _ver.GetFileVersionMaintenance(),

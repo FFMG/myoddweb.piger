@@ -12,7 +12,7 @@ public:
   static ClipboardDropData* FromDROPFILES(DROPFILES* dropFiles, size_t maxMemory);
 
   // return all the files.
-  const std::vector<STD_TSTRING>& Files() const { return _files; }
+  const std::vector<MYODD_STRING>& Files() const { return _files; }
   int GetDropfilesSize() const;
   bool PopulateDropFiles(DROPFILES *df, const int maxSize ) const;
 
@@ -21,7 +21,7 @@ protected:
 
 protected:
   //
-  typedef std::vector<STD_TSTRING> DropFiles;
+  typedef std::vector<MYODD_STRING> DropFiles;
   DropFiles _files;
 
 private:

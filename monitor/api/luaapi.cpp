@@ -126,7 +126,7 @@ int LuaApi::GetCommand (lua_State *lua)
   }
 
   size_t idx = (size_t)lua_tointeger (lua, ARGUMENT_NUMBER);
-  STD_TSTRING sValue;
+  MYODD_STRING sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
     lua_pushboolean( lua, false );
@@ -162,7 +162,7 @@ int LuaApi::GetAction (lua_State *lua)
     return 1;
   }
 
-  STD_TSTRING sValue;
+  MYODD_STRING sValue;
   if( !__super::GetAction( sValue ) )
   {
     lua_pushboolean( lua, false );
@@ -228,7 +228,7 @@ int LuaApi::Getstring( lua_State *lua )
     bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetString( sValue, bQuote ) )
   {
     //  just return false.
@@ -253,7 +253,7 @@ int LuaApi::Getstring( lua_State *lua )
  */
 int LuaApi::GetVersion( lua_State *lua )
 {
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetVersion( sValue ) )
   {
     //  just return false.
@@ -299,7 +299,7 @@ int LuaApi::Getfile( lua_State *lua )
     bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetFile( idx, sValue, bQuote ) )
   {
     lua_pushboolean ( lua, false );
@@ -343,7 +343,7 @@ int LuaApi::Getfolder( lua_State *lua )
     bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetFolder( idx, sValue, bQuote ) )
   {
     //  just return false.
@@ -389,7 +389,7 @@ int LuaApi::Geturl( lua_State *lua )
     bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetURL( idx, sValue, bQuote) )
   {
     //  just return false.
@@ -483,7 +483,7 @@ int LuaApi::FindAction( lua_State *lua )
   UINT idx = (UINT)lua_tointeger (lua, 1);
   LPCSTR action = lua_tostring (lua, 2);
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::FindAction( idx, HelperApi::widen( action ).c_str(), sValue ) )
   {
     //  just return false.

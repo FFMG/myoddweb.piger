@@ -111,7 +111,7 @@ bool PythonVirtualMachine::Initialize()
   if (embedded)
   {
     // try and load the python core files.
-    STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
+    MYODD_STRING exe_dir = myodd::files::GetAppPath(true);
     std::wstring python_path;
     myodd::files::Join(python_path, exe_dir, L"python\\python35.zip");
     Py_SetPath(python_path.c_str());
@@ -121,7 +121,7 @@ bool PythonVirtualMachine::Initialize()
   Py_Initialize();
   if (embedded)
   {
-    STD_TSTRING exe_dir = myodd::files::GetAppPath(true);
+    MYODD_STRING exe_dir = myodd::files::GetAppPath(true);
     std::wstring python_path1;
     myodd::files::Join(python_path1, exe_dir, L"python\\");
 

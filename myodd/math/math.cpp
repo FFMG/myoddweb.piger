@@ -59,7 +59,7 @@ void Test()
   assert( ToBase10( _T("100"), 36 ) == 1296 );
 
   // the other way around.
-  STD_TSTRING ret = _T("");                         // base 36
+  MYODD_STRING ret = _T("");                         // base 36
   ToBase( ret, 10, 36 );
   assert( ret == _T("A") );
   ToBase( ret, 100, 36 );
@@ -466,11 +466,11 @@ int __fastcall ToBase10(const TCHAR* udata, BYTE fromBase)
 
 /**
  * Convert a base 10 number to a given BASE.
- * @param STD_TSTRING& the container to the return value.
+ * @param MYODD_STRING& the container to the return value.
  * @param unsigned int the base 10 number.
  * @return NULL|string the converted number.
  */
-LPCTSTR __fastcall ToBase( STD_TSTRING& ret, unsigned int base10number, BYTE base)
+LPCTSTR __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE base)
 {
   //  reset the return value.
   ret = _T("");
@@ -537,20 +537,20 @@ int random_range(int lowest_number, int highest_number)
 }
 
 /**
- * string conversions of STD_TSTRING
+ * string conversions of MYODD_STRING
  * @see _tstof
- * @param const STD_TSTRING& the number we want to convert.
+ * @param const MYODD_STRING& the number we want to convert.
  * @return double the double conversion of the string
  */
-double std_tstof(const STD_TSTRING& s)
+double std_tstof(const MYODD_STRING& s)
 {
   return _tstof( s.c_str() );
 }
 
 /**
- * string conversions of STD_TSTRING
+ * string conversions of MYODD_STRING
  * @see _tstol
- * @param const STD_TSTRING& the number we want to convert.
+ * @param const MYODD_STRING& the number we want to convert.
  * @return long the long conversion of the string
  */
 template<>
@@ -626,12 +626,12 @@ double Convert<const std::string&, double>(const std::string& src)
 }
 
 /**
- * string conversions of STD_TSTRING
+ * string conversions of MYODD_STRING
  * @see _tstoi
- * @param const STD_TSTRING& the number we want to convert.
+ * @param const MYODD_STRING& the number we want to convert.
  * @return int the int conversion of the string
  */
-int std_tstoi(const STD_TSTRING& s)
+int std_tstoi(const MYODD_STRING& s)
 {
   return _tstoi( s.c_str() );
 }

@@ -390,7 +390,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   _maxClipboardSize = 0;
 
   // the path
-  const STD_TSTRING path = _T("clipboard\\maxmemory");
+  const MYODD_STRING path = _T("clipboard\\maxmemory");
 
   //  does the value exist?
   if (!myodd::config::isset(path))
@@ -413,24 +413,24 @@ void CActionMonitorApp::InitMaxClipboardSize()
  */
 void CActionMonitorApp::InitReservedPaths()
 {
-  STD_TSTRING sPath = myodd::config::get( _T("paths\\commands") );
+  MYODD_STRING sPath = myodd::config::get( _T("paths\\commands") );
 
-  STD_TSTRING sPathIn;
+  MYODD_STRING sPathIn;
   myodd::files::Join( sPathIn, sPath, AM_DIRECTORY_IN );
   myodd::files::CreateFullDirectory( sPathIn, false );
   myodd::config::set( _T("paths\\in"), sPathIn );
 
-  STD_TSTRING sPathOut;
+  MYODD_STRING sPathOut;
   myodd::files::Join( sPathOut, sPath, AM_DIRECTORY_OUT );
   myodd::files::CreateFullDirectory( sPathOut, false );
   myodd::config::set( _T("paths\\out"), sPathOut );
 
-  STD_TSTRING sPathTmp;
+  MYODD_STRING sPathTmp;
   myodd::files::Join( sPathTmp, sPath, AM_DIRECTORY_TMP );
   myodd::files::CreateFullDirectory( sPathTmp, false );
   myodd::config::set( _T("paths\\tmp"), sPathTmp );
 
-  STD_TSTRING sPathPlugin;
+  MYODD_STRING sPathPlugin;
   myodd::files::Join( sPathPlugin, sPath, AM_DIRECTORY_PLUGIN );
   myodd::files::CreateFullDirectory( sPathPlugin, false );
   myodd::config::set( _T("paths\\plugin"), sPathPlugin );

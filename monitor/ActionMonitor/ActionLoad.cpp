@@ -27,11 +27,11 @@ ActionLoad::~ActionLoad()
 
 /**
  * Run the command, we take into account the current selection and command parameters given.
- * @param const STD_TSTRING& szCommandLine the command line argument.
+ * @param const MYODD_STRING& szCommandLine the command line argument.
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-ActiveAction* ActionLoad::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionLoad::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
   HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;

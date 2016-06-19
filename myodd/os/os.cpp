@@ -66,7 +66,7 @@ ARCHITECTURE GetImageArchitecture(IMAGE_DOS_HEADER *pDosHd)
   return architecture;
 }
 
-ARCHITECTURE GetImageArchitecture(const STD_TSTRING& modulePath)
+ARCHITECTURE GetImageArchitecture(const MYODD_STRING& modulePath)
 {
   return GetImageArchitecture(modulePath.c_str());
 }

@@ -24,9 +24,9 @@ public:
   bool Add( Action* action );
   bool Add( LPCTSTR szText, LPCTSTR szPath );
   bool Remove( LPCTSTR szText, LPCTSTR szPath );
-  bool Find( UINT idx, LPCTSTR szText, STD_TSTRING& stdPath );
+  bool Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath );
 
-  STD_TSTRING toChar( ) const;
+  MYODD_STRING toChar( ) const;
 
 protected:
   DISALLOW_COPY_AND_ASSIGN(Actions);
@@ -35,7 +35,7 @@ protected:
 
   struct COMMANDS_VALUE
   {
-    STD_TSTRING color;
+    MYODD_STRING color;
     bool bBold;
     bool bItalic;
     COMMANDS_VALUE() :
@@ -43,7 +43,7 @@ protected:
       bItalic(0)
     {
     }
-    COMMANDS_VALUE( STD_TSTRING c, bool b, bool i ) :
+    COMMANDS_VALUE( MYODD_STRING c, bool b, bool i ) :
       bBold( b), bItalic( i ), color( c ) 
     {
     }
@@ -51,7 +51,7 @@ protected:
     DISALLOW_COPY_AND_ASSIGN(COMMANDS_VALUE);
   };
 
-  static STD_TSTRING toChar( const STD_TSTRING& s, const COMMANDS_VALUE& cv );
+  static MYODD_STRING toChar( const MYODD_STRING& s, const COMMANDS_VALUE& cv );
   void GetCommandValue( LPCTSTR lpName, COMMANDS_VALUE& cv ) const;
 
 protected:
@@ -61,7 +61,7 @@ protected:
   array_of_actions m_Actions;
   array_of_actions m_ActionsMatch;
 
-  array_of_actions::const_iterator Find( const STD_TSTRING& szText, const STD_TSTRING& szPath );
+  array_of_actions::const_iterator Find( const MYODD_STRING& szText, const MYODD_STRING& szPath );
 public:
   //  select one item down in the list
   void down();
@@ -83,7 +83,7 @@ protected:
   size_t m_uCommand;
 
 public:
-  const Action* GetCommand( STD_TSTRING* cmdLine = NULL ) const;
+  const Action* GetCommand( MYODD_STRING* cmdLine = NULL ) const;
   void SetAction( Action* tmpAction );
 
 protected:
@@ -95,9 +95,9 @@ public:
    * This is the action that the user typed in.
    * So if the action is "Google" but the user typed if "Goo" then we will only return "Goo"
    *
-   * @return const STD_TSTRING& the current action.
+   * @return const MYODD_STRING& the current action.
    */
-  inline const STD_TSTRING& getActionAsTyped() const
+  inline const MYODD_STRING& getActionAsTyped() const
   { 
     return m_sActionAsTyped;
   }
@@ -109,11 +109,11 @@ public:
   void ClearAll();
 protected:
   // this is the text that the user is currently typing
-  STD_TSTRING m_sActionAsTyped;
+  MYODD_STRING m_sActionAsTyped;
 
 protected:
   size_t BuildMatchList( );
-  size_t BuildMatchList( std::vector<STD_TSTRING>& exploded );
+  size_t BuildMatchList( std::vector<MYODD_STRING>& exploded );
 
 protected:
   virtual bool IsReservedDir( LPCTSTR ) const;

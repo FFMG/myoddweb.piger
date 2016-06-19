@@ -15,7 +15,7 @@
 class ActiveAction : public Action
 {
 public:
-  ActiveAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged);
+  ActiveAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
 	virtual ~ActiveAction();
 
   // ----------------------------
@@ -30,9 +30,9 @@ public:
    * this is the command line arguments as given by the user.
    * So if the action is ""learn" and the user typed "Lea aaaa bbbb"
    * the command line is aaaa bbbb and the command is "learn"
-   * @return const STD_TSTRING& the command line.
+   * @return const MYODD_STRING& the command line.
    */
-  const STD_TSTRING& CommandLine() const {
+  const MYODD_STRING& CommandLine() const {
     return _szCommandLine;
   }
 
@@ -64,7 +64,7 @@ private:
 private:
   // the current clipboard.
   Clipboard* _clipboard;
-  STD_TSTRING _szCommandLine;
+  MYODD_STRING _szCommandLine;
   bool _isPrivileged;
   HWND _hTopHWnd;
 

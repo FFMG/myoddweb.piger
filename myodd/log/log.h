@@ -24,7 +24,7 @@ namespace myodd{ namespace log{
   bool AddNotif( const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast = 100 );
   bool RemoveNotif( const LogEventCallback& fnNotif, LPARAM lParam );
 
-  const STD_TSTRING& GetCurrentLogFile();
+  const MYODD_STRING& GetCurrentLogFile();
 
   //  initialise the various events.
   bool Initialise(const std::wstring& wPath, const std::wstring& wPrefix, const std::wstring& wExtention, size_t maxFileSize);

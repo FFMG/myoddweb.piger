@@ -18,6 +18,6 @@ protected:
   virtual bool IsReservedDir( LPCTSTR )const{ return false;}
 
 protected:
-  STD_TSTRING m_subDir;
+  MYODD_STRING m_subDir;
   void DoThem();
 };

@@ -22,10 +22,10 @@ ConfigBase* m_staticContainer = NULL;
  * Read/load the definition file.
  * Set all the values.
  *
- * @param const STD_TSTRING& the path of the configuration file.
+ * @param const MYODD_STRING& the path of the configuration file.
  * @return bool success or not.
  */
-bool init( const STD_TSTRING& sz )
+bool init( const MYODD_STRING& sz )
 {
   free();
 
@@ -35,7 +35,7 @@ bool init( const STD_TSTRING& sz )
     return false;
   }
 
-  STD_TSTRING lpDest;
+  MYODD_STRING lpDest;
   if( !myodd::files::ExpandEnvironment( sz, lpDest ))
   {
     return false;
@@ -74,11 +74,11 @@ bool HasBeenInitialized()
 /**
  * Set a value for a configuration item.
  *
- * @param const STD_TSTRING& s the name of the config item we are changing
+ * @param const MYODD_STRING& s the name of the config item we are changing
  * @param Data& the new value
  * @return bool true|false if the item was added/value changed
  */
-bool set ( const STD_TSTRING& stdVarName, const Data &d )
+bool set ( const MYODD_STRING& stdVarName, const Data &d )
 {
   // remember that we are throwing if something is wrong!
   IS_VALID_CONTAINER
@@ -87,11 +87,11 @@ bool set ( const STD_TSTRING& stdVarName, const Data &d )
 
 /**
  * Set one of more values at the same time and notify a common name, (probably part of)
- * @param const STD_TSTRING& the name that we send to notify this global update.
+ * @param const MYODD_STRING& the name that we send to notify this global update.
  * @param const DATA_CONTAINER& the name/data that we are updating.
  * @return bool if any data was changed at all.
  */
-bool set ( const STD_TSTRING& stdNotifyName, const DATA_CONTAINER& data )
+bool set ( const MYODD_STRING& stdNotifyName, const DATA_CONTAINER& data )
 {
   // remember that we are throwing if something is wrong!
   IS_VALID_CONTAINER
@@ -104,11 +104,11 @@ bool set ( const STD_TSTRING& stdNotifyName, const DATA_CONTAINER& data )
 /**
  * Set a value for a configuration item.
  *
- * @param const STD_TSTRING& s the name of the config item we are changing
+ * @param const MYODD_STRING& s the name of the config item we are changing
  * @param Data& the new value
  * @return bool true|false if the item was added/value changed
  */
-bool setTemp ( const STD_TSTRING& stdVarName, const Data &d )
+bool setTemp ( const MYODD_STRING& stdVarName, const Data &d )
 {
   IS_VALID_CONTAINER
   return m_staticContainer->Add( stdVarName, d, true );
@@ -119,15 +119,15 @@ bool setTemp ( const STD_TSTRING& stdVarName, const Data &d )
  * When the variable changes then we will call that particular function.
  * @see CONFIG_NOTIFY
  *
- * @param const STD_TSTRING& s the name of the object been monitored.
+ * @param const MYODD_STRING& s the name of the object been monitored.
  * @param CONFIG_NOTIFY the config notifier, (function definition)
  * @param LPARAM a single parameter that will be passed to the function.
  * @return none
  */
-void AddConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, LPARAM lParam )
+void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam )
 {
   IS_VALID_CONTAINER
-  std::vector<STD_TSTRING> v_s;
+  std::vector<MYODD_STRING> v_s;
   size_t l = myodd::strings::explode( v_s, s, _T('\\') );
   
   if( v_s[l-1] == _T( "*" ) )
@@ -142,10 +142,10 @@ void AddConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, LPARAM 
   }
 }
 
-void RemoveConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, LPARAM lParam )
+void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam )
 {
   IS_VALID_CONTAINER
-  std::vector<STD_TSTRING> v_s;
+  std::vector<MYODD_STRING> v_s;
   size_t l = myodd::strings::explode( v_s, s, _T('\\') );
   if( v_s[l-1] == _T( "*" ) )
   {
@@ -161,10 +161,10 @@ void RemoveConfigurationMonitor( const STD_TSTRING& s, CONFIG_NOTIFY notif, LPAR
 
 /**
  * return true if a config item exists.
- * @param const STD_TSTRING& the name of the object we are checking.
+ * @param const MYODD_STRING& the name of the object we are checking.
  * @return none
  */
-bool isset( const STD_TSTRING& stdVarName )
+bool isset( const MYODD_STRING& stdVarName )
 {
   IS_VALID_CONTAINER
   return m_staticContainer->Isset( stdVarName );
@@ -172,10 +172,10 @@ bool isset( const STD_TSTRING& stdVarName )
 
 /**
  * Unset a config object from the list of items.
- * @param const STD_TSTRING& the name of the object been unset.
+ * @param const MYODD_STRING& the name of the object been unset.
  * @return none
  */
-void unset( const STD_TSTRING& stdVarName )
+void unset( const MYODD_STRING& stdVarName )
 {
   IS_VALID_CONTAINER
   m_staticContainer->Unset( stdVarName );
@@ -185,11 +185,11 @@ void unset( const STD_TSTRING& stdVarName )
  * Get the current value of a config object.
  * The calling function will get the right data for that object.
  *
- * @param const STD_TSTRING& s the name of the config item we are getting
+ * @param const MYODD_STRING& s the name of the config item we are getting
  * @param Data& the default value should the value not be found.
  * @return const Data& default value|actual value.
  */
-const Data& getTemp( const STD_TSTRING& stdVarName,  const Data& defaultValue )
+const Data& getTemp( const MYODD_STRING& stdVarName,  const Data& defaultValue )
 {
   IS_VALID_CONTAINER
   return m_staticContainer->Get( stdVarName, defaultValue, true );
@@ -199,11 +199,11 @@ const Data& getTemp( const STD_TSTRING& stdVarName,  const Data& defaultValue )
  * Get the current value of a config object.
  * The calling function will get the right data for that object.
  *
- * @param const STD_TSTRING& s the name of the config item we are getting
+ * @param const MYODD_STRING& s the name of the config item we are getting
  * @param Data& the default value should the value not be found.
  * @return const Data& default value|actual value.
  */
-const Data& get( const STD_TSTRING& stdVarName,  const Data& defaultValue )
+const Data& get( const MYODD_STRING& stdVarName,  const Data& defaultValue )
 {
   IS_VALID_CONTAINER
   return m_staticContainer->Get( stdVarName, defaultValue );

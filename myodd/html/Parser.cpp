@@ -165,8 +165,8 @@ void Parser::Add( LPCTSTR begin, LPCTSTR end, bool isHtmlTag )
     myodd::strings::ireplace_inplace( hd->text, _T("&lt;"), _T("<") );
     myodd::strings::ireplace_inplace( hd->text, _T("&gt;"), _T(">") );
     myodd::strings::ireplace_inplace( hd->text, _T("&amp;"), _T("&") );
-    myodd::strings::ireplace_inplace( hd->text, _T("&deg;"),  STD_TSTRING(1,TCHAR(176)));    //  degree
-    myodd::strings::ireplace_inplace( hd->text, _T("&plusmn;"),  STD_TSTRING(1,TCHAR(177))); //  Plus/minus symbol
+    myodd::strings::ireplace_inplace( hd->text, _T("&deg;"),  MYODD_STRING(1,TCHAR(176)));    //  degree
+    myodd::strings::ireplace_inplace( hd->text, _T("&plusmn;"),  MYODD_STRING(1,TCHAR(177))); //  Plus/minus symbol
   }
 
   // add this to the list.

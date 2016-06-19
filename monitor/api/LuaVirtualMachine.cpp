@@ -114,11 +114,11 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
 
 /**
  * Todo
- * @param const STD_TSTRING& szFile the file/script we would like to load.
+ * @param const MYODD_STRING& szFile the file/script we would like to load.
  * @param LuaApi api the created api we will be using.
  * @return int result of the operation.
  */
-int LuaVirtualMachine::ExecuteInThread(const STD_TSTRING& szFile, LuaApi* api)
+int LuaVirtualMachine::ExecuteInThread(const MYODD_STRING& szFile, LuaApi* api)
 {
   lua_State* lua = CreateState(api);
   if( NULL == lua )
@@ -131,7 +131,7 @@ int LuaVirtualMachine::ExecuteInThread(const STD_TSTRING& szFile, LuaApi* api)
   int resultOfCall = luaL_loadfile( lua , T_T2A(szFile.c_str() ) );
   if(resultOfCall != 0 )
   {
-    STD_TSTRING sErr = T_A2T( lua_tostring( lua, -1) );
+    MYODD_STRING sErr = T_A2T( lua_tostring( lua, -1) );
     myodd::log::LogError( _T("LUA Err: %s"), sErr.c_str() );
   }
   else

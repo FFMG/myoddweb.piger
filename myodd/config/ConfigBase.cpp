@@ -19,7 +19,7 @@ namespace myodd{ namespace config{
  * @param LPCTSTR the path of the config file.
  * @return none.
  */
-ConfigBase::ConfigBase( const STD_TSTRING& szPath ) : 
+ConfigBase::ConfigBase( const MYODD_STRING& szPath ) : 
   _doc( NULL ),
   m_bIsDirty( false )
 {
@@ -62,34 +62,34 @@ void ConfigBase::CloseDoc()
 /**
  * In that node look for a 'type' attribute, if it exists then we will look for a value.
  * @param tinyxml2::XMLElement& the current node
- * @param std::vector<STD_TSTRING>& the current list of parent names.
+ * @param std::vector<MYODD_STRING>& the current list of parent names.
  * @return none.
  */
 void ConfigBase::_addLoadElement
 ( 
   const tinyxml2::XMLElement& root,
-  std::vector<STD_TSTRING>& parents 
+  std::vector<MYODD_STRING>& parents 
 )
 {
   //  get the type
-  static const STD_TSTRING sep = _T("\\");
+  static const MYODD_STRING sep = _T("\\");
   const tinyxml2::XMLAttribute* attributeType = root.FindAttribute("type");
   if( attributeType != NULL )
   {
     // get the value
 #ifdef UNICODE
-    STD_TSTRING stdType = myodd::strings::String2WString( attributeType->Value() );
-    STD_TSTRING stdRoot = myodd::strings::String2WString( root.Value() );
-    STD_TSTRING stdText = myodd::strings::String2WString(root.GetText());
+    MYODD_STRING stdType = myodd::strings::String2WString( attributeType->Value() );
+    MYODD_STRING stdRoot = myodd::strings::String2WString( root.Value() );
+    MYODD_STRING stdText = myodd::strings::String2WString(root.GetText());
 #else
-    STD_TSTRING stdType = attributeType->Value;
-    STD_TSTRING stdRoot = root.Value();
-    STD_TSTRING stdText = root.GetText();
+    MYODD_STRING stdType = attributeType->Value;
+    MYODD_STRING stdRoot = root.Value();
+    MYODD_STRING stdText = root.GetText();
 #endif // UNICODE    
     
 
     //  create the name of the object that we will be adding.
-    STD_TSTRING stdName = myodd::strings::implode( parents, sep );
+    MYODD_STRING stdName = myodd::strings::implode( parents, sep );
 
     // and get the type of the object
     long ltype = _tstol( stdType.c_str() );
@@ -141,13 +141,13 @@ void ConfigBase::_addLoadElement
  * <Config>
  *
  * @param tinyxml2::XMLElement& the current node we are traversing.
- * @param std::vector<STD_TSTRING>& the current names of the parents, (so we can rebuild them in a single string).
+ * @param std::vector<MYODD_STRING>& the current names of the parents, (so we can rebuild them in a single string).
  * @return none.
  */
 void ConfigBase::_addLoadElements
 ( 
   const tinyxml2::XMLElement& root,
-  std::vector<STD_TSTRING>& parents 
+  std::vector<MYODD_STRING>& parents 
 )
 {
   // Look for all the child nodes, they can all be valid item.
@@ -202,7 +202,7 @@ bool ConfigBase::LoadValuesFromFile()
   // starting from the beginning we look for sub nodes
   // once there are no more nodes we will add the value.
   // @see _addLoadElements( ... )
-  std::vector<STD_TSTRING> parents;
+  std::vector<MYODD_STRING> parents;
   _addLoadElements( *pElemConfig, parents ); 
 
   // loading the values will, by default set the values to dirty
@@ -221,13 +221,13 @@ bool ConfigBase::LoadValuesFromFile()
  * So if the user creates a node "something/else" we will create the nodes "something->else"
  *
  * @param tinyxml2::XMLElement& the current node we are adding elements to.
- * @param const std::vector<STD_TSTRING>& the array of elements we are traversing.
+ * @param const std::vector<MYODD_STRING>& the array of elements we are traversing.
  * @return tinyxml2::XMLElement* the last element that we will be adding data to.
  */
 tinyxml2::XMLElement* ConfigBase::_getSaveElement
 ( 
   tinyxml2::XMLElement& root,
-  const std::vector<STD_TSTRING>& parents 
+  const std::vector<MYODD_STRING>& parents 
 )
 {
   //  sanity check
@@ -264,8 +264,8 @@ tinyxml2::XMLElement* ConfigBase::_getSaveElement
 
   // this was not the last item, so we need to remove the string from the list
   // and continue going down the list.
-  std::vector<STD_TSTRING> tmpParents;
-  for( std::vector<STD_TSTRING>::const_iterator it = parents.begin()+1; it != parents.end(); it++ )
+  std::vector<MYODD_STRING> tmpParents;
+  for( std::vector<MYODD_STRING>::const_iterator it = parents.begin()+1; it != parents.end(); it++ )
   {
     tmpParents.push_back( *it );
   }
@@ -327,7 +327,7 @@ void ConfigBase::Save()
       continue;
     }
 
-    std::vector<STD_TSTRING> parents;
+    std::vector<MYODD_STRING> parents;
     myodd::strings::explode( parents, c->GetObjectName(), sep );
     tinyxml2::XMLElement* pValue = _getSaveElement( *pElemConfig, parents );
     
@@ -397,7 +397,7 @@ void ConfigBase::erase()
  * @param string the variable we are looking for.
  * @return boolean true if the value does exists or false if it does not.
  */
-bool ConfigBase::Isset( const STD_TSTRING& stdVarName ) const
+bool ConfigBase::Isset( const MYODD_STRING& stdVarName ) const
 {
   //
   // we must prevent other threads from deleting anything while we are looking for it.
@@ -416,10 +416,10 @@ bool ConfigBase::Isset( const STD_TSTRING& stdVarName ) const
 
 /**
  * Unset a variable if it exists.
- * @param const STD_TSTRING& the name of the variable we are un-setting.
+ * @param const MYODD_STRING& the name of the variable we are un-setting.
  * @return bool if the item was removed or not.
  */
-bool ConfigBase::Unset( const STD_TSTRING& stdVarName )
+bool ConfigBase::Unset( const MYODD_STRING& stdVarName )
 {
   ConfigObject* object = NULL;
   if( !Find( stdVarName, object ))
@@ -443,11 +443,11 @@ bool ConfigBase::Unset( const STD_TSTRING& stdVarName )
 
 /**
  * Find of an object
- * @param const STD_TSTRING& the name of the variable we are looking for.
+ * @param const MYODD_STRING& the name of the variable we are looking for.
  * @param Object*& container that will contain the return value, (if found).
  * @return bool if the value was found or not.
  */
-bool ConfigBase::Find( const STD_TSTRING &szVarName, ConfigObject*& obj ) const
+bool ConfigBase::Find( const MYODD_STRING &szVarName, ConfigObject*& obj ) const
 {
   obj = NULL;
   MAP_CONFIGOBJECTS_CONST_IT it = m_pData.find( szVarName );
@@ -461,13 +461,13 @@ bool ConfigBase::Find( const STD_TSTRING &szVarName, ConfigObject*& obj ) const
 
 /**
  * Add a variable/value to the array of object
- * @param const STD_TSTRING& the name of the variable we are watching.
+ * @param const MYODD_STRING& the name of the variable we are watching.
  * @param const Data& the data we are adding.
  * @return bool true|false if the item was added/value changed
  */
 bool ConfigBase::Add
 ( 
-  const STD_TSTRING& stdVarName, 
+  const MYODD_STRING& stdVarName, 
   const Data &d,
   bool isTemp /*= false*/
 )
@@ -547,11 +547,11 @@ bool ConfigBase::Add
 
 /**
  * Set one of more values at the same time and notify a common name, (probably part of)
- * @param const STD_TSTRING& the name that we send to notify this global update.
+ * @param const MYODD_STRING& the name that we send to notify this global update.
  * @param const DATA_CONTAINER& the name/data that we are updating.
  * @return bool if any data was changed at all.
  */
-bool ConfigBase::Add( const STD_TSTRING& stdNotifyName, const DATA_CONTAINER& data )
+bool ConfigBase::Add( const MYODD_STRING& stdNotifyName, const DATA_CONTAINER& data )
 {
   bool bNotif = false;
   m_pDataNotify.BlockNotifications();
@@ -581,14 +581,14 @@ bool ConfigBase::Add( const STD_TSTRING& stdNotifyName, const DATA_CONTAINER& da
 
 /**
 * Remove a function that was called when parts of a variable name is changed.
-* @param const STD_TSTRING& the name of the variable we were watching.
+* @param const MYODD_STRING& the name of the variable we were watching.
 * @param CONFIG_NOTIFY the function that was called when the function changed.
 * @param LPARAM the param that was passed when the function is called.
 * @return none
 */
 void ConfigBase::RemovePartMonitor
 ( 
-  const STD_TSTRING& stdVarName, 
+  const MYODD_STRING& stdVarName, 
   CONFIG_NOTIFY notif, 
   LPARAM lParam 
 )
@@ -614,16 +614,16 @@ void ConfigBase::RemovePartMonitor
 
 /**
  * Add a function that will be called when parts of a variable name is changed.
- * @param const STD_TSTRING& the name of the variable we are watching.
+ * @param const MYODD_STRING& the name of the variable we are watching.
  * @param CONFIG_NOTIFY the function that will be called when the function changes.
  * @param LPARAM the param that will be passed when the function is called.
  * @return none
  */
-void ConfigBase::AddPartMonitor( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
+void ConfigBase::AddPartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
 {
   CONFIG_NOTIFY_PARTS* part = new CONFIG_NOTIFY_PARTS;
 
-  std::vector<STD_TSTRING> v_s;
+  std::vector<MYODD_STRING> v_s;
   size_t l = myodd::strings::explode( v_s, stdVarName, _T( '\\') );
   
   part->stParts     = l;
@@ -657,10 +657,10 @@ void ConfigBase::DeleteNotifyParts( )
 /**
  * Notify all the items that are watching parts.
  * @param Data::config_type the data type been notified.
- * @param const STD_TSTRING& the var name that we are notifying.
+ * @param const MYODD_STRING& the var name that we are notifying.
  * @return 
  */
-void ConfigBase::NotifyParts( Data::config_type type, const STD_TSTRING& stdVarName )
+void ConfigBase::NotifyParts( Data::config_type type, const MYODD_STRING& stdVarName )
 {
   if( 0 == m_pDataNotify.GetNumberOfNotifs() )
   {
@@ -668,7 +668,7 @@ void ConfigBase::NotifyParts( Data::config_type type, const STD_TSTRING& stdVarN
     return;
   }
 
-  std::vector<STD_TSTRING> v_s;
+  std::vector<MYODD_STRING> v_s;
   size_t l = myodd::strings::explode( v_s, stdVarName, _T('\\') );
   
   LPARAM lParam;
@@ -686,7 +686,7 @@ void ConfigBase::NotifyParts( Data::config_type type, const STD_TSTRING& stdVarN
 
     // how many parts are we looking for?
     // join it together.
-    STD_TSTRING s = myodd::strings::implode( v_s, _T("\\"), 0, part->stParts-1 );
+    MYODD_STRING s = myodd::strings::implode( v_s, _T("\\"), 0, part->stParts-1 );
     s += _T("\\*");
 
     if( s != part->stdVarName )
@@ -700,12 +700,12 @@ void ConfigBase::NotifyParts( Data::config_type type, const STD_TSTRING& stdVarN
 
 /**
  * Add a function that will be called when a variable name is changed.
- * @param const STD_TSTRING& the name of the variable we are watching.
+ * @param const MYODD_STRING& the name of the variable we are watching.
  * @param CONFIG_NOTIFY the function that will be called when the function changes.
  * @param LPARAM the param that will be passed when the function is called.
  * @return bool success or not.
  */
-bool ConfigBase::AddMonitor ( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
+bool ConfigBase::AddMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
 {
   //  look for that item
   ConfigObject* object = NULL;
@@ -728,7 +728,7 @@ bool ConfigBase::AddMonitor ( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif
 
 const Data& ConfigBase::Get
 ( 
-  const STD_TSTRING& stdVarName, 
+  const MYODD_STRING& stdVarName, 
   const Data& default,
   bool isTemp /*= false*/
 )
@@ -792,12 +792,12 @@ const Data& ConfigBase::Get
 
 /**
  * Remove a function that will be called when a variable name is changed.
- * @param const STD_TSTRING& the name of the variable we are no longer watching.
+ * @param const MYODD_STRING& the name of the variable we are no longer watching.
  * @param CONFIG_NOTIFY the function that was called when the function changed.
  * @param LPARAM the param that was passed when the function was called.
  * @return bool success or not.
  */
-bool ConfigBase::RemoveMonitor( const STD_TSTRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
+bool ConfigBase::RemoveMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
 {
   ConfigObject* object = NULL;
   if( Find( stdVarName, object ) )

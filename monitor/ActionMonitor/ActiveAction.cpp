@@ -12,12 +12,12 @@
  * The contructor
  * @param const Action& src the action that is now active.
  * @param HWND hTopHWnd the window that was on top at the time the command was given.
- * @param const STD_TSTRING& szCommandLine the given command line that is, the words after the command itself
+ * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
  * @param bool isPrivileged if this action is privileged or not.
  */
 ActiveAction::ActiveAction(const Action& src, 
                            HWND hTopHWnd,
-                           const STD_TSTRING& szCommandLine, 
+                           const MYODD_STRING& szCommandLine, 
                            bool isPrivileged) : 
   Action( src ), 
   _clipboard(NULL),
@@ -170,8 +170,8 @@ void ActiveAction::UpdateEnvironmentVariables()
 void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
 {
   // values we will be using
-  STD_TSTRING keyConfig;
-  STD_TSTRING keyName;
+  MYODD_STRING keyConfig;
+  MYODD_STRING keyName;
   bool expandValue = false;
   
   // set the values depending on the type.
@@ -206,14 +206,14 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
     return;
   }
 
-  STD_TSTRING configName = _T("os\\setenvironment\\") + keyConfig;
+  MYODD_STRING configName = _T("os\\setenvironment\\") + keyConfig;
   if (myodd::config::get(configName, 1) != 1)
   {
     return;
   }
 
   // get the value
-  STD_TSTRING sValue;
+  MYODD_STRING sValue;
   if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), keyName.c_str(), sValue, HKEY_LOCAL_MACHINE))
   {
     return;

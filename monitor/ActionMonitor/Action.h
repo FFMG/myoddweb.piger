@@ -26,14 +26,14 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const;
+  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const;
 
   // Same as CreateActiveAction( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  ActiveAction* CreateActiveActionDirect(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged ) const;
 
   //  convert to a LPCTSTR
-  const STD_TSTRING& Command() const;
+  const MYODD_STRING& Command() const;
   
   // the lenght of the command.
   size_t Len() const { return _szCommand.length();}
@@ -42,21 +42,21 @@ protected:
   ActiveAction* CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const;
 
 protected:
-  STD_TSTRING toSingleLine( LPCTSTR  ) const;
+  MYODD_STRING toSingleLine( LPCTSTR  ) const;
 
 public:
   // ----------------------------
   //  this is the full file name + extentions
-  const STD_TSTRING& File() const { return m_szFile; }
-  const STD_TSTRING& Extension() const { return m_szExt; }
+  const MYODD_STRING& File() const { return m_szFile; }
+  const MYODD_STRING& Extension() const { return m_szExt; }
 
 public:
-  static bool Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged );
+  static bool Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged );
 
 private:  
-  STD_TSTRING _szCommand;  //  the command line only.
-  STD_TSTRING m_szFile;     //  the full path+extention
-  STD_TSTRING m_szExt;      //  the extention
+  MYODD_STRING _szCommand;  //  the command line only.
+  MYODD_STRING m_szFile;     //  the full path+extention
+  MYODD_STRING m_szExt;      //  the extention
 };
 
 #endif // __Action_h__

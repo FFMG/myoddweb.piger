@@ -30,7 +30,7 @@ ActionBye::~ActionBye()
  * @param HWND hTopWindow the last foreground window
  * @return BOOL true.
  */
-ActiveAction* ActionBye::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionBye::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
   HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;

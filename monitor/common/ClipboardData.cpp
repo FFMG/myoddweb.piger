@@ -129,7 +129,7 @@ void ClipboardData::NullAll()
 ClipboardData* ClipboardData::FromClipboardHDrop(HGLOBAL hData, size_t maxMemory)
 {
   //  https://msdn.microsoft.com/en-us/library/windows/desktop/bb776408%28v=vs.85%29.aspx
-  std::vector<STD_TSTRING> res;
+  std::vector<MYODD_STRING> res;
 
   // get the files.
   DROPFILES* dfs = (DROPFILES*)GlobalLock(hData);

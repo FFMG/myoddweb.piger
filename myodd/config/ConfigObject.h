@@ -20,8 +20,8 @@ public:
    */
   ConfigObject();
   ConfigObject( const ConfigObject &c);
-  ConfigObject( const STD_TSTRING& stdVarName );
-  ConfigObject( const STD_TSTRING& stdVarName, const Data& cod );
+  ConfigObject( const MYODD_STRING& stdVarName );
+  ConfigObject( const MYODD_STRING& stdVarName, const Data& cod );
   virtual ~ConfigObject();
 
 protected:
@@ -42,9 +42,9 @@ public:
 
   /** 
    * Get the current data Name
-   * @return const STD_TSTRING& the name of this object.
+   * @return const MYODD_STRING& the name of this object.
    */
-  const STD_TSTRING& GetObjectName() const 
+  const MYODD_STRING& GetObjectName() const 
   {
     return m_unicodeName;
   }
@@ -53,7 +53,7 @@ public:
   bool SetIsSet( bool is );
 
   // set the name of the object.
-  void SetObjectName  (const STD_TSTRING& n);
+  void SetObjectName  (const MYODD_STRING& n);
 
 public:
   Data& data()              { return m_codData; }
@@ -70,7 +70,7 @@ protected:
 
   //
   // the name of the variable.
-  STD_TSTRING m_unicodeName;
+  MYODD_STRING m_unicodeName;
 
 public:
   bool AddMonitor( const CONFIG_NOTIFY& notif, LPARAM lParam );
@@ -82,7 +82,7 @@ public:
 };//
 
 //  ---------------------------------------------------------------------------------------------------
-typedef std::map<STD_TSTRING, ConfigObject* > MAP_CONFIGOBJECTS;
+typedef std::map<MYODD_STRING, ConfigObject* > MAP_CONFIGOBJECTS;
 typedef MAP_CONFIGOBJECTS::const_iterator MAP_CONFIGOBJECTS_CONST_IT;
 
 } //  config

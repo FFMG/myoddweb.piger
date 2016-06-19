@@ -16,7 +16,7 @@ namespace myodd{ namespace wnd{
   typedef std::map< HWND, bool> MYODD_WINDOWS_STATE;
 
   // -- Strings
-  STD_TSTRING GetText( HWND hwndParent, WORD id, bool bTrim = true ); 
+  MYODD_STRING GetText( HWND hwndParent, WORD id, bool bTrim = true ); 
 
   // -- numbers.
   int GetInt      ( HWND hwndParent, WORD id, int iDefault=0 ); 
@@ -33,7 +33,7 @@ namespace myodd{ namespace wnd{
 
   bool SetFocus( HWND hwndParent, WORD id );
 
-  bool SetText( HWND hwndParent, WORD id, const STD_TSTRING& s );
+  bool SetText( HWND hwndParent, WORD id, const MYODD_STRING& s );
   bool SetText( HWND hwndParent, WORD id, const TCHAR* lp );
   bool SetText( HWND hwndParent, WORD id, int i );
   bool SetText( HWND hwndParent, WORD id, double d, const TCHAR* pszFormat );

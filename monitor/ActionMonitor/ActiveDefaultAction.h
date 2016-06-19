@@ -5,7 +5,7 @@ class ActiveDefaultAction :
   public ActiveAction
 {
 public:
-  ActiveDefaultAction(const Action& src, HWND hTopHWnd, const STD_TSTRING& szCommandLine, bool isPrivileged);
+  ActiveDefaultAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
   virtual ~ActiveDefaultAction();
 
 protected:

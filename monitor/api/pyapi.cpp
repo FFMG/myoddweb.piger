@@ -102,7 +102,7 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args)
     return Fail();
   }
 
-  STD_TSTRING sValue;
+  MYODD_STRING sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
     //  just return false.
@@ -123,7 +123,7 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args)
  */
 PyObject* PyApi::GetAction(PyObject *self, PyObject *args)
 {
-  STD_TSTRING sValue;
+  MYODD_STRING sValue;
   if( !__super::GetAction( sValue ) )
   {
     //  just return false.
@@ -198,7 +198,7 @@ PyObject* PyApi::Getstring(PyObject *self, PyObject *args)
     return Fail();
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetString( sValue, iQuote == 1) )
   {
     // we have nothing
@@ -227,7 +227,7 @@ PyObject* PyApi::Getfile(PyObject *self, PyObject *args)
     return Fail();
   }
   
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetFile( idx, sValue, (iQuote == 1) ) )
   {
     // return false, nothing was found.
@@ -256,7 +256,7 @@ PyObject* PyApi::Getfolder(PyObject *self, PyObject *args)
     return Fail();
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetFolder( idx, sValue, (iQuote == 1) ) )
   {
     // return false, nothing was found.
@@ -285,7 +285,7 @@ PyObject* PyApi::Geturl(PyObject *self, PyObject *args)
     return Fail();
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetURL( idx, sValue, (iQuote == 1)) )
   {
     // return false, nothing was found.
@@ -352,7 +352,7 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
  */
 PyObject* PyApi::GetVersion(PyObject *self, PyObject *args)
 {
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::GetVersion( sValue ) )
   {
     // we have nothing
@@ -381,7 +381,7 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args)
     return Fail();
   }
 
-  STD_TSTRING sValue = _T("");
+  MYODD_STRING sValue = _T("");
   if( !__super::FindAction( idx, HelperApi::widen( szText ).c_str(), sValue ) )
   {
     // we have nothing

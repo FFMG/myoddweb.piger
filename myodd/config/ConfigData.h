@@ -324,13 +324,13 @@ protected:
     return m_dContainer.sContent;
   }
   /**
-   * STD_TSTRING version of _get(...)
+   * MYODD_STRING version of _get(...)
    * @see _get( ValueType& val )
-   * @param STD_TSTRING the value we are getting.
-   * @return STD_TSTRING the value.
+   * @param MYODD_STRING the value we are getting.
+   * @return MYODD_STRING the value.
    */
   template<>
-  STD_TSTRING _get<STD_TSTRING>( ) const
+  MYODD_STRING _get<MYODD_STRING>( ) const
   {
     return m_dContainer.sContent;
   }
@@ -480,7 +480,7 @@ protected:
   struct _Data
   {
     // the data
-    STD_TSTRING sContent;
+    MYODD_STRING sContent;
     int iContent;
     __int64 i64Content;
     double dContent;
@@ -718,7 +718,7 @@ protected:
     {
       return type_long;
     }
-    else if( t == typeid(STD_TSTRING) ||
+    else if( t == typeid(MYODD_STRING) ||
              t == typeid(LPCTSTR) ||
              t == typeid(LPTSTR)
 #ifdef _UNICODE

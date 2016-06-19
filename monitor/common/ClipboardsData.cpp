@@ -33,12 +33,12 @@ void ClipboardsData::Reset()
   _fileNames.clear();
 }
 
-void ClipboardsData::SetText(const STD_TSTRING& text)
+void ClipboardsData::SetText(const MYODD_STRING& text)
 {
   _text = text;
 }
 
-void ClipboardsData::AddPossibleFileName(const STD_TSTRING& possibleFilename)
+void ClipboardsData::AddPossibleFileName(const MYODD_STRING& possibleFilename)
 {
   if( !myodd::files::IsFile(possibleFilename) &&
       !myodd::files::IsDirectory(possibleFilename) &&
@@ -48,7 +48,7 @@ void ClipboardsData::AddPossibleFileName(const STD_TSTRING& possibleFilename)
     return;
   }
 
-  STD_TSTRING first = myodd::strings::lower(possibleFilename);
+  MYODD_STRING first = myodd::strings::lower(possibleFilename);
   if (myodd::files::IsDirectory(first.c_str()))
   {
     // Make sure the trailing slash looks similar for all
@@ -56,7 +56,7 @@ void ClipboardsData::AddPossibleFileName(const STD_TSTRING& possibleFilename)
     myodd::files::AddTrailingBackSlash(first);
   }
 
-  std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = _fileNames.find(first);
+  std::map<MYODD_STRING, MYODD_STRING >::const_iterator it = _fileNames.find(first);
   if (it != _fileNames.end())
   {
     //  we already have it.
@@ -68,12 +68,12 @@ void ClipboardsData::AddPossibleFileName(const STD_TSTRING& possibleFilename)
 
 /**
  * Get a folder from our list of files.
- * @param STD_TSTRING& sText
+ * @param MYODD_STRING& sText
  * @param size_t idx
  * @param bool bQuote
  * @return bool if we found the item or not.
  */
-bool ClipboardsData::GetFolder(STD_TSTRING& sText, size_t idx, bool bQuote ) const
+bool ClipboardsData::GetFolder(MYODD_STRING& sText, size_t idx, bool bQuote ) const
 {
   sText = _T(""); //  reset the contents
 
@@ -116,7 +116,7 @@ bool ClipboardsData::GetFolder(STD_TSTRING& sText, size_t idx, bool bQuote ) con
  * @param string the container that will, (maybe), have hold our return string.
  * @return BOOL TRUE if we have something to return.
  */
-bool ClipboardsData::GetTextFromClipboard(STD_TSTRING& sText, bool bQuote ) const
+bool ClipboardsData::GetTextFromClipboard(MYODD_STRING& sText, bool bQuote ) const
 {
   sText = _T(""); //  reset the contents
   if (GetText(sText, bQuote ))
@@ -152,7 +152,7 @@ bool ClipboardsData::GetTextFromClipboard(STD_TSTRING& sText, bool bQuote ) cons
  * @param bool bQuote if we want to quote the filename
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool ClipboardsData::GetText(STD_TSTRING& sText, bool bQuote ) const
+bool ClipboardsData::GetText(MYODD_STRING& sText, bool bQuote ) const
 {
   sText = _T(""); //  reset the contents
   if ( _text.length() == 0)
@@ -173,13 +173,13 @@ bool ClipboardsData::GetText(STD_TSTRING& sText, bool bQuote ) const
  * @param bool bQuote if we want to quote the filename
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool ClipboardsData::GetFile(STD_TSTRING& sText, size_t idx, bool bQuote ) const
+bool ClipboardsData::GetFile(MYODD_STRING& sText, size_t idx, bool bQuote ) const
 {
   sText = _T(""); //  reset the contents
 
   // look around for the first item that match
   size_t actual = 0;
-  for ( std::map<STD_TSTRING, STD_TSTRING >::const_iterator it = _fileNames.begin();
+  for ( std::map<MYODD_STRING, MYODD_STRING >::const_iterator it = _fileNames.begin();
         it != _fileNames.end();
         it++
       )
@@ -211,7 +211,7 @@ bool ClipboardsData::GetFile(STD_TSTRING& sText, size_t idx, bool bQuote ) const
  * @param bool bQuote if we want to quote the filename
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool ClipboardsData::GetURL(STD_TSTRING& sText, size_t idx, bool bQuote ) const
+bool ClipboardsData::GetURL(MYODD_STRING& sText, size_t idx, bool bQuote ) const
 {
   sText = _T(""); //  reset the contents
 
@@ -240,9 +240,9 @@ bool ClipboardsData::GetURL(STD_TSTRING& sText, size_t idx, bool bQuote ) const
   return false;
 }
 
-STD_TSTRING ClipboardsData::Quote(const STD_TSTRING& sSrc, bool bQuote)
+MYODD_STRING ClipboardsData::Quote(const MYODD_STRING& sSrc, bool bQuote)
 {
-  STD_TSTRING sText = sSrc;
+  MYODD_STRING sText = sSrc;
   if ( bQuote )
   {
     sText = _T("\"") + sText + _T("\"");

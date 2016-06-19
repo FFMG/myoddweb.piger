@@ -157,7 +157,7 @@ namespace myodd{ namespace reg{
   ( 
     LPCTSTR lpSubKey, 
     LPCTSTR section, 
-    STD_TSTRING &oldVal, 
+    MYODD_STRING &oldVal, 
     HKEY hkey /*= HKEY_LOCAL_MACHINE*/, 
     DWORD *dwRet 
   ) 
@@ -167,7 +167,7 @@ namespace myodd{ namespace reg{
 		  //
 		  //	success or not
 		  LONG ret = ERROR_SUCCESS;
-		  DWORD dwDataSize = sizeof( STD_TSTRING );
+		  DWORD dwDataSize = sizeof( MYODD_STRING );
 		  //
 		  //	Open the registery
 		  HKEY hOpenKey;

@@ -132,11 +132,11 @@ void Action::SetCommandPath( LPCTSTR szPath )
 /**
  * Run the command, we take into account the current selection and command parameters given.
  * @param CWnd* pWnd the last forground window.
- * @param const STD_TSTRING& szCommandLine the command line argument.
+ * @param const MYODD_STRING& szCommandLine the command line argument.
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
@@ -181,7 +181,7 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const STD_TSTRING& szComman
 ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const
 {
   //  the command line we will try and make.
-  STD_TSTRING szCommandLine = _T("");
+  MYODD_STRING szCommandLine = _T("");
 
   size_t maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
 
@@ -200,7 +200,7 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPri
     Clipboard clipboard( cwnd, maxClipboardMemory );
 
     //  any other values are rejected, (bitmaps and so on).
-    STD_TSTRING sText = _T("");
+    MYODD_STRING sText = _T("");
     if (clipboard.GetTextFromClipboard(sText, true ))
     {
       //  we need to trim all the items into one single line
@@ -226,10 +226,10 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPri
 /**
  * Get a text an remove the single lines out of it/
  * TODO: Move this to the am_string namespace?
- * @param const STD_TSTRING& szCommandLine the text that we would like to enforce into a single line.
- * @return STD_TSTRING a single line of text.
+ * @param const MYODD_STRING& szCommandLine the text that we would like to enforce into a single line.
+ * @return MYODD_STRING a single line of text.
  */
-STD_TSTRING Action::toSingleLine( LPCTSTR sText ) const
+MYODD_STRING Action::toSingleLine( LPCTSTR sText ) const
 {
   // Sanity checks.
   if( NULL == sText )
@@ -240,7 +240,7 @@ STD_TSTRING Action::toSingleLine( LPCTSTR sText ) const
   LPCTSTR pdest = _tcschr( sText, '\n' );
   size_t  result;
 
-  STD_TSTRING ret( sText );
+  MYODD_STRING ret( sText );
   if( pdest != NULL )
   {
     result = pdest - sText;
@@ -263,7 +263,7 @@ STD_TSTRING Action::toSingleLine( LPCTSTR sText ) const
  * @param void
  * @return LPCTSTR the command, (the name the user has to enter).
  */
-const STD_TSTRING& Action::Command() const
+const MYODD_STRING& Action::Command() const
 {
   return _szCommand;
 }
@@ -271,11 +271,11 @@ const STD_TSTRING& Action::Command() const
 /**
  * Execute a file.
  * We will expend all the environment variables as needed.
- * @param const std::vector<STD_TSTRING> [0] the file path, [1] the arguments to launch with, (optional).
+ * @param const std::vector<MYODD_STRING> [0] the file path, [1] the arguments to launch with, (optional).
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool true|false success or not.
  */
-bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
+bool Action::Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged )
 {
   // get the number of arguments.
   size_t argc = argv.size();
@@ -362,11 +362,11 @@ bool Action::Execute( const std::vector<STD_TSTRING>& argv, bool isPrivileged )
  * Launch a single action with all the command line arguments.
  * TODO : The API calls ignore the values been passed to them, so we should first check that we have all the values.
  * @param CWnd* pWnd the last forground window.
- * @param const STD_TSTRING& szCommandLine the command and the arguments we are launching this file with.
+ * @param const MYODD_STRING& szCommandLine the command and the arguments we are launching this file with.
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL TRUE|FALSE success or not.
  */
-ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const STD_TSTRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   // sanity check
   if (0 == m_szFile.length())
@@ -377,7 +377,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const STD_TSTRING& sz
   //  get the last forground window handle
   HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
 
-  const STD_TSTRING& szExt = Extension();
+  const MYODD_STRING& szExt = Extension();
 #ifdef ACTIONMONITOR_API_LUA
   // Do the API calls.
   //
