@@ -11,7 +11,7 @@ namespace myodd {
       {
         _guard = new std::lock_guard<std::mutex>(_mutex);
       }
-      catch (const std::system_error& e) {
+      catch (const std::system_error&) {
       }
     }
 
