@@ -258,7 +258,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
   }
   catch (...)
   {
-    myodd::log::LogError(_T("Unable to updateenvironment variable: %s.", keyName.c_str()));
+    myodd::log::LogError(_T("Unable to updateenvironment variable: %s."), keyName.c_str());
   }
 }
 

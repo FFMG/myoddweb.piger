@@ -64,13 +64,13 @@ void LoaderManager::Init( amplugin* p  )
     }
     else
     {
-      myodd::log::LogError(_T("[Loader] Could create the directry '%s'.", wFilePath));
+      myodd::log::LogError(_T("[Loader] Could create the directry '%s'."), wFilePath);
       return;
     }
   }
   else
   {
-    myodd::log::LogError(_T("[Loader] Could not expand the environment '%s'.", stdXml ));
+    myodd::log::LogError(_T("[Loader] Could not expand the environment '%s'."), stdXml );
     return;
   }
 }
