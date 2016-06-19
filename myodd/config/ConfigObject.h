@@ -8,7 +8,7 @@
 #include "ConfigData.h"
 
 // define the class for the notification.
-typedef int ( *CONFIG_NOTIFY )(LPCTSTR, unsigned int, LPARAM lParam);
+typedef int ( *CONFIG_NOTIFY )(const MYODD_CHAR*, unsigned int, MYODD_LPARAM lParam);
 
 namespace myodd{ namespace config{
 
@@ -73,8 +73,8 @@ protected:
   MYODD_STRING m_unicodeName;
 
 public:
-  bool AddMonitor( const CONFIG_NOTIFY& notif, LPARAM lParam );
-  bool RemoveMonitor( const CONFIG_NOTIFY& notif, LPARAM lParam );
+  bool AddMonitor( const CONFIG_NOTIFY& notif, MYODD_LPARAM lParam );
+  bool RemoveMonitor( const CONFIG_NOTIFY& notif, MYODD_LPARAM lParam );
   void RemoveAllNotifs();
 
 public:

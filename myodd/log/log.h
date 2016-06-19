@@ -10,19 +10,19 @@
 
 namespace myodd{ namespace log{
   // the helper functions
-  void Log(LPCTSTR pszLine, ...);
-  void LogSuccess(LPCTSTR pszLine, ...);
-  void LogError(LPCTSTR pszLine, ...);
-  void LogWarning(LPCTSTR pszLine, ...);
-  void LogMessage(LPCTSTR pszLine, ...);
-  void LogSystem(LPCTSTR pszLine, ...);
+  void Log(const MYODD_CHAR* pszLine, ...);
+  void LogSuccess(const MYODD_CHAR* pszLine, ...);
+  void LogError(const MYODD_CHAR* pszLine, ...);
+  void LogWarning(const MYODD_CHAR* pszLine, ...);
+  void LogMessage(const MYODD_CHAR* pszLine, ...);
+  void LogSystem(const MYODD_CHAR* pszLine, ...);
 
   //  add the debug log message
-  void LogDebug(LogType uiType, LPCTSTR pszFmt, ...);  //  log in _DEBUG messages only
+  void LogDebug(LogType uiType, const MYODD_CHAR* pszFmt, ...);  //  log in _DEBUG messages only
 
   
-  bool AddNotif( const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast = 100 );
-  bool RemoveNotif( const LogEventCallback& fnNotif, LPARAM lParam );
+  bool AddNotif( const LogEventCallback& fnNotif, MYODD_LPARAM lParam, size_t iSendLast = 100 );
+  bool RemoveNotif( const LogEventCallback& fnNotif, MYODD_LPARAM lParam );
 
   const MYODD_STRING& GetCurrentLogFile();
 

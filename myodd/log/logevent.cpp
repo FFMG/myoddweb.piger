@@ -29,25 +29,25 @@ namespace myodd { namespace log {
   }
 
   /**
-  * Remove a LPARAM from the list. If the list is empty then we will remove it.
+  * Remove a MYODD_LPARAM from the list. If the list is empty then we will remove it.
   * @param T the typename of the function
-  * @param LPARAM the param we want to remove
+  * @param MYODD_LPARAM the param we want to remove
   * @return bool if something was removed we will return true.
   */
-  bool LogEvent::RemoveNotif(const LogEventCallback& fnNotif, LPARAM lParam)
+  bool LogEvent::RemoveNotif(const LogEventCallback& fnNotif, MYODD_LPARAM lParam)
   {
     myodd::threads::AutoLock autoLock(*this);
     return __super::RemoveNotif(fnNotif, lParam);
   }
 
   /**
-  * Add an LPARAM/Function to the list of items
+  * Add an long/Function to the list of items
   * @param T the typename of the function
-  * @param LPVOID the param we want to add
+  * @param MYODD_LPARAM lParam the param we want to add
   * @param size_t the number of last notifications we want to receive.
   * @return bool true if the item was added, false if it already exists.
   */
-  bool LogEvent::AddNotif(const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast)
+  bool LogEvent::AddNotif(const LogEventCallback& fnNotif, MYODD_LPARAM lParam, size_t iSendLast)
   {
     // Lock the thread
     myodd::threads::AutoLock autoLock(*this);
@@ -67,21 +67,21 @@ namespace myodd { namespace log {
   /**
   * Log an event
   * @param LogType the type of the event been logged
-  * @param LPCTSTR the unformatted buffer.
+  * @param const MYODD_CHAR* the unformatted buffer.
   * @param va_list the list of arguments we will add to the buffer.
   * @return
   */
-  void LogEvent::Log(LogType uiType, LPCTSTR pszLine, va_list argp)
+  void LogEvent::Log(LogType uiType, const MYODD_CHAR* pszLine, va_list argp)
   {
     ASSERT(pszLine != NULL);
 
-    TCHAR* buffer = NULL;
+    MYODD_CHAR* buffer = NULL;
     int len = _vsctprintf(pszLine, argp);
     if (len >0)
     {
       // _vscprintf doesn't count + 1; terminating '\0'
       ++len;
-      buffer = new TCHAR[len];
+      buffer = new MYODD_CHAR[len];
       _vsntprintf_s(buffer, len, len, pszLine, argp);
     }
 
@@ -102,13 +102,13 @@ namespace myodd { namespace log {
   * Log a message and send notifications.
   * This assumes that we have the thread lock.
   * @param LogType the message been logged.
-  * @param LPCTSTR the text been logged.
+  * @param const MYODD_CHAR* the text been logged.
   * @return none
   */
-  void LogEvent::LogInLockedThread(LogType uiType, LPCTSTR pszLine)
+  void LogEvent::LogInLockedThread(LogType uiType, const MYODD_CHAR* pszLine)
   {
     //  then we need to notify all this new message.
-    LPARAM lParam;
+    MYODD_LPARAM lParam;
     LogEventCallback fnNotif;
     unsigned idx = 0;
     while (GetNotif(idx++, fnNotif, lParam))
@@ -188,10 +188,10 @@ namespace myodd { namespace log {
   /**
   * Log an entry to the file.
   * @param unsigned int uiType the log type
-  * @param LPCTSTR the line we are adding.
+  * @param const MYODD_CHAR* the line we are adding.
   * @return
   */
-  bool LogEvent::LogToFile(LogType uiType, LPCTSTR pszLine)
+  bool LogEvent::LogToFile(LogType uiType, const MYODD_CHAR* pszLine)
   {
     // Lock the thread
     myodd::threads::AutoLock autoLock(*this);

@@ -42,11 +42,11 @@ namespace myodd{ namespace offset{
     }
   }
   template<>
-  void write<TCHAR>( const TCHAR*& item, BYTE*& pData, size_t& ulOffset );
+  void write<MYODD_CHAR>( const MYODD_CHAR*& item, BYTE*& pData, size_t& ulOffset );
 
   void write( const void* item, size_t unItemSize, BYTE*& pData, size_t& ulOffset );
 
-  void writeFile( const TCHAR* fileName, BYTE*& pData, size_t& ulOffset );
+  void writeFile( const MYODD_CHAR* fileName, BYTE*& pData, size_t& ulOffset );
 
   template <typename T>
   bool read( T& item, const void* pData, size_t& ulOffset, size_t uiMaxSize )
@@ -71,11 +71,11 @@ namespace myodd{ namespace offset{
     return read( *item, pData, ulOffset, uiMaxSize );
   }
   template<>
-  bool read<TCHAR>( TCHAR*& item, const void* pData, size_t& ulOffset, size_t uiMaxSize );
+  bool read<MYODD_CHAR>(MYODD_CHAR*& item, const void* pData, size_t& ulOffset, size_t uiMaxSize );
 
   bool read( void* item, size_t unItemSize, const void* pData, size_t& ulOffset, size_t uiMaxSize );
 
-  void readFile( const TCHAR* fileName, const BYTE* pData, size_t& ulOffset, size_t uiMaxSize  );
+  void readFile( const MYODD_CHAR* fileName, const BYTE* pData, size_t& ulOffset, size_t uiMaxSize  );
 } //  offset
 } //  myodd
 #endif // _Offset_h

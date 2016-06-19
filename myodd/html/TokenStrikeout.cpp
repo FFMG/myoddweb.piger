@@ -1,4 +1,5 @@
 #include "TokenStrikeout.h"
+#include "../string/string.h"
 
 TokenStrikeout::TokenStrikeout() : 
 Token()
@@ -10,7 +11,7 @@ TokenStrikeout::~TokenStrikeout()
 }
 
 // if this is the token we are looking for.
-bool TokenStrikeout::OnIsToken( LPCTSTR lpString, int nLen ) const
+bool TokenStrikeout::OnIsToken(const MYODD_CHAR* lpString, int nLen ) const
 {
   if( nLen == 1 )
   {

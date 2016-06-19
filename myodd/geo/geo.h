@@ -1,11 +1,11 @@
 // MagVar.h: interface for the CMagVar class.
 //
 //////////////////////////////////////////////////////////////////////
-
+#pragma once
 #ifndef _MAGVAR_H
 #define _MAGVAR_H
 
-#pragma once
+#include "../common/includes.h"
 #include <wtypes.h>
 
 #ifdef _DEBUG  //  http://en.wikipedia.org/wiki/Longitude#Noting_and_calculating_longitude
@@ -50,7 +50,7 @@ namespace myodd{ namespace geo{
 
   void decimalToDegree( double n, int &degree, int &minute, double &second);
 
-  double positionToDecimal( LPCTSTR lpPos );
+  double positionToDecimal(const MYODD_CHAR* lpPos );
 
   // --------------------
   // conversions.

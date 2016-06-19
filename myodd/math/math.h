@@ -305,8 +305,8 @@ double LengthOfLine( Vector v1, Vector v2 );
 
 double AngleOf2Points( const Vector& p0, const Vector& p1 );
 
-int __fastcall ToBase10(const TCHAR* udata, BYTE fromBase);
-LPCTSTR __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE base);
+int __fastcall ToBase10(const MYODD_CHAR* udata, BYTE fromBase);
+const MYODD_CHAR* __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE base);
 
 int Random( int min, int max );
 

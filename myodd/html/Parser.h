@@ -24,7 +24,7 @@ public:
   typedef std::vector<HTMLDATA*> HTML_CONTAINER;
   HTML_CONTAINER m_data;
 
-  const HTML_CONTAINER& Parse( LPCTSTR lpString, int nCount );
+  const HTML_CONTAINER& Parse(const MYODD_CHAR* lpString, int nCount );
   const HTML_CONTAINER& Tree() const{
     return m_data;
   };
@@ -55,6 +55,6 @@ private:
   void ApplyFont( HDC hdc, const LOGFONT& lf );
 
 private:
-  void Add( LPCTSTR begin, LPCTSTR end, bool isHtmlTag );
+  void Add(const MYODD_CHAR* begin, LPCTSTR end, bool isHtmlTag );
   void Clear();
 };

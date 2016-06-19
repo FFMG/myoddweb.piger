@@ -16,7 +16,7 @@ protected:
   struct _NOTIFY_LPARAM
   {
     T fnNotif;
-    LPARAM lParam;
+    MYODD_LPARAM lParam;
   };
   typedef std::vector<_NOTIFY_LPARAM > NOTIFY_VECTOR;
 
@@ -68,12 +68,12 @@ public:
   }
 
   /**
-   * Add an LPARAM/Function to the list of items
+   * Add an long/Function to the list of items
    * @param T the typename of the function
-   * @param LPARAM the param we want to add
+   * @param MYODD_LPARAM the param we want to add
    * @return bool true if the item was added, false if it already exists.
    */
-  virtual bool AddNotif( const T& fnNotif, LPARAM lParam )
+  virtual bool AddNotif( const T& fnNotif, MYODD_LPARAM lParam )
   {
     myodd::threads::AutoLock autoLock( *this );
     // Make sure that this notification does not already exists.
@@ -96,15 +96,15 @@ public:
   }
 
   /**
-   * Add an LPARAM/Function to the list of items
+   * Add an long/Function to the list of items
    * @param T the typename of the function
-   * @param LPVOID the param we want to add
+   * @param void* the param we want to add
    * @return bool true if the item was added, false if it already exists.
    */
-  virtual bool AddNotif( const T& fnNotif, LPVOID lpVoid )
+  virtual bool AddNotif( const T& fnNotif, void* lpVoid )
   {
     // just add this function and lParam.
-    return AddNotif( fnNotif, (LPARAM)lpVoid );
+    return AddNotif( fnNotif, (MYODD_LPARAM)lpVoid );
   }
 
   /**
@@ -119,14 +119,14 @@ public:
   }
 
   /**
-   * Get the next function/LPARAM in the list.
-   * If we have no more LPARAMS and/or functions then we will return false
+   * Get the next function/MYODD_LPARAM in the list.
+   * If we have no more MYODD_LPARAM and/or functions then we will return false
    * @param unsigned int the index number of the notification we want.
    * @param T the typename of the function
-   * @param LPARAM the param we want to remove
+   * @param MYODD_LPARAM the param we want to remove
    * @return bool if a function was found or not.
    */
-  bool GetNotif( unsigned int idx, T& fnNotif, LPARAM& lParam )
+  bool GetNotif( unsigned int idx, T& fnNotif, MYODD_LPARAM& lParam )
   {
     if( idx >= m_vectorOfFunctions.size() )
     {
@@ -146,12 +146,12 @@ public:
   }
 
   /**
-   * Remove a LPARAM from the list. If the list is empty then we will remove it.
+   * Remove a MYODD_LPARAM from the list. If the list is empty then we will remove it.
    * @param T the typename of the function
-   * @param LPARAM the param we want to remove
+   * @param MYODD_LPARAM the param we want to remove
    * @return bool if something was removed we will return true.
    */
-  bool RemoveNotif( const T& fnNotif, LPARAM lParam )
+  bool RemoveNotif( const T& fnNotif, MYODD_LPARAM lParam )
   {
     myodd::threads::AutoLock autoLock( *this );
 
@@ -173,14 +173,14 @@ public:
   }
 
   /**
-   * Remove a LPARAM from the list. If the list is empty then we will remove it.
+   * Remove a MYODD_LPARAM from the list. If the list is empty then we will remove it.
    * @param T the typename of the function
-   * @param LPVOID the pointer we want to remove
+   * @param void* the pointer we want to remove
    * @return bool if something was removed we will return true.
    */
-  bool RemoveNotif( const T& fnNotif, LPVOID lpVoid )
+  bool RemoveNotif( const T& fnNotif, void* lpVoid )
   {
-    return RemoveNotif( fnNotif, (LPARAM)lpVoid );
+    return RemoveNotif( fnNotif, (MYODD_LPARAM)lpVoid );
   }
 
   /**
@@ -239,7 +239,7 @@ private:
   unsigned int m_iNotificationCount;
 };
 
-typedef void ( *NOTIFY_DEFAULT )(LPARAM lParam);
+typedef void ( *NOTIFY_DEFAULT )(MYODD_LPARAM lParam);
 class NotificationsDefault : public Notifications<NOTIFY_DEFAULT>
 {
 public:
@@ -273,7 +273,7 @@ public:
    */
   void Notify()
   {
-    LPARAM lParam;
+    MYODD_LPARAM lParam;
     NOTIFY_DEFAULT fnNotif;
     unsigned idx = 0;
     while( GetNotif( idx++, fnNotif, lParam ) )

@@ -1,4 +1,5 @@
 #include "TokenUnderline.h"
+#include "../string/string.h"
 
 TokenUnderline::TokenUnderline() : 
   Token()
@@ -10,7 +11,7 @@ TokenUnderline::~TokenUnderline()
 }
 
 // if this is the token we are looking for.
-bool TokenUnderline::OnIsToken( LPCTSTR lpString, int nLen ) const
+bool TokenUnderline::OnIsToken(const MYODD_CHAR* lpString, int nLen ) const
 {
   if( nLen == 1 )
   {

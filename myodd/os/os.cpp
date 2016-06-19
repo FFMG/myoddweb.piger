@@ -10,7 +10,7 @@ bool IsElevated()
   HANDLE hToken = NULL;
   if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
     TOKEN_ELEVATION Elevation;
-    DWORD cbSize = sizeof(TOKEN_ELEVATION);
+    unsigned long cbSize = sizeof(TOKEN_ELEVATION);
     if (GetTokenInformation(hToken, TokenElevation, &Elevation, sizeof(Elevation), &cbSize)) {
       fRet = Elevation.TokenIsElevated > 0;
     }
@@ -21,13 +21,13 @@ bool IsElevated()
   return fRet;
 }
 
-LPVOID GetOffsetFromRva(IMAGE_DOS_HEADER *pDos, IMAGE_NT_HEADERS *pNt, DWORD rva) {
+void* GetOffsetFromRva(IMAGE_DOS_HEADER *pDos, IMAGE_NT_HEADERS *pNt, unsigned long rva) {
   IMAGE_SECTION_HEADER *pSecHd = IMAGE_FIRST_SECTION(pNt);
   for (unsigned long i = 0; i < pNt->FileHeader.NumberOfSections; ++i, ++pSecHd) {
     // Lookup which section contains this RVA so we can translate the VA to a file offset
     if (rva >= pSecHd->VirtualAddress && rva < (pSecHd->VirtualAddress + pSecHd->Misc.VirtualSize)) {
-      DWORD delta = pSecHd->VirtualAddress - pSecHd->PointerToRawData;
-      return (LPVOID)MKPTR(pDos, rva - delta);
+      unsigned long delta = pSecHd->VirtualAddress - pSecHd->PointerToRawData;
+      return (void*)MKPTR(pDos, rva - delta);
     }
   }
   return NULL;
@@ -71,7 +71,7 @@ ARCHITECTURE GetImageArchitecture(const MYODD_STRING& modulePath)
   return GetImageArchitecture(modulePath.c_str());
 }
 
-ARCHITECTURE GetImageArchitecture(const TCHAR* modulePath)
+ARCHITECTURE GetImageArchitecture(const MYODD_CHAR* modulePath)
 {
   // is it for us?
   if (NULL == modulePath)
@@ -92,12 +92,12 @@ ARCHITECTURE GetImageArchitecture(const TCHAR* modulePath)
     return ARCHITECTURE_UNKNOWN;
   }
 
-  DWORD fsize = GetFileSize(hFile, NULL);
-  DWORD buffersize = fsize;//+0x2000;
+  unsigned long fsize = GetFileSize(hFile, NULL);
+  unsigned long buffersize = fsize;//+0x2000;
   BYTE *buffer = new BYTE[buffersize];
   
   ARCHITECTURE pe = ARCHITECTURE_UNKNOWN;
-  DWORD read;
+  unsigned long read;
   if (ReadFile(hFile, buffer, fsize, &read, NULL))
   {
     IMAGE_DOS_HEADER *idh = (IMAGE_DOS_HEADER*)buffer;

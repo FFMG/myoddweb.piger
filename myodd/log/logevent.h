@@ -33,7 +33,7 @@ namespace log {
     class _LogMessage
     {
     public:
-      _LogMessage(LogType lt = LogType::None, LPCTSTR lpMessage = NULL) :
+      _LogMessage(LogType lt = LogType::None, const MYODD_CHAR* lpMessage = NULL) :
         _uiType(lt),
         _szLogLine(lpMessage)
       {
@@ -44,7 +44,7 @@ namespace log {
         return lm;
       }
 
-      LPCTSTR GetMessage() const { return _szLogLine.c_str(); }
+      const MYODD_CHAR* GetMessage() const { return _szLogLine.c_str(); }
       LogType GetType() const { return _uiType; }
     protected:
       void Copy(const _LogMessage& lm)
@@ -64,16 +64,16 @@ namespace log {
 
   protected:
     myodd::log::LogFile m_logFile;
-    bool LogToFile(LogType uiType, LPCTSTR pszLine);
-    void LogInLockedThread(LogType uiType, LPCTSTR pszLine);
+    bool LogToFile(LogType uiType, const MYODD_CHAR* pszLine);
+    void LogInLockedThread(LogType uiType, const MYODD_CHAR* pszLine);
 
   public:
     // notification messages
-    bool AddNotif(const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast);
-    bool RemoveNotif(const LogEventCallback& fnNotif, LPARAM lParam);
+    bool AddNotif(const LogEventCallback& fnNotif, MYODD_LPARAM lParam, size_t iSendLast);
+    bool RemoveNotif(const LogEventCallback& fnNotif, MYODD_LPARAM lParam);
 
     // the actual log messages.
-    void Log(LogType uFlags, LPCTSTR pszFmt, va_list argp);
+    void Log(LogType uFlags, const MYODD_CHAR* pszFmt, va_list argp);
     static LogEvent& Instance();
 
 

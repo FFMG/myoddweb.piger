@@ -429,16 +429,16 @@ void decimalToDegree
  * Convert a string to a Decimal lat/lon 
  * @see http://williams.best.vwh.net/avform.htm
  * @see http://en.wikipedia.org/wiki/ISO_6709
- * @param LPCTSTR the string representing the lat/lon
+ * @param const MYODD_CHAR* the string representing the lat/lon
  * @return double the converted latitude/longitude.
  */
-double positionToDecimal( LPCTSTR lpString )
+double positionToDecimal(const MYODD_CHAR* lpString )
 {
   MYODD_STRING sPos( lpString );
   sPos = myodd::strings::replace( sPos, _T("&apos;"), _T("'") );
   sPos = myodd::strings::replace( sPos, _T("&quot;"), _T("\"") );
 
-  LPCTSTR lpPos = sPos.c_str();
+  const MYODD_CHAR* lpPos = sPos.c_str();
 
   // 05º 13' 01.3" S = -(5 + 13/60 + 1/3600)
   // S05º 13' 01.3"
@@ -462,7 +462,7 @@ double positionToDecimal( LPCTSTR lpString )
     {
       // look for any number
       // anything else will be assumed to be a 'divider'
-      const TCHAR c = lpPos[ s+n ];
+      const MYODD_CHAR c = lpPos[ s+n ];
       if( (s+n)<l && ((c >= '0' && c <= '9') || c=='.' || c==',' )){
         ++n;
         continue;
@@ -480,7 +480,7 @@ double positionToDecimal( LPCTSTR lpString )
     // spaces and breaks do not count
     if( n>0 )
     {
-      TCHAR* t = new TCHAR[ n+1];
+      MYODD_CHAR* t = new MYODD_CHAR[ n+1];
       _tcsncpy_s( t, n+1, lpPos+s, n);
       // by definition all the numbers are +ve
       // because we skip any non numeric characters.

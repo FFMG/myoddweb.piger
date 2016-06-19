@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../myoddinclude.h"
+#include "../common/includes.h"
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
   TypeName(const TypeName&);               \
@@ -13,7 +13,7 @@ public:
   virtual ~Token(){};
 
   // if this is the token we are looking for.
-  bool IsToken( LPCTSTR lpString, int nLen ) const;
+  bool IsToken(const MYODD_CHAR* lpString, int nLen ) const;
   
   // apply the style
   void push( LOGFONT& logFont );
@@ -33,7 +33,7 @@ protected:
   virtual void OnPop( LOGFONT& logFont ) = 0;
 
   // if this is the token we are looking for.
-  virtual bool OnIsToken( LPCTSTR lpString, int nLen ) const = 0;
+  virtual bool OnIsToken(const MYODD_CHAR* lpString, int nLen ) const = 0;
 
 private:
   int m_depth;

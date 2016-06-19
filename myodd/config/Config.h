@@ -28,20 +28,20 @@ void unset( const MYODD_STRING& stdVarName );
 
 // add an item to monitor
 // call the function if/when the item change
-void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam );
+void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
 
 template <class T>
 void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, T* lParam ){
-  AddConfigurationMonitor( s, notif, (LPARAM)lParam );
+  AddConfigurationMonitor( s, notif, (MYODD_LPARAM)lParam );
 }
 
 // add an item to monitor
 // call the function if/when the item change
-void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam );
+void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
 
 template <class T>
 void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, T* lParam ){
-  RemoveConfigurationMonitor( s, notif, (LPARAM)lParam );
+  RemoveConfigurationMonitor( s, notif, (MYODD_LPARAM)lParam );
 }
 
 } //  config

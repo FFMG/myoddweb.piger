@@ -1,4 +1,5 @@
 #include "TokenItalic.h"
+#include "../string/string.h"
 
 TokenItalic::TokenItalic() : 
   Token()
@@ -10,7 +11,7 @@ TokenItalic::~TokenItalic()
 }
 
 // if this is the token we are looking for.
-bool TokenItalic::OnIsToken( LPCTSTR lpString, int nLen ) const
+bool TokenItalic::OnIsToken(const MYODD_CHAR* lpString, int nLen ) const
 {
   if( nLen == 1 )
   {

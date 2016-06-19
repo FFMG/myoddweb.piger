@@ -121,10 +121,10 @@ bool setTemp ( const MYODD_STRING& stdVarName, const Data &d )
  *
  * @param const MYODD_STRING& s the name of the object been monitored.
  * @param CONFIG_NOTIFY the config notifier, (function definition)
- * @param LPARAM a single parameter that will be passed to the function.
+ * @param MYODD_LPARAM a single parameter that will be passed to the function.
  * @return none
  */
-void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam )
+void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYODD_LPARAM lParam )
 {
   IS_VALID_CONTAINER
   std::vector<MYODD_STRING> v_s;
@@ -142,7 +142,7 @@ void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM
   }
 }
 
-void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, LPARAM lParam )
+void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYODD_LPARAM lParam )
 {
   IS_VALID_CONTAINER
   std::vector<MYODD_STRING> v_s;

@@ -1,13 +1,5 @@
 #include "stdafx.h"
 
-#ifdef __AFXWIN_H__
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif // _DEBUG
-#endif // __AFXWIN_H__
-
 #include "ConfigObject.h"
 
 namespace myodd{ namespace config{
@@ -120,18 +112,18 @@ void ConfigObject::SetObjectName( const MYODD_STRING& s )
 /**
  * Add a function we want to call when something changes in this config object.
  * @param CONFIG_NOTIFY the function we want to call.
- * @param LPARAM a param we are passing to this function.
+ * @param MYODD_LPARAM a param we are passing to this function.
  * @return bool if the monitor was added or not.
  */ 
 bool ConfigObject::AddMonitor
 ( 
   const CONFIG_NOTIFY& notif, 
-  LPARAM lParam 
+  MYODD_LPARAM lParam
 )
 {
   //
   // ok, we can add this item to the list.
-  // if it already exists then we only add the LPARAM
+  // if it already exists then we only add the MYODD_LPARAM
   return AddNotif( notif, lParam );
 }
 
@@ -139,10 +131,10 @@ bool ConfigObject::AddMonitor
  * Remove a monitored item given the notification and the lParam
  *
  * @param CONFIG_NOTIFY the function we want to call.
- * @param LPARAM a param we are passing to this function.
+ * @param MYODD_LPARAM a param we are passing to this function.
  * @return bool if we removed something or not.
  */
-bool ConfigObject::RemoveMonitor( const CONFIG_NOTIFY& notif, LPARAM lParam )
+bool ConfigObject::RemoveMonitor( const CONFIG_NOTIFY& notif, MYODD_LPARAM lParam )
 {
   // the notification will do its own locking
   return RemoveNotif( notif, lParam );
@@ -167,9 +159,9 @@ void ConfigObject::RemoveAllNotifs()
 void ConfigObject::Notify( Data::config_type type )
 {
   const MYODD_STRING& name = GetObjectName();
-  LPCTSTR lpName = name.c_str();
+  const MYODD_CHAR* lpName = name.c_str();
 
-  LPARAM lParam;
+  MYODD_LPARAM lParam;
   CONFIG_NOTIFY fnNotif;
   unsigned int idx = 0;
   while( GetNotif( idx++, fnNotif, lParam ) )

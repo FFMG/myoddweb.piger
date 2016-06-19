@@ -1,5 +1,6 @@
 #include "TokenBr.h"
 #include "../myodd.h"
+#include "../string/string.h"
 
 TokenBr::TokenBr() : 
   Token()
@@ -17,7 +18,7 @@ bool TokenBr::ToNextLine( bool bIsEnd ) const
 }
 
 // if this is the token we are looking for.
-bool TokenBr::OnIsToken( LPCTSTR lpString, int nLen ) const
+bool TokenBr::OnIsToken(const MYODD_CHAR* lpString, int nLen ) const
 {
   if( nLen == 2 )
   {

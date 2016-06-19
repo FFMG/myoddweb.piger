@@ -6,8 +6,8 @@
 namespace myodd{ namespace reg{
   bool	DeleteFullPath
   ( 
-    LPCTSTR lpSubKey, 
-    LPCTSTR section, 
+    const MYODD_CHAR* lpSubKey,
+    const MYODD_CHAR* section,
     HKEY hkey 
   )
   {
@@ -44,11 +44,11 @@ namespace myodd{ namespace reg{
 
   bool SaveStringFullPath
   ( 
-    LPCTSTR lpSubKey, 
-    LPCTSTR section, 
-    LPCTSTR newVal,
+    const MYODD_CHAR* lpSubKey,
+    const MYODD_CHAR* section,
+    const MYODD_CHAR* newVal,
     HKEY hkey, 
-    DWORD *dwRet
+    unsigned long *dwRet
   )
   {
 	  if( newVal == NULL )
@@ -80,7 +80,7 @@ namespace myodd{ namespace reg{
 				               0,									// must be zero 
 				               REG_SZ,						// value type 
 				               (LPBYTE)newVal,		// pointer to value data 
-				               (DWORD)myodd::strings::Length(newVal)     // length of value data 
+				               (unsigned long)myodd::strings::Length(newVal)     // length of value data 
                       );
 			  //
 			  //	clean
@@ -101,11 +101,11 @@ namespace myodd{ namespace reg{
 
   bool SaveDWORDFullPath
   ( 
-    LPCTSTR lpSubKey, 
-	  LPCTSTR section, 
-	  DWORD newVal, 
+    const MYODD_CHAR* lpSubKey,
+    const MYODD_CHAR* section,
+    unsigned long newVal,
 	  HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, 
-	  DWORD *dwRet
+    unsigned long *dwRet
   )
   {
 	  try
@@ -155,11 +155,11 @@ namespace myodd{ namespace reg{
   //	load a String value with Full path
   bool	LoadStringFullPath
   ( 
-    LPCTSTR lpSubKey, 
-    LPCTSTR section, 
+    const MYODD_CHAR* lpSubKey,
+    const MYODD_CHAR* section,
     MYODD_STRING &oldVal, 
     HKEY hkey /*= HKEY_LOCAL_MACHINE*/, 
-    DWORD *dwRet 
+    unsigned long *dwRet
   ) 
   {
 	  bool bRet = FALSE;
@@ -167,7 +167,7 @@ namespace myodd{ namespace reg{
 		  //
 		  //	success or not
 		  LONG ret = ERROR_SUCCESS;
-		  DWORD dwDataSize = sizeof( MYODD_STRING );
+      unsigned long dwDataSize = sizeof( MYODD_STRING );
 		  //
 		  //	Open the registery
 		  HKEY hOpenKey;
@@ -180,7 +180,7 @@ namespace myodd{ namespace reg{
 		  //	try to load what was saved
 		  if (ret == ERROR_SUCCESS)
 		  {
-			  TCHAR*  pszBuffer = NULL;
+        MYODD_CHAR* pszBuffer = NULL;
   			
 			  // Get the size of the counter.
 			  ret = RegQueryValueEx( hOpenKey,
@@ -195,7 +195,7 @@ namespace myodd{ namespace reg{
 				  if( dwDataSize > 0 )
 				  {
 					  // Allocate memory for the buffer.
-					  pszBuffer = new TCHAR[ dwDataSize ];
+					  pszBuffer = new MYODD_CHAR[ dwDataSize ];
 
 					  ret = RegQueryValueEx( hOpenKey, 
 										     section, 
@@ -248,11 +248,11 @@ namespace myodd{ namespace reg{
 
   bool LoadDWORDFullPath
   ( 
-    LPCTSTR lpSubKey, 
-    LPCTSTR section, 
-    DWORD &oldVal, 
+    const MYODD_CHAR* lpSubKey,
+    const MYODD_CHAR* section,
+    unsigned long &oldVal,
     HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, 
-    DWORD *dwRet
+    unsigned long *dwRet
   )
   {
 	  bool bRet = FALSE;
@@ -261,7 +261,7 @@ namespace myodd{ namespace reg{
 		  //
 		  //	success or not
 		  LONG ret = ERROR_SUCCESS;
-		  DWORD dwDataSize = sizeof( DWORD );
+      unsigned long dwDataSize = sizeof(unsigned long);
 		  //
 		  //	Open the registery
 		  HKEY hKey;
@@ -274,7 +274,7 @@ namespace myodd{ namespace reg{
 		  //	try to load what was saved
 		  if (ret == ERROR_SUCCESS)
 		  {
-			  DWORD	dwValue;
+        unsigned long	dwValue;
 			  ret = RegQueryValueEx( hKey, 
 								     section, 
 								     NULL, 

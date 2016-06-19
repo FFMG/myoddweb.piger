@@ -3,7 +3,7 @@
 #include "logevent.h"
 
 namespace myodd{ namespace log{
-  void LogDebug( LogType uiType, LPCTSTR pszFmt, ...)
+  void LogDebug( LogType uiType, const MYODD_CHAR* pszFmt, ...)
   {
 #ifdef _DEBUG
     va_list argp;
@@ -17,7 +17,7 @@ namespace myodd{ namespace log{
 #endif
   }
 
-  void Log(LPCTSTR pszFmt, ...)
+  void Log(const MYODD_CHAR* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -25,7 +25,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogSuccess(LPCTSTR pszFmt, ...)
+  void LogSuccess(const MYODD_CHAR* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -33,7 +33,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogError(LPCTSTR pszFmt, ...)
+  void LogError(const MYODD_CHAR* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -41,7 +41,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogWarning(LPCTSTR pszFmt, ...)
+  void LogWarning(const MYODD_CHAR* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -49,7 +49,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogMessage(LPCTSTR pszFmt, ...)
+  void LogMessage(const MYODD_CHAR* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -59,11 +59,11 @@ namespace myodd{ namespace log{
 
   /**
    * Log a system message.
-   * @param LPCTSTR the string message we are logging.
+   * @param const MYODD_CHAR* the string message we are logging.
    * @param ... params in the message.
    * @return none
    */
-  void LogSystem(LPCTSTR pszFmt, ...)
+  void LogSystem(const MYODD_CHAR* pszFmt, ...)
   {
     va_list argp;
     va_start(argp, pszFmt);
@@ -95,24 +95,24 @@ namespace myodd{ namespace log{
   }
 
   /**
-   * Remove a LPARAM from the list. If the list is empty then we will remove it.
+   * Remove a MYODD_LPARAM from the list. If the list is empty then we will remove it.
    * @param T the typename of the function
-   * @param LPARAM the param we want to remove
+   * @param MYODD_LPARAM the param we want to remove
    * @return bool if something was removed we will return true.
    */
-  bool RemoveNotif( const LogEventCallback& fnNotif, LPARAM lParam )
+  bool RemoveNotif( const LogEventCallback& fnNotif, MYODD_LPARAM lParam )
   {
     return LogEvent::Instance().RemoveNotif( fnNotif, lParam );
   }
 
   /**
-   * Add an LPARAM/Function to the list of items
+   * Add an long/Function to the list of items
    * @param T the typename of the function
-   * @param LPVOID the param we want to add
+   * @param MYODD_LPARAM the param we want to add
    * @param size_t the number of last notifications we want to receive.
    * @return bool true if the item was added, false if it already exists.
    */
-  bool AddNotif( const LogEventCallback& fnNotif, LPARAM lParam, size_t iSendLast /*= 100*/  )
+  bool AddNotif( const LogEventCallback& fnNotif, MYODD_LPARAM lParam, size_t iSendLast /*= 100*/  )
   {
     return LogEvent::Instance().AddNotif( fnNotif, lParam, iSendLast );
   }

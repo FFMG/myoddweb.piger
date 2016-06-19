@@ -7,14 +7,14 @@
 
 namespace myodd{ namespace net{
   // -------------------------------------------------------------------
-  LONG GetRegKey(HKEY key, LPCTSTR subkey, LPTSTR retdata)
+  LONG GetRegKey(HKEY key, const MYODD_CHAR* subkey, MYODD_CHAR* retdata)
   {
     HKEY hkey;
     LONG retval = RegOpenKeyEx(key, subkey, 0, KEY_QUERY_VALUE, &hkey);
 
     if (retval == ERROR_SUCCESS) {
       long datasize = MAX_PATH;
-      TCHAR data[MAX_PATH];
+      MYODD_CHAR data[MAX_PATH];
       RegQueryValue(hkey, NULL, data, &datasize);
       lstrcpy(retdata,data);
       RegCloseKey(hkey);
@@ -25,13 +25,13 @@ namespace myodd{ namespace net{
 
   /**
   * Go to a given URL using the user default browser/options
-  * @param LPCTSTR the path we want to go to.
+  * @param const MYODD_CHAR* the path we want to go to.
   * @param int how we want to display the bowser. @see http://msdn.microsoft.com/en-us/library/bb762153(VS.85).aspx
   * @return HINSTANCE if < than 32 then there was a problem.
   */
-  HINSTANCE GoToURL(LPCTSTR lpUrl, int showcmd)
+  HINSTANCE GoToURL(const MYODD_CHAR* lpUrl, int showcmd)
   {
-    TCHAR key[MAX_PATH + MAX_PATH];
+    MYODD_CHAR key[MAX_PATH + MAX_PATH];
 
     // First try ShellExecute()
     HINSTANCE result = ShellExecute(NULL, _T("open"), lpUrl, NULL,NULL, showcmd);
@@ -45,7 +45,7 @@ namespace myodd{ namespace net{
 
         if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) 
         {
-          TCHAR *pos;
+          MYODD_CHAR *pos;
           pos = _tcsstr(key, _T("\"%1\""));
           if (pos == NULL)                      // No quotes found
           {
@@ -73,21 +73,21 @@ namespace myodd{ namespace net{
 
   /**
   * Read an entire file off the interent
-  * @param LPCTSTR the URL of the file we are getting.
-  * @param LPVOID the buffer that will contain the data we are getting.
-  * @param DWORD the max number of bytes we can read
-  * @param DWORD the actual number of bytes read. 
-  * @param LPCTSTR the agent to send to the site.
+  * @param const MYODD_CHAR* the URL of the file we are getting.
+  * @param void* the buffer that will contain the data we are getting.
+  * @param unsigned long the max number of bytes we can read
+  * @param unsigned long the actual number of bytes read. 
+  * @param const MYODD_CHAR* the agent to send to the site.
   * @return bool if we managed to read the file or not.
   */
   bool InternetReadWholeFile
-    ( 
-    LPCTSTR lpUrl, 
-    LPVOID lpBuffer, 
+  ( 
+    const MYODD_CHAR* lpUrl,
+    void* lpBuffer,
     unsigned int dwNumberOfBytesToRead, 
     unsigned int* lpNumberOfBytesRead, 
-    LPCTSTR lpszAgent /*= _T("myodd getfile")*/
-    )
+    const MYODD_CHAR* lpszAgent /*= _T("myodd getfile")*/
+  )
   {
     HINTERNET hInet = InternetOpen(lpszAgent, INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, NULL);
     try
@@ -104,7 +104,7 @@ namespace myodd{ namespace net{
       }
       try
       {
-        DWORD dwRead=0;
+        unsigned long dwRead=0;
         BYTE szBuffer[512];
         memset(lpBuffer,0,dwNumberOfBytesToRead);
         *lpNumberOfBytesRead = 0;
@@ -134,12 +134,12 @@ namespace myodd{ namespace net{
     catch( ... )
     {
 #ifdef _DEBUG 
-      DWORD code = ::GetLastError();
-      DWORD size_needed = 0;
+      unsigned long code = ::GetLastError();
+      unsigned long size_needed = 0;
       InternetGetLastResponseInfo(&code,NULL,&size_needed);
       if( size_needed > 0 )
       {
-        TCHAR *message = new TCHAR[size_needed + 1];
+        MYODD_CHAR *message = new TCHAR[size_needed + 1];
         InternetGetLastResponseInfo(&code,message,&size_needed);
         delete [] message;
       }

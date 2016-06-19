@@ -336,7 +336,7 @@ protected:
   }
 
   template<>
-  LPCTSTR _get<LPCTSTR>( ) const
+  const MYODD_CHAR* _get<LPCTSTR>( ) const
   {
     return m_dContainer.sContent.c_str();
   }
@@ -428,8 +428,8 @@ protected:
   /**
    * unsigned long version of _get(...)
    * @see _get( ValueType& val )
-   * @param DWORD the value we are getting.
-   * @return DWORD the value.
+   * @param unsigned long the value we are getting.
+   * @return unsigned long the value.
    */
   template<>
   unsigned long _get<unsigned long>( ) const
@@ -657,7 +657,7 @@ protected:
   {
     m_dContainer.sContent = myodd::strings::ToString( v );
 
-    LPCTSTR lp = m_dContainer.sContent.c_str();
+    const MYODD_CHAR* lp = m_dContainer.sContent.c_str();
     m_ctType = Data::_GetType( typeid(v) );
 
     // check if this is indeed a number.
@@ -713,13 +713,13 @@ protected:
       return type_double;
     }
     else if( t == typeid(long) ||
-             t == typeid(DWORD)
+             t == typeid(unsigned long)
            )
     {
       return type_long;
     }
     else if( t == typeid(MYODD_STRING) ||
-             t == typeid(LPCTSTR) ||
+             t == typeid(const MYODD_CHAR*) ||
              t == typeid(LPTSTR)
 #ifdef _UNICODE
           || t == typeid(LPCSTR) 

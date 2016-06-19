@@ -1,22 +1,13 @@
 #include "stdafx.h"
 
-#ifdef __AFXWIN_H__
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif // _DEBUG
-#endif // __AFXWIN_H__
-
 #include "ConfigBase.h"
-
 #include "../files/files.h"
 #include "../xml/tinyxml2.h"
 
 namespace myodd{ namespace config{
 /**
  * The constructor.
- * @param LPCTSTR the path of the config file.
+ * @param const MYODD_CHAR* the path of the config file.
  * @return none.
  */
 ConfigBase::ConfigBase( const MYODD_STRING& szPath ) : 
@@ -583,20 +574,20 @@ bool ConfigBase::Add( const MYODD_STRING& stdNotifyName, const DATA_CONTAINER& d
 * Remove a function that was called when parts of a variable name is changed.
 * @param const MYODD_STRING& the name of the variable we were watching.
 * @param CONFIG_NOTIFY the function that was called when the function changed.
-* @param LPARAM the param that was passed when the function is called.
+* @param MYODD_LPARAM the param that was passed when the function is called.
 * @return none
 */
 void ConfigBase::RemovePartMonitor
 ( 
   const MYODD_STRING& stdVarName, 
   CONFIG_NOTIFY notif, 
-  LPARAM lParam 
+  MYODD_LPARAM lParam
 )
 {
   // lock the thread
   myodd::threads::AutoLock lock( *this );
 
-  LPARAM lParamCur;
+  MYODD_LPARAM lParamCur;
   CONFIG_NOTIFY fnNotif;
   unsigned int idx = 0;
   while( m_pDataNotify.GetNotif( idx++, fnNotif, lParamCur ) )
@@ -616,10 +607,10 @@ void ConfigBase::RemovePartMonitor
  * Add a function that will be called when parts of a variable name is changed.
  * @param const MYODD_STRING& the name of the variable we are watching.
  * @param CONFIG_NOTIFY the function that will be called when the function changes.
- * @param LPARAM the param that will be passed when the function is called.
+ * @param MYODD_LPARAM the param that will be passed when the function is called.
  * @return none
  */
-void ConfigBase::AddPartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
+void ConfigBase::AddPartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, MYODD_LPARAM lParam )
 {
   CONFIG_NOTIFY_PARTS* part = new CONFIG_NOTIFY_PARTS;
 
@@ -644,7 +635,7 @@ void ConfigBase::DeleteNotifyParts( )
   // lock the values, because we are erasing everything we cannot allow anyone to use it.
   myodd::threads::AutoLock lock( *this );
 
-  LPARAM lParam;
+  MYODD_LPARAM lParam;
   CONFIG_NOTIFY fnNotif;
   unsigned int idx = 0;
   while( m_pDataNotify.GetNotif( idx++, fnNotif, lParam ) )
@@ -671,7 +662,7 @@ void ConfigBase::NotifyParts( Data::config_type type, const MYODD_STRING& stdVar
   std::vector<MYODD_STRING> v_s;
   size_t l = myodd::strings::explode( v_s, stdVarName, _T('\\') );
   
-  LPARAM lParam;
+  MYODD_LPARAM lParam;
   CONFIG_NOTIFY fnNotif;
   unsigned int idx = 0;
   while( m_pDataNotify.GetNotif( idx++, fnNotif, lParam ) )
@@ -702,10 +693,10 @@ void ConfigBase::NotifyParts( Data::config_type type, const MYODD_STRING& stdVar
  * Add a function that will be called when a variable name is changed.
  * @param const MYODD_STRING& the name of the variable we are watching.
  * @param CONFIG_NOTIFY the function that will be called when the function changes.
- * @param LPARAM the param that will be passed when the function is called.
+ * @param MYODD_LPARAM the param that will be passed when the function is called.
  * @return bool success or not.
  */
-bool ConfigBase::AddMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
+bool ConfigBase::AddMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, MYODD_LPARAM lParam )
 {
   //  look for that item
   ConfigObject* object = NULL;
@@ -794,10 +785,10 @@ const Data& ConfigBase::Get
  * Remove a function that will be called when a variable name is changed.
  * @param const MYODD_STRING& the name of the variable we are no longer watching.
  * @param CONFIG_NOTIFY the function that was called when the function changed.
- * @param LPARAM the param that was passed when the function was called.
+ * @param MYODD_LPARAM the param that was passed when the function was called.
  * @return bool success or not.
  */
-bool ConfigBase::RemoveMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam )
+bool ConfigBase::RemoveMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, MYODD_LPARAM lParam )
 {
   ConfigObject* object = NULL;
   if( Find( stdVarName, object ) )

@@ -5,7 +5,7 @@
 
 namespace myodd{ namespace html{
   SIZE html(HDC     hdc,        // handle of device context
-            LPCTSTR lpString,   // address of string to draw
+            const MYODD_CHAR* lpString,   // address of string to draw
             int     nCount,     // string length, in characters
             LPRECT  lpRect,     // address of structure with formatting dimensions
             UINT    uFormat     // text-drawing flags

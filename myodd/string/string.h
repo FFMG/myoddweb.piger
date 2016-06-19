@@ -15,11 +15,11 @@ namespace myodd{ namespace strings{
   void Test();  //  test data
 
   // check if a string is empty.
-  bool IsEmptyString( LPCTSTR s );
+  bool IsEmptyString(const MYODD_CHAR* s );
   bool IsEmptyString( const MYODD_STRING& s );
 
   // converst to lower case.
-  TCHAR lower(TCHAR c );
+  MYODD_CHAR lower(MYODD_CHAR c );
   MYODD_STRING lower(const MYODD_STRING& s);
 
   // search and replace
@@ -59,7 +59,7 @@ namespace myodd{ namespace strings{
   size_t explode_by_null_char
     (
     std::vector<MYODD_STRING>& ret,
-    LPCTSTR s_keys, 
+    const MYODD_CHAR* s_keys,
     size_t nLen
     );
 
@@ -68,7 +68,7 @@ namespace myodd{ namespace strings{
     (
     std::vector<MYODD_STRING>& ret,
     const MYODD_STRING& s, 
-    TCHAR strDelimit, 
+    MYODD_CHAR strDelimit,
     int nCount =-1,
     bool bAddEmpty = true
     );
@@ -91,13 +91,13 @@ namespace myodd{ namespace strings{
     );
 
   // regex compare.
-  bool wildcmp(LPCTSTR wild, LPCTSTR string);
+  bool wildcmp(const MYODD_CHAR* wild, const MYODD_CHAR* string);
   bool wildcmp(const MYODD_STRING& wild, const MYODD_STRING& string);
 
-  bool IntToString( MYODD_STRING& value, int i, LPCTSTR pszFormat );
-  bool FloatToString( MYODD_STRING& value, float f, LPCTSTR pszFormat );
-  bool DoubleToString( MYODD_STRING& value, double d, LPCTSTR pszFormat );
-  bool StringToString( MYODD_STRING& value, LPCTSTR s, LPCTSTR pszFormat );
+  bool IntToString( MYODD_STRING& value, int i, const MYODD_CHAR* pszFormat );
+  bool FloatToString( MYODD_STRING& value, float f, const MYODD_CHAR* pszFormat );
+  bool DoubleToString( MYODD_STRING& value, double d, const MYODD_CHAR* pszFormat );
+  bool StringToString( MYODD_STRING& value, const MYODD_CHAR* s, const MYODD_CHAR* pszFormat );
 
   /**
    * Convert a double variables to a string with the option of a format.
@@ -106,7 +106,7 @@ namespace myodd{ namespace strings{
    * @return MYODD_STRING the converted int
    */
   template<typename T>
-  inline MYODD_STRING ToString( T t, LPCTSTR pszFormat  )
+  inline MYODD_STRING ToString( T t, const MYODD_CHAR* pszFormat  )
   {
     MYODD_STRING s;
     IntToString( s, static_cast<int>(t), pszFormat );
@@ -119,7 +119,7 @@ namespace myodd{ namespace strings{
    * @return MYODD_STRING the converted int
    */
   template<>
-  inline MYODD_STRING ToString<LPCTSTR>( LPCTSTR l, LPCTSTR pszFormat )
+  inline MYODD_STRING ToString<const MYODD_CHAR*>(const MYODD_CHAR* l, const MYODD_CHAR* pszFormat )
   {
     MYODD_STRING s;
     StringToString( s, l, pszFormat );
@@ -131,7 +131,7 @@ namespace myodd{ namespace strings{
    * @param double the number we are converting to a string.
    * @return MYODD_STRING the converted int
    */
-  inline MYODD_STRING ToString( LPCTSTR l )
+  inline MYODD_STRING ToString(const MYODD_CHAR* l )
   {
     return l;
   }
@@ -139,11 +139,11 @@ namespace myodd{ namespace strings{
   /**
    * Convert a double variables to a string with the option of a format.
    * @param double the number we are converting to a string.
-   * @param LPCTSTR 
+   * @param const MYODD_CHAR* 
    * @return MYODD_STRING the converted int
    */
   template<>
-  inline MYODD_STRING ToString<double>( double d, LPCTSTR pszFormat )
+  inline MYODD_STRING ToString<double>( double d, const MYODD_CHAR* pszFormat )
   {
     MYODD_STRING s;
     DoubleToString( s, d, pszFormat );
@@ -157,14 +157,14 @@ namespace myodd{ namespace strings{
    * @return MYODD_STRING the converted int
    */
   template<>
-  inline MYODD_STRING ToString<float>( float f, LPCTSTR pszFormat  )
+  inline MYODD_STRING ToString<float>( float f, const MYODD_CHAR* pszFormat  )
   {
     MYODD_STRING s;
     FloatToString( s, f, pszFormat );
     return s;
   }
 
-  MYODD_STRING ToStringFmt( LPCTSTR pszFormat, ... );
+  MYODD_STRING ToStringFmt(const MYODD_CHAR* pszFormat, ... );
 
   /**
   * Convert many variables to a string.
@@ -201,7 +201,7 @@ namespace myodd{ namespace strings{
   }
 
   template<>
-  inline MYODD_STRING ToString<LPTSTR>( const LPTSTR& x)
+  inline MYODD_STRING ToString<MYODD_CHAR*>( const LPTSTR& x)
   {
     return x;
   }
@@ -225,12 +225,12 @@ namespace myodd{ namespace strings{
   bool IsNumeric( const MYODD_STRING& s, bool allowDecimal = true);
 
   // Trims
-  void Trim( MYODD_STRING& str, const TCHAR* chars = _T( " " ) );
-  void TrimRight( MYODD_STRING& str, const TCHAR* chars );
-  void TrimLeft( MYODD_STRING& str, const TCHAR* chars );
+  void Trim( MYODD_STRING& str, const MYODD_CHAR* chars = _T( " " ) );
+  void TrimRight( MYODD_STRING& str, const MYODD_CHAR* chars );
+  void TrimLeft( MYODD_STRING& str, const MYODD_CHAR* chars );
 
-  LPTSTR _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet);
-  LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet);
+  MYODD_CHAR* _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet);
+  MYODD_CHAR* _tcsistr(const MYODD_CHAR* string, const MYODD_CHAR* strCharSet);
 
   template<typename T>
   size_t Length(T src);
@@ -240,7 +240,7 @@ namespace myodd{ namespace strings{
 } //  strings
 } //  myodd
 
-#   define T_MAX_PATH (MAX_PATH*sizeof(TCHAR))
+#   define T_MAX_PATH (MAX_PATH*sizeof(MYODD_CHAR))
 #   ifdef _UNICODE
 #     define T_A2T(p) A2T(p)
 #     define T_T2A(p) T2A(p)

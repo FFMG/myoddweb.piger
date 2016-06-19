@@ -10,8 +10,8 @@
 // the maxfile size we want to use.
 static size_t MAX_FILE_SIZE_IN_MEGABYTES = 5;
 
-static LPCTSTR LogFile_default_Prefix = _T("myodd");
-static LPCTSTR LogFile_default_Extention = _T("log");
+static const MYODD_CHAR* LogFile_default_Prefix = _T("myodd");
+static const MYODD_CHAR* LogFile_default_Extention = _T("log");
 
 namespace myodd{ namespace log{
   LogFile::LogFile() : 
@@ -73,10 +73,10 @@ namespace myodd{ namespace log{
       for ( unsigned int i = 0;; ++i )
       {
         //  get the log file.
-        TCHAR szDateLogStarted[40] = {};
+        MYODD_CHAR szDateLogStarted[40] = {};
         _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y-%m-%d"), &_tStarted );
 
-        TCHAR szFileCount[10] = {};
+        MYODD_CHAR szFileCount[10] = {};
         if (i > 0) 
         {
           swprintf(szFileCount, _T("-%d"), i);
@@ -284,10 +284,10 @@ namespace myodd{ namespace log{
   /**
    * Log an entry to the file.
    * @param unsigned int uiType the log type
-   * @param LPCTSTR the line we are adding.
+   * @param const MYODD_CHAR* the line we are adding.
    * @return bool success or not.
    */
-  bool LogFile::LogToFile( unsigned int uiType, LPCTSTR pszLine )
+  bool LogFile::LogToFile( unsigned int uiType, const MYODD_CHAR* pszLine )
   {
     //  are we logging?
     if (m_sCurrentFile.empty())
@@ -317,7 +317,7 @@ namespace myodd{ namespace log{
         return false;
       }
 
-      TCHAR szDateLogStarted[40];
+      MYODD_CHAR szDateLogStarted[40];
       _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y/%m/%d %H:%M:%S"), &tStarted );
 
       //  build the return message.
@@ -327,10 +327,10 @@ namespace myodd{ namespace log{
       stdMsg += (pszLine ? pszLine : _T(""));
       stdMsg += _T("\r\n");
 
-      LPCTSTR pszMsg = stdMsg.c_str();
+      const MYODD_CHAR* pszMsg = stdMsg.c_str();
 
       // get the total size of what we are about to write..
-      size_t uToWrite = _tcslen(pszMsg) * sizeof(TCHAR);
+      size_t uToWrite = _tcslen(pszMsg) * sizeof(MYODD_CHAR);
 
       //  then we can write to the file.
       size_t uWritten = fwrite(pszMsg, 1, uToWrite, m_fp);

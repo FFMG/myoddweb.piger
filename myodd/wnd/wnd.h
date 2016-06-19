@@ -28,15 +28,15 @@ namespace myodd{ namespace wnd{
   void MakeValidUInt( HWND hwndParent, WORD id );
   void MakeValidInt( HWND hwndParent, WORD id ); 
   void MakeValidIntRange(HWND hwndParent, WORD id, int nMin, int nMax );
-  void MakeValidDouble( HWND hwndParent, WORD id, LPCTSTR lpszFormat = _T("%f") ); 
-  void MakeValidDoubleRange( HWND hwndParent, WORD id, double nMin, double nMax, LPCTSTR lpszFormat = _T("%f") );
+  void MakeValidDouble( HWND hwndParent, WORD id, const MYODD_CHAR* lpszFormat = _T("%f") );
+  void MakeValidDoubleRange( HWND hwndParent, WORD id, double nMin, double nMax, const MYODD_CHAR* lpszFormat = _T("%f") );
 
   bool SetFocus( HWND hwndParent, WORD id );
 
   bool SetText( HWND hwndParent, WORD id, const MYODD_STRING& s );
-  bool SetText( HWND hwndParent, WORD id, const TCHAR* lp );
+  bool SetText( HWND hwndParent, WORD id, const MYODD_CHAR* lp );
   bool SetText( HWND hwndParent, WORD id, int i );
-  bool SetText( HWND hwndParent, WORD id, double d, const TCHAR* pszFormat );
+  bool SetText( HWND hwndParent, WORD id, double d, const MYODD_CHAR* pszFormat );
 
   // -- windows helpers.
   bool EnableWindow(HWND hWndParent, WORD id, bool bEnable );
@@ -53,7 +53,7 @@ namespace myodd{ namespace wnd{
   void GetNearestMonitorRect( HWND hwndParent, RECT& rect );
 
   // -- kill an app.
-  DWORD WINAPI TerminateApp( DWORD dwPID, DWORD dwTimeout ) ;
+  unsigned long WINAPI TerminateApp(unsigned long dwPID, unsigned long dwTimeout ) ;
 } //  wnd
 } //  myodd
 

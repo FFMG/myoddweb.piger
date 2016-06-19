@@ -9,13 +9,13 @@
 #include "../common/includes.h"
 
 namespace myodd{ namespace reg{
-  bool DeleteFullPath( LPCTSTR lpSubKey, LPCTSTR section, HKEY hkey );
+  bool DeleteFullPath(const MYODD_CHAR* lpSubKey, const MYODD_CHAR* section, HKEY hkey );
 
-  bool SaveStringFullPath( LPCTSTR lpSubKey, LPCTSTR section, LPCTSTR newVal, HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, DWORD *dwRet = NULL );
-  bool SaveDWORDFullPath( LPCTSTR lpSubKey, LPCTSTR section, DWORD newVal, HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, DWORD *dwRet = NULL);
+  bool SaveStringFullPath(const MYODD_CHAR* lpSubKey, const MYODD_CHAR* section, LPCTSTR newVal, HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, unsigned long *dwRet = NULL );
+  bool SaveDWORDFullPath(const MYODD_CHAR* lpSubKey, const MYODD_CHAR* section, unsigned long newVal, HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, unsigned long *dwRet = NULL);
 
-  bool LoadStringFullPath( LPCTSTR lpSubKey, LPCTSTR section, MYODD_STRING &oldVal, HKEY hkey /*= HKEY_LOCAL_MACHINE*/,  DWORD *dwRet = NULL );
-  bool LoadDWORDFullPath( LPCTSTR lpSubKey, LPCTSTR section, DWORD &oldVal, HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, DWORD *dwRet = NULL );
+  bool LoadStringFullPath(const MYODD_CHAR* lpSubKey, const MYODD_CHAR* section, MYODD_STRING &oldVal, HKEY hkey /*= HKEY_LOCAL_MACHINE*/, unsigned long *dwRet = NULL );
+  bool LoadDWORDFullPath(const MYODD_CHAR* lpSubKey, const MYODD_CHAR* section, unsigned long &oldVal, HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, unsigned long *dwRet = NULL );
 } //  reg
 } //  myodd
 #endif // _Reg_h

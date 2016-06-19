@@ -2,6 +2,7 @@
 #include <locale>
 #include <codecvt>
 #include "string.h"
+#include "assert.h"
 
 namespace myodd{ namespace strings{
 void Test()
@@ -93,16 +94,16 @@ void Test()
  * Explode a string that is separated with '\0' chars.
  * This is used with items like GetPrivateProfileString( ... ) when we want to list all the keys.
  * @param std::vector<MYODD_STRING>& the return container.
- * @param LPCTSTR the string with null chars '\0' finished by '\0\0'
+ * @param const MYODD_CHAR* the string with null chars '\0' finished by '\0\0'
  * @param size_t the length of the string. 
  * @return int the number of items returned.
  */
 size_t explode_by_null_char
 (
- std::vector<MYODD_STRING>& ret,
- LPCTSTR s_keys, 
- size_t nLen
- )
+  std::vector<MYODD_STRING>& ret,
+  const MYODD_CHAR* s_keys,
+  size_t nLen
+)
 {
   size_t retSize = 0;
   MYODD_STRING stdToken;
@@ -131,7 +132,7 @@ size_t explode_by_null_char
  *
  * @param std::vector<MYODD_STRING>& the return container.
  * @param MYODD_STRING the string we want to explode
- * @param LPCTSTR Set of delimiter characters.
+ * @param const MYODD_CHAR* Set of delimiter characters.
  * @param int the max number of items we want to return.
  * @return int the number of item that we found.
  */
@@ -139,7 +140,7 @@ size_t explode
 (
   std::vector<MYODD_STRING>& ret,
   const MYODD_STRING& s, 
-  TCHAR strDelimit, 
+  MYODD_CHAR strDelimit,
   int nCount /*=-1*/,
   bool bAddEmpty /*= true*/
 )
@@ -308,7 +309,7 @@ size_t ifind
     return MYODD_STRING::npos;  // cannot find it.
 
   // look for that string
-  LPTSTR lpFind = _tcsistr( origStr.c_str()+ nFrom, srchStr.c_str() );
+  MYODD_CHAR* lpFind = _tcsistr( origStr.c_str()+ nFrom, srchStr.c_str() );
   if( NULL == lpFind )
     return MYODD_STRING::npos;  //  not found
 
@@ -429,7 +430,7 @@ void replace_inplace
 MYODD_STRING lower(const MYODD_STRING& s)
 {
   MYODD_STRING ret = _T("");
-  BOOST_FOREACH( TCHAR tch, s )
+  BOOST_FOREACH(MYODD_CHAR tch, s )
   {
     ret += lower( tch );
   }
@@ -439,10 +440,10 @@ MYODD_STRING lower(const MYODD_STRING& s)
 /**
  * convert single char to lower case.
  *
- * @param TCHAR the character we want to convert.
- * @return TCHAR the lower char character
+ * @param MYODD_CHAR the character we want to convert.
+ * @return MYODD_CHAR the lower char character
  */
-TCHAR lower( TCHAR c )
+MYODD_CHAR lower(MYODD_CHAR c )
 {
   if( c >= _T('A') && c <= _T('Z') )
   {
@@ -456,8 +457,8 @@ TCHAR lower( TCHAR c )
  * little bit more powerful.
  * Or at least something that follows the regex standard(s).
  *
- * @param LPCTSTR the wild search, something like "^(5){1}"
- * @param LPCTSTR the string we will be comparing against.
+ * @param const MYODD_CHAR* the wild search, something like "^(5){1}"
+ * @param const MYODD_CHAR* the string we will be comparing against.
  * @return int
  */
 bool wildcmp(const MYODD_STRING& wild, const MYODD_STRING& string)
@@ -470,11 +471,11 @@ bool wildcmp(const MYODD_STRING& wild, const MYODD_STRING& string)
  * little bit more powerful.
  * Or at least something that follows the regex standard(s).
  *
- * @param LPCTSTR the wild search, something like "^(5){1}"
- * @param LPCTSTR the string we will be comparing against.
+ * @param const MYODD_CHAR* the wild search, something like "^(5){1}"
+ * @param const MYODD_CHAR* the string we will be comparing against.
  * @return int 
  */
-bool wildcmp(LPCTSTR wild, LPCTSTR string) 
+bool wildcmp(const MYODD_CHAR* wild, const MYODD_CHAR* string)
 {
   try
   {
@@ -525,7 +526,7 @@ bool IsNumeric( const MYODD_STRING& s, bool allowDecimal /*= true*/ )
 
   if( allowDecimal )
   {
-    static LPCTSTR lpMatches = _T("^\\s*(([-+]?\\d{0,})(\\.?\\d{0,}))\\s*$");
+    static const MYODD_CHAR* lpMatches = _T("^\\s*(([-+]?\\d{0,})(\\.?\\d{0,}))\\s*$");
     static boost_match matches;
     static boost_regex aStringregex( lpMatches );
     if (boost::regex_match( s.c_str(), matches, aStringregex))
@@ -535,7 +536,7 @@ bool IsNumeric( const MYODD_STRING& s, bool allowDecimal /*= true*/ )
   }
   else
   {
-    static LPCTSTR lpMatches = _T("^\\s*(([-+]?\\d{0,}))\\s*$");
+    static const MYODD_CHAR* lpMatches = _T("^\\s*(([-+]?\\d{0,}))\\s*$");
     static boost_match matches;
     static boost_regex aStringregex( lpMatches );
     if (boost::regex_match( s.c_str(), matches, aStringregex))
@@ -549,10 +550,10 @@ bool IsNumeric( const MYODD_STRING& s, bool allowDecimal /*= true*/ )
 /**
  * Trim left && right character(s)
  * @param MYODD_STRING& str the string we want to edit.
- * @param const TCHAR* the char(s) we want to trim off.
+ * @param const MYODD_CHAR* the char(s) we want to trim off.
  * @return none
  */
-void Trim( MYODD_STRING& str, const TCHAR* chars /*= _T( " " )*/ )
+void Trim( MYODD_STRING& str, const MYODD_CHAR* chars /*= _T( " " )*/ )
 {
   TrimLeft( str, chars );
   TrimRight( str, chars );
@@ -561,10 +562,10 @@ void Trim( MYODD_STRING& str, const TCHAR* chars /*= _T( " " )*/ )
 /**
  * Trim right character(s)
  * @param MYODD_STRING& str the string we want to edit.
- * @param const TCHAR* the char(s) we want to trim off.
+ * @param const MYODD_CHAR* the char(s) we want to trim off.
  * @return none
  */
-void TrimRight( MYODD_STRING& str, const TCHAR* chars )
+void TrimRight( MYODD_STRING& str, const MYODD_CHAR* chars )
 {
   if (!str.empty())
   {
@@ -583,10 +584,10 @@ void TrimRight( MYODD_STRING& str, const TCHAR* chars )
 /**
  * Trim left character(s)
  * @param MYODD_STRING& str the string we want to edit.
- * @param const TCHAR* the char(s) we want to trim off.
+ * @param const MYODD_CHAR* the char(s) we want to trim off.
  * @return none
  */
-void TrimLeft( MYODD_STRING& str, const TCHAR* chars )
+void TrimLeft( MYODD_STRING& str, const MYODD_CHAR* chars )
 {
   if (!str.empty())
   {
@@ -607,13 +608,13 @@ void TrimLeft( MYODD_STRING& str, const TCHAR* chars )
  * _tcsistr() will search by ignoring the case of those characters 
  * that fall in the ANSI range a-z and A-Z.
  * @see ::_tcsstr( ... )
- * @param LPCTSTR nul-terminated string to search
- * @param LPCTSTR nul-terminated string to search for
- * @return LPTSTR - if successful, returns a pointer to the first 
+ * @param const MYODD_CHAR* nul-terminated string to search
+ * @param const MYODD_CHAR* nul-terminated string to search for
+ * @return MYODD_CHAR* - if successful, returns a pointer to the first 
  *                  occurrence of strCharSet in string;  otherwise, 
  *                  returns NULL
  */ 
-LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet)
+MYODD_CHAR* _tcsistr(const MYODD_CHAR* string, const MYODD_CHAR* strCharSet)
 {
   size_t nLen = _tcslen(strCharSet);
 
@@ -627,7 +628,7 @@ LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet)
 	if (*string == _T('\0'))
 		string = NULL;
 
-	return (LPTSTR)string;
+	return (MYODD_CHAR*)string;
 }
 
 /**
@@ -638,11 +639,11 @@ LPTSTR _tcsistr(LPCTSTR string, LPCTSTR strCharSet)
  * @see _tcsistr( ... )
  * @param const MYODD_STRING& string to search
  * @param const MYODD_STRING& string to search for
- * @return LPTSTR - if successful, returns a pointer to the first 
+ * @return MYODD_CHAR* - if successful, returns a pointer to the first 
  *                  occurrence of strCharSet in string;  otherwise, 
  *                  returns NULL
  */ 
-LPTSTR _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet)
+MYODD_CHAR* _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet)
 {
   return _tcsistr( string.c_str(), strCharSet.c_str() );
 }
@@ -650,10 +651,10 @@ LPTSTR _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet)
 /**
 * Check if a given string is empty
 * "     " even if the len of the string is not 0
-* @param const MYODD_STRING
+* @param const MYODD_CHAR*
 * @return bool if the string is empty or not.
 */
-bool IsEmptyString( LPCTSTR s )
+bool IsEmptyString(const MYODD_CHAR* s )
 {
   if( s == NULL )
     return true;
@@ -684,10 +685,10 @@ bool IsEmptyString( const MYODD_STRING& s )
  * Convert a double value to an string given a format.
  * @param MYODD_STRING& 
  * @param float the number we want to use.
- * @param LPCTSTR|NULL the format we want to use the float with.
+ * @param const MYODD_CHAR*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool IntToString( MYODD_STRING& value, int i, LPCTSTR pszFormat )
+bool IntToString( MYODD_STRING& value, int i, const MYODD_CHAR* pszFormat )
 {
   try
   {
@@ -709,10 +710,10 @@ bool IntToString( MYODD_STRING& value, int i, LPCTSTR pszFormat )
  * Convert a double value to an string given a format.
  * @param MYODD_STRING& 
  * @param float the number we want to use.
- * @param LPCTSTR|NULL the format we want to use the float with.
+ * @param const MYODD_CHAR*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool DoubleToString( MYODD_STRING& value, double d, LPCTSTR pszFormat )
+bool DoubleToString( MYODD_STRING& value, double d, const MYODD_CHAR* pszFormat )
 {
   try
   {
@@ -734,10 +735,10 @@ bool DoubleToString( MYODD_STRING& value, double d, LPCTSTR pszFormat )
  * Convert a float value to an string given a format.
  * @param MYODD_STRING& 
  * @param float the number we want to use.
- * @param LPCTSTR|NULL the format we want to use the float with.
+ * @param const MYODD_CHAR*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool FloatToString( MYODD_STRING& value, float f, LPCTSTR pszFormat )
+bool FloatToString( MYODD_STRING& value, float f, const MYODD_CHAR* pszFormat )
 {
   try
   {
@@ -758,11 +759,11 @@ bool FloatToString( MYODD_STRING& value, float f, LPCTSTR pszFormat )
 /**
  * Convert a float value to an string given a format.
  * @param MYODD_STRING& the return value.
- * @param LPCTSTR the string we would like to format.
- * @param LPCTSTR|NULL the format we want to use the float with.
+ * @param const MYODD_CHAR* the string we would like to format.
+ * @param const MYODD_CHAR*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool StringToString( MYODD_STRING& value, LPCTSTR l, LPCTSTR pszFormat )
+bool StringToString( MYODD_STRING& value, const MYODD_CHAR* l, const MYODD_CHAR* pszFormat )
 {
   try
   {
@@ -807,7 +808,7 @@ std::string WString2String(const std::wstring& ws2Convert)
 }
 
 
-MYODD_STRING ToStringFmt( LPCTSTR pszFormat, ... )
+MYODD_STRING ToStringFmt(const MYODD_CHAR* pszFormat, ... )
 {
   va_list argp;
   va_start(argp, pszFormat);
@@ -829,7 +830,7 @@ MYODD_STRING ToStringFmt( LPCTSTR pszFormat, ... )
   MYODD_STRING result = _T("");
 
   // create the new buffer.
-  TCHAR* buffer = new TCHAR[len];
+  MYODD_CHAR* buffer = new MYODD_CHAR[len];
   if( _vsntprintf_s(buffer, len, len, pszFormat, argp) > 0 )
   {
     // set the return the value

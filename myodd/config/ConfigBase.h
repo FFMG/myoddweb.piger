@@ -52,11 +52,11 @@ public:
   * All the get/set functions
   * You can use get_x when you want a specific type to be returned
   */
-  bool AddMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
-  bool RemoveMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
+  bool AddMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
+  bool RemoveMonitor ( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
 
-  void AddPartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
-  void RemovePartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, LPARAM lParam );
+  void AddPartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
+  void RemovePartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
 
   /**
   * Add an object to the array of ConfigBase objects
@@ -70,7 +70,7 @@ private:
   struct  CONFIG_NOTIFY_PARTS
   {
     size_t stParts;
-    LPARAM lParam;
+    MYODD_LPARAM lParam;
     MYODD_STRING stdVarName;
   };
   myodd::notif::Notifications<CONFIG_NOTIFY> m_pDataNotify;

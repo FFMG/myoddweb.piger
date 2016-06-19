@@ -401,11 +401,11 @@ double AngleOf2Points( const Vector& pt1, const Vector& pt2 )
  * Convert a string to an integer.
  * The function returns -1 if there is any problem!
  * 
- * @param const TCHAR* the string we are converting.
+ * @param const MYODD_CHAR* the string we are converting.
  * @param BYTE the base we are converting from.
  * @return int the converted number.
  */
-int __fastcall ToBase10(const TCHAR* udata, BYTE fromBase)
+int __fastcall ToBase10(const MYODD_CHAR* udata, BYTE fromBase)
 {
   //  sanity check
   // 1- We only support base 2 -> 36
@@ -420,16 +420,16 @@ int __fastcall ToBase10(const TCHAR* udata, BYTE fromBase)
     return -1; // Cannot convert NULL value.
   }
 
-  static const TCHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+  static const MYODD_CHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
   size_t udatalen = myodd::strings::Length( udata );
 
   long digitValue = 0;
   int retVal = 0;
-  TCHAR digits[ sizeof(numdigits)+1 ];
-  TCHAR *dataVal;
+  MYODD_CHAR digits[ sizeof(numdigits)+1 ];
+  MYODD_CHAR *dataVal;
 
   //copy the data to our variable
-  TCHAR *data = new TCHAR[udatalen+1];
+  MYODD_CHAR* data = new MYODD_CHAR[udatalen+1];
   _tcscpy_s(data, udatalen+1, udata);
   //convert it to upper case
 
@@ -470,7 +470,7 @@ int __fastcall ToBase10(const TCHAR* udata, BYTE fromBase)
  * @param unsigned int the base 10 number.
  * @return NULL|string the converted number.
  */
-LPCTSTR __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE base)
+const MYODD_CHAR* __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE base)
 {
   //  reset the return value.
   ret = _T("");
@@ -484,11 +484,11 @@ LPCTSTR __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE ba
   //  no need to try to convert 0.
   if( 0 != base10number )
   {
-    static const TCHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    static const MYODD_CHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     long digitValue = 0;
     
     // copy only the numbers we need, (depending on the base).
-    TCHAR digits[sizeof(numdigits) + 1];
+    MYODD_CHAR digits[sizeof(numdigits) + 1];
     memset(digits, 0, sizeof(digits));
     _tcsncpy_s(digits, numdigits, base);
     while(base10number)
