@@ -1,5 +1,4 @@
 #include "TokenBr.h"
-#include "../myodd.h"
 #include "../string/string.h"
 
 TokenBr::TokenBr() : 

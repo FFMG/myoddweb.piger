@@ -1,8 +1,6 @@
 /* DrawHTML()
 * Drop-in replacement for DrawText() supporting a tiny subset of HTML.
 */
-#include "..\myodd.h"
-
 #include "../common/includes.h"
 #include "../string/string.h"
 #include "../math/math.h"

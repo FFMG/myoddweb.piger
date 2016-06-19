@@ -45,8 +45,6 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 #endif
 
-#include "myodd.h"
-
 // --------------------------------------------------------------------------------------
 // BOOST Files.
 #define BOOST_ALL_NO_LIB 1

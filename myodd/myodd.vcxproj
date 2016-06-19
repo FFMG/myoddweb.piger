@@ -557,7 +557,6 @@
     <ClCompile Include="log\logevent.cpp" />
     <ClCompile Include="log\logfile.cpp" />
     <ClCompile Include="math\math.cpp" />
-    <ClCompile Include="myodd.cpp" />
     <ClCompile Include="network\network.cpp" />
     <ClCompile Include="offsets\offset.cpp" />
     <ClCompile Include="os\os.cpp">
@@ -635,7 +634,6 @@
     <ClInclude Include="log\logfile.h" />
     <ClInclude Include="log\logtype.h" />
     <ClInclude Include="math\math.h" />
-    <ClInclude Include="myodd.h" />
     <ClInclude Include="network\network.h" />
     <ClInclude Include="notif\notif.h" />
     <ClInclude Include="offsets\offset.h" />

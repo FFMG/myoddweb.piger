@@ -2,7 +2,6 @@
 #define _Notify_H_
 #pragma once
 
-#include "../myodd.h"
 #include "../threads/threads.h"
 #include <assert.h>
 #include <vector>
