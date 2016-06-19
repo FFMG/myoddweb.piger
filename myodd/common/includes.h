@@ -12,8 +12,10 @@
 #ifndef MYODD_STRING
 #   ifdef _UNICODE
       typedef std::wstring MYODD_STRING;
+      typedef wchar_t* MYODD_CHAR;
 #   else
       typedef std::string MYODD_STRING;
+      typedef char* MYODD_CHAR;
 #   endif
 #endif  //  MYODD_STRING
 
