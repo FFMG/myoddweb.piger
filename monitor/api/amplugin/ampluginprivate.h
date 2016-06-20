@@ -28,7 +28,8 @@ public:
   virtual bool AddAction(const wchar_t* szText, const wchar_t* szPath);
   virtual bool RemoveAction(const wchar_t* szText, const wchar_t* szPath);
   virtual bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer);
-  virtual void * GetForegroundWindow() const;
+  virtual void* GetForegroundWindow() const;
+  virtual void Log(unsigned int logType, const wchar_t* szText);
 
   //  add a definition
   virtual void Add(const wchar_t* name, void*);

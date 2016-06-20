@@ -75,4 +75,7 @@ public:
   // Get the last foreground window.
   // this is the window that was in the foreground at the time the call was made.
   HWND GetForegroundWindow() const;
+
+  // log a message to the log file.
+  void Log(unsigned int logType, const wchar_t* lpText);
 };

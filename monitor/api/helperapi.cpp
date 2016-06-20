@@ -478,3 +478,39 @@ std::wstring HelperApi::widen(const std::string& str)
     wstm << ctfacet.widen(str[i]);
   return wstm.str();
 }
+
+/**
+ * Log a message.
+ * @param unsigned int logType the message type we are logging.
+ * @param const wchar_t* lpText the text we wish to log.
+ * @return none.
+ */
+void HelperApi::Log(unsigned int logType, const wchar_t* lpText)
+{
+  switch ( (myodd::log::LogType)logType )
+  {
+  case myodd::log::LogType::Success:
+    myodd::log::LogSuccess(lpText);
+    break;
+
+  case myodd::log::LogType::Error:
+    myodd::log::LogError(lpText);
+    break;
+
+  case myodd::log::LogType::Warning:
+    myodd::log::LogWarning(lpText);
+    break;
+
+  case myodd::log::LogType::Message:
+    myodd::log::LogMessage(lpText);
+    break;
+
+  case myodd::log::LogType::System:
+    myodd::log::LogSystem(lpText);
+    break;
+
+  default:
+    myodd::log::LogError( _T("Unknown log type: %s"), lpText );
+    break;
+  }
+}

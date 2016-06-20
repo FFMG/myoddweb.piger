@@ -70,18 +70,19 @@ public:
   static double Version();
   static size_t GetCommandCount();
 
-  static bool Say(LPCWSTR msg, UINT nElapse, UINT nFadeOut);
-  static bool Execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged);
-  static int GetString(DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
-  static size_t GetCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer);
-  static int GetAction(DWORD nBufferLength, LPWSTR lpBuffer);
-  static int GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
-  static int GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
-  static int GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote);
-  static bool AddAction(LPCWSTR szText, LPCWSTR szPath);
-  static bool RemoveAction(LPCWSTR szText, LPCWSTR szPath);
-  static bool GetVersion(DWORD nBufferLength, LPWSTR lpBuffer);
-  static bool FindAction(UINT idx, LPCWSTR lpCommand, DWORD nBufferLength, LPWSTR lpBuffer);
+  static bool Say(const wchar_t* msg, UINT nElapse, UINT nFadeOut);
+  static bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
+  static int GetString(DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
+  static size_t GetCommand(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer);
+  static int GetAction(DWORD nBufferLength, wchar_t* lpBuffer);
+  static int GetFile(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
+  static int GetFolder(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
+  static int GetURL(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
+  static bool AddAction(const wchar_t* szText, const wchar_t* szPath);
+  static bool RemoveAction(const wchar_t* szText, const wchar_t* szPath);
+  static bool GetVersion(DWORD nBufferLength, wchar_t* lpBuffer);
+  static bool FindAction(UINT idx, const wchar_t* lpCommand, DWORD nBufferLength, wchar_t* lpBuffer);
   static HWND GetForegroundWindow();
+  static void Log(unsigned int logType, const wchar_t* lpText);
 };
 #endif /*ACTIONMONITOR_API_PLUGIN*/

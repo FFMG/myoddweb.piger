@@ -106,7 +106,15 @@ public:
   virtual bool AddAction(const wchar_t* szText, const wchar_t* szPath) = 0;
   virtual bool RemoveAction(const wchar_t* szText, const wchar_t* szPath) = 0;
   virtual bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
-  virtual void * GetForegroundWindow() const = 0;
+  virtual void* GetForegroundWindow() const = 0;
+
+  // The error types are
+  //   Success = 1
+  //   Error= 2
+  //   Warning = 3
+  //   Message = 4
+  //   System = 5
+  virtual void Log(unsigned int logType, const wchar_t* szText) = 0;
 
   //  add a definition
   virtual void Add(const wchar_t* name, void*) = 0;

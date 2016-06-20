@@ -10,6 +10,7 @@ typedef bool(*PLUGIN_FNCEXECUTE)(const wchar_t*, const wchar_t*, bool);
 typedef bool(*PLUGIN_FNCOMMAND)(const wchar_t*, const wchar_t*);
 typedef bool(*PLUGIN_FINDCOMMAND)(unsigned int, const wchar_t*, unsigned int, wchar_t*);
 typedef void* (*PLUGIN_FOREGROUNDWINDOW)();
+typedef void (*PLUGIN_LOG)(unsigned int, const wchar_t*);
 
 AmPluginPrivate::AmPluginPrivate()
 {
@@ -264,7 +265,7 @@ bool AmPluginPrivate::FindAction(unsigned int idx, const wchar_t* szText, unsign
 * Get the last foreground window.
 * @return void* the last foregorund window.
 */
-void * AmPluginPrivate::GetForegroundWindow() const
+void* AmPluginPrivate::GetForegroundWindow() const
 {
   void* pFunc = Get(L"getForegroundWindow");
   if (!pFunc)
@@ -272,4 +273,20 @@ void * AmPluginPrivate::GetForegroundWindow() const
     return NULL;
   }
   return ((PLUGIN_FOREGROUNDWINDOW)(pFunc))();
+}
+
+/**
+ * Log a message.
+ * @param unsigned int logType the message type we are logging.
+ * @param const wchar_t* lpText the text we wish to log.
+ * @return none.
+ */
+void AmPluginPrivate::Log(unsigned int logType, const wchar_t* szText)
+{
+  void* pFunc = Get(L"log");
+  if (!pFunc)
+  {
+    return;
+  }
+  return ((PLUGIN_LOG)(pFunc))(logType, szText);
 }
