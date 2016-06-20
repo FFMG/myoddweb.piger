@@ -490,23 +490,23 @@ void HelperApi::Log(unsigned int logType, const wchar_t* lpText)
   switch ( (myodd::log::LogType)logType )
   {
   case myodd::log::LogType::Success:
-    myodd::log::LogSuccess(lpText);
+    myodd::log::LogSuccess( L"%s", lpText);
     break;
 
   case myodd::log::LogType::Error:
-    myodd::log::LogError(lpText);
+    myodd::log::LogError(L"%s", lpText);
     break;
 
   case myodd::log::LogType::Warning:
-    myodd::log::LogWarning(lpText);
+    myodd::log::LogWarning(L"%s", lpText);
     break;
 
   case myodd::log::LogType::Message:
-    myodd::log::LogMessage(lpText);
+    myodd::log::LogMessage(L"%s", lpText);
     break;
 
   case myodd::log::LogType::System:
-    myodd::log::LogSystem(lpText);
+    myodd::log::LogSystem(L"%s", lpText);
     break;
 
   default:
