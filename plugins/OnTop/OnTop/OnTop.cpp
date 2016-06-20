@@ -20,7 +20,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
     {
       //
       // the plugin manager.
-      amplugin* p = (amplugin*)(lParam);
+      AmPlugin* p = (AmPlugin*)(lParam);
 
       //
       // get the full path of this plugin
@@ -44,7 +44,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
     {
       //
       // Our action as called!
-      amplugin* p = (amplugin*)(lParam);
+      AmPlugin* p = (AmPlugin*)(lParam);
 
       // get the window
       HWND hWnd = (HWND)p->GetForegroundWindow();

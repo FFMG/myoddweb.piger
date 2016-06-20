@@ -111,7 +111,7 @@ void PluginVirtualMachine::Initialize()
     if (_amPlugin == NULL)
     {
       //  we can now create it.
-      _amPlugin = new amplugin();
+      _amPlugin = new AmPlugin();
 
       // register our Plugin functions.
       InitializeFunctions();

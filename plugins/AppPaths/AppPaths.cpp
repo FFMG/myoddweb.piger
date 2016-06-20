@@ -18,7 +18,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
   {
   case AM_MSG_INIT:
     m_appPath = new AppPaths;
-    m_appPath->Init( *((amplugin*)lParam) );
+    m_appPath->Init( *((AmPlugin*)lParam) );
     return AM_RESP_TRUE;
     break;
 
@@ -247,10 +247,10 @@ void AppPaths::QueryKey
 
 /**
  * Go around all the registry keys and add the entries as actions.
- * @param amplugin& the amplugin that we will use to add actions.
+ * @param AmPlugin& the AmPlugin that we will use to add actions.
  * @return none
  */
-void AppPaths::Init( amplugin& am )
+void AppPaths::Init(AmPlugin& am )
 {
   //
   // add the registry values.
@@ -259,10 +259,10 @@ void AppPaths::Init( amplugin& am )
 
 /**
  * Query all the app path registry keys.
- * @param amplugin& the common plugin code.
+ * @param AmPlugin& the common plugin code.
  * @return none.
  */
-void AppPaths::QueryRegistry( amplugin& am )
+void AppPaths::QueryRegistry(AmPlugin& am )
 {
   //
   // read all the name values

@@ -25,9 +25,9 @@ LoaderManager::~LoaderManager(void)
 
 /**
  * Initialise the loader with the plugin.
- * @param amplugin* p the plugin itself.
+ * @param AmPlugin* p the plugin itself.
  */
-void LoaderManager::Init( amplugin* p  )
+void LoaderManager::Init(AmPlugin* p  )
 {
   // assume that we have no path.
   m_lpFilePath = m_thisPath = L"";
@@ -81,7 +81,7 @@ void LoaderManager::Exit( )
 }
 
 // -------------------------------------------------------------
-void LoaderManager::Main( amplugin* p  )
+void LoaderManager::Main(AmPlugin* p  )
 {
   int l = 0;
   //  get the name of the action
@@ -122,11 +122,11 @@ void LoaderManager::Main( amplugin* p  )
 
 /**
  * remove one of OUR commands from the list.
- * @param amplugin* the plugin manager
+ * @param AmPlugin* the plugin manager
  * @param const std::wstring& the name of the command we are removing.
  * @return none
  */
-void LoaderManager::UnLearn( amplugin* p, const std::wstring& lpName  )
+void LoaderManager::UnLearn(AmPlugin* p, const std::wstring& lpName  )
 {
   if( myodd::strings::IsEmptyString(lpName) )
   {
@@ -158,7 +158,7 @@ void LoaderManager::UnLearn( amplugin* p, const std::wstring& lpName  )
 
 // -------------------------------------------------------------
 //  add an item to the list to open
-void LoaderManager::Learn( amplugin* p, bool isPrivileged)
+void LoaderManager::Learn(AmPlugin* p, bool isPrivileged)
 {
   // the user could have entered a multi word command.
   int count = p->GetCommandCount();
@@ -346,7 +346,7 @@ LoaderManager::OPENAS_NAMES::const_iterator LoaderManager::Find(const std::wstri
 }
 
 // -------------------------------------------------------------
-bool LoaderManager::RemoveCommand( amplugin* p, const std::wstring& name )
+bool LoaderManager::RemoveCommand(AmPlugin* p, const std::wstring& name )
 {
   auto it = Find( name );
   if( m_openAs.end() == it )
@@ -367,7 +367,7 @@ bool LoaderManager::RemoveCommand( amplugin* p, const std::wstring& name )
  * @param bool deleteFileIfExists if we wish to remove a file or not.
  * @return bool success or not.
  */
-bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerName, bool deleteFileIfExists)
+bool LoaderManager::RemoveActionIfInList(AmPlugin* p, const std::wstring& lowerName, bool deleteFileIfExists)
 {
   // lowercase TCHAR
   const wchar_t* cpLowerName = lowerName.c_str();
@@ -412,12 +412,12 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
 
 /**
  * Add a command to the list of commands.
- * @param amplugin* the plugin manager
+ * @param AmPlugin* the plugin manager
  * @param const std::wstring& the name of the coammnd
  * @param const std::wstring& the path of the command we want to execute.
  * @return bool success or not.
  */
-bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std::wstring& path )
+bool LoaderManager::AddCommand(AmPlugin* p, const std::wstring& name, const std::wstring& path )
 {
   std::wstring lowerName = myodd::strings::lower( name );
   const wchar_t* cpLowerName = lowerName.c_str();
@@ -463,7 +463,7 @@ std::wstring LoaderManager::GetUnLearnCommand(const std::wstring& lowerName)
 }
 
 // -------------------------------------------------------------
-bool LoaderManager::LoadXML( amplugin* p )
+bool LoaderManager::LoadXML(AmPlugin* p )
 {
   //  simply go around all the values
   std::string sFilePath = myodd::strings::WString2String(m_lpFilePath);

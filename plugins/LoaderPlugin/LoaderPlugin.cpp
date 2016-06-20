@@ -15,7 +15,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
   case AM_MSG_INIT:
     {
       AFX_MANAGE_STATE(AfxGetStaticModuleState());
-      theApp.InitPlugin( (amplugin*)(lParam) );
+      theApp.InitPlugin( (AmPlugin*)(lParam) );
       return AM_RESP_TRUE;
     }
     break;
@@ -47,7 +47,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
   case AM_MSG_MAIN:
     {
       AFX_MANAGE_STATE(AfxGetStaticModuleState());
-      return (theApp.Main( (amplugin*)(lParam) ) ? AM_RESP_TRUE : AM_RESP_FALSE);
+      return (theApp.Main( (AmPlugin*)(lParam) ) ? AM_RESP_TRUE : AM_RESP_FALSE);
     }
     break;
 
@@ -118,7 +118,7 @@ void CLoaderPluginApp::SetPluginPath( LPCWSTR lpPath )
 }
 
 // ---------------------------------------------------------------------------
-void CLoaderPluginApp::InitPlugin( amplugin* p )
+void CLoaderPluginApp::InitPlugin(AmPlugin* p )
 {
   delete m_loadManager;
   m_loadManager = new LoaderManager( m_pluginPath );
@@ -142,7 +142,7 @@ bool CLoaderPluginApp::DestroyPlugIn( )
 }
 
 // ---------------------------------------------------------------------------
-bool CLoaderPluginApp::Main( amplugin* p )
+bool CLoaderPluginApp::Main(AmPlugin* p )
 {
   if( NULL == m_loadManager )
   {

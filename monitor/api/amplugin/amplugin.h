@@ -34,11 +34,11 @@ enum AM_MSG
                             //  WPARAM = buffer size
                             //  LPARAM = buffer
   AM_MSG_INIT         = 2,  //  Called when the plugin is loaded.
-                            //    LPARAM = amplugin*
+                            //    LPARAM = AmPlugin*
   AM_MSG_DEINIT       = 3,  //  Called when the plugin is about to get destroyed.
                             //    LPARAM = 0 / WPARAM = 0
   AM_MSG_MAIN         = 4,  //  Ask the plugin to execute the action.
-                            //    LPARAM = amplugin*
+                            //    LPARAM = AmPlugin*
                             //    return AM_RESP_TRUE|AM_RESP_FALSE
   AM_MSG_PATH_CMD     = 5,  //  The root commands temp path (./).
                             //  LPARAM = const wchar_t* the temp path.
@@ -80,13 +80,13 @@ extern "C" PLUGIN_API AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lPar
 #endif
 
 //
-// The amplugin path, we can call those functions to do extra operations.
+// The AmPlugin path, we can call those functions to do extra operations.
 //
-class amplugin
+class AmPlugin
 {
 public:
-  amplugin();
-  ~amplugin();
+  AmPlugin();
+  ~AmPlugin();
 
 public:
   // the various functions

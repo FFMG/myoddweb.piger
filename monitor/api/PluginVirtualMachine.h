@@ -33,7 +33,7 @@ public:
   void AddApi(PluginApi* api );
 
 protected:
-  amplugin* _amPlugin;
+  AmPlugin* _amPlugin;
   void Initialize();
   void InitializeFunctions();
 
