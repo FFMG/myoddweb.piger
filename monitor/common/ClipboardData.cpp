@@ -353,7 +353,7 @@ void ClipboardData::ToClipboard()
       ClipboardDropData* cdd = static_cast<ClipboardDropData*>(data);
 
       // get the size of the clipboard.
-      int size = cdd->GetDropfilesSize();
+      size_t size = cdd->GetDropfilesSize();
       if (size > 0)
       {
         // make some room for this DROPFILES item.

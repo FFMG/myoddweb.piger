@@ -118,11 +118,11 @@ ClipboardDropData* ClipboardDropData::FromDROPFILES(DROPFILES* dropFiles, size_t
 
 /**
  * Given the files we have, calculate the DROPFILES file size.
- * @return int the size needed for the DROPFILES pointer.
+ * @return size_t the size needed for the DROPFILES pointer.
  */
-int ClipboardDropData::GetDropfilesSize() const
+size_t ClipboardDropData::GetDropfilesSize() const
 {
-  int size = 0;
+  size_t size = 0;
   size += sizeof(DROPFILES);
 
   for (DropFiles::const_iterator it = Files().begin(); it != Files().end(); ++it)
@@ -140,14 +140,14 @@ int ClipboardDropData::GetDropfilesSize() const
  * Recreate the DROPFILES* structure.
  * Call GetDropfilesSize() to get the structuer size
  * @param DROPFILES* df the structure we want to repopulate.
- * @param const int maxSize the maximum amount of space we have available to use.
- *                          this is the memory size, not the number of character space.
- *                          so the total size must include everything.
+ * @param const size_t maxSize the maximum amount of space we have available to use.
+ *                             this is the memory size, not the number of character space.
+ *                             so the total size must include everything.
  * @return boolean if this worked or not.
  */
-bool ClipboardDropData::PopulateDropFiles(DROPFILES *df, const int maxSize) const
+bool ClipboardDropData::PopulateDropFiles(DROPFILES *df, const size_t maxSize) const
 {
-  int offset = maxSize;
+  size_t offset = maxSize;
   offset -= sizeof(DROPFILES);
 
   // where we will start putting the files.

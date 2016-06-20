@@ -13,8 +13,8 @@ public:
 
   // return all the files.
   const std::vector<MYODD_STRING>& Files() const { return _files; }
-  int GetDropfilesSize() const;
-  bool PopulateDropFiles(DROPFILES *df, const int maxSize ) const;
+  size_t GetDropfilesSize() const;
+  bool PopulateDropFiles(DROPFILES *df, const size_t maxSize ) const;
 
 protected:
   static size_t CalculateBits(DROPFILES *df);

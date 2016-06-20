@@ -475,7 +475,7 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
   // how many words are in the command?
   LPCTSTR lpAction = action->Command().c_str();
   std::vector<MYODD_STRING> exploded;
-  int nSize = myodd::strings::explode( exploded, m_sActionAsTyped, _T(' ') );
+  size_t nSize = myodd::strings::explode( exploded, m_sActionAsTyped, _T(' ') );
 
   // we now need to see how many of those words are present in the select
   // so if the actual command is 
@@ -563,7 +563,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   }
   
   _tfinddata_t fdata;
-  long ffhandle = _tfindfirst( fullPath, &fdata );
+  intptr_t ffhandle = _tfindfirst( fullPath, &fdata );
   if( ffhandle != -1 )
   {
     do
