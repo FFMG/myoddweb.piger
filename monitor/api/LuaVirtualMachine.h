@@ -44,6 +44,7 @@ public:
   static int AddAction(lua_State *lua);
   static int RemoveAction(lua_State *lua);
   static int FindAction(lua_State *lua);
+  static int Log(lua_State *lua);
 };
 
 #endif /*ACTIONMONITOR_API_LUA*/
