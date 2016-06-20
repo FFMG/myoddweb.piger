@@ -110,16 +110,15 @@ xcopy $(ProjectDir)amplugin.h $(SolutionDir)\plugins\ /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="amplugin.cpp" />
+    <ClCompile Include="ampluginprivate.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="amplugin.def" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="amplugin.h" />
+    <ClInclude Include="ampluginprivate.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

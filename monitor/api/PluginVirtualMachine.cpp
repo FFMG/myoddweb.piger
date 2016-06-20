@@ -6,6 +6,7 @@
 #include "helperapi.h"
 #include "ActionMonitor.h"
 #include "../threads/lock.h"
+#include "amplugin\ampluginprivate.h"
 
 /**
  * Todo
@@ -111,7 +112,7 @@ void PluginVirtualMachine::Initialize()
     if (_amPlugin == NULL)
     {
       //  we can now create it.
-      _amPlugin = new amplugin();
+      _amPlugin = new AmPluginPrivate();
 
       // register our Plugin functions.
       InitializeFunctions();
@@ -142,6 +143,7 @@ void PluginVirtualMachine::InitializeFunctions()
   Register(_T("getVersion"), PluginVirtualMachine::GetVersion);
   Register(_T("findAction"), PluginVirtualMachine::FindAction);
   Register(_T("getForegroundWindow"), PluginVirtualMachine::GetForegroundWindow);
+  Register(_T("log"), PluginVirtualMachine::Log);
 }
 
 /**
@@ -312,7 +314,7 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   try
   {
     // set some of the paths that might be of interest.
-    LPCWSTR lp = NULL;
+    const wchar_t* lp = NULL;
     lp = myodd::config::get( _T("paths\\commands") );
     pfMsg( AM_MSG_PATH_CMD, 0, (AM_INT)lp );
     lp = myodd::config::get( _T("paths\\in"));
@@ -423,7 +425,7 @@ double PluginVirtualMachine::Version()
 * @param void
 * @return void
 */
-bool PluginVirtualMachine::Say(LPCWSTR msg, UINT nElapse, UINT nFadeOut)
+bool PluginVirtualMachine::Say(const wchar_t* msg, UINT nElapse, UINT nFadeOut)
 {
   return GetApi().Say(msg, nElapse, nFadeOut);
 }
@@ -436,7 +438,7 @@ bool PluginVirtualMachine::Say(LPCWSTR msg, UINT nElapse, UINT nFadeOut)
 * @param void
 * @return void
 */
-size_t PluginVirtualMachine::GetCommand(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer)
+size_t PluginVirtualMachine::GetCommand(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer)
 {
   return GetApi().GetCommand( idx, nBufferLength, lpBuffer);
 }
@@ -449,7 +451,7 @@ size_t PluginVirtualMachine::GetCommand(UINT idx, DWORD nBufferLength, LPWSTR lp
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetAction(DWORD nBufferLength, LPWSTR lpBuffer)
+int PluginVirtualMachine::GetAction(DWORD nBufferLength, wchar_t* lpBuffer)
 {
   return GetApi().GetAction( nBufferLength, lpBuffer);
 }
@@ -472,7 +474,7 @@ size_t PluginVirtualMachine::GetCommandCount()
 * @param bool isPrivileged if we need administrator privilege to run this.
 * @return void
 */
-bool PluginVirtualMachine::Execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivileged)
+bool PluginVirtualMachine::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged)
 {
   return GetApi().Execute(module, cmdLine, isPrivileged);
 }
@@ -484,7 +486,7 @@ bool PluginVirtualMachine::Execute(LPCWSTR module, LPCWSTR cmdLine, bool isPrivi
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetString(DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
+int PluginVirtualMachine::GetString(DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
 {
   return GetApi().GetString(nBufferLength, lpBuffer, bQuote );
 }
@@ -497,7 +499,7 @@ int PluginVirtualMachine::GetString(DWORD nBufferLength, LPWSTR lpBuffer, bool b
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
+int PluginVirtualMachine::GetFile(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
 {
   return GetApi().GetFile( idx, nBufferLength, lpBuffer, bQuote );
 }
@@ -510,7 +512,7 @@ int PluginVirtualMachine::GetFile(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
+int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
 {
   return GetApi().GetFolder( idx, nBufferLength, lpBuffer, bQuote );
 }
@@ -523,7 +525,7 @@ int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, LPWSTR lpBuff
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer, bool bQuote)
+int PluginVirtualMachine::GetURL(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
 {
   return GetApi().GetURL( idx,  nBufferLength,  lpBuffer, bQuote );
 }
@@ -535,7 +537,7 @@ int PluginVirtualMachine::GetURL(UINT idx, DWORD nBufferLength, LPWSTR lpBuffer,
 * @param void
 * @return void
 */
-bool PluginVirtualMachine::AddAction(LPCWSTR szText, LPCWSTR szPath)
+bool PluginVirtualMachine::AddAction(const wchar_t* szText, const wchar_t* szPath)
 {
   return GetApi().AddAction(szText, szPath);
 }
@@ -547,7 +549,7 @@ bool PluginVirtualMachine::AddAction(LPCWSTR szText, LPCWSTR szPath)
 * @param void
 * @return void
 */
-bool PluginVirtualMachine::RemoveAction(LPCWSTR szText, LPCWSTR szPath)
+bool PluginVirtualMachine::RemoveAction(const wchar_t* szText, const wchar_t* szPath)
 {
   return GetApi().RemoveAction( szText, szPath);
 }
@@ -555,10 +557,10 @@ bool PluginVirtualMachine::RemoveAction(LPCWSTR szText, LPCWSTR szPath)
 /**
 * Get the action monitor version string.
 * @param DWORD the max size of the buffer.
-* @param LPWSTR the buffer that will contain the return data, (version).
+* @param wchar_t* the buffer that will contain the return data, (version).
 * @return bool success or not if there was an error.
 */
-bool PluginVirtualMachine::GetVersion(DWORD nBufferLength, LPWSTR lpBuffer)
+bool PluginVirtualMachine::GetVersion(DWORD nBufferLength, wchar_t* lpBuffer)
 {
   return GetApi().GetVersion( nBufferLength, lpBuffer);
 }
@@ -566,17 +568,17 @@ bool PluginVirtualMachine::GetVersion(DWORD nBufferLength, LPWSTR lpBuffer)
 /**
 * Find an action.
 * @param UINT the action number we are after.
-* @param LPCWSTR the action name we are looking for.
+* @param const wchar_t* the action name we are looking for.
 * @param DWORD the max size of the buffer.
-* @param LPWSTR the buffer that will contain the return data, (version).
+* @param wchar_t* the buffer that will contain the return data, (version).
 * @return bool if the command exists or not.
 */
 bool PluginVirtualMachine::FindAction
 (
   UINT idx,
-  LPCWSTR lpCommand,
+  const wchar_t* lpCommand,
   DWORD nBufferLength,
-  LPWSTR lpBuffer
+  wchar_t* lpBuffer
 )
 {
   return GetApi().FindAction
@@ -597,4 +599,14 @@ HWND PluginVirtualMachine::GetForegroundWindow()
   return GetApi().GetForegroundWindow();
 }
 
+/** 
+ * Log a message.
+ * @param unsigned int logType the message type we are logging.
+ * @param const wchar_t* lpText the text we wish to log.
+ * @return none.
+ */
+void PluginVirtualMachine::Log(unsigned int logType, const wchar_t* lpText)
+{
+  GetApi().Log(logType, lpText);
+}
 #endif /* ACTIONMONITOR_API_PLUGIN*/

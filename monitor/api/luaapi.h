@@ -8,7 +8,8 @@
 // this is the version number for that particular API
 // 0.1 was the old API, not idea what version of Python it was using.
 // 2.0 uses version 5.3.
-static const double ACTIONMONITOR_API_LUA_VERSION = 2.0;
+// 3.0 added Log( ... )
+static const double ACTIONMONITOR_API_LUA_VERSION = 3.0;
 
 // support for LUA
 extern "C" 
@@ -47,6 +48,7 @@ public:
   int AddAction( lua_State *lua );
   int RemoveAction( lua_State *lua );
   int FindAction( lua_State *lua );
+  int Log(lua_State *lua);
 };
 
 #endif /* ACTIONMONITOR_API_LUA */

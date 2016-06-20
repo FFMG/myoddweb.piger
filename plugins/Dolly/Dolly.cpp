@@ -14,7 +14,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
     {      
       //
       // the plugin manager.
-      amplugin* p = (amplugin*)(lParam);
+      AmPlugin* p = (AmPlugin*)(lParam);
 
       //
       // get the full path of this plugin
@@ -82,7 +82,7 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
       const WCHAR* lyric = lyrics[u];
 
       // and then just say it...
-      ((amplugin*)(lParam))->Say( lyric, 200, 5 );
+      ((AmPlugin*)(lParam))->Say( lyric, 200, 5 );
 
       //  all good.
       return AM_RESP_SUCCESS;

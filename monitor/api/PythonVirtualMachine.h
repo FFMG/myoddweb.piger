@@ -50,6 +50,6 @@ public:
   static PyObject* RemoveAction(PyObject *self, PyObject *args);
   static PyObject* GetVersion(PyObject *self, PyObject *args);
   static PyObject* FindAction(PyObject *self, PyObject *args);
+  static PyObject* Log(PyObject *self, PyObject *args);
 };
-
 #endif /* ACTIONMONITOR_API_PY */

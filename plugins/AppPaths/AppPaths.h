@@ -8,6 +8,7 @@
 #endif
 
 #include "resource.h"		// main symbols
+#include <map>
 
 // support for PluginAPI
 #include "../amplugin.h"
@@ -18,7 +19,7 @@ public:
   AppPaths();
   ~AppPaths();
 
-  void Init( amplugin& am );
+  void Init(AmPlugin& am );
 
 protected:
   std::wstring lower( const std::wstring& s) const;
@@ -29,7 +30,7 @@ protected:
   typedef std::map<std::wstring, std::wstring> REG_VALUES;
   typedef std::map<std::wstring, REG_VALUES> REG_NAMES;
 
-  void QueryRegistry( amplugin& am );
+  void QueryRegistry(AmPlugin& am );
   void QueryKeyValues(HKEY hKey, const std::wstring& sFullKey, REG_VALUES& values ) ;
   void QueryKey( HKEY hKey, const std::wstring& sFullKey, REG_NAMES& values ) ;
 };

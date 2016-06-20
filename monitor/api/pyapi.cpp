@@ -329,8 +329,8 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args)
  */
 PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
 {
-  CHAR* szText = NULL;
-  CHAR* szPath = NULL;
+  char* szText = NULL;
+  char* szPath = NULL;
   
   if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
   {
@@ -341,6 +341,30 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
   // run it
   bool result = __super::RemoveAction(HelperApi::widen(szText).c_str(), HelperApi::widen(szPath).c_str() );
   return Py_BuildValue("b", result );
+}
+
+/**
+* Log a message.
+* @see helperapi::Log
+* @param PyObject *
+* @param PyObject *
+* @return PyObject* false or the path of that action.
+*/
+PyObject* PyApi::Log(PyObject *self, PyObject *args)
+{
+  unsigned int logType = 0;
+  char* szText = NULL;
+
+  if (!PyArg_ParseTuple(args, "Is", &logType, &szText))
+  {
+    __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>"), 3000, 5);
+    return Fail();
+  }
+
+  // run it
+  auto action = myodd::strings::String2WString(szText);
+  __super::Log( logType, action.c_str() );
+  return Py_BuildValue("b", true);
 }
 
 /**

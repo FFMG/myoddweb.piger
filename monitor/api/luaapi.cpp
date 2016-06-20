@@ -3,6 +3,7 @@
 #ifdef ACTIONMONITOR_API_LUA
 #include "luaapi.h"
 #include "luaVirtualMachine.h"
+#include "../string/string.h"
 
 /**
  * Todo
@@ -498,6 +499,32 @@ int LuaApi::FindAction( lua_State *lua )
   lua_pushstring(lua, T_T2A(sValue.c_str()) );
 
   // one return variable.
+  return 1;
+}
+
+int LuaApi::Log(lua_State *lua)
+{
+  const int ARGUMENT_LOGTYPE = 1;
+  const int ARGUMENT_MESSAGE = 2;
+
+  //  get the number of arguments
+  int n = lua_gettop(lua);
+
+  // we must have 2 items
+  if (n != 2)
+  {
+    __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>"), 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
+  auto logType = (unsigned int)lua_tointeger(lua, ARGUMENT_LOGTYPE);
+  auto action = myodd::strings::String2WString( lua_tostring(lua, ARGUMENT_MESSAGE));
+
+  __super::Log(logType, action.c_str() );
+
+  // success.
+  lua_pushboolean(lua, true );
   return 1;
 }
 

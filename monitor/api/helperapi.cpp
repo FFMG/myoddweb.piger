@@ -244,11 +244,11 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
 bool HelperApi::GetVersion (MYODD_STRING& sValue )
 {
   myodd::files::Version _ver;
-  sValue = myodd::strings::ToStringFmt( _T("%d.%d.%d.%d"),
-                                        _ver.GetFileVersionMajor(),
-                                        _ver.GetFileVersionMinor(),
-                                        _ver.GetFileVersionMaintenance(),
-                                        _ver.GetFileVersionBuild() );
+  sValue = myodd::strings::Format( _T("%d.%d.%d.%d"),
+                                   _ver.GetFileVersionMajor(),
+                                   _ver.GetFileVersionMinor(),
+                                   _ver.GetFileVersionMaintenance(),
+                                   _ver.GetFileVersionBuild() );
   return true;
 }
 
@@ -477,4 +477,40 @@ std::wstring HelperApi::widen(const std::string& str)
   for (size_t i = 0; i<str.size(); ++i)
     wstm << ctfacet.widen(str[i]);
   return wstm.str();
+}
+
+/**
+ * Log a message.
+ * @param unsigned int logType the message type we are logging.
+ * @param const wchar_t* lpText the text we wish to log.
+ * @return none.
+ */
+void HelperApi::Log(unsigned int logType, const wchar_t* lpText)
+{
+  switch ( (myodd::log::LogType)logType )
+  {
+  case myodd::log::LogType::Success:
+    myodd::log::LogSuccess( L"%s", lpText);
+    break;
+
+  case myodd::log::LogType::Error:
+    myodd::log::LogError(L"%s", lpText);
+    break;
+
+  case myodd::log::LogType::Warning:
+    myodd::log::LogWarning(L"%s", lpText);
+    break;
+
+  case myodd::log::LogType::Message:
+    myodd::log::LogMessage(L"%s", lpText);
+    break;
+
+  case myodd::log::LogType::System:
+    myodd::log::LogSystem(L"%s", lpText);
+    break;
+
+  default:
+    myodd::log::LogError( _T("Unknown log type: %s"), lpText );
+    break;
+  }
 }

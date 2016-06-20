@@ -90,13 +90,29 @@ import module, **import am**, (only usable within Piger of course).
 - removeAction, remove an action from the list.
 - getVersion, get the piger version number.
 - findAction, find an action in our list of actions.
+- log, log a message to file, (or whatever logger is been used).
+	- Success = 1
+	- Error = 2
+	- Warning = 3
+	- Message = 4
+	- System = 5
 
 ### Example
-#### Calculator.lua
+#### Calculator.py
 
+    # import the action monitor, (am), module.
     import am
+
+    # give a message
     am.say( "Run - calc ...", 400, 10 );
-    am.execute( "%SystemRoot%\\system32\\calc.exe" );
+
+    # Launch the application
+    # use the second parameter for arguments and 
+    # the third, (true|false), is to elevate the process.
+    am.execute( "%SystemRoot%\\system32\\calc.exe", "", true );
+
+    # log that all is good.
+    am.log( 1, "Launched calculator" );
 
 ## Lua
 ### Code
@@ -114,14 +130,28 @@ import module, **import am**, (only usable within Piger of course).
 - am_removeAction, remove an action from the list.
 - am_getVersion, get the piger version number.
 - am_findAction, find an action in our list of actions.
+- am_log, log a message to file, (or whatever logger is been used).
+	- Success = 1
+	- Error = 2
+	- Warning = 3
+	- Message = 4
+	- System = 5
 
 ### Example
 #### Calculator.lua
 
 Launch the default calculator.
 
+    -- give a message
     am_say( "Run - calc ...", 400, 10 );
-    am_execute( "%SystemRoot%\\system32\\calc.exe" );
+
+    -- Launch the application
+    -- use the second parameter for arguments and 
+    -- the third, (true|false), is to elevate the process.
+    am_execute( [[%SystemRoot%\system32\calc.exe]], "", true );
+
+    -- log that all is good.
+    am_log( 1, "Launched calculator" );
 
 #### Google.lua
 

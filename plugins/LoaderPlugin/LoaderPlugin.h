@@ -18,9 +18,9 @@ public:
   virtual ~CLoaderPluginApp();
 
   // plugin functions
-  void InitPlugin( amplugin* p );
+  void InitPlugin(AmPlugin* p );
   bool DestroyPlugIn( );
-  bool Main( amplugin* p );
+  bool Main(AmPlugin* p );
 
   void SetPluginPath( LPCWSTR lpPath );
 // Overrides

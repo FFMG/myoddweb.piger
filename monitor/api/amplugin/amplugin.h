@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <map>
 
 #define PLUGIN_API __declspec(dllexport)
 
@@ -34,11 +33,11 @@ enum AM_MSG
                             //  WPARAM = buffer size
                             //  LPARAM = buffer
   AM_MSG_INIT         = 2,  //  Called when the plugin is loaded.
-                            //    LPARAM = amplugin*
+                            //    LPARAM = AmPlugin*
   AM_MSG_DEINIT       = 3,  //  Called when the plugin is about to get destroyed.
                             //    LPARAM = 0 / WPARAM = 0
   AM_MSG_MAIN         = 4,  //  Ask the plugin to execute the action.
-                            //    LPARAM = amplugin*
+                            //    LPARAM = AmPlugin*
                             //    return AM_RESP_TRUE|AM_RESP_FALSE
   AM_MSG_PATH_CMD     = 5,  //  The root commands temp path (./).
                             //  LPARAM = const wchar_t* the temp path.
@@ -50,6 +49,18 @@ enum AM_MSG
                             //  LPARAM = const wchar_t* the temp path.
   AM_MSG_PATH_PLUGIN  = 9,  //  The root commands 'plugin' path (./__tmp).
                             //  LPARAM = const wchar_t* the temp path.
+};
+
+//
+// The various log levels
+//
+enum AM_LOG
+{
+  AM_LOG_SUCCES = 1,
+  AM_LOG_ERROR = 2,
+  AM_LOG_WARNING = 3,
+  AM_LOG_MESSAGE = 4,
+  AM_LOG_SYSTEM = 5,
 };
 
 #ifdef  _WIN64
@@ -80,41 +91,43 @@ extern "C" PLUGIN_API AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lPar
 #endif
 
 //
-// The amplugin path, we can call those functions to do extra operations.
+// The AmPlugin path, we can call those functions to do extra operations.
 //
-class amplugin
+class AmPlugin
 {
 public:
-  amplugin();
-  ~amplugin();
+  AmPlugin();
+  virtual ~AmPlugin();
 
 public:
   // the various functions
-  double Version();
-  bool Say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut);
-  size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer);
+  virtual double Version() = 0;
+  virtual bool Say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut) = 0;
+  virtual size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
 
   // get the full action as given by the user
-  size_t GetAction(unsigned int nBufferLength, wchar_t* lpBuffer);
+  virtual size_t GetAction(unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
 
   // get the number of parameters passed.
-  size_t GetCommandCount() const;
-  bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
-  int GetString(unsigned int nBufferLength, wchar_t* lpBuffer);
-  size_t GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
-  size_t GetFolder(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
-  size_t GetURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
-  bool AddAction(const wchar_t* szText, const wchar_t* szPath);
-  bool RemoveAction(const wchar_t* szText, const wchar_t* szPath);
-  bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer);
-  void * GetForegroundWindow() const;
+  virtual size_t GetCommandCount() const = 0;
+  virtual bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged) = 0;
+  virtual int GetString(unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
+  virtual size_t GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
+  virtual size_t GetFolder(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
+  virtual size_t GetURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
+  virtual bool AddAction(const wchar_t* szText, const wchar_t* szPath) = 0;
+  virtual bool RemoveAction(const wchar_t* szText, const wchar_t* szPath) = 0;
+  virtual bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
 
-  //  add a definition
-  void Add(const wchar_t* name, void*);
+  // Get the window that was in the forground, (at the time of the call).
+  // the return value is a windows HWND
+  virtual void* GetForegroundWindow() const = 0;
 
-private:
-  void* Get(const wchar_t* name) const;
-  // ---------------------------------------------------------------------------------------------
-  typedef std::map< std::wstring, void *> FNC_CONTAINER;
-  FNC_CONTAINER m_pFunction;
+  // The error types are
+  //   AM_LOG_SUCCES = Success = 1
+  //   AM_LOG_ERROR = Error= 2
+  //   AM_LOG_WARNING = Warning = 3
+  //   AM_LOG_MESSAGE = Message = 4
+  //   AM_LOG_SYSTEM = System = 5
+  virtual void Log(unsigned int logType, const wchar_t* szText) = 0;
 };

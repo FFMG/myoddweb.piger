@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "monitor", "monitor", "{D4A1E5D7-B261-4425-AFCC-BD5E9BEB5ABD}"
 EndProject
@@ -91,8 +91,16 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythoncore64", "monitor\api\python\PCbuild\pythoncore64.vcxproj", "{67EB96D1-01F2-462E-A66C-064BFBA919FC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OnTop", "plugins\OnTop\OnTop\OnTop.vcxproj", "{BFEB6027-4CA5-4ECB-8898-BC5F62818324}"
+	ProjectSection(ProjectDependencies) = postProject
+		{887C7E24-886C-4584-8CE4-89F45D7BB3D7} = {887C7E24-886C-4584-8CE4-89F45D7BB3D7}
+		{93AF99D9-1217-4A51-BBF5-2794513D4136} = {93AF99D9-1217-4A51-BBF5-2794513D4136}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OnTop64", "plugins\OnTop\OnTop\OnTop64.vcxproj", "{8E98A2AF-3370-48D0-8D2B-C1D998432040}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B97CC3E-1BBC-452F-A8E8-FEAE2653ACA2} = {9B97CC3E-1BBC-452F-A8E8-FEAE2653ACA2}
+		{0161D190-3859-42D8-B30D-15718AEBB5DA} = {0161D190-3859-42D8-B30D-15718AEBB5DA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

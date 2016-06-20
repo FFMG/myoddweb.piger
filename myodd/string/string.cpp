@@ -3,6 +3,7 @@
 #include <codecvt>
 #include "string.h"
 #include "assert.h"
+#include <memory>    // For std::unique_ptr
 
 namespace myodd{ namespace strings{
 void Test()
@@ -13,7 +14,7 @@ void Test()
   assert(_T("a") == String2WString( "a"));
   assert(_T("abcdef") == String2WString("abcdef"));
 
-  MYODD_STRING s1 = ToStringFmt( _T("%10.2f"), 10.27 );
+  MYODD_STRING s1 = Format( _T("%10.2f"), 10.27 );
   assert( s1 == _T("     10.27"));
   assert( IsEmptyString( _T("    " )));
   assert( IsEmptyString( NULL ));
@@ -807,8 +808,7 @@ std::string WString2String(const std::wstring& ws2Convert)
   return converterX.to_bytes(ws2Convert);
 }
 
-
-MYODD_STRING ToStringFmt(const MYODD_CHAR* pszFormat, ... )
+MYODD_STRING Format(const MYODD_CHAR* pszFormat, ... )
 {
   va_list argp;
   va_start(argp, pszFormat);

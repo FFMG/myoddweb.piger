@@ -102,6 +102,7 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
   lua_register( lua, "am_removeAction", LuaVirtualMachine::RemoveAction);
   lua_register( lua, "am_getVersion", LuaVirtualMachine::GetVersion);
   lua_register( lua, "am_findAction", LuaVirtualMachine::FindAction);
+  lua_register( lua, "am_log", LuaVirtualMachine::Log );
 
   // we can now add it to our list.
   _mutex.lock();
@@ -315,13 +316,22 @@ int LuaVirtualMachine::RemoveAction(lua_State *lua)
 }
 
 /**
-* Get the action monitor version string.
-* @param lua_State *
-* @return int
-*/
+ * Get the action monitor version string.
+ * @param lua_State *
+ * @return int
+ */
 int LuaVirtualMachine::FindAction(lua_State *lua)
 {
   return GetApi(lua).FindAction(lua);
 }
 
+/**
+ * Get the action monitor version string.
+ * @param lua_State *
+ * @return int
+ */
+int LuaVirtualMachine::Log(lua_State *lua)
+{
+  return GetApi(lua).Log(lua);
+}
 #endif /* ACTIONMONITOR_API_LUA */

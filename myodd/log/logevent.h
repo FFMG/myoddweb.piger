@@ -74,9 +74,8 @@ namespace log {
 
     // the actual log messages.
     void Log(LogType uFlags, const MYODD_CHAR* pszFmt, va_list argp);
+    void Log(LogType uFlags, const MYODD_CHAR* pszFmt );
     static LogEvent& Instance();
-
-
   };
 
 } //  logevent

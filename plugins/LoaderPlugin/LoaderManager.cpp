@@ -25,9 +25,9 @@ LoaderManager::~LoaderManager(void)
 
 /**
  * Initialise the loader with the plugin.
- * @param amplugin* p the plugin itself.
+ * @param AmPlugin* p the plugin itself.
  */
-void LoaderManager::Init( amplugin* p  )
+void LoaderManager::Init(AmPlugin* p  )
 {
   // assume that we have no path.
   m_lpFilePath = m_thisPath = L"";
@@ -44,7 +44,7 @@ void LoaderManager::Init( amplugin* p  )
   }
   else
   {
-    myodd::log::LogError(_T("[Loader] I was unable to get the path of this command."));
+    p->Log( AM_LOG_ERROR, L"I was unable to get the path of this command.");
     return;
   }
 
@@ -64,13 +64,15 @@ void LoaderManager::Init( amplugin* p  )
     }
     else
     {
-      myodd::log::LogError(_T("[Loader] Could create the directry '%s'."), wFilePath);
+      auto log = myodd::strings::Format(L"Could create the directry '%s'.", wFilePath);
+      p->Log(AM_LOG_ERROR, log.c_str() );
       return;
     }
   }
   else
   {
-    myodd::log::LogError(_T("[Loader] Could not expand the environment '%s'."), stdXml );
+    auto log = myodd::strings::Format(L"Could not expand the environment '%s'.", stdXml);
+    p->Log(AM_LOG_ERROR, log.c_str() );
     return;
   }
 }
@@ -81,7 +83,7 @@ void LoaderManager::Exit( )
 }
 
 // -------------------------------------------------------------
-void LoaderManager::Main( amplugin* p  )
+void LoaderManager::Main(AmPlugin* p  )
 {
   int l = 0;
   //  get the name of the action
@@ -122,11 +124,11 @@ void LoaderManager::Main( amplugin* p  )
 
 /**
  * remove one of OUR commands from the list.
- * @param amplugin* the plugin manager
+ * @param AmPlugin* the plugin manager
  * @param const std::wstring& the name of the command we are removing.
  * @return none
  */
-void LoaderManager::UnLearn( amplugin* p, const std::wstring& lpName  )
+void LoaderManager::UnLearn(AmPlugin* p, const std::wstring& lpName  )
 {
   if( myodd::strings::IsEmptyString(lpName) )
   {
@@ -158,7 +160,7 @@ void LoaderManager::UnLearn( amplugin* p, const std::wstring& lpName  )
 
 // -------------------------------------------------------------
 //  add an item to the list to open
-void LoaderManager::Learn( amplugin* p, bool isPrivileged)
+void LoaderManager::Learn(AmPlugin* p, bool isPrivileged)
 {
   // the user could have entered a multi word command.
   int count = p->GetCommandCount();
@@ -346,7 +348,7 @@ LoaderManager::OPENAS_NAMES::const_iterator LoaderManager::Find(const std::wstri
 }
 
 // -------------------------------------------------------------
-bool LoaderManager::RemoveCommand( amplugin* p, const std::wstring& name )
+bool LoaderManager::RemoveCommand(AmPlugin* p, const std::wstring& name )
 {
   auto it = Find( name );
   if( m_openAs.end() == it )
@@ -367,7 +369,7 @@ bool LoaderManager::RemoveCommand( amplugin* p, const std::wstring& name )
  * @param bool deleteFileIfExists if we wish to remove a file or not.
  * @return bool success or not.
  */
-bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerName, bool deleteFileIfExists)
+bool LoaderManager::RemoveActionIfInList(AmPlugin* p, const std::wstring& lowerName, bool deleteFileIfExists)
 {
   // lowercase TCHAR
   const wchar_t* cpLowerName = lowerName.c_str();
@@ -386,7 +388,8 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
   if (!p->RemoveAction(cpLowerName, itCommand->second.c_str()))
   {
     // we could not remove it.
-    myodd::log::LogError(_T("[Loader] I was unable to remove the command '%s' - '%s'"), cpLowerName, itCommand->second.c_str());
+    auto log = myodd::strings::Format(L"I was unable to remove the command '%s' - '%s'", cpLowerName, itCommand->second.c_str());
+    p->Log(AM_LOG_ERROR, log.c_str() );
     return false;
   }
 
@@ -397,7 +400,8 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
   }
 
   // log it  
-  myodd::log::LogSuccess(_T("[Loader] Removed command '%s' - '%s'"), cpLowerName, itCommand->second.c_str());
+  auto log = myodd::strings::Format(L"Removed command '%s' - '%s'", cpLowerName, itCommand->second.c_str());
+  p->Log(AM_LOG_ERROR, log.c_str() );
 
   // unlearn the unlearn function as well.
   std::wstring sUnLearn = GetUnLearnCommand(lowerName);
@@ -412,12 +416,12 @@ bool LoaderManager::RemoveActionIfInList(amplugin* p, const std::wstring& lowerN
 
 /**
  * Add a command to the list of commands.
- * @param amplugin* the plugin manager
+ * @param AmPlugin* the plugin manager
  * @param const std::wstring& the name of the coammnd
  * @param const std::wstring& the path of the command we want to execute.
  * @return bool success or not.
  */
-bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std::wstring& path )
+bool LoaderManager::AddCommand(AmPlugin* p, const std::wstring& name, const std::wstring& path )
 {
   std::wstring lowerName = myodd::strings::lower( name );
   const wchar_t* cpLowerName = lowerName.c_str();
@@ -427,7 +431,8 @@ bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std
   if (!RemoveActionIfInList( p, lowerName, false ))
   {
     //  could not remove it.
-    myodd::log::LogError(_T("[Loader] I was unable to remove the command '%s' - '%s' to (re)add it."), name.c_str(), path.c_str());
+    auto log = myodd::strings::Format(L"I was unable to remove the command '%s' - '%s' to (re)add it.", name.c_str(), path.c_str());
+    p->Log(AM_LOG_ERROR, log.c_str() );
     return false;
   }
 
@@ -437,7 +442,8 @@ bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std
   // and to the action monitor.
   if( !p->AddAction(cpLowerName, path.c_str() ) )
   {
-    myodd::log::LogError(_T("[Loader] I was unable to add the command '%s' - '%s'"), name.c_str(), path.c_str());
+    auto log = myodd::strings::Format(L"I was unable to add the command '%s' - '%s'", name.c_str(), path.c_str());
+    p->Log(AM_LOG_ERROR, log.c_str() );
     return false;
   }
 
@@ -446,7 +452,8 @@ bool LoaderManager::AddCommand( amplugin* p, const std::wstring& name, const std
   p->AddAction( sUnLearn.c_str(), GetThisPath().c_str() );
 
   // it seems to have worked.
-  myodd::log::LogSuccess(_T("[Loader] Added command '%s' - '%s'"), name.c_str(), path.c_str());
+  auto log = myodd::strings::Format(L"Added command '%s' - '%s'", name.c_str(), path.c_str());
+  p->Log(AM_LOG_SUCCES, log.c_str() );
   return true;
 }
 
@@ -463,7 +470,7 @@ std::wstring LoaderManager::GetUnLearnCommand(const std::wstring& lowerName)
 }
 
 // -------------------------------------------------------------
-bool LoaderManager::LoadXML( amplugin* p )
+bool LoaderManager::LoadXML(AmPlugin* p )
 {
   //  simply go around all the values
   std::string sFilePath = myodd::strings::WString2String(m_lpFilePath);

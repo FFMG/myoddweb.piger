@@ -65,6 +65,7 @@ Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Loade
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\AppPaths.amp"
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Dolly.amp"
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\OnTop.amp"
+Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\SamplePlugin.amp"
 
 ; remove old python file as things are now moved to {app}\python\ folder.
 Type: files; Name: "{app}\python35.zip"

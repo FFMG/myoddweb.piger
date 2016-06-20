@@ -20,20 +20,20 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
     {
       //
       // the plugin manager.
-      amplugin* p = (amplugin*)(lParam);
+      AmPlugin* p = (AmPlugin*)(lParam);
 
       //
       // get the full path of this plugin
       // call 'getCommand( 0, ... ) and it will return this file.
       WCHAR szPath[MAX_PATH];
-      size_t l = p->getCommand(0, MAX_PATH, szPath);
+      size_t l = p->GetCommand(0, MAX_PATH, szPath);
 
       //
       // This is the name of the action e will call
       // the second param is who to call when this happens
       // in this case, we want Piger to call us back here.
       // but we could launch something else.
-      p->addAction(L"Sample plugin", szPath);
+      p->AddAction(L"Sample plugin", szPath);
     }
     break;
 
@@ -44,10 +44,10 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
     {
       //
       // Our action as called!
-      amplugin* p = (amplugin*)(lParam);
+      AmPlugin* p = (AmPlugin*)(lParam);
 
       // try and say something
-      p->say(L"Hello from Sample plugin!", 100, 100);
+      p->Say(L"Hello from Sample plugin!", 100, 100);
     }
     break;
 

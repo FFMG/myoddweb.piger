@@ -6,16 +6,16 @@ public:
   LoaderManager( const std::wstring& pluginPath );
   ~LoaderManager(void);
 
-  void Init( amplugin* p  );
+  void Init(AmPlugin* p  );
   void Exit( );
-  void Main( amplugin* p  );
+  void Main(AmPlugin* p  );
 
 protected:
-  void Learn( amplugin* p, bool isPrivileged );
-  void UnLearn( amplugin* p, const std::wstring& lpName );
+  void Learn(AmPlugin* p, bool isPrivileged );
+  void UnLearn(AmPlugin* p, const std::wstring& lpName );
 
-  bool RemoveCommand( amplugin* p, const std::wstring& name );
-  bool AddCommand( amplugin* p, const std::wstring& name, const std::wstring& path );
+  bool RemoveCommand(AmPlugin* p, const std::wstring& name );
+  bool AddCommand(AmPlugin* p, const std::wstring& name, const std::wstring& path );
 
   typedef std::map< std::wstring, std::wstring > OPENAS_NAMES;
   OPENAS_NAMES  m_openAs;
@@ -35,7 +35,7 @@ protected:
     return m_thisPath;
   }
 
-  bool LoadXML( amplugin* p  );
+  bool LoadXML(AmPlugin* p  );
   bool SaveXML() const;
 
   bool SaveLUAFile( std::wstring& fileName, 
@@ -44,6 +44,6 @@ protected:
                     bool isPrivileged
                   );
 
-  bool RemoveActionIfInList(amplugin* p, const std::wstring& lowerName, bool deleteFileIfExists );
+  bool RemoveActionIfInList(AmPlugin* p, const std::wstring& lowerName, bool deleteFileIfExists );
   static std::wstring GetUnLearnCommand( const std::wstring& lowerName);
 };
