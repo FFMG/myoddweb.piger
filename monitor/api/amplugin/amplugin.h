@@ -51,6 +51,18 @@ enum AM_MSG
                             //  LPARAM = const wchar_t* the temp path.
 };
 
+//
+// The various log levels
+//
+enum AM_LOG
+{
+  AM_LOG_SUCCES = 1,
+  AM_LOG_ERROR = 2,
+  AM_LOG_WARNING = 3,
+  AM_LOG_MESSAGE = 4,
+  AM_LOG_SYSTEM = 5,
+};
+
 #ifdef  _WIN64
 # define AM_UINT unsigned __int64
 # define AM_INT __int64
@@ -106,16 +118,16 @@ public:
   virtual bool AddAction(const wchar_t* szText, const wchar_t* szPath) = 0;
   virtual bool RemoveAction(const wchar_t* szText, const wchar_t* szPath) = 0;
   virtual bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
+
+  // Get the window that was in the forground, (at the time of the call).
+  // the return value is a windows HWND
   virtual void* GetForegroundWindow() const = 0;
 
   // The error types are
-  //   Success = 1
-  //   Error= 2
-  //   Warning = 3
-  //   Message = 4
-  //   System = 5
+  //   AM_LOG_SUCCES = Success = 1
+  //   AM_LOG_ERROR = Error= 2
+  //   AM_LOG_WARNING = Warning = 3
+  //   AM_LOG_MESSAGE = Message = 4
+  //   AM_LOG_SYSTEM = System = 5
   virtual void Log(unsigned int logType, const wchar_t* szText) = 0;
-
-  //  add a definition
-  virtual void Add(const wchar_t* name, void*) = 0;
 };

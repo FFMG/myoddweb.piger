@@ -85,16 +85,28 @@ namespace myodd { namespace log {
       _vsntprintf_s(buffer, len, len, pszLine, argp);
     }
 
+    Log(uiType, buffer);
+    if (NULL != buffer)
+    {
+      delete[] buffer;
+    }
+  }
+
+  /**
+  * Log an event
+  * @param LogType the type of the event been logged
+  * @param const MYODD_CHAR* the unformatted buffer.
+  * @return
+  */
+  void LogEvent::Log(LogType uiType, const MYODD_CHAR* pszLine )
+  {
+    ASSERT(pszLine != NULL);
+
     // try and Lock the thread
     myodd::threads::AutoLockTry autoLockTry(*this);
     if (autoLockTry.TryLock(20))
     {
-      LogInLockedThread(uiType, buffer);
-    }
-
-    if (NULL != buffer)
-    {
-      delete[] buffer;
+      LogInLockedThread(uiType, pszLine);
     }
   }
 

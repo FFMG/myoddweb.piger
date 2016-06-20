@@ -319,5 +319,5 @@ HWND PluginApi::GetForegroundWindow() const
  */
 void PluginApi::Log(unsigned int logType, const wchar_t* lpText)
 {
-
+  __super::Log(logType, lpText);
 }

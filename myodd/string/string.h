@@ -164,7 +164,7 @@ namespace myodd{ namespace strings{
     return s;
   }
 
-  MYODD_STRING ToStringFmt(const MYODD_CHAR* pszFormat, ... );
+  MYODD_STRING Format(const MYODD_CHAR* pszFormat, ... );
 
   /**
   * Convert many variables to a string.
@@ -232,8 +232,17 @@ namespace myodd{ namespace strings{
   MYODD_CHAR* _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet);
   MYODD_CHAR* _tcsistr(const MYODD_CHAR* string, const MYODD_CHAR* strCharSet);
 
+  // Get the string length
   template<typename T>
   size_t Length(T src);
+  template<>
+  size_t Length<const std::string&>(const std::string& src);
+  template<>
+  size_t Length<const char*>(const char* src);
+  template<>
+  size_t Length<const std::wstring&>(const std::wstring& src);
+  template<>
+  size_t Length<const wchar_t*>(const wchar_t* src);
 
   std::wstring String2WString( const std::string& s2Convert );
   std::string WString2String(const std::wstring& ws2Convert);

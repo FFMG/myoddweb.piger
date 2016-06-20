@@ -244,11 +244,11 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
 bool HelperApi::GetVersion (MYODD_STRING& sValue )
 {
   myodd::files::Version _ver;
-  sValue = myodd::strings::ToStringFmt( _T("%d.%d.%d.%d"),
-                                        _ver.GetFileVersionMajor(),
-                                        _ver.GetFileVersionMinor(),
-                                        _ver.GetFileVersionMaintenance(),
-                                        _ver.GetFileVersionBuild() );
+  sValue = myodd::strings::Format( _T("%d.%d.%d.%d"),
+                                   _ver.GetFileVersionMajor(),
+                                   _ver.GetFileVersionMinor(),
+                                   _ver.GetFileVersionMaintenance(),
+                                   _ver.GetFileVersionBuild() );
   return true;
 }
 
