@@ -17,7 +17,7 @@ bool TokenBr::ToNextLine( bool bIsEnd ) const
 }
 
 // if this is the token we are looking for.
-bool TokenBr::OnIsToken(const MYODD_CHAR* lpString, int nLen ) const
+bool TokenBr::OnIsToken(const MYODD_CHAR* lpString, __int64 nLen ) const
 {
   if( nLen == 2 )
   {

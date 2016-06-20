@@ -79,7 +79,7 @@ namespace myodd{ namespace log{
         MYODD_CHAR szFileCount[10] = {};
         if (i > 0) 
         {
-          swprintf(szFileCount, _T("-%d"), i);
+          swprintf(szFileCount, _T("-%u"), i);
         }
 
         //  we have already added a back slash at the end of the directory.
