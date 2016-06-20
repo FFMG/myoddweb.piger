@@ -21,6 +21,7 @@ static PyMethodDef amMethods[] = {
   { "removeAction", PythonVirtualMachine::RemoveAction, METH_VARARGS, "Remove an action from the list." },
   { "getVersion", PythonVirtualMachine::GetVersion, METH_VARARGS, "Get the full version string." },
   { "findAction", PythonVirtualMachine::FindAction, METH_VARARGS, "Find an action given an index, return false or the path." },
+  { "log", PythonVirtualMachine::Log, METH_VARARGS, "Log messages to file." },
   { NULL, NULL, 0, NULL }
 };
 
@@ -381,15 +382,27 @@ PyObject* PythonVirtualMachine::GetVersion(PyObject *self, PyObject *args)
 }
 
 /**
-* Find an action.
-* @see helperapi::findAction
-* @param PyObject *
-* @param PyObject *
-* @return PyObject* false or the path of that action.
-*/
+ * Find an action.
+ * @see helperapi::findAction
+ * @param PyObject *
+ * @param PyObject *
+ * @return PyObject* false or the path of that action.
+ */
 PyObject* PythonVirtualMachine::FindAction(PyObject *self, PyObject *args)
 {
   return GetApi().FindAction(self, args);
+}
+
+/**
+ * Log a message.
+ * @see helperapi::Log
+ * @param PyObject *
+ * @param PyObject *
+ * @return PyObject* false or the path of that action.
+ */
+PyObject* PythonVirtualMachine::Log(PyObject *self, PyObject *args)
+{
+  return GetApi().Log(self, args);
 }
 
 #endif  /* ACTIONMONITOR_API_PY */

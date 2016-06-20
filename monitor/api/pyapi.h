@@ -7,7 +7,8 @@
 // this is the version number for that particular API
 // 0.1 was the old API, not idea what version of Python it was using.
 // 2.0 uses version 3.5 of Python.
-static const double ACTIONMONITOR_API_PY_VERSION = 2.0;
+// 3.0 added Log( ... )
+static const double ACTIONMONITOR_API_PY_VERSION = 3.0;
 
 // support for Python
 #include "python\include\Python.h"
@@ -33,6 +34,7 @@ public:
   PyObject* RemoveAction(PyObject *self, PyObject *args);
   PyObject* GetVersion(PyObject *self, PyObject *args);
   PyObject* FindAction(PyObject *self, PyObject *args);
+  PyObject* Log(PyObject *self, PyObject *args);
 
   void ExecuteInThread();
 protected:
