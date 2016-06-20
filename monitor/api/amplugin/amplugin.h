@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <map>
 
 #define PLUGIN_API __declspec(dllexport)
 
@@ -86,35 +85,29 @@ class AmPlugin
 {
 public:
   AmPlugin();
-  ~AmPlugin();
+  virtual ~AmPlugin();
 
 public:
   // the various functions
-  double Version();
-  bool Say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut);
-  size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer);
+  virtual double Version() = 0;
+  virtual bool Say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut) = 0;
+  virtual size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
 
   // get the full action as given by the user
-  size_t GetAction(unsigned int nBufferLength, wchar_t* lpBuffer);
+  virtual size_t GetAction(unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
 
   // get the number of parameters passed.
-  size_t GetCommandCount() const;
-  bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
-  int GetString(unsigned int nBufferLength, wchar_t* lpBuffer);
-  size_t GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
-  size_t GetFolder(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
-  size_t GetURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
-  bool AddAction(const wchar_t* szText, const wchar_t* szPath);
-  bool RemoveAction(const wchar_t* szText, const wchar_t* szPath);
-  bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer);
-  void * GetForegroundWindow() const;
+  virtual size_t GetCommandCount() const = 0;
+  virtual bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged) = 0;
+  virtual int GetString(unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
+  virtual size_t GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
+  virtual size_t GetFolder(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
+  virtual size_t GetURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
+  virtual bool AddAction(const wchar_t* szText, const wchar_t* szPath) = 0;
+  virtual bool RemoveAction(const wchar_t* szText, const wchar_t* szPath) = 0;
+  virtual bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
+  virtual void * GetForegroundWindow() const = 0;
 
   //  add a definition
-  void Add(const wchar_t* name, void*);
-
-private:
-  void* Get(const wchar_t* name) const;
-  // ---------------------------------------------------------------------------------------------
-  typedef std::map< std::wstring, void *> FNC_CONTAINER;
-  FNC_CONTAINER m_pFunction;
+  virtual void Add(const wchar_t* name, void*) = 0;
 };

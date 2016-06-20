@@ -6,6 +6,7 @@
 #include "helperapi.h"
 #include "ActionMonitor.h"
 #include "../threads/lock.h"
+#include "amplugin\ampluginprivate.h"
 
 /**
  * Todo
@@ -111,7 +112,7 @@ void PluginVirtualMachine::Initialize()
     if (_amPlugin == NULL)
     {
       //  we can now create it.
-      _amPlugin = new AmPlugin();
+      _amPlugin = new AmPluginPrivate();
 
       // register our Plugin functions.
       InitializeFunctions();

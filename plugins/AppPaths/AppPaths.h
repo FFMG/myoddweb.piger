@@ -8,6 +8,7 @@
 #endif
 
 #include "resource.h"		// main symbols
+#include <map>
 
 // support for PluginAPI
 #include "../amplugin.h"

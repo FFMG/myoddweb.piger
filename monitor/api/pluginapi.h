@@ -1,15 +1,11 @@
 #pragma once
 
+// add the APLI libs
+#ifdef ACTIONMONITOR_API_PLUGIN
 #include "helperapi.h"
 
 // this is the version number for that particular API
 static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
-
-// add the LUA libs
-#ifdef ACTIONMONITOR_API_PLUGIN
-
-// support for PluginApi
-#include "../plugins/amplugin.h"
 
 class PluginApi : public HelperApi
 {

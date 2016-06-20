@@ -1,12 +1,14 @@
 #pragma once
 
+#ifdef ACTIONMONITOR_API_PLUGIN
+
 #include "PluginApi.h"
 #include <map>
 #include <thread>
 #include <mutex>
 #include "os/os.h"
+#include "amplugin\ampluginprivate.h"
 
-#ifdef ACTIONMONITOR_API_PLUGIN
 class PluginVirtualMachine
 {
 public:
@@ -33,7 +35,7 @@ public:
   void AddApi(PluginApi* api );
 
 protected:
-  AmPlugin* _amPlugin;
+  AmPluginPrivate* _amPlugin;
   void Initialize();
   void InitializeFunctions();
 
