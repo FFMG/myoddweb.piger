@@ -7,6 +7,8 @@
 #include "../notif/notif.h"
 #include "ConfigData.h"
 
+#include <map>
+
 // define the class for the notification.
 typedef int ( *CONFIG_NOTIFY )(const MYODD_CHAR*, unsigned int, MYODD_LPARAM lParam);
 

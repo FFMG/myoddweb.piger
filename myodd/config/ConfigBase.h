@@ -8,6 +8,8 @@
 #include "ConfigData.h"
 #include "ConfigObject.h"
 
+#include <map>
+
 #include "../xml/tinyxml2.h"
 
 namespace myodd{ namespace config{
