@@ -9,7 +9,8 @@
 // 0.1 was the old API, not idea what version of Python it was using.
 // 2.0 uses version 5.3.
 // 3.0 added Log( ... )
-static const double ACTIONMONITOR_API_LUA_VERSION = 3.0;
+// 3.1 fixed some minor issues with bool > boolean
+static const double ACTIONMONITOR_API_LUA_VERSION = 3.1;
 
 // support for LUA
 extern "C" 

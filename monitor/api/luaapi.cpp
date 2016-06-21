@@ -126,7 +126,7 @@ int LuaApi::GetCommand (lua_State *lua)
     return 1;
   }
 
-  size_t idx = (size_t)lua_tointeger (lua, ARGUMENT_NUMBER);
+  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER);
   MYODD_STRING sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
@@ -223,10 +223,10 @@ int LuaApi::Getstring( lua_State *lua )
   int n = lua_gettop(lua);
 
   // the quote
-  boolean bQuote = true;
+  bool bQuote = true;
   if (n >= 1)
   {
-    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+    bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
@@ -294,10 +294,10 @@ int LuaApi::Getfile( lua_State *lua )
   UINT idx = (UINT)lua_tointeger (lua, ARGUMENT_NUMBER );
 
   // the quote
-  boolean bQuote = true;
+  bool bQuote = true;
   if (n >= 2)
   {
-    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+    bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
@@ -338,10 +338,10 @@ int LuaApi::Getfolder( lua_State *lua )
   UINT idx = (UINT)lua_tointeger (lua, ARGUMENT_NUMBER);
 
   // the quote
-  boolean bQuote = true;
+  bool bQuote = true;
   if (n >= 2)
   {
-    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+    bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
@@ -384,10 +384,10 @@ int LuaApi::Geturl( lua_State *lua )
   UINT idx = (UINT)lua_tointeger (lua, 1);
 
   // the quote
-  boolean bQuote = true;
+  bool bQuote = true;
   if (n >= 2)
   {
-    bQuote = (bool)lua_toboolean(lua, ARGUMENT_QUOTE);
+    bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
