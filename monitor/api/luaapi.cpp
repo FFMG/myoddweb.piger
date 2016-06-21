@@ -24,27 +24,41 @@ LuaApi::~LuaApi(void)
 }
 
 /**
- * Todo
+ * 'Get the current version number
  * @param lua_State *
  * @return int
  */
 int LuaApi::Version (lua_State *lua)
 {
+  int n = lua_gettop(lua);
+  if (n > 0 )
+  {
+    auto errorMsg = _T("<b>Error : </b> The 'Version function does not take any parametters.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say( errorMsg , 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
   // short and sweet
   // all we need is the version number.
   lua_pushnumber(lua, ACTIONMONITOR_API_LUA_VERSION );
 
-  // we passed one items
+  // return the number of results
   return 1;
 }
 
 /**
- * Todo
+ * Execute.
  * @param lua_State *
  * @return int
  */
 int LuaApi::Execute (lua_State *lua)
 {
+  static const int ARGUMENT_MODULE = 1;
+  static const int ARGUMENT_ARGS = 2;
+  static const int ARGUMENT_PRIVILEGED = 3;
+
   // get the number of arguments.
   // we can only have one or 2 arguments 
   // 
@@ -53,30 +67,45 @@ int LuaApi::Execute (lua_State *lua)
   int n = lua_gettop( lua );
   if( n < 1 || n > 3 )
   {
-    __super::Say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>"), 3000, 5 );
+    auto errorMsg = _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg , 3000, 5 );
     lua_pushboolean ( lua, false );
+
+    // return the number of results
     return 1;
   }
 
-  USES_CONVERSION;
+  if (!lua_isstring(lua, ARGUMENT_MODULE) || !lua_isstring(lua, ARGUMENT_ARGS))
+  {
+    auto errorMsg = _T("<b>Error : </b> The first and second parameters must be strings.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
 
-  LPCTSTR module  = T_A2T( lua_tostring (lua, 1) );
-  LPCTSTR cmdLine = T_A2T( lua_tostring (lua, 2) );
+    // return the number of results
+    return 1;
+  }
 
   bool isPrivileged = false;
   if (n == 3)
   {
-    if (!lua_isboolean(lua, 3))
+    if (!lua_isboolean(lua, ARGUMENT_PRIVILEGED))
     {
-      __super::Say(_T("<b>Error : </b> The third argument, (privileged), can only be true|false"), 3000, 5);
+      auto errorMsg = _T("<b>Error : </b> The third argument, (privileged), can only be true|false");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
       lua_pushboolean(lua, false);
       return 1;
     }
-    isPrivileged = (lua_toboolean(lua, 3 ) == 1);
+    isPrivileged = (lua_toboolean(lua, ARGUMENT_PRIVILEGED) == 1);
   }
 
+  auto module = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_MODULE));
+  auto cmdLine = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ARGS));
+
   // run the query
-  bool result = __super::Execute(module, cmdLine, isPrivileged );
+  bool result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged );
 
   // push the result.
   lua_pushboolean ( lua, result );
@@ -84,7 +113,9 @@ int LuaApi::Execute (lua_State *lua)
   // tell the user it did not work
   if (false == result)
   {
-	  __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
+    auto errorMsg = _T("<b>Error : </b> There was an error executing the request, please check the parameters.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
   }
 
   // return the number of results
@@ -92,12 +123,24 @@ int LuaApi::Execute (lua_State *lua)
 }
 
 /**
- * Todo
+ * Get the number of arguments passed.
  * @param lua_State *
  * @return int
  */
 int LuaApi::GetCommandCount(lua_State *lua)
 {
+  int n = lua_gettop(lua);
+  if (n > 0)
+  {
+    auto errorMsg = _T("<b>Error : </b> The 'GetCommandCount' function does not take any parametters.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
   // get it
   size_t nSize = __super::GetCommandCount();
   
@@ -109,7 +152,7 @@ int LuaApi::GetCommandCount(lua_State *lua)
 }
 
 /**
- * Todo
+ * Get an arguments
  * @param lua_State *
  * @return int
  */
@@ -119,9 +162,11 @@ int LuaApi::GetCommand (lua_State *lua)
   int n = lua_gettop( lua );
   if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getCommand( <b>index</b> )</i>"), 3000, 5 );
-    lua_pushboolean( lua, false );
-    
+    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getCommand( <b>index</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
     // return the number of results
     return 1;
   }
@@ -130,23 +175,25 @@ int LuaApi::GetCommand (lua_State *lua)
   MYODD_STRING sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
+    auto errorMsg = _T("Trying to get an argument past the number of arguments.");
+    __super::Log(AM_LOG_WARNING, errorMsg);
+
     lua_pushboolean( lua, false );
 
     // return the number of results
     return 1;
   }
 
-  USES_CONVERSION;
-
   // push the value
-  lua_pushstring(lua, T_T2A( sValue.c_str() ) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str() );
 
   // return the number of results
   return 1;
 }
 
 /**
- * Todo
+ * Get an action
  * @param lua_State *
  * @return int
  */
@@ -156,7 +203,9 @@ int LuaApi::GetAction (lua_State *lua)
   int n = lua_gettop( lua );
   if( n != 0 )
   {
-    __super::Say( _T("<b>Error : </b>.<br>Format is <i>am_getAction( )</i>"), 3000, 5 );
+    auto errorMsg = _T("<b>Error : </b>.<br>Format is <i>am_getAction( )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
     lua_pushboolean( lua, false );
     
     // return the number of results
@@ -166,16 +215,18 @@ int LuaApi::GetAction (lua_State *lua)
   MYODD_STRING sValue;
   if( !__super::GetAction( sValue ) )
   {
-    lua_pushboolean( lua, false );
+    auto errorMsg = _T("Trying to get an action past the number of actions.");
+    __super::Log(AM_LOG_WARNING, errorMsg);
+
+    lua_pushboolean(lua, false);
 
     // return the number of results
     return 1;
   }
 
-  USES_CONVERSION;
-
   // push the value
-  lua_pushstring(lua, T_T2A( sValue.c_str() ) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str());
 
   // return the number of results
   return 1;
@@ -188,23 +239,77 @@ int LuaApi::GetAction (lua_State *lua)
  */
 int LuaApi::Say (lua_State *lua)
 {
-  USES_CONVERSION;
+  const int ARGUMENT_TEXT = 1;
+  const int ARGUMENT_ELAPSE = 2;
+  const int ARGUMENT_FADEOUT = 3;
+
+  int n = lua_gettop(lua);
+  if (n < 2 || n > 3)
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
+  if (!lua_isstring( lua, ARGUMENT_TEXT))
+  {
+    auto errorMsg = _T("<b>Error : </b> The first argument must be a string.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
+  if (!lua_isinteger(lua, ARGUMENT_ELAPSE))
+  {
+    auto errorMsg = _T("<b>Error : </b> The elapse parameters must be an integer.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
 
   // the first item is the message.
-  LPCTSTR msg = T_A2T( lua_tostring (lua, 1) );
-  UINT nElapse = (UINT)lua_tointeger (lua, 2);
-  if(  nElapse == 0 )                                                               
+  auto msg = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_TEXT) );
+  unsigned int nElapse = (unsigned int)lua_tointeger (lua, ARGUMENT_ELAPSE);
+  if(  nElapse == 0 )
   {
-    __super::Say( _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>, fade=0)</i>"), 3000, 5 );
-    lua_pushboolean ( lua, false );
+    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say( errorMsg, 3000, 5 );
+    lua_pushboolean(lua, false);
+
+    // return the number of results
     return 1;
   }
 
   // if it is 0 then we fade rapidely
-  UINT nFadeOut = (UINT)lua_tointeger (lua, 3);
+  unsigned int nFadeOut = 0;
+  if (n == 3)
+  {
+    if (!lua_isinteger(lua, ARGUMENT_FADEOUT))
+    {
+      auto errorMsg = _T("<b>Error : </b> The fadout parameters must be an integer.");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      lua_pushboolean(lua, false);
+
+      // return the number of results
+      return 1;
+    }
+    nFadeOut = (unsigned int)lua_tointeger(lua, ARGUMENT_FADEOUT);
+  }
 
   // and we can now display the message.
-  bool result = __super::Say( msg, nElapse, nFadeOut );
+  bool result = __super::Say( msg.c_str(), nElapse, nFadeOut );
   lua_pushboolean ( lua, result );
 
   // return the number of results
@@ -212,7 +317,7 @@ int LuaApi::Say (lua_State *lua)
 }
 
 /**
- * Todo
+ * Get the currently selected string.
  * @param lua_State *
  * @return int
  */
@@ -221,17 +326,39 @@ int LuaApi::Getstring( lua_State *lua )
   const int ARGUMENT_QUOTE = 1;
 
   int n = lua_gettop(lua);
+  if ( n > 1 )
+  {
+    auto errorMsg = _T("<b>Error : </b> The function 'Getstring' does not take more than one parameter");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
 
   // the quote
   bool bQuote = true;
-  if (n >= 1)
+  if (n == 1)
   {
+    if (!lua_isboolean(lua, ARGUMENT_QUOTE) )
+    {
+      auto errorMsg = _T("The first parameter must be a boolean.");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      lua_pushboolean(lua, false);
+
+      // return the number of results
+      return 1;
+    }
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
   if( !__super::GetString( sValue, bQuote ) )
   {
+    __super::Log(AM_LOG_WARNING, _T("Could not get any selected string."));
+
     //  just return false.
     lua_pushboolean ( lua, false );
 
@@ -240,8 +367,8 @@ int LuaApi::Getstring( lua_State *lua )
   }
 
   // otherwise push the string
-  USES_CONVERSION;
-  lua_pushstring(lua, T_T2A(sValue.c_str()) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str());
 
   // we have one item
   return 1;
@@ -254,9 +381,23 @@ int LuaApi::Getstring( lua_State *lua )
  */
 int LuaApi::GetVersion( lua_State *lua )
 {
+  int n = lua_gettop(lua);
+  if (n > 0)
+  {
+    auto errorMsg = _T("<b>Error : </b> The function 'GetVersion' does not take any parameters");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
   MYODD_STRING sValue = _T("");
   if( !__super::GetVersion( sValue ) )
   {
+    __super::Log(AM_LOG_ERROR, _T("Unable to get the version number") );
+
     //  just return false.
     lua_pushboolean ( lua, false );
 
@@ -265,59 +406,87 @@ int LuaApi::GetVersion( lua_State *lua )
   }
 
   // otherwise push the string
-  USES_CONVERSION;
-  lua_pushstring(lua, T_T2A(sValue.c_str()) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str());
 
   // we have one item
   return 1;
 }
 
 /**
- * Todo
+ * Get a file at a given index.
  * @param lua_State *
  * @return int
  */
 int LuaApi::Getfile( lua_State *lua )
 {
+  //  the arguments.
   const int ARGUMENT_NUMBER = 1;
   const int ARGUMENT_QUOTE = 2;
 
   int n = lua_gettop( lua );
-  if( n < 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
+  if (n < 1 || n > 2 )
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>"), 3000, 5 );
+    auto errorMsg = _T("<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
+  if( !lua_isnumber(lua, ARGUMENT_NUMBER ) )
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say( errorMsg, 3000, 5 );
     lua_pushboolean ( lua, false );
+
+    // return the number of results
     return 1;
   }
 
   //  get the nunber
-  UINT idx = (UINT)lua_tointeger (lua, ARGUMENT_NUMBER );
+  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER );
 
   // the quote
   bool bQuote = true;
-  if (n >= 2)
+  if (n == 2)
   {
+    if (!lua_isboolean(lua, ARGUMENT_QUOTE))
+    {
+      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      lua_pushboolean(lua, false);
+
+      // return the number of results
+      return 1;
+    }
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
   if( !__super::GetFile( idx, sValue, bQuote ) )
   {
+    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested file index."));
     lua_pushboolean ( lua, false );
+
+    // return the number of results
     return 1;
   }
 
   // otherwise push the string
-  USES_CONVERSION;
-  LPCTSTR c = sValue.c_str();
-  lua_pushstring(lua, T_T2A( c ) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str());
 
   // we have one item
   return 1;
 }
 
 /**
- * Todo
+ * Get a folder at a given index.
  * @param lua_State *
  * @return int
  */
@@ -326,44 +495,69 @@ int LuaApi::Getfolder( lua_State *lua )
   const int ARGUMENT_NUMBER = 1;
   const int ARGUMENT_QUOTE = 2;
 
-  int n = lua_gettop( lua );
-  if( n < 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
+  int n = lua_gettop(lua);
+  if (n < 1 || n > 2)
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b>[, quote] )</i>"), 3000, 5 );
-    lua_pushboolean ( lua, false );
+    auto errorMsg = _T("<b>Error : </b> The function 'Getfolder' takes 1 or 2 parameters");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
+  if (!lua_isnumber(lua, ARGUMENT_NUMBER))
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b>[, quote] )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
     return 1;
   }
 
   //  the number.
-  UINT idx = (UINT)lua_tointeger (lua, ARGUMENT_NUMBER);
+  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER);
 
   // the quote
   bool bQuote = true;
   if (n >= 2)
   {
+    if (!lua_isboolean(lua, ARGUMENT_QUOTE))
+    {
+      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      lua_pushboolean(lua, false);
+
+      // return the number of results
+      return 1;
+    }
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
   if( !__super::GetFolder( idx, sValue, bQuote ) )
   {
+    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested folder index."));
+
     //  just return false.
     lua_pushboolean ( lua, false );
     return 1;
   }
 
-  USES_CONVERSION;
-
   // otherwise push the string
-  LPCTSTR c = sValue.c_str();
-  lua_pushstring(lua, T_T2A(c) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str());
 
   // we have one item
   return 1;
 }
 
 /**
- * Todo
+ * Get a url at a given index.
  * @param lua_State *
  * @return int
  */
@@ -372,77 +566,126 @@ int LuaApi::Geturl( lua_State *lua )
   const int ARGUMENT_NUMBER = 1;
   const int ARGUMENT_QUOTE = 2;
 
-  int n = lua_gettop( lua );
-  if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
+  int n = lua_gettop(lua);
+  if (n < 1 || n > 2)
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>"), 3000, 5 );
-    lua_pushboolean ( lua, false );
+    auto errorMsg = _T("<b>Error : </b> The function 'Geturl' takes 1 or 2 parameters");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
+  if (!lua_isnumber(lua, ARGUMENT_NUMBER))
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
     return 1;
   }
 
   //  get the index.
-  UINT idx = (UINT)lua_tointeger (lua, 1);
+  unsigned int idx = (unsigned int)lua_tointeger (lua, 1);
 
   // the quote
   bool bQuote = true;
   if (n >= 2)
   {
+    if (!lua_isboolean(lua, ARGUMENT_QUOTE))
+    {
+      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      lua_pushboolean(lua, false);
+
+      // return the number of results
+      return 1;
+    }
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
   MYODD_STRING sValue = _T("");
   if( !__super::GetURL( idx, sValue, bQuote) )
   {
+    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested url index."));
+
     //  just return false.
     lua_pushboolean ( lua, false );
     return 1;
   }
 
-  USES_CONVERSION;
-
   // otherwise push the string
-  LPCTSTR c = sValue.c_str();
-  lua_pushstring(lua, T_T2A(c) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str());
 
   // we have one item
   return 1;
 }
 
 /**
- * Todo
+ * Add a given action
  * @param lua_State *
  * @return int
  */
 int LuaApi::AddAction( lua_State *lua )
 {
+  const int ARGUMENT_ACTION = 1;
+  const int ARGUMENT_PATH = 2;
+
   //  get the number of arguments
   int n = lua_gettop( lua );
 
   // we must have 2 items
   if( n != 2 )
   {
-    __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
+    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say( errorMsg, 3000, 5 );
     lua_pushboolean ( lua, false );
     return 1;
   }
 
-  USES_CONVERSION;
+  if (!lua_isstring(lua, ARGUMENT_ACTION))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
 
-  LPCTSTR szText = T_A2T( lua_tostring (lua, 1) );
-  LPCTSTR szPath = T_A2T( lua_tostring (lua, 2) );
-  bool r = __super::AddAction( szText, szPath );
+  if (!lua_isstring(lua, ARGUMENT_PATH))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
+  auto szAction = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_ACTION) );
+  auto szPath = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_PATH ) );
+  bool r = __super::AddAction(szAction.c_str(), szPath.c_str() );
   
   lua_pushboolean ( lua, r );
   return 1;
 }
 
 /**
- * Todo
+ * Remove a given action
  * @param lua_State *
  * @return int
  */
 int LuaApi::RemoveAction( lua_State *lua )
 {
+  const int ARGUMENT_ACTION = 1;
+  const int ARGUMENT_PATH = 2;
+
   //  get the number of arguments
   int n = lua_gettop( lua );
 
@@ -454,21 +697,44 @@ int LuaApi::RemoveAction( lua_State *lua )
     return 1;
   }
 
-  LPCSTR szText = lua_tostring (lua, 1);
-  LPCSTR szPath = lua_tostring (lua, 2);
-  bool r = __super::RemoveAction(HelperApi::widen(szText).c_str(), HelperApi::widen(szPath).c_str() );
+  if (!lua_isstring(lua, ARGUMENT_ACTION))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
+  if (!lua_isstring(lua, ARGUMENT_PATH))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
+  USES_CONVERSION;
+
+  LPCTSTR szAction = T_A2T(lua_tostring(lua, ARGUMENT_ACTION));
+  LPCTSTR szPath = T_A2T(lua_tostring(lua, ARGUMENT_PATH));
+  bool r = __super::RemoveAction(szAction, szPath );
   
   lua_pushboolean ( lua, r );
   return 1;
 }
 
 /**
- * Get the action monitor version string.
+ * Find an action at a given index.
  * @param lua_State *
  * @return int
  */
 int LuaApi::FindAction( lua_State *lua )
 {
+  const int ARGUMENT_INDEX = 1;
+  const int ARGUMENT_ACTION = 2;
+
   //  get the number of arguments
   int n = lua_gettop( lua );
 
@@ -480,13 +746,32 @@ int LuaApi::FindAction( lua_State *lua )
     return 1;
   }
 
+  if (!lua_isinteger(lua, ARGUMENT_INDEX))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'index' must be a number");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
 
-  UINT idx = (UINT)lua_tointeger (lua, 1);
-  LPCSTR action = lua_tostring (lua, 2);
+  if (!lua_isstring(lua, ARGUMENT_ACTION))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
+  auto idx = (unsigned int)lua_tointeger (lua, ARGUMENT_INDEX);
+  auto action = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ACTION));
 
   MYODD_STRING sValue = _T("");
-  if( !__super::FindAction( idx, HelperApi::widen( action ).c_str(), sValue ) )
+  if( !__super::FindAction( idx, action.c_str(), sValue ) )
   {
+    __super::Log(AM_LOG_WARNING, _T("Could not find action at given index"));
+
     //  just return false.
     lua_pushboolean ( lua, false );
 
@@ -495,13 +780,18 @@ int LuaApi::FindAction( lua_State *lua )
   }
 
   // otherwise push the string
-  USES_CONVERSION;
-  lua_pushstring(lua, T_T2A(sValue.c_str()) );
+  auto asValue = myodd::strings::WString2String(sValue);
+  lua_pushstring(lua, asValue.c_str());
 
   // one return variable.
   return 1;
 }
 
+/**
+ * Log a message 
+ * @param lua_Sate *lua
+ * @return int the number of arguments.
+ */
 int LuaApi::Log(lua_State *lua)
 {
   const int ARGUMENT_LOGTYPE = 1;
@@ -513,7 +803,27 @@ int LuaApi::Log(lua_State *lua)
   // we must have 2 items
   if (n != 2)
   {
-    __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>"), 3000, 5);
+    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
+  if (!lua_isinteger(lua, ARGUMENT_LOGTYPE))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'logtype' must be a number");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+    return 1;
+  }
+
+  if (!lua_isstring(lua, ARGUMENT_MESSAGE))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'message' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
     return 1;
   }

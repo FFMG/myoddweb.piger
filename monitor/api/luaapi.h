@@ -10,7 +10,8 @@
 // 2.0 uses version 5.3.
 // 3.0 added Log( ... )
 // 3.1 fixed some minor issues with bool > boolean
-static const double ACTIONMONITOR_API_LUA_VERSION = 3.1;
+// 3.2 check all the params type/number
+static const double ACTIONMONITOR_API_LUA_VERSION = 3.2;
 
 // support for LUA
 extern "C" 
