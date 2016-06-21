@@ -2,7 +2,9 @@
 #include "log.h"
 #include "logfile.h"
 #include <io.h>
-#include "../files/files.h"
+
+#include <chrono>
+#include <ctime>
 
 #include "../math/math.h"
 #include "../files/files.h"
@@ -38,6 +40,33 @@ namespace myodd{ namespace log{
     return ( m_fp != NULL && !m_bInOpenCall );
   }
 
+  struct tm LogFile::GetCurrentTimeStruct() const
+  {
+    // the current time.
+    auto timeNow = std::chrono::system_clock::now();
+
+    // to a time_t struct
+    auto tTime = std::chrono::system_clock::to_time_t(timeNow);
+
+    // to a tm structure.
+    return *localtime(&tTime);
+  }
+
+  /**
+   * Updated the started time of the log file.
+   * this will set the _tStarted structure.
+   */
+  void LogFile::UpdateStartedTime()
+  {
+    // update the started time with the current structure.
+    _tStarted = GetCurrentTimeStruct();
+  }
+
+  /**
+   * Create the log file given the prefix and extension
+   * We will check that the file size if within limit
+   * And the date/time is up to date.
+   */
   bool LogFile::Create()
   {
     //  is the file open already.
@@ -59,23 +88,18 @@ namespace myodd{ namespace log{
     bool bResult = false;
     try
     {
-      __time64_t tTime;
-      _time64( &tTime ); 
+      // get the time now.
+      UpdateStartedTime();
 
-      errno_t err = _localtime64_s( &_tStarted, &tTime );
-      if( err )
-      {
-        //  there was a problem.
-        m_bInOpenCall = true;
-        return false;
-      }
-
+      // look for a file that matches
       for ( unsigned int i = 0;; ++i )
       {
         //  get the log file.
         MYODD_CHAR szDateLogStarted[40] = {};
         _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y-%m-%d"), &_tStarted );
 
+        // add a number if the file number is > 0
+        // so we will create more than one file for today if need be.
         MYODD_CHAR szFileCount[10] = {};
         if (i > 0) 
         {
@@ -172,21 +196,16 @@ namespace myodd{ namespace log{
     }
     else
     {
-      // check how old the file is
-      __time64_t tTime;
-      struct tm tStarted;
-      _time64(&tTime);
+      // get the current time and check if the file is out of date.
+      auto tStarted = GetCurrentTimeStruct();
 
-      errno_t err = _localtime64_s(&tStarted, &tTime);
-      if (err == 0)
+      //  compare it to the started time.
+      auto tm = GetStartedDate();
+      if (tm.tm_yday != tStarted.tm_yday)
       {
-        auto tm = GetStartedDate();
-        if (tm.tm_yday != tStarted.tm_yday)
-        {
-          //  close the old one and force a re-open
-          // this will force a check to be done.
-          bRecreate = true;
-        }
+        //  close the old one and force a re-open
+        // this will force a check to be done.
+        bRecreate = true;
       }
     }
 
@@ -306,16 +325,8 @@ namespace myodd{ namespace log{
     bool bResult = false;
     try
     {
-      __time64_t tTime;
-      struct tm tStarted;
-      _time64( &tTime ); 
-
-      errno_t err = _localtime64_s( &tStarted, &tTime );
-      if( err )
-      {
-        //  there was a problem.
-        return false;
-      }
+      // get the current date so we can add it to the log.
+      auto tStarted = GetCurrentTimeStruct();
 
       MYODD_CHAR szDateLogStarted[40];
       _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y/%m/%d %H:%M:%S"), &tStarted );

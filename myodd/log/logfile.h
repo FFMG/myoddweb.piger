@@ -44,6 +44,9 @@ namespace myodd{ namespace log{
     __int64 m_uCurrentSize;
     struct tm _tStarted;
     size_t _maxFileSizeInMegabytes;
+
+    void UpdateStartedTime();
+    struct tm GetCurrentTimeStruct() const;
   };
 } //  log
 } //  myodd
