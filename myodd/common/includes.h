@@ -3,9 +3,17 @@
 
 #pragma once
 
+// we need to remove this eventually
 #include <windows.h>
-#include <string>
 
+/** 
+ * We do not want any warnings for deprecated warnings if we are in windows.
+ */
+#if (defined(_WIN32) || defined(WIN32)) && !defined(_CRT_SECURE_NO_WARNINGS)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
+// define lparam/waprams
 #ifdef _WIN64
   typedef __int64 MYODD_LPARAM;
   typedef unsigned __int64 MYODD_WPARAM;
@@ -14,6 +22,8 @@
   typedef unsigned int MYODD_WPARAM;
 #endif
 
+// define the strings
+#include <string>
 #ifndef MYODD_STRING
   #ifdef _UNICODE
     typedef std::wstring MYODD_STRING;
