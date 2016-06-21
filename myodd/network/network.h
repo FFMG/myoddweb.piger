@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../common/includes.h"
+#include <windows.h>
 #include "wininet.h"
 #include <vector>
 

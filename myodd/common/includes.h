@@ -3,9 +3,6 @@
 
 #pragma once
 
-// we need to remove this eventually
-#include <windows.h>
-
 /** 
  * We do not want any warnings for deprecated warnings if we are in windows.
  */

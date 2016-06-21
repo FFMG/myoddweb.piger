@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/includes.h"
+#include <windows.h>
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
   TypeName(const TypeName&);               \

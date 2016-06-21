@@ -10,19 +10,19 @@
 
 namespace myodd{ namespace offset{
   template <typename T>
-  void write( const T& item, BYTE*& pData, size_t& ulOffset )
+  void write( const T& item, unsigned char*& pData, size_t& ulOffset )
   {
     unsigned int uiSize = sizeof(item);
     if( ulOffset > 0 && pData)
     {
-      BYTE* pTmpData = new BYTE[ulOffset + uiSize ];
+      unsigned char* pTmpData = new unsigned char[ulOffset + uiSize ];
       memcpy( pTmpData, pData, ulOffset );
       delete [] pData;
       pData = pTmpData;
     }
     else
     {
-      pData = new BYTE[ uiSize ];
+      pData = new unsigned char[ uiSize ];
     }
 
     memcpy( pData+ulOffset, &item, uiSize );
@@ -31,10 +31,10 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  void write<MYODD_STRING>( const MYODD_STRING& item, BYTE*& pData, size_t& ulOffset );
+  void write<MYODD_STRING>( const MYODD_STRING& item, unsigned char*& pData, size_t& ulOffset );
 
   template <typename T>
-  void write( const T*& item, BYTE*& pData, size_t& ulOffset )
+  void write( const T*& item, unsigned char*& pData, size_t& ulOffset )
   {
     if( item )
     {
@@ -42,11 +42,11 @@ namespace myodd{ namespace offset{
     }
   }
   template<>
-  void write<MYODD_CHAR>( const MYODD_CHAR*& item, BYTE*& pData, size_t& ulOffset );
+  void write<MYODD_CHAR>( const MYODD_CHAR*& item, unsigned char*& pData, size_t& ulOffset );
 
-  void write( const void* item, size_t unItemSize, BYTE*& pData, size_t& ulOffset );
+  void write( const void* item, size_t unItemSize, unsigned char*& pData, size_t& ulOffset );
 
-  void writeFile( const MYODD_CHAR* fileName, BYTE*& pData, size_t& ulOffset );
+  void writeFile( const MYODD_CHAR* fileName, unsigned char*& pData, size_t& ulOffset );
 
   template <typename T>
   bool read( T& item, const void* pData, size_t& ulOffset, size_t uiMaxSize )
@@ -54,7 +54,7 @@ namespace myodd{ namespace offset{
     unsigned int uiSize = sizeof(item);
     if( ulOffset+uiSize > uiMaxSize )
       return false;
-    memcpy( &item, (const BYTE*)pData+ulOffset, uiSize );
+    memcpy( &item, (const unsigned char*)pData+ulOffset, uiSize );
     ulOffset += uiSize;
     return true;
   }
@@ -75,7 +75,7 @@ namespace myodd{ namespace offset{
 
   bool read( void* item, size_t unItemSize, const void* pData, size_t& ulOffset, size_t uiMaxSize );
 
-  void readFile( const MYODD_CHAR* fileName, const BYTE* pData, size_t& ulOffset, size_t uiMaxSize  );
+  void readFile( const MYODD_CHAR* fileName, const unsigned char* pData, size_t& ulOffset, size_t uiMaxSize  );
 } //  offset
 } //  myodd
 #endif // _Offset_h

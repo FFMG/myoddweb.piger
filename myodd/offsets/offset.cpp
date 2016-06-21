@@ -9,14 +9,14 @@ namespace myodd{ namespace offset{
   /**
    * Write a file, (the actual data, not the filename), to the given buffer.
    * @param const MYODD_CHAR* the file we want to write to the buffer.
-   * @param BYTE*& the data that will contain the file contents.
+   * @param unsigned char*& the data that will contain the file contents.
    * @param unsigned long& the current offset position at the start and end of the operation
    * @return none.
    */
   void writeFile
   ( 
     const MYODD_CHAR* fileName,
-    BYTE*& pData, 
+    unsigned char*& pData,
     size_t& ulOffset
   )
   {
@@ -50,11 +50,11 @@ namespace myodd{ namespace offset{
         myodd::offset::write( bufferLen, pData, ulOffset );
 
         // read the file.
-        BYTE* bRead = new BYTE[bufferLen];
+        unsigned char* bRead = new unsigned char[bufferLen];
         memset( bRead, 0, bufferLen );
         if( bRead )
         {
-          size_t ulRead = _fread_nolock(bRead, sizeof(BYTE), bufferLen, hf);
+          size_t ulRead = _fread_nolock(bRead, sizeof(unsigned char), bufferLen, hf);
           assert( ulRead == (size_t)bufferLen );
           myodd::offset::write( bRead, ulRead, pData, ulOffset );
           delete [] bRead;
@@ -75,7 +75,7 @@ namespace myodd{ namespace offset{
   ( 
     const void* item, 
     size_t unItemSize,
-    BYTE*& pData, 
+    unsigned char*& pData,
     size_t& ulOffset
   )
   {
@@ -87,37 +87,37 @@ namespace myodd{ namespace offset{
 
     if( ulOffset > 0 && pData)
     {
-      BYTE* pTmpData = new BYTE[ulOffset + unItemSize ];
+      unsigned char* pTmpData = new unsigned char[ulOffset + unItemSize ];
       memcpy( pTmpData, pData, ulOffset );
       delete [] pData;
       pData = pTmpData;
     }
     else
     {
-      pData = new BYTE[ unItemSize ];
+      pData = new unsigned char[ unItemSize ];
     }
 
-    memcpy( (BYTE*)pData+ulOffset, item, unItemSize );
+    memcpy( (unsigned char*)pData+ulOffset, item, unItemSize );
 
     ulOffset += unItemSize;
   }
 
   template<>
-  void write<MYODD_CHAR>( const MYODD_CHAR*& item, BYTE*& pData, size_t& ulOffset )
+  void write<MYODD_CHAR>( const MYODD_CHAR*& item, unsigned char*& pData, size_t& ulOffset )
   {
     size_t uiLength = myodd::strings::Length( item ) * sizeof(MYODD_CHAR);
     size_t uiSize = uiLength;
     uiSize += sizeof(unsigned int); //  the length
     if( ulOffset > 0 )
     {
-      BYTE* pTmpData = new BYTE[ulOffset + uiSize ];
+      unsigned char* pTmpData = new unsigned char[ulOffset + uiSize ];
       memcpy( pTmpData, pData, ulOffset );
       delete [] pData;
       pData = pTmpData;
     }
     else
     {
-      pData = new BYTE[ uiSize ];
+      pData = new unsigned char[ uiSize ];
     }
 
     memcpy( pData+ulOffset, &uiLength, sizeof(unsigned int) );
@@ -129,7 +129,7 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  void write<MYODD_STRING>( const MYODD_STRING& item, BYTE*& pData, size_t& ulOffset )
+  void write<MYODD_STRING>( const MYODD_STRING& item, unsigned char*& pData, size_t& ulOffset )
   {
     const MYODD_CHAR* lp = item.c_str();
     write( lp, pData, ulOffset );
@@ -155,7 +155,7 @@ namespace myodd{ namespace offset{
       return false;
 
     unsigned int uiSize = 0;
-    memcpy( &uiSize, (const BYTE*)pData+ulOffset, sizeof(unsigned int) );
+    memcpy( &uiSize, (const unsigned char*)pData+ulOffset, sizeof(unsigned int) );
     ulOffset += sizeof(unsigned int);
 
     if( ulOffset+uiSize > uiMaxSize )
@@ -165,7 +165,7 @@ namespace myodd{ namespace offset{
     {
       item = new MYODD_CHAR[(uiSize+ sizeof(MYODD_CHAR))];
       memset( item, 0, uiSize+sizeof(MYODD_CHAR));
-      memcpy( item, (const BYTE*)pData+ulOffset, uiSize );
+      memcpy( item, (const unsigned char*)pData+ulOffset, uiSize );
       ulOffset += uiSize;
     }
     return true;
@@ -207,16 +207,16 @@ namespace myodd{ namespace offset{
   {
     if( ulOffset+unItemSize > uiMaxSize )
       return false;
-    memcpy( item, (const BYTE*)pData+ulOffset, unItemSize );
+    memcpy( item, (const unsigned char*)pData+ulOffset, unItemSize );
     ulOffset += unItemSize;
     return true;
   }
 
   /**
    * Read a file content from given data
-   * the first 4 bytes is the total size of the 
+   * the first 4 unsigned chars is the total size of the 
    * @param const MYODD_CHAR* where we are writing the file to.
-   * @param const BYTE* the data we are reading from
+   * @param const unsigned char* the data we are reading from
    * @param unsigned long& the offest start/end position
    * @param unsigned int the maximum size of the buffer
    * @return none
@@ -224,7 +224,7 @@ namespace myodd{ namespace offset{
   void readFile
   ( 
     const MYODD_CHAR* fileName,
-    const BYTE* pData, 
+    const unsigned char* pData,
     size_t& ulOffset,
     size_t uiMaxSize
   )
@@ -249,13 +249,13 @@ namespace myodd{ namespace offset{
 
     // recreate the file.
     // create a buffer that will contain the whole file.
-    BYTE* pBuffer = new BYTE[bufferLen];
+      unsigned char* pBuffer = new unsigned char[bufferLen];
 
     // read the data
     myodd::offset::read( pBuffer, bufferLen, pData, ulOffset, uiMaxSize );
 
     // write the data to the file.
-    size_t nWriten = fwrite( pBuffer, sizeof(BYTE), bufferLen, hf );
+    size_t nWriten = fwrite( pBuffer, sizeof(unsigned char), bufferLen, hf );
     assert( nWriten == (size_t)bufferLen );
 
     // close the file.

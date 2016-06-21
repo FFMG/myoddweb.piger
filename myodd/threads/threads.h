@@ -2,6 +2,8 @@
 #ifndef _Threads_h
 #define _Threads_h
 
+#include <windows.h>
+
 namespace myodd{ namespace threads{
   class CritSection
   {
