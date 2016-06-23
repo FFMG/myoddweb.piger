@@ -143,8 +143,32 @@ BOOL CActionMonitorDlg::OnInitDialog()
   //  do all the actions that are labeled as 'start'
   App().DoStartActionsList();
 
-  //  setup the hooks and the key
-  InitHook();
+  // SetWindowText( L"MyOddweb_com_ActionMonitor");
+  
+  {
+    // Check if our class is already defined
+    LPCTSTR pszClassName = _T("MyOddweb_com_ActionMonitor");
+    auto p = FindWindowW(L"MyOddweb_com_ActionMonitor", nullptr);
+    WNDCLASS wndcls;
+    auto h = ::GetParent(m_hWnd);
+    if (!::GetClassInfo(AfxGetInstanceHandle(), pszClassName, &wndcls))
+    {
+      std::array<TCHAR, 256> className; //256 is max classname length
+      GetClassName(h, className.data(), className.size());
+
+      // Change the name of the class.
+      WNDCLASS wc;
+      ::GetClassInfo(AfxGetInstanceHandle(), className.data(), &wc);
+      wc.lpszClassName = pszClassName;
+
+      // Register this class so that MFC can use it.
+      if (!RegisterClass(&wc))
+      {
+        TRACE(traceAppMsg, 0, _T("Can't register window class named %Ts\n"),  wc.lpszClassName);
+        return FALSE;
+      }
+    }
+  }
 
   return TRUE;
 }
