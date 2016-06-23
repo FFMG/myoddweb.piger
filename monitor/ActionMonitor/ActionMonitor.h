@@ -4,13 +4,10 @@
 #pragma once
 
 #include "Actions.h"    //  the actions we can call, (the name of the file)
-#include "Action.h"     //  the action we are currently working with
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
-
-#include "resource.h"		          // main symbols
 
 /////////////////////////////////////////////////////////////////////////////
 // CActionMonitorApp:
@@ -36,9 +33,9 @@ public:
 	DECLARE_MESSAGE_MAP()
 
 protected:
-  bool InitConfig(const myodd::variables& vm);
-  void InitLog();
-  void InitReservedPaths();
+  static bool InitConfig(const myodd::variables& vm);
+  static void InitLog();
+  static void InitReservedPaths();
   void InitMaxClipboardSize();
 
 public:
@@ -51,18 +48,18 @@ public:
   void BuildActionsList();
 
 public:
-  void DoStartActionsList();
-  void DoEndActionsList();
+  static void DoStartActionsList();
+  static void DoEndActionsList();
 
 public:
 //  virtual int ExitInstance();
-  virtual int ExitInstance();
+  int ExitInstance() override;
 
   // check Mutext and so on
   bool CanStartApp();
 
   // self elevate us to admin.
-  void SelfElavate();
+  static void SelfElavate();
 
   // the handle of the mutex
   HANDLE m_hMutex; 

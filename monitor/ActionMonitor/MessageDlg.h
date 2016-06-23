@@ -1,5 +1,6 @@
 #pragma once
 #include "FadeWnd.h"
+#include "resource.h"		// main symbols
 
 // MessageDlg dialog
 
