@@ -28,10 +28,11 @@ bool CActionMonitorDlg::IsRunning()
  * @param void
  * @return void
  */
-CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=NULL*/)
+CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
 	: CTrayDialog(CActionMonitorDlg::IDD, pParent), 
   m_keyState (ACTION_NONE),
-  fontTime( NULL )
+  fontTime(nullptr),
+  _IpcServer( nullptr )
 {
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -52,6 +53,9 @@ CActionMonitorDlg::~CActionMonitorDlg()
     fontTime->DeleteObject();
     delete fontTime;
   }
+
+  delete _IpcServer;
+  _IpcServer = nullptr;
 }
 
 /**
@@ -146,6 +150,9 @@ BOOL CActionMonitorDlg::OnInitDialog()
   //  setup the hooks and the key
   InitHook();
 
+  // create the IPC server
+  _IpcServer = new myodd::os::Ipc(CONF_MUTEXT);
+
   return TRUE;
 }
 
@@ -223,7 +230,7 @@ void CActionMonitorDlg::ShowWindow( BYTE bTrans )
     ::ShowWindow( m_hWnd, bTrans>0?SW_SHOW:SW_HIDE );
   }
 
-  ::RedrawWindow(m_hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
+  ::RedrawWindow(m_hWnd, nullptr, nullptr, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
 }
 
 /**
@@ -526,7 +533,7 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
         MYODD_STRING szCommandLine = _T( "" );
         const Action* action = App().PossibleActions().GetCommand(&szCommandLine);
-        if (NULL != action)
+        if (nullptr != action)
         {
           //  do the action now
           //  we might not have any, but that's not for us to decides :).
@@ -608,7 +615,7 @@ bool CActionMonitorDlg::DisplayMessage
 )
 {
   // Sanity check
-  if( NULL == pText )
+  if(nullptr == pText )
   {
 
     return false;
@@ -654,7 +661,7 @@ bool CActionMonitorDlg::DisplayMessage
  * @param void
  * @return void
  */
-bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= NULL*/ )
+bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
 {
   // should we even be here?
   if( 0 == IsVisible() )
@@ -666,10 +673,10 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= NULL*/ )
   MYODD_STRING sCommand = App().PossibleActions().toChar( );
   size_t len = sCommand.length();
 
-  HDC localHdc = NULL;
-  if( NULL == hdc )
+  HDC localHdc = nullptr;
+  if(nullptr == hdc )
   {
-    localHdc = ::GetDC( NULL );
+    localHdc = ::GetDC(nullptr);
   }
   else
   {
@@ -742,14 +749,14 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= NULL*/ )
   }// if we are redrawing
 
   //  clean up old fonts
-  if ( pOldFont != NULL )
+  if ( pOldFont != nullptr)
   {
     SelectObject( localHdc, pOldFont );
   }
 
-  if( NULL == hdc )
+  if(nullptr == hdc )
   {
-    ::ReleaseDC( NULL, localHdc );
+    ::ReleaseDC(nullptr, localHdc );
   }
   return bRedraw;
 }
@@ -770,7 +777,7 @@ void CActionMonitorDlg::DisplayTime
   if( myodd::config::get( _T("commands\\show.time"), 1) )
   {
     HGDIOBJ pOldTime = SelTimeFont( hdc );
-    if( NULL != pOldTime )
+    if(nullptr != pOldTime )
     {
       __time64_t long_time;
       _time64( &long_time ); 
@@ -797,7 +804,7 @@ void CActionMonitorDlg::DisplayTime
       }// if _tcsftime(...)
       
       //  restore the font
-      if( pOldTime != NULL )
+      if( pOldTime != nullptr)
       {
         SelectObject( hdc, pOldTime );
       }
@@ -847,7 +854,7 @@ bool CActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
  */
 HGDIOBJ CActionMonitorDlg::SelTimeFont( HDC hdc )
 {
-  if( NULL == fontTime )
+  if(nullptr == fontTime )
   {
 	  LOGFONT logFont;
 	  memset(&logFont, 0, sizeof(LOGFONT));
@@ -859,7 +866,7 @@ HGDIOBJ CActionMonitorDlg::SelTimeFont( HDC hdc )
     fontTime = new CFont();
 	  if (!fontTime->CreateFontIndirect(&logFont))
     {
-      return NULL;
+      return nullptr;
     }
   }
 
@@ -1018,7 +1025,7 @@ void CActionMonitorDlg::ClearUnusedMessages()
     }
 
     MessageDlg* dlg = (MessageDlg*)(*it);
-    if (dlg != NULL)
+    if (dlg != nullptr)
     {
       HWND hwnd = dlg->GetSafeHwnd();
       if (0 != ::GetWindowLongPtr(hwnd, GWLP_HWNDPARENT))
@@ -1050,7 +1057,7 @@ void CActionMonitorDlg::KillAllActiveWindows()
   {
     //  clear what is still good.
     MessageDlg* dlg = (MessageDlg*)(*it);
-    if (dlg != NULL)
+    if (dlg != nullptr)
     {
       dlg->FadeKillWindow();
     }
@@ -1091,7 +1098,7 @@ void CActionMonitorDlg::WaitForActiveWindows()
       break;
 
     MessageDlg* dlg = (MessageDlg*)(*it);
-    if (dlg != NULL)
+    if (dlg != nullptr)
     {
       // then try and process the remaining messages
       // if the window has not been killed properly.
@@ -1099,7 +1106,7 @@ void CActionMonitorDlg::WaitForActiveWindows()
       if (0 != ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
       {
         //  give the other apps/classes one last chance to do some work.
-        MessagePump(NULL);
+        MessagePump(nullptr);
 
         // let go of the thread.
         std::this_thread::yield();

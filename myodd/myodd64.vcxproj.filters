@@ -77,9 +77,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="myodd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -260,6 +257,9 @@
     <ClCompile Include="xml\tinyxml2.cpp">
       <Filter>XML</Filter>
     </ClCompile>
+    <ClCompile Include="os\ipc.cpp">
+      <Filter>os</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -270,9 +270,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="myodd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -401,6 +398,9 @@
     </ClInclude>
     <ClInclude Include="xml\tinyxml2.h">
       <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="os\ipc.h">
+      <Filter>os</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,42 +8,6 @@
 #include "ActionLoad.h"
 #include "ActionVersion.h"
 
-class MyWindow : public CWnd
-{
-public:
-  MyWindow::MyWindow(LPCTSTR pszClassName, HWND parent )
-  {
-    WNDCLASS wndcls;
-    if (GetClassInfo(AfxGetApp()->m_hInstance, pszClassName, &wndcls))
-    {
-      //already registered
-      return;
-    }
-
-    wndcls.style = 0;
-    wndcls.lpfnWndProc = ::DefWindowProc;
-    wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
-    wndcls.hInstance = AfxGetApp()->m_hInstance;
-    wndcls.hIcon = nullptr;
-    wndcls.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wndcls.hbrBackground = GetSysColorBrush(COLOR_WINDOW);
-    wndcls.lpszMenuName = nullptr;
-    wndcls.lpszClassName = pszClassName;
-    if (!RegisterClass( &wndcls))
-    {
-      TRACE(traceAppMsg, 0, _T("Can't register window class named %Ts\n"), wndcls.lpszClassName);
-    }
-    else
-    {
-      if (!this->CreateEx(0, pszClassName, L"", 0, 0, 0, 0, 0, parent, nullptr))
-      {
-        TRACE(traceAppMsg, 0, _T("Can't create window class named %Ts\n"), wndcls.lpszClassName);
-      }
-    }
-  }
-};
-
-
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 	//{{AFX_MSG_MAP(CActionMonitorApp)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
@@ -339,19 +303,9 @@ BOOL CActionMonitorApp::InitInstance()
 
   CFrameWnd *noTaskBar=new CFrameWnd();
   noTaskBar->Create(0,0,WS_OVERLAPPEDWINDOW);
+  
 	CActionMonitorDlg dlg( noTaskBar );
 	m_pMainWnd = &dlg;
-
-  auto pszClassName = _T("MyOddweb_com_ActionMonitor");
-  auto wnd = new MyWindow(pszClassName, HWND_MESSAGE);
-
-  auto p = FindWindow(pszClassName, nullptr);
-  p = FindWindowExW(nullptr, nullptr, pszClassName, nullptr);
-  p = FindWindowExW(HWND_MESSAGE, nullptr, pszClassName, nullptr);
-  p = FindWindowExW(nullptr, nullptr, pszClassName, nullptr);
-  p = FindWindowExW(HWND_MESSAGE, HWND_MESSAGE, pszClassName, nullptr);
-  p = FindWindow(L"Afx:0000000140000000:0", nullptr);
-
 
   // create the possible actions
   BuildActionsList( );
