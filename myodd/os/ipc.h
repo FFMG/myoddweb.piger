@@ -2,14 +2,17 @@
 
 namespace myodd {
   namespace os {
-    class Ipc
+    class IpcListener
     {
     public:
-      Ipc( const wchar_t* serverName );
-      virtual ~Ipc();
+      /**
+       * Create the server.
+       */
+      IpcListener( const wchar_t* serverName );
+      virtual ~IpcListener();
 
     protected:
-      void CreateServer(const wchar_t* serverName);
+      void Create(const wchar_t* serverName);
 
       void* _pServer;
     };

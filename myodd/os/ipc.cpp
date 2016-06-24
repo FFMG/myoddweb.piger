@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "ipc.h"
+#include "ipclistener.h"
 #include <afxwin.h>
 
 namespace myodd {
 namespace os {
-class IpcWnd : public CWnd
+class IpcListenerWnd : public CWnd
 {
 public:
-  explicit IpcWnd(const wchar_t* pszClassName )
+  explicit IpcListenerWnd(const wchar_t* pszClassName )
   {
     auto hInstance = GetModuleHandle( nullptr );
     WNDCLASS wndcls;
@@ -17,7 +17,7 @@ public:
     }
 
     wndcls.style = 0;
-    wndcls.lpfnWndProc = IpcWnd::WindowProc;
+    wndcls.lpfnWndProc = IpcListenerWnd::WindowProc;
     wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
     wndcls.hInstance = hInstance;
     wndcls.hIcon = nullptr;
@@ -27,14 +27,14 @@ public:
     wndcls.lpszClassName = pszClassName;
     if (!RegisterClass(&wndcls))
     {
-      throw "Can't register IPC window class.";
+      throw "Can't register IpcListener window class.";
     }
 
     // one way or another the class was created.
     // so we can create our listener accordingly.
     if (!this->CWnd::CreateEx(0, pszClassName, L"", 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
     {
-      throw "Can't create IPC window.";
+      throw "Can't create IpcListener window.";
     }
   }
 
@@ -45,16 +45,16 @@ public:
 };
 
 
-Ipc::Ipc(const wchar_t* serverName) : _pServer( nullptr )
+IpcListener::IpcListener(const wchar_t* serverName) : _pServer( nullptr )
 {
   // create the server
-  CreateServer(serverName);
+  Create(serverName);
 }
 
-Ipc::~Ipc()
+IpcListener::~IpcListener()
 {
   // remove the server.
-  delete static_cast<IpcWnd*>(_pServer);
+  delete static_cast<IpcListenerWnd*>(_pServer);
 }
 
 /**
@@ -62,9 +62,9 @@ Ipc::~Ipc()
  * @param const wchar_t* serverName the server name we wish to use.
  * @return none
  */
-void Ipc::CreateServer(const wchar_t* serverName)
+void IpcListener::CreateServer(const wchar_t* serverName)
 {
-  _pServer = new IpcWnd( serverName );
+  _pServer = new IpcListenerWnd( serverName );
 }
 
 }
