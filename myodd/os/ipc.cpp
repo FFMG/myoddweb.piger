@@ -7,32 +7,34 @@ namespace os {
 class IpcWnd : public CWnd
 {
 public:
-  IpcWnd(const wchar_t* pszClassName )
+  explicit IpcWnd(const wchar_t* pszClassName )
   {
     auto hInstance = GetModuleHandle( nullptr );
     WNDCLASS wndcls;
-    if (!GetClassInfo(hInstance, pszClassName, &wndcls))
+    if (GetClassInfo(hInstance, pszClassName, &wndcls))
     {
-      wndcls.style = 0;
-      wndcls.lpfnWndProc = IpcWnd::WindowProc;
-      wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
-      wndcls.hInstance = hInstance;
-      wndcls.hIcon = nullptr;
-      wndcls.hCursor = LoadCursor(nullptr, IDC_ARROW);
-      wndcls.hbrBackground = GetSysColorBrush(COLOR_WINDOW);
-      wndcls.lpszMenuName = nullptr;
-      wndcls.lpszClassName = pszClassName;
-      if (!RegisterClass(&wndcls))
-      {
-        TRACE(traceAppMsg, 0, _T("Can't register window class named %Ts\n"), wndcls.lpszClassName);
-      }
+      throw "The server already exists.";
+    }
+
+    wndcls.style = 0;
+    wndcls.lpfnWndProc = IpcWnd::WindowProc;
+    wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
+    wndcls.hInstance = hInstance;
+    wndcls.hIcon = nullptr;
+    wndcls.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wndcls.hbrBackground = GetSysColorBrush(COLOR_WINDOW);
+    wndcls.lpszMenuName = nullptr;
+    wndcls.lpszClassName = pszClassName;
+    if (!RegisterClass(&wndcls))
+    {
+      throw "Can't register IPC window class.";
     }
 
     // one way or another the class was created.
     // so we can create our listener accordingly.
     if (!this->CWnd::CreateEx(0, pszClassName, L"", 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
     {
-      TRACE(traceAppMsg, 0, _T("Can't create window class named %Ts\n"), wndcls.lpszClassName);
+      throw "Can't create IPC window.";
     }
   }
 
@@ -57,6 +59,8 @@ Ipc::~Ipc()
 
 /**
  * Create the server window that will be listening to messages.
+ * @param const wchar_t* serverName the server name we wish to use.
+ * @return none
  */
 void Ipc::CreateServer(const wchar_t* serverName)
 {
