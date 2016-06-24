@@ -257,7 +257,7 @@
     <ClCompile Include="xml\tinyxml2.cpp">
       <Filter>XML</Filter>
     </ClCompile>
-    <ClCompile Include="os\ipc.cpp">
+    <ClCompile Include="os\ipclistener.cpp">
       <Filter>os</Filter>
     </ClCompile>
   </ItemGroup>
@@ -399,7 +399,7 @@
     <ClInclude Include="xml\tinyxml2.h">
       <Filter>XML</Filter>
     </ClInclude>
-    <ClInclude Include="os\ipc.h">
+    <ClInclude Include="os\ipclistener.h">
       <Filter>os</Filter>
     </ClInclude>
   </ItemGroup>

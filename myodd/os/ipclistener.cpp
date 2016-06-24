@@ -4,11 +4,17 @@
 
 namespace myodd {
 namespace os {
+static HWND _pParentWnd = nullptr;
+
 class IpcListenerWnd : public CWnd
 {
 public:
-  explicit IpcListenerWnd(const wchar_t* pszClassName )
+  explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent)
   {
+    //  save the parent
+    _pParentWnd = pParent;
+
+    //  the instance of this module
     auto hInstance = GetModuleHandle( nullptr );
     WNDCLASS wndcls;
     if (GetClassInfo(hInstance, pszClassName, &wndcls))
@@ -17,7 +23,7 @@ public:
     }
 
     wndcls.style = 0;
-    wndcls.lpfnWndProc = IpcListenerWnd::WindowProc;
+    wndcls.lpfnWndProc = WindowProc;
     wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
     wndcls.hInstance = hInstance;
     wndcls.hIcon = nullptr;
@@ -40,15 +46,22 @@ public:
 
   static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   {
-    return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
+    // pass this to the parent window
+    auto lpResult = ::SendMessageW(_pParentWnd, uMsg, wParam, lParam);
+
+    // pass this to our window...
+    ::DefWindowProc(hwnd, uMsg, wParam, lParam);
+
+    //  return the parent result
+    return lpResult;
   }
 };
 
-
-IpcListener::IpcListener(const wchar_t* serverName) : _pServer( nullptr )
+IpcListener::IpcListener(const wchar_t* serverName, void* parent ) :
+  _pServer( nullptr )
 {
   // create the server
-  Create(serverName);
+  Create(serverName, parent );
 }
 
 IpcListener::~IpcListener()
@@ -60,11 +73,12 @@ IpcListener::~IpcListener()
 /**
  * Create the server window that will be listening to messages.
  * @param const wchar_t* serverName the server name we wish to use.
+ * @param void* pParent the parent that we want to pass the messages to.
  * @return none
  */
-void IpcListener::CreateServer(const wchar_t* serverName)
+void IpcListener::Create(const wchar_t* serverName, void* pParent)
 {
-  _pServer = new IpcListenerWnd( serverName );
+  _pServer = new IpcListenerWnd( serverName, (HWND)pParent );
 }
 
 }

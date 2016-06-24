@@ -559,7 +559,7 @@
     <ClCompile Include="math\math.cpp" />
     <ClCompile Include="network\network.cpp" />
     <ClCompile Include="offsets\offset.cpp" />
-    <ClCompile Include="os\ipc.cpp" />
+    <ClCompile Include="os\ipclistener.cpp" />
     <ClCompile Include="os\os.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">NotUsing</PrecompiledHeader>
@@ -638,7 +638,7 @@
     <ClInclude Include="network\network.h" />
     <ClInclude Include="notif\notif.h" />
     <ClInclude Include="offsets\offset.h" />
-    <ClInclude Include="os\ipc.h" />
+    <ClInclude Include="os\ipclistener.h" />
     <ClInclude Include="os\os.h" />
     <ClInclude Include="registry\registry.h" />
     <ClInclude Include="sqlite\sqlite.h" />

@@ -8,11 +8,11 @@ namespace myodd {
       /**
        * Create the server.
        */
-      IpcListener( const wchar_t* serverName );
+      IpcListener( const wchar_t* serverName, void* pParent );
       virtual ~IpcListener();
 
     protected:
-      void Create(const wchar_t* serverName);
+      void Create(const wchar_t* serverName, void* pParent);
 
       void* _pServer;
     };

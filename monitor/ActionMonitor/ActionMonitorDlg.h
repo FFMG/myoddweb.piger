@@ -17,7 +17,7 @@
 #define SPECIAL_KEY VK_CAPITAL
 
 #include "../common/trayDialog.h" //  system tray icon item
-#include <os/ipc.h>
+#include <os/ipclistener.h>
 
 class CActionMonitorDlg : public CTrayDialog, FadeWnd, ActiveActions
 {
@@ -127,5 +127,5 @@ protected:
   std::thread::id _main_threadId;
   bool IsMainThread() const;
 
-  myodd::os::Ipc* _IpcServer;
+  myodd::os::IpcListener* _IpcListener;
 };
