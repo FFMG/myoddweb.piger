@@ -29,22 +29,23 @@ namespace MyOdd
     IntPtr? _hWindow;
 
     #region DllImport and Structures
-    public struct CopyDataStruct
+    
+    /// <summary> 
+    /// The COPYDATASTRUCT structure contains data to be passed to another  
+    /// application by the WM_COPYDATA message.  
+    /// </summary> 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct COPYDATASTRUCT
     {
-      public int cbData;
-      public IntPtr dwData;
-      [MarshalAs(UnmanagedType.LPStr)]
-      public string lpData;
+      public IntPtr dwData;       // Specifies data to be passed 
+      public int cbData;          // Specifies the data size in bytes 
+      public IntPtr lpData;       // Pointer to data to be passed 
     }
-
     [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
     static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
-    static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
-
-    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-    public static extern IntPtr SendMessageWithCopyDataStruct(IntPtr hWnd, uint msg, IntPtr wParam, ref CopyDataStruct lParam);
+    static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref COPYDATASTRUCT lParam);
 #endregion
 
     public IpcConnector( string serverName )
@@ -60,6 +61,16 @@ namespace MyOdd
       return FindWindow(ServerName, null);
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    internal struct MyStruct
+    {
+      public UInt32 uMsg;
+
+      public ulong wParam;
+
+      public long lParam;
+    }
+
     /// <summary>
     /// Send a close request to the main window.
     /// </summary>
@@ -71,12 +82,35 @@ namespace MyOdd
         return false;
       }
 
-      //I'd double check this constant, just in case
-      const uint wmClose = 0x10;
+      const int wmClose = 0x10;
+      const int wmCopyData = 0x004A;
 
-      // cast to IntPtr because we know it is not null.
-      SendMessage((IntPtr)hWindow, wmClose, IntPtr.Zero, IntPtr.Zero);
+      var myStruct = new MyStruct
+      {
+        uMsg = wmClose,
+        wParam = 0,
+        lParam = 0
+      };
 
+      var myStructSize = Marshal.SizeOf(myStruct);
+      IntPtr pMyStruct = Marshal.AllocHGlobal(myStructSize);
+
+      try
+      {
+        Marshal.StructureToPtr(myStruct, pMyStruct, true);
+
+        COPYDATASTRUCT cds = new COPYDATASTRUCT();
+        cds.dwData = (IntPtr)1; //  send message
+        cds.cbData = myStructSize;
+        cds.lpData = pMyStruct;
+
+        // cast to IntPtr because we know it is not null.
+        SendMessage((IntPtr)hWindow, wmCopyData, IntPtr.Zero, ref cds);
+      }
+      finally
+      {
+        Marshal.FreeHGlobal(pMyStruct);
+      }
       // success
       return true;
     }

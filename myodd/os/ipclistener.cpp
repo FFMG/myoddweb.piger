@@ -8,6 +8,22 @@ static HWND _pParentWnd = nullptr;
 
 class IpcListenerWnd : public CWnd
 {
+protected:
+  enum class IpcMessageType : unsigned int
+  {
+    None = 0,
+    SendMessage = 1,
+    PostMessage = 2,
+  };
+
+  struct IpcMessageStruct
+  {
+    //  https://www.displayfusion.com/Discussions/View/converting-c-data-types-to-c/?ID=38db6001-45e5-41a3-ab39-8004450204b3
+    unsigned int uMsg;
+    unsigned __int64 wParam;
+    __int64 lParam;
+  };
+
 public:
   explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent)
   {
@@ -44,16 +60,81 @@ public:
     }
   }
 
+protected:
+  static bool MessageStructFromCopyData(const COPYDATASTRUCT& cds, IpcMessageStruct& ipcMessageStructure)
+  {
+    //  clear the values
+    memset(&ipcMessageStructure, 0, sizeof(ipcMessageStructure));
+
+    // is the data we were given the right size?
+    if (cds.cbData != sizeof(ipcMessageStructure))
+    {
+      //  nope, it is not, something is wrong.
+      return false;
+    }
+
+    // copy the data over.
+    memcpy_s(&ipcMessageStructure, sizeof(ipcMessageStructure), cds.lpData, cds.cbData);
+
+    // success.
+    return true;
+  }
+
+public:
   static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
   {
-    // pass this to the parent window
-    auto lpResult = ::SendMessageW(_pParentWnd, uMsg, wParam, lParam);
+    //  is it a copy data message?
+    // if not, then it is just a message for this window.
+    if (uMsg != WM_COPYDATA)
+    {
+      // pass this to our window...
+      return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
 
-    // pass this to our window...
-    ::DefWindowProc(hwnd, uMsg, wParam, lParam);
+    //  cast it to COPYDATASTRUCT
+    auto pcds = (COPYDATASTRUCT*)lParam;
 
-    //  return the parent result
-    return lpResult;
+    // then simply reconstruct the message
+    switch ( (IpcMessageType)pcds->dwData)
+    {
+    case IpcMessageType::SendMessage:
+    {
+      // pass this to the parent window
+      IpcMessageStruct ims;
+      if (MessageStructFromCopyData(*pcds, ims))
+      {
+#if defined(_WIN64)
+        return ::SendMessage(_pParentWnd, ims.uMsg, ims.wParam, ims.lParam);
+#else
+        return ::SendMessage(_pParentWnd, ims.uMsg, static_cast<unsigned int>(ims.wParam), static_cast<long>(ims.lParam));
+#endif // X64
+      }
+    }
+    break;
+
+    case IpcMessageType::PostMessage:
+    {
+      // pass this to the parent window
+      IpcMessageStruct ims;
+      if (MessageStructFromCopyData(*pcds, ims))
+      {
+        // pass this to the parent window
+#if defined(_WIN64)
+        return ::PostMessage(_pParentWnd, ims.uMsg, ims.wParam, ims.lParam);
+#else
+        return ::SendMessage(_pParentWnd, ims.uMsg, static_cast<unsigned int>(ims.wParam), static_cast<long>(ims.lParam));
+#endif // X64
+      }
+    }
+    break;
+
+    default:
+      //  unknown message type
+      break;
+    }
+
+    // if we reach this then we have an unknwon type.
+    return 0;
   }
 };
 
