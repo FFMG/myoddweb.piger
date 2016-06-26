@@ -5,6 +5,7 @@
 #include "FadeWnd.h"
 #include "ActiveActions.h"
 #include "MessageDlg.h"
+#include "resource.h"		// main symbols
 
 /////////////////////////////////////////////////////////////////////////////
 // CActionMonitorDlg dialog

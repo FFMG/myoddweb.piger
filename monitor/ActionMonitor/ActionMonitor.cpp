@@ -2,7 +2,6 @@
 #include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
 #include "ActionsImmediate.h"
-#include "os/os.h"
 
 #include "ActionBye.h"
 #include "ActionLoad.h"
@@ -22,17 +21,18 @@ END_MESSAGE_MAP()
  * @return void
  */
 CActionMonitorApp::CActionMonitorApp() :
-  m_hMutex( NULL ),
-  _maxClipboardSize( NULL ),
-  _cwndLastForegroundWindow( NULL )
+  m_hMutex(nullptr),
+  _cwndLastForegroundWindow(nullptr),
+  _maxClipboardSize( NULL )
 #ifdef ACTIONMONITOR_API_LUA
-  , _lvm(NULL)
+  , _possibleActions(nullptr), 
+  _lvm(nullptr)
 #endif
 #ifdef ACTIONMONITOR_API_PY
-  , _pvm(NULL)
+  , _pvm(nullptr)
 #endif
 #ifdef ACTIONMONITOR_API_PLUGIN
-  , _plugvm(NULL)
+  , _plugvm(nullptr)
 #endif
 {
 }
@@ -46,22 +46,22 @@ CActionMonitorApp::~CActionMonitorApp()
 {
 #ifdef ACTIONMONITOR_API_LUA
   delete _lvm;
-  _lvm = NULL;
+  _lvm = nullptr;
 #endif
 #ifdef ACTIONMONITOR_API_PY
   delete _pvm;
-  _pvm = NULL;
+  _pvm = nullptr;
 #endif
 #ifdef ACTIONMONITOR_API_PLUGIN
   delete _plugvm;
-  _plugvm = NULL;
+  _plugvm = nullptr;
 #endif
 }
 
 #ifdef ACTIONMONITOR_API_LUA
 LuaVirtualMachine* CActionMonitorApp::GetLuaVirtualMachine()
 {
-  if (_lvm == NULL)
+  if (_lvm == nullptr)
   {
     _lvm = new LuaVirtualMachine();
   }
@@ -72,7 +72,7 @@ LuaVirtualMachine* CActionMonitorApp::GetLuaVirtualMachine()
 #ifdef ACTIONMONITOR_API_PY
 PythonVirtualMachine* CActionMonitorApp::GetPythonVirtualMachine()
 {
-  if (_pvm == NULL)
+  if (_pvm == nullptr)
   {
     _pvm = new PythonVirtualMachine();
   }
@@ -83,7 +83,7 @@ PythonVirtualMachine* CActionMonitorApp::GetPythonVirtualMachine()
 #ifdef ACTIONMONITOR_API_PLUGIN
 PluginVirtualMachine* CActionMonitorApp::GetPluginVirtualMachine()
 {
-  if (_plugvm == NULL)
+  if (_plugvm == nullptr)
   {
     _plugvm = new PluginVirtualMachine();
   }
@@ -139,12 +139,12 @@ void CActionMonitorApp::SetLastForegroundWindow( CWnd* w )
  */
 bool CActionMonitorApp::CanStartApp()
 {
-  m_hMutex = CreateMutex( NULL,   // default security attributes
+  m_hMutex = CreateMutex(nullptr,   // default security attributes
                           FALSE,  // initially not owned
                           CONF_MUTEXT 
                          );
 
-  if (m_hMutex == NULL) 
+  if (m_hMutex == nullptr)
   {
     TRACE("CreateMutex error: %d\n", GetLastError());
     return false;
@@ -156,7 +156,7 @@ bool CActionMonitorApp::CanStartApp()
   {
   case ERROR_ALREADY_EXISTS:
     CloseHandle(m_hMutex);
-    m_hMutex = NULL;
+    m_hMutex = nullptr;
     return false;
 
   case ERROR_SUCCESS:
@@ -178,8 +178,7 @@ void CActionMonitorApp::SelfElavate()
   // if we are in debug we cannot elevate ourselve.
   // otherwise we will never be able to debug...
   return;
-#endif
-
+#else
   if (myodd::os::IsElevated())
   {
     //  already elevated.
@@ -187,7 +186,7 @@ void CActionMonitorApp::SelfElavate()
   }
 
   TCHAR szPath[MAX_PATH];
-  if (0 == GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath)))
+  if (0 == GetModuleFileName(nullptr, szPath, ARRAYSIZE(szPath)))
   {
     //  could not get our own path!
     return;
@@ -197,7 +196,7 @@ void CActionMonitorApp::SelfElavate()
   SHELLEXECUTEINFO sei = { sizeof(sei) };
   sei.lpVerb = _T("runas");
   sei.lpFile = szPath;
-  sei.hwnd = NULL;
+  sei.hwnd = nullptr;
   sei.nShow = SW_NORMAL;
   if (!ShellExecuteEx(&sei))
   {
@@ -212,6 +211,7 @@ void CActionMonitorApp::SelfElavate()
   {
     _exit(1);  // Quit itself
   }
+#endif
 }
 
 /**
@@ -301,16 +301,16 @@ BOOL CActionMonitorApp::InitInstance()
   // set the cliboard size.
   InitMaxClipboardSize();
 
-  CFrameWnd *noTaskBar=new CFrameWnd();
-  noTaskBar->Create(0,0,WS_OVERLAPPEDWINDOW);
-  
+  auto noTaskBar = new CFrameWnd();
+  noTaskBar->Create(nullptr, nullptr,WS_OVERLAPPEDWINDOW);
+
 	CActionMonitorDlg dlg( noTaskBar );
 	m_pMainWnd = &dlg;
 
   // create the possible actions
   BuildActionsList( );
-  
-	INT_PTR nResponse = dlg.DoModal();
+
+  auto nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
 		// TODO: Place code here to handle when the dialog is
@@ -402,7 +402,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   }
 
   // do we have a valid value in the config?
-  size_t maxClipboardSize = (size_t)myodd::config::get( path, 1024 );
+  auto maxClipboardSize = static_cast<size_t>(myodd::config::get( path, 1024 ));
   _maxClipboardSize = maxClipboardSize;
 }
 
@@ -463,7 +463,7 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
   // does the file exist?
   if (!myodd::files::FileExists(sAPath))
   {
-    MessageBox( NULL, _T("I was unable to locate the configuration file, this is a critical problem!"), _T("Cannot find config"), MB_ICONERROR | MB_OK);
+    MessageBox(nullptr, _T("I was unable to locate the configuration file, this is a critical problem!"), _T("Cannot find config"), MB_ICONERROR | MB_OK);
     return false;
   }
 
@@ -471,7 +471,7 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
   // so witting to the xml while the app is running will have no effect.
   if (!myodd::config::init(sAPath))
   {
-    MessageBox(NULL, _T("There was a problem with the given config, is it valid XML?"), _T("Cannot load config"), MB_OK);
+    MessageBox(nullptr, _T("There was a problem with the given config, is it valid XML?"), _T("Cannot load config"), MB_OK);
     return false;
   }
   return true;
@@ -530,7 +530,7 @@ int CActionMonitorApp::ExitInstance()
     //  close the mutext
     CloseHandle(m_hMutex);
   }
-  m_hMutex = NULL;
+  m_hMutex = nullptr;
 
   return CWinApp::ExitInstance();
 }
