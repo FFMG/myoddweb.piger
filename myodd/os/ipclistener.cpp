@@ -122,7 +122,7 @@ public:
 #if defined(_WIN64)
         return ::PostMessage(_pParentWnd, ims.uMsg, ims.wParam, ims.lParam);
 #else
-        return ::SendMessage(_pParentWnd, ims.uMsg, static_cast<unsigned int>(ims.wParam), static_cast<long>(ims.lParam));
+        return ::PostMessage(_pParentWnd, ims.uMsg, static_cast<unsigned int>(ims.wParam), static_cast<long>(ims.lParam));
 #endif // X64
       }
     }
