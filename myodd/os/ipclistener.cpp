@@ -134,13 +134,19 @@ public:
     break;
 
     case IpcMessageType::CopyMessage:
+      try
       {
         //  try and decrypt the message that was sent.
-        auto ipcdata = new myodd::os::IpcData( static_cast<unsigned char*>(pcds->lpData), pcds->cbData);
+        auto ipcdata = new myodd::os::IpcData(static_cast<unsigned char*>(pcds->lpData), pcds->cbData);
 
         // success
-        return 0;
+        return 1;
       }
+      catch (...)
+      {
+        // received some invalid data.
+      }
+      break;
 
     default:
       //  unknown message type

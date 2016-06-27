@@ -140,6 +140,9 @@ std::wstring IpcData::ReadString(unsigned char* pData, size_t& pointer)
     if (0 != dataSize)
     {
       // create a wchar container.
+      //
+      // NB: The 'size' is the number of wide characters, not the number of bytes.
+      //     This is why we must be carefull when passing data from one function to the other.
       auto dataValue = new wchar_t[dataSize + 1];
 
       // reset the data, be sure to add a terminating \0.
