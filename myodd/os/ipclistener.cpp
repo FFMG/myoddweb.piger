@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ipclistener.h"
 #include <afxwin.h>
+#include <string>
 
 namespace myodd {
 namespace os {
@@ -149,7 +150,46 @@ public:
 
         for (;pointer < pcds->cbData;)
         {
-          pointer++;
+          // get the next item type.
+          unsigned short int dataType = 0;
+          memcpy_s(&dataType, sizeof(dataType), (byte*)pcds->lpData+pointer, sizeof(dataType));
+          pointer += sizeof(dataType);
+          switch (dataType)
+          {
+          case 1://int32
+            {
+              signed int dataValue = 0;
+              memcpy_s(&dataValue, sizeof(dataValue), (byte*)pcds->lpData + pointer, sizeof(dataValue));
+              pointer += sizeof(dataValue);
+            }
+            break;
+
+          case 2://string
+            {
+              //  first we get the size
+              signed int dataSize = 0;
+              memcpy_s(&dataSize, sizeof(dataSize), (byte*)pcds->lpData + pointer, sizeof(dataSize));
+              pointer += sizeof(dataSize);
+
+              // then we create the char
+              std::wstring sDataValue = L"";
+              if (0 != dataSize)
+              {
+                auto dataValue = new wchar_t[dataSize];
+                memset(dataValue, 0, dataSize);
+                memcpy_s(dataValue, dataSize, (byte*)pcds->lpData + pointer, dataSize);
+                pointer += dataSize;
+
+                //  copy it
+                sDataValue = dataValue;
+                delete[] dataValue;
+              }
+            }
+            break;
+
+          default:
+            break;
+          }
         }
       }
       break;
