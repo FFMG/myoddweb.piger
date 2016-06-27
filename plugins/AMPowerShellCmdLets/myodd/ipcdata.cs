@@ -17,6 +17,15 @@ namespace AMPowerShellCmdLets.myodd
     };
 
     /// <summary>
+    /// Check if we have a valid guid or not.
+    /// </summary>
+    /// <returns></returns>
+    public bool HasGuid()
+    {
+      return !String.IsNullOrEmpty(Guid);
+    }
+
+    /// <summary>
     /// Get the number of arguments we have in the IpcData
     /// </summary>
     public uint ArgumentsCount { get; private set; }

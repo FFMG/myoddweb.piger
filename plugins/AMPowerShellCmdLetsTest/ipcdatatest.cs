@@ -12,6 +12,9 @@ namespace AMPowerShellCmdLetsTest
     {
       var emptyIpcData = new IpcData();
       Assert.IsTrue(emptyIpcData.HasGuid());
+
+      //  check that the string is not empty
+      Assert.IsFalse( string.IsNullOrEmpty(emptyIpcData.Guid) );
     }
   }
 }
