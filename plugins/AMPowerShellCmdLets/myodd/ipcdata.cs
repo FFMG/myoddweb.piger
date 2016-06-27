@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace AMPowerShellCmdLets.myodd
 {
   public class IpcData
   {
-    enum IpcDataTye : short
+    private enum DataTye : short
     {
       None = 0,
       Int32 = 1,
-      String = 2
+      String = 2,
+      StringAscii =3
     };
 
     // The current version number
@@ -41,20 +43,34 @@ namespace AMPowerShellCmdLets.myodd
       }
     }
 
-    public void Add( string stringToAdd )
+    public void Add( string stringToAdd, bool asUnicode = true )
     {
-      Add(Combine(new byte[][]{
-        BitConverter.GetBytes( (short)IpcDataTye.String),   //  short
-        BitConverter.GetBytes( stringToAdd.Length),         //  Int32, size is guaranteed.
-        System.Text.Encoding.Default.GetBytes(stringToAdd)
+      if (asUnicode)
+      {
+        var stringInBytes = Encoding.Unicode.GetBytes(stringToAdd);
+        Add(Combine(new byte[][]{
+        BitConverter.GetBytes( (short)DataTye.String ),   //  short
+        BitConverter.GetBytes( stringInBytes.Length),     //  Int32, size is guaranteed.
+        stringInBytes
         }
-      ));
+        ));
+      }
+      else
+      {
+        Add(Combine(new byte[][]{
+        BitConverter.GetBytes( (short)DataTye.StringAscii ),   //  short
+        BitConverter.GetBytes( stringToAdd.Length),         //  Int32, size is guaranteed.
+        System.Text.Encoding.ASCII.GetBytes(stringToAdd)
+        }
+        ));
+      }
     }
 
-    public void Add(Int32 numberToAdd)
+    public void Add(int numberToAdd)
     {
-      Add( Combine( new byte[][]{
-        BitConverter.GetBytes( (short)IpcDataTye.Int32),  //  short
+      Add( Combine( new[]
+      {
+        BitConverter.GetBytes( (short)DataTye.Int32),  //  short
         BitConverter.GetBytes(numberToAdd)                //  int32
         }               
       ));
@@ -71,11 +87,11 @@ namespace AMPowerShellCmdLets.myodd
     /// </summary>
     /// <param name="arrays"></param>
     /// <returns></returns>
-    static private byte[] Combine(params byte[][] arrays)
+    private static byte[] Combine(params byte[][] arrays)
     {
-      byte[] rv = new byte[arrays.Sum(a => a.Length)];
-      int offset = 0;
-      foreach (byte[] array in arrays)
+      var rv = new byte[arrays.Sum(a => a.Length)];
+      var offset = 0;
+      foreach (var array in arrays)
       {
         System.Buffer.BlockCopy(array, 0, rv, offset, array.Length);
         offset += array.Length;
@@ -97,7 +113,7 @@ namespace AMPowerShellCmdLets.myodd
       // we know that the size is, at the very least, the version number.
       // if it is null, then we have no data
       // but we have the version number.
-      return Bytes == null ? sizeof(Int32) : Bytes.Length;
+      return Bytes?.Length ?? sizeof(int);
     }
 
     public IntPtr GetPtr()

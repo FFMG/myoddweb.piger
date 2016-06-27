@@ -1,5 +1,4 @@
-﻿using System;
-using System.Management.Automation;
+﻿using System.Management.Automation;
 
 namespace AMPowerShellCmdLets
 {
@@ -22,19 +21,20 @@ namespace AMPowerShellCmdLets
       x.Send( new myodd.IpcData() );
 
       // send a request with just a number
-      var y1 = new myodd.IpcData();
-      y1.Add(10);
-      x.Send( y1 );
+      //var y1 = new myodd.IpcData();
+      //y1.Add(34);
+      //x.Send( y1 );
 
       // send a request with just a string
-      var y2 = new myodd.IpcData();
-      y2.Add("Hello");
-      x.Send(y2);
+      //var y2 = new myodd.IpcData();
+      //y2.Add("Hello");
+      //x.Send(y2);
 
       // send a request with just a number and a string
       var y3 = new myodd.IpcData();
-      y3.Add(10);
+      y3.Add(12);
       y3.Add("Hello");
+      y3.Add("Hello", false );  //  ascii
       x.Send(y3);
     }
   }

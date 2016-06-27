@@ -157,35 +157,62 @@ public:
           switch (dataType)
           {
           case 1://int32
+          {
+            signed int dataValue = 0;
+            memcpy_s(&dataValue, sizeof(dataValue), (byte*)pcds->lpData + pointer, sizeof(dataValue));
+            pointer += sizeof(dataValue);
+          }
+          break;
+
+          case 2://string unicode
+          {
+            //  first we get the size
+            signed int dataSize = 0;
+            memcpy_s(&dataSize, sizeof(dataSize), static_cast<byte*>(pcds->lpData) + pointer, sizeof(dataSize));
+            pointer += sizeof(dataSize);
+
+            // then we create the char
+            std::wstring sDataValue = L"";
+            if (0 != dataSize)
             {
-              signed int dataValue = 0;
-              memcpy_s(&dataValue, sizeof(dataValue), (byte*)pcds->lpData + pointer, sizeof(dataValue));
-              pointer += sizeof(dataValue);
-            }
-            break;
+              auto dataValue = new wchar_t[dataSize];
+              memset(dataValue, 0, dataSize);
+              memcpy_s(dataValue, dataSize, static_cast<byte*>(pcds->lpData) + pointer, dataSize);
+              pointer += dataSize;
 
-          case 2://string
+              //  copy it
+              sDataValue = dataValue;
+
+              //  clean it.
+              delete[] dataValue;
+            }
+          }
+          break;
+
+          case 3://string ascii
+          {
+            //  first we get the size
+            signed int dataSize = 0;
+            memcpy_s(&dataSize, sizeof(dataSize), static_cast<byte*>(pcds->lpData) + pointer, sizeof(dataSize));
+            pointer += sizeof(dataSize);
+
+            // then we create the char
+            std::string sDataValue = "";
+            if (0 != dataSize)
             {
-              //  first we get the size
-              signed int dataSize = 0;
-              memcpy_s(&dataSize, sizeof(dataSize), (byte*)pcds->lpData + pointer, sizeof(dataSize));
-              pointer += sizeof(dataSize);
+              auto dataValue = new char[dataSize];
+              memset(dataValue, 0, dataSize);
+              memcpy_s(dataValue, dataSize, static_cast<byte*>(pcds->lpData) + pointer, dataSize);
+              pointer += dataSize;
 
-              // then we create the char
-              std::wstring sDataValue = L"";
-              if (0 != dataSize)
-              {
-                auto dataValue = new wchar_t[dataSize];
-                memset(dataValue, 0, dataSize);
-                memcpy_s(dataValue, dataSize, (byte*)pcds->lpData + pointer, dataSize);
-                pointer += dataSize;
+              //  copy it
+              sDataValue = dataValue;
 
-                //  copy it
-                sDataValue = dataValue;
-                delete[] dataValue;
-              }
+              //  clean it.
+              delete[] dataValue;
             }
-            break;
+          }
+          break;
 
           default:
             break;
