@@ -30,19 +30,19 @@ namespace myodd {
       void Read(unsigned char* pData, unsigned int dataSize);
 
       // read the version number only.
-      static signed int ReadVersionNumber(unsigned char* pData, int& pointer );
+      static signed int ReadVersionNumber(unsigned char* pData, size_t& pointer );
 
       // read the version number only.
-      static IpcDataType ReadDataType(unsigned char* pData, int& pointer);
+      static IpcDataType ReadDataType(unsigned char* pData, size_t& pointer);
 
       // read a number
-      static signed int ReadInt32(unsigned char* pData, int& pointer);
+      static signed int ReadInt32(unsigned char* pData, size_t& pointer);
 
       // read a unicode string
-      static std::wstring ReadString(unsigned char* pData, int& pointer);
+      static std::wstring ReadString(unsigned char* pData, size_t& pointer);
 
       // read a Ascii string
-      static std::string ReadAsciiString(unsigned char* pData, int& pointer);
+      static std::string ReadAsciiString(unsigned char* pData, size_t& pointer);
     };
   }
 }

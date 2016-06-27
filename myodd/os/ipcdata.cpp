@@ -39,7 +39,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
   _numArguments = 0;
 
   // the pointer to keep track of where we are.
-  auto pointer = 0;
+  size_t pointer = 0;
 
   //  get the version number
   auto versionNumber = ReadVersionNumber( pData, pointer );
@@ -91,10 +91,10 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
  * Read the next data type
  * We update the pointer location.
  * @param unsigned char* pData the data container
- * @param int& pointer the current pointer location.
+ * @param size_t& pointer the current pointer location.
  * @return unsigned short int the next data type.
  */
-IpcData::IpcDataType IpcData::ReadDataType(unsigned char* pData, int& pointer)
+IpcData::IpcDataType IpcData::ReadDataType(unsigned char* pData, size_t& pointer)
 {
   // default value, we need to make sure that value is 'signed int' rahter than 'auto'
   unsigned short int dataType = 0;
@@ -119,10 +119,10 @@ IpcData::IpcDataType IpcData::ReadDataType(unsigned char* pData, int& pointer)
  * Read a Unicode string.
  * We update the pointer location.
  * @param unsigned char* pData the data container
- * @param int& pointer the current pointer location.
+ * @param size_t& pointer the current pointer location.
  * @return std::wstring the string that we read.
  */
-std::wstring IpcData::ReadString(unsigned char* pData, int& pointer)
+std::wstring IpcData::ReadString(unsigned char* pData, size_t& pointer)
 {
   // our return value
   std::wstring sDataValue = L"";
@@ -146,7 +146,7 @@ std::wstring IpcData::ReadString(unsigned char* pData, int& pointer)
       memset(dataValue, L'\0', (dataSize+1) * sizeof(wchar_t));
 
       // get the data
-      auto dataSizeToRead = dataSize * sizeof(wchar_t);
+      auto dataSizeToRead = static_cast<size_t>(dataSize) * sizeof(wchar_t);
       memcpy_s(dataValue, dataSizeToRead, pData + pointer, dataSizeToRead);
 
       // update the pointer location
@@ -172,10 +172,10 @@ std::wstring IpcData::ReadString(unsigned char* pData, int& pointer)
  * Read an ascii string.
  * We update the pointer location.
  * @param unsigned char* pData the data container
- * @param int& pointer the current pointer location.
+ * @param size_t& pointer the current pointer location.
  * @return std::string the string that we read.
  */
-std::string IpcData::ReadAsciiString(unsigned char* pData, int& pointer)
+std::string IpcData::ReadAsciiString(unsigned char* pData, size_t& pointer)
 {
   // our return value
   std::string sDataValue = "";
@@ -224,10 +224,10 @@ std::string IpcData::ReadAsciiString(unsigned char* pData, int& pointer)
  * Read the number at our current location.
  * We update the pointer location.
  * @param unsigned char* pData the data container
- * @param int& pointer the current pointer location.
+ * @param size_t& pointer the current pointer location.
  * @return signed int the number.
  */
-signed int IpcData::ReadInt32(unsigned char* pData, int& pointer)
+signed int IpcData::ReadInt32(unsigned char* pData, size_t& pointer)
 {
   signed int dataValue = 0;
   try
@@ -251,10 +251,10 @@ signed int IpcData::ReadInt32(unsigned char* pData, int& pointer)
  * Read the version number at our current location.
  * We update the pointer location.
  * @param unsigned char* pData the data container
- * @param int& pointer the current pointer location.
+ * @param size_t& pointer the current pointer location.
  * @return signed int the version number.
  */
-signed int IpcData::ReadVersionNumber(unsigned char* pData, int& pointer)
+signed int IpcData::ReadVersionNumber(unsigned char* pData, size_t& pointer)
 {
   // default value, we need to make sure that value is 'signed int' rahter than 'auto'
   signed int versionNumber = 0;
