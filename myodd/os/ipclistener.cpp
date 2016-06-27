@@ -137,7 +137,7 @@ public:
       try
       {
         //  try and decrypt the message that was sent.
-        auto ipcdata = new myodd::os::IpcData(static_cast<unsigned char*>(pcds->lpData), pcds->cbData);
+        auto ipcdata = new IpcData(static_cast<unsigned char*>(pcds->lpData), pcds->cbData);
         
         // did we get a guid?
         if (ipcdata->HasGuid())
@@ -157,18 +157,13 @@ public:
 
           if (pBuf != nullptr)
           {
-            size_t pointer = 0;
-            signed int versionNumber = 100;
-            memcpy(static_cast<PVOID>(pBuf+pointer), &versionNumber, sizeof(versionNumber));
-            pointer += sizeof(versionNumber);
+            IpcData ipcresponse( ipcdata->GetGuid() );
+            ipcresponse.Add(37);
 
-            signed int dataValue = 37;
-            unsigned short int dataType = 2;  //  Int32
-            memcpy(static_cast<PVOID>(pBuf + pointer), &dataType, sizeof(dataType));
-            pointer += sizeof(dataType);
-
-            memcpy(static_cast<PVOID>(pBuf + pointer), &dataValue, sizeof(dataValue));
-            pointer += sizeof(dataValue);
+            // get the pointer.
+            auto pData = ipcresponse.GetPtr();
+            auto s = strlen(reinterpret_cast<char*>(pData));
+            memcpy(pBuf, pData, s );
 
             // clean the buffer.
             UnmapViewOfFile(pBuf);

@@ -16,13 +16,19 @@ namespace AMPowerShellCmdLets.myodd
       StringAscii = 4
     };
 
+    /// <summary>
+    /// Get the number of arguments we have in the IpcData
+    /// </summary>
     public uint ArgumentsCount { get; private set; }
 
-    public Guid Guid { get; }
+    /// <summary>
+    /// Get the current Guid for this IpcData
+    /// </summary>
+    public string Guid { get; }
 
     // The current version number
     // this will help us to read the data.
-    const int VersionNumber = 100;
+    private const int VersionNumber = 100;
 
     private byte[] Bytes { get; set; }
 
@@ -40,8 +46,8 @@ namespace AMPowerShellCmdLets.myodd
       Bytes = BitConverter.GetBytes(VersionNumber);
 
       // set the guid
-      Guid = Guid.NewGuid();
-      Add( Guid );
+      Guid = System.Guid.NewGuid().ToString();
+      AddGuid();
     }
 
     public IpcData(byte[] bytes)
@@ -51,6 +57,9 @@ namespace AMPowerShellCmdLets.myodd
 
       // we have no arguments.
       ArgumentsCount = 0;
+
+      //  we have no guid.
+      Guid = "";
 
       // create a brand new byte and just add the version number.
       Bytes = BitConverter.GetBytes(VersionNumber);
@@ -73,7 +82,6 @@ namespace AMPowerShellCmdLets.myodd
       {
         // get the next item type.
         var dataType = ReadDataType(bytes, ref pointer);
-
         switch (dataType)
         {
           case DataTye.Guid:
@@ -101,6 +109,7 @@ namespace AMPowerShellCmdLets.myodd
             }
             break;
 
+          case DataTye.None:
           default:
             // no point goint further as we do no know the size of that argument.
             // even if we can move the pointer forward, it would be more luck than anything.
@@ -124,11 +133,7 @@ namespace AMPowerShellCmdLets.myodd
     ~IpcData()
     {
       // do we need to free some memory?
-      if (HGlobal != null)
-      {
-        Marshal.FreeHGlobal( (IntPtr)HGlobal);
-        HGlobal = null;
-      }
+      ResetPtr();
     }
 
     private static DataTye ReadDataType(byte[] bytes, ref int pointer)
@@ -171,7 +176,7 @@ namespace AMPowerShellCmdLets.myodd
       throw new NotImplementedException();
     }
 
-    private static Guid ReadGuid(byte[] bytes, ref int pointer)
+    private static string ReadGuid(byte[] bytes, ref int pointer)
     {
       throw new NotImplementedException();
     }
@@ -191,13 +196,12 @@ namespace AMPowerShellCmdLets.myodd
       return BitConverter.ToInt32(dst, 0);
     }
 
-    private void Add(Guid guidToAdd)
+    private void AddGuid()
     {
-      var guidString = guidToAdd.ToString();
       Add(Combine(new byte[][]{
         BitConverter.GetBytes( (short)DataTye.Guid ),     //  short
-        BitConverter.GetBytes( guidString.Length),        //  Int32, size is guaranteed.
-        System.Text.Encoding.Unicode.GetBytes(guidString)
+        BitConverter.GetBytes( Guid.Length),        //  Int32, size is guaranteed.
+        System.Text.Encoding.Unicode.GetBytes(Guid)
         }
       ));
     }
@@ -277,9 +281,16 @@ namespace AMPowerShellCmdLets.myodd
       return rv;
     }
 
+    /// <summary>
+    /// Clear the pointer and free memeory if need be.
+    /// </summary>
     private void ResetPtr()
     {
-      HGlobal = null;
+      if (HGlobal != null)
+      {
+        Marshal.FreeHGlobal((IntPtr)HGlobal);
+        HGlobal = null;
+      }
     }
 
     /// <summary>

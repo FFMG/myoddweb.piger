@@ -6,15 +6,65 @@
 namespace myodd {
 namespace os {
 
+static const signed int VersionNumber = 100;
+
 IpcData::IpcData(unsigned char* pData, unsigned int dataSize) : 
-  _numArguments( 0 )
+  _numArguments( 0 ),
+  _guid( L"" ),
+  _pData( nullptr )
 {
   //  read the data
   Read(pData, dataSize);
 }
 
+IpcData::IpcData(const std::wstring& guid) :
+  _numArguments(0),
+  _guid( guid ),
+  _pData(nullptr)
+{
+}
+
 IpcData::~IpcData()
 {
+  // reset the data.
+  ResetArguments();
+
+  // reset the pointer.
+  ResetPtr();
+}
+
+/**
+ * Reset the arguments and delete all the values.
+ */
+void IpcData::ResetArguments()
+{
+  for(IpcArguments::const_iterator it = _ipcArguments.begin();
+      it != _ipcArguments.end();
+      ++it)
+  {
+    auto ia = (*it);
+    
+    // delete the data.
+    delete ia->pData;
+
+    // delete the data
+    delete ia;
+  }
+
+  // reset all the data.
+  _ipcArguments.clear();
+}
+
+/**
+ * Reset the data pointer.
+ */
+void IpcData::ResetPtr()
+{
+  if( _pData )
+  {
+    delete[] _pData;
+    _pData = nullptr;
+  }
 }
 
 /**
@@ -43,6 +93,107 @@ bool IpcData::HasGuid() const
   return (GetGuid().length() > 0);
 }
 
+/**
+ * Calculate the total size given all the arguments.
+ * @return size_t the total arguments size.
+ */
+size_t IpcData::CalculateArgumentsSize() const
+{
+  // at least the size of the version number.
+  auto totalSize = sizeof(VersionNumber);
+
+  // now add all the type sizes.
+  for (auto it = _ipcArguments.begin();
+            it != _ipcArguments.end();
+            ++it)
+  {
+    auto ia = (*it);
+    switch( ia->dataType )
+    {
+    case IpcDataType::Int32:
+      totalSize += sizeof(signed int);
+      break;
+
+    case IpcDataType::String:
+    case IpcDataType::Guid:
+      totalSize += static_cast<std::wstring*>(ia->pData)->length() * sizeof(wchar_t*);
+      break;
+
+    case IpcDataType::StringAscii:
+      totalSize += static_cast<std::string*>(ia->pData)->length() * sizeof( char*);
+      break;
+
+    case IpcDataType::None:
+    default:
+      throw "Unnown data type.";
+    }
+  }
+  return totalSize;
+}
+
+unsigned char* IpcData::GetPtr()
+{
+  if (_pData)
+  {
+    return _pData;
+  }
+
+  auto totalSize = CalculateArgumentsSize();
+  _pData = new unsigned char[totalSize];
+  memset(_pData, 0, totalSize);
+
+  size_t pointer = 0;
+
+  //  add the version number.
+  memcpy(static_cast<PVOID>(_pData + pointer), &VersionNumber, sizeof(VersionNumber));
+  pointer += sizeof(VersionNumber);
+
+  for (IpcArguments::const_iterator it = _ipcArguments.begin();
+    it != _ipcArguments.end();
+    ++it)
+  {
+    auto ia = (*it);
+    switch (ia->dataType)
+    {
+    case IpcDataType::Int32:
+    {
+      signed int* dataValue = static_cast<signed int*>(ia->pData);
+      unsigned short int dataType = static_cast<unsigned short int>(IpcDataType::Int32);  //  Int32
+
+      // add the data type.
+      memcpy(static_cast<PVOID>(_pData + pointer), &dataType, sizeof(dataType));
+      pointer += sizeof(dataType);
+
+      // add the data
+      memcpy(static_cast<PVOID>(_pData + pointer), dataValue, sizeof(*dataValue));
+      pointer += sizeof(*dataValue);
+    }
+    break;
+
+    case IpcDataType::String:
+    case IpcDataType::Guid:
+      break;
+
+    case IpcDataType::StringAscii:
+      break;
+
+    case IpcDataType::None:
+    default:
+      throw "Unnown data type.";
+    }
+  }
+
+  // we can now get the pointer.
+  return GetPtr();
+}
+
+/**
+ * Read data passed to us.
+ * @throw if one or more items are invalid.
+ * @param unsigned char* pData the data we want to read
+ * @param unsigned int dataSize the size of the data we are reading.
+ * @return none.
+ */
 void IpcData::Read(unsigned char* pData, unsigned int dataSize)
 {
   //  the message must be, at the very least the size of the version number.
@@ -51,6 +202,12 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
   {
     throw "invalid data size, we need at least the version number.";
   }
+
+  // reset the arguments
+  ResetArguments();
+
+  // reset the pointer
+  ResetPtr();
 
   // reset the number of arguments
   _numArguments = 0;
@@ -76,24 +233,37 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
     {
       // set the guid.
       _guid = ReadGuid(pData, pointer);
+      _ipcArguments.push_back(new IpcArgument{
+        new std::wstring(_guid),
+        IpcDataType::Guid
+      });
     }
     break;
     
     case IpcDataType::Int32:
     {
-      auto dataValue = ReadInt32( pData, pointer );
+      _ipcArguments.push_back(new IpcArgument{
+        new (signed int)(ReadInt32(pData, pointer)),
+        IpcDataType::Int32
+      });
     }
     break;
 
     case IpcDataType::String://string unicode
     {
-      auto sDataValue = ReadString(pData, pointer);
+      _ipcArguments.push_back(new IpcArgument{
+        new std::wstring(ReadString(pData, pointer)),
+        IpcDataType::String
+      });
     }
     break;
 
     case IpcDataType::StringAscii:
     {
-      auto sDataValue = ReadAsciiString(pData, pointer);
+      _ipcArguments.push_back(new IpcArgument{
+        new std::string(ReadAsciiString(pData, pointer)),
+        IpcDataType::StringAscii
+      });
     }
     break;
 
@@ -327,5 +497,18 @@ signed int IpcData::ReadVersionNumber(unsigned char* pData, size_t& pointer)
   return versionNumber;
 }
 
+void IpcData::Add(signed int dataValue )
+{
+  _ipcArguments.push_back(new IpcArgument{
+    new (signed int)(dataValue),
+    IpcDataType::Int32
+  });
+
+  // update the argument count
+  ++_numArguments;
+
+  // reset the pointer if need be.
+  ResetPtr();
+}
 }
 }

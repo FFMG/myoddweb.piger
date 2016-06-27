@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 namespace myodd {
   namespace os {
@@ -19,6 +20,7 @@ namespace myodd {
        * The IPC data parser
        */
       IpcData( unsigned char* pData, unsigned int dataSize );
+      IpcData( const std::wstring& guid );
       virtual ~IpcData();
 
       // the number of arguments.
@@ -30,12 +32,21 @@ namespace myodd {
       // do we have a valid guid, (we should but still).
       bool HasGuid() const;
 
+      // get the pointer.
+      unsigned char* GetPtr();
+
+      // add a signed int.
+      void Add(signed int dataValue);
+
     private:
       // the number of arguments we were passed.
       unsigned int _numArguments;
 
       // the guid.
       std::wstring _guid;
+
+      // the current data
+      unsigned char* _pData;
 
       //  read all the data
       void Read(unsigned char* pData, unsigned int dataSize);
@@ -57,6 +68,27 @@ namespace myodd {
 
       // read the guid
       static std::wstring ReadGuid(unsigned char* pData, size_t& pointer);
+
+    private:
+      // all the arguments.
+      struct IpcArgument
+      {
+        void* pData;
+        IpcDataType dataType;
+      };
+
+      typedef std::vector<IpcArgument*> IpcArguments;
+      IpcArguments _ipcArguments;
+
+      // reset all the data
+      void ResetArguments();
+
+      // given all the arguments caclulate the size
+      // of the pointer we will need.
+      size_t CalculateArgumentsSize() const;
+
+      // reset the point
+      void ResetPtr();
     };
   }
 }
