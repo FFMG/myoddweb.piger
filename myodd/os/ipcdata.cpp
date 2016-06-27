@@ -127,12 +127,12 @@ size_t IpcData::CalculateArgumentsSize() const
     case IpcDataType::String:
     case IpcDataType::Guid:
       totalSize += sizeof(signed int);  //  the number of characters
-      totalSize += static_cast<std::wstring*>(ia->pData)->length() * sizeof(wchar_t*);  //  the data itself
+      totalSize += static_cast<std::wstring*>(ia->pData)->length() * sizeof(wchar_t);  //  the data itself
       break;
 
     case IpcDataType::StringAscii:
       totalSize += sizeof(signed int);  //  the number of characters
-      totalSize += static_cast<std::string*>(ia->pData)->length() * sizeof( char*); //  the data itself
+      totalSize += static_cast<std::string*>(ia->pData)->length() * sizeof(char); //  the data itself
       break;
 
     case IpcDataType::None:
@@ -205,10 +205,36 @@ unsigned char* IpcData::GetPtr()
 
     case IpcDataType::String:
     case IpcDataType::Guid:
-      break;
+    {
+      // get the data.
+      auto dataValue = static_cast<std::wstring*>(ia->pData);
+
+      //  first we need to add the size.
+      signed int dataSize = static_cast<signed int>(dataValue->length());
+      memcpy(static_cast<PVOID>(_pData + pointer), &dataSize, sizeof(dataSize));
+      pointer += sizeof(dataSize);
+
+      //  now add the dataitself.
+      memcpy(static_cast<PVOID>(_pData + pointer), dataValue->c_str(), dataSize * sizeof(wchar_t));
+      pointer += dataSize * sizeof(wchar_t);
+    }
+    break;
 
     case IpcDataType::StringAscii:
-      break;
+    {
+      // get the data.
+      auto dataValue = static_cast<std::string*>(ia->pData);
+
+      //  first we need to add the size.
+      signed int dataSize = static_cast<signed int>(dataValue->length());
+      memcpy(static_cast<PVOID>(_pData + pointer), &dataSize, sizeof(dataSize));
+      pointer += sizeof(dataSize);
+
+      //  now add the dataitself.
+      memcpy(static_cast<PVOID>(_pData + pointer), dataValue->c_str(), dataSize * sizeof(char));
+      pointer += dataSize * sizeof(char);
+    }
+    break;
 
     case IpcDataType::None:
     default:
@@ -530,6 +556,10 @@ signed int IpcData::ReadVersionNumber(unsigned char* pData, size_t& pointer)
   return versionNumber;
 }
 
+/**
+ * Add a signed integer to our list of arguments.
+ * @param signed int dataValue the string we want to add.
+ */
 void IpcData::Add(signed int dataValue )
 {
   _ipcArguments.push_back(new IpcArgument{
@@ -543,5 +573,43 @@ void IpcData::Add(signed int dataValue )
   // reset the pointer if need be.
   ResetPtr();
 }
+
+/**
+ * Add a wide string to our list of arguments.
+ * @param const std::wstring& dataValue the string we want to add.
+ */
+void IpcData::Add(const std::wstring& dataValue)
+{
+  _ipcArguments.push_back(new IpcArgument{
+    new std::wstring(dataValue),
+    IpcDataType::String
+  });
+
+  // update the argument count
+  ++_numArguments;
+
+  // reset the pointer if need be.
+  ResetPtr();
 }
+
+/**
+ * Add an asccii string to our list of arguments.
+ * @param const std::string& dataValue the string we want to add.
+ */
+void IpcData::Add(const std::string& dataValue)
+{
+  _ipcArguments.push_back(new IpcArgument{
+    new std::string(dataValue),
+    IpcDataType::StringAscii
+  });
+
+  // update the argument count
+  ++_numArguments;
+
+  // reset the pointer if need be.
+  ResetPtr();
 }
+
+//
+} // os
+} // myodd

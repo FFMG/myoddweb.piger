@@ -22,7 +22,7 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     public bool HasGuid()
     {
-      return !String.IsNullOrEmpty(Guid);
+      return !string.IsNullOrEmpty(Guid);
     }
 
     /// <summary>
@@ -177,17 +177,60 @@ namespace AMPowerShellCmdLets.myodd
 
     private static string ReadString(byte[] bytes, ref int pointer)
     {
-      throw new NotImplementedException();
+      // create the destination item
+      var dstDataSize = new byte[sizeof(int)];
+
+      // copy from where we are to where we are going.
+      Array.Copy(bytes, pointer, dstDataSize, 0, sizeof(int));
+      var dataSize = BitConverter.ToInt32(dstDataSize, 0);
+
+      // update the pointer.
+      pointer += sizeof(int);
+
+      //  now get the data itself
+      // create the destination item
+      var dstData = new byte[dataSize*sizeof(char)];
+
+      // copy from where we are to where we are going.
+      Array.Copy(bytes, pointer, dstData, 0, dataSize * sizeof(char));
+
+      // update the pointer.
+      pointer += dataSize * sizeof(char);
+
+      // return the converted value.
+      return Encoding.Unicode.GetString(dstData );
     }
 
     private static string ReadAsciiString(byte[] bytes, ref int pointer)
     {
-      throw new NotImplementedException();
+      // create the destination item
+      var dstDataSize = new byte[sizeof(int)];
+
+      // copy from where we are to where we are going.
+      Array.Copy(bytes, pointer, dstDataSize, 0, sizeof(int));
+      var dataSize = BitConverter.ToInt32(dstDataSize, 0);
+
+      // update the pointer.
+      pointer += sizeof(int);
+
+      //  now get the data itself
+      // create the destination item
+      var dstData = new byte[dataSize];
+
+      // copy from where we are to where we are going.
+      Array.Copy(bytes, pointer, dstData, 0, dataSize );
+
+      // update the pointer.
+      pointer += dataSize;
+
+      // return the converted value.
+      return Encoding.ASCII.GetString(dstData);
     }
 
     private static string ReadGuid(byte[] bytes, ref int pointer)
     {
-      throw new NotImplementedException();
+      // this is a wide string
+      return ReadString(bytes, ref pointer);
     }
 
     private static int ReadVersionNumber(byte[] bytes, ref int pointer)

@@ -44,6 +44,9 @@ namespace myodd {
       // add a wide string.
       void Add( const std::wstring& dataValue);
 
+      // add an ascii string.
+      void Add(const std::string& dataValue);
+
     private:
       // the number of arguments we were passed.
       unsigned int _numArguments;

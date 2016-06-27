@@ -160,6 +160,8 @@ public:
           {
             IpcData ipcresponse( ipcdata->GetGuid() );
             ipcresponse.Add(37);
+            ipcresponse.Add( L"Hello" );
+            ipcresponse.Add( "Hello" );
 
             //  get the pointer.
             auto pData = ipcresponse.GetPtr();
