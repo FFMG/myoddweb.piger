@@ -11,7 +11,8 @@ static const signed int VersionNumber = 100;
 IpcData::IpcData(unsigned char* pData, unsigned int dataSize) : 
   _numArguments( 0 ),
   _guid( L"" ),
-  _pData( nullptr )
+  _pData( nullptr ),
+  _pDataSize( 0 )
 {
   //  read the data
   Read(pData, dataSize);
@@ -20,7 +21,8 @@ IpcData::IpcData(unsigned char* pData, unsigned int dataSize) :
 IpcData::IpcData(const std::wstring& guid) :
   _numArguments(0),
   _guid( guid ),
-  _pData(nullptr)
+  _pData(nullptr),
+  _pDataSize(0)
 {
 }
 
@@ -60,11 +62,15 @@ void IpcData::ResetArguments()
  */
 void IpcData::ResetPtr()
 {
-  if( _pData )
+  if( nullptr != _pData )
   {
+    // clean the array.
     delete[] _pData;
     _pData = nullptr;
   }
+
+  // reset the data size as well.
+  _pDataSize = 0;
 }
 
 /**
@@ -107,7 +113,11 @@ size_t IpcData::CalculateArgumentsSize() const
             it != _ipcArguments.end();
             ++it)
   {
+    // the pointer
     auto ia = (*it);
+
+    // the data type, always added.
+    totalSize += sizeof(ia->dataType);
     switch( ia->dataType )
     {
     case IpcDataType::Int32:
@@ -116,11 +126,13 @@ size_t IpcData::CalculateArgumentsSize() const
 
     case IpcDataType::String:
     case IpcDataType::Guid:
-      totalSize += static_cast<std::wstring*>(ia->pData)->length() * sizeof(wchar_t*);
+      totalSize += sizeof(signed int);  //  the number of characters
+      totalSize += static_cast<std::wstring*>(ia->pData)->length() * sizeof(wchar_t*);  //  the data itself
       break;
 
     case IpcDataType::StringAscii:
-      totalSize += static_cast<std::string*>(ia->pData)->length() * sizeof( char*);
+      totalSize += sizeof(signed int);  //  the number of characters
+      totalSize += static_cast<std::string*>(ia->pData)->length() * sizeof( char*); //  the data itself
       break;
 
     case IpcDataType::None:
@@ -131,17 +143,37 @@ size_t IpcData::CalculateArgumentsSize() const
   return totalSize;
 }
 
+size_t IpcData::GetSize()
+{
+  //  make sure that the pointer is valid
+  // so call the getptr value to get the data size.
+  GetPtr();
+
+  // we should now have a valid size.
+  return _pDataSize;
+}
+
 unsigned char* IpcData::GetPtr()
 {
-  if (_pData)
+  if ( nullptr != _pData)
   {
     return _pData;
   }
 
-  auto totalSize = CalculateArgumentsSize();
-  _pData = new unsigned char[totalSize];
-  memset(_pData, 0, totalSize);
+  // re-calculate the size,
+  _pDataSize = CalculateArgumentsSize();
 
+  // the size cannot be zero
+  if (_pDataSize == 0)
+  {
+    throw "The size cannot be zero, we must have at least the version number!";
+  }
+
+  // create the data 
+  _pData = new unsigned char[_pDataSize];
+  memset(_pData, 0, _pDataSize);
+
+  // the current pointer.
   size_t pointer = 0;
 
   //  add the version number.

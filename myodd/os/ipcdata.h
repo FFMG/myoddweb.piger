@@ -6,7 +6,7 @@ namespace myodd {
     class IpcData
     {
     public:
-      enum class IpcDataType : unsigned int
+      enum class IpcDataType : unsigned short int
       {
         None = 0,
         Guid = 1,
@@ -35,8 +35,14 @@ namespace myodd {
       // get the pointer.
       unsigned char* GetPtr();
 
+      // get the pointer size.
+      size_t GetSize();
+
       // add a signed int.
       void Add(signed int dataValue);
+
+      // add a wide string.
+      void Add( const std::wstring& dataValue);
 
     private:
       // the number of arguments we were passed.
@@ -47,6 +53,9 @@ namespace myodd {
 
       // the current data
       unsigned char* _pData;
+
+      // the current data size.
+      size_t _pDataSize;
 
       //  read all the data
       void Read(unsigned char* pData, unsigned int dataSize);

@@ -3,6 +3,7 @@
 #include <afxwin.h>
 #include "ipcdata.h"
 #include "../threads/lock.h"
+#include <assert.h>
 
 namespace myodd {
 namespace os {
@@ -160,10 +161,19 @@ public:
             IpcData ipcresponse( ipcdata->GetGuid() );
             ipcresponse.Add(37);
 
-            // get the pointer.
+            //  get the pointer.
             auto pData = ipcresponse.GetPtr();
-            auto s = strlen(reinterpret_cast<char*>(pData));
-            memcpy(pBuf, pData, s );
+
+            // the data size, we must make sure it is 4bytes
+            // a signed int in c# is 4 bytes and should also be in c++
+            auto datasize = (signed int)ipcresponse.GetSize();
+#ifdef DEBUG
+            assert(sizeof(datasize) == 4);
+#endif // DEBUG
+            memcpy(pBuf, &datasize, sizeof(datasize));
+
+            //  now add the data itself.
+            memcpy(pBuf+ sizeof(datasize), pData, datasize);
 
             // clean the buffer.
             UnmapViewOfFile(pBuf);

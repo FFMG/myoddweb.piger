@@ -113,8 +113,11 @@ namespace MyOdd
         {
           using (var reader = new BinaryReader(mmfvs))
           {
+            // read the first 4 bytes for the size.
+            var dataSize = BitConverter.ToInt32( reader.ReadBytes( sizeof(int)), 0 );
+
             // all the byes 
-            var bytes = reader.ReadBytes((int) mmfvs.Length);
+            var bytes = reader.ReadBytes( dataSize );
 
             // parse the response data into an IpcData
             return new IpcData( bytes );
