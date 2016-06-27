@@ -153,18 +153,19 @@ unsigned char* IpcData::GetPtr()
     ++it)
   {
     auto ia = (*it);
+
+    auto dataType = static_cast<unsigned short int>(ia->dataType);
+    memcpy(static_cast<PVOID>(_pData + pointer), &dataType, sizeof(dataType));
+    pointer += sizeof(dataType);
+
     switch (ia->dataType)
     {
     case IpcDataType::Int32:
     {
-      signed int* dataValue = static_cast<signed int*>(ia->pData);
-      unsigned short int dataType = static_cast<unsigned short int>(IpcDataType::Int32);  //  Int32
+      // get the data.
+      auto dataValue = static_cast<signed int*>(ia->pData);
 
-      // add the data type.
-      memcpy(static_cast<PVOID>(_pData + pointer), &dataType, sizeof(dataType));
-      pointer += sizeof(dataType);
-
-      // add the data
+      // add it to the pointer.
       memcpy(static_cast<PVOID>(_pData + pointer), dataValue, sizeof(*dataValue));
       pointer += sizeof(*dataValue);
     }
