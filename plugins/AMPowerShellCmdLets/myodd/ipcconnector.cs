@@ -6,8 +6,8 @@ namespace MyOdd
 {
   public class IpcConnector
   {
-    const int WmClose = 0x10;
-    const int WmCopyData = 0x004A;
+    private const int WmClose = 0x10;
+    private const int WmCopyData = 0x004A;
 
     /// <summary>
     /// This is the name of the server we are connecting to.
@@ -39,7 +39,7 @@ namespace MyOdd
     /// application by the WM_COPYDATA message.  
     /// </summary> 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct COPYDATASTRUCT
+    internal struct Copydatastruct
     {
       public IntPtr dwData;       // Specifies data to be passed 
       public int cbData;          // Specifies the data size in bytes 
@@ -49,7 +49,7 @@ namespace MyOdd
     static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
-    static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref COPYDATASTRUCT lParam);
+    static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref Copydatastruct lParam);
 #endregion
 
     public IpcConnector( string serverName )
@@ -82,13 +82,13 @@ namespace MyOdd
     /// <returns></returns>
     public bool Send(IpcData msg )
     {
-      IntPtr? hWindow = ConnectedWindow;
+      var hWindow = ConnectedWindow;
       if (null == hWindow)
       {
         return false;
       }
 
-      var cds = new COPYDATASTRUCT
+      var cds = new Copydatastruct
       {
         dwData = (IntPtr)3, //  copy message...
         cbData = msg.GetSize(),
@@ -125,7 +125,7 @@ namespace MyOdd
       {
         Marshal.StructureToPtr(myStruct, pMyStruct, true);
 
-        var cds = new COPYDATASTRUCT
+        var cds = new Copydatastruct
         {
           dwData = (IntPtr)1, //  send message
           cbData = myStructSize,
