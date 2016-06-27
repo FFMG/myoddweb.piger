@@ -26,6 +26,23 @@ unsigned int IpcData::GetNumArguments() const
   return _numArguments;
 }
 
+/**
+ * Get the given guid.
+ * @return const std::wstring& the guid, if we have one.
+ */
+const std::wstring& IpcData::GetGuid() const
+{
+  return _guid;
+}
+
+/**
+ * Return if we have a guid or not.
+ */
+bool IpcData::HasGuid() const
+{
+  return (GetGuid().length() > 0);
+}
+
 void IpcData::Read(unsigned char* pData, unsigned int dataSize)
 {
   //  the message must be, at the very least the size of the version number.
@@ -37,6 +54,9 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
 
   // reset the number of arguments
   _numArguments = 0;
+
+  // reset the guid
+  _guid = L"";
 
   // the pointer to keep track of where we are.
   size_t pointer = 0;
@@ -52,6 +72,13 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
 
     switch ( dataType)
     {
+    case IpcDataType::Guid:
+    {
+      // set the guid.
+      _guid = ReadGuid(pData, pointer);
+    }
+    break;
+    
     case IpcDataType::Int32:
     {
       auto dataValue = ReadInt32( pData, pointer );
@@ -76,8 +103,17 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
       throw "Unknown argument type, I am unable to read the size/data for it.";
     }
 
-    //  we found a valid argument.
-    ++_numArguments;
+    switch (dataType)
+    {
+    case IpcDataType::Guid:
+      //  the guid does not count as an argument.
+      break;
+
+    default:
+      //  we found a valid argument.
+      ++_numArguments;
+      break;
+    }
   }
 
   // if the data is not exactly correct, then we have a problem.
@@ -169,6 +205,19 @@ std::wstring IpcData::ReadString(unsigned char* pData, size_t& pointer)
 
   // return what we found.
   return sDataValue;
+}
+
+/**
+ * Read a Unicode guid.
+ * We update the pointer location.
+ * @param unsigned char* pData the data container
+ * @param size_t& pointer the current pointer location.
+ * @return std::wstring the string that we read.
+ */
+std::wstring IpcData::ReadGuid(unsigned char* pData, size_t& pointer)
+{
+  // we just use the string class.
+  return ReadString( pData, pointer );
 }
 
 /**

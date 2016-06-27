@@ -16,9 +16,9 @@ protected:
   enum class IpcMessageType : unsigned int
   {
     None = 0,
-    SendMessage = 1,
-    PostMessage = 2,
-    CopyMessage = 3,
+    Send = 1,
+    Post = 2,
+    Copy = 3,
   };
 
   struct IpcMessageStruct
@@ -102,7 +102,7 @@ public:
     // then simply reconstruct the message
     switch ( static_cast<IpcMessageType>(pcds->dwData))
     {
-    case IpcMessageType::SendMessage:
+    case IpcMessageType::Send:
     {
       // pass this to the parent window
       IpcMessageStruct ims;
@@ -117,7 +117,7 @@ public:
     }
     break;
 
-    case IpcMessageType::PostMessage:
+    case IpcMessageType::Post:
     {
       // pass this to the parent window
       IpcMessageStruct ims;
@@ -133,11 +133,52 @@ public:
     }
     break;
 
-    case IpcMessageType::CopyMessage:
+    case IpcMessageType::Copy:
       try
       {
         //  try and decrypt the message that was sent.
         auto ipcdata = new myodd::os::IpcData(static_cast<unsigned char*>(pcds->lpData), pcds->cbData);
+        
+        // did we get a guid?
+        if (ipcdata->HasGuid())
+        {
+          auto hMapFile = OpenFileMappingW(FILE_MAP_ALL_ACCESS, false, ipcdata->GetGuid().c_str() );
+          if (hMapFile == nullptr)
+          {
+            return 0;
+          }
+
+          auto pBuf = static_cast<unsigned char*>(MapViewOfFile(hMapFile, // handle to map object
+            FILE_MAP_ALL_ACCESS,  // read/write permission
+            0,
+            0,
+            1000
+          ));
+
+          if (pBuf != nullptr)
+          {
+            size_t pointer = 0;
+            signed int versionNumber = 100;
+            memcpy(static_cast<PVOID>(pBuf+pointer), &versionNumber, sizeof(versionNumber));
+            pointer += sizeof(versionNumber);
+
+            signed int dataValue = 37;
+            unsigned short int dataType = 2;  //  Int32
+            memcpy(static_cast<PVOID>(pBuf + pointer), &dataType, sizeof(dataType));
+            pointer += sizeof(dataType);
+
+            memcpy(static_cast<PVOID>(pBuf + pointer), &dataValue, sizeof(dataValue));
+            pointer += sizeof(dataValue);
+
+            // clean the buffer.
+            UnmapViewOfFile(pBuf);
+          }
+
+          CloseHandle(hMapFile);
+        }
+
+        // all done
+        delete ipcdata;
 
         // success
         return 1;
