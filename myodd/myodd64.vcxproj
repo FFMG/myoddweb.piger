@@ -556,6 +556,7 @@
     <ClCompile Include="math\math.cpp" />
     <ClCompile Include="network\network.cpp" />
     <ClCompile Include="offsets\offset.cpp" />
+    <ClCompile Include="os\ipcdata.cpp" />
     <ClCompile Include="os\ipclistener.cpp" />
     <ClCompile Include="os\os.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -635,6 +636,7 @@
     <ClInclude Include="network\network.h" />
     <ClInclude Include="notif\notif.h" />
     <ClInclude Include="offsets\offset.h" />
+    <ClInclude Include="os\ipcdata.h" />
     <ClInclude Include="os\ipclistener.h" />
     <ClInclude Include="os\os.h" />
     <ClInclude Include="registry\registry.h" />

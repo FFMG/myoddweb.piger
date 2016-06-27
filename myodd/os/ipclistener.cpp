@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ipclistener.h"
 #include <afxwin.h>
-#include <string>
+#include "ipcdata.h"
 
 namespace myodd {
 namespace os {
@@ -94,10 +94,10 @@ public:
     }
 
     //  cast it to COPYDATASTRUCT
-    auto pcds = (COPYDATASTRUCT*)lParam;
+    auto pcds = reinterpret_cast<COPYDATASTRUCT*>(lParam);
 
     // then simply reconstruct the message
-    switch ( (IpcMessageType)pcds->dwData)
+    switch ( static_cast<IpcMessageType>(pcds->dwData))
     {
     case IpcMessageType::SendMessage:
     {
@@ -133,91 +133,7 @@ public:
     case IpcMessageType::CopyMessage:
       {
         //  try and decrypt the message that was sent.
-
-        //  the message must be, at the very least the size of the version number.
-        // https://www.displayfusion.com/Discussions/View/converting-c-data-types-to-c/?ID=38db6001-45e5-41a3-ab39-8004450204b3
-        if (pcds->cbData < sizeof(signed int))
-        {
-          return false;
-        }
-
-        //  get the version number
-        signed int versionNumber = 0;
-        auto pointer = 0;
-        memcpy_s(&versionNumber, sizeof(versionNumber), pcds->lpData , sizeof(versionNumber));
-        pointer += sizeof(signed int);
-        auto version = 0;
-
-        for (;pointer < pcds->cbData;)
-        {
-          // get the next item type.
-          unsigned short int dataType = 0;
-          memcpy_s(&dataType, sizeof(dataType), (byte*)pcds->lpData+pointer, sizeof(dataType));
-          pointer += sizeof(dataType);
-          switch (dataType)
-          {
-          case 1://int32
-          {
-            signed int dataValue = 0;
-            memcpy_s(&dataValue, sizeof(dataValue), (byte*)pcds->lpData + pointer, sizeof(dataValue));
-            pointer += sizeof(dataValue);
-          }
-          break;
-
-          case 2://string unicode
-          {
-            //  first we get the size
-            signed int dataSize = 0;
-            memcpy_s(&dataSize, sizeof(dataSize), static_cast<byte*>(pcds->lpData) + pointer, sizeof(dataSize));
-            pointer += sizeof(dataSize);
-
-            // then we create the char
-            std::wstring sDataValue = L"";
-            if (0 != dataSize)
-            {
-              auto dataValue = new wchar_t[dataSize];
-              memset(dataValue, 0, dataSize);
-              memcpy_s(dataValue, dataSize, static_cast<byte*>(pcds->lpData) + pointer, dataSize);
-              pointer += dataSize;
-
-              //  copy it
-              sDataValue = dataValue;
-
-              //  clean it.
-              delete[] dataValue;
-            }
-          }
-          break;
-
-          case 3://string ascii
-          {
-            //  first we get the size
-            signed int dataSize = 0;
-            memcpy_s(&dataSize, sizeof(dataSize), static_cast<byte*>(pcds->lpData) + pointer, sizeof(dataSize));
-            pointer += sizeof(dataSize);
-
-            // then we create the char
-            std::string sDataValue = "";
-            if (0 != dataSize)
-            {
-              auto dataValue = new char[dataSize];
-              memset(dataValue, 0, dataSize);
-              memcpy_s(dataValue, dataSize, static_cast<byte*>(pcds->lpData) + pointer, dataSize);
-              pointer += dataSize;
-
-              //  copy it
-              sDataValue = dataValue;
-
-              //  clean it.
-              delete[] dataValue;
-            }
-          }
-          break;
-
-          default:
-            break;
-          }
-        }
+        auto ipcdata = new myodd::os::IpcData( static_cast<unsigned char*>(pcds->lpData), pcds->cbData);
       }
       break;
 

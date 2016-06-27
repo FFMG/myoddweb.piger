@@ -260,6 +260,9 @@
     <ClCompile Include="os\ipclistener.cpp">
       <Filter>os</Filter>
     </ClCompile>
+    <ClCompile Include="os\ipcdata.cpp">
+      <Filter>os</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -400,6 +403,9 @@
       <Filter>XML</Filter>
     </ClInclude>
     <ClInclude Include="os\ipclistener.h">
+      <Filter>os</Filter>
+    </ClInclude>
+    <ClInclude Include="os\ipcdata.h">
       <Filter>os</Filter>
     </ClInclude>
   </ItemGroup>

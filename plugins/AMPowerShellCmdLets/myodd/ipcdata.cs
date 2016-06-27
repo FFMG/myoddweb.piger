@@ -50,7 +50,7 @@ namespace AMPowerShellCmdLets.myodd
         var stringInBytes = Encoding.Unicode.GetBytes(stringToAdd);
         Add(Combine(new byte[][]{
         BitConverter.GetBytes( (short)DataTye.String ),   //  short
-        BitConverter.GetBytes( stringInBytes.Length),     //  Int32, size is guaranteed.
+        BitConverter.GetBytes( stringToAdd.Length),       //  Int32, size is guaranteed.
         stringInBytes
         }
         ));
