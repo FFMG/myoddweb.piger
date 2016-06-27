@@ -14,6 +14,7 @@ protected:
     None = 0,
     SendMessage = 1,
     PostMessage = 2,
+    CopyMessage = 3,
   };
 
   struct IpcMessageStruct
@@ -127,6 +128,31 @@ public:
       }
     }
     break;
+
+    case IpcMessageType::CopyMessage:
+      {
+        //  try and decrypt the message that was sent.
+
+        //  the message must be, at the very least the size of the version number.
+        // https://www.displayfusion.com/Discussions/View/converting-c-data-types-to-c/?ID=38db6001-45e5-41a3-ab39-8004450204b3
+        if (pcds->cbData < sizeof(signed int))
+        {
+          return false;
+        }
+
+        //  get the version number
+        signed int versionNumber = 0;
+        auto pointer = 0;
+        memcpy_s(&versionNumber, sizeof(versionNumber), pcds->lpData , sizeof(versionNumber));
+        pointer += sizeof(signed int);
+        auto version = 0;
+
+        for (;pointer < pcds->cbData;)
+        {
+          pointer++;
+        }
+      }
+      break;
 
     default:
       //  unknown message type

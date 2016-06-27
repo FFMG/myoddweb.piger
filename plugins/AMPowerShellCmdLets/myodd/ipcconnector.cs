@@ -1,10 +1,14 @@
-﻿using System;
+﻿using AMPowerShellCmdLets.myodd;
+using System;
 using System.Runtime.InteropServices;
 
 namespace MyOdd
 {
   public class IpcConnector
   {
+    const int WmClose = 0x10;
+    const int WmCopyData = 0x004A;
+
     /// <summary>
     /// This is the name of the server we are connecting to.
     /// </summary>
@@ -72,6 +76,31 @@ namespace MyOdd
     }
 
     /// <summary>
+    /// Send a message as a reconstructed string.
+    /// </summary>
+    /// <param name="msg">The IpcData we want to send.</param>
+    /// <returns></returns>
+    public bool Send(IpcData msg )
+    {
+      IntPtr? hWindow = ConnectedWindow;
+      if (null == hWindow)
+      {
+        return false;
+      }
+
+      var cds = new COPYDATASTRUCT
+      {
+        dwData = (IntPtr)3, //  copy message...
+        cbData = msg.GetSize(),
+        lpData = msg.GetPtr()
+      };
+
+      // cast to IntPtr because we know it is not null.
+      SendMessage((IntPtr)hWindow, WmCopyData, IntPtr.Zero, ref cds);
+      return true;
+    }
+
+    /// <summary>
     /// Send a close request to the main window.
     /// </summary>
     public bool Close()
@@ -82,12 +111,9 @@ namespace MyOdd
         return false;
       }
 
-      const int wmClose = 0x10;
-      const int wmCopyData = 0x004A;
-
       var myStruct = new MyStruct
       {
-        uMsg = wmClose,
+        uMsg = WmClose,
         wParam = 0,
         lParam = 0
       };
@@ -99,13 +125,15 @@ namespace MyOdd
       {
         Marshal.StructureToPtr(myStruct, pMyStruct, true);
 
-        COPYDATASTRUCT cds = new COPYDATASTRUCT();
-        cds.dwData = (IntPtr)1; //  send message
-        cds.cbData = myStructSize;
-        cds.lpData = pMyStruct;
+        var cds = new COPYDATASTRUCT
+        {
+          dwData = (IntPtr)1, //  send message
+          cbData = myStructSize,
+          lpData = pMyStruct
+        };
 
         // cast to IntPtr because we know it is not null.
-        SendMessage((IntPtr)hWindow, wmCopyData, IntPtr.Zero, ref cds);
+        SendMessage((IntPtr)hWindow, WmCopyData, IntPtr.Zero, ref cds);
       }
       finally
       {
