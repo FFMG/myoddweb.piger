@@ -2,6 +2,7 @@
 #include "ipclistener.h"
 #include <afxwin.h>
 #include "ipcdata.h"
+#include "../threads/lock.h"
 
 namespace myodd {
 namespace os {
@@ -10,6 +11,8 @@ static HWND _pParentWnd = nullptr;
 class IpcListenerWnd : public CWnd
 {
 protected:
+  std::mutex& _mutex;
+
   enum class IpcMessageType : unsigned int
   {
     None = 0,
@@ -27,7 +30,7 @@ protected:
   };
 
 public:
-  explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent)
+  explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex) : _mutex( mutex )
   {
     //  save the parent
     _pParentWnd = pParent;
@@ -134,8 +137,10 @@ public:
       {
         //  try and decrypt the message that was sent.
         auto ipcdata = new myodd::os::IpcData( static_cast<unsigned char*>(pcds->lpData), pcds->cbData);
+
+        // success
+        return 0;
       }
-      break;
 
     default:
       //  unknown message type
@@ -157,7 +162,23 @@ IpcListener::IpcListener(const wchar_t* serverName, void* parent ) :
 IpcListener::~IpcListener()
 {
   // remove the server.
-  delete static_cast<IpcListenerWnd*>(_pServer);
+  if (nullptr != _pServer)
+  {
+    // aquire the lock
+    threads::Lock guard(_mutex);
+
+    // now that we have the lock, do we need to do what we need to do?
+    if (nullptr != _pServer)
+    {
+      // delete it
+      delete static_cast<IpcListenerWnd*>(_pServer);
+
+      // clear it
+      _pServer = nullptr;
+    }
+
+    // release the lock(s)
+  }
 }
 
 /**
@@ -168,7 +189,15 @@ IpcListener::~IpcListener()
  */
 void IpcListener::Create(const wchar_t* serverName, void* pParent)
 {
-  _pServer = new IpcListenerWnd( serverName, (HWND)pParent );
+  // make sure we are only creating this once.
+  if (nullptr == _pServer)
+  {
+    threads::Lock guard(_mutex);
+    if (nullptr == _pServer)
+    {
+      _pServer = new IpcListenerWnd(serverName, static_cast<HWND>(pParent), _mutex);
+    }
+  }
 }
 
 }

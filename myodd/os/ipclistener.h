@@ -1,5 +1,7 @@
 #pragma once
 
+#include <mutex>
+
 namespace myodd {
   namespace os {
     class IpcListener
@@ -14,7 +16,11 @@ namespace myodd {
     protected:
       void Create(const wchar_t* serverName, void* pParent);
 
+      // the server window.
       void* _pServer;
+
+      // the mutex lock
+      std::mutex _mutex;
     };
   }
 }
