@@ -114,6 +114,7 @@ namespace AMPowerShellCmdLets.myodd
       // var msgBytes = System.Text.Encoding.Default.GetBytes(msg);
       var bytesSize = Bytes.Length;
       HGlobal = Marshal.AllocHGlobal(bytesSize);
+      Marshal.Copy(Bytes, 0, (IntPtr)HGlobal, bytesSize);
 
       return (IntPtr)HGlobal;
     }
