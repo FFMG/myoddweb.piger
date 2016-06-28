@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,7 +8,7 @@ namespace AMPowerShellCmdLets.myodd
 {
   public class IpcData
   {
-    private enum DataTye : short
+    private enum DataType : short
     {
       None = 0,
       Guid = 1,
@@ -15,6 +16,8 @@ namespace AMPowerShellCmdLets.myodd
       String = 3,
       StringAscii = 4
     };
+    
+    private List<dynamic> IpcArguments { get; set; }
 
     /// <summary>
     /// Check if we have a valid guid or not.
@@ -45,6 +48,9 @@ namespace AMPowerShellCmdLets.myodd
 
     public IpcData()
     {
+      //  the list of dynamics
+      IpcArguments = new List<dynamic>();
+
       // make sure it is null by default.
       HGlobal = null;
 
@@ -67,6 +73,9 @@ namespace AMPowerShellCmdLets.myodd
     /// <param name="bytes">The bytes data</param>
     public IpcData(byte[] bytes)
     {
+      //  the list of dynamics
+      IpcArguments = new List<dynamic>();
+
       // make sure it is null by default.
       HGlobal = null;
 
@@ -103,48 +112,36 @@ namespace AMPowerShellCmdLets.myodd
         var dataType = ReadDataType(bytes, ref pointer);
         switch (dataType)
         {
-          case DataTye.Guid:
+          case DataType.Guid:
             {
               // set the guid.
               Guid = ReadGuid(bytes, ref pointer);
             }
             break;
 
-          case DataTye.Int32:
+          case DataType.Int32:
             {
-              var dataValue = ReadInt32(bytes, ref pointer);
+              Add( ReadInt32(bytes, ref pointer));
             }
             break;
 
-          case DataTye.String://string unicode
+          case DataType.String://string unicode
             {
-              var sDataValue = ReadString(bytes, ref pointer);
+              Add( ReadString(bytes, ref pointer), true );
             }
             break;
 
-          case DataTye.StringAscii:
+          case DataType.StringAscii:
             {
-              var sDataValue = ReadAsciiString(bytes, ref pointer);
+              Add(ReadString(bytes, ref pointer), false );
             }
             break;
 
-          case DataTye.None:
+          case DataType.None:
           default:
             // no point goint further as we do no know the size of that argument.
             // even if we can move the pointer forward, it would be more luck than anything.
             throw new ArgumentException("Unknown argument type, I am unable to read the size/data for it.");
-        }
-
-        switch (dataType)
-        {
-          case DataTye.Guid:
-            //  the guid does not count as an argument.
-            break;
-
-          default:
-            //  we found a valid argument.
-            ++ArgumentsCount;
-            break;
         }
       }
     }
@@ -161,12 +158,12 @@ namespace AMPowerShellCmdLets.myodd
     /// <param name="bytes">the bytes we are reading from</param>
     /// <param name="pointer">the current pointer location</param>
     /// <returns></returns>
-    private static DataTye ReadDataType(byte[] bytes, ref int pointer)
+    private static DataType ReadDataType(byte[] bytes, ref int pointer)
     {
       //  check that we have enough data.
       if (pointer + sizeof(short) > bytes.Length)
       {
-        throw new ArgumentOutOfRangeException("We there is not enough data to read the data type.");
+        throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read the data type.");
       }
 
       // create the destination item
@@ -179,7 +176,7 @@ namespace AMPowerShellCmdLets.myodd
       pointer += sizeof(short);
 
       // return the converted value.
-      return (DataTye)BitConverter.ToInt16(dst, 0);
+      return (DataType)BitConverter.ToInt16(dst, 0);
     }
 
     /// <summary>
@@ -193,7 +190,7 @@ namespace AMPowerShellCmdLets.myodd
       //  check that we have enough data.
       if( pointer + sizeof(int) > bytes.Length)
       {
-        throw new ArgumentOutOfRangeException("We there is not enough data to read.");
+        throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
       }
 
       // create the destination item
@@ -217,6 +214,12 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     private static string ReadString(byte[] bytes, ref int pointer)
     {
+      //  check that we have enough data for the length.
+      if (pointer + sizeof(int) > bytes.Length)
+      {
+        throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
+      }
+
       // create the destination item
       var dstDataSize = new byte[sizeof(int)];
 
@@ -226,6 +229,18 @@ namespace AMPowerShellCmdLets.myodd
 
       // update the pointer.
       pointer += sizeof(int);
+
+      // do we have anything to read?
+      if (dataSize == 0)
+      {
+        return "";
+      }
+
+      //  check that we have enough data for the size.
+      if (pointer + (dataSize * sizeof(char)) > bytes.Length)
+      {
+        throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
+      }
 
       //  now get the data itself
       // create the destination item
@@ -249,6 +264,12 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     private static string ReadAsciiString(byte[] bytes, ref int pointer)
     {
+      //  check that we have enough data for the length.
+      if (pointer + sizeof(int) > bytes.Length)
+      {
+        throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
+      }
+
       // create the destination item
       var dstDataSize = new byte[sizeof(int)];
 
@@ -258,6 +279,12 @@ namespace AMPowerShellCmdLets.myodd
 
       // update the pointer.
       pointer += sizeof(int);
+
+      //  check that we have enough data for the size.
+      if (pointer + dataSize > bytes.Length)
+      {
+        throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
+      }
 
       //  now get the data itself
       // create the destination item
@@ -313,7 +340,7 @@ namespace AMPowerShellCmdLets.myodd
     private void AddGuid()
     {
       Add(Combine(new byte[][]{
-        BitConverter.GetBytes( (short)DataTye.Guid ),     //  short
+        BitConverter.GetBytes( (short)DataType.Guid ),     //  short
         BitConverter.GetBytes( Guid.Length),        //  Int32, size is guaranteed.
         System.Text.Encoding.Unicode.GetBytes(Guid)
         }
@@ -331,7 +358,7 @@ namespace AMPowerShellCmdLets.myodd
       {
         var stringInBytes = Encoding.Unicode.GetBytes(stringToAdd);
         Add(Combine(new byte[][]{
-        BitConverter.GetBytes( (short)DataTye.String ),   //  short
+        BitConverter.GetBytes( (short)DataType.String ),   //  short
         BitConverter.GetBytes( stringToAdd.Length),       //  Int32, size is guaranteed.
         stringInBytes
         }
@@ -340,12 +367,19 @@ namespace AMPowerShellCmdLets.myodd
       else
       {
         Add(Combine(new byte[][]{
-        BitConverter.GetBytes( (short)DataTye.StringAscii ),   //  short
+        BitConverter.GetBytes( (short)DataType.StringAscii ),   //  short
         BitConverter.GetBytes( stringToAdd.Length),         //  Int32, size is guaranteed.
         System.Text.Encoding.ASCII.GetBytes(stringToAdd)
         }
         ));
       }
+
+      //  add to the arguments list.
+      IpcArguments.Add(new
+      {
+        data = stringToAdd,
+        type = (asUnicode ? DataType.String : DataType.StringAscii)
+      });
 
       // update the argument count.
       ArgumentsCount++;
@@ -359,10 +393,17 @@ namespace AMPowerShellCmdLets.myodd
     {
       Add( Combine( new[]
       {
-        BitConverter.GetBytes( (short)DataTye.Int32),  //  short
+        BitConverter.GetBytes( (short)DataType.Int32),  //  short
         BitConverter.GetBytes(numberToAdd)                //  int32
         }               
       ));
+
+      //  add to the arguments list.
+      IpcArguments.Add(new
+      {
+        data = numberToAdd,
+        type = DataType.Int32
+      });
 
       // update the argument count.
       ArgumentsCount++;
@@ -440,6 +481,15 @@ namespace AMPowerShellCmdLets.myodd
       Marshal.Copy(Bytes, 0, (IntPtr)HGlobal, bytesSize);
 
       return (IntPtr)HGlobal;
+    }
+
+    public object Get( uint index )
+    {
+      if (index >= ArgumentsCount)
+      {
+        throw new ArgumentOutOfRangeException(nameof(index));
+      }
+      return IpcArguments[ (int)index].data;
     }
   }
 }

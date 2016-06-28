@@ -5,7 +5,7 @@ using AMPowerShellCmdLets.myodd;
 namespace AMPowerShellCmdLetsTest
 {
   [TestClass]
-  public class ipcdatatest
+  public class IpcDataTest
   {
     [TestMethod]
     public void TestHasGuidByDefault()
@@ -20,10 +20,72 @@ namespace AMPowerShellCmdLetsTest
     }
 
     [TestMethod]
+    public void TestGetSingleTypes()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add( "Hello" );
+      emptyIpcData.Add( "World" );
+
+      // check the values.
+      Assert.AreEqual( "Hello", emptyIpcData.Get(0));
+      Assert.AreEqual( "World", emptyIpcData.Get(1));
+    }
+
+    [TestMethod]
+    public void TestGetDifferentTypes()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add("Hello");
+      emptyIpcData.Add("World");
+      emptyIpcData.Add( 42 );
+      emptyIpcData.Add( "Something", false );
+
+      // check the values.
+      Assert.AreEqual("Hello", emptyIpcData.Get(0));
+      Assert.AreEqual("World", emptyIpcData.Get(1));
+      Assert.AreEqual(42, emptyIpcData.Get(2));
+      Assert.AreEqual("Something", emptyIpcData.Get(3));
+    }
+
+    [TestMethod]
+    public void TestTheArgumentCountIsValid()
+    {
+      var emptyIpcData = new IpcData();
+
+      Assert.AreEqual( (uint)0, emptyIpcData.ArgumentsCount);
+      emptyIpcData.Add("Hello");
+      emptyIpcData.Add("World");
+      Assert.AreEqual( (uint)2 , emptyIpcData.ArgumentsCount );
+      emptyIpcData.Add(42);
+      Assert.AreEqual( (uint)3, emptyIpcData.ArgumentsCount);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There are no items in the list to get.")]
+    public void TestTryingToGetAnEmptyItemOutOfRange()
+    {
+      var emptyIpcData = new IpcData();
+      var something = emptyIpcData.Get(0);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There are no items in the list to get.")]
+    public void TestTryingToGetANonEmptyItemOutOfRange()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add(42);
+
+      Assert.AreEqual(42, emptyIpcData.Get(0));
+
+      //  out of range
+      emptyIpcData.Get(1);
+    }
+
+    [TestMethod]
     [ExpectedException(typeof(ArgumentException), "The argument must have at least a version number.")]
     public void TestTryingToPassEmptyByteArray()
     {
-      new IpcData( new byte[0] );
+      new IpcData( new byte[] {} );
     }
 
     [TestMethod]
@@ -31,7 +93,7 @@ namespace AMPowerShellCmdLetsTest
     public void TestTryingToPassByteArrayTooSmall()
     {
       //  the size should be 4
-      new IpcData(new byte[3] { 0,0,0 });
+      new IpcData(new byte[] { 0,0,0 });
     }
 
     [TestMethod]
@@ -39,7 +101,7 @@ namespace AMPowerShellCmdLetsTest
     public void TestVersionNumberIsPastOurCurrentNumber()
     {
       //  the current version number is 100
-      new IpcData(new byte[4] { 200, 0, 0, 0 });
+      new IpcData(new byte[] { 200, 0, 0, 0 });
     }
 
     [TestMethod]
@@ -48,7 +110,7 @@ namespace AMPowerShellCmdLetsTest
     {
       //  current version number is 100
 
-      new IpcData(new byte[6] { 100, 0, 0, 0, //  version
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 12, 0         //  unknown type
                               });
     }
@@ -59,8 +121,18 @@ namespace AMPowerShellCmdLetsTest
     {
       //  current version number is 100
 
-      new IpcData(new byte[5] { 100, 0, 0, 0, //  version
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 2             //  too small.
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the Guid.")]
+    public void TestNoDataToReadGuid()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                1, 0          //  data type guid
                               });
     }
 
@@ -69,8 +141,75 @@ namespace AMPowerShellCmdLetsTest
     public void TestNoDataToReadInteger()
     {
       //  give a data type of int32, but no data to read
-      new IpcData(new byte[6] { 100, 0, 0, 0, //  version
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 2, 0          //  data type int32
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the string.")]
+    public void TestNoDataToReadString()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                3, 0          //  data type string
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the ascii string.")]
+    public void TestNoDataToReadStringAscii()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                4, 0          //  data type string ascii
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    public void TestNotEnoughDataToReadAGuid()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                1, 0,         //  data type guid
+                                0, 0, 0       //  not enough data to make an int32
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    public void TestCanReadGuidSizeButNoData()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                1, 0,        //  data type guid
+                                10, 0, 0,0   //  size of 10
+                                             //  but no more data
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    public void TestCanReadStringSizeButNoData()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                3, 0,        //  data type string
+                                10, 0, 0,0   //  size of 10
+                                             //  but no more data
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    public void TestCanReadAsciiStringSizeButNoData()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                4, 0,        //  data type guid
+                                10, 0, 0,0   //  size of 10
+                                             //  but no more data
                               });
     }
 
@@ -79,23 +218,56 @@ namespace AMPowerShellCmdLetsTest
     public void TestNotEnoughDataToReadAnInteger()
     {
       //  give a data type of int32, but no data to read
-      new IpcData(new byte[9] { 100, 0, 0, 0, //  version
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 2, 0,         //  data type int32
                                 0, 0, 0       //  not enough data to make an int32
                               });
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the unicode string.")]
+    public void TestNotEnoughDataToReadAString()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                3, 0,         //  data type unicode string
+                                0, 0, 0       //  not enough data to make an int32
+                              });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the unicode string.")]
+    public void TestNotEnoughDataToReadAnAsciiString()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                4, 0,         //  data type ascii string
+                                0, 0, 0       //  not enough data to make an int32
+                              });
+    }
+    
+    [TestMethod]
     [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int32.")]
     public void TestCanReadOneInt32ButNotEnoughDataToReadAnotherInteger()
     {
       //  give a data type of int32, but no data to read
-      new IpcData(new byte[15] { 100, 0, 0, 0, //  version
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                  2, 0,         //  data type int32
                                  20, 0, 0, 0,  //  first interger is valid
                                  2, 0,         //  data type int32
                                  0, 0, 0       //  not enough data to make an int32
                                });
+    }
+
+    [TestMethod]
+    public void TestStringCanBeSizeZero()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                3, 0,        //  data type string
+                                0, 0, 0,0    //  size of 0
+                                             //  no more data needed.
+                              });
     }
   }
 }
