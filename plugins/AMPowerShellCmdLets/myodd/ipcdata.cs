@@ -83,7 +83,7 @@ namespace AMPowerShellCmdLets.myodd
       var dataSize = bytes.Length;
       if (dataSize < sizeof(int))
       {
-        throw new Exception("invalid data size, we need at least the version number.");
+        throw new ArgumentException("Invalid data size, we need at least the version number.");
       }
 
       // the pointer to keep track of where we are.
@@ -91,7 +91,11 @@ namespace AMPowerShellCmdLets.myodd
 
       //  get the version number
       var versionNumber = ReadVersionNumber(bytes, ref pointer);
-      
+      if( versionNumber > VersionNumber )
+      {
+        throw new ArgumentException("The given version number is greater than the supported version number.");
+      }
+
       //  now read all the data
       for (; pointer < dataSize;)
       {
@@ -128,7 +132,7 @@ namespace AMPowerShellCmdLets.myodd
           default:
             // no point goint further as we do no know the size of that argument.
             // even if we can move the pointer forward, it would be more luck than anything.
-            throw new Exception("Unknown argument type, I am unable to read the size/data for it.");
+            throw new ArgumentException("Unknown argument type, I am unable to read the size/data for it.");
         }
 
         switch (dataType)
@@ -159,6 +163,12 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     private static DataTye ReadDataType(byte[] bytes, ref int pointer)
     {
+      //  check that we have enough data.
+      if (pointer + sizeof(short) > bytes.Length)
+      {
+        throw new ArgumentOutOfRangeException("We there is not enough data to read the data type.");
+      }
+
       // create the destination item
       var dst = new byte[sizeof(short)];
 
@@ -180,6 +190,12 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     private static int ReadInt32(byte[] bytes, ref int pointer)
     {
+      //  check that we have enough data.
+      if( pointer + sizeof(int) > bytes.Length)
+      {
+        throw new ArgumentOutOfRangeException("We there is not enough data to read.");
+      }
+
       // create the destination item
       var dst = new byte[sizeof(int)];
 
