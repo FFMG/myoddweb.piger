@@ -24,7 +24,10 @@ namespace AMPowerShellCmdLets
       ipcRequest.Add("Hello", false );  //  ascii
 
       var ipcResponse = x.Send(ipcRequest);
-      var i = ipcResponse.Get<int>(0);
+      if (null != ipcResponse)
+      {
+        var i = ipcResponse.Get<int>(0);
+      }
     }
   }
 }

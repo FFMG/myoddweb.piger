@@ -74,6 +74,7 @@ static const TCHAR CONF_MUTEXT[]	  = _T("MyOddweb_com_ActionMonitor"); //  if yo
 #define ACTIONMONITOR_API_LUA
 #define ACTIONMONITOR_API_PY
 #define ACTIONMONITOR_API_PLUGIN
+#define ACTIONMONITOR_PS_PLUGIN
 
 #ifdef ACTIONMONITOR_API_LUA
 #   include "../api/luavirtualmachine.h"
@@ -85,4 +86,8 @@ static const TCHAR CONF_MUTEXT[]	  = _T("MyOddweb_com_ActionMonitor"); //  if yo
 
 #ifdef ACTIONMONITOR_API_PLUGIN
 #   include "../api/pluginvirtualmachine.h"
+#endif
+
+#ifdef ACTIONMONITOR_PS_PLUGIN
+#   include "../api/powershellvirtualmachine.h"
 #endif

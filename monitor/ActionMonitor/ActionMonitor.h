@@ -106,6 +106,14 @@ protected:
 public:
   PluginVirtualMachine* GetPluginVirtualMachine();
 #endif
+
+#ifdef ACTIONMONITOR_PS_PLUGIN
+protected:
+  PowershellVirtualMachine* _psvm;
+
+public:
+  PowershellVirtualMachine* GetPowershellVirtualMachine();
+#endif
 };
 
 CActionMonitorApp& App();

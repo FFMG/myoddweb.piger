@@ -176,6 +176,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\api\PluginVirtualMachine.cpp" />
+    <ClCompile Include="..\api\powershellvirtualmachine.cpp" />
     <ClCompile Include="..\api\pyapi.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -199,6 +200,7 @@
     <ClCompile Include="ActiveDefaultAction.cpp" />
     <ClCompile Include="ActiveLuaAction.cpp" />
     <ClCompile Include="ActivePluginAction.cpp" />
+    <ClCompile Include="ActivePowershellAction.cpp" />
     <ClCompile Include="ActivePythonAction.cpp" />
     <ClCompile Include="ActiveUserMessageAction.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
@@ -217,6 +219,7 @@
     <ClInclude Include="..\api\LuaVirtualMachine.h" />
     <ClInclude Include="..\api\pluginapi.h" />
     <ClInclude Include="..\api\PluginVirtualMachine.h" />
+    <ClInclude Include="..\api\powershellvirtualmachine.h" />
     <ClInclude Include="..\api\pyapi.h" />
     <ClInclude Include="..\api\pyconfig.h" />
     <ClInclude Include="..\api\PythonVirtualMachine.h" />
@@ -239,6 +242,7 @@
     <ClInclude Include="ActiveDefaultAction.h" />
     <ClInclude Include="ActiveLuaAction.h" />
     <ClInclude Include="ActivePluginAction.h" />
+    <ClInclude Include="ActivePowershellAction.h" />
     <ClInclude Include="ActivePythonAction.h" />
     <ClInclude Include="ActiveUserMessageAction.h" />
     <ClInclude Include="FadeWnd.h" />

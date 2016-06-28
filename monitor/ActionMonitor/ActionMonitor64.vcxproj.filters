@@ -114,6 +114,12 @@
     <ClCompile Include="ActiveDefaultAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="..\api\powershellvirtualmachine.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="ActivePowershellAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -224,6 +230,12 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveDefaultAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\powershellvirtualmachine.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="ActivePowershellAction.h">
       <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>

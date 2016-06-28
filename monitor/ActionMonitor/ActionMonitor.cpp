@@ -34,6 +34,9 @@ CActionMonitorApp::CActionMonitorApp() :
 #ifdef ACTIONMONITOR_API_PLUGIN
   , _plugvm(nullptr)
 #endif
+#ifdef ACTIONMONITOR_PS_PLUGIN
+  , _psvm(nullptr)
+#endif
 {
 }
 
@@ -55,6 +58,10 @@ CActionMonitorApp::~CActionMonitorApp()
 #ifdef ACTIONMONITOR_API_PLUGIN
   delete _plugvm;
   _plugvm = nullptr;
+#endif
+#ifdef ACTIONMONITOR_PS_PLUGIN
+  delete _psvm;
+  _psvm = nullptr;
 #endif
 }
 
@@ -88,6 +95,17 @@ PluginVirtualMachine* CActionMonitorApp::GetPluginVirtualMachine()
     _plugvm = new PluginVirtualMachine();
   }
   return _plugvm;
+}
+#endif
+
+#ifdef ACTIONMONITOR_PS_PLUGIN
+PowershellVirtualMachine* CActionMonitorApp::GetPowershellVirtualMachine()
+{
+  if (_psvm == nullptr)
+  {
+    _psvm = new PowershellVirtualMachine();
+  }
+  return _psvm;
 }
 #endif
 /////////////////////////////////////////////////////////////////////////////

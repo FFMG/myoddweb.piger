@@ -12,6 +12,7 @@
 #include "activedefaultaction.h"
 
 #include "os\os.h"
+#include "ActivePowershellAction.h"
 
 /**
  * todo
@@ -409,6 +410,22 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
     delete apa;
   }
 #endif // ACTIONMONITOR_API_PY
+
+#ifdef ACTIONMONITOR_PS_PLUGIN
+  // Do the API calls.
+  //
+  if (PowershellVirtualMachine::IsPluginExt(szExt.c_str()))
+  {
+    ActivePowershellAction* apa = new ActivePowershellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    if (apa->Initialize())
+    {
+      return apa;
+    }
+
+    // did not work, try the default way...
+    delete apa;
+  }
+#endif // ACTIONMONITOR_API_PLUGIN
 
 #ifdef ACTIONMONITOR_API_PLUGIN
   // Do the API calls.

@@ -31,8 +31,7 @@ bool CActionMonitorDlg::IsRunning()
 CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
 	: CTrayDialog(CActionMonitorDlg::IDD, pParent), 
   m_keyState (ACTION_NONE),
-  fontTime(nullptr),
-  _IpcListener( nullptr )
+  fontTime(nullptr)
 {
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -53,9 +52,6 @@ CActionMonitorDlg::~CActionMonitorDlg()
     fontTime->DeleteObject();
     delete fontTime;
   }
-
-  delete _IpcListener;
-  _IpcListener = nullptr;
 }
 
 /**
@@ -149,9 +145,6 @@ BOOL CActionMonitorDlg::OnInitDialog()
 
   //  setup the hooks and the key
   InitHook();
-
-  // create the IPC server
-  _IpcListener = new myodd::os::IpcListener(CONF_MUTEXT, GetSafeHwnd() );
 
   return TRUE;
 }
