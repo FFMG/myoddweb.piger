@@ -20,7 +20,7 @@ namespace myodd {
        * The IPC data parser
        */
       IpcData( unsigned char* pData, unsigned int dataSize );
-      IpcData( const std::wstring& guid );
+      explicit IpcData( const std::wstring& guid );
       virtual ~IpcData();
 
       // the number of arguments.

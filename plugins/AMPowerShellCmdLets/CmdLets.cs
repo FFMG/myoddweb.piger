@@ -17,25 +17,14 @@ namespace AMPowerShellCmdLets
       const string name = "MyOddweb_com_ActionMonitor";
       var x = new MyOdd.IpcConnector(name);
 
-      //  send a null request
-      x.Send( new myodd.IpcData() );
-
-      // send a request with just a number
-      //var y1 = new myodd.IpcData();
-      //y1.Add(34);
-      //x.Send( y1 );
-
-      // send a request with just a string
-      //var y2 = new myodd.IpcData();
-      //y2.Add("Hello");
-      //x.Send(y2);
-
       // send a request with just a number and a string
-      var y3 = new myodd.IpcData();
-      y3.Add(12);
-      y3.Add("Hello");
-      y3.Add("Hello", false );  //  ascii
-      x.Send(y3);
+      var ipcRequest = new myodd.IpcData();
+      ipcRequest.Add(12);
+      ipcRequest.Add("Hello");
+      ipcRequest.Add("Hello", false );  //  ascii
+
+      var ipcResponse = x.Send(ipcRequest);
+      var i = (int)ipcResponse.Get(0);
     }
   }
 }

@@ -133,7 +133,7 @@ namespace AMPowerShellCmdLets.myodd
 
           case DataType.StringAscii:
             {
-              Add(ReadString(bytes, ref pointer), false );
+              Add(ReadAsciiString(bytes, ref pointer), false );
             }
             break;
 
@@ -279,6 +279,12 @@ namespace AMPowerShellCmdLets.myodd
 
       // update the pointer.
       pointer += sizeof(int);
+
+      // do we have anything to read?
+      if (dataSize == 0)
+      {
+        return "";
+      }
 
       //  check that we have enough data for the size.
       if (pointer + dataSize > bytes.Length)

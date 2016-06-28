@@ -51,18 +51,18 @@ void IpcData::ResetArguments()
     {
     case IpcDataType::Int32:
       // delete the data.
-      delete ((signed int*)ia->pData);
+      delete static_cast<signed int*>(ia->pData);
       break;
 
     case IpcDataType::String:
     case IpcDataType::Guid:
       // delete the data.
-      delete ((std::wstring*)ia->pData);
+      delete static_cast<std::wstring*>(ia->pData);
       break;
 
     case IpcDataType::StringAscii:
       // delete the data.
-      delete ((std::string*)ia->pData);
+      delete static_cast<std::string*>(ia->pData);
       break;
 
     case IpcDataType::None:
@@ -236,8 +236,12 @@ unsigned char* IpcData::GetPtr()
       pointer += sizeof(dataSize);
 
       //  now add the dataitself.
-      memcpy(static_cast<PVOID>(_pData + pointer), dataValue->c_str(), dataSize * sizeof(wchar_t));
-      pointer += dataSize * sizeof(wchar_t);
+      //  now add the dataitself.
+      if (dataSize > 0)
+      {
+        memcpy(static_cast<PVOID>(_pData + pointer), dataValue->c_str(), dataSize * sizeof(wchar_t));
+        pointer += dataSize * sizeof(wchar_t);
+      }
     }
     break;
 
@@ -252,8 +256,11 @@ unsigned char* IpcData::GetPtr()
       pointer += sizeof(dataSize);
 
       //  now add the dataitself.
-      memcpy(static_cast<PVOID>(_pData + pointer), dataValue->c_str(), dataSize * sizeof(char));
-      pointer += dataSize * sizeof(char);
+      if (dataSize > 0)
+      {
+        memcpy(static_cast<PVOID>(_pData + pointer), dataValue->c_str(), dataSize * sizeof(char));
+        pointer += dataSize * sizeof(char);
+      }
     }
     break;
 
