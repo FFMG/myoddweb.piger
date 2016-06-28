@@ -40,14 +40,35 @@ IpcData::~IpcData()
  */
 void IpcData::ResetArguments()
 {
-  for(IpcArguments::const_iterator it = _ipcArguments.begin();
+  for(auto it = _ipcArguments.begin();
       it != _ipcArguments.end();
       ++it)
   {
+    // the pointer
     auto ia = (*it);
-    
-    // delete the data.
-    delete ia->pData;
+
+    switch (ia->dataType)
+    {
+    case IpcDataType::Int32:
+      // delete the data.
+      delete ((signed int*)ia->pData);
+      break;
+
+    case IpcDataType::String:
+    case IpcDataType::Guid:
+      // delete the data.
+      delete ((std::wstring*)ia->pData);
+      break;
+
+    case IpcDataType::StringAscii:
+      // delete the data.
+      delete ((std::string*)ia->pData);
+      break;
+
+    case IpcDataType::None:
+    default:
+      throw "Unnown data type.";
+    }
 
     // delete the data
     delete ia;

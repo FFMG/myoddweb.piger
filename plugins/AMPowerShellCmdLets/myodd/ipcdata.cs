@@ -56,9 +56,15 @@ namespace AMPowerShellCmdLets.myodd
 
       // set the guid
       Guid = System.Guid.NewGuid().ToString();
+
+      // add this guid.
       AddGuid();
     }
 
+    /// <summary>
+    /// Constructor with given bytes.
+    /// </summary>
+    /// <param name="bytes">The bytes data</param>
     public IpcData(byte[] bytes)
     {
       // make sure it is null by default.
@@ -145,6 +151,12 @@ namespace AMPowerShellCmdLets.myodd
       ResetPtr();
     }
 
+    /// <summary>
+    /// Get current data type.
+    /// </summary>
+    /// <param name="bytes">the bytes we are reading from</param>
+    /// <param name="pointer">the current pointer location</param>
+    /// <returns></returns>
     private static DataTye ReadDataType(byte[] bytes, ref int pointer)
     {
       // create the destination item
@@ -160,6 +172,12 @@ namespace AMPowerShellCmdLets.myodd
       return (DataTye)BitConverter.ToInt16(dst, 0);
     }
 
+    /// <summary>
+    /// Get the string an integer.
+    /// </summary>
+    /// <param name="bytes">the bytes we are reading from</param>
+    /// <param name="pointer">the current pointer location</param>
+    /// <returns></returns>
     private static int ReadInt32(byte[] bytes, ref int pointer)
     {
       // create the destination item
@@ -175,6 +193,12 @@ namespace AMPowerShellCmdLets.myodd
       return BitConverter.ToInt32(dst, 0);
     }
 
+    /// <summary>
+    /// Get the string as unicode
+    /// </summary>
+    /// <param name="bytes">the bytes we are reading from</param>
+    /// <param name="pointer">the current pointer location</param>
+    /// <returns></returns>
     private static string ReadString(byte[] bytes, ref int pointer)
     {
       // create the destination item
@@ -201,6 +225,12 @@ namespace AMPowerShellCmdLets.myodd
       return Encoding.Unicode.GetString(dstData );
     }
 
+    /// <summary>
+    /// Get the string as ascii
+    /// </summary>
+    /// <param name="bytes">the bytes we are reading from</param>
+    /// <param name="pointer">the current pointer location</param>
+    /// <returns></returns>
     private static string ReadAsciiString(byte[] bytes, ref int pointer)
     {
       // create the destination item
@@ -227,12 +257,24 @@ namespace AMPowerShellCmdLets.myodd
       return Encoding.ASCII.GetString(dstData);
     }
 
+    /// <summary>
+    /// Get the Guid, (a string as unicode)
+    /// </summary>
+    /// <param name="bytes">the bytes we are reading from</param>
+    /// <param name="pointer">the current pointer location</param>
+    /// <returns></returns>
     private static string ReadGuid(byte[] bytes, ref int pointer)
     {
       // this is a wide string
       return ReadString(bytes, ref pointer);
     }
 
+    /// <summary>
+    /// Get the current version number.
+    /// </summary>
+    /// <param name="bytes">the bytes we are reading from</param>
+    /// <param name="pointer">the current pointer location</param>
+    /// <returns></returns>
     private static int ReadVersionNumber(byte[] bytes, ref int pointer)
     {
       // create the destination item
@@ -248,6 +290,10 @@ namespace AMPowerShellCmdLets.myodd
       return BitConverter.ToInt32(dst, 0);
     }
 
+    /// <summary>
+    /// Add the GUID as a string.
+    /// </summary>
+    /// <returns></returns>
     private void AddGuid()
     {
       Add(Combine(new byte[][]{
@@ -357,6 +403,10 @@ namespace AMPowerShellCmdLets.myodd
       return Bytes?.Length ?? sizeof(int);
     }
 
+    /// <summary>
+    /// Get the pointer for transmission.
+    /// </summary>
+    /// <returns></returns>
     public IntPtr GetPtr()
     {
       if( null != HGlobal )
