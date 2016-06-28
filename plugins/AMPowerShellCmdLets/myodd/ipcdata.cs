@@ -113,28 +113,29 @@ namespace AMPowerShellCmdLets.myodd
         switch (dataType)
         {
           case DataType.Guid:
-          {
-            // set the guid.
-            Guid = ReadGuid(bytes, ref pointer);
-          }
+            {
+              // set the guid.
+              Guid = ReadGuid(bytes, ref pointer);
+              AddGuid();
+            }
             break;
 
           case DataType.Int32:
-          {
-            Add(ReadInt32(bytes, ref pointer));
-          }
+            {
+              Add(ReadInt32(bytes, ref pointer));
+            }
             break;
 
           case DataType.String: //string unicode
-          {
-            Add(ReadString(bytes, ref pointer), true);
-          }
+            {
+              Add(ReadString(bytes, ref pointer), true);
+            }
             break;
 
           case DataType.StringAscii:
-          {
-            Add(ReadAsciiString(bytes, ref pointer), false);
-          }
+            {
+              Add(ReadAsciiString(bytes, ref pointer), false);
+            }
             break;
 
           case DataType.None:
@@ -176,7 +177,7 @@ namespace AMPowerShellCmdLets.myodd
       pointer += sizeof(short);
 
       // return the converted value.
-      return (DataType) BitConverter.ToInt16(dst, 0);
+      return (DataType)BitConverter.ToInt16(dst, 0);
     }
 
     /// <summary>
@@ -237,20 +238,20 @@ namespace AMPowerShellCmdLets.myodd
       }
 
       //  check that we have enough data for the size.
-      if (pointer + (dataSize*sizeof(char)) > bytes.Length)
+      if (pointer + (dataSize * sizeof(char)) > bytes.Length)
       {
         throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
       }
 
       //  now get the data itself
       // create the destination item
-      var dstData = new byte[dataSize*sizeof(char)];
+      var dstData = new byte[dataSize * sizeof(char)];
 
       // copy from where we are to where we are going.
-      Array.Copy(bytes, pointer, dstData, 0, dataSize*sizeof(char));
+      Array.Copy(bytes, pointer, dstData, 0, dataSize * sizeof(char));
 
       // update the pointer.
-      pointer += dataSize*sizeof(char);
+      pointer += dataSize * sizeof(char);
 
       // return the converted value.
       return Encoding.Unicode.GetString(dstData);
@@ -351,7 +352,14 @@ namespace AMPowerShellCmdLets.myodd
         BitConverter.GetBytes(Guid.Length), //  Int32, size is guaranteed.
         System.Text.Encoding.Unicode.GetBytes(Guid)
       }
-        ));
+      ));
+
+      //  add to the arguments list.
+      IpcArguments.Add(new
+      {
+        data = Guid,
+        type = DataType.Guid
+      });
     }
 
     /// <summary>
@@ -452,7 +460,7 @@ namespace AMPowerShellCmdLets.myodd
     {
       if (HGlobal != null)
       {
-        Marshal.FreeHGlobal((IntPtr) HGlobal);
+        Marshal.FreeHGlobal((IntPtr)HGlobal);
         HGlobal = null;
       }
     }
@@ -477,7 +485,7 @@ namespace AMPowerShellCmdLets.myodd
     {
       if (null != HGlobal)
       {
-        return (IntPtr) HGlobal;
+        return (IntPtr)HGlobal;
       }
 
       // make sure we clean what needst to be
@@ -487,9 +495,9 @@ namespace AMPowerShellCmdLets.myodd
       // var msgBytes = System.Text.Encoding.Default.GetBytes(msg);
       var bytesSize = Bytes.Length;
       HGlobal = Marshal.AllocHGlobal(bytesSize);
-      Marshal.Copy(Bytes, 0, (IntPtr) HGlobal, bytesSize);
+      Marshal.Copy(Bytes, 0, (IntPtr)HGlobal, bytesSize);
 
-      return (IntPtr) HGlobal;
+      return (IntPtr)HGlobal;
     }
 
     private static bool IsNumericType(Type t)
@@ -534,21 +542,25 @@ namespace AMPowerShellCmdLets.myodd
         throw new ArgumentOutOfRangeException(nameof(index));
       }
 
-      var objectData = IpcArguments[(int) index].data;
+      // rebuild the arguments without Guid.
+      var arguments = IpcArguments.Where(t => t.type != DataType.Guid).ToList();
+      
+      // then look for the argument we are after.
+      var objectData = arguments[(int)index].data;
       var type = typeof(T);
       if (Type.GetTypeCode(type) == TypeCode.Object)
       {
         return objectData;
       }
 
-      var objectType = (DataType) IpcArguments[(int) index].type;
+      var objectType = (DataType)arguments[(int)index].type;
 
       if (IsNumericType(type))
       {
         switch (objectType)
         {
           case DataType.Int32:
-            return (T) objectData;
+            return (T)objectData;
 
           default:
             throw new InvalidCastException();
@@ -560,15 +572,15 @@ namespace AMPowerShellCmdLets.myodd
         switch (objectType)
         {
           case DataType.Int32:
-            var i = (int) objectData;
+            var i = (int)objectData;
             var s = i.ToString();
-            var o = (object) s;
-            return (T) o;
+            var o = (object)s;
+            return (T)o;
 
           case DataType.Guid:
           case DataType.String:
           case DataType.StringAscii:
-            return (T) objectData;
+            return (T)objectData;
 
           default:
             throw new InvalidCastException();

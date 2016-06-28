@@ -24,6 +24,11 @@ IpcData::IpcData(const std::wstring& guid) :
   _pData(nullptr),
   _pDataSize(0)
 {
+  //  add it to our list.
+  _ipcArguments.push_back(new IpcArgument{
+    new std::wstring(_guid),
+    IpcDataType::Guid
+  });
 }
 
 IpcData::~IpcData()

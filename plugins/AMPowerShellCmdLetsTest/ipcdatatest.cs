@@ -287,5 +287,26 @@ namespace AMPowerShellCmdLetsTest
       Assert.AreEqual((double)67, emptyIpcData.Get<double>(2));
       Assert.AreEqual((float)67, emptyIpcData.Get<float>(2));
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidCastException), "Tring to convert a string to a number.")]
+    public void TestTryingtogetANumberWhenTheArgumentIsAString()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add("Hello");
+
+      // this is not a number.
+      emptyIpcData.Get<long>(0);
+    }
+
+    [TestMethod]
+    public void TestANumberCanBeCastToAString()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add( 12 );
+
+      // we can cast the number to a string.
+      Assert.AreEqual( "12", emptyIpcData.Get<string>(0) );
+    }
   }
 }
