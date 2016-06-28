@@ -27,8 +27,8 @@ namespace AMPowerShellCmdLetsTest
       emptyIpcData.Add( "World" );
 
       // check the values.
-      Assert.AreEqual( "Hello", emptyIpcData.Get(0));
-      Assert.AreEqual( "World", emptyIpcData.Get(1));
+      Assert.AreEqual( "Hello", emptyIpcData.Get<string>(0));
+      Assert.AreEqual( "World", emptyIpcData.Get<string>(1));
     }
 
     [TestMethod]
@@ -41,10 +41,10 @@ namespace AMPowerShellCmdLetsTest
       emptyIpcData.Add( "Something", false );
 
       // check the values.
-      Assert.AreEqual("Hello", emptyIpcData.Get(0));
-      Assert.AreEqual("World", emptyIpcData.Get(1));
-      Assert.AreEqual(42, emptyIpcData.Get(2));
-      Assert.AreEqual("Something", emptyIpcData.Get(3));
+      Assert.AreEqual("Hello", emptyIpcData.Get<string>(0));
+      Assert.AreEqual("World", emptyIpcData.Get<string>(1));
+      Assert.AreEqual(42, emptyIpcData.Get<int>(2));
+      Assert.AreEqual("Something", emptyIpcData.Get<string>(3));
     }
 
     [TestMethod]
@@ -65,7 +65,7 @@ namespace AMPowerShellCmdLetsTest
     public void TestTryingToGetAnEmptyItemOutOfRange()
     {
       var emptyIpcData = new IpcData();
-      var something = emptyIpcData.Get(0);
+      var something = emptyIpcData.Get<object>(0);
     }
 
     [TestMethod]
@@ -75,10 +75,10 @@ namespace AMPowerShellCmdLetsTest
       var emptyIpcData = new IpcData();
       emptyIpcData.Add(42);
 
-      Assert.AreEqual(42, emptyIpcData.Get(0));
+      Assert.AreEqual(42, emptyIpcData.Get<int>(0));
 
       //  out of range
-      emptyIpcData.Get(1);
+      emptyIpcData.Get<object>(1);
     }
 
     [TestMethod]
@@ -268,6 +268,24 @@ namespace AMPowerShellCmdLetsTest
                                 0, 0, 0,0    //  size of 0
                                              //  no more data needed.
                               });
+    }
+
+    [TestMethod]
+    public void TestCastingToDifferentNumbers()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add(42);
+      emptyIpcData.Add(52);
+      emptyIpcData.Add(67);
+
+      // check the values.
+      Assert.AreEqual((long)42, emptyIpcData.Get<long>(0));
+      Assert.AreEqual((uint)52, emptyIpcData.Get<uint>(1));
+      Assert.AreEqual((int)67, emptyIpcData.Get<int>(2));
+      Assert.AreEqual((short)67, emptyIpcData.Get<short>(2));
+
+      Assert.AreEqual((double)67, emptyIpcData.Get<double>(2));
+      Assert.AreEqual((float)67, emptyIpcData.Get<float>(2));
     }
   }
 }

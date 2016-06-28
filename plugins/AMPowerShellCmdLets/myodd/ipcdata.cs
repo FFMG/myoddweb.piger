@@ -16,7 +16,7 @@ namespace AMPowerShellCmdLets.myodd
       String = 3,
       StringAscii = 4
     };
-    
+
     private List<dynamic> IpcArguments { get; set; }
 
     /// <summary>
@@ -100,7 +100,7 @@ namespace AMPowerShellCmdLets.myodd
 
       //  get the version number
       var versionNumber = ReadVersionNumber(bytes, ref pointer);
-      if( versionNumber > VersionNumber )
+      if (versionNumber > VersionNumber)
       {
         throw new ArgumentException("The given version number is greater than the supported version number.");
       }
@@ -113,28 +113,28 @@ namespace AMPowerShellCmdLets.myodd
         switch (dataType)
         {
           case DataType.Guid:
-            {
-              // set the guid.
-              Guid = ReadGuid(bytes, ref pointer);
-            }
+          {
+            // set the guid.
+            Guid = ReadGuid(bytes, ref pointer);
+          }
             break;
 
           case DataType.Int32:
-            {
-              Add( ReadInt32(bytes, ref pointer));
-            }
+          {
+            Add(ReadInt32(bytes, ref pointer));
+          }
             break;
 
-          case DataType.String://string unicode
-            {
-              Add( ReadString(bytes, ref pointer), true );
-            }
+          case DataType.String: //string unicode
+          {
+            Add(ReadString(bytes, ref pointer), true);
+          }
             break;
 
           case DataType.StringAscii:
-            {
-              Add(ReadAsciiString(bytes, ref pointer), false );
-            }
+          {
+            Add(ReadAsciiString(bytes, ref pointer), false);
+          }
             break;
 
           case DataType.None:
@@ -176,7 +176,7 @@ namespace AMPowerShellCmdLets.myodd
       pointer += sizeof(short);
 
       // return the converted value.
-      return (DataType)BitConverter.ToInt16(dst, 0);
+      return (DataType) BitConverter.ToInt16(dst, 0);
     }
 
     /// <summary>
@@ -188,7 +188,7 @@ namespace AMPowerShellCmdLets.myodd
     private static int ReadInt32(byte[] bytes, ref int pointer)
     {
       //  check that we have enough data.
-      if( pointer + sizeof(int) > bytes.Length)
+      if (pointer + sizeof(int) > bytes.Length)
       {
         throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
       }
@@ -237,7 +237,7 @@ namespace AMPowerShellCmdLets.myodd
       }
 
       //  check that we have enough data for the size.
-      if (pointer + (dataSize * sizeof(char)) > bytes.Length)
+      if (pointer + (dataSize*sizeof(char)) > bytes.Length)
       {
         throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
       }
@@ -247,13 +247,13 @@ namespace AMPowerShellCmdLets.myodd
       var dstData = new byte[dataSize*sizeof(char)];
 
       // copy from where we are to where we are going.
-      Array.Copy(bytes, pointer, dstData, 0, dataSize * sizeof(char));
+      Array.Copy(bytes, pointer, dstData, 0, dataSize*sizeof(char));
 
       // update the pointer.
-      pointer += dataSize * sizeof(char);
+      pointer += dataSize*sizeof(char);
 
       // return the converted value.
-      return Encoding.Unicode.GetString(dstData );
+      return Encoding.Unicode.GetString(dstData);
     }
 
     /// <summary>
@@ -297,7 +297,7 @@ namespace AMPowerShellCmdLets.myodd
       var dstData = new byte[dataSize];
 
       // copy from where we are to where we are going.
-      Array.Copy(bytes, pointer, dstData, 0, dataSize );
+      Array.Copy(bytes, pointer, dstData, 0, dataSize);
 
       // update the pointer.
       pointer += dataSize;
@@ -345,12 +345,13 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     private void AddGuid()
     {
-      Add(Combine(new byte[][]{
-        BitConverter.GetBytes( (short)DataType.Guid ),     //  short
-        BitConverter.GetBytes( Guid.Length),        //  Int32, size is guaranteed.
+      Add(Combine(new byte[][]
+      {
+        BitConverter.GetBytes((short) DataType.Guid), //  short
+        BitConverter.GetBytes(Guid.Length), //  Int32, size is guaranteed.
         System.Text.Encoding.Unicode.GetBytes(Guid)
-        }
-      ));
+      }
+        ));
     }
 
     /// <summary>
@@ -358,26 +359,28 @@ namespace AMPowerShellCmdLets.myodd
     /// </summary>
     /// <param name="stringToAdd">the string to add</param>
     /// <param name="asUnicode">If we want to send it as unicode or not.</param>
-    public void Add( string stringToAdd, bool asUnicode = true )
+    public void Add(string stringToAdd, bool asUnicode = true)
     {
       if (asUnicode)
       {
         var stringInBytes = Encoding.Unicode.GetBytes(stringToAdd);
-        Add(Combine(new byte[][]{
-        BitConverter.GetBytes( (short)DataType.String ),   //  short
-        BitConverter.GetBytes( stringToAdd.Length),       //  Int32, size is guaranteed.
-        stringInBytes
+        Add(Combine(new byte[][]
+        {
+          BitConverter.GetBytes((short) DataType.String), //  short
+          BitConverter.GetBytes(stringToAdd.Length), //  Int32, size is guaranteed.
+          stringInBytes
         }
-        ));
+          ));
       }
       else
       {
-        Add(Combine(new byte[][]{
-        BitConverter.GetBytes( (short)DataType.StringAscii ),   //  short
-        BitConverter.GetBytes( stringToAdd.Length),         //  Int32, size is guaranteed.
-        System.Text.Encoding.ASCII.GetBytes(stringToAdd)
+        Add(Combine(new byte[][]
+        {
+          BitConverter.GetBytes((short) DataType.StringAscii), //  short
+          BitConverter.GetBytes(stringToAdd.Length), //  Int32, size is guaranteed.
+          System.Text.Encoding.ASCII.GetBytes(stringToAdd)
         }
-        ));
+          ));
       }
 
       //  add to the arguments list.
@@ -397,12 +400,12 @@ namespace AMPowerShellCmdLets.myodd
     /// <param name="numberToAdd">The number to add.</param>
     public void Add(int numberToAdd)
     {
-      Add( Combine( new[]
+      Add(Combine(new[]
       {
-        BitConverter.GetBytes( (short)DataType.Int32),  //  short
-        BitConverter.GetBytes(numberToAdd)                //  int32
-        }               
-      ));
+        BitConverter.GetBytes((short) DataType.Int32), //  short
+        BitConverter.GetBytes(numberToAdd) //  int32
+      }
+        ));
 
       //  add to the arguments list.
       IpcArguments.Add(new
@@ -419,10 +422,10 @@ namespace AMPowerShellCmdLets.myodd
     /// Add a created byte to our current byte.
     /// </summary>
     /// <param name="newBytes"></param>
-    private void Add( byte[] newBytes )
+    private void Add(byte[] newBytes)
     {
       //  join the old and the new together.
-      Bytes = Combine( Bytes, newBytes );
+      Bytes = Combine(Bytes, newBytes);
     }
 
     /// <summary>
@@ -449,7 +452,7 @@ namespace AMPowerShellCmdLets.myodd
     {
       if (HGlobal != null)
       {
-        Marshal.FreeHGlobal((IntPtr)HGlobal);
+        Marshal.FreeHGlobal((IntPtr) HGlobal);
         HGlobal = null;
       }
     }
@@ -472,9 +475,9 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     public IntPtr GetPtr()
     {
-      if( null != HGlobal )
+      if (null != HGlobal)
       {
-        return (IntPtr)HGlobal;
+        return (IntPtr) HGlobal;
       }
 
       // make sure we clean what needst to be
@@ -484,18 +487,96 @@ namespace AMPowerShellCmdLets.myodd
       // var msgBytes = System.Text.Encoding.Default.GetBytes(msg);
       var bytesSize = Bytes.Length;
       HGlobal = Marshal.AllocHGlobal(bytesSize);
-      Marshal.Copy(Bytes, 0, (IntPtr)HGlobal, bytesSize);
+      Marshal.Copy(Bytes, 0, (IntPtr) HGlobal, bytesSize);
 
-      return (IntPtr)HGlobal;
+      return (IntPtr) HGlobal;
     }
 
-    public object Get( uint index )
+    private static bool IsNumericType(Type t)
+    {
+      switch (Type.GetTypeCode(t))
+      {
+        case TypeCode.Byte:
+        case TypeCode.SByte:
+        case TypeCode.UInt16:
+        case TypeCode.UInt32:
+        case TypeCode.UInt64:
+        case TypeCode.Int16:
+        case TypeCode.Int32:
+        case TypeCode.Int64:
+        case TypeCode.Decimal:
+        case TypeCode.Double:
+        case TypeCode.Single:
+          return true;
+
+        default:
+          return false;
+      }
+    }
+
+    private static bool IsStringType(Type t)
+    {
+      switch (Type.GetTypeCode(t))
+      {
+        case TypeCode.String:
+        case TypeCode.Char:
+          return true;
+
+        default:
+          return false;
+      }
+    }
+
+    public T Get<T>(uint index)
     {
       if (index >= ArgumentsCount)
       {
         throw new ArgumentOutOfRangeException(nameof(index));
       }
-      return IpcArguments[ (int)index].data;
+
+      var objectData = IpcArguments[(int) index].data;
+      var type = typeof(T);
+      if (Type.GetTypeCode(type) == TypeCode.Object)
+      {
+        return objectData;
+      }
+
+      var objectType = (DataType) IpcArguments[(int) index].type;
+
+      if (IsNumericType(type))
+      {
+        switch (objectType)
+        {
+          case DataType.Int32:
+            return (T) objectData;
+
+          default:
+            throw new InvalidCastException();
+        }
+      }
+
+      if (IsStringType(type))
+      {
+        switch (objectType)
+        {
+          case DataType.Int32:
+            var i = (int) objectData;
+            var s = i.ToString();
+            var o = (object) s;
+            return (T) o;
+
+          case DataType.Guid:
+          case DataType.String:
+          case DataType.StringAscii:
+            return (T) objectData;
+
+          default:
+            throw new InvalidCastException();
+        }
+      }
+
+      //  we cannot convert that type.
+      throw new InvalidCastException();
     }
   }
 }
