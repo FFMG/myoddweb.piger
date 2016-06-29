@@ -11,33 +11,44 @@ namespace os {
     _pParentWnd(pParent)
   {
     //  the instance of this module
-    auto hInstance = GetModuleHandle( nullptr );
-    WNDCLASS wndcls;
-    if (GetClassInfo(hInstance, pszClassName, &wndcls))
+    auto hInstance = ::GetModuleHandle( nullptr );
+    WNDCLASSEX wcx; 
+    if (GetClassInfoEx(hInstance, pszClassName, &wcx))
     {
       throw "The server already exists.";
     }
 
-    wndcls.style = 0;
-    wndcls.lpfnWndProc = WindowProc;
-    wndcls.cbClsExtra = wndcls.cbWndExtra = 0;
-    wndcls.hInstance = hInstance;
-    wndcls.hIcon = nullptr;
-    wndcls.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wndcls.hbrBackground = GetSysColorBrush(COLOR_WINDOW);
-    wndcls.lpszMenuName = nullptr;
-    wndcls.lpszClassName = pszClassName;
-    if (!RegisterClass(&wndcls))
+    wcx.cbSize = sizeof(wcx);
+    wcx.style = 0;
+    wcx.lpfnWndProc = WindowProc;
+    wcx.cbClsExtra = 0;
+    wcx.cbWndExtra = 0;
+    wcx.hInstance = hInstance;
+    wcx.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wcx.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wcx.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+    wcx.lpszMenuName = L"MainMenu";
+    wcx.lpszClassName = pszClassName;
+    wcx.hIconSm = (HICON)LoadImage(hInstance,
+      MAKEINTRESOURCE(5),
+      IMAGE_ICON,
+      GetSystemMetrics(SM_CXSMICON),
+      GetSystemMetrics(SM_CYSMICON),
+      LR_DEFAULTCOLOR);
+
+    if (!RegisterClassEx(&wcx))
     {
       throw "Can't register IpcListener window class.";
     }
 
     // one way or another the class was created.
     // so we can create our listener accordingly.
-    if (!this->CWnd::CreateEx(0, pszClassName, L"", 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
+    if (!this->CWnd::CreateEx(0, pszClassName, L"MyDummyWindow", 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
     {
       throw "Can't create IpcListener window.";
     }
+
+    this->CWnd::UpdateWindow();
 
     // save this pointer
     SetWindowLongPtr(GetSafeHwnd(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));

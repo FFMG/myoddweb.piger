@@ -47,8 +47,8 @@ namespace MyOdd
       public int cbData;          // Specifies the data size in bytes 
       public IntPtr lpData;       // Pointer to data to be passed 
     }
-    [DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
-    static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+    [DllImport("user32.dll", EntryPoint = "FindWindowEx", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string lclassName, string windowTitle);
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, ref Copydatastruct lParam);
@@ -64,7 +64,8 @@ namespace MyOdd
     protected IntPtr FindWindowByClass()
     {
       //  look for the window.
-      return FindWindow(ServerName, null);
+      IntPtr hwndMessage = new IntPtr(-3);
+      return FindWindowEx(hwndMessage, IntPtr.Zero, ServerName, null);
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

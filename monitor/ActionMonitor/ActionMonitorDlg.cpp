@@ -125,10 +125,10 @@ BOOL CActionMonitorDlg::OnInitDialog()
 #else
   MYODD_STRING strSay = myodd::strings::Format(_T("Action Monitor : %d.%d.%d.%d"),
 #endif
-    _ver.GetFileVersionMajor(),
-    _ver.GetFileVersionMinor(),
-    _ver.GetFileVersionMaintenance(),
-    _ver.GetFileVersionBuild());
+  _ver.GetFileVersionMajor(),
+  _ver.GetFileVersionMinor(),
+  _ver.GetFileVersionMaintenance(),
+  _ver.GetFileVersionBuild());
 
 	TraySetToolTip( strSay.c_str() );
   TraySetMenu(IDR_TRAY );

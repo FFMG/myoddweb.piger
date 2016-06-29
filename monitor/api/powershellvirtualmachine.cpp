@@ -28,7 +28,8 @@ void PowershellVirtualMachine::Initialize()
 
   // create the listenner.
   auto pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
-  _IpcListener = new myodd::os::IpcListener(CONF_MUTEXT, pThis->GetSafeHwnd() );
+  auto hWnd = pThis->GetParent()->GetSafeHwnd();
+  _IpcListener = new myodd::os::IpcListener(CONF_MUTEXT, hWnd );
 }
 
 int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
