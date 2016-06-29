@@ -38,7 +38,6 @@ void ActivePowershellAction::OnExecuteInThread()
   // create the Python Api.
   auto pvm = App().GetPowershellVirtualMachine();
   
-  //  save it.
   // we can now execute the thread.
   pvm->ExecuteInThread( szFile.c_str(), *this );
 }

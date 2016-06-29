@@ -176,6 +176,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\api\PluginVirtualMachine.cpp" />
+    <ClCompile Include="..\api\powershellapi.cpp" />
     <ClCompile Include="..\api\powershellvirtualmachine.cpp" />
     <ClCompile Include="..\api\pyapi.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">StdAfx.h</PrecompiledHeaderFile>
@@ -219,6 +220,7 @@
     <ClInclude Include="..\api\LuaVirtualMachine.h" />
     <ClInclude Include="..\api\pluginapi.h" />
     <ClInclude Include="..\api\PluginVirtualMachine.h" />
+    <ClInclude Include="..\api\powershellapi.h" />
     <ClInclude Include="..\api\powershellvirtualmachine.h" />
     <ClInclude Include="..\api\pyapi.h" />
     <ClInclude Include="..\api\pyconfig.h" />

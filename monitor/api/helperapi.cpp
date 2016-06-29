@@ -197,6 +197,36 @@ size_t HelperApi::GetCommandCount()
   }
 }
 
+HINSTANCE HelperApi::ExecuteWithInstance(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged)
+{
+  if (NULL == module && NULL == cmdLine)
+  {
+    return nullptr;
+  }
+
+  // prepare each items to be returned.
+  // 
+  std::vector<MYODD_STRING> argv;
+
+  // we must have at least the module
+  if (NULL == module)
+  {
+    argv.push_back(_T(""));
+  }
+  else
+  {
+    argv.push_back(module);
+  }
+
+  if (NULL != cmdLine)
+  {
+    argv.push_back(cmdLine);
+  }
+
+  // Execute the command +  module
+  return Action::ExecuteWithInstance(argv, isPrivileged);
+}
+
 /**
  * Execute a module and a command line if the module is NULL then we try
  * and run the command line arguments only.
@@ -208,32 +238,20 @@ size_t HelperApi::GetCommandCount()
  */
 bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
 {
-  if( NULL == module && NULL == cmdLine )
-  {
-    return false;
-  }
+  //  get the instance
+  auto hHinstance = ExecuteWithInstance(module, cmdLine, isPrivileged);
 
-  // prepare each items to be returned.
-  // 
-  std::vector<MYODD_STRING> argv;
-
-  // we must have at least the module
-  if( NULL == module )
+  // Assume error
+  bool result = false;
+  if (hHinstance > (HINSTANCE)32)
   {
-    argv.push_back( _T("") );
+    result = true;
   }
   else
   {
-    argv.push_back( module );
+    result = false;
   }
-
-  if( NULL != cmdLine )
-  {
-    argv.push_back( cmdLine );
-  }
-  
-  // Execute the command +  module
-  return Action::Execute( argv, isPrivileged );
+  return result;
 }
 
 /**

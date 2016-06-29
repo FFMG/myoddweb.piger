@@ -41,6 +41,7 @@ public:
 
   // execute a module and a command line
   bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
+  HINSTANCE ExecuteWithInstance(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
 
   // get the currently selected text, or false if none.
   bool GetString (MYODD_STRING& sValue, bool bQuote);

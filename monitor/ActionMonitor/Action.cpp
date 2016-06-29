@@ -276,7 +276,32 @@ const MYODD_STRING& Action::Command() const
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool true|false success or not.
  */
-bool Action::Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged )
+bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged)
+{
+  //  get the instance
+  auto hHinstance = ExecuteWithInstance(argv, isPrivileged);
+
+  // Assume error
+  bool result = false;
+  if (hHinstance > (HINSTANCE)32)
+  {
+    result = true;
+  }
+  else
+  {
+    result = false;
+  }
+  return result;
+}
+
+/**
+ * Execute a file.
+ * We will expend all the environment variables as needed.
+ * @param const std::vector<MYODD_STRING> [0] the file path, [1] the arguments to launch with, (optional).
+ * @param bool isPrivileged if we need administrator privilege to run this.
+ * @return bool true|false success or not.
+ */
+HINSTANCE Action::ExecuteWithInstance(const std::vector<MYODD_STRING>& argv, bool isPrivileged)
 {
   // get the number of arguments.
   size_t argc = argv.size();
@@ -285,7 +310,7 @@ bool Action::Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged )
   if( argc < 1 || argc > 2 )
   {
     ASSERT ( 0 ); //  wrong number of arguments.
-    return false;
+    return nullptr;
   }
 
   LPTSTR argvModule = NULL;
@@ -296,7 +321,7 @@ bool Action::Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged )
   if( !myodd::files::ExpandEnvironment( argv[ 0 ].c_str(), argvModule ) )
   {
     myodd::log::LogError(_T("Could not execute statement: Unable to expand command line '%s'"), argv[0].c_str());
-    return false;
+    return nullptr;
   }
 
   // But we might also have a command line item.
@@ -307,12 +332,9 @@ bool Action::Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged )
     {
       myodd::log::LogError(_T("Could not execute statement: Unable to expand arguments '%s'"), argv[1].c_str());
       delete [] argvModule;
-      return false;
+      return nullptr;
     }
   }
-
-  // Assume error
-  bool result = false;
 
   //
   // ShellExec
@@ -340,23 +362,17 @@ bool Action::Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged )
                               );
   }
 
-  if( hHinstance > (HINSTANCE)32 )
+  if (hHinstance <= (HINSTANCE)32)
   {
-    result = true;
-  }
-  else
-  {
-    result = false;
-
-    myodd::log::LogError( _T("Could not execute statement: could not execute '%s'"), argvModule );
-    myodd::log::LogError(_T("Could not execute statement: Last error '%d'"), ::GetLastError() );
+    myodd::log::LogError(_T("Could not execute statement: could not execute '%s'"), argvModule);
+    myodd::log::LogError(_T("Could not execute statement: Last error '%d'"), ::GetLastError());
   }
 
   // clean up the expended variable.
   delete [] argvCmd;
   delete [] argvModule;
 
-  return result;
+  return hHinstance;
 }
 
 /**

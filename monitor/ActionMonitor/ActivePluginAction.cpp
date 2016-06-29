@@ -37,7 +37,6 @@ void ActivePluginAction::OnExecuteInThread()
 
   // create the Python Api.
   PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
-  PluginApi* api = new PluginApi( *this );
   
   //  save it.
   // we can now execute the thread.

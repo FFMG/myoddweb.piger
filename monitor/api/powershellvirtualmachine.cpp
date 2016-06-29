@@ -1,9 +1,13 @@
 #include "stdafx.h"
+
+#ifdef ACTIONMONITOR_PS_PLUGIN
+#include <boost/uuid/uuid.hpp>            // uuid class
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
+
 #include <os/ipclistener.h>
 #include <ActionMonitorDlg.h>
 #include <ActionMonitor.h>
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
 
 #include "powershellvirtualmachine.h"
 
@@ -13,6 +17,8 @@ PowershellVirtualMachine::PowershellVirtualMachine()
 
 PowershellVirtualMachine::~PowershellVirtualMachine()
 {
+  //  Remove all the apis
+  RemoveApis();
 }
 
 // create the IPC server
@@ -46,11 +52,90 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
 int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action)
 {
   Initialize();
+
+  //  create uuid and andd it to our list.
+  std::wstring uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
+  auto psApi = AddApi(uuid, action );
+
+  //  execute a script now.
+  MYODD_STRING arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), pluginFile);
+  psApi->ExecuteWithInstance( _T("powershell.exe"), arguments.c_str(), true);
   return 0;
 }
 
 bool PowershellVirtualMachine::IsPluginExt(LPCTSTR ext)
 {
   return (_tcsicmp(ext, _T("ps1")) == 0);
+}
+
+PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action)
+{
+  //  lock us in
+  myodd::threads::Lock lock(_mutex);
+
+  //  does it exist already
+  auto it = _apis.find(uuid);
+  if (it != _apis.end())
+  {
+    //  yes it does, so just return what we have.
+    return it->second;
+  }
+
+  //  create the powershell api.
+  auto psApi = new PowershellApi(action);
+
+  // add it to the array
+  _apis[uuid] = psApi;
+
+  // return the new psApi
+  return psApi;
+}
+
+void PowershellVirtualMachine::RemoveApi(const std::wstring& uuid)
+{
+  //  lock us in
+  myodd::threads::Lock lock(_mutex);
+
+  //  look for it
+  auto it = _apis.find(uuid);
+  if (it == _apis.end())
+  {
+    //  does not seem to exist.
+    return;
+  }
+
+  // delete the api
+  delete it->second;
+
+  // remove it from the map
+  _apis.erase(it);
+}
+
+/**
+ * Remove all the created apis.
+ */
+void PowershellVirtualMachine::RemoveApis()
+{
+  //  lock us in
+  myodd::threads::Lock lock(_mutex);
+
+  //  delete all the pointers
+  for (auto it = _apis.begin(); it != _apis.end(); ++it)
+  {
+    try
+    {
+      //  delete it.
+      delete it->second;
+    }
+    catch (const std::exception&)
+    {
+      //  there was a problem...
+      //  but we have to carry on to delete the others.
+      myodd::log::LogError(_T("There was a problem deleting a powershellApi : %s"), it->first);
+    }
+  }
+
+  //  reset the api map
+  _apis.clear();
 }
 #endif /*ACTIONMONITOR_PS_PLUGIN*/

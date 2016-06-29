@@ -1,7 +1,10 @@
 #pragma once
-#include <os/ipcmessagehandler.h>
-
 #ifdef ACTIONMONITOR_PS_PLUGIN
+
+#include <map>
+#include <mutex>
+#include <os/ipcmessagehandler.h>
+#include "powershellapi.h"
 
 class PowershellVirtualMachine : public myodd::os::IpcMessageHandler
 {
@@ -16,5 +19,14 @@ public:
 
 protected:
   void Initialize();
+
+  std::mutex _mutex;
+
+  typedef std::map<std::wstring, PowershellApi*> APIS;
+  APIS _apis;
+
+  PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action);
+  void RemoveApi(const std::wstring& uuid );
+  void RemoveApis();
 };
 #endif /*ACTIONMONITOR_PS_PLUGIN*/
