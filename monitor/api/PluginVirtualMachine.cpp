@@ -36,22 +36,37 @@ PluginVirtualMachine::~PluginVirtualMachine()
 
 /**
  * Remove the current thread API from our list.
+ * @param PluginApi* api the api we wish to remove.
+ * @return bool if the item was removed or not.
  */
-void PluginVirtualMachine::DisposeApi()
+bool PluginVirtualMachine::DisposeApi(PluginApi* api)
 {
   // lock it
   myodd::threads::Lock guard( _mutex );
   
   // find this thread
-  ListOfPlugins::const_iterator it = _apis.find(std::this_thread::get_id());
-  if (it == _apis.end())
+  for (ListOfPlugins::const_iterator it = _apis.begin();
+    it != _apis.end();
+    ++it)
   {
-    // not found...
-    return;
+    if (it->second == api)
+    {
+      // the thread id should be this one.
+      if( it->first != std::this_thread::get_id() )
+      {
+        myodd::log::LogError(_T("Removed an Api from the list of plugin, but the one we removed was not from this thread id."));
+      }
+
+      // remove it.
+      _apis.erase(it);
+
+      // we found it.
+      return true;
+    }
   }
 
-  // remove it.
-  _apis.erase(it);
+  // we did not find it.
+  return false;
 }
 
 /**
@@ -213,48 +228,74 @@ HMODULE PluginVirtualMachine::ExpandLoadLibrary( LPCTSTR lpFile )
   return hMod;
 }
 
+int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
+{
+  // assume error 
+  auto result = AM_RESP_NONE;
+  try
+  {
+    // we need to look for that module
+    // if it exists then all we need to do is send another 'CreateActiveAction'
+    //
+    // otherwise we need to ask it to restart again.
+    auto f = Find(pluginFile);
+    if (nullptr == f)
+    {
+      //  init this file.
+      return Create(pluginFile);
+    }
+
+    // Start the un-threaded main function
+    // it is up to the plugins to ensure that they don't block the main thread for too long
+    try
+    {
+      result = f->fnMsg(AM_MSG_MAIN, 0, reinterpret_cast<AM_INT>(_amPlugin));
+    }
+    catch (...)
+    {
+      // something bad has happened.
+      result = AM_RESP_THROW;
+      ErasePlugin(pluginFile);
+    }
+  }
+  catch (...)
+  {
+    // something bad has happened.
+    result = AM_RESP_THROW;
+    ErasePlugin(pluginFile);
+  }
+  return result;
+}
+
 /**
  * Todo
  * @param void
  * @return void
  */
-int PluginVirtualMachine::ExecuteInThread( LPCTSTR pluginFile )
+int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, PluginApi* api)
 {
   Initialize();
-  if( NULL == _amPlugin )
+  if (NULL == _amPlugin)
   {
     // the plugin manager was not created?
     // or could not be created properly
-    return -1;
+    return AM_RESP_NONE;
   }
 
-  // we need to look for that module
-  // if it exists then all we need to do is send another 'CreateActiveAction'
-  //
-  // otherwise we need to ask it to restart again.
-  PLUGIN_THREAD* f = Find( pluginFile );
-  if( NULL == f )
+  // add the api to the list.
+  AddApi( api );
+
+  // execute this plugin
+  auto result = ExecuteInThread(pluginFile);
+
+  // dispose of the api
+  if( false == DisposeApi( api ) )
   {
-    //  init this file.
-    return Create( pluginFile );
+    myodd::log::LogError(_T("I was unable to remove the plugin API."));
   }
 
-  // assume error 
-  AM_RESPONSE result = AM_RESP_NONE;
-
-  // Start the un-threaded main function
-  // it is up to the plugins to ensure that they don't block the main thread for too long
-  try
-  {
-    result = f-> fnMsg( AM_MSG_MAIN, 0, (AM_INT)_amPlugin );
-  }
-  catch( ... )
-  {
-    // something bad has happened.
-    result = AM_RESP_THROW;
-    ErasePlugin( pluginFile );
-  }
-  return ( result );
+  // return what we found.
+  return result;
 }
 
 /**

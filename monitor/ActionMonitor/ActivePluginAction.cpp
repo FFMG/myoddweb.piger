@@ -38,15 +38,10 @@ void ActivePluginAction::OnExecuteInThread()
   // create the Python Api.
   PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
   PluginApi* api = new PluginApi( *this );
-
-  //add it to the list
-  pvm->AddApi(api);
   
   //  save it.
   // we can now execute the thread.
-  pvm->ExecuteInThread( szFile.c_str() );
+  pvm->ExecuteInThread( szFile.c_str(), api);
 
-  // we can now dispose of the lua
-  pvm->DisposeApi();
   delete api;
 }

@@ -2,6 +2,7 @@
 
 #include <mutex>
 #include <afxwin.h>
+#include "ipcmessagehandler.h"
 
 namespace myodd {
   namespace os {
@@ -27,16 +28,17 @@ namespace myodd {
       };
 
     public:
-      explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex);
+      explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex, IpcMessageHandler& handler );
 
     protected:
       static bool MessageStructFromCopyData(const COPYDATASTRUCT& cds, IpcMessageStruct& ipcMessageStructure);
       LRESULT _WindowProc( const COPYDATASTRUCT& cds);
-      LRESULT _WindowProcSend(const COPYDATASTRUCT& cds);
-      LRESULT _WindowProcPost(const COPYDATASTRUCT& cds);
+      LRESULT _WindowProcSend(const COPYDATASTRUCT& cds) const;
+      LRESULT _WindowProcPost(const COPYDATASTRUCT& cds) const;
       LRESULT _WindowProcCopy(const COPYDATASTRUCT& cds);
 
       HWND _pParentWnd;
+      IpcMessageHandler& _handler;
 
     public:
       static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

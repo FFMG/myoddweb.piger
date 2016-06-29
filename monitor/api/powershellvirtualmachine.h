@@ -1,9 +1,9 @@
 #pragma once
-#include <os/ipclistener.h>
+#include <os/ipcmessagehandler.h>
 
 #ifdef ACTIONMONITOR_PS_PLUGIN
 
-class PowershellVirtualMachine
+class PowershellVirtualMachine : public myodd::os::IpcMessageHandler
 {
 public:
   PowershellVirtualMachine();
@@ -12,8 +12,9 @@ public:
   int ExecuteInThread(LPCTSTR pluginFile);
   static bool IsPluginExt(LPCTSTR ext);
 
+  bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
+
 protected:
   void Initialize();
-  myodd::os::IpcListener* _IpcListener;
 };
 #endif /*ACTIONMONITOR_PS_PLUGIN*/

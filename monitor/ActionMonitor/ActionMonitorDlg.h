@@ -18,6 +18,7 @@
 #define SPECIAL_KEY VK_CAPITAL
 
 #include "../common/trayDialog.h" //  system tray icon item
+#include <os/ipclistener.h>
 
 class CActionMonitorDlg : public CTrayDialog, FadeWnd, ActiveActions
 {
@@ -76,6 +77,12 @@ public:
   // before we close the dlg we must wait for our last messages
   void WaitForActiveWindows();
 
+  //  add a message handler
+  void AddMessageHandler(myodd::os::IpcMessageHandler& handler);
+
+  // remove a message handler.
+  void RemoveMessageHandler(myodd::os::IpcMessageHandler& handler);
+
 protected:
   bool DisplayCommand( HDC hdc = NULL );
   void DisplayTime( HDC hdc, RECT &rParent );
@@ -126,4 +133,7 @@ protected:
   std::mutex _mutex;
   std::thread::id _main_threadId;
   bool IsMainThread() const;
+
+  void InitializeListener();
+  myodd::os::IpcListener* _IpcListener;
 };

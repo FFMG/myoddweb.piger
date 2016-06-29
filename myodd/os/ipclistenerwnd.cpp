@@ -6,9 +6,10 @@
 
 namespace myodd {
 namespace os {
-  IpcListenerWnd::IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex) : 
+  IpcListenerWnd::IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex, IpcMessageHandler& handler) :
     _mutex( mutex ),
-    _pParentWnd(pParent)
+    _pParentWnd(pParent),
+    _handler( handler )
   {
     //  the instance of this module
     auto hInstance = ::GetModuleHandle( nullptr );
@@ -24,17 +25,17 @@ namespace os {
     wcx.cbClsExtra = 0;
     wcx.cbWndExtra = 0;
     wcx.hInstance = hInstance;
-    wcx.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wcx.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wcx.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+    wcx.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+    wcx.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wcx.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
     wcx.lpszMenuName = L"MainMenu";
     wcx.lpszClassName = pszClassName;
-    wcx.hIconSm = (HICON)LoadImage(hInstance,
-      MAKEINTRESOURCE(5),
-      IMAGE_ICON,
-      GetSystemMetrics(SM_CXSMICON),
-      GetSystemMetrics(SM_CYSMICON),
-      LR_DEFAULTCOLOR);
+    wcx.hIconSm = static_cast<HICON>(LoadImage(hInstance,
+                                               MAKEINTRESOURCE(5),
+                                               IMAGE_ICON,
+                                               GetSystemMetrics(SM_CXSMICON),
+                                               GetSystemMetrics(SM_CYSMICON),
+                                               LR_DEFAULTCOLOR));
 
     if (!RegisterClassEx(&wcx))
     {
@@ -43,7 +44,7 @@ namespace os {
 
     // one way or another the class was created.
     // so we can create our listener accordingly.
-    if (!this->CWnd::CreateEx(0, pszClassName, L"MyDummyWindow", 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
+    if (!this->CWnd::CreateEx(0, pszClassName, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
     {
       throw "Can't create IpcListener window.";
     }
@@ -96,7 +97,7 @@ namespace os {
     return wndClass->_WindowProc(*pcds);
   }
 
-  LRESULT IpcListenerWnd::_WindowProcSend(const COPYDATASTRUCT& cds)
+  LRESULT IpcListenerWnd::_WindowProcSend(const COPYDATASTRUCT& cds) const
   {
     // pass this to the parent window
     IpcMessageStruct ims;
@@ -112,7 +113,7 @@ namespace os {
 #endif // X64
   }
 
-  LRESULT IpcListenerWnd::_WindowProcPost(const COPYDATASTRUCT& cds)
+  LRESULT IpcListenerWnd::_WindowProcPost(const COPYDATASTRUCT& cds) const
   {
     // pass this to the parent window
     IpcMessageStruct ims;
@@ -136,12 +137,12 @@ namespace os {
       //  try and decrypt the message that was sent.
       IpcData ipcRequest(static_cast<unsigned char*>(cds.lpData), cds.cbData);
 
-      IpcData ipcResponse( ipcRequest.GetGuid() );
-      ipcResponse.Add(37);
-      ipcResponse.Add(L"Hello");
-      ipcResponse.Add(L"");  // empty L string
-      ipcResponse.Add("Hello");
-      ipcResponse.Add("");  // empty string
+      // just call the handler
+      IpcData ipcResponse(ipcRequest.GetGuid());
+      if( !_handler.HandleIpcMessage( ipcRequest, ipcResponse ) )
+      {
+        return 0;
+      }
 
       // did we get a guid, if we do then we need to send the response back to the sender.
       if (!ipcRequest.HasGuid())

@@ -31,7 +31,8 @@ bool CActionMonitorDlg::IsRunning()
 CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
 	: CTrayDialog(CActionMonitorDlg::IDD, pParent), 
   m_keyState (ACTION_NONE),
-  fontTime(nullptr)
+  fontTime(nullptr),
+  _IpcListener(nullptr)
 {
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -47,6 +48,13 @@ CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
  */
 CActionMonitorDlg::~CActionMonitorDlg()
 {
+  //  clear the ipc listener
+  if (_IpcListener != nullptr)
+  {
+    delete _IpcListener;
+    _IpcListener = nullptr;
+  }
+
   if( fontTime )
   {
     fontTime->DeleteObject();
@@ -140,14 +148,36 @@ BOOL CActionMonitorDlg::OnInitDialog()
   // set the fade window
   SetFadeParent( m_hWnd );
 
+  // initialise the listener.
+  InitializeListener();
+
   //  do all the actions that are labeled as 'start'
   App().DoStartActionsList();
 
   //  setup the hooks and the key
   InitHook();
-
+  
   return TRUE;
 }
+
+void CActionMonitorDlg::InitializeListener()
+{
+  if (nullptr == _IpcListener)
+  {
+    // lock us in
+    myodd::threads::Lock guard(_mutex);
+
+    // if this is done already, we don't want to do it again.
+    if (nullptr == _IpcListener)
+    {
+      // create the listenner and pass oursleves as the window.
+      // so some messages can be routed back to us.
+      auto hWnd = GetSafeHwnd();
+      _IpcListener = new myodd::os::IpcListener(CONF_MUTEXT, hWnd);
+    }
+  }
+}
+
 
 /**
  * todo
@@ -1154,4 +1184,34 @@ void CActionMonitorDlg::OnDestroy()
 
   // destroy the window.
   __super::OnDestroy(); 
+}
+
+/**
+ * Add a message handler to our list of handlers.
+ * Each will be called when a new message arrives.
+ * @param IpcMessageHandler& handler the message handler we are adding.
+ */
+void CActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
+{
+  myodd::threads::Lock guard(_mutex);
+  if(_IpcListener == nullptr )
+  {
+    return;
+  }
+  _IpcListener->AddMessageHandler(handler);
+}
+
+/**
+ * Remove a message handler from our list.
+ * @param IpcMessageHandler& handler the message handler we want to remove.
+ * @return none
+ */
+void CActionMonitorDlg::RemoveMessageHandler(myodd::os::IpcMessageHandler& handler)
+{
+  myodd::threads::Lock guard(_mutex);
+  if (_IpcListener == nullptr)
+  {
+    return;
+  }
+  _IpcListener->RemoveMessageHandler(handler);
 }

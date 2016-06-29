@@ -15,7 +15,7 @@ public:
   PluginVirtualMachine();
   virtual ~PluginVirtualMachine();
 
-  int ExecuteInThread( LPCTSTR pluginFile );
+  int ExecuteInThread( LPCTSTR pluginFile, PluginApi* api);
   static bool IsPluginExt( LPCTSTR ext );
 
   bool Register( LPCTSTR, void* );
@@ -30,10 +30,11 @@ protected:
   std::mutex _mutex;
   static PluginApi& GetApi();
 
-public:
-  void DisposeApi();
-  void AddApi(PluginApi* api );
+protected:
+  bool DisposeApi(PluginApi* api);
+  void AddApi( PluginApi* api );
 
+  int ExecuteInThread( LPCTSTR pluginFile );
 protected:
   AmPluginPrivate* _amPlugin;
   void Initialize();

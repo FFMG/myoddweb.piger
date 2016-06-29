@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ipcdata.h"
 #include <afxwin.h>
-#include <string>
 
 namespace myodd {
 namespace os {
@@ -16,6 +15,15 @@ IpcData::IpcData(unsigned char* pData, unsigned int dataSize) :
 {
   //  read the data
   Read(pData, dataSize);
+}
+
+IpcData::IpcData(const IpcData& ipcData) :
+  _numArguments(0),
+  _guid(L""),
+  _pData(nullptr),
+  _pDataSize(0)
+{
+  *this = ipcData;
 }
 
 IpcData::IpcData(const std::wstring& guid) :
@@ -38,6 +46,75 @@ IpcData::~IpcData()
 
   // reset the pointer.
   ResetPtr();
+}
+
+const IpcData& IpcData::operator=(const IpcData& rhs)
+{
+  if( this != &rhs )
+  {
+    //  clear everything
+    ResetPtr();
+    ResetArguments();
+
+    //  copy some of the data
+    _numArguments = rhs._numArguments;
+    _guid = rhs._guid;
+
+    for (auto it = rhs._ipcArguments.begin();
+      it != rhs._ipcArguments.end();
+      ++it)
+    {
+      // the pointer
+      auto ia = (*it);
+      switch ( ia->dataType )
+      {
+      case IpcDataType::Guid:
+      {
+        // set the guid.
+        _ipcArguments.push_back(new IpcArgument{
+          new std::wstring(_guid),
+          IpcDataType::Guid
+        });
+      }
+      break;
+
+      case IpcDataType::Int32:
+      {
+        _ipcArguments.push_back(new IpcArgument{
+          new (signed int)( *(static_cast<signed int*>(ia->pData))),
+          IpcDataType::Int32
+        });
+      }
+      break;
+
+      case IpcDataType::String://string unicode
+      {
+        _ipcArguments.push_back(new IpcArgument{
+          new std::wstring( *(static_cast<std::wstring*>(ia->pData))),
+          IpcDataType::String
+        });
+      }
+      break;
+
+      case IpcDataType::StringAscii:
+      {
+        _ipcArguments.push_back(new IpcArgument{
+          new std::string( *(static_cast<std::string*>(ia->pData))),
+          IpcDataType::StringAscii
+        });
+      }
+      break;
+
+      default:
+        // we cannot copy this item
+        throw "Unknown argument type, I am unable to copy the original content.";
+      }
+
+    }
+      
+    //  we don't need the pointer and sizes as those are created on the fly.
+  }
+  return *this;
 }
 
 /**
@@ -81,6 +158,7 @@ void IpcData::ResetArguments()
 
   // reset all the data.
   _ipcArguments.clear();
+  _numArguments = 0;
 }
 
 /**

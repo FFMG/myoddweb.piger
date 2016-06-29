@@ -28,6 +28,10 @@ namespace AMPowerShellCmdLets
       {
         var i = ipcResponse.Get<int>(0);
       }
+
+      var a = x.Send(ipcRequest);
+      x.Close();
+      var b = x.Send(ipcRequest);
     }
   }
 }

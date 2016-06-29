@@ -643,6 +643,7 @@
     <ClInclude Include="os\ipcdata.h" />
     <ClInclude Include="os\ipclistener.h" />
     <ClInclude Include="os\ipclistenerwnd.h" />
+    <ClInclude Include="os\ipcmessagehandler.h" />
     <ClInclude Include="os\os.h" />
     <ClInclude Include="registry\registry.h" />
     <ClInclude Include="sqlite\sqlite.h" />

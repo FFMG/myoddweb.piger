@@ -29,7 +29,7 @@ namespace myodd {
     void Lock::Release()
     {
       delete _guard;
-      _guard = NULL;
+      _guard = nullptr;
     }
   }
 }

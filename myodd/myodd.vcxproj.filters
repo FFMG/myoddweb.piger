@@ -414,5 +414,8 @@
     <ClInclude Include="os\ipclistenerwnd.h">
       <Filter>os</Filter>
     </ClInclude>
+    <ClInclude Include="os\ipcmessagehandler.h">
+      <Filter>os</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
