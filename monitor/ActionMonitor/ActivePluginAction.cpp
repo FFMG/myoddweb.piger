@@ -41,7 +41,5 @@ void ActivePluginAction::OnExecuteInThread()
   
   //  save it.
   // we can now execute the thread.
-  pvm->ExecuteInThread( szFile.c_str(), api);
-
-  delete api;
+  pvm->ExecuteInThread( szFile.c_str(), *this );
 }

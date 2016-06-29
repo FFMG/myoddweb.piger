@@ -3,6 +3,7 @@
 #ifdef ACTIONMONITOR_API_PLUGIN
 
 #include "PluginApi.h"
+#include "ActiveAction.h"
 #include <map>
 #include <thread>
 #include <mutex>
@@ -15,7 +16,7 @@ public:
   PluginVirtualMachine();
   virtual ~PluginVirtualMachine();
 
-  int ExecuteInThread( LPCTSTR pluginFile, PluginApi* api);
+  int ExecuteInThread( LPCTSTR pluginFile, const ActiveAction& action );
   static bool IsPluginExt( LPCTSTR ext );
 
   bool Register( LPCTSTR, void* );

@@ -43,7 +43,7 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   return true;
 }
 
-int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
+int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action)
 {
   Initialize();
   return 0;

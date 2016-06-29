@@ -40,5 +40,5 @@ void ActivePowershellAction::OnExecuteInThread()
   
   //  save it.
   // we can now execute the thread.
-  pvm->ExecuteInThread( szFile.c_str() );
+  pvm->ExecuteInThread( szFile.c_str(), *this );
 }

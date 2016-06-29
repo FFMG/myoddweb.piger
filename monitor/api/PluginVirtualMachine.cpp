@@ -272,7 +272,7 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
  * @param void
  * @return void
  */
-int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, PluginApi* api)
+int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action )
 {
   Initialize();
   if (NULL == _amPlugin)
@@ -283,6 +283,7 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, PluginApi* api)
   }
 
   // add the api to the list.
+  auto api = new PluginApi(action);
   AddApi( api );
 
   // execute this plugin
@@ -293,6 +294,9 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, PluginApi* api)
   {
     myodd::log::LogError(_T("I was unable to remove the plugin API."));
   }
+
+  //  now delete the api
+  delete api;
 
   // return what we found.
   return result;
