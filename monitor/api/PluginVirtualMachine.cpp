@@ -469,7 +469,7 @@ double PluginVirtualMachine::Version()
 * @param void
 * @return void
 */
-bool PluginVirtualMachine::Say(const wchar_t* msg, UINT nElapse, UINT nFadeOut)
+bool PluginVirtualMachine::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
 {
   return GetApi().Say(msg, nElapse, nFadeOut);
 }

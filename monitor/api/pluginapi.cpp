@@ -42,7 +42,7 @@ double PluginApi::Version ( )
  * @param void
  * @return void
  */
-bool PluginApi::Say(const wchar_t* msg, UINT nElapse, UINT nFadeOut)
+bool PluginApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
 {
   // display the message
   // and we can now display the message.

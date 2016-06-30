@@ -53,7 +53,7 @@ void* AmPluginPrivate::Get(const wchar_t* name) const
 * @param void
 * @return void
 */
-bool AmPluginPrivate::Say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut)
+bool AmPluginPrivate::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
 {
   void* pFunc = Get(L"say");
   if (!pFunc)

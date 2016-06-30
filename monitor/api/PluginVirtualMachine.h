@@ -72,7 +72,7 @@ public:
   static double Version();
   static size_t GetCommandCount();
 
-  static bool Say(const wchar_t* msg, UINT nElapse, UINT nFadeOut);
+  static bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut);
   static bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
   static int GetString(DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   static size_t GetCommand(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer);
