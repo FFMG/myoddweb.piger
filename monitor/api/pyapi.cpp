@@ -170,7 +170,7 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::Execute(HelperApi::widen( module ).c_str(), HelperApi::widen( cmdLine ).c_str(), (isPrivileged==1) );
+  auto result = __super::Execute(HelperApi::widen( module ).c_str(), HelperApi::widen( cmdLine ).c_str(), (isPrivileged==1), nullptr );
 
   // tell the user it did not work
   if (false == result)

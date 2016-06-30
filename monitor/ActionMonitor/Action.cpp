@@ -274,9 +274,11 @@ const MYODD_STRING& Action::Command() const
  * We will expend all the environment variables as needed.
  * @param const std::vector<MYODD_STRING> [0] the file path, [1] the arguments to launch with, (optional).
  * @param bool isPrivileged if we need administrator privilege to run this.
+ * @param HANDLE hProcess if this value is not null, we will return the handle of the started process.
+ *               it is then up to the calling application to close this handle when done with it...
  * @return bool true|false success or not.
  */
-bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged)
+bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, HANDLE* hProcess)
 {
   // get the number of arguments.
   size_t argc = argv.size();
@@ -288,8 +290,8 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged)
     return false;
   }
 
-  LPTSTR argvModule = NULL;
-  LPTSTR argvCmd = NULL;
+  LPTSTR argvModule = nullptr;
+  LPTSTR argvCmd = nullptr;
 
   // get the module name, (what we are running).
   // Expand the values that might have been passed.
@@ -312,44 +314,59 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged)
   }
 
   //
-  // ShellExec
+  // ShellExecuteEx
+  // https://msdn.microsoft.com/en-us/library/windows/desktop/bb759784(v=vs.85).aspx 
   //
-  HINSTANCE hHinstance = NULL;
+  SHELLEXECUTEINFO sei = {};
+  sei.cbSize = sizeof(sei);     // in, required, sizeof of this structure
+  sei.fMask = SEE_MASK_DEFAULT; // in, SEE_MASK_XXX values
+  sei.hwnd = nullptr;           // in, optional
+  sei.lpFile = argvModule;      // in, either this value or lpIDList must be specified
+  sei.lpParameters = argvCmd;   // in, optional
+  sei.lpDirectory = nullptr;    // in, optional
+  sei.nShow = SW_NORMAL;        // in, required
+  HINSTANCE hInstApp;           // out when SEE_MASK_NOCLOSEPROCESS is specified
+  //sei.lpIDList;               // in, valid when SEE_MASK_IDLIST is specified, PCIDLIST_ABSOLUTE, for use with SEE_MASK_IDLIST & SEE_MASK_INVOKEIDLIST
+  //sei.lpClass;                // in, valid when SEE_MASK_CLASSNAME is specified
+  //sei.hkeyClass;              // in, valid when SEE_MASK_CLASSKEY is specified
+  //sei.dwHotKey;               // in, valid when SEE_MASK_HOTKEY is specified
   if (isPrivileged == true && !myodd::os::IsElevated() )
   {
-    hHinstance = ShellExecute( NULL,
-                               _T("runas"),  //  elevate
-                               argvModule,
-                               argvCmd,
-                               _T(""),
-                               SW_SHOW
-                              );
+    sei.lpVerb = _T("runas"); // in, optional when unspecified the default verb is choosen
   }
   else
   {
     //  launch as a normal file.
-    hHinstance = ShellExecute( GetDesktopWindow(), 
-                               _T("open"), 
-                               argvModule, 
-                               argvCmd, 
-                               _T(""),   
-                               SW_SHOW
-                              );
+    sei.lpVerb = _T("runas"); // in, optional when unspecified the default verb is choosen
   }
 
-  if (hHinstance <= (HINSTANCE)32)
+  if (hProcess != nullptr )
+  {
+    sei.fMask = SEE_MASK_NOCLOSEPROCESS; // in, SEE_MASK_XXX values
+  }
+
+  // Assume error
+  auto result = false;
+  if (!ShellExecuteEx(&sei))
   {
     myodd::log::LogError(_T("Could not execute statement: could not execute '%s'"), argvModule);
     myodd::log::LogError(_T("Could not execute statement: Last error '%d'"), ::GetLastError());
+  }
+  else
+  {
+    result = true;
+    if (hProcess != nullptr)
+    {
+      *hProcess = sei.hProcess;
+    }
   }
 
   // clean up the expended variable.
   delete [] argvCmd;
   delete [] argvModule;
 
-  // Assume error
-  bool result = false;
-  return (hHinstance > (HINSTANCE)32);
+  // return what we found
+  return result;
 }
 
 /**

@@ -26,7 +26,7 @@ public:
   static std::wstring widen(const std::string& str);
   
   // display a message onto the screen.
-  bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut);
+  virtual bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const;
   
   // get a command by index
   // return false if it does not exist
@@ -40,7 +40,7 @@ public:
   size_t GetCommandCount();
 
   // execute a module and a command line
-  bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
+  virtual bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const;
 
   // get the currently selected text, or false if none.
   bool GetString (MYODD_STRING& sValue, bool bQuote);

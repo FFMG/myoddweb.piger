@@ -46,9 +46,9 @@ const Clipboard& HelperApi::GetClipboard() const
  * @param const unsigned int how fast we want to fade out.
  * @return bool if the message was displayed properly.
  */
-bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
+bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
 {
-  if( NULL == msg )
+  if( nullptr == msg )
   {
     return false;
   }
@@ -61,7 +61,7 @@ bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsign
   // it is possible for a rogue thread to try and display a message
   // even after we have shutdown everything.
   // if the dlg is no longer active then we will not display anything.
-  CActionMonitorDlg* pThis = (CActionMonitorDlg*)App().GetMainWnd();
+  CActionMonitorDlg* pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
   if( !CActionMonitorDlg::IsRunning() )
   {
     return false;
@@ -206,7 +206,7 @@ size_t HelperApi::GetCommandCount()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return bool success or not
  */
-bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
+bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const
 {
   if( NULL == module && NULL == cmdLine )
   {
@@ -233,7 +233,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
   }
   
   // Execute the command +  module
-  return Action::Execute( argv, isPrivileged );
+  return Action::Execute( argv, isPrivileged, hProcess );
 }
 
 /**

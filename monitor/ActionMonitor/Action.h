@@ -17,7 +17,7 @@ public:
   
   const Action& operator=(const Action& );
   Action( const Action&);
-  Action( LPCTSTR szCommand, LPCTSTR szPath = NULL );
+  Action( LPCTSTR szCommand, LPCTSTR szPath = nullptr );
 
 	virtual ~Action();
 
@@ -50,7 +50,7 @@ public:
   const MYODD_STRING& File() const { return m_szFile; }
   const MYODD_STRING& Extension() const { return m_szExt; }
 
-  static bool Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged );
+  static bool Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged, HANDLE* hProcess );
 
 private:  
   MYODD_STRING _szCommand;  //  the command line only.

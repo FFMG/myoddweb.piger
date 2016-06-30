@@ -41,5 +41,5 @@ void ActiveDefaultAction::OnExecuteInThread()
 	std::vector<MYODD_STRING> argv;
 	argv.push_back(szFile);
 	argv.push_back(GetCommandLine() );
-	Action::Execute(argv, IsPrivileged() );
+	Action::Execute(argv, IsPrivileged(), nullptr );
 }

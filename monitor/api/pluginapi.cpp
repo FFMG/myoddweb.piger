@@ -123,9 +123,9 @@ size_t PluginApi::GetCommandCount()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return void
  */
-bool PluginApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
+bool PluginApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const
 {
-  if (!__super::Execute(module, cmdLine, isPrivileged))
+  if (!__super::Execute(module, cmdLine, isPrivileged, hProcess ))
   {
     // tell the user it did not work
     __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);

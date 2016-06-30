@@ -105,7 +105,7 @@ int LuaApi::Execute (lua_State *lua)
   auto cmdLine = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ARGS));
 
   // run the query
-  bool result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged );
+  bool result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr );
 
   // push the result.
   lua_pushboolean ( lua, result );

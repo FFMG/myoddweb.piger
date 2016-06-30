@@ -17,8 +17,8 @@ public:
   double Version ();
   size_t GetCommandCount();
 
-  bool Say         (const wchar_t* msg, UINT nElapse, UINT nFadeOut);
-  bool Execute     (const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
+  bool Say         (const wchar_t* msg, UINT nElapse, UINT nFadeOut) const override;
+  bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
   int GetString    ( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   size_t GetCommand( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer );
   int GetAction    ( DWORD nBufferLength, wchar_t* lpBuffer );

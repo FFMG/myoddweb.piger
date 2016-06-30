@@ -3,7 +3,6 @@
 #ifdef ACTIONMONITOR_API_PLUGIN
 
 #include "PluginVirtualMachine.h"
-#include "helperapi.h"
 #include "ActionMonitor.h"
 #include "../threads/lock.h"
 #include "amplugin\ampluginprivate.h"
@@ -14,10 +13,10 @@
  * @return void
  */
 PluginVirtualMachine::PluginVirtualMachine() : 
-  _amPlugin( NULL )
+  _amPlugin( nullptr )
 {
   //  get our own module architecture.
-  _moduleArchitecture = myodd::os::GetImageArchitecture( NULL );
+  _moduleArchitecture = myodd::os::GetImageArchitecture( nullptr );
 }
 
 /**
@@ -519,9 +518,9 @@ size_t PluginVirtualMachine::GetCommandCount()
 * @param bool isPrivileged if we need administrator privilege to run this.
 * @return void
 */
-bool PluginVirtualMachine::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged)
+bool PluginVirtualMachine::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
 {
-  return GetApi().Execute(module, cmdLine, isPrivileged);
+  return GetApi().Execute(module, cmdLine, isPrivileged, nullptr );
 }
 
 /**

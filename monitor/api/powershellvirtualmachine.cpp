@@ -59,7 +59,23 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
 
   //  execute a script now.
   MYODD_STRING arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), pluginFile);
-  psApi->Execute( _T("powershell.exe"), arguments.c_str(), true);
+
+  HANDLE hProcess = nullptr;
+  if( psApi->Execute( _T("powershell.exe"), arguments.c_str(), true, &hProcess ) )
+  {
+    if( hProcess != nullptr )
+    {
+      for (;;)
+      {
+        auto singleObject = WaitForSingleObject(hProcess, 1000);
+        if(WAIT_TIMEOUT != singleObject )
+        {
+          break;
+        }
+      }
+      CloseHandle( hProcess );
+    }
+  }
   return 0;
 }
 
