@@ -55,26 +55,42 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
 
   //  create uuid and andd it to our list.
   std::wstring uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  auto psApi = AddApi(uuid, action );
+  auto psApi = AddApi(uuid, action);
 
   //  execute a script now.
   MYODD_STRING arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), pluginFile);
 
+  //
+  // it is very important that we do not use out locks here!
+  // otherwise no other powershell window will be able to run
+  // we must let everything run fine.
   HANDLE hProcess = nullptr;
-  if( psApi->Execute( _T("powershell.exe"), arguments.c_str(), true, &hProcess ) )
+  if (psApi->Execute(_T("powershell.exe"), arguments.c_str(), true, &hProcess))
   {
-    if( hProcess != nullptr )
+    // it seems to have run, but according to MS it is possible that we do not get a valid process.
+    if (hProcess != nullptr)
     {
       for (;;)
       {
+        // wait for it to finish... a little.
         auto singleObject = WaitForSingleObject(hProcess, 1000);
-        if(WAIT_TIMEOUT != singleObject )
+
+        // if we didn't timeout then something else happened.
+        if (WAIT_TIMEOUT != singleObject)
         {
+          if (NO_ERROR != singleObject)
+          {
+            myodd::log::LogWarning(_T("There was an error running powershell : '%s'"), arguments.c_str());
+          }
           break;
         }
       }
-      CloseHandle( hProcess );
+      CloseHandle(hProcess);
     }
+  }
+  else
+  {
+    myodd::log::LogError(_T("I was unable to start powershell : '%s'"), arguments.c_str());
   }
   return 0;
 }
