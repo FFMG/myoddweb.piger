@@ -163,7 +163,7 @@ bool ClipboardDropData::PopulateDropFiles(DROPFILES *df, const size_t maxSize) c
   {
     // get the number of characters in the file.
     // the number of characters is the number of wchar_t, not the size it takes in memory.
-    int len = (*it).size();
+    size_t len = (*it).size();
 
     // check that we have space for that.
     // as we are checking the memory, we * sizeof(wchar_t)
