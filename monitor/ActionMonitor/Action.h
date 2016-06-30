@@ -50,11 +50,7 @@ public:
   const MYODD_STRING& File() const { return m_szFile; }
   const MYODD_STRING& Extension() const { return m_szExt; }
 
-private:
   static bool Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged );
-
-public:
-  static HINSTANCE ExecuteWithInstance( const std::vector<MYODD_STRING>& argv, bool isPrivileged);
 
 private:  
   MYODD_STRING _szCommand;  //  the command line only.

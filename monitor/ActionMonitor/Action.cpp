@@ -278,31 +278,6 @@ const MYODD_STRING& Action::Command() const
  */
 bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged)
 {
-  //  get the instance
-  auto hHinstance = ExecuteWithInstance(argv, isPrivileged);
-
-  // Assume error
-  bool result = false;
-  if (hHinstance > (HINSTANCE)32)
-  {
-    result = true;
-  }
-  else
-  {
-    result = false;
-  }
-  return result;
-}
-
-/**
- * Execute a file.
- * We will expend all the environment variables as needed.
- * @param const std::vector<MYODD_STRING> [0] the file path, [1] the arguments to launch with, (optional).
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @return bool true|false success or not.
- */
-HINSTANCE Action::ExecuteWithInstance(const std::vector<MYODD_STRING>& argv, bool isPrivileged)
-{
   // get the number of arguments.
   size_t argc = argv.size();
 
@@ -310,7 +285,7 @@ HINSTANCE Action::ExecuteWithInstance(const std::vector<MYODD_STRING>& argv, boo
   if( argc < 1 || argc > 2 )
   {
     ASSERT ( 0 ); //  wrong number of arguments.
-    return nullptr;
+    return false;
   }
 
   LPTSTR argvModule = NULL;
@@ -321,7 +296,7 @@ HINSTANCE Action::ExecuteWithInstance(const std::vector<MYODD_STRING>& argv, boo
   if( !myodd::files::ExpandEnvironment( argv[ 0 ].c_str(), argvModule ) )
   {
     myodd::log::LogError(_T("Could not execute statement: Unable to expand command line '%s'"), argv[0].c_str());
-    return nullptr;
+    return false;
   }
 
   // But we might also have a command line item.
@@ -332,7 +307,7 @@ HINSTANCE Action::ExecuteWithInstance(const std::vector<MYODD_STRING>& argv, boo
     {
       myodd::log::LogError(_T("Could not execute statement: Unable to expand arguments '%s'"), argv[1].c_str());
       delete [] argvModule;
-      return nullptr;
+      return false;
     }
   }
 
@@ -372,7 +347,9 @@ HINSTANCE Action::ExecuteWithInstance(const std::vector<MYODD_STRING>& argv, boo
   delete [] argvCmd;
   delete [] argvModule;
 
-  return hHinstance;
+  // Assume error
+  bool result = false;
+  return (hHinstance > (HINSTANCE)32);
 }
 
 /**
