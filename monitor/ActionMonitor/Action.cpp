@@ -340,6 +340,8 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, H
     sei.lpVerb = _T("runas"); // in, optional when unspecified the default verb is choosen
   }
 
+  // did the user pass a handle?
+  // if they did then they want to take ownership of the process and close the handle.
   if (hProcess != nullptr )
   {
     sei.fMask = SEE_MASK_NOCLOSEPROCESS; // in, SEE_MASK_XXX values
@@ -357,6 +359,7 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, H
     result = true;
     if (hProcess != nullptr)
     {
+      // return the handle.
       *hProcess = sei.hProcess;
     }
   }
