@@ -42,7 +42,7 @@ double PowershellApi::Version ( )
  * @param void
  * @return void
  */
-bool PowershellApi::Say(const wchar_t* msg, UINT nElapse, UINT nFadeOut) const
+bool PowershellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
 {
   // display the message
   // and we can now display the message.
