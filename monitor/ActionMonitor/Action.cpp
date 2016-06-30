@@ -325,7 +325,7 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, H
   sei.lpParameters = argvCmd;   // in, optional
   sei.lpDirectory = nullptr;    // in, optional
   sei.nShow = SW_NORMAL;        // in, required
-  HINSTANCE hInstApp;           // out when SEE_MASK_NOCLOSEPROCESS is specified
+  //sei.hInstApp;               // out when SEE_MASK_NOCLOSEPROCESS is specified
   //sei.lpIDList;               // in, valid when SEE_MASK_IDLIST is specified, PCIDLIST_ABSOLUTE, for use with SEE_MASK_IDLIST & SEE_MASK_INVOKEIDLIST
   //sei.lpClass;                // in, valid when SEE_MASK_CLASSNAME is specified
   //sei.hkeyClass;              // in, valid when SEE_MASK_CLASSKEY is specified
