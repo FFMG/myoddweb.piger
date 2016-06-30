@@ -337,7 +337,7 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, H
   else
   {
     //  launch as a normal file.
-    sei.lpVerb = _T("runas"); // in, optional when unspecified the default verb is choosen
+    sei.lpVerb = _T("open");  // in, optional when unspecified the default verb is choosen
   }
 
   // did the user pass a handle?

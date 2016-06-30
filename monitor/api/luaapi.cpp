@@ -1,6 +1,16 @@
 #include "StdAfx.h"
 
 #ifdef ACTIONMONITOR_API_LUA
+
+// this is the version number for that particular API
+// 0.1 was the old API, not idea what version of Python it was using.
+// 2.0 uses version 5.3.
+// 3.0 added Log( ... )
+// 3.1 fixed some minor issues with bool > boolean
+// 3.2 check all the params type/number
+// 3.3 fixed lua execute with just one element.
+static const double ACTIONMONITOR_API_LUA_VERSION = 3.3;
+
 #include "luaapi.h"
 #include "luaVirtualMachine.h"
 #include "../string/string.h"
@@ -76,9 +86,22 @@ int LuaApi::Execute (lua_State *lua)
     return 1;
   }
 
-  if (!lua_isstring(lua, ARGUMENT_MODULE) || !lua_isstring(lua, ARGUMENT_ARGS))
+  // do we have a module?
+  if (!lua_isstring(lua, ARGUMENT_MODULE) )
   {
-    auto errorMsg = _T("<b>Error : </b> The first and second parameters must be strings.");
+    auto errorMsg = _T("<b>Error : </b> The first parameters must be strings.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    lua_pushboolean(lua, false);
+
+    // return the number of results
+    return 1;
+  }
+
+  // do we have an argument?
+  if ( n >= 2 && !lua_isstring(lua, ARGUMENT_ARGS))
+  {
+    auto errorMsg = _T("<b>Error : </b> The second parameters must be a string.");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -101,8 +124,11 @@ int LuaApi::Execute (lua_State *lua)
     isPrivileged = (lua_toboolean(lua, ARGUMENT_PRIVILEGED) == 1);
   }
 
-  auto module = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_MODULE));
-  auto cmdLine = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ARGS));
+  //  get the module
+  auto module = (n >= 1) ? myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_MODULE)) : L"";
+
+  // and the command line argument
+  auto cmdLine = (n >= 2) ? myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ARGS)) : L"";
 
   // run the query
   bool result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr );
