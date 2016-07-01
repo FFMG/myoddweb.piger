@@ -1,5 +1,4 @@
-﻿using AMPowerShellCmdLets.myodd;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
@@ -7,7 +6,7 @@ using System.Runtime.InteropServices;
 // ReSharper disable once CheckNamespace
 namespace MyOdd
 {
-  public class IpcConnector
+  internal class IpcConnector
   {
     private const int WmClose = 0x10;
     private const int WmCopyData = 0x004A;

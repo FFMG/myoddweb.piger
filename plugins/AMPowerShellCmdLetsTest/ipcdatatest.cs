@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AMPowerShellCmdLets.myodd;
+using MyOdd;
 
-namespace AMPowerShellCmdLetsTest
+namespace MyOddTest
 {
   [TestClass]
   public class IpcDataTest

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace AMPowerShellCmdLets.myodd
+namespace MyOdd
 {
-  public class IpcData
+  internal class IpcData
   {
     private enum DataType : short
     {
