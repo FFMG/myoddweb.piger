@@ -334,7 +334,7 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   }
 
   // Do it
-  PFUNC_MSG pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
+  auto pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
   if (NULL == pfMsg )
   {
     api.Say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
@@ -350,7 +350,7 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   m_pluginsContainer[ pluginFile ] = f;
 
   // assume error 
-  AM_RESPONSE result = AM_RESP_NONE;
+  auto result = AM_RESP_NONE;
 
   // as this is the first time we call this plugin
   // we need to initialize it here
@@ -358,20 +358,20 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   try
   {
     // set some of the paths that might be of interest.
-    const wchar_t* lp = NULL;
+    const wchar_t* lp = nullptr;
     lp = myodd::config::get( _T("paths\\commands") );
-    pfMsg( AM_MSG_PATH_CMD, 0, (AM_INT)lp );
+    pfMsg( AM_MSG_PATH_CMD, 0, reinterpret_cast<AM_INT>(lp) );
     lp = myodd::config::get( _T("paths\\in"));
-    pfMsg( AM_MSG_PATH_IN, 0, (AM_INT)lp );
+    pfMsg( AM_MSG_PATH_IN, 0, reinterpret_cast<AM_INT>(lp) );
     lp = myodd::config::get( _T("paths\\out"));
-    pfMsg( AM_MSG_PATH_OUT, 0, (AM_INT)lp );
+    pfMsg( AM_MSG_PATH_OUT, 0, reinterpret_cast<AM_INT>(lp) );
     lp = myodd::config::get( _T("paths\\tmp"));
-    pfMsg( AM_MSG_PATH_TMP, 0, (AM_INT)lp );
+    pfMsg( AM_MSG_PATH_TMP, 0, reinterpret_cast<AM_INT>(lp) );
     lp = myodd::config::get( _T("paths\\plugin"));
-    pfMsg( AM_MSG_PATH_PLUGIN, 0, (AM_INT)lp );
+    pfMsg( AM_MSG_PATH_PLUGIN, 0, reinterpret_cast<AM_INT>(lp) );
 
     // call the init path
-    result = pfMsg( AM_MSG_INIT,     0, (AM_INT)_amPlugin );
+    result = pfMsg( AM_MSG_INIT,     0, reinterpret_cast<AM_INT>(_amPlugin) );
   }
   catch( ... )
   {
@@ -443,7 +443,7 @@ void PluginVirtualMachine::DestroyPlugins()
 
     // and with the pointer
     delete f;
-    f = NULL;
+    f = nullptr;
   }// for each modules.
 
   // and remove everything

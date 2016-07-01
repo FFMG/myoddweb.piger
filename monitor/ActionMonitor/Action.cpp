@@ -141,12 +141,12 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szComma
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
-  LPCTSTR command = Command().c_str();
+  auto command = Command().c_str();
   
   //  not sure how to do that...
   if ( Len() == 0)
   {
-    return NULL;
+    return nullptr;
   }
 
   // we are about to execute a command, we don't know how long the command will last
@@ -156,7 +156,7 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szComma
   //  if we are here then we are going to load a user command
   //
   //  If the user did not pass any arguments/command line then we must get them from the clipboard.
-  ActiveAction* aa = NULL;
+  ActiveAction* aa = nullptr;
   if( szCommandLine.length() == 0 )
   {
     aa = CreateActiveActionWithNoCommandLine( pWnd, isPrivileged);

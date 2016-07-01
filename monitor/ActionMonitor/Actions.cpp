@@ -4,11 +4,9 @@
 
 #include "stdafx.h"
 #include "Actions.h"
-#include "ActionMonitor.h"
 #include <io.h>
 
 //  the Dll hooks, (for the pause)
-#include "../hook/hook.h"
 #include "threads/lock.h"
 
 
