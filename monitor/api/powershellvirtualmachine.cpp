@@ -57,13 +57,28 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   std::wstring uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
   auto psApi = AddApi(uuid, action);
 
-  //  execute a script now.
-  MYODD_STRING arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), pluginFile);
+  // get the powershell dll path
+  auto path = myodd::files::GetAppPath(true);
+  myodd::files::Join(path, path, _T("AMPowerShellCmdLets.dll"));
+  if (!myodd::files::FileExists(path))
+  {
+    auto errorMsg = _T("I was unable to find the AMPowerShell dll, I cannot execute this script.");
+    psApi->Say(errorMsg, 3000, 5);
+    myodd::log::LogError(errorMsg);
+
+    // did not find the command let
+    return 0;
+  }
+
+  //  prepare the arguments.
+  auto arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), path.c_str(), pluginFile);
 
   //
   // it is very important that we do not use out locks here!
   // otherwise no other powershell window will be able to run
   // we must let everything run fine.
+  //
+  //  execute a script now.
   HANDLE hProcess = nullptr;
   if (psApi->Execute(_T("powershell.exe"), arguments.c_str(), true, &hProcess))
   {

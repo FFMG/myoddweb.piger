@@ -15,8 +15,15 @@ namespace Am
 
     private MyOdd.IpcConnector Connector { get; set; }
 
-    public Core()
+    public Core(string givenGuid)
     {
+      // We must be given a valid uid
+      givenGuid = givenGuid.Trim();
+      if ( string.IsNullOrEmpty(givenGuid) )
+      {
+        throw new Exception("The given ID cannot be null and/or empty");
+      }
+
       //  create the connector.
       Connector = new MyOdd.IpcConnector(_Name);
     }
