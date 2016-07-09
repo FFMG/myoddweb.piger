@@ -28,5 +28,8 @@ protected:
   PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action);
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();
+
+  static bool IsPowershell3Installed();
+  static bool Powershell3Path(MYODD_STRING& szPath);
 };
 #endif /*ACTIONMONITOR_PS_PLUGIN*/

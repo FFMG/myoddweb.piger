@@ -57,6 +57,24 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   std::wstring uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
   auto psApi = AddApi(uuid, action);
 
+  //  do we have powerhsell3?
+  if (!IsPowershell3Installed())
+  {
+    auto errorMsg = _T("Powersell 3 is not installed, so we cannot run this script!");
+    psApi->Say(errorMsg, 3000, 5);
+    myodd::log::LogError(errorMsg);
+    return 0;
+  }
+
+  MYODD_STRING szPath;
+  if( !Powershell3Path(szPath) )
+  {
+    auto errorMsg = _T("Powersell 3 could not be found in the installed path, so we cannot run this script!");
+    psApi->Say(errorMsg, 3000, 5);
+    myodd::log::LogError(errorMsg);
+    return 0;
+  }
+
   // get the powershell dll path
   auto path = myodd::files::GetAppPath(true);
   myodd::files::Join(path, path, _T("AMPowerShellCmdLets.dll"));
@@ -73,7 +91,6 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   // the object
   auto am = myodd::strings::Format( _T("$am = New-Object Am.Core \"%s\""), uuid.c_str() );
 
-
   //  prepare the arguments.
   auto arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), path.c_str(), am.c_str(), pluginFile);
 
@@ -84,7 +101,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   //
   //  execute a script now.
   HANDLE hProcess = nullptr;
-  if (psApi->Execute(_T("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"), arguments.c_str(), true, &hProcess))
+  if (psApi->Execute(szPath.c_str(), arguments.c_str(), true, &hProcess))
   {
     // it seems to have run, but according to MS it is possible that we do not get a valid process.
     if (hProcess != nullptr)
@@ -190,5 +207,66 @@ void PowershellVirtualMachine::RemoveApis()
 
   //  reset the api map
   _apis.clear();
+}
+
+/**
+ * Get the path of powershell 3
+ * @param MYODD_STRING& szPath the path, if we find it.
+ * @return boolean if we managed to locate the exe
+ */
+bool PowershellVirtualMachine::Powershell3Path(MYODD_STRING& szPath)
+{
+  // does it even exist?
+  if (!IsPowershell3Installed())
+  {
+    myodd::log::LogWarning(_T("Could not get PS3 path as it is not even installed!"));
+    szPath = _T("");
+    return false;
+  }
+
+  //  the return path.
+  MYODD_STRING szRegPath = _T("");
+  if (!myodd::reg::LoadStringFullPath(_T("SOFTWARE\\Microsoft\\PowerShell\\3\\PowerShellEngine"), _T("ApplicationBase"), szRegPath, HKEY_LOCAL_MACHINE))
+  {
+    // this does not make sense.
+    myodd::log::LogError(_T("Could not get PS3 path, while it looks like it is installed, the path value could not be found."));
+
+    // the value does not even exist.
+    szPath = _T("");
+    return false;
+  }
+
+  // we now need to add powershell.exe
+  myodd::files::Join(szPath, szRegPath, _T("powershell.exe"));
+  if (!myodd::files::FileExists(szPath))
+  {
+    // this does not make sense.
+    myodd::log::LogError(_T("Could not get PS3 path, while it looks like it is installed, the path given does not point to a valid exe."));
+
+    // the value does not even exist.
+    szPath = _T("");
+    return false;
+  }
+
+  //  the path is set in the myodd::files::Join( ... ).
+  return true;
+}
+
+/**
+ * Static function to check if powershell is installed.
+ * @see https://blogs.msdn.microsoft.com/powershell/2009/06/25/detection-logic-for-powershell-installation/
+ * @return boolean if powershell 3 is installed or not.
+ */
+bool PowershellVirtualMachine::IsPowershell3Installed()
+{
+  DWORD dwValue;
+  if (!myodd::reg::LoadDWORDFullPath(_T("SOFTWARE\\Microsoft\\PowerShell\\3"), _T("Install"), dwValue, HKEY_LOCAL_MACHINE))
+  {
+    // the value does not even exist.
+    return false;
+  }
+
+  // if the value is 1 then it is installed.
+  return (dwValue == 1 );
 }
 #endif /*ACTIONMONITOR_PS_PLUGIN*/
