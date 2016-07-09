@@ -70,8 +70,12 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
     return 0;
   }
 
+  // the object
+  auto am = myodd::strings::Format( _T("$am = New-Object Am.Core \"%s\""), uuid.c_str() );
+
+
   //  prepare the arguments.
-  auto arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), path.c_str(), pluginFile);
+  auto arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), path.c_str(), am.c_str(), pluginFile);
 
   //
   // it is very important that we do not use out locks here!
@@ -80,7 +84,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   //
   //  execute a script now.
   HANDLE hProcess = nullptr;
-  if (psApi->Execute(_T("powershell.exe"), arguments.c_str(), true, &hProcess))
+  if (psApi->Execute(_T("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"), arguments.c_str(), true, &hProcess))
   {
     // it seems to have run, but according to MS it is possible that we do not get a valid process.
     if (hProcess != nullptr)
@@ -107,7 +111,9 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   {
     myodd::log::LogError(_T("I was unable to start powershell : '%s'"), arguments.c_str());
   }
-  return 0;
+
+  // if we are here, it worked.
+  return 1;
 }
 
 bool PowershellVirtualMachine::IsPluginExt(LPCTSTR ext)
