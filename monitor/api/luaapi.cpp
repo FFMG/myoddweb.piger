@@ -589,7 +589,7 @@ int LuaApi::Geturl( lua_State *lua )
   }
 
   //  get the index.
-  unsigned int idx = (unsigned int)lua_tointeger (lua, 1);
+  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER);
 
   // the quote
   bool bQuote = true;

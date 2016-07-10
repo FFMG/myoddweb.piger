@@ -111,6 +111,18 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
     return psApi->GetFile(shiftedRequest, ipcResponse);
   }
 
+  // get the selected folder.
+  if (functionName == L"GetFolder")
+  {
+    return psApi->GetFolder(shiftedRequest, ipcResponse);
+  }
+
+  // get the selected folder.
+  if (functionName == L"GetUrl")
+  {
+    return psApi->GetUrl(shiftedRequest, ipcResponse);
+  }
+
   //  if we are here then it is an unknown function.
   return false;
 }

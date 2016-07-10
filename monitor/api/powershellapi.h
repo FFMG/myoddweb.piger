@@ -24,10 +24,10 @@ public:
   bool GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+  bool GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+  bool GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
 
   bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
-  int GetFolder    ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
-  int GetURL       ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   bool AddAction   (const wchar_t* szText, const wchar_t* szPath );
   bool RemoveAction(const wchar_t* szText, const wchar_t* szPath );
   bool GetVersion  ( DWORD nBufferLength, wchar_t* lpBuffer);

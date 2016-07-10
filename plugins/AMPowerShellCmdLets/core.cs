@@ -249,6 +249,12 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
+    /// <summary>
+    /// Get the currenctly selected folder by index.
+    /// </summary>
+    /// <param name="index">The folder we are looking for.</param>
+    /// <param name="quote">If we want to quote the response or not.</param>
+    /// <returns></returns>
     public string Getfolder( uint index, bool quote)
     {
       //  request
@@ -264,9 +270,26 @@ namespace Am
       {
         throw new Exception("Unable to get the folder at index.");
       }
+
+      if (ipcResponse.IsInt(0))
+      {
+        if (0 == ipcResponse.Get<int>(0))
+        {
+          throw new Exception("Unable to get the selected file, probably because there isn't one.");
+        }
+
+        //  not sure what that number is
+        throw new Exception("Could not understand the return error.");
+      }
       return ipcResponse.Get<string>(0);
     }
 
+    /// <summary>
+    /// Get the url by index.
+    /// </summary>
+    /// <param name="index">The url we are looking for.</param>
+    /// <param name="quote">If we want to quote the response or not.</param>
+    /// <returns></returns>
     public string Geturl( uint index, bool quote)
     {
       //  request
@@ -281,6 +304,17 @@ namespace Am
       if (null == ipcResponse)
       {
         throw new Exception("Unable to get the url at index.");
+      }
+
+      if (ipcResponse.IsInt(0))
+      {
+        if (0 == ipcResponse.Get<int>(0))
+        {
+          throw new Exception("Unable to get the selected file, probably because there isn't one.");
+        }
+
+        //  not sure what that number is
+        throw new Exception("Could not understand the return error.");
       }
       return ipcResponse.Get<string>(0);
     }
