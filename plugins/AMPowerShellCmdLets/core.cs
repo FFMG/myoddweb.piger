@@ -117,19 +117,33 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    public string GetAction( uint index )
+    /// <summary>
+    /// Get the action name.
+    /// </summary>
+    /// <returns>The name of the action that we called.</returns>
+    public string GetAction()
     {
       //  request
       var ipcRequest = new MyOdd.IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetAction");
-      ipcRequest.Add(index);
 
       //  response
       var ipcResponse = Connector.Send(ipcRequest);
       if (null == ipcResponse)
       {
-        throw new Exception("Unable to get the action at index.");
+        throw new Exception("Unable to get the action.");
+      }
+
+      if (ipcResponse.IsInt(0))
+      {
+        if (0 == ipcResponse.Get<int>(0))
+        {
+          throw new Exception("Unable to get the command name.");
+        }
+
+        //  not sure what that number is
+        throw new Exception("Could not understand the return error.");
       }
       return ipcResponse.Get<string>(0);
     }

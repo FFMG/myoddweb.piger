@@ -21,10 +21,10 @@ public:
   bool Version (const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+  bool GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
 
   bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
   int GetString    ( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
-  int GetAction    ( DWORD nBufferLength, wchar_t* lpBuffer );
   int GetFile      ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   int GetFolder    ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   int GetURL       ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);

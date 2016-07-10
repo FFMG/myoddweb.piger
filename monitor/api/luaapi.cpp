@@ -199,7 +199,6 @@ int LuaApi::GetCommand (lua_State *lua)
  */
 int LuaApi::GetAction (lua_State *lua)
 {
-  static const int ARGUMENT_NUMBER = 1;
   int n = lua_gettop( lua );
   if( n != 0 )
   {
@@ -215,7 +214,7 @@ int LuaApi::GetAction (lua_State *lua)
   MYODD_STRING sValue;
   if( !__super::GetAction( sValue ) )
   {
-    auto errorMsg = _T("Trying to get an action past the number of actions.");
+    auto errorMsg = _T("Trying to get the action name/value.");
     __super::Log(AM_LOG_WARNING, errorMsg);
 
     lua_pushboolean(lua, false);

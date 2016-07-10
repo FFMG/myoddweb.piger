@@ -21,31 +21,6 @@ PowershellApi::~PowershellApi()
 {
 }
 
-/**
- * Todo
- * @see __super::getAction
- * @param void
- * @param void
- * @param void
- * @return void
- */
-int PowershellApi::GetAction( DWORD nBufferLength, wchar_t* lpBuffer )
-{
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetAction( sValue ) )
-  {
-    return 0;
-  }
-
-  size_t len = sValue.length();
-  if ( nBufferLength > 0 && lpBuffer )
-  {
-    memset( lpBuffer, 0, nBufferLength );
-    _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
-  }
-
-  return static_cast<int>(len);
-}
 
 /**
  * Todo
@@ -274,7 +249,7 @@ bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 2 || argumentCount > 3)
   {
-    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     return false;
@@ -300,7 +275,7 @@ bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
   auto elapse = ipcRequest.Get<unsigned int>(ARGUMENT_ELAPSE);
   if (elapse == 0)
   {
-    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     return false;
@@ -349,10 +324,12 @@ bool PowershellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
 }
 
 /**
-* Get the number of command, (space delimited).
-* @see __super::getCommandCount
-* @return in the number of commanded entered by the user
-*/
+ * Get the number of command, (space delimited).
+ * @see __super::getCommandCount
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us. 
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not
+ */
 bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
   auto argumentCount = ipcRequest.GetNumArguments();
@@ -376,13 +353,12 @@ bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd:
 }
 
 /**
-* Todo
-* @see __super::getCommand
-* @param UINT idx the command number we want to get.
-* @param DWORD nBufferLength the max buffer length that we want to get.
-* @param wchar_t* lpBuffer the buffer that will contain the command, if it is NULL only the size will be returned.
-* @return void
-*/
+ * Get a command by index, #0 is the script been run.
+ * @see __super::getCommand
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return boolean success or not
+ */
 bool PowershellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
   static const int ARGUMENT_NUMBER = 0;
@@ -409,5 +385,42 @@ bool PowershellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::
 
   //  return the string that we found.
   ipcResponse.Add(sValue);
+  return true;
+}
+
+/**
+ * Get the command that was called, (usefull in case we have multiple registered commands by scripts).
+ * @see __super::getAction
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return boolean success or not
+ */
+bool PowershellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount != 0)
+  {
+    auto errorMsg = _T("<b>Error : </b>.<br>Format is <i>GetAction( )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  MYODD_STRING sValue;
+  if (!__super::GetAction(sValue))
+  {
+    auto errorMsg = _T("Trying to get the action name/value.");
+    __super::Log(AM_LOG_WARNING, errorMsg);
+
+    // return that there was an error.
+    ipcResponse.Add(0);
+    return true;
+  }
+
+  // push the value
+  auto asValue = myodd::strings::WString2String(sValue);
+  ipcResponse.Add( asValue );
+
+  // success
   return true;
 }
