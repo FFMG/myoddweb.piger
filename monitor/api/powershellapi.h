@@ -14,6 +14,9 @@ public:
   virtual ~PowershellApi();
 
 public:
+  bool Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+
+public:
   double Version ();
   size_t GetCommandCount();
 

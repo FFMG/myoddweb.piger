@@ -321,3 +321,63 @@ void PowershellApi::Log(unsigned int logType, const wchar_t* lpText)
 {
   __super::Log(logType, lpText);
 }
+
+bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  const int ARGUMENT_TEXT = 0;
+  const int ARGUMENT_ELAPSE = 1;
+  const int ARGUMENT_FADEOUT = 2;
+
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount < 2 || argumentCount > 3)
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsString(ARGUMENT_TEXT))
+  {
+    auto errorMsg = _T("<b>Error : </b> The first argument must be a string.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsInt( ARGUMENT_ELAPSE))
+  {
+    auto errorMsg = _T("<b>Error : </b> The elapse parameters must be an integer.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  auto message = ipcRequest.Get<std::wstring>(ARGUMENT_TEXT);
+  auto elapse = ipcRequest.Get<unsigned int>(ARGUMENT_ELAPSE);
+  if (elapse == 0)
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  auto fade = 0;
+  if (argumentCount == 3)
+  {
+    if (!ipcRequest.IsInt(ARGUMENT_FADEOUT))
+    {
+      auto errorMsg = _T("<b>Error : </b> The fadout parameters must be an integer.");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      return false;
+    }
+    fade = ipcRequest.Get<unsigned int>(ARGUMENT_FADEOUT);
+  }
+
+  // add the boolean response.
+  auto b = Say(message.c_str(), elapse, fade);
+  ipcResponse.Add( b );
+  return b;
+}

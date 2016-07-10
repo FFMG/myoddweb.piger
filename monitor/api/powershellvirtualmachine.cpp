@@ -40,13 +40,42 @@ void PowershellVirtualMachine::Initialize()
  */
 bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  ipcResponse.Add(37);
-  ipcResponse.Add(L"Hello");
-  ipcResponse.Add(L"");  // empty L string
-  ipcResponse.Add("Hello");
-  ipcResponse.Add("");  // empty string
+  //  we must have 2 arguments
+  // #1 is the uiid
+  // #2 is the function name
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if ( argumentCount < 2)
+  {
+    //  this is not for us
+    return false;
+  }
 
-  return true;
+  //  lock us in to prevent the api from going away
+  myodd::threads::Lock lock(_mutex);
+
+  // get the uuid
+  auto uuid = ipcRequest.Get<std::wstring>(0);
+  auto psApi = FindApi(uuid);
+  if (nullptr == psApi)
+  {
+    return false;
+  }
+
+  //  get the function name
+  auto functionName = ipcRequest.Get<std::wstring>(1);
+
+  // shift the 2 arguments.
+  auto shiftedRequest = ipcRequest;
+  shiftedRequest.RemoveArgument(0); // remove the uuid
+  shiftedRequest.RemoveArgument(0); // remove the function name
+
+  if (functionName == L"Say")
+  {
+    return psApi->Say(shiftedRequest, ipcResponse);
+  }
+
+  //  if we are here then it is an unknown function.
+  return false;
 }
 
 int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action)
@@ -159,6 +188,20 @@ PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const 
 
   // return the new psApi
   return psApi;
+}
+
+PowershellApi* PowershellVirtualMachine::FindApi(const std::wstring& uuid) const
+{
+  //  look for it
+  auto it = _apis.find(uuid);
+  if (it == _apis.end())
+  {
+    //  does not seem to exist.
+    return nullptr;
+  }
+
+  //  return the api
+  return it->second;
 }
 
 void PowershellVirtualMachine::RemoveApi(const std::wstring& uuid)

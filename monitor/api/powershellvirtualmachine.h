@@ -26,6 +26,7 @@ protected:
   APIS _apis;
 
   PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action);
+  PowershellApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();
 
