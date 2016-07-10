@@ -43,30 +43,6 @@ bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool 
 
 /**
  * Todo
- * @see __super::getString
- * @param void
- * @param void
- * @return void
- */
-int PowershellApi::GetString( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote )
-{
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetString ( sValue, bQuote ) )
-  {
-    return 0;
-  }
-
-  size_t len = sValue.length();
-  if ( nBufferLength > 0 && lpBuffer )
-  {
-    memset( lpBuffer, 0, nBufferLength );
-    _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
-  }
-  return static_cast<int>(len);
-}
-
-/**
- * Todo
  * @see __super::getFile
  * @param void
  * @param void
@@ -422,5 +398,56 @@ bool PowershellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::I
   ipcResponse.Add( asValue );
 
   // success
+  return true;
+}
+
+/**
+ * Get the currently selected string, (if any).
+ * @see __super::getString
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return boolean success or not
+ */
+bool PowershellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  const int ARGUMENT_QUOTE = 0;
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount > 1)
+  {
+    auto errorMsg = _T("<b>Error : </b> The function 'Getstring' does not take more than one parameter");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  // the quote
+  bool bQuote = true;
+  if (argumentCount == 1)
+  {
+    if (!ipcRequest.IsInt( ARGUMENT_QUOTE ))
+    {
+      auto errorMsg = _T("The first parameter must be a boolean.");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      return false;
+    }
+    bQuote = (1 == ipcRequest.Get<int>(ARGUMENT_QUOTE));
+  }
+
+  MYODD_STRING sValue = _T("");
+  if (!__super::GetString(sValue, bQuote))
+  {
+    __super::Log(AM_LOG_WARNING, _T("Could not get any selected string."));
+
+    // return that there was an error.
+    ipcResponse.Add(0);
+    return true;
+  }
+
+  // otherwise push the string
+  auto asValue = myodd::strings::WString2String(sValue);
+  ipcResponse.Add( asValue );
+
+  // we have one item
   return true;
 }

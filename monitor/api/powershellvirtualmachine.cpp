@@ -99,6 +99,12 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
     return psApi->GetAction(shiftedRequest, ipcResponse);
   }
 
+  // get the selected string
+  if (functionName == L"GetString")
+  {
+    return psApi->GetString(shiftedRequest, ipcResponse);
+  }
+  
   //  if we are here then it is an unknown function.
   return false;
 }

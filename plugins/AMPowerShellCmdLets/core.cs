@@ -187,19 +187,30 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
-    public string Getstring( uint index )
+    public string Getstring( bool quote )
     {
       //  request
       var ipcRequest = new MyOdd.IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetString");
-      ipcRequest.Add(index);
+      ipcRequest.Add(quote);
 
       //  response
       var ipcResponse = Connector.Send(ipcRequest);
       if (null == ipcResponse)
       {
-        throw new Exception("Unable to get the string at index.");
+        throw new Exception("Unable to get the selected string.");
+      }
+
+      if (ipcResponse.IsInt(0))
+      {
+        if (0 == ipcResponse.Get<int>(0))
+        {
+          throw new Exception("Unable to get the selected string.");
+        }
+
+        //  not sure what that number is
+        throw new Exception("Could not understand the return error.");
       }
       return ipcResponse.Get<string>(0);
     }
