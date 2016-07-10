@@ -81,6 +81,12 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
     return psApi->Version(shiftedRequest, ipcResponse);
   }
 
+  // get the app version number.
+  if (functionName == L"GetVersion")
+  {
+    return psApi->GetVersion(shiftedRequest, ipcResponse);
+  }
+
   // get the number of commands
   if (functionName == L"GetCommandCount")
   {

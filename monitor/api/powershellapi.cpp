@@ -69,23 +69,6 @@ bool PowershellApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
 }
 
 /**
- * Get the action monitor version string.
- * @param DWORD the max size of the buffer.
- * @param wchar_t* the buffer that will contain the return data, (version).
- * @return bool success or not if there was an error.
- */
-bool PowershellApi::GetVersion(DWORD nBufferLength, wchar_t* lpBuffer )
-{
-  MYODD_STRING stdVersion;
-  if( !__super::GetVersion( stdVersion ) )
-  {
-    return false;
-  }
-  wcsncpy_s( lpBuffer, nBufferLength, stdVersion.c_str(), nBufferLength );
-  return true;
-}
-
-/**
  * Find an action.
  * @param UINT the action number we are after.
  * @param const wchar_t* the action name we are looking for.
@@ -556,6 +539,39 @@ bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcD
     //  just return false.
     ipcResponse.Add(0);
     return true;
+  }
+
+  // otherwise push the string
+  ipcResponse.Add(sValue);
+
+  // we have one item
+  return true;
+}
+
+/**
+ * Get the action monitor version string.
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return boolean success or not
+ */
+bool PowershellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount > 0)
+  {
+    auto errorMsg = _T("<b>Error : </b> The function 'GetVersion' does not take any parameters");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  MYODD_STRING sValue = _T("");
+  if (!__super::GetVersion(sValue))
+  {
+    __super::Log(AM_LOG_ERROR, _T("Unable to get the version number"));
+
+    //could not get it.
+    return false;
   }
 
   // otherwise push the string

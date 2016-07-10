@@ -355,6 +355,10 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
+    /// <summary>
+    /// Get the application version number.
+    /// </summary>
+    /// <returns>The app version number.</returns>
     public string GetVersion()
     {
       //  request
