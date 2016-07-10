@@ -187,6 +187,11 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
+    /// <summary>
+    /// Get the currently selected string, (if any).
+    /// </summary>
+    /// <param name="quote"></param>
+    /// <returns></returns>
     public string Getstring( bool quote )
     {
       //  request
@@ -229,6 +234,17 @@ namespace Am
       if (null == ipcResponse)
       {
         throw new Exception("Unable to get the file at index.");
+      }
+
+      if (ipcResponse.IsInt(0))
+      {
+        if (0 == ipcResponse.Get<int>(0))
+        {
+          throw new Exception("Unable to get the selected file, probably because there isn't one.");
+        }
+
+        //  not sure what that number is
+        throw new Exception("Could not understand the return error.");
       }
       return ipcResponse.Get<string>(0);
     }

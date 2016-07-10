@@ -43,31 +43,6 @@ bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool 
 
 /**
  * Todo
- * @see __super::getFile
- * @param void
- * @param void
- * @param void
- * @return void
- */
-int PowershellApi::GetFile(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
-{
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetFile(idx, sValue, bQuote ) )
-  {
-    return 0;
-  }
-
-  size_t len = sValue.length();
-  if ( nBufferLength > 0 && lpBuffer )
-  {
-    memset( lpBuffer, 0, nBufferLength );
-    _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
-  }
-  return static_cast<int>(len);
-}
-
-/**
- * Todo
  * @see __super::getFolder
  * @param void
  * @param void
@@ -394,8 +369,7 @@ bool PowershellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::I
   }
 
   // push the value
-  auto asValue = myodd::strings::WString2String(sValue);
-  ipcResponse.Add( asValue );
+  ipcResponse.Add( sValue );
 
   // success
   return true;
@@ -445,8 +419,70 @@ bool PowershellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::I
   }
 
   // otherwise push the string
-  auto asValue = myodd::strings::WString2String(sValue);
-  ipcResponse.Add( asValue );
+  ipcResponse.Add( sValue );
+
+  // we have one item
+  return true;
+}
+
+/**
+ * Get a currently selected file, return false if we don't have that index.
+ * @see __super::getFile
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return boolean success or not
+ */
+bool PowershellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  //  the arguments.
+  const int ARGUMENT_NUMBER = 0;
+  const int ARGUMENT_QUOTE = 1;
+
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount < 1 || argumentCount > 2)
+  {
+    auto errorMsg = _T("<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsInt(ARGUMENT_NUMBER))
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  //  get the nunber
+  auto idx = ipcRequest.Get<unsigned int>( ARGUMENT_NUMBER );
+
+  // the quote
+  bool bQuote = true;
+  if (argumentCount == 2)
+  {
+    if (!ipcRequest.IsInt( ARGUMENT_QUOTE))
+    {
+      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      return false;
+    }
+    bQuote = (1 == ipcRequest.Get<signed int>(ARGUMENT_QUOTE));
+  }
+
+  MYODD_STRING sValue = _T("");
+  if (!__super::GetFile(idx, sValue, bQuote))
+  {
+    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested file index."));
+
+    ipcResponse.Add(0);
+    return true;
+  }
+
+  // otherwise push the string
+  ipcResponse.Add( sValue );
 
   // we have one item
   return true;

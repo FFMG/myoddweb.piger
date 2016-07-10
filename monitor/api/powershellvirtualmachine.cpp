@@ -104,7 +104,13 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   {
     return psApi->GetString(shiftedRequest, ipcResponse);
   }
-  
+
+  // get a selected file
+  if (functionName == L"GetFile")
+  {
+    return psApi->GetFile(shiftedRequest, ipcResponse);
+  }
+
   //  if we are here then it is an unknown function.
   return false;
 }
