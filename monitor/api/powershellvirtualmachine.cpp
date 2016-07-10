@@ -74,6 +74,11 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
     return psApi->Say(shiftedRequest, ipcResponse);
   }
 
+  if (functionName == L"Version")
+  {
+    return psApi->Version(shiftedRequest, ipcResponse);
+  }
+
   //  if we are here then it is an unknown function.
   return false;
 }

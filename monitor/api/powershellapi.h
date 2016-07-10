@@ -3,9 +3,10 @@
 // add the APLI libs
 #ifdef ACTIONMONITOR_PS_PLUGIN
 #include "helperapi.h"
+#include <string>
 
 // this is the version number for that particular API
-static const double ACTIONMONITOR_PS_PLUGIN_VERSION = 0.1f;
+static const std::wstring ACTIONMONITOR_PS_PLUGIN_VERSION = L"0.1";
 
 class PowershellApi : public HelperApi
 {
@@ -14,13 +15,13 @@ public:
   virtual ~PowershellApi();
 
 public:
-  bool Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+  virtual bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const;
 
-public:
-  double Version ();
+  bool Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+  bool Version (const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+ 
   size_t GetCommandCount();
 
-  bool Say (const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const override;
   bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
   int GetString    ( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   size_t GetCommand( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer );

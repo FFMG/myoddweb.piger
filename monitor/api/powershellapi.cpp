@@ -23,34 +23,6 @@ PowershellApi::~PowershellApi()
 
 /**
  * Todo
- * @see __super::version
- * @param void
- * @return void
- */
-double PowershellApi::Version ( )
-{
-  // short and sweet
-  // all we need is the version number.
-  return (ACTIONMONITOR_API_PLUGIN_VERSION );
-}
-
-/**
- * Todo
- * @see __super::say
- * @param void
- * @param void
- * @param void
- * @return void
- */
-bool PowershellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
-{
-  // display the message
-  // and we can now display the message.
-  return __super::Say( msg, nElapse, nFadeOut );
-}
-
-/**
- * Todo
  * @see __super::getCommand
  * @param UINT idx the command number we want to get.
  * @param DWORD nBufferLength the max buffer length that we want to get. 
@@ -322,6 +294,17 @@ void PowershellApi::Log(unsigned int logType, const wchar_t* lpText)
   __super::Log(logType, lpText);
 }
 
+bool PowershellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
+{
+  return __super::Say(msg, nElapse, nFadeOut);
+}
+
+/**
+ * Output a message on the screen.
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not.
+ */
 bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
   const int ARGUMENT_TEXT = 0;
@@ -377,7 +360,30 @@ bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
   }
 
   // add the boolean response.
-  auto b = Say(message.c_str(), elapse, fade);
+  auto b = __super::Say(message.c_str(), elapse, fade);
   ipcResponse.Add( b );
   return b;
+}
+
+/**
+ * Get the powerhsell api version number.
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not.
+ */
+bool PowershellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount > 0 )
+  {
+    auto errorMsg = _T("<b>Error : </b> The 'Version' function does not take any arguments.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  // short and sweet
+  // all we need is the version number.
+  ipcResponse.Add(ACTIONMONITOR_PS_PLUGIN_VERSION);
+  return true;
 }
