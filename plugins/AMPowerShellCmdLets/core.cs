@@ -82,6 +82,13 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
+    /// <summary>
+    /// Get a command at a certain index.
+    /// We throw if the value is out of range, use GetCommandCount(...)
+    /// Command #0 is the full path of this script.
+    /// </summary>
+    /// <param name="index">the index we want</param>
+    /// <returns>The command</returns>
     public string GetCommand( uint index )
     {
       //  request
@@ -95,6 +102,17 @@ namespace Am
       if (null == ipcResponse)
       {
         throw new Exception( "Unable to get the command at index." );
+      }
+
+      if(ipcResponse.IsInt(0) )
+      {
+        if( 0 == ipcResponse.Get<int>(0) )
+        {
+          throw new ArgumentOutOfRangeException("The command you are trying to get does not exist.");
+        }
+
+        //  not sure what that number is
+        throw new Exception("Could not understand the return error.");
       }
       return ipcResponse.Get<string>(0);
     }
@@ -116,6 +134,10 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
+    /// <summary>
+    /// Get the number of arguments entered after the command.
+    /// </summary>
+    /// <returns>The number of commands entered.</returns>
     public int GetCommandCount()
     {
       //  request

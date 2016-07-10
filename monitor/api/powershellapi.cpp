@@ -23,36 +23,6 @@ PowershellApi::~PowershellApi()
 
 /**
  * Todo
- * @see __super::getCommand
- * @param UINT idx the command number we want to get.
- * @param DWORD nBufferLength the max buffer length that we want to get. 
- * @param wchar_t* lpBuffer the buffer that will contain the command, if it is NULL only the size will be returned.
- * @return void
- */
-size_t PowershellApi::GetCommand( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer )
-{
-  // first get the command
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetCommand( idx, sValue ) )
-  {
-    return 0;
-  }
-
-  // then copy the data into the buffer.
-  size_t len = sValue.length();
-  if ( nBufferLength > 0 && lpBuffer )
-  {
-    // clear the buffer.
-    memset( lpBuffer, 0, nBufferLength * sizeof(TCHAR) );
-
-    // then copy the word.
-    _tcsncpy_s( lpBuffer, (nBufferLength > len+1 ? len+1 : nBufferLength), sValue.c_str(), _TRUNCATE );
-  }
-  return len;
-}
-
-/**
- * Todo
  * @see __super::getAction
  * @param void
  * @param void
@@ -75,16 +45,6 @@ int PowershellApi::GetAction( DWORD nBufferLength, wchar_t* lpBuffer )
   }
 
   return static_cast<int>(len);
-}
-
-/**
- * Get the number of command, (space delimited).
- * @see __super::getCommandCount
- * @return in the number of commanded entered by the user
- */
-size_t PowershellApi::GetCommandCount()
-{
-  return __super::GetCommandCount();
 }
 
 /**
@@ -385,5 +345,69 @@ bool PowershellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   // short and sweet
   // all we need is the version number.
   ipcResponse.Add(ACTIONMONITOR_PS_PLUGIN_VERSION);
+  return true;
+}
+
+/**
+* Get the number of command, (space delimited).
+* @see __super::getCommandCount
+* @return in the number of commanded entered by the user
+*/
+bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount > 0)
+  {
+    auto errorMsg = _T("<b>Error : </b> The 'GetCommandCount' function does not take any arguments.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  // get it
+  size_t nSize = __super::GetCommandCount();
+
+  //  add it to the response
+  ipcResponse.Add( nSize);
+
+  // success.
+  return true;
+
+}
+
+/**
+* Todo
+* @see __super::getCommand
+* @param UINT idx the command number we want to get.
+* @param DWORD nBufferLength the max buffer length that we want to get.
+* @param wchar_t* lpBuffer the buffer that will contain the command, if it is NULL only the size will be returned.
+* @return void
+*/
+bool PowershellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  static const int ARGUMENT_NUMBER = 0;
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount != 1 || !ipcRequest.IsInt(ARGUMENT_NUMBER))
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>GetCommand( <b>index</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  unsigned int idx = ipcRequest.Get<unsigned int>(ARGUMENT_NUMBER);
+  MYODD_STRING sValue;
+  if (!__super::GetCommand(idx, sValue))
+  {
+    auto errorMsg = _T("Trying to get an argument past the number of arguments.");
+    __super::Log(AM_LOG_WARNING, errorMsg);
+
+    // return that there was an error.
+    ipcResponse.Add(0);
+    return true;
+  }
+
+  //  return the string that we found.
+  ipcResponse.Add(sValue);
   return true;
 }

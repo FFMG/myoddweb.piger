@@ -69,14 +69,28 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   shiftedRequest.RemoveArgument(0); // remove the uuid
   shiftedRequest.RemoveArgument(0); // remove the function name
 
+  // Say
   if (functionName == L"Say")
   {
     return psApi->Say(shiftedRequest, ipcResponse);
   }
 
+  // Version number
   if (functionName == L"Version")
   {
     return psApi->Version(shiftedRequest, ipcResponse);
+  }
+
+  // get the number of commands
+  if (functionName == L"GetCommandCount")
+  {
+    return psApi->GetCommandCount(shiftedRequest, ipcResponse);
+  }
+
+  // get a command by index.
+  if (functionName == L"GetCommand")
+  {
+    return psApi->GetCommand(shiftedRequest, ipcResponse);
   }
 
   //  if we are here then it is an unknown function.
