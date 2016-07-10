@@ -608,5 +608,69 @@ namespace MyOdd
       //  we cannot convert that type.
       throw new InvalidCastException();
     }
+
+    /// <summary>
+    /// Check if a certain argument is a string or not.
+    /// </summary>
+    /// <param name="index">The index we are checking.</param>
+    /// <returns></returns>
+    public bool IsString( uint index )
+    {
+      if (index >= ArgumentsCount)
+      {
+        throw new ArgumentOutOfRangeException(nameof(index));
+      }
+
+      // rebuild the arguments without Guid.
+      var arguments = IpcArguments.Where(t => t.type != DataType.Guid).ToList();
+
+      // then look for the argument we are after.
+      var objectType = (DataType)arguments[(int)index].type;
+      switch (objectType)
+      {
+        case DataType.Int32:
+          return false;
+
+        case DataType.String:
+        case DataType.StringAscii:
+          return true;
+
+        default:
+          // new type?
+          throw new InvalidCastException();
+      }
+    }
+
+    /// <summary>
+    /// Check if an argument is a number or not.
+    /// </summary>
+    /// <param name="index">The index we are checking.</param>
+    /// <returns></returns>
+    public bool IsInt(uint index)
+    {
+      if (index >= ArgumentsCount)
+      {
+        throw new ArgumentOutOfRangeException(nameof(index));
+      }
+
+      // rebuild the arguments without Guid.
+      var arguments = IpcArguments.Where(t => t.type != DataType.Guid).ToList();
+
+      // then look for the argument we are after.
+      var objectType = (DataType)arguments[(int)index].type;
+      switch (objectType)
+      {
+        case DataType.Int32:
+          return true;
+
+        case DataType.String:
+        case DataType.StringAscii:
+          return false;
+
+        default:
+          // new type?
+          throw new InvalidCastException();
+      }
+    }
   }
 }

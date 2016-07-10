@@ -35,6 +35,13 @@ namespace Am
     {
     }
 
+    /// <summary>
+    /// Output a message on the screen.
+    /// </summary>
+    /// <param name="what">The message</param>
+    /// <param name="elapse">For how long, (ms)</param>
+    /// <param name="fadeout">The fadeout speed.</param>
+    /// <returns></returns>
     public bool Say(string what, uint elapse, uint fadeout )
     {
       //  request
@@ -55,6 +62,10 @@ namespace Am
       return (i == 1);
     }
 
+    /// <summary>
+    /// Get the Powershell version number.
+    /// </summary>
+    /// <returns></returns>
     public string Version()
     {
       //  request
