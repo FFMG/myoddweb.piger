@@ -27,12 +27,12 @@ public:
   bool GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+  bool Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
 
   bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
   bool AddAction   (const wchar_t* szText, const wchar_t* szPath );
   bool RemoveAction(const wchar_t* szText, const wchar_t* szPath );
   bool FindAction  ( UINT idx, const wchar_t* lpCommand, DWORD nBufferLength, wchar_t* lpBuffer);
-  void Log( unsigned int logType, const wchar_t* lpText );
   HWND GetForegroundWindow() const;
 };
 

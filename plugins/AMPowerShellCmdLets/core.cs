@@ -393,6 +393,12 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
+    /// <summary>
+    /// Log a message to the main application log.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
     public bool Log( int type, string message )
     {
       //  request

@@ -87,6 +87,12 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
     return psApi->GetVersion(shiftedRequest, ipcResponse);
   }
 
+  // log a message
+  if (functionName == L"Log")
+  {
+    return psApi->Log(shiftedRequest, ipcResponse);
+  }
+
   // get the number of commands
   if (functionName == L"GetCommandCount")
   {

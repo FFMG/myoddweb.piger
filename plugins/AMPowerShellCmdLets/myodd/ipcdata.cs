@@ -571,7 +571,34 @@ namespace MyOdd
         return objectData;
       }
 
+      // if it is a boolean...
       var objectType = (DataType)arguments[(int)index].type;
+
+      if (Type.GetTypeCode(type) == TypeCode.Boolean)
+      {
+        switch (objectType)
+        {
+          case DataType.Int32:
+            return (T)((object)((int)objectData == 1));
+
+          case DataType.String:
+          case DataType.StringAscii:
+            var s = ((string)objectData).ToLower().Trim();
+            if( s == "true" || s == "1")
+            {
+              return (T)((object)true);
+            }
+            if (s == "false" || s == "0")
+            {
+              return (T)((object)false);
+            }
+            // if we are here, we do not know what it is.
+            throw new InvalidCastException();
+
+          default:
+            throw new InvalidCastException();
+        }
+      }
 
       if (IsNumericType(type))
       {

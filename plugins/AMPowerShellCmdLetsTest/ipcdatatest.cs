@@ -503,5 +503,53 @@ namespace MyOddTest
 
       emptyIpcData.IsString(2);
     }
+
+    [TestMethod]
+    public void TestGetBooleanFromIntegerEqualOne()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add(1);
+      Assert.IsTrue(emptyIpcData.Get<bool>(0)); 
+    }
+
+    [TestMethod]
+    public void TestGetBooleanFromIntegerNotEqualOne()
+    {
+      var random = new Random();
+      var r = random.Next(2, Int32.MaxValue);
+      if(random.Next(0, 1) == 1)
+      {
+        r *= -1;
+      }
+
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add(1);
+      Assert.IsTrue(emptyIpcData.Get<bool>(0));
+    }
+
+    [TestMethod]
+    public void TestGetBooleanTrueString()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add("True");
+      Assert.IsTrue(emptyIpcData.Get<bool>(0));
+    }
+
+    [TestMethod]
+    public void TestGetBooleanFalseString()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add("False");
+      Assert.IsFalse(emptyIpcData.Get<bool>(0));
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidCastException), "The given string is not a valid boolean.")]
+    public void TestGetBooleanNeitherTrueNorFalseString()
+    {
+      var emptyIpcData = new IpcData();
+      emptyIpcData.Add("NotAValidString");
+      emptyIpcData.Get<bool>(0);
+    }
   }
 }

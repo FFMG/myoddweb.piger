@@ -103,17 +103,6 @@ HWND PowershellApi::GetForegroundWindow() const
   return __super::GetForegroundWindow();
 }
 
-/**
- * Log a message.
- * @param unsigned int logType the message type we are logging.
- * @param const wchar_t* lpText the text we wish to log.
- * @return none.
- */
-void PowershellApi::Log(unsigned int logType, const wchar_t* lpText)
-{
-  __super::Log(logType, lpText);
-}
-
 bool PowershellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
 {
   return __super::Say(msg, nElapse, nFadeOut);
@@ -578,5 +567,54 @@ bool PowershellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::
   ipcResponse.Add(sValue);
 
   // we have one item
+  return true;
+}
+
+/**
+ * Log a message.
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return none.
+ */
+bool PowershellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+{
+  const int ARGUMENT_LOGTYPE = 0;
+  const int ARGUMENT_MESSAGE = 1;
+
+  //  get the number of arguments
+  auto argumentCount = ipcRequest.GetNumArguments();
+
+  // we must have 2 items
+  if (argumentCount != 2)
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsInt(ARGUMENT_LOGTYPE))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'logtype' must be a number");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsString(ARGUMENT_MESSAGE))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'message' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  auto logType = ipcRequest.Get<unsigned int>( ARGUMENT_LOGTYPE );
+  auto action = ipcRequest.Get<std::wstring>( ARGUMENT_MESSAGE );
+
+  __super::Log(logType, action.c_str());
+
+  // success.
+  ipcResponse.Add(1);
   return true;
 }
