@@ -279,7 +279,7 @@ int LuaApi::Say (lua_State *lua)
 
   // the first item is the message.
   auto msg = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_TEXT) );
-  unsigned int nElapse = (unsigned int)lua_tointeger (lua, ARGUMENT_ELAPSE);
+  auto nElapse = (unsigned int)lua_tointeger (lua, ARGUMENT_ELAPSE);
   if(  nElapse == 0 )
   {
     auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
