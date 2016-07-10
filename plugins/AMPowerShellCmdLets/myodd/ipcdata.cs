@@ -427,6 +427,24 @@ namespace MyOdd
     }
 
     /// <summary>
+    /// Add a number to the list
+    /// </summary>
+    /// <param name="numberToAdd">The number to add.</param>
+    public void Add(uint numberToAdd)
+    {
+      Add((int)numberToAdd);
+    }
+
+    /// <summary>
+    /// Add a true/false flag
+    /// </summary>
+    /// <param name="flag">True/False.</param>
+    public void Add(bool flag )
+    {
+      Add( flag ? 1 : 0 );
+    }
+
+    /// <summary>
     /// Add a created byte to our current byte.
     /// </summary>
     /// <param name="newBytes"></param>

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ipcdata.h"
 #include <afxwin.h>
+#include <../string/string.h>
 
 namespace myodd {
 namespace os {
@@ -720,6 +721,218 @@ void IpcData::Add(const std::string& dataValue)
   // reset the pointer if need be.
   ResetPtr();
 }
+
+/**
+ * Check if the argument at the index is a string or a number
+ * @param unsigned int index we are checking
+ * @return bool if the index is a string or not.
+ */
+bool IpcData::IsString(unsigned int index) const
+{
+  //  we can always cast it to a string...
+  return true;
+}
+
+/**
+ * Check if the argument at the index is a number or a string
+ * @param unsigned int index we are checking
+ * @return bool if the index is a number or not.
+ */
+bool IpcData::IsInt(unsigned int index) const
+{
+  // adjust the index, we will check for out of range values.
+  index = AdjustIndexNumber(index);
+
+  auto ipc = _ipcArguments[index];
+  switch (ipc->dataType)
+  {
+  case IpcDataType::Int32:
+    return true;
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+    return myodd::strings::IsNumeric( *(static_cast<std::wstring*>(ipc->pData)) );
+
+  case IpcDataType::StringAscii:
+    return myodd::strings::IsNumeric( myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))) );
+
+  case IpcDataType::None:
+  default:
+    throw "Unnown data type.";
+  }
+
+  // never reached
+  return false;
+}
+
+template<>
+std::wstring IpcData::Get<std::wstring>(unsigned int index) const
+{
+  // adjust the index, we will check for out of range values.
+  index = AdjustIndexNumber(index);
+
+  auto ipc = _ipcArguments[index];
+  switch (ipc->dataType)
+  {
+  case IpcDataType::Int32:
+    return myodd::strings::Format(_T("%d"), *static_cast<signed int*>(ipc->pData));
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+    return *(static_cast<std::wstring*>(ipc->pData));
+
+  case IpcDataType::StringAscii:
+    return myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData)));
+
+  case IpcDataType::None:
+  default:
+    throw "Unnown data type.";
+  }
+
+  // never reached
+  return L"";
+}
+
+template<>
+unsigned int IpcData::Get<unsigned int>(unsigned int index) const
+{
+  // adjust the index, we will check for out of range values.
+  index = AdjustIndexNumber(index);
+
+  auto ipc = _ipcArguments[index];
+  switch (ipc->dataType)
+  {
+  case IpcDataType::Int32:
+    return (unsigned int)(*(static_cast<signed int*>(ipc->pData)));
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+    return (unsigned int)std::stoi( *(static_cast<std::wstring*>(ipc->pData)));
+
+  case IpcDataType::StringAscii:
+    return (unsigned int)std::stoi( myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
+
+  case IpcDataType::None:
+  default:
+    throw "Unnown data type.";
+  }
+
+  // never reached
+  return 0;
+}
+
+template<>
+signed int IpcData::Get<signed int>(unsigned int index) const
+{
+  // adjust the index, we will check for out of range values.
+  index = AdjustIndexNumber(index);
+
+  auto ipc = _ipcArguments[index];
+  switch (ipc->dataType)
+  {
+  case IpcDataType::Int32:
+    return (int)(*(static_cast<signed int*>(ipc->pData)));
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+    return std::stoi(*(static_cast<std::wstring*>(ipc->pData)));
+
+  case IpcDataType::StringAscii:
+    return std::stoi(myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
+
+  case IpcDataType::None:
+  default:
+    throw "Unnown data type.";
+  }
+
+  // never reached
+  return 0;
+}
+
+/**
+ * Given an index we adjust the number in relation to the guid(s)
+ * @param unsigned int givenIndex the given index we want to get.
+ * @return unsigned int the adjusted index number.
+ */
+unsigned int IpcData::AdjustIndexNumber(unsigned int givenIndex) const
+{
+  // sanity check, (number or arguments does not include the GUIDs).
+  if ( givenIndex >= GetNumArguments())
+  {
+    throw "The argument index is out of range.";
+  }
+
+  auto offset = 0;
+  for (auto i = 0; i <= givenIndex; ++i)
+  {
+    auto ipc = _ipcArguments[i];
+    switch (ipc->dataType)
+    {
+    case IpcDataType::Guid:
+      ++offset;
+      break;
+    }
+  }
+  return (givenIndex + offset);
+}
+
+/**
+ * Remove an argument at a given index.
+ * @param unsigned int index the argument index we want to remove.
+ * @retrun none
+ */
+void IpcData::RemoveArgument(unsigned int index)
+{
+  // sanity check, (number or arguments does not include the GUIDs).
+  if (index >= GetNumArguments())
+  {
+    throw "The argument index is out of range.";
+  }
+
+  // reset the pointer
+  ResetPtr();
+
+  // adjust the index
+  index = AdjustIndexNumber(index);
+
+  //  we removed an index.
+  --_numArguments;
+
+  auto it = _ipcArguments.begin() + index;
+
+  // the pointer
+  auto ia = (*it);
+
+  switch (ia->dataType)
+  {
+  case IpcDataType::Int32:
+    // delete the data.
+    delete static_cast<signed int*>(ia->pData);
+    break;
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+    // delete the data.
+    delete static_cast<std::wstring*>(ia->pData);
+    break;
+
+  case IpcDataType::StringAscii:
+    // delete the data.
+    delete static_cast<std::string*>(ia->pData);
+    break;
+
+  case IpcDataType::None:
+  default:
+    throw "Unnown data type.";
+  }
+
+  // delete the data
+  delete ia;
+
+  // remove it
+  _ipcArguments.erase(it);
+}
+
 
 //
 } // os

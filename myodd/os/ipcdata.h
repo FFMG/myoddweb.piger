@@ -35,6 +35,9 @@ namespace myodd {
       // do we have a valid guid, (we should but still).
       bool HasGuid() const;
 
+      // remove an argument by index.
+      void RemoveArgument(unsigned int index);
+
       // get the pointer.
       unsigned char* GetPtr();
 
@@ -50,9 +53,21 @@ namespace myodd {
       // add an ascii string.
       void Add(const std::string& dataValue);
 
+      template<typename T>
+      T Get(unsigned int index) const;
+
+      // is it a string?
+      bool IsString(unsigned int index) const;
+
+      // is it an int?
+      bool IsInt(unsigned int index) const;
+
     private:
       // the number of arguments we were passed.
       unsigned int _numArguments;
+
+      // shift an index number by the guid
+      unsigned int AdjustIndexNumber(unsigned int givenIndex) const;
 
       // the guid.
       std::wstring _guid;
