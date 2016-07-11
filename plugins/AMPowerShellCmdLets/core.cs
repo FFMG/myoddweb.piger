@@ -13,10 +13,14 @@ namespace Am
     //  the default connection name.
     private const string Name = "MyOddweb_com_ActionMonitor";
 
-    private MyOdd.IpcConnector Connector { get; set; }
+    private MyOdd.IpcConnector Connector { get; }
 
-    private string Uuid { get; set; }
+    private string Uuid { get; }
 
+    /// <summary>
+    /// The contructor
+    /// </summary>
+    /// <param name="givenUuid">The UUID we are using to keep the link between us and the Action monitor class.</param>
     public Core(string givenUuid)
     {
       // We must be given a valid uid
