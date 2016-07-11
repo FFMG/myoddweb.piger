@@ -220,6 +220,12 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
+    /// <summary>
+    /// Get a selected file at an index.
+    /// </summary>
+    /// <param name="index">the index we want</param>
+    /// <param name="quote">if we want to quote the text or not.</param>
+    /// <returns></returns>
     public string Getfile( uint index, bool quote )
     {
       //  request

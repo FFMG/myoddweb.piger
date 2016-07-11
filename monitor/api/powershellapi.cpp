@@ -23,24 +23,78 @@ PowershellApi::~PowershellApi()
 
 
 /**
- * Todo
+ * Execute a certain application/script.
  * @see __super::execute
- * @param void
- * @param void
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @return void
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not.
  */
-bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const
+bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  if (!__super::Execute(module, cmdLine, isPrivileged, hProcess ))
+  static const int ARGUMENT_MODULE = 0;
+  static const int ARGUMENT_ARGS = 1;
+  static const int ARGUMENT_PRIVILEGED = 2;
+
+  // get the number of arguments.
+  // we can only have one or 2 arguments 
+  // 
+  // the first argument is the name of the module
+  // and the second is the arguments.
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount < 1 || argumentCount > 3)
   {
-    // tell the user it did not work
-    __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
+    auto errorMsg = _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
     return false;
   }
+
+  if (!ipcRequest.IsString(ARGUMENT_MODULE) || !ipcRequest.IsString(ARGUMENT_ARGS))
+  {
+    auto errorMsg = _T("<b>Error : </b> The first and second parameters must be strings.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  bool isPrivileged = false;
+  if (argumentCount == 3)
+  {
+    if (!ipcRequest.IsInt(ARGUMENT_PRIVILEGED))
+    {
+      auto errorMsg = _T("<b>Error : </b> The third argument, (privileged), can only be true|false");
+      __super::Log(AM_LOG_ERROR, errorMsg);
+      __super::Say(errorMsg, 3000, 5);
+      return false;
+    }
+    isPrivileged = (ipcRequest.Get<unsigned int>(ARGUMENT_PRIVILEGED) == 1);
+  }
+
+  auto module = ipcRequest.Get<std::wstring>(ARGUMENT_MODULE);
+  auto cmdLine = ipcRequest.Get<std::wstring>( ARGUMENT_ARGS);
+
+  // run the query
+  bool result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr);
+
+  // push the result.
+  ipcResponse.Add( result ? 1 : 0);
+
+  // tell the user it did not work
+  if (false == result)
+  {
+    auto errorMsg = _T("<b>Error : </b> There was an error executing the request, please check the parameters.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+  }
+
+  // return the number of results
   return true;
 }
 
+bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const
+{
+  return __super::Execute(module, cmdLine, isPrivileged, hProcess);
+}
 
 /**
  * Todo
@@ -574,7 +628,7 @@ bool PowershellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::
  * Log a message.
  * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
- * @return none.
+ * @return bool success or not.
  */
 bool PowershellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
