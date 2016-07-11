@@ -100,6 +100,7 @@ Read more [code examples/notes](powershell.md).
 	- Warning = 3
 	- Message = 4
 	- System = 5
+- GetForegroundWindow, get the foreground window at the time the script was called.
 
 ### Example
 #### Calculator.ps1
@@ -128,8 +129,7 @@ Read more [code examples/notes](powershell.md).
     # log that all is good.
     $am.Log( 1, "Launched calculator" ) | out-null
 
-    Write-Host "Press any key to continue ..."
-    $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+	# Powershell will close automatically...
 
 
 ## Python
