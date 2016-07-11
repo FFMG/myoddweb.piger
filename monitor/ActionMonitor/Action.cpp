@@ -31,11 +31,11 @@ Action::Action()
  * @param LPCTSTR the full path of the action that we will execute.
  * @return none
  */
-Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = NULL  */)
+Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = nullptr  */)
 {
-  if( NULL == szCommand)
+  if(nullptr == szCommand)
   {
-    //  we cannot have NULL commands.
+    //  we cannot have nullptr commands.
     throw -1;
   }
 
@@ -49,14 +49,14 @@ Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = NULL  */)
   //  make sure that the command is valid.
   if ( 0 == Len() )
   {
-    //  we cannot have NULL commands.
+    //  we cannot have nullptr commands.
     throw - 1;
   }
 
   // expand the path
   if( szPath )
   {
-    LPTSTR lpExpandPath = NULL;
+    LPTSTR lpExpandPath = nullptr;
     if( myodd::files::ExpandEnvironment( szPath, lpExpandPath ) )
     {
       m_szFile = lpExpandPath;
@@ -67,7 +67,7 @@ Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = NULL  */)
       // keep whatever value was given to us.
       m_szFile = szPath;
     }
-  }// if we have an szPath != NULL
+  }// if we have an szPath != nullptr
 
   // and the extension
   m_szExt = myodd::files::get_extension( m_szFile );
@@ -140,10 +140,6 @@ void Action::SetCommandPath( LPCTSTR szPath )
  */
 ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
-  // this is the full command passed by the user.
-  // so even if the user only typed "goo" we will return google.
-  auto command = Command().c_str();
-  
   //  not sure how to do that...
   if ( Len() == 0)
   {
@@ -157,7 +153,7 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szComma
   //  if we are here then we are going to load a user command
   //
   //  If the user did not pass any arguments/command line then we must get them from the clipboard.
-  ActiveAction* aa = nullptr;
+  ActiveAction* aa;
   if( szCommandLine.length() == 0 )
   {
     aa = CreateActiveActionWithNoCommandLine( pWnd, isPrivileged);
@@ -234,7 +230,7 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPri
 MYODD_STRING Action::toSingleLine( LPCTSTR sText ) const
 {
   // Sanity checks.
-  if( NULL == sText )
+  if(nullptr == sText )
   {
     return _T("");
   }
@@ -243,7 +239,7 @@ MYODD_STRING Action::toSingleLine( LPCTSTR sText ) const
   size_t  result;
 
   MYODD_STRING ret( sText );
-  if( pdest != NULL )
+  if( pdest != nullptr)
   {
     result = pdest - sText;
     ret = ret.substr( 0, result );
@@ -251,7 +247,7 @@ MYODD_STRING Action::toSingleLine( LPCTSTR sText ) const
   }
 
   pdest = _tcschr( sText, '\r' );
-  if( pdest != NULL )
+  if( pdest != nullptr)
   {
     result = pdest - sText;
     ret = ret.substr( 0, result );
@@ -275,14 +271,14 @@ const MYODD_STRING& Action::Command() const
  * We will expend all the environment variables as needed.
  * @param const std::vector<MYODD_STRING> [0] the file path, [1] the arguments to launch with, (optional).
  * @param bool isPrivileged if we need administrator privilege to run this.
- * @param HANDLE hProcess if this value is not null, we will return the handle of the started process.
+ * @param HANDLE hProcess if this value is not nullptr, we will return the handle of the started process.
  *               it is then up to the calling application to close this handle when done with it...
  * @return bool true|false success or not.
  */
 bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, HANDLE* hProcess)
 {
   // get the number of arguments.
-  size_t argc = argv.size();
+  auto argc = argv.size();
 
   // sanity check
   if( argc < 1 || argc > 2 )
@@ -386,13 +382,13 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
   // sanity check
   if (0 == m_szFile.length())
   {
-    return NULL;
+    return nullptr;
   }
 
   //  get the last forground window handle
-  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
+  auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
 
-  const MYODD_STRING& szExt = Extension();
+  const auto& szExt = Extension();
 #ifdef ACTIONMONITOR_API_LUA
   // Do the API calls.
   //
