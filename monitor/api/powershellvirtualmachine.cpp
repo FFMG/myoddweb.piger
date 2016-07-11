@@ -111,12 +111,6 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
     return psApi->GetCommand(shiftedRequest, ipcResponse);
   }
 
-  // get the action name
-  if (functionName == L"GetAction")
-  {
-    return psApi->GetAction(shiftedRequest, ipcResponse);
-  }
-
   // get the selected string
   if (functionName == L"GetString")
   {
@@ -140,6 +134,26 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   {
     return psApi->GetUrl(shiftedRequest, ipcResponse);
   }
+
+  // Actions
+  if (functionName == L"FindAction")
+  {
+    return psApi->FindAction(shiftedRequest, ipcResponse);
+  }
+  if (functionName == L"RemoveAction")
+  {
+    return psApi->RemoveAction(shiftedRequest, ipcResponse);
+  }
+  if (functionName == L"AddAction")
+  {
+    return psApi->AddAction(shiftedRequest, ipcResponse);
+  }
+  // get this action name
+  if (functionName == L"GetAction")
+  {
+    return psApi->GetAction(shiftedRequest, ipcResponse);
+  }
+
 
   //  if we are here then it is an unknown function.
   return false;

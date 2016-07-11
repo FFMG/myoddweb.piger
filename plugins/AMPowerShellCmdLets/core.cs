@@ -353,7 +353,7 @@ namespace Am
     /// </summary>
     /// <param name="type"></param>
     /// <param name="message"></param>
-    /// <returns></returns>
+    /// <returns>Success or not</returns>
     public bool Log( int type, string message )
     {
       //  request
@@ -371,7 +371,13 @@ namespace Am
       }
       return ipcResponse.Get<bool>(0);
     }
-    
+
+    /// <summary>
+    /// Add an action
+    /// </summary>
+    /// <param name="action">The action we want to add.</param>
+    /// <param name="path">The path of the action we are adding.</param>
+    /// <returns>Success or not</returns>
     public bool AddAction(string action, string path)
     {
       //  request
@@ -390,6 +396,12 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
+    /// <summary>
+    /// Remove an action given a path
+    /// </summary>
+    /// <param name="action">The action we want to remove.</param>
+    /// <param name="path">The path of the action we want to remove.</param>
+    /// <returns>Success or not</returns>
     public bool RemoveAction(string action, string path)
     {
       //  request
@@ -408,6 +420,14 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
+    /// <summary>
+    /// Find an action at a given index.
+    /// So if we are looking for a command "stuff", there could be more than one.
+    /// And index 0, 1, ..., x are the posible numbers.
+    /// </summary>
+    /// <param name="index">The action index we are looking for.</param>
+    /// <param name="action">The action we want.</param>
+    /// <returns>Success or not</returns>
     public string FindAction(uint index, string action)
     {
       //  request
@@ -422,6 +442,17 @@ namespace Am
       if (null == ipcResponse)
       {
         throw new Exception("Unable to find the action at the given index.");
+      }
+
+      if (ipcResponse.IsInt(0))
+      {
+        if (0 == ipcResponse.Get<int>(0))
+        {
+          throw new Exception("Unable to find the action at the given index.");
+        }
+
+        //  not sure what that number is
+        throw new Exception("Could not understand the return error.");
       }
       return ipcResponse.Get<string>(0);
     }

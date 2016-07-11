@@ -105,51 +105,169 @@ bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool 
 /**
  * Todo
  * @see __super::addAction
- * @param void
- * @param void
- * @return void
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not.
  */
-bool PowershellApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
+bool PowershellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  // pass it straight to the helper API as it will do all the needed validations
-  return __super::AddAction( szText, szPath );
+  const auto ARGUMENT_ACTION = 0;
+  const auto ARGUMENT_PATH = 1;
+
+  //  get the number of arguments
+  auto argumentCount = ipcRequest.GetNumArguments();
+
+  // we must have 2 items
+  if (argumentCount != 2)
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsString(ARGUMENT_ACTION))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsString(ARGUMENT_PATH))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  // get the action and path
+  auto szAction = ipcRequest.Get<std::wstring>( ARGUMENT_ACTION);
+  auto szPath = ipcRequest.Get<std::wstring>( ARGUMENT_PATH);
+
+  // add it, (or try).
+  auto result = __super::AddAction(szAction.c_str(), szPath.c_str());
+
+  // return if it works.
+  ipcResponse.Add(result ? 1 : 0);
+
+  // success
+  return true;
 }
 
 /**
  * Todo
  * @see __super::RemoveAction
- * @param void
- * @param void
- * @return void
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not.
  */
-bool PowershellApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
+bool PowershellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  // pass it straight to the helper API as it will do all the needed validations
-  return __super::RemoveAction( szText, szPath );
+  const auto ARGUMENT_ACTION = 0;
+  const auto ARGUMENT_PATH = 1;
+
+  //  get the number of arguments
+  auto argumentCount = ipcRequest.GetNumArguments();
+
+  // we must have 1 or 2
+  if (argumentCount != 2)
+  {
+    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsString ( ARGUMENT_ACTION ))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsString( ARGUMENT_PATH))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  // get the action and path
+  auto szAction = ipcRequest.Get<std::wstring>( ARGUMENT_ACTION );
+  auto szPath = ipcRequest.Get<std::wstring>( ARGUMENT_PATH);
+
+  // remove it, (or try).
+  auto result = __super::RemoveAction(szAction.c_str(), szPath.c_str());
+
+  // return if it works.
+  ipcResponse.Add(result ? 1 : 0);
+
+  // success
+  return true;
 }
 
 /**
  * Find an action.
- * @param UINT the action number we are after.
- * @param const wchar_t* the action name we are looking for.
- * @param DWORD the max size of the buffer.
- * @param wchar_t* the buffer that will contain the return data, (version).
- * @return bool if the command exists or not.
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not.
  */
-bool PowershellApi::FindAction
-( 
-  UINT idx, 
-  const wchar_t* lpCommand,
-  DWORD nBufferLength, 
-  wchar_t* lpBuffer
-)
+bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  MYODD_STRING stdActionPath;
-  if( !__super::FindAction( idx, lpCommand, stdActionPath ) )
+  const auto ARGUMENT_INDEX = 0;
+  const auto ARGUMENT_ACTION = 1;
+
+  //  get the number of arguments
+  auto argumentCount = ipcRequest.GetNumArguments();
+
+  // we must have 2 arguments.
+  if (argumentCount != 2)
   {
+    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
     return false;
   }
-  wcsncpy_s( lpBuffer, nBufferLength, stdActionPath.c_str(), nBufferLength );
+
+  if (!ipcRequest.IsInt(ARGUMENT_INDEX))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'index' must be a number");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  if (!ipcRequest.IsString(ARGUMENT_ACTION))
+  {
+    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_INDEX);
+  auto action = ipcRequest.Get<std::wstring>(ARGUMENT_ACTION);
+
+  MYODD_STRING sValue = _T("");
+  if (!__super::FindAction(idx, action.c_str(), sValue))
+  {
+    __super::Log(AM_LOG_WARNING, _T("Could not find action at given index"));
+
+    //  just return false.
+    ipcResponse.Add(0);
+
+    // one return variable.
+    return false;
+  }
+
+  // otherwise push the string
+  ipcResponse.Add(sValue);
+
+  // one return variable.
   return true;
 }
 
