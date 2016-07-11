@@ -2,7 +2,6 @@
 
 #ifdef ACTIONMONITOR_API_LUA
 #include "luaapi.h"
-#include "luaVirtualMachine.h"
 #include "../string/string.h"
 
 /**
@@ -30,7 +29,7 @@ LuaApi::~LuaApi(void)
  */
 int LuaApi::Version (lua_State *lua)
 {
-  int n = lua_gettop(lua);
+  auto n = lua_gettop(lua);
   if (n > 0 )
   {
     auto errorMsg = _T("<b>Error : </b> The 'Version function does not take any parametters.");
