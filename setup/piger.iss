@@ -71,6 +71,10 @@ Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Sampl
 Type: files; Name: "{app}\python35.zip"
 Type: files; Name: "{app}\python6435.dll"
 
+; remove the powershell dll, in case the user removed powershell, (or something weird).
+; that way we will not try and execute something that might not exist.
+Type: files; Name: "{app}\AMPowerShellCmdLets.dll"
+
 [Files]
 ;
 ; All the plugins
