@@ -93,7 +93,7 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
     return psApi->Log(shiftedRequest, ipcResponse);
   }
 
-  // execute a message
+  // execute a process
   if (functionName == L"Execute")
   {
     return psApi->Execute(shiftedRequest, ipcResponse);

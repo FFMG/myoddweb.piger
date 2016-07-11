@@ -168,12 +168,19 @@ namespace Am
       return ipcResponse.Get<int>(0);
     }
 
+    /// <summary>
+    /// Execute a process.
+    /// </summary>
+    /// <param name="module">The process we want to execute.</param>
+    /// <param name="args">the arguments to pass</param>
+    /// <param name="priviledged">if we want it to be elevated or not.</param>
+    /// <returns></returns>
     public bool Execute( string module, string args, bool priviledged )
     {
       //  request
       var ipcRequest = new MyOdd.IpcData();
       ipcRequest.Add(Uuid);
-      ipcRequest.Add("GetAction");
+      ipcRequest.Add("Execute");
       ipcRequest.Add(module);
       ipcRequest.Add(args);
       ipcRequest.Add(priviledged);

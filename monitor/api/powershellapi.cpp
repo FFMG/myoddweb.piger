@@ -31,9 +31,9 @@ PowershellApi::~PowershellApi()
  */
 bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  static const int ARGUMENT_MODULE = 0;
-  static const int ARGUMENT_ARGS = 1;
-  static const int ARGUMENT_PRIVILEGED = 2;
+  const auto ARGUMENT_MODULE = 0;
+  const auto ARGUMENT_ARGS = 1;
+  const auto ARGUMENT_PRIVILEGED = 2;
 
   // get the number of arguments.
   // we can only have one or 2 arguments 
@@ -170,9 +170,9 @@ bool PowershellApi::Say(const wchar_t* msg, const unsigned int nElapse, const un
  */
 bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  const int ARGUMENT_TEXT = 0;
-  const int ARGUMENT_ELAPSE = 1;
-  const int ARGUMENT_FADEOUT = 2;
+  const auto ARGUMENT_TEXT = 0;
+  const auto ARGUMENT_ELAPSE = 1;
+  const auto ARGUMENT_FADEOUT = 2;
 
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 2 || argumentCount > 3)
@@ -289,7 +289,7 @@ bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd:
  */
 bool PowershellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  static const int ARGUMENT_NUMBER = 0;
+  const auto ARGUMENT_NUMBER = 0;
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount != 1 || !ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
@@ -361,7 +361,7 @@ bool PowershellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::I
  */
 bool PowershellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  const int ARGUMENT_QUOTE = 0;
+  const auto ARGUMENT_QUOTE = 0;
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 1)
   {
@@ -412,8 +412,8 @@ bool PowershellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::I
 bool PowershellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
   //  the arguments.
-  const int ARGUMENT_NUMBER = 0;
-  const int ARGUMENT_QUOTE = 1;
+  const auto ARGUMENT_NUMBER = 0;
+  const auto ARGUMENT_QUOTE = 1;
 
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
@@ -474,8 +474,8 @@ bool PowershellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
  */
 bool PowershellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  const int ARGUMENT_NUMBER = 0;
-  const int ARGUMENT_QUOTE = 1;
+  const auto ARGUMENT_NUMBER = 0;
+  const auto ARGUMENT_QUOTE = 1;
 
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
@@ -498,7 +498,7 @@ bool PowershellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::I
   auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_NUMBER);
 
   // the quote
-  bool bQuote = true;
+  auto bQuote = true;
   if (argumentCount >= 2)
   {
     if (!ipcRequest.IsInt(ARGUMENT_QUOTE))
@@ -537,8 +537,8 @@ bool PowershellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::I
  */
 bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  const int ARGUMENT_NUMBER = 0;
-  const int ARGUMENT_QUOTE = 1;
+  const auto ARGUMENT_NUMBER = 0;
+  const auto ARGUMENT_QUOTE = 1;
 
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
@@ -561,7 +561,7 @@ bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcD
   auto idx = ipcRequest.Get<unsigned int>( ARGUMENT_NUMBER );
 
   // the quote
-  bool bQuote = true;
+  auto bQuote = true;
   if (argumentCount >= 2)
   {
     if (!ipcRequest.IsInt(ARGUMENT_QUOTE))
@@ -632,8 +632,8 @@ bool PowershellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::
  */
 bool PowershellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  const int ARGUMENT_LOGTYPE = 0;
-  const int ARGUMENT_MESSAGE = 1;
+  const auto ARGUMENT_LOGTYPE = 0;
+  const auto ARGUMENT_MESSAGE = 1;
 
   //  get the number of arguments
   auto argumentCount = ipcRequest.GetNumArguments();
