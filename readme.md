@@ -74,7 +74,9 @@ For example, the file "**google.lua**" will create a command called "**google**"
 
 ## Powershell
 
-**If** you have powershell 3 installed, (and you should have if you have a decent version of windows installed), then you can run powershell scripts.
+Read more [code examples/notes](powershell.md).
+
+**<u>If</u>** you have powershell 3 installed, (and you should have if you have a decent version of windows installed), then you can run powershell scripts.
 
 ### Code
 
@@ -100,8 +102,6 @@ For example, the file "**google.lua**" will create a command called "**google**"
 	- System = 5
 
 ### Example
-Read more [code examples](powershell.md).
-
 #### Calculator.ps1
 
     #

@@ -1,5 +1,40 @@
 ## Examples
 
+### GetForegroundWindow
+
+Get the foreground window at the time of the call.
+The value returned is a IntPtr or a window handle, (32bit integer really).
+
+    $signature = @"
+     
+            [DllImport("user32.dll")]
+            public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X,int Y, int cx, int cy, uint uFlags);
+
+            static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+     
+            const UInt32 SWP_NOSIZE = 0x0001;
+            const UInt32 SWP_NOMOVE = 0x0002;
+            const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+     
+            public static void MakeTopMost (IntPtr fHandle)
+            {
+                    SetWindowPos(fHandle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+            }
+    "@
+     
+    $app = Add-Type -MemberDefinition $signature -Name Win32Window -Namespace ScriptFanatic.WinAPI -ReferencedAssemblies System.Windows.Forms -Using System.Windows.Forms -PassThru
+
+    $hwnd = $am.GetForegroundWindow()
+    if($hWnd -ne 0)
+    { 
+      $null = $app::MakeTopMost($hWnd)
+    }
+    else
+    {
+      Write-Host "$hWnd is 0"
+    }
+
+
 ### Log messages
 
     $am.Log( 1, "Hello from powershell" )
@@ -7,6 +42,14 @@
 or, (to prevent output).
 
     [void]($am.Log( 1, "Hello from powershell" ))
+
+The log messages are:
+
+- Success = 1
+- Error = 2
+- Warning = 3
+- Message = 4
+- System = 5
 
 ### Say
 
