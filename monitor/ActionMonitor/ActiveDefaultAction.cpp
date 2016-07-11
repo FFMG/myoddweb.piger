@@ -32,14 +32,18 @@ bool ActiveDefaultAction::OnInitialize()
 
 void ActiveDefaultAction::OnExecuteInThread()
 {
-	auto szExt = Extension();
-
+  // we need to log that we are going to run this as a default.
+  // we should always try and create an ActiveAction for each known extensions.
+  auto szExt = Extension();
+  auto szCommand = Command();
+  myodd::log::LogWarning(_T("Will try and execute the command '%s' from file '%s'"), szExt.c_str(), szCommand.c_str());
+	
 	//  the file.
 	auto szFile = File();
 
 	//  join the two items together.
 	std::vector<MYODD_STRING> argv;
-	argv.push_back(szFile);
-	argv.push_back(GetCommandLine() );
+	argv.push_back( szFile);
+	argv.push_back( GetCommandLine() );
 	Execute(argv, IsPrivileged(), nullptr );
 }

@@ -458,5 +458,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
   {
     return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
   }
+
+  // run the default action.
   return new ActiveDefaultAction( *this, hTopHWnd, szCommandLine, isPrivileged );
 }
