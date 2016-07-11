@@ -1,18 +1,34 @@
 #include <tchar.h>
 
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 6
-#define VERSION_MAINTENANCE 13
-#define VERSION_BUILD 29
-#define VERSION_BUILD_DATE  _T("11/07/2016")
-#define VERSION_BUILD_TIME  _T("13:50:41UTC")
+#define VERSION_MAJOR          0
+#define VERSION_MINOR          6
+#define VERSION_MAINTENANCE   13
+#define VERSION_BUILD         32
+
+#define VERSION_HOUR          22
+#define VERSION_MINUTE        43
+
+#define VERSION_YEAR        2016
+#define VERSION_MONTH          7
+#define VERSION_DAY           11
 
 //
-// No need to edit below... (or maybe the year...)
+// No need to edit below...
 //
 
 #define _STR(x) #x
 #define STR(x) _STR(x)
+
+#define VERSION_BUILD_DATE  _T(STR(VERSION_YEAR)) \
+                            _T("\\") \
+                            _T(STR(VERSION_MONTH)) \
+                            _T("\\") \
+                            _T(STR(VERSION_DAY))
+
+#define VERSION_BUILD_TIME  _T(STR(VERSION_HOUR)) \
+                            _T(":") \
+                            _T(STR(VERSION_MINUTE)) \
+                            _T(":00UTC")
 
 #define VERSION_NUMBER VERSION_MAJOR, VERSION_MINOR, VERSION_MAINTENANCE, VERSION_BUILD
 #define VERSION_STRING _T( STR(VERSION_MAJOR)) \
@@ -24,9 +40,11 @@
                        _T(STR(VERSION_BUILD))
 
 #define VERSION_COMPANY _T("MyOddweb.com.  All rights reserved.")
-#define VERSION_COPYRIGHT _T("Copyright (C) MyOddweb.com. 2008-2016" )
+#define VERSION_COPYRIGHT _T("Copyright (C) MyOddweb.com. 2008-") \
+                          _T(STR(VERSION_YEAR))
 #define VERSION_TRADEMARK _T("")
-#define VERSION_BUILD_DATE_TIME VERSION_BUILD_DATE _T( " - " ) \
+#define VERSION_BUILD_DATE_TIME VERSION_BUILD_DATE \
+                                _T(" - ") \
                                 VERSION_BUILD_TIME
 #define VERSION_DESCRIPTION _T( "Piger keyboard Launcher." );
 

@@ -460,5 +460,25 @@ namespace Am
       }
       return ipcResponse.Get<string>(0);
     }
+
+    /// <summary>
+    /// Get the foreground window at the time of the call. 
+    /// </summary>
+    /// <returns>IntPtr the current fogregorund window.</returns>
+    public IntPtr GetForegroundWindow()
+    {
+      //  request
+      var ipcRequest = new MyOdd.IpcData();
+      ipcRequest.Add(Uuid);
+      ipcRequest.Add("GetForegroundWindow");
+
+      //  response
+      var ipcResponse = Connector.Send(ipcRequest);
+      if (null == ipcResponse)
+      {
+        throw new Exception("Unable to find the action at the given index.");
+      }
+      return (IntPtr)ipcResponse.Get<int>(0);
+    }
   }
 }
