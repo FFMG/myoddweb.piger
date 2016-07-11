@@ -10,6 +10,7 @@
 #include "activeluaaction.h"
 #include "activepluginaction.h"
 #include "activedefaultaction.h"
+#include "activebatchaction.h"
 
 #include "os\os.h"
 #include "ActivePowershellAction.h"
@@ -456,5 +457,10 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
   }
 #endif // ACTIONMONITOR_API_PLUGIN
 
+  // Batch files...
+  if( _tcsicmp(szExt.c_str(), _T("bat")) == 0)
+  {
+    return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
+  }
   return new ActiveDefaultAction( *this, hTopHWnd, szCommandLine, isPrivileged );
 }
