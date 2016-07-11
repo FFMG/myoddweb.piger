@@ -123,6 +123,9 @@
     <ClCompile Include="..\api\powershellapi.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="ActiveBatchAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -246,6 +249,9 @@
     </ClInclude>
     <ClInclude Include="..\api\powershellapi.h">
       <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveBatchAction.h">
+      <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

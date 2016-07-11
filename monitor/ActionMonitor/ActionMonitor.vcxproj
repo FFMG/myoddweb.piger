@@ -197,6 +197,7 @@
     <ClCompile Include="ActionVersion.cpp" />
     <ClCompile Include="ActiveAction.cpp" />
     <ClCompile Include="ActiveActions.cpp" />
+    <ClCompile Include="ActiveBatchAction.cpp" />
     <ClCompile Include="ActiveByeAction.cpp" />
     <ClCompile Include="ActiveDefaultAction.cpp" />
     <ClCompile Include="ActiveLuaAction.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="ActionVersion.h" />
     <ClInclude Include="ActiveAction.h" />
     <ClInclude Include="ActiveActions.h" />
+    <ClInclude Include="ActiveBatchAction.h" />
     <ClInclude Include="ActiveByeAction.h" />
     <ClInclude Include="ActiveDefaultAction.h" />
     <ClInclude Include="ActiveLuaAction.h" />
