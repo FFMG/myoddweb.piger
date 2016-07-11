@@ -716,13 +716,14 @@ int LuaApi::RemoveAction( lua_State *lua )
     return 1;
   }
 
-  USES_CONVERSION;
-
-  LPCTSTR szAction = T_A2T(lua_tostring(lua, ARGUMENT_ACTION));
-  LPCTSTR szPath = T_A2T(lua_tostring(lua, ARGUMENT_PATH));
-  bool r = __super::RemoveAction(szAction, szPath );
+  auto szAction = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ACTION));
+  auto szPath = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_PATH));
+  auto result = __super::RemoveAction(szAction.c_str(), szPath.c_str());
   
-  lua_pushboolean ( lua, r );
+  // return if it works.
+  lua_pushboolean ( lua, result);
+
+  // one argument
   return 1;
 }
 
