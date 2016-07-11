@@ -12,7 +12,7 @@
  * @param void
  * @return void
  */
-ActionVersion::ActionVersion( ) : Action( ACTION_CORE_VERSION, NULL )
+ActionVersion::ActionVersion( ) : Action( ACTION_CORE_VERSION, nullptr)
 {
 }
 

@@ -42,7 +42,7 @@ double PluginApi::Version ( )
  * @param void
  * @return void
  */
-bool PluginApi::Say(const wchar_t* msg, UINT nElapse, UINT nFadeOut)
+bool PluginApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
 {
   // display the message
   // and we can now display the message.
@@ -102,7 +102,7 @@ int PluginApi::GetAction( DWORD nBufferLength, wchar_t* lpBuffer )
     _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
   }
 
-  return len;
+  return static_cast<int>(len);
 }
 
 /**
@@ -155,7 +155,7 @@ int PluginApi::GetString( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote )
     memset( lpBuffer, 0, nBufferLength );
     _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
   }
-  return len;
+  return static_cast<int>(len);
 }
 
 /**
@@ -180,7 +180,7 @@ int PluginApi::GetFile(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQ
     memset( lpBuffer, 0, nBufferLength );
     _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
   }
-  return len;
+  return static_cast<int>(len);
 }
 
 /**
@@ -205,7 +205,7 @@ int PluginApi::GetFolder (UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool
     memset( lpBuffer, 0, nBufferLength );
     _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
   }
-  return len;
+  return static_cast<int>(len);
 }
 
 /**
@@ -230,7 +230,7 @@ int PluginApi::GetURL(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQu
     memset( lpBuffer, 0, nBufferLength );
     _tcsncpy_s( lpBuffer, nBufferLength, sValue.c_str(), _TRUNCATE );
   }
-  return len;
+  return static_cast<int>(len);
 }
 
 /**

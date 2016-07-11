@@ -32,14 +32,14 @@ bool ActiveDefaultAction::OnInitialize()
 
 void ActiveDefaultAction::OnExecuteInThread()
 {
-	const MYODD_STRING& szExt = Extension();
+	auto szExt = Extension();
 
 	//  the file.
-	const MYODD_STRING& szFile = File();
+	auto szFile = File();
 
 	//  join the two items together.
 	std::vector<MYODD_STRING> argv;
 	argv.push_back(szFile);
 	argv.push_back(GetCommandLine() );
-	Action::Execute(argv, IsPrivileged(), nullptr );
+	Execute(argv, IsPrivileged(), nullptr );
 }

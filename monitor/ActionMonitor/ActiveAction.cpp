@@ -4,7 +4,6 @@
 
 #include "stdafx.h"
 #include "ActiveAction.h"
-#include "ActionsCore.h"
 #include "ActionMonitor.h"
 #include "../myodd/threads/threads.h"
 
@@ -20,7 +19,7 @@ ActiveAction::ActiveAction(const Action& src,
                            const MYODD_STRING& szCommandLine, 
                            bool isPrivileged) : 
   Action( src ), 
-  _clipboard(NULL),
+  _clipboard(nullptr),
   _szCommandLine( szCommandLine ),
   _isPrivileged( isPrivileged ),
   _hTopHWnd( hTopHWnd )
@@ -172,7 +171,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
   // values we will be using
   MYODD_STRING keyConfig;
   MYODD_STRING keyName;
-  bool expandValue = false;
+  auto expandValue = false;
   
   // set the values depending on the type.
   switch (variableType)

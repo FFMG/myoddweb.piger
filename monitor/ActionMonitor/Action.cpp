@@ -10,6 +10,7 @@
 #include "activeluaaction.h"
 #include "activepluginaction.h"
 #include "activedefaultaction.h"
+#include "activebatchaction.h"
 
 #include "os\os.h"
 #include "ActivePowershellAction.h"
@@ -141,12 +142,12 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szComma
 {
   // this is the full command passed by the user.
   // so even if the user only typed "goo" we will return google.
-  LPCTSTR command = Command().c_str();
+  auto command = Command().c_str();
   
   //  not sure how to do that...
   if ( Len() == 0)
   {
-    return NULL;
+    return nullptr;
   }
 
   // we are about to execute a command, we don't know how long the command will last
@@ -156,7 +157,7 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szComma
   //  if we are here then we are going to load a user command
   //
   //  If the user did not pass any arguments/command line then we must get them from the clipboard.
-  ActiveAction* aa = NULL;
+  ActiveAction* aa = nullptr;
   if( szCommandLine.length() == 0 )
   {
     aa = CreateActiveActionWithNoCommandLine( pWnd, isPrivileged);
@@ -337,7 +338,7 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, H
   else
   {
     //  launch as a normal file.
-    sei.lpVerb = _T("runas"); // in, optional when unspecified the default verb is choosen
+    sei.lpVerb = _T("open");  // in, optional when unspecified the default verb is choosen
   }
 
   // did the user pass a handle?
@@ -456,5 +457,10 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
   }
 #endif // ACTIONMONITOR_API_PLUGIN
 
+  // Batch files...
+  if( _tcsicmp(szExt.c_str(), _T("bat")) == 0)
+  {
+    return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
+  }
   return new ActiveDefaultAction( *this, hTopHWnd, szCommandLine, isPrivileged );
 }

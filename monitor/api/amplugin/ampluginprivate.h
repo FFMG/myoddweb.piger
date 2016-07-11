@@ -12,7 +12,7 @@ public:
 public:
   // the various functions
   virtual double Version();
-  virtual bool Say(const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut);
+  virtual bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const;
   virtual size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer);
 
   // get the full action as given by the user

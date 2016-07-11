@@ -13,7 +13,7 @@ class HelperApi
 {
 public:
   HelperApi(const ActiveAction& action );
-  ~HelperApi();
+  virtual ~HelperApi();
 
 private:
   const Clipboard& GetClipboard() const;

@@ -5,15 +5,6 @@
 
 #include "helperapi.h"
 
-// this is the version number for that particular API
-// 0.1 was the old API, not idea what version of Python it was using.
-// 2.0 uses version 5.3.
-// 3.0 added Log( ... )
-// 3.1 fixed some minor issues with bool > boolean
-// 3.2 check all the params type/number
-// 3.3 some code cleanup
-static const double ACTIONMONITOR_API_LUA_VERSION = 3.3;
-
 // support for LUA
 extern "C" 
 {

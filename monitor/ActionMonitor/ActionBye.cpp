@@ -12,7 +12,7 @@
  * @param void
  * @return void
  */
-ActionBye::ActionBye( ) : Action( ACTION_CORE_BYE, NULL )
+ActionBye::ActionBye( ) : Action( ACTION_CORE_BYE, nullptr )
 {
 }
 
