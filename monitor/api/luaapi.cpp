@@ -633,8 +633,8 @@ int LuaApi::Geturl( lua_State *lua )
  */
 int LuaApi::AddAction( lua_State *lua )
 {
-  const int ARGUMENT_ACTION = 1;
-  const int ARGUMENT_PATH = 2;
+  const auto ARGUMENT_ACTION = 1;
+  const auto ARGUMENT_PATH = 2;
 
   //  get the number of arguments
   int n = lua_gettop( lua );
@@ -667,11 +667,15 @@ int LuaApi::AddAction( lua_State *lua )
     return 1;
   }
 
+  // get the action and path
   auto szAction = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_ACTION) );
   auto szPath = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_PATH ) );
-  bool r = __super::AddAction(szAction.c_str(), szPath.c_str() );
+
+  // add it, (or try).
+  auto result = __super::AddAction(szAction.c_str(), szPath.c_str() );
   
-  lua_pushboolean ( lua, r );
+  // return if it works.
+  lua_pushboolean ( lua, result);
   return 1;
 }
 
