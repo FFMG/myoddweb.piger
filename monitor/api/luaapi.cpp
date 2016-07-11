@@ -740,7 +740,9 @@ int LuaApi::FindAction( lua_State *lua )
   // we must have 2 arguments.
   if( n != 2 )
   {
-    __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>"), 3000, 5 );
+    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
     lua_pushboolean ( lua, false );
     return 1;
   }
