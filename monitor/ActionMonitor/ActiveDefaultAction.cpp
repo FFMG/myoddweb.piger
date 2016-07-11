@@ -34,6 +34,7 @@ void ActiveDefaultAction::OnExecuteInThread()
 {
   // we need to log that we are going to run this as a default.
   // we should always try and create an ActiveAction for each known extensions.
+  // otherwise, who knows how this will run, (for example and swf extension might not be able to run).
   auto szExt = Extension();
   auto szCommand = Command();
   myodd::log::LogWarning(_T("Will try and execute the command '%s' from file '%s'"), szExt.c_str(), szCommand.c_str());
