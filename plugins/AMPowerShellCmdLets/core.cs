@@ -54,7 +54,11 @@ namespace Am
 
       //  response
       var ipcResponse = Connector.Send(ipcRequest);
-      var i = ipcResponse?.Get<int>(0);
+      if (null == ipcResponse)
+      {
+        throw new Exception("Unable to get the version number of the powershell plugin");
+      }
+      var i = ipcResponse.Get<int>(0);
       return i == 1;
     }
 
@@ -242,7 +246,7 @@ namespace Am
       var ipcResponse = Connector.Send(ipcRequest);
       if (null == ipcResponse)
       {
-        throw new Exception("Unable to get the file at index.");
+        throw new ArgumentOutOfRangeException(nameof(index), "Unable to get the file at index.");
       }
 
       if (ipcResponse.IsInt(0))
@@ -284,7 +288,7 @@ namespace Am
       {
         if (0 == ipcResponse.Get<int>(0))
         {
-          throw new Exception("Unable to get the selected file, probably because there isn't one.");
+          throw new ArgumentOutOfRangeException( nameof(index), "Unable to get the selected file, probably because there isn't one.");
         }
 
         //  not sure what that number is
@@ -319,7 +323,7 @@ namespace Am
       {
         if (0 == ipcResponse.Get<int>(0))
         {
-          throw new Exception("Unable to get the selected file, probably because there isn't one.");
+          throw new ArgumentOutOfRangeException(nameof(index), "Unable to get the selected file, probably because there isn't one.");
         }
 
         //  not sure what that number is
@@ -448,7 +452,7 @@ namespace Am
       {
         if (0 == ipcResponse.Get<int>(0))
         {
-          throw new Exception("Unable to find the action at the given index.");
+          throw new ArgumentOutOfRangeException( nameof(index), "Unable to find the action at the given index.");
         }
 
         //  not sure what that number is

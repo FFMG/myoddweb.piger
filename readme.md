@@ -71,6 +71,67 @@ At statup all the actions/plugins are loaded. A file will have the command name.
 For example, the file "**google.lua**" will create a command called "**google**" and the code in "google.lua" will be executed when that action is called. 
 
 # Scripting your own commands.
+
+## Powershell
+
+**If** you have powershell 3 installed, (and you should have if you have a decent version of windows installed), then you can run powershell scripts.
+
+### Code
+
+- Say( what, elapse, fade ), display a message
+- Version, get the LUA version been used.
+- GetCommand( idx ), get a typed command, if the user selects something like "*google world*", then command #0 is "google" and command #1 is "world".
+- GetAction, get the selected action.
+- GetCommandCount, get the number of commands including the action.
+- execute, execute a certain app/event/batch file. You can also ask for elevated permission, (if piger is not running elevated).
+- GetString, get a string that the user might have selected at the time of calling the action.
+- GetFile, get a file that the user might have selected at the time of calling the action.
+- GetFolder, get a folder that the user might have selected at the time of calling the action.
+- GetUrl, get a url that the user might have selected at the time of calling the action.
+- AddAction, add an action to our current list of actions. (lost when the app restarts!)
+- RemoveAction, remove an action from the list.
+- GetVersion, get the piger version number.
+- FindAction, find an action in our list of actions.
+- Log, log a message to file, (or whatever logger is been used).
+	- Success = 1
+	- Error = 2
+	- Warning = 3
+	- Message = 4
+	- System = 5
+
+### Example
+Read more [code examples](powershell.md).
+
+#### Calculator.ps1
+
+    #
+    # The module is automatically imported.
+    #
+
+    # give a message
+    # we use '| out-null' so we don't output the result of the message.
+    $am.Say( "Run - calc ...", 400, 10 ) | out-null
+
+    # Launch the application
+    # use the second parameter for arguments and 
+    # the third, (true|false), is to elevate the process.
+    Try
+    {
+      $am.Execute( "%SystemRoot%\\system32\\calc.exe", "", $true ) | out-null
+    }
+    Catch
+    {
+      # some functions throw exceptions...
+      Write-Host "Caught exception!"
+    }
+    
+    # log that all is good.
+    $am.Log( 1, "Launched calculator" ) | out-null
+
+    Write-Host "Press any key to continue ..."
+    $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+
 ## Python
 ### Code
 
@@ -197,6 +258,10 @@ Launch the explorer and navigate to the Google site, if one or more words are hi
 Windows batch files are just executed, they have no access to any of the plugins functions.
 
 Any arguments given are simply passed.
+
+  - %0 is the path to the exe, (Actionmonitor.exe).
+
+**NB**: Any batch files are "**Elevated**" this is because almost all scripts need to be elevated to run.
 
 ### Example
 
