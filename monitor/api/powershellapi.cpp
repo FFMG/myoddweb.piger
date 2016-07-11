@@ -274,11 +274,29 @@ bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::
 /**
  * Get the last foreground window. This is the window that was last on top.
  * It is posible to return NULL if the window is not
- * @return HWND the last top window.
+ * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
+ * @param myodd::os::IpcData& ipcResponse the container that will have the response.
+ * @return bool success or not.
  */
-HWND PowershellApi::GetForegroundWindow() const
+bool PowershellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  return __super::GetForegroundWindow();
+  auto argumentCount = ipcRequest.GetNumArguments();
+  if (argumentCount > 0)
+  {
+    auto errorMsg = _T("<b>Error : </b> The 'GetForegroundWindow' function does not take any arguments.");
+    __super::Log(AM_LOG_ERROR, errorMsg);
+    __super::Say(errorMsg, 3000, 5);
+    return false;
+  }
+
+  // get the foreground window.
+  auto hwnd = __super::GetForegroundWindow();
+
+  // return it as an int.
+  ipcResponse.Add(reinterpret_cast<int>(hwnd));
+
+  //  done 
+  return true;
 }
 
 bool PowershellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
