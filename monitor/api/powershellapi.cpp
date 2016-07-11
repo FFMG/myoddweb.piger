@@ -21,7 +21,6 @@ PowershellApi::~PowershellApi()
 {
 }
 
-
 /**
  * Execute a certain application/script.
  * @see __super::execute
@@ -91,6 +90,13 @@ bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   return true;
 }
 
+/**
+ * Overide function to execute a process.
+ * @param const wchar_t* module the module we want to execute.
+ * @param const wchar_t* cmdLine the arguments to pass to this module.
+ * @param bool isPrivileged, HANDLE* hProcess if not null, the handle of the created process.
+ * @return bool success or not.
+ */
 bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const
 {
   return __super::Execute(module, cmdLine, isPrivileged, hProcess);

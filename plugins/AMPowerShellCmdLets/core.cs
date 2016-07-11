@@ -11,7 +11,7 @@ namespace Am
   public class Core
   {
     //  the default connection name.
-    const string _Name = "MyOddweb_com_ActionMonitor";
+    private const string Name = "MyOddweb_com_ActionMonitor";
 
     private MyOdd.IpcConnector Connector { get; set; }
 
@@ -28,11 +28,7 @@ namespace Am
       Uuid = givenUuid;
 
       //  create the connector.
-      Connector = new MyOdd.IpcConnector(_Name);
-    }
-
-    ~Core()
-    {
+      Connector = new MyOdd.IpcConnector(Name);
     }
 
     /// <summary>
@@ -54,12 +50,8 @@ namespace Am
 
       //  response
       var ipcResponse = Connector.Send(ipcRequest);
-      if (null == ipcResponse)
-      {
-        return false;
-      }
-      var i = ipcResponse.Get<int>(0);
-      return (i == 1);
+      var i = ipcResponse?.Get<int>(0);
+      return i == 1;
     }
 
     /// <summary>
@@ -108,7 +100,7 @@ namespace Am
       {
         if( 0 == ipcResponse.Get<int>(0) )
         {
-          throw new ArgumentOutOfRangeException("The command you are trying to get does not exist.");
+          throw new ArgumentOutOfRangeException( nameof(index), "The command you are trying to get does not exist.");
         }
 
         //  not sure what that number is
@@ -332,42 +324,6 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    public bool AddAction( string action, string path )
-    {
-      //  request
-      var ipcRequest = new MyOdd.IpcData();
-      ipcRequest.Add(Uuid);
-      ipcRequest.Add("AddAction");
-      ipcRequest.Add(action);
-      ipcRequest.Add(path );
-
-      //  response
-      var ipcResponse = Connector.Send(ipcRequest);
-      if (null == ipcResponse)
-      {
-        throw new Exception("Unable to add the given action.");
-      }
-      return ipcResponse.Get<bool>(0);
-    }
-
-    public bool RemoveAction( string action, string path)
-    {
-      //  request
-      var ipcRequest = new MyOdd.IpcData();
-      ipcRequest.Add(Uuid);
-      ipcRequest.Add("RemoveAction");
-      ipcRequest.Add(action);
-      ipcRequest.Add(path);
-
-      //  response
-      var ipcResponse = Connector.Send(ipcRequest);
-      if (null == ipcResponse)
-      {
-        throw new Exception("Unable to remove the given action.");
-      }
-      return ipcResponse.Get<bool>(0);
-    }
-
     /// <summary>
     /// Get the application version number.
     /// </summary>
@@ -384,24 +340,6 @@ namespace Am
       if (null == ipcResponse)
       {
         throw new Exception("Unable to get the version number");
-      }
-      return ipcResponse.Get<string>(0);
-    }
-
-    public string FindAction( uint index, string action )
-    {
-      //  request
-      var ipcRequest = new MyOdd.IpcData();
-      ipcRequest.Add(Uuid);
-      ipcRequest.Add("FindAction");
-      ipcRequest.Add(index);
-      ipcRequest.Add(action);
-
-      //  response
-      var ipcResponse = Connector.Send(ipcRequest);
-      if (null == ipcResponse)
-      {
-        throw new Exception("Unable to find the action at the given index.");
       }
       return ipcResponse.Get<string>(0);
     }
@@ -428,6 +366,60 @@ namespace Am
         throw new Exception("Unable to log the message.");
       }
       return ipcResponse.Get<bool>(0);
+    }
+    
+    public bool AddAction(string action, string path)
+    {
+      //  request
+      var ipcRequest = new MyOdd.IpcData();
+      ipcRequest.Add(Uuid);
+      ipcRequest.Add("AddAction");
+      ipcRequest.Add(action);
+      ipcRequest.Add(path);
+
+      //  response
+      var ipcResponse = Connector.Send(ipcRequest);
+      if (null == ipcResponse)
+      {
+        throw new Exception("Unable to add the given action.");
+      }
+      return ipcResponse.Get<bool>(0);
+    }
+
+    public bool RemoveAction(string action, string path)
+    {
+      //  request
+      var ipcRequest = new MyOdd.IpcData();
+      ipcRequest.Add(Uuid);
+      ipcRequest.Add("RemoveAction");
+      ipcRequest.Add(action);
+      ipcRequest.Add(path);
+
+      //  response
+      var ipcResponse = Connector.Send(ipcRequest);
+      if (null == ipcResponse)
+      {
+        throw new Exception("Unable to remove the given action.");
+      }
+      return ipcResponse.Get<bool>(0);
+    }
+
+    public string FindAction(uint index, string action)
+    {
+      //  request
+      var ipcRequest = new MyOdd.IpcData();
+      ipcRequest.Add(Uuid);
+      ipcRequest.Add("FindAction");
+      ipcRequest.Add(index);
+      ipcRequest.Add(action);
+
+      //  response
+      var ipcResponse = Connector.Send(ipcRequest);
+      if (null == ipcResponse)
+      {
+        throw new Exception("Unable to find the action at the given index.");
+      }
+      return ipcResponse.Get<string>(0);
     }
   }
 }
