@@ -35,8 +35,8 @@ public:
   bool FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
-  
-  HWND GetForegroundWindow() const;
+
+  bool GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
 };
 
 #endif
