@@ -10,7 +10,7 @@ if sizeOf == 0  then
   local word = am_getstring();
   if false == word then
     am_say( "Starting Google.", 400, 10 );
-    am_execute( browser, wiki );
+    am_execute( browser, "" );
   else
     am_say( "Starting Google for : " .. word , 400, 10 );
     am_execute( browser, "http://www.google.com/search?hl=en&q=" .. word );
