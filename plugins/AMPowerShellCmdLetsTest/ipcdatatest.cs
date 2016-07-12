@@ -264,7 +264,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                3, 0,        //  data type string
+                                4, 0,        //  data type string
                                 0, 0, 0,0    //  size of 0
                                              //  no more data needed.
                               });
@@ -392,7 +392,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                3, 0,        //  data type string
+                                4, 0,        //  data type string
                                 5, 0, 0,0,   //  the len
                                 (byte)'h', 0,
                                 (byte)'e', 0,
@@ -410,7 +410,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0,        //  data type string
+                                5, 0,        //  data type string
                                 5, 0, 0,0,   //  the len
                                 (byte)'h',
                                 (byte)'e',
@@ -550,6 +550,95 @@ namespace MyOddTest
       var emptyIpcData = new IpcData();
       emptyIpcData.Add("NotAValidString");
       emptyIpcData.Get<bool>(0);
+    }
+
+    [TestMethod]
+    public void TestFromInt64ToPtrAndBack()
+    {
+      var ipc = new IpcData();
+
+      var random = new Random();
+      var n = (long)(random.NextDouble() * long.MaxValue);
+      var uuid = ipc.Guid;
+      ipc.Add( long.MaxValue );
+      ipc.Add(n);
+
+      var payload = ipc.GetPtr();
+      var dataBlockSize = ipc.GetSize();
+      var byteArray = new byte[dataBlockSize];
+
+      System.Runtime.InteropServices.Marshal.Copy(payload, byteArray, 0, dataBlockSize);
+      var ipc2 = new IpcData(byteArray);
+
+      Assert.AreEqual(uuid, ipc2.Guid);
+      Assert.AreEqual(Int64.MaxValue, ipc2.Get<long>(0));
+      Assert.AreEqual(n, ipc2.Get<long>(1));
+    }
+
+    [TestMethod]
+    public void TestFromInt32ToPtrAndBack()
+    {
+      var ipc = new IpcData();
+
+      var uuid = ipc.Guid;
+      var random = new Random();
+      var n = (Int32)random.Next(0, Int32.MaxValue);
+
+      ipc.Add(Int32.MaxValue);
+      ipc.Add(n);
+
+      var payload = ipc.GetPtr();
+      var dataBlockSize = ipc.GetSize();
+      var byteArray = new byte[dataBlockSize];
+
+      System.Runtime.InteropServices.Marshal.Copy(payload, byteArray, 0, dataBlockSize);
+      var ipc2 = new IpcData(byteArray);
+
+      Assert.AreEqual(uuid, ipc2.Guid);
+      Assert.AreEqual(Int32.MaxValue, ipc2.Get<Int32>(0));
+      Assert.AreEqual(n, ipc2.Get<Int32>(1));
+    }
+
+    [TestMethod]
+    public void TestFromInt64And32ToPtrAndBack()
+    {
+      var ipc = new IpcData();
+
+      var random = new Random();
+      var m = (int)(random.NextDouble() * int.MaxValue);
+      var n = (long)(random.NextDouble() * long.MaxValue);
+
+      var uuid = ipc.Guid;
+      ipc.Add(m);
+      ipc.Add(n);
+
+      var payload = ipc.GetPtr();
+      var dataBlockSize = ipc.GetSize();
+      var byteArray = new byte[dataBlockSize];
+
+      System.Runtime.InteropServices.Marshal.Copy(payload, byteArray, 0, dataBlockSize);
+      var ipc2 = new IpcData(byteArray);
+
+      Assert.AreEqual(uuid, ipc2.Guid);
+      Assert.AreEqual(m, ipc2.Get<int>(0));
+      Assert.AreEqual(n, ipc2.Get<long>(1));
+    }
+
+    [TestMethod]
+    public void TestFromInt32CanBeConvertedToInt64()
+    {
+      var ipc = new IpcData();
+
+      var random = new Random();
+      var m = (int)(random.NextDouble() * int.MaxValue);
+      var n = (long)(random.NextDouble() * long.MaxValue);
+
+      ipc.Add(m);
+      ipc.Add(n);
+
+      Assert.AreEqual(m, ipc.Get<int>(0));
+      Assert.AreEqual(m, ipc.Get<long>(0)); // as a long
+      Assert.AreEqual(n, ipc.Get<long>(1));
     }
   }
 }

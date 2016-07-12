@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <stdint.h>
 
 namespace myodd {
   namespace os {
@@ -11,8 +12,9 @@ namespace myodd {
         None = 0,
         Guid = 1,
         Int32 = 2,
-        String = 3,
-        StringAscii = 4,
+        Int64 = 3,
+        String = 4,
+        StringAscii = 5,
       };
 
     public:
@@ -45,7 +47,10 @@ namespace myodd {
       size_t GetSize();
 
       // add a signed int.
-      void Add(signed int dataValue);
+      void Add(int32_t dataValue);
+
+      // add a signed long long.
+      void Add(int64_t dataValue);
 
       // add a wide string.
       void Add( const std::wstring& dataValue);
@@ -88,7 +93,10 @@ namespace myodd {
       static IpcDataType ReadDataType(unsigned char* pData, size_t& pointer);
 
       // read a number
-      static signed int ReadInt32(unsigned char* pData, size_t& pointer);
+      static int32_t ReadInt32(unsigned char* pData, size_t& pointer);
+
+      // read a number
+      static int64_t ReadInt64(unsigned char* pData, size_t& pointer);
 
       // read a unicode string
       static std::wstring ReadString(unsigned char* pData, size_t& pointer);

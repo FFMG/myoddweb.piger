@@ -13,8 +13,9 @@ namespace MyOdd
       None = 0,
       Guid = 1,
       Int32 = 2,
-      String = 3,
-      StringAscii = 4
+      Int64 = 3,
+      String = 4,
+      StringAscii = 5
     };
 
     private List<dynamic> IpcArguments { get; set; }
@@ -126,6 +127,12 @@ namespace MyOdd
             }
             break;
 
+          case DataType.Int64:
+            {
+              Add(ReadInt64(bytes, ref pointer));
+            }
+            break;
+
           case DataType.String: //string unicode
             {
               Add(ReadString(bytes, ref pointer), true);
@@ -205,6 +212,33 @@ namespace MyOdd
 
       // return the converted value.
       return BitConverter.ToInt32(dst, 0);
+    }
+
+    /// <summary>
+    /// Get the string an integer.
+    /// </summary>
+    /// <param name="bytes">the bytes we are reading from</param>
+    /// <param name="pointer">the current pointer location</param>
+    /// <returns></returns>
+    private static long ReadInt64(byte[] bytes, ref int pointer)
+    {
+      //  check that we have enough data.
+      if (pointer + sizeof(long) > bytes.Length)
+      {
+        throw new ArgumentOutOfRangeException(nameof(bytes), "We there is not enough data to read.");
+      }
+
+      // create the destination item
+      var dst = new byte[sizeof(long)];
+
+      // copy from where we are to where we are going.
+      Array.Copy(bytes, pointer, dst, 0, sizeof(long));
+
+      // update the pointer.
+      pointer += sizeof(long);
+
+      // return the converted value.
+      return BitConverter.ToInt64(dst, 0);
     }
 
     /// <summary>
@@ -349,7 +383,7 @@ namespace MyOdd
       Add(Combine(new byte[][]
       {
         BitConverter.GetBytes((short) DataType.Guid), //  short
-        BitConverter.GetBytes(Guid.Length), //  Int32, size is guaranteed.
+        BitConverter.GetBytes(Guid.Length), //
         System.Text.Encoding.Unicode.GetBytes(Guid)
       }
       ));
@@ -420,6 +454,30 @@ namespace MyOdd
       {
         data = numberToAdd,
         type = DataType.Int32
+      });
+
+      // update the argument count.
+      ArgumentsCount++;
+    }
+
+    /// <summary>
+    /// Add a number to the list
+    /// </summary>
+    /// <param name="numberToAdd">The number to add.</param>
+    public void Add(long numberToAdd)
+    {
+      Add(Combine(new[]
+        {
+          BitConverter.GetBytes((short) DataType.Int64), // short
+          BitConverter.GetBytes(numberToAdd) //  int64
+        }
+        ));
+
+      //  add to the arguments list.
+      IpcArguments.Add(new
+      {
+        data = numberToAdd,
+        type = DataType.Int64
       });
 
       // update the argument count.
@@ -605,6 +663,7 @@ namespace MyOdd
         switch (objectType)
         {
           case DataType.Int32:
+          case DataType.Int64:
             return (T)objectData;
 
           default:
@@ -617,10 +676,20 @@ namespace MyOdd
         switch (objectType)
         {
           case DataType.Int32:
-            var i = (int)objectData;
-            var s = i.ToString();
-            var o = (object)s;
-            return (T)o;
+            {
+              var i = (int)objectData;
+              var s = i.ToString();
+              var o = (object)s;
+              return (T)o;
+            }
+
+          case DataType.Int64:
+            {
+              var i = (long)objectData;
+              var s = i.ToString();
+              var o = (object)s;
+              return (T)o;
+            }
 
           case DataType.Guid:
           case DataType.String:

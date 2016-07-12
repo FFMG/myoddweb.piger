@@ -2,6 +2,7 @@
 #include "ipcdata.h"
 #include <afxwin.h>
 #include <../string/string.h>
+#include <inttypes.h>
 
 namespace myodd {
 namespace os {
@@ -82,8 +83,16 @@ const IpcData& IpcData::operator=(const IpcData& rhs)
       case IpcDataType::Int32:
       {
         _ipcArguments.push_back(new IpcArgument{
-          new (signed int)( *(static_cast<signed int*>(ia->pData))),
+          new (int32_t)( *(static_cast<int32_t*>(ia->pData))),
           IpcDataType::Int32
+        });
+      }
+
+      case IpcDataType::Int64:
+      {
+        _ipcArguments.push_back(new IpcArgument{
+          new (int64_t)(*(static_cast<int64_t*>(ia->pData))),
+          IpcDataType::Int64
         });
       }
       break;
@@ -134,7 +143,12 @@ void IpcData::ResetArguments()
     {
     case IpcDataType::Int32:
       // delete the data.
-      delete static_cast<signed int*>(ia->pData);
+      delete static_cast<int32_t*>(ia->pData);
+      break;
+
+    case IpcDataType::Int64:
+      // delete the data.
+      delete static_cast<int64_t*>(ia->pData);
       break;
 
     case IpcDataType::String:
@@ -226,7 +240,11 @@ size_t IpcData::CalculateArgumentsSize() const
     switch( ia->dataType )
     {
     case IpcDataType::Int32:
-      totalSize += sizeof(signed int);
+      totalSize += sizeof(int32_t);
+      break;
+
+    case IpcDataType::Int64:
+      totalSize += sizeof(int64_t);
       break;
 
     case IpcDataType::String:
@@ -300,7 +318,18 @@ unsigned char* IpcData::GetPtr()
     case IpcDataType::Int32:
     {
       // get the data.
-      auto dataValue = static_cast<signed int*>(ia->pData);
+      auto dataValue = static_cast<int32_t*>(ia->pData);
+
+      // add it to the pointer.
+      memcpy(static_cast<PVOID>(_pData + pointer), dataValue, sizeof(*dataValue));
+      pointer += sizeof(*dataValue);
+    }
+    break;
+
+    case IpcDataType::Int64:
+    {
+      // get the data.
+      auto dataValue = static_cast<int64_t*>(ia->pData);
 
       // add it to the pointer.
       memcpy(static_cast<PVOID>(_pData + pointer), dataValue, sizeof(*dataValue));
@@ -414,8 +443,17 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
     case IpcDataType::Int32:
     {
       _ipcArguments.push_back(new IpcArgument{
-        new (signed int)(ReadInt32(pData, pointer)),
+        new (int32_t)(ReadInt32(pData, pointer)),
         IpcDataType::Int32
+      });
+    }
+    break;
+
+    case IpcDataType::Int64:
+    {
+      _ipcArguments.push_back(new IpcArgument{
+        new (int64_t)(ReadInt64(pData, pointer)),
+        IpcDataType::Int64
       });
     }
     break;
@@ -618,11 +656,11 @@ std::string IpcData::ReadAsciiString(unsigned char* pData, size_t& pointer)
  * We update the pointer location.
  * @param unsigned char* pData the data container
  * @param size_t& pointer the current pointer location.
- * @return signed int the number.
+ * @return int32_t the number.
  */
-signed int IpcData::ReadInt32(unsigned char* pData, size_t& pointer)
+int32_t IpcData::ReadInt32(unsigned char* pData, size_t& pointer)
 {
-  signed int dataValue = 0;
+  int32_t dataValue = 0;
   try
   {
     // read the value.
@@ -640,6 +678,32 @@ signed int IpcData::ReadInt32(unsigned char* pData, size_t& pointer)
   return dataValue;
 }
 
+/**
+ * Read the number at our current location.
+ * We update the pointer location.
+ * @param unsigned char* pData the data container
+ * @param size_t& pointer the current pointer location.
+ * @return int32_t the number.
+ */
+int64_t IpcData::ReadInt64(unsigned char* pData, size_t& pointer)
+{
+  int64_t dataValue = 0;
+  try
+  {
+    // read the value.
+    memcpy_s(&dataValue, sizeof(dataValue), pData + pointer, sizeof(dataValue));
+
+    // move the pointer forward.
+    pointer += sizeof(dataValue);
+  }
+  catch (...)
+  {
+    throw "There was a problem reading the number.";
+  }
+
+  // return what we found.
+  return dataValue;
+}
 /**
  * Read the version number at our current location.
  * We update the pointer location.
@@ -672,11 +736,29 @@ signed int IpcData::ReadVersionNumber(unsigned char* pData, size_t& pointer)
  * Add a signed integer to our list of arguments.
  * @param signed int dataValue the string we want to add.
  */
-void IpcData::Add(signed int dataValue )
+void IpcData::Add(int32_t dataValue )
 {
   _ipcArguments.push_back(new IpcArgument{
-    new (signed int)(dataValue),
+    new (int32_t)(dataValue),
     IpcDataType::Int32
+  });
+
+  // update the argument count
+  ++_numArguments;
+
+  // reset the pointer if need be.
+  ResetPtr();
+}
+
+/**
+* Add a signed integer to our list of arguments.
+* @param signed int dataValue the string we want to add.
+*/
+void IpcData::Add(int64_t dataValue)
+{
+  _ipcArguments.push_back(new IpcArgument{
+    new (int64_t)(dataValue),
+    IpcDataType::Int64
   });
 
   // update the argument count
@@ -747,6 +829,7 @@ bool IpcData::IsInt(unsigned int index) const
   switch (ipc->dataType)
   {
   case IpcDataType::Int32:
+  case IpcDataType::Int64:
     return true;
 
   case IpcDataType::String:
@@ -775,7 +858,10 @@ std::wstring IpcData::Get<std::wstring>(unsigned int index) const
   switch (ipc->dataType)
   {
   case IpcDataType::Int32:
-    return myodd::strings::Format(_T("%d"), *static_cast<signed int*>(ipc->pData));
+    return myodd::strings::Format(_T("%d"), *static_cast<int32_t*>(ipc->pData));
+
+  case IpcDataType::Int64:
+    return myodd::strings::Format(_T("%" PRId64), *static_cast<int64_t*>(ipc->pData));
 
   case IpcDataType::String:
   case IpcDataType::Guid:
@@ -794,7 +880,7 @@ std::wstring IpcData::Get<std::wstring>(unsigned int index) const
 }
 
 template<>
-unsigned int IpcData::Get<unsigned int>(unsigned int index) const
+uint32_t IpcData::Get<uint32_t>(unsigned int index) const
 {
   // adjust the index, we will check for out of range values.
   index = AdjustIndexNumber(index);
@@ -803,14 +889,17 @@ unsigned int IpcData::Get<unsigned int>(unsigned int index) const
   switch (ipc->dataType)
   {
   case IpcDataType::Int32:
-    return (unsigned int)(*(static_cast<signed int*>(ipc->pData)));
+    return (uint32_t)(*(static_cast<int32_t*>(ipc->pData)));
+
+  case IpcDataType::Int64:
+    return (uint32_t)(*(static_cast<int64_t*>(ipc->pData)));
 
   case IpcDataType::String:
   case IpcDataType::Guid:
-    return (unsigned int)std::stoi( *(static_cast<std::wstring*>(ipc->pData)));
+    return (uint32_t)std::stoll(*(static_cast<std::wstring*>(ipc->pData)));
 
   case IpcDataType::StringAscii:
-    return (unsigned int)std::stoi( myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
+    return (uint32_t)std::stoll(myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
 
   case IpcDataType::None:
   default:
@@ -822,7 +911,7 @@ unsigned int IpcData::Get<unsigned int>(unsigned int index) const
 }
 
 template<>
-signed int IpcData::Get<signed int>(unsigned int index) const
+int32_t IpcData::Get<int32_t>(unsigned int index) const
 {
   // adjust the index, we will check for out of range values.
   index = AdjustIndexNumber(index);
@@ -831,14 +920,79 @@ signed int IpcData::Get<signed int>(unsigned int index) const
   switch (ipc->dataType)
   {
   case IpcDataType::Int32:
-    return (int)(*(static_cast<signed int*>(ipc->pData)));
+    return (int32_t)(*(static_cast<int32_t*>(ipc->pData)));
+
+  case IpcDataType::Int64:
+    return (int32_t)(*(static_cast<int64_t*>(ipc->pData)));
 
   case IpcDataType::String:
   case IpcDataType::Guid:
-    return std::stoi(*(static_cast<std::wstring*>(ipc->pData)));
+    return (int32_t)std::stoll(*(static_cast<std::wstring*>(ipc->pData)));
 
   case IpcDataType::StringAscii:
-    return std::stoi(myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
+    return (int32_t)std::stoll(myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
+
+  case IpcDataType::None:
+  default:
+    throw "Unnown data type.";
+  }
+
+  // never reached
+  return 0;
+}
+
+template<>
+uint64_t IpcData::Get<uint64_t>(unsigned int index) const
+{
+  // adjust the index, we will check for out of range values.
+  index = AdjustIndexNumber(index);
+
+  auto ipc = _ipcArguments[index];
+  switch (ipc->dataType)
+  {
+  case IpcDataType::Int32:
+    return (uint64_t)(*(static_cast<int32_t*>(ipc->pData)));
+
+  case IpcDataType::Int64:
+    return (uint64_t)(*(static_cast<int64_t*>(ipc->pData)));
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+    return (uint64_t)std::stoll(*(static_cast<std::wstring*>(ipc->pData)));
+
+  case IpcDataType::StringAscii:
+    return (uint64_t)std::stoll(myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
+
+  case IpcDataType::None:
+  default:
+    throw "Unnown data type.";
+  }
+
+  // never reached
+  return 0;
+}
+
+template<>
+int64_t IpcData::Get<int64_t>(unsigned int index) const
+{
+  // adjust the index, we will check for out of range values.
+  index = AdjustIndexNumber(index);
+
+  auto ipc = _ipcArguments[index];
+  switch (ipc->dataType)
+  {
+  case IpcDataType::Int32:
+    return (int64_t)(*(static_cast<int32_t*>(ipc->pData)));
+
+  case IpcDataType::Int64:
+    return (int64_t)(*(static_cast<int64_t*>(ipc->pData)));
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+    return (int64_t)std::stoll( *(static_cast<std::wstring*>(ipc->pData)));
+
+  case IpcDataType::StringAscii:
+    return (int64_t)std::stoll( myodd::strings::String2WString(*(static_cast<std::string*>(ipc->pData))));
 
   case IpcDataType::None:
   default:
@@ -863,7 +1017,7 @@ unsigned int IpcData::AdjustIndexNumber(unsigned int givenIndex) const
   }
 
   auto offset = 0;
-  for (auto i = 0; i <= givenIndex; ++i)
+  for (unsigned int i = 0; i <= givenIndex; ++i)
   {
     auto ipc = _ipcArguments[i];
     switch (ipc->dataType)
@@ -932,8 +1086,6 @@ void IpcData::RemoveArgument(unsigned int index)
   // remove it
   _ipcArguments.erase(it);
 }
-
-
 //
 } // os
 } // myodd

@@ -293,7 +293,7 @@ bool PowershellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, my
   auto hwnd = __super::GetForegroundWindow();
 
   // return it as an int.
-  ipcResponse.Add(reinterpret_cast<int>(hwnd));
+  ipcResponse.Add(reinterpret_cast<int64_t>(hwnd));
 
   //  done 
   return true;
@@ -415,7 +415,7 @@ bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd:
   size_t nSize = __super::GetCommandCount();
 
   //  add it to the response
-  ipcResponse.Add( nSize);
+  ipcResponse.Add( (int64_t)nSize );
 
   // success.
   return true;
