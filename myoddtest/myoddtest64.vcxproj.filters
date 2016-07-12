@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="myodd">
+      <UniqueIdentifier>{831a3e0d-bbba-4ac8-8a7c-50c717e21517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="myodd\os">
+      <UniqueIdentifier>{04a40bdf-97bd-46a7-a0bd-c4c461888bd4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="myoddtest64.cpp" />
+    <ClCompile Include="testipcdata.cpp">
+      <Filter>myodd\os</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
