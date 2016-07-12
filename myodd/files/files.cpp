@@ -567,8 +567,8 @@ bool UnExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest )
  */
 bool UnExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
 {
-  dest = NULL;
-  if( NULL == lpSrc || _tcslen( lpSrc ) == 0  )
+  dest = nullptr;
+  if(nullptr == lpSrc || _tcslen( lpSrc ) == 0  )
   {
     // no error, just nothing to do really.
     return true;
@@ -1310,8 +1310,8 @@ bool GetFileInformationByName(const MYODD_CHAR* file, BY_HANDLE_FILE_INFORMATION
 MYODD_STRING GetAppPath( bool bAddtrailing /*=true*/)
 {
   MYODD_STRING sReturn = _T("");
-  MYODD_CHAR* lpBuffer = new TCHAR[ T_MAX_PATH ];
-  if (GetModuleFileName( NULL, lpBuffer, T_MAX_PATH ) != 0)
+  auto lpBuffer = new MYODD_CHAR[ T_MAX_PATH ];
+  if (GetModuleFileName( nullptr, lpBuffer, T_MAX_PATH ) != 0)
   {
     sReturn = GetBaseFromFile( lpBuffer, false, bAddtrailing );
   }
@@ -2003,7 +2003,7 @@ MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos, __int64 nEndPos 
   if ( err || NULL == fp )
   {
     // could not open the file.
-    return NULL;
+    return nullptr;
   }
 
   //
@@ -2283,8 +2283,8 @@ public:
   void set(const ubyte* pBuf, size_t nLen, FileEncode eEncoding);
   utf8 get() const { return m_nCur; };
   void operator++();
-  eState getState() { return m_eState; };
-  operator bool() { return m_pRead <= m_pEnd; };
+  eState getState() const { return m_eState; };
+  operator bool() const { return m_pRead <= m_pEnd; };
 
 protected:
   void toStart(); // Put to start state, swap bytes if necessary
@@ -2401,8 +2401,8 @@ MYODD_CHAR* Byte2Char
   case uni16LE_NoBOM:
     {
       // get the max new size
-      size_t newSize = len + len / 2 + 1;
-      char* cbuf  = new char[newSize];
+      auto newSize = len + len / 2 + 1;
+      auto cbuf  = new char[newSize];
       memset( cbuf, 0, newSize );
 
       BYTE nSkip = 2;
@@ -2444,8 +2444,8 @@ MYODD_CHAR* Byte2Char
     break;
   }
 
-  size_t l = convertedString.length();
-  wchar_t* tbuf = new wchar_t[ l + sizeof(wchar_t)];
+  auto l = convertedString.length();
+  auto tbuf = new wchar_t[ l + sizeof(wchar_t)];
   lstrcpy(tbuf, convertedString.c_str());
 
   return tbuf;
@@ -2460,7 +2460,7 @@ MYODD_CHAR* Byte2Char
  */
 long GetFileSizeInBytes( const MYODD_STRING& stdFullPathFileName )
 {
-  MYODD_STRING cleannedFileName = stdFullPathFileName;
+  auto cleannedFileName = stdFullPathFileName;
   if (!ExpandEnvironment(cleannedFileName, cleannedFileName))
   {
     return -1;
