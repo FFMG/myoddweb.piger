@@ -56,6 +56,8 @@ Name: pluginloader; Description: "Create a 'Learn/Unlearn' action to learn new s
 Name: pluginapppaths; Description: "Parse all the common applications on your system and create actions on the fly."; GroupDescription: "Plugins";
 Name: pluginontop; Description: "Create 'OnTop' command to keep any window as the topmost window, (like vlc/winamp etc...)."; GroupDescription: "Plugins";
 Name: plugindolly; Description: "Hello Dolly sample plugin"; GroupDescription: "Plugins"; Flags: unchecked
+; make sure that this remains item #5 as the [code] bellow disables it.
+Name: pluginpowershell3; Description: "Powershell 3 plugins"; GroupDescription: "Plugins";
 
 [InstallDelete]
 ; remove old files that the user might no longer want
@@ -108,13 +110,13 @@ Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinsta
 Source: {#APP_SOURCE86}ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}hook.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}python35.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE86}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
+Source: {#APP_SOURCE86}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64 and IsPowershell3Installed" 
 
 ; x64 App
 Source: {#APP_SOURCE64}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}python35.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE64}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+Source: {#APP_SOURCE64}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: (IsWin64 and IsPowershell3Installed)
 
 ; common
 Source: {#APP_INCLUDE}python86\*.*; DestDir: {app}\python\; Flags: recursesubdirs createallsubdirs; Check: "not IsWin64"
@@ -134,3 +136,33 @@ Name: {group}\Piger; Filename: {app}\ActionMonitor.exe
 Name: {group}\{cm:ProgramOnTheWeb,Piger}; Filename: {#APP_URL}
 Name: {group}\{cm:UninstallProgram,Piger}; Filename: {uninstallexe}
 Name: {group}\{cm:UninstallProgram, Piger}; Filename: {uninstallexe}
+
+[Code]
+function IsPowershell3Installed(): Boolean;
+var
+  Install: Cardinal;
+begin
+  Result := false;
+  if RegQueryDWordValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\PowerShell\3', 'Install', Install) then
+  begin
+    // Successfully read the value
+    Result := (1 = Install )
+    Log('The Install is: ' + IntToStr(Install));
+  end;
+end;
+
+// Disable Tasks
+procedure CurPageChanged(CurPageID: Integer);
+var
+  Index: Integer;
+begin
+  // if we have entered the tasks selection page, disable the specified Tasks.
+  if CurPageID = wpSelectTasks then
+  begin
+    // this number is the powershell task number! don't change it!
+    Index := 5
+    WizardForm.TasksList.ItemEnabled[Index] := IsPowershell3Installed();
+  end;
+
+end;
+// Disable Tasks - END
