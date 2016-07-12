@@ -1,13 +1,10 @@
-#ifndef __Includes_h__
-#define __Includes_h__
-
 #pragma once
 
 /** 
  * We do not want any warnings for deprecated warnings if we are in windows.
  */
 #if (defined(_WIN32) || defined(WIN32)) && !defined(_CRT_SECURE_NO_WARNINGS)
-#define _CRT_SECURE_NO_WARNINGS
+  #define _CRT_SECURE_NO_WARNINGS
 #endif
 
 // define lparam/waprams
@@ -49,5 +46,3 @@
 #endif
 
 #endif  //  __AFXWIN_H__
-
-#endif  //  __Includes_h__
