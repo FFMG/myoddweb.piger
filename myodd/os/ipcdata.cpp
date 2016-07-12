@@ -117,7 +117,7 @@ const IpcData& IpcData::operator=(const IpcData& rhs)
 
       default:
         // we cannot copy this item
-        throw "Unknown argument type, I am unable to copy the original content.";
+        throw std::exception( "Unknown argument type, I am unable to copy the original content.");
       }
 
     }
@@ -164,7 +164,7 @@ void IpcData::ResetArguments()
 
     case IpcDataType::None:
     default:
-      throw "Unnown data type.";
+      throw std::exception( "Unnown data type." );
     }
 
     // delete the data
@@ -260,7 +260,7 @@ size_t IpcData::CalculateArgumentsSize() const
 
     case IpcDataType::None:
     default:
-      throw "Unnown data type.";
+      throw std::exception( "Unnown data type." );
     }
   }
   return totalSize;
@@ -289,7 +289,7 @@ unsigned char* IpcData::GetPtr()
   // the size cannot be zero
   if (_pDataSize == 0)
   {
-    throw "The size cannot be zero, we must have at least the version number!";
+    throw std::exception( "The size cannot be zero, we must have at least the version number!" );
   }
 
   // create the data 
@@ -379,7 +379,7 @@ unsigned char* IpcData::GetPtr()
 
     case IpcDataType::None:
     default:
-      throw "Unnown data type.";
+      throw std::exception( "Unnown data type." );
     }
   }
 
@@ -400,7 +400,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
   // https://www.displayfusion.com/Discussions/View/converting-c-data-types-to-c/?ID=38db6001-45e5-41a3-ab39-8004450204b3
   if (dataSize < sizeof(signed int))
   {
-    throw "invalid data size, we need at least the version number.";
+    throw std::exception( "invalid data size, we need at least the version number." );
   }
 
   // reset the arguments
@@ -479,7 +479,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
     default:
       // no point goint further as we do no know the size of that argument.
       // even if we can move the pointer forward, it would be more luck than anything.
-      throw "Unknown argument type, I am unable to read the size/data for it.";
+      throw std::exception( "Unknown argument type, I am unable to read the size/data for it.");
     }
 
     switch (dataType)
@@ -498,7 +498,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
   // if the data is not exactly correct, then we have a problem.
   if( pointer != dataSize )
   {
-    throw "There was a problem reading the given data, the counters do not match exactly as expected.";
+    throw std::exception( "There was a problem reading the given data, the counters do not match exactly as expected.");
   }
 }
 
@@ -523,7 +523,7 @@ IpcData::IpcDataType IpcData::ReadDataType(unsigned char* pData, size_t& pointer
   }
   catch (...)
   {
-    throw "There was a problem reading the version number.";
+    throw std::exception( "There was a problem reading the version number.");
   }
 
   // return what we found.
@@ -579,7 +579,7 @@ std::wstring IpcData::ReadString(unsigned char* pData, size_t& pointer)
   }
   catch (...)
   {
-    throw "There was a problem reading the unicode string.";
+    throw std::exception( "There was a problem reading the unicode string." );
   }
 
   // return what we found.
@@ -644,7 +644,7 @@ std::string IpcData::ReadAsciiString(unsigned char* pData, size_t& pointer)
   }
   catch (...)
   {
-    throw "There was a problem reading the acii string.";
+    throw std::exception( "There was a problem reading the acii string.");
   }
 
   // return what we found.
@@ -671,7 +671,7 @@ int32_t IpcData::ReadInt32(unsigned char* pData, size_t& pointer)
   }
   catch (...)
   {
-    throw "There was a problem reading the number.";
+    throw std::exception( "There was a problem reading the number.");
   }
 
   // return what we found.
@@ -698,7 +698,7 @@ int64_t IpcData::ReadInt64(unsigned char* pData, size_t& pointer)
   }
   catch (...)
   {
-    throw "There was a problem reading the number.";
+    throw std::exception( "There was a problem reading the number.");
   }
 
   // return what we found.
@@ -725,7 +725,7 @@ signed int IpcData::ReadVersionNumber(unsigned char* pData, size_t& pointer)
   }
   catch( ... )
   {
-    throw "There was a problem reading the version number.";
+    throw std::exception( "There was a problem reading the version number.");
   }
 
   // return what we found.
@@ -841,7 +841,7 @@ bool IpcData::IsInt(unsigned int index) const
 
   case IpcDataType::None:
   default:
-    throw "Unnown data type.";
+    throw std::exception( "Unnown data type." );
   }
 
   // never reached
@@ -872,7 +872,7 @@ std::wstring IpcData::Get<std::wstring>(unsigned int index) const
 
   case IpcDataType::None:
   default:
-    throw "Unnown data type.";
+    throw std::exception( "Unnown data type." );
   }
 
   // never reached
@@ -903,7 +903,7 @@ uint32_t IpcData::Get<uint32_t>(unsigned int index) const
 
   case IpcDataType::None:
   default:
-    throw "Unnown data type.";
+    throw std::exception( "Unnown data type." );
   }
 
   // never reached
@@ -934,7 +934,7 @@ int32_t IpcData::Get<int32_t>(unsigned int index) const
 
   case IpcDataType::None:
   default:
-    throw "Unnown data type.";
+    throw std::exception( "Unnown data type." );
   }
 
   // never reached
@@ -965,7 +965,7 @@ uint64_t IpcData::Get<uint64_t>(unsigned int index) const
 
   case IpcDataType::None:
   default:
-    throw "Unnown data type.";
+    throw std::exception( "Unnown data type." );
   }
 
   // never reached
@@ -996,7 +996,7 @@ int64_t IpcData::Get<int64_t>(unsigned int index) const
 
   case IpcDataType::None:
   default:
-    throw "Unnown data type.";
+    throw std::exception( "Unnown data type.");
   }
 
   // never reached
@@ -1013,7 +1013,7 @@ unsigned int IpcData::AdjustIndexNumber(unsigned int givenIndex) const
   // sanity check, (number or arguments does not include the GUIDs).
   if ( givenIndex >= GetNumArguments())
   {
-    throw "The argument index is out of range.";
+    throw std::exception( "The argument index is out of range.");
   }
 
   auto offset = 0;
@@ -1040,7 +1040,7 @@ void IpcData::RemoveArgument(unsigned int index)
   // sanity check, (number or arguments does not include the GUIDs).
   if (index >= GetNumArguments())
   {
-    throw "The argument index is out of range.";
+    throw std::exception( "The argument index is out of range." );
   }
 
   // reset the pointer
@@ -1077,7 +1077,7 @@ void IpcData::RemoveArgument(unsigned int index)
 
   case IpcDataType::None:
   default:
-    throw "Unnown data type.";
+    throw std::exception( "Unnown data type.");
   }
 
   // delete the data
