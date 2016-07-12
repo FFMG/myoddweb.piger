@@ -5,6 +5,8 @@
 #include "../math/math.h"
 #include "../log/log.h"
 #include <io.h>
+#include <boost/regex.hpp>
+#include <boost/foreach.hpp>
 
 // Look for version.lib
 #pragma comment( lib, "version.lib" )
