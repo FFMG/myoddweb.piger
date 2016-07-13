@@ -4,6 +4,16 @@ using MyOdd;
 
 namespace MyOddTest
 {
+  internal enum ExpectedIpcDataType : byte
+  {
+    None = 0,
+    Guid = 1,
+    Int32 = 2,
+    Int64 = 3,
+    String = 4,
+    StringAscii = 5,
+  };
+
   [TestClass]
   public class IpcDataTest
   {
@@ -65,7 +75,7 @@ namespace MyOddTest
     public void TestTryingToGetAnEmptyItemOutOfRange()
     {
       var emptyIpcData = new IpcData();
-      var something = emptyIpcData.Get<object>(0);
+      emptyIpcData.Get<object>(0);
     }
 
     [TestMethod]
@@ -132,7 +142,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                1, 0          //  data type guid
+                                (byte) ExpectedIpcDataType.Guid, 0          //  data type guid
                               });
     }
 
@@ -142,7 +152,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                2, 0          //  data type int32
+                                (byte) ExpectedIpcDataType.Int32, 0          //  data type int32
                               });
     }
 
@@ -152,7 +162,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                3, 0          //  data type int64
+                                (byte) ExpectedIpcDataType.Int64, 0          //  data type int64
                               });
     }
 
@@ -162,7 +172,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0          //  data type string
+                                (byte) ExpectedIpcDataType.String, 0          //  data type string
                               });
     }
 
@@ -172,7 +182,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                5, 0          //  data type string ascii
+                                (byte) ExpectedIpcDataType.StringAscii, 0          //  data type string ascii
                               });
     }
 
@@ -182,7 +192,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                1, 0,         //  data type guid
+                                (byte) ExpectedIpcDataType.Guid, 0,         //  data type guid
                                 0, 0, 0       //  not enough data to make an int32
                               });
     }
@@ -193,7 +203,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                1, 0,        //  data type guid
+                                (byte) ExpectedIpcDataType.Guid, 0,        //  data type guid
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
@@ -205,7 +215,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0,        //  data type string
+                                (byte) ExpectedIpcDataType.String, 0,        //  data type string
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
@@ -217,7 +227,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                5, 0,        //  data type ascii string
+                                (byte) ExpectedIpcDataType.StringAscii, 0,        //  data type ascii string
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
@@ -229,7 +239,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                2, 0,         //  data type int32
+                                (byte) ExpectedIpcDataType.Int32, 0,         //  data type int32
                                 0, 0, 0       //  not enough data to make an int32
                               });
     }
@@ -240,7 +250,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0,         //  data type unicode string
+                                (byte) ExpectedIpcDataType.String, 0,         //  data type unicode string
                                 0, 0, 0       //  not enough data to make an int32
                               });
     }
@@ -251,7 +261,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                5, 0,         //  data type ascii string
+                                (byte) ExpectedIpcDataType.StringAscii, 0,         //  data type ascii string
                                 0, 0, 0       //  not enough data to make an int32
                               });
     }
@@ -262,9 +272,9 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                 2, 0,         //  data type int32
+                                 (byte) ExpectedIpcDataType.Int32, 0,         //  data type int32
                                  20, 0, 0, 0,  //  first interger is valid
-                                 2, 0,         //  data type int32
+                                 (byte) ExpectedIpcDataType.Int32, 0,         //  data type int32
                                  0, 0, 0       //  not enough data to make an int32
                                });
     }
@@ -275,9 +285,9 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0,           //  version
-                                 3, 0,                 //  data type int64
+                                 (byte) ExpectedIpcDataType.Int64, 0,                 //  data type int64
                                  20, 0, 0, 0,0,0,0,0,  //  first long is valid
-                                 3, 0,                 //  data type int64
+                                 (byte) ExpectedIpcDataType.Int64, 0,                 //  data type int64
                                  20, 0, 0, 0,0,0       //  not enough data to make an int64
                                });
     }
@@ -287,7 +297,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0,        //  data type string
+                                (byte) ExpectedIpcDataType.String, 0,        //  data type string
                                 0, 0, 0,0    //  size of 0
                                              //  no more data needed.
                               });
@@ -340,7 +350,7 @@ namespace MyOddTest
 
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                2, 0,        //  data type int
+                                (byte) ExpectedIpcDataType.Int32, 0,        //  data type int
                                 r1, 0, 0,0   //  int value
                               });
 
@@ -356,7 +366,7 @@ namespace MyOddTest
 
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                2, 0,        //  data type int
+                                (byte) ExpectedIpcDataType.Int32, 0,        //  data type int
                                 r1, r2, 0,0   //  int value
                               });
 
@@ -373,7 +383,7 @@ namespace MyOddTest
 
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                2, 0,        //  data type int
+                                (byte) ExpectedIpcDataType.Int32, 0,        //  data type int
                                 r1, r2, r3,0   //  int value
                               });
 
@@ -391,7 +401,7 @@ namespace MyOddTest
 
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                2, 0,        //  data type int
+                                (byte) ExpectedIpcDataType.Int32, 0,        //  data type int
                                 r1, r2, r3,r4   //  int value
                               });
 
@@ -403,7 +413,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                2, 0,        //  data type int
+                                (byte) ExpectedIpcDataType.Int32, 0,        //  data type int
                                 32, 0, 0,0   //  int value
                               });
 
@@ -415,7 +425,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0,        //  data type string
+                                (byte) ExpectedIpcDataType.String, 0,        //  data type string
                                 5, 0, 0,0,   //  the len
                                 (byte)'h', 0,
                                 (byte)'e', 0,
@@ -433,7 +443,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       var emptyIpcData = new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                5, 0,        //  data type string
+                                (byte) ExpectedIpcDataType.StringAscii, 0,        //  data type string
                                 5, 0, 0,0,   //  the len
                                 (byte)'h',
                                 (byte)'e',
@@ -470,8 +480,8 @@ namespace MyOddTest
     public void TestIsNumericPastGuidAndStrings()
     {
       var random = new Random();
-      var r1 = random.Next(0, Int32.MaxValue);
-      var r2 = random.Next(0, Int32.MaxValue);
+      var r1 = random.Next(0, int.MaxValue);
+      var r2 = random.Next(0, int.MaxValue);
 
       var emptyIpcData = new IpcData();
       emptyIpcData.Add(r1);
