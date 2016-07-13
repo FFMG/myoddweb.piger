@@ -6,15 +6,18 @@
 int main(int argc, char** argv)
 {
 	printf("Running main() from main\n");
-
-	printf("###\n");
-#ifdef _WIN64
-	printf("    x64\n");
-#else
-	printf("#    x86\n");
-#endif
-	printf("###\n");
-
 	testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS();
+
+  auto runall = RUN_ALL_TESTS();
+
+  printf("\n");
+  printf("   ##############\n");
+#ifdef _WIN64
+  printf("       x64\n");
+#else
+  printf("#       x86\n");
+#endif
+  printf("   ##############\n");
+
+  return runall;
 }

@@ -815,8 +815,28 @@ void IpcData::Add(const std::string& dataValue)
  */
 bool IpcData::IsString(unsigned int index) const
 {
-  //  we can always cast it to a string...
-  return true;
+  // adjust the index, we will check for out of range values.
+  index = AdjustIndexNumber(index);
+
+  auto ipc = _ipcArguments[index];
+  switch (ipc->dataType)
+  {
+  case IpcDataType::Int32:
+  case IpcDataType::Int64:
+    return false;
+
+  case IpcDataType::String:
+  case IpcDataType::Guid:
+  case IpcDataType::StringAscii:
+    return true;
+
+  case IpcDataType::None:
+  default:
+    throw std::exception("Unnown data type.");
+  }
+
+  // never reached
+  return false;
 }
 
 /**
@@ -881,6 +901,13 @@ std::wstring IpcData::Get<std::wstring>(unsigned int index) const
 
   // never reached
   return L"";
+}
+
+template<>
+std::string IpcData::Get<std::string>(unsigned int index) const
+{
+  auto ws2Convert = this->Get<std::wstring>(index);
+  return strings::WString2String( ws2Convert );
 }
 
 template<>

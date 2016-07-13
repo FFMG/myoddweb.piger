@@ -19,6 +19,9 @@
     <ClInclude Include="targetver.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="testcommon.h">
+      <Filter>myodd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -28,5 +31,17 @@
       <Filter>myodd\os</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="testipcdata_int32.cpp">
+      <Filter>myodd\os</Filter>
+    </ClCompile>
+    <ClCompile Include="testipcdata_int64.cpp">
+      <Filter>myodd\os</Filter>
+    </ClCompile>
+    <ClCompile Include="testipcdata_string.cpp">
+      <Filter>myodd\os</Filter>
+    </ClCompile>
+    <ClCompile Include="testipcdata_wstring.cpp">
+      <Filter>myodd\os</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
