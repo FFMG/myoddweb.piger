@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "myoddinclude.h"
 #include "os\ipcdata.h"
-#include "testcommon.h"
+#include "..\testcommon.h"
 
 TEST(MyoddOsTest, CheckThatTheGuiIsSavedProperly) {
   // create the ipc

@@ -1,5 +1,5 @@
 #include "os\ipcdata.h"
-#include "testcommon.h"
+#include "..\testcommon.h"
 #include <gtest/gtest.h>
 
 const struct test_wstring
