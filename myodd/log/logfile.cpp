@@ -4,7 +4,6 @@
 #include <io.h>
 
 #include <chrono>
-#include <ctime>
 
 #include "../math/math.h"
 #include "../files/files.h"

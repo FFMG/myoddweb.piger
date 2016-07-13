@@ -3,7 +3,10 @@
 #define _LogFile_h
 
 #include "../string/string.h"
-#include "../threads/threads.h"
+
+#if (defined(_WIN32) || defined(WIN32)) && !defined(_CRT_SECURE_NO_WARNINGS)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 namespace myodd{ namespace log{
   class LogFile
