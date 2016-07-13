@@ -55,6 +55,36 @@ TEST(MyoddOs, TheVersionNumberIsPastOurVersionNumber) {
   EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
 }
 
+TEST(MyoddOs, UnknownDataType) {
+  // create the ipc
+  unsigned char pData[6] = { 100, 0, 0, 0, // version
+                             23, 0         // unknown data type
+                           };
+  unsigned int dataSize = 6;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NotEnoughDataForGuid) {
+  // create the ipc
+  unsigned char pData[6] = { 100, 0, 0, 0, // version
+                             1, 0          // No data for guid
+                           };
+  unsigned int dataSize = 6;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NotEnoughDataForFirstDataType) {
+  // create the ipc
+  unsigned char pData[5] = { 100, 0, 0, 0, // version
+                             2             // No data for short
+                           };
+  unsigned int dataSize = 5;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
 TEST(MyoddOs, GetStringOnly) {
   // create the ipc
   auto uuid = Uuid();
