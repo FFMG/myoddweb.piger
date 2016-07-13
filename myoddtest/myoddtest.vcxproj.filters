@@ -13,9 +13,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -27,9 +24,9 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>include</Filter>
     </ClCompile>
-    <ClCompile Include="myoddtest64.cpp" />
     <ClCompile Include="testipcdata.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>
