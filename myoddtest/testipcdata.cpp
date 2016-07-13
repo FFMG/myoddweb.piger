@@ -59,7 +59,7 @@ TEST(MyoddOsTest, UnknownDataType) {
 TEST(MyoddOsTest, NoDataForGuid) {
   // create the ipc
   unsigned char pData[6] = { 100, 0, 0, 0, // version
-                             1, 0          // No data for guid
+                             ExpectedIpcDataType::Guid, 0          // No data for guid
                            };
   unsigned int dataSize = 6;
 
@@ -69,7 +69,7 @@ TEST(MyoddOsTest, NoDataForGuid) {
 TEST(MyoddOsTest, NotEnoughDataForGuid) {
   // create the ipc
   unsigned char pData[8] = { 100, 0, 0, 0, // version
-                              1, 0,        // No data for guid
+                              ExpectedIpcDataType::Guid, 0,        // No data for guid
                               0, 0
                             };
   unsigned int dataSize = 8;
@@ -80,7 +80,7 @@ TEST(MyoddOsTest, NotEnoughDataForGuid) {
 TEST(MyoddOsTest, TheGivenGuiSizeDoesNotExist) {
   // create the ipc
   unsigned char pData[10] = { 100, 0, 0, 0, // version
-                               1, 0,        // uuid
+                               ExpectedIpcDataType::Guid, 0,        // uuid
                               10, 0, 0, 0
                                             // no data
                             };
@@ -92,7 +92,7 @@ TEST(MyoddOsTest, TheGivenGuiSizeDoesNotExist) {
 TEST(MyoddOsTest, NoDataForInt32) {
   // create the ipc
   unsigned char pData[6] = { 100, 0, 0, 0, // version
-                             2, 0          // No data for int
+                             ExpectedIpcDataType::Int32, 0          // No data for int
                            };
   unsigned int dataSize = 6;
 
@@ -102,7 +102,7 @@ TEST(MyoddOsTest, NoDataForInt32) {
 TEST(MyoddOsTest, NotEnoughDataForInt32) {
   // create the ipc
   unsigned char pData[9] = { 100, 0, 0, 0, // version
-                             2, 0,         // No data for int
+                             ExpectedIpcDataType::Int32, 0,         // No data for int
                              0, 0, 0 
                            };
   unsigned int dataSize = 9;
@@ -113,7 +113,7 @@ TEST(MyoddOsTest, NotEnoughDataForInt32) {
 TEST(MyoddOsTest, NoDataForInt64) {
   // create the ipc
   unsigned char pData[6] = { 100, 0, 0, 0, // version
-                             3, 0          // No data for long
+                             ExpectedIpcDataType::Int64, 0          // No data for long
                            };
   unsigned int dataSize = 6;
 
@@ -123,7 +123,7 @@ TEST(MyoddOsTest, NoDataForInt64) {
 TEST(MyoddOsTest, NotEnoughDataForInt64) {
   // create the ipc
   unsigned char pData[9] = { 100, 0, 0, 0, // version
-                             3, 0,         // No data for long
+                             ExpectedIpcDataType::Int64, 0,         // No data for long
                              0, 0, 0
                            };
   unsigned int dataSize = 9;
@@ -134,7 +134,7 @@ TEST(MyoddOsTest, NotEnoughDataForInt64) {
 TEST(MyoddOsTest, NotEnoughDataForString) {
   // create the ipc
   unsigned char pData[6] = { 100, 0, 0, 0, // version
-                             4, 0          // No data for string
+                             ExpectedIpcDataType::String, 0          // No data for string
                            };
   unsigned int dataSize = 6;
 
@@ -144,7 +144,7 @@ TEST(MyoddOsTest, NotEnoughDataForString) {
 TEST(MyoddOsTest, NotEnoughDataForAsciiString) {
   // create the ipc
   unsigned char pData[6] = { 100, 0, 0, 0, // version
-                             5, 0          // No data for ascii string
+                             ExpectedIpcDataType::StringAscii, 0          // No data for ascii string
                            };
   unsigned int dataSize = 6;
 
