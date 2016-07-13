@@ -43,5 +43,8 @@
     <ClCompile Include="testipcdata_wstring.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
+    <ClCompile Include="testipcdata_varied.cpp">
+      <Filter>myodd\os</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -30,7 +30,7 @@ struct MyoddOsWStringTest : testing::Test, testing::WithParamInterface<test_wstr
   }
 };
 
-TEST_P(MyoddOsWStringTest, CheckIntValues)
+TEST_P(MyoddOsWStringTest, CheckWStringValues)
 {
   auto param = GetParam();
   ASSERT_EQ(param.uuid, ipc->GetGuid());
