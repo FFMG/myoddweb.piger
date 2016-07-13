@@ -147,12 +147,22 @@ namespace MyOddTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int64.")]
+    public void TestNoDataToReadLong()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+                                3, 0          //  data type int64
+                              });
+    }
+
+    [TestMethod]
     [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the string.")]
     public void TestNoDataToReadString()
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                3, 0          //  data type string
+                                4, 0          //  data type string
                               });
     }
 
@@ -162,7 +172,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0          //  data type string ascii
+                                5, 0          //  data type string ascii
                               });
     }
 
@@ -195,7 +205,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                3, 0,        //  data type string
+                                4, 0,        //  data type string
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
@@ -207,7 +217,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0,        //  data type guid
+                                5, 0,        //  data type ascii string
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
@@ -230,7 +240,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                3, 0,         //  data type unicode string
+                                4, 0,         //  data type unicode string
                                 0, 0, 0       //  not enough data to make an int32
                               });
     }
@@ -241,7 +251,7 @@ namespace MyOddTest
     {
       //  give a data type of int32, but no data to read
       new IpcData(new byte[] { 100, 0, 0, 0, //  version
-                                4, 0,         //  data type ascii string
+                                5, 0,         //  data type ascii string
                                 0, 0, 0       //  not enough data to make an int32
                               });
     }
@@ -256,6 +266,19 @@ namespace MyOddTest
                                  20, 0, 0, 0,  //  first interger is valid
                                  2, 0,         //  data type int32
                                  0, 0, 0       //  not enough data to make an int32
+                               });
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int32.")]
+    public void TestCanReadOneInt64ButNotEnoughDataToReadAnotherInteger()
+    {
+      //  give a data type of int32, but no data to read
+      new IpcData(new byte[] { 100, 0, 0, 0,           //  version
+                                 3, 0,                 //  data type int64
+                                 20, 0, 0, 0,0,0,0,0,  //  first long is valid
+                                 3, 0,                 //  data type int64
+                                 20, 0, 0, 0,0,0       //  not enough data to make an int64
                                });
     }
 

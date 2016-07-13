@@ -65,10 +65,95 @@ TEST(MyoddOs, UnknownDataType) {
   EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
 }
 
-TEST(MyoddOs, NotEnoughDataForGuid) {
+TEST(MyoddOs, NoDataForGuid) {
   // create the ipc
   unsigned char pData[6] = { 100, 0, 0, 0, // version
                              1, 0          // No data for guid
+                           };
+  unsigned int dataSize = 6;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NotEnoughDataForGuid) {
+  // create the ipc
+  unsigned char pData[8] = { 100, 0, 0, 0, // version
+                              1, 0,        // No data for guid
+                              0, 0
+                            };
+  unsigned int dataSize = 8;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, TheGivenGuiSizeDoesNotExist) {
+  // create the ipc
+  unsigned char pData[10] = { 100, 0, 0, 0, // version
+                               1, 0,        // uuid
+                              10, 0, 0, 0
+                                            // no data
+                            };
+  unsigned int dataSize = 10;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NoDataForInt32) {
+  // create the ipc
+  unsigned char pData[6] = { 100, 0, 0, 0, // version
+                             2, 0          // No data for int
+                           };
+  unsigned int dataSize = 6;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NotEnoughDataForInt32) {
+  // create the ipc
+  unsigned char pData[9] = { 100, 0, 0, 0, // version
+                             2, 0,         // No data for int
+                             0, 0, 0 
+                           };
+  unsigned int dataSize = 9;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NoDataForInt64) {
+  // create the ipc
+  unsigned char pData[6] = { 100, 0, 0, 0, // version
+                             3, 0          // No data for long
+                           };
+  unsigned int dataSize = 6;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NotEnoughDataForInt64) {
+  // create the ipc
+  unsigned char pData[9] = { 100, 0, 0, 0, // version
+                             3, 0,         // No data for long
+                             0, 0, 0
+                           };
+  unsigned int dataSize = 9;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NotEnoughDataForString) {
+  // create the ipc
+  unsigned char pData[6] = { 100, 0, 0, 0, // version
+                             4, 0          // No data for string
+                           };
+  unsigned int dataSize = 6;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, NotEnoughDataForAsciiString) {
+  // create the ipc
+  unsigned char pData[6] = { 100, 0, 0, 0, // version
+                             5, 0          // No data for ascii string
                            };
   unsigned int dataSize = 6;
 
