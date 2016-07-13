@@ -31,6 +31,30 @@ TEST(MyoddOs, FromGuidToPtrAndBack) {
   ASSERT_EQ(uuid, copyIpc.GetGuid());
 }
 
+TEST(MyoddOs, TryAndPassAnEmptyByteArray) {
+  // create the ipc
+  unsigned char* pData = nullptr;
+  unsigned int dataSize = 0;
+
+  EXPECT_THROW( myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, TryAndPassArrayThatIsTooSmallToEvenStart) {
+  // create the ipc
+  unsigned char pData[3] = {};
+  unsigned int dataSize = 3;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
+TEST(MyoddOs, TheVersionNumberIsPastOurVersionNumber) {
+  // create the ipc
+  unsigned char pData[4] = {200, 0, 0, 0};
+  unsigned int dataSize = 4;
+
+  EXPECT_THROW(myodd::os::IpcData(pData, dataSize), std::exception);
+}
+
 TEST(MyoddOs, GetStringOnly) {
   // create the ipc
   auto uuid = Uuid();
@@ -88,8 +112,11 @@ TEST(MyoddOs, TryingToGetAnOutofRangeItemInEmptyIpc) {
 TEST(MyoddOs, TryingToGetAnOutofRangeItemInNonEmptyIpc) {
   // create the ipc
   auto ipc = myodd::os::IpcData(Uuid());
+  
+  // add a couple of values
   ipc.Add(42);
+  ipc.Add((int64_t)42);
 
-  // we have item 0, but not 1
-  EXPECT_THROW(ipc.Get<std::wstring>(1), std::exception);
+  // we have item 0, but not 2
+  EXPECT_THROW(ipc.Get<std::wstring>(2), std::exception);
 }

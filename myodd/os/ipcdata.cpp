@@ -420,6 +420,10 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
 
   //  get the version number
   auto versionNumber = ReadVersionNumber( pData, pointer );
+  if (versionNumber > VersionNumber)
+  {
+    throw std::exception("Trying to read data with a version number past our version number.");
+  }
 
   //  now read all the data
   for (; pointer < dataSize;)
