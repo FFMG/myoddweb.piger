@@ -5,19 +5,13 @@
 
 int main(int argc, char** argv)
 {
-	printf("Running main() from main\n");
-	testing::InitGoogleTest(&argc, argv);
-
-  auto runall = RUN_ALL_TESTS();
-
-  printf("\n");
-  printf("   ##############\n");
+	printf("Running main() from main");
 #ifdef _WIN64
-  printf("   #   x64\n");
+  printf(" on x64\n");
 #else
-  printf("   #   x86\n");
+  printf(" on x86\n");
 #endif
-  printf("   ##############\n");
 
-  return runall;
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
