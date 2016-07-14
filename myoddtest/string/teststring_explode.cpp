@@ -12,23 +12,23 @@ const struct test_explode
   bool addEmpty;
 };
 
-struct MyOddStringExplode : testing::Test, testing::WithParamInterface<test_explode>
+struct MyOddStringExplodeTest : testing::Test, testing::WithParamInterface<test_explode>
 {
 };
 
-struct MyOddStringExplodeWithCount : MyOddStringExplode
+struct MyOddStringExplodeWithCount : MyOddStringExplodeTest
 {
 };
 
-struct MyOddStringExplodeWithAddEmpty : MyOddStringExplode
+struct MyOddStringExplodeWithAddEmpty : MyOddStringExplodeTest
 {
 };
 
-struct MyOddStringExplodeWithNegativeCount: MyOddStringExplode
+struct MyOddStringExplodeWithNegativeCount: MyOddStringExplodeTest
 {
 };
 
-TEST_P(MyOddStringExplode, DefaultParams)
+TEST_P(MyOddStringExplodeTest, ExplodeStringDefaultParams)
 {
   auto param = GetParam();
 
@@ -79,7 +79,7 @@ TEST_P(MyOddStringExplodeWithAddEmpty, CountParams)
   ASSERT_EQ(len, l);
 }
 
-INSTANTIATE_TEST_CASE_P(Default, MyOddStringExplode,
+INSTANTIATE_TEST_CASE_P(ExplodeStringDefault, MyOddStringExplodeTest,
   testing::Values(
     test_explode{ L",, ,A,", L',', {L"",L"",L" ",L"A",L""}, 5 },
     test_explode{ L",,,A,", L',',{ L"",L"",L"",L"A",L"" }, 5 },

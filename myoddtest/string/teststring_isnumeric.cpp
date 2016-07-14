@@ -10,9 +10,9 @@ const struct test_is
 
   friend std::ostream& operator <<(std::ostream& os, const test_is& obj)
   {
-    return os 
-      << "Given : " << myodd::strings::WString2String( obj.given )
-      << " Expected : " << (obj.is ? "true" : "false") 
+    return os
+      << "Given : " << myodd::strings::WString2String(obj.given)
+      << " Expected : " << (obj.is ? "true" : "false")
       << " Allow decimals : " << (obj.allowDecimals ? "true" : "false");
   }
 };
@@ -25,14 +25,14 @@ struct MyOddStringIsNumericWithAllowDecimals : testing::Test, testing::WithParam
 {
 };
 
-TEST_P(MyOddStringIsNumeric, DefaultParams)
+TEST_P(MyOddStringIsNumeric, IsNumericDefaultParams)
 {
   auto param = GetParam();
 
   auto given = GetParam().given;
   auto is = GetParam().is;
 
-  ASSERT_EQ( is, myodd::strings::IsNumeric(given));
+  ASSERT_EQ(is, myodd::strings::IsNumeric(given));
 }
 
 TEST_P(MyOddStringIsNumericWithAllowDecimals, UseAllowDecimalsFlag)
@@ -56,7 +56,7 @@ INSTANTIATE_TEST_CASE_P(NegativeStrings, MyOddStringIsNumeric,
     test_is{ L"-999", true },
     test_is{ L"-999.a", false },
     test_is{ L"-1.1.1", false }
-  ));
+));
 
 INSTANTIATE_TEST_CASE_P(NegativeStringsDecimalsAllowed, MyOddStringIsNumericWithAllowDecimals,
   testing::Values(

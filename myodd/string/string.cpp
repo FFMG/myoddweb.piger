@@ -15,11 +15,6 @@ void Test()
 
   MYODD_STRING s1 = Format( _T("%10.2f"), 10.27 );
   assert( s1 == _T("     10.27"));
-  assert( IsEmptyString( _T("    " )));
-  assert( IsEmptyString( NULL ));
-  assert( IsEmptyString( _T("" )));
-  assert( !IsEmptyString( _T("    A" )));
-  assert( !IsEmptyString( _T("A" )));
 
   assert( _tcsistr( _T("Hel"), _T("hello")) == NULL );
 
@@ -680,13 +675,15 @@ MYODD_CHAR* _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet)
 */
 bool IsEmptyString(const MYODD_CHAR* s )
 {
-  if( s == NULL )
-    return true;
+	if (s == nullptr)
+	{
+		return true;
+	}
 
-  size_t len = _tcslen(s);
+  auto len = _tcslen(s);
   for( ;len>0;)
   {
-    if( s[--len] != ' ' )
+    if( s[--len] != _T(' ') )
     {
       return false;
     }
