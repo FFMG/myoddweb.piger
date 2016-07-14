@@ -13,9 +13,9 @@ int main(int argc, char** argv)
   printf("\n");
   printf("   ##############\n");
 #ifdef _WIN64
-  printf("       x64\n");
+  printf("   #   x64\n");
 #else
-  printf("#       x86\n");
+  printf("   #   x86\n");
 #endif
   printf("   ##############\n");
 

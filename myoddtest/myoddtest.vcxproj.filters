@@ -11,6 +11,9 @@
     <Filter Include="myodd\os">
       <UniqueIdentifier>{04a40bdf-97bd-46a7-a0bd-c4c461888bd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\string">
+      <UniqueIdentifier>{1011aab2-5fe5-4f58-abed-30871acbfa77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,23 +30,23 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>include</Filter>
     </ClCompile>
-    <ClCompile Include="testipcdata.cpp">
-      <Filter>myodd\os</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="testipcdata_int32.cpp">
+    <ClCompile Include="os\testipcdata.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
-    <ClCompile Include="testipcdata_int64.cpp">
+    <ClCompile Include="os\testipcdata_int32.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
-    <ClCompile Include="testipcdata_string.cpp">
+    <ClCompile Include="os\testipcdata_int64.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
-    <ClCompile Include="testipcdata_wstring.cpp">
+    <ClCompile Include="os\testipcdata_string.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
-    <ClCompile Include="testipcdata_varied.cpp">
+    <ClCompile Include="os\testipcdata_varied.cpp">
+      <Filter>myodd\os</Filter>
+    </ClCompile>
+    <ClCompile Include="os\testipcdata_wstring.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
     <ClCompile Include="string\teststring_explode.cpp">

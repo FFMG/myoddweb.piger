@@ -3,7 +3,6 @@
 #include <codecvt>
 #include "string.h"
 #include "assert.h"
-#include <memory>    // For std::unique_ptr
 
 namespace myodd{ namespace strings{
 void Test()
@@ -21,15 +20,6 @@ void Test()
   assert( IsEmptyString( _T("" )));
   assert( !IsEmptyString( _T("    A" )));
   assert( !IsEmptyString( _T("A" )));
-
-  std::vector<MYODD_STRING> s;
-  assert( 5 == explode( s, _T(",, ,A,"), _T(',') ));
-  assert( 5 == explode( s, _T(",,,A,"), _T(',') ));
-  assert( 2 == explode( s, _T(","), _T(',') ));
-  assert( 2 == explode( s, _T("1,2"), _T(',') ));
-  assert( 1 == explode( s, _T("1"), _T(',') ));
-  assert( 1 == explode( s, _T(""), _T(',') ));
-  assert( 2 == explode( s, _T("1,2,3,4,5"), _T(','), 2 ));
 
   assert( false == IsNumeric( _T("-1.2" ), false ));  // decimal not allowed.
   assert( true == IsNumeric( _T("-1" ), false ));  // decimal allowed.
@@ -130,11 +120,12 @@ size_t explode_by_null_char
 
 /**
  * Explode a given string given a delimiter string
- *
  * @param std::vector<MYODD_STRING>& the return container.
  * @param MYODD_STRING the string we want to explode
  * @param const MYODD_CHAR* Set of delimiter characters.
- * @param int the max number of items we want to return.
+ * @param int nCount the max number of items we want to return.
+ *                   If the limit parameter is zero, then this is treated as 1.
+ * @param bool bAddEmpty if we want to add empty params or not.
  * @return int the number of item that we found.
  */
 size_t explode
@@ -149,16 +140,18 @@ size_t explode
   //  reset all
   ret.clear();
 
-  size_t l = s.length();
+  auto l = s.length();
 
-  //  reserve space.
   // or return if we have no work to do.
-  if( 1 == nCount )
+  // If the limit parameter is zero, then this is treated as 1.
+  if( 1 == nCount || 0 == nCount )
   {
     ret.push_back( s );
     return 1;
   }
-  else if( nCount > 1 )
+  
+  // reserve space.
+  if( nCount > 1 )
   {
     ret.reserve( nCount );
   }
