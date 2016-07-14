@@ -128,12 +128,12 @@ size_t explode_by_null_char
  * @param bool bAddEmpty if we want to add empty params or not.
  * @return int the number of item that we found.
  */
-size_t explode
+size_t Explode
 (
   std::vector<MYODD_STRING>& ret,
   const MYODD_STRING& s, 
   MYODD_CHAR strDelimit,
-  int nCount /*=-1*/,
+  int nCount /*=MYODD_MAX_INT32*/,
   bool bAddEmpty /*= true*/
 )
 {
@@ -151,7 +151,7 @@ size_t explode
   }
   
   // reserve space.
-  if( nCount > 1 )
+  if( nCount > 1 && nCount != MYODD_MAX_INT32 )
   {
     ret.reserve( nCount );
   }
@@ -169,7 +169,7 @@ size_t explode
         ret.push_back( s.substr( iLast, (pos-iLast) ));
       }
       iLast = (pos+1);
-      if( nCount >-1 && (retSize+1) >= (size_t)nCount )
+      if( nCount >-1 && (retSize+1) >= static_cast<size_t>(nCount) )
       {
         // the last item will be added bellow
         break;

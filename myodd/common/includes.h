@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 /** 
  * We do not want any warnings for deprecated warnings if we are in windows.
@@ -15,6 +15,10 @@
   typedef long MYODD_LPARAM;
   typedef unsigned int MYODD_WPARAM;
 #endif
+
+// Min/Max 32bit int 
+#define MYODD_MAX_INT32 2147483647
+#define MYODD_MIN_INT32 -2147483648 
 
 // define the strings
 #include <string>

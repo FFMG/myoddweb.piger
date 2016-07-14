@@ -319,7 +319,7 @@ void ConfigBase::Save()
     }
 
     std::vector<MYODD_STRING> parents;
-    myodd::strings::explode( parents, c->GetObjectName(), sep );
+    myodd::strings::Explode( parents, c->GetObjectName(), sep );
     tinyxml2::XMLElement* pValue = _getSaveElement( *pElemConfig, parents );
     
     switch( data.type() )
@@ -615,7 +615,7 @@ void ConfigBase::AddPartMonitor( const MYODD_STRING& stdVarName, CONFIG_NOTIFY n
   CONFIG_NOTIFY_PARTS* part = new CONFIG_NOTIFY_PARTS;
 
   std::vector<MYODD_STRING> v_s;
-  size_t l = myodd::strings::explode( v_s, stdVarName, _T( '\\') );
+  size_t l = myodd::strings::Explode( v_s, stdVarName, _T( '\\') );
   
   part->stParts     = l;
   part->lParam      = lParam;
@@ -660,7 +660,7 @@ void ConfigBase::NotifyParts( Data::config_type type, const MYODD_STRING& stdVar
   }
 
   std::vector<MYODD_STRING> v_s;
-  size_t l = myodd::strings::explode( v_s, stdVarName, _T('\\') );
+  size_t l = myodd::strings::Explode( v_s, stdVarName, _T('\\') );
   
   MYODD_LPARAM lParam;
   CONFIG_NOTIFY fnNotif;

@@ -64,12 +64,12 @@ namespace myodd{ namespace strings{
     );
 
   // explode a string with a set of delimiter characters
-  size_t explode
+  size_t Explode
     (
     std::vector<MYODD_STRING>& ret,
     const MYODD_STRING& s, 
     MYODD_CHAR strDelimit,
-    int nCount =-1,
+    int nCount = MYODD_MAX_INT32,
     bool bAddEmpty = true
     );
 

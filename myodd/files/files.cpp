@@ -1522,10 +1522,10 @@ bool GetAbsolutePath
 
   // split them all
   std::vector<MYODD_STRING> e_sRelative;
-  myodd::strings::explode( e_sRelative, sRelative, SEPARATOR_REPLACE_C, -1, false );
+  myodd::strings::Explode( e_sRelative, sRelative, SEPARATOR_REPLACE_C, -1, false );
 
   std::vector<MYODD_STRING> e_sOrigin;
-  myodd::strings::explode( e_sOrigin, sOrigin, SEPARATOR_REPLACE_C, -1, false );
+  myodd::strings::Explode( e_sOrigin, sOrigin, SEPARATOR_REPLACE_C, -1, false );
   // reverse from the origin path we only reverse the ../
 
   size_t dotdotCount = 0;
@@ -1815,7 +1815,7 @@ bool is_dot(const MYODD_CHAR* lpFile )
   sOrigin = myodd::strings::replace( sOrigin, _T("/"), _T("\\") );
   
   std::vector<MYODD_STRING> e_sOrigin;
-  size_t size = myodd::strings::explode( e_sOrigin, sOrigin, _T('\\'), -1, false );
+  size_t size = myodd::strings::Explode( e_sOrigin, sOrigin, _T('\\'), -1, false );
   if( size == 0 )
   {
     return false;

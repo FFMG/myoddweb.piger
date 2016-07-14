@@ -35,7 +35,7 @@ TEST_P(MyOddStringExplode, DefaultParams)
   auto len = GetParam().len;
 
   std::vector<std::wstring> s;
-  auto l = myodd::strings::explode(s, actual, delim);
+  auto l = myodd::strings::Explode(s, actual, delim);
 
   ASSERT_EQ(expected, s);
   ASSERT_EQ(len, l);
@@ -52,7 +52,7 @@ TEST_P(MyOddStringExplodeWithCount, CountParams)
   auto count = GetParam().count;
 
   std::vector<std::wstring> s;
-  auto l = myodd::strings::explode(s, actual, delim, count);
+  auto l = myodd::strings::Explode(s, actual, delim, count);
 
   ASSERT_EQ(expected, s);
   ASSERT_EQ(len, l);
@@ -70,7 +70,7 @@ TEST_P(MyOddStringExplodeWithAddEmpty, CountParams)
   auto addEmpty = GetParam().addEmpty;
 
   std::vector<std::wstring> s;
-  auto l = myodd::strings::explode(s, actual, delim, count, addEmpty);
+  auto l = myodd::strings::Explode(s, actual, delim, count, addEmpty);
 
   ASSERT_EQ(expected, s);
   ASSERT_EQ(len, l);

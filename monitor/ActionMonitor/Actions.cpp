@@ -357,7 +357,7 @@ size_t Actions::BuildMatchList( )
 
   //  explode all the 'words'
   std::vector<MYODD_STRING> exploded;
-  myodd::strings::explode(  exploded, regEx, _T(' ') );
+  myodd::strings::Explode(  exploded, regEx, _T(' ') );
 
   // go back and look for as many matches as possible.
   // so if the command is "Google Earth" and we type "Goo Ear" we don't return commands with only "Goo" in them.
@@ -473,7 +473,7 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
   // how many words are in the command?
   LPCTSTR lpAction = action->Command().c_str();
   std::vector<MYODD_STRING> exploded;
-  size_t nSize = myodd::strings::explode( exploded, m_sActionAsTyped, _T(' ') );
+  size_t nSize = myodd::strings::Explode( exploded, m_sActionAsTyped, _T(' ') );
 
   // we now need to see how many of those words are present in the select
   // so if the actual command is 
