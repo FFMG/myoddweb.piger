@@ -21,24 +21,6 @@ void Test()
   assert( !IsEmptyString( _T("    A" )));
   assert( !IsEmptyString( _T("A" )));
 
-  assert( false == IsNumeric( _T("-1.2" ), false ));  // decimal not allowed.
-  assert( true == IsNumeric( _T("-1" ), false ));  // decimal allowed.
-
-  assert( true == IsNumeric( _T("-1" )));
-  assert( true == IsNumeric( _T("1" )));
-  assert( true == IsNumeric( _T("-" )));
-  assert( true == IsNumeric( _T("+" )));
-  assert( true == IsNumeric( _T("+.1" )));
-  assert( true == IsNumeric( _T("1." )));
-  assert( true == IsNumeric( _T("-1.1" )));
-  assert( false == IsNumeric( _T("-1.1.1" )));
-  assert( false == IsNumeric( _T("A1,1" )));
-  assert( false == IsNumeric( _T("A11" )));
-  assert( false == IsNumeric( _T("11A" )));
-  assert( true == IsNumeric( _T("-999" )));
-  assert( false == IsNumeric( _T("-999.a" )));
-  assert( false == IsNumeric( _T("-999.1   2" )));
-
   assert( _tcsistr( _T("Hel"), _T("hello")) == NULL );
 
   assert( _tcsistr( _T("Hello"), _T("hello")) != NULL );
@@ -525,35 +507,68 @@ bool wildcmp(const MYODD_CHAR* wild, const MYODD_CHAR* string)
  */
 bool IsNumeric( const MYODD_STRING& s, bool allowDecimal /*= true*/ )
 {
-#ifdef _UNICODE
-  typedef boost::wcmatch boost_match;
-  typedef boost::wregex  boost_regex;
-#else
-  typedef boost::cmatch boost_match;
-  typedef boost::regex  boost_regex;
-#endif
+  auto t = s;
+  Trim(t);
+  if( t.length() == 0 )
+  {
+    //  empty is not a number
+    return false;
+  }
 
-  if( allowDecimal )
+  auto it = t.begin();
+  if( *it == _T('+') || *it == _T('-'))
   {
-    static const MYODD_CHAR* lpMatches = _T("^\\s*(([-+]?\\d{0,})(\\.?\\d{0,}))\\s*$");
-    static boost_match matches;
-    static boost_regex aStringregex( lpMatches );
-    if (boost::regex_match( s.c_str(), matches, aStringregex))
+    t.erase(it);
+    if (t.length() == 0)
     {
-      return true;
+      //  just a + or a - is not a number.
+      return false;
     }
   }
-  else
+
+  // if we have '1.' we can remove the last '.'
+  auto rit = t.rbegin();
+  if (*rit == _T('.') )
   {
-    static const MYODD_CHAR* lpMatches = _T("^\\s*(([-+]?\\d{0,}))\\s*$");
-    static boost_match matches;
-    static boost_regex aStringregex( lpMatches );
-    if (boost::regex_match( s.c_str(), matches, aStringregex))
+    t.erase(std::next(rit).base());
+    if (t.length() == 0)
     {
-      return true;
+      //  just a '.' is not a number.
+      return false;
     }
   }
-  return false;
+
+  // we have not yet found a decimal.
+  auto decimalFound = false;
+
+  // go around and look for non-numbers.
+  for( auto string_iterator = t.begin(); string_iterator != t.end(); ++ string_iterator )
+  {
+    // is it decimal?
+    if( *string_iterator == _T('.'))
+    {
+      if( decimalFound || !allowDecimal )
+      {
+        // we found one already
+        return false;
+      }
+
+      // we cannot find it again.
+      decimalFound = true;
+      continue;
+    }
+#ifdef _UNICODE
+    if(!iswdigit(*string_iterator))
+#else
+    if(!isdigit(*string_iterator))
+#endif
+    {
+      return false;
+    }
+  }
+
+  // if we are here, then it is...
+  return true;
 }
 
 /**

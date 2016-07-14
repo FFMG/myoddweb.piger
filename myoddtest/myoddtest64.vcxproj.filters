@@ -52,5 +52,8 @@
     <ClCompile Include="string\teststring_explode.cpp">
       <Filter>myodd\string</Filter>
     </ClCompile>
+    <ClCompile Include="string\teststring_isnumeric.cpp">
+      <Filter>myodd\string</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
