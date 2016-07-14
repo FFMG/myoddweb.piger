@@ -7,6 +7,14 @@ const struct test_is
   std::wstring given;
   bool is;
   bool allowDecimals;
+
+  friend std::ostream& operator <<(std::ostream& os, const test_is& obj)
+  {
+    return os 
+      << "Given : " << myodd::strings::WString2String( obj.given )
+      << " Expected : " << (obj.is ? "true" : "false") 
+      << " Allow decimals : " << (obj.allowDecimals ? "true" : "false");
+  }
 };
 
 struct MyOddStringIsNumeric : testing::Test, testing::WithParamInterface<test_is>
