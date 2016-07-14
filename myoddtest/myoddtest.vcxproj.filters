@@ -46,5 +46,8 @@
     <ClCompile Include="testipcdata_varied.cpp">
       <Filter>myodd\os</Filter>
     </ClCompile>
+    <ClCompile Include="string\teststring_explode.cpp">
+      <Filter>myodd\string</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
