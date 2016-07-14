@@ -103,7 +103,7 @@ bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue )
     {
       // get the number of elements.
       std::vector<MYODD_STRING> params;
-      myodd::strings::Explode( params, szCommandLine , _T(' '), -1, false );
+      myodd::strings::Explode( params, szCommandLine , _T(' '), MYODD_MAX_INT32, false );
 
       // because the std::vector is 0 based
       // we must step the index back once to get the right number
@@ -184,7 +184,7 @@ size_t HelperApi::GetCommandCount()
 
     // get the action commands and get the number of argument .
     std::vector<MYODD_STRING> params;
-    size_t nSize = myodd::strings::Explode(  params, szCommandLine, _T(' '), -1, false );
+    size_t nSize = myodd::strings::Explode(  params, szCommandLine, _T(' '), MYODD_MAX_INT32, false );
     
     // return the number of arguments we have.
     return nSize;

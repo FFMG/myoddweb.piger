@@ -128,7 +128,7 @@ void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYODD_
 {
   IS_VALID_CONTAINER
   std::vector<MYODD_STRING> v_s;
-  size_t l = myodd::strings::Explode( v_s, s, _T('\\') );
+  auto l = myodd::strings::Explode( v_s, s, _T('\\') );
   
   if( v_s[l-1] == _T( "*" ) )
   {
@@ -146,7 +146,7 @@ void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYO
 {
   IS_VALID_CONTAINER
   std::vector<MYODD_STRING> v_s;
-  size_t l = myodd::strings::Explode( v_s, s, _T('\\') );
+  auto l = myodd::strings::Explode( v_s, s, _T('\\') );
   if( v_s[l-1] == _T( "*" ) )
   {
     // we are monitoring any parts of an object.

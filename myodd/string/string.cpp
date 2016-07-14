@@ -184,6 +184,21 @@ size_t Explode
     ++retSize;
   }
 
+  // If count is negative, we only return retSize - count items.
+  if( nCount < 0 )
+  {
+    if(static_cast<size_t>(nCount *-1) >= retSize )
+    {
+      ret.clear();
+      retSize = 0;
+    }
+    else
+    {
+      retSize += nCount;  //  nCount is negative...
+      ret.erase( ret.begin(), ret.begin() +retSize);
+    }
+  }
+  
   // return the size.
   return retSize;
 }

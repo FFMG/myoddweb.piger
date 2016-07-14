@@ -1522,10 +1522,10 @@ bool GetAbsolutePath
 
   // split them all
   std::vector<MYODD_STRING> e_sRelative;
-  myodd::strings::Explode( e_sRelative, sRelative, SEPARATOR_REPLACE_C, -1, false );
+  strings::Explode( e_sRelative, sRelative, SEPARATOR_REPLACE_C, MYODD_MAX_INT32, false );
 
   std::vector<MYODD_STRING> e_sOrigin;
-  myodd::strings::Explode( e_sOrigin, sOrigin, SEPARATOR_REPLACE_C, -1, false );
+  strings::Explode( e_sOrigin, sOrigin, SEPARATOR_REPLACE_C, MYODD_MAX_INT32, false );
   // reverse from the origin path we only reverse the ../
 
   size_t dotdotCount = 0;
@@ -1812,10 +1812,10 @@ bool is_dot(const MYODD_CHAR* lpFile )
 {
   // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
   MYODD_STRING sOrigin = lpFile;
-  sOrigin = myodd::strings::replace( sOrigin, _T("/"), _T("\\") );
+  sOrigin = strings::replace( sOrigin, _T("/"), _T("\\") );
   
   std::vector<MYODD_STRING> e_sOrigin;
-  size_t size = myodd::strings::Explode( e_sOrigin, sOrigin, _T('\\'), -1, false );
+  auto size = strings::Explode( e_sOrigin, sOrigin, _T('\\'), MYODD_MAX_INT32, false );
   if( size == 0 )
   {
     return false;
@@ -2207,7 +2207,7 @@ size_t GetKeys
   while( true )
   {
     MYODD_CHAR* keys = new TCHAR[ keys_size ];
-    size_t nLen = ::GetPrivateProfileString( lpAppName, NULL, _T(""), keys, keys_size, lpFileName );
+    auto nLen = ::GetPrivateProfileString( lpAppName, NULL, _T(""), keys, keys_size, lpFileName );
     if( (keys_size-2) == nLen )
     {
       keys_size+=T_MAX_PATH;
@@ -2217,7 +2217,7 @@ size_t GetKeys
     {
       //  get the tokens.
       std::vector<MYODD_STRING> tokensTmp;
-      myodd::strings::explode_by_null_char( tokensTmp, keys, nLen );
+      strings::explode_by_null_char( tokensTmp, keys, nLen );
       for( std::vector<MYODD_STRING>::const_iterator it = tokensTmp.begin(); 
            it != tokensTmp.end();
            ++it
