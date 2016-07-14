@@ -58,5 +58,8 @@
     <ClCompile Include="string\teststring_isempty.cpp">
       <Filter>myodd\string</Filter>
     </ClCompile>
+    <ClCompile Include="string\teststring_replace.cpp">
+      <Filter>myodd\string</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

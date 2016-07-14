@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include <locale>
 #include <codecvt>
+#include <vector>
+#include <algorithm>
+
 #include "string.h"
 #include "assert.h"
 
@@ -31,19 +34,9 @@ void Test()
   assert( icompare( _T("Hello"), _T("hello") ) == 0 );
   assert( icompare( _T("Hello"), _T("helo") ) != 0 );   //  no match
 
-  assert( ifind( _T("Hello"), _T("hello") ) == 0 );
-  assert( ifind( _T("HelloHello"), _T("hello"), 5 ) == 5 );
-  assert( ifind( _T("HelloHello"), _T("hello"), 2 ) == 5 );
-
-  assert( ireplace(  _T("Hellohello"), _T("Hello"), _T("no" )) == _T("nono") );
-  assert( ireplace(  _T("Hellohello"), _T("Hello"), _T("No" )) == _T("NoNo") );
-  assert( ireplace(  _T("Hellohello"), _T("Hello"), _T("" )) == _T("") );
-  assert( ireplace(  _T("ABC"), _T("A"), _T("A" )) == _T("ABC") );  //  prevent infinite loop
-  assert( ireplace(  _T("ABC"), _T("A"), _T("a" )) == _T("ABC") );  //  prevent infinite loop
-  
-  assert( replace( _T("Hellohello"), _T("Hello"), _T("No" )) == _T("Nohello") );
-  assert( replace( _T("Hellohello"), _T("Hello"), _T("" )) == _T("hello") );
-  assert( replace(  _T("ABC"), _T("A"), _T("A" )) == _T("ABC") );   //  prevent infinite loop
+  assert( Find( _T("Hello"), _T("hello"), 0, false) == 0 );
+  assert( Find( _T("HelloHello"), _T("hello"), 5, false) == 5 );
+  assert( Find( _T("HelloHello"), _T("hello"), 2, false ) == 5 );
 
   assert( ToString( (int)10, NULL ) == _T("10") );
   assert( ToString( (int)10 ) == _T("10") );
@@ -275,135 +268,92 @@ int icompare( const MYODD_STRING& s1, const MYODD_STRING& s2 )
 }
 
 /**
- * Case insensitivce search
- * @see MYODD_STRING::find( ...)
- * @param const MYODD_STRING& the string we will be searching in.
- * @param const MYODD_STRING& the string we are looking for, (int the original string)
- * @param unsigned int the position we want to start searching for. 
- * @return int the position of the string or MYODD_STRING::npos if the string could not be found.
- */
-size_t ifind
-( 
-  const MYODD_STRING& origStr, 
-  const MYODD_STRING& srchStr, 
-  const size_t nFrom /*= 0*/ 
-)
-{
-  // make sure we are not searching past the length of the string
-  // otherwise we know it cannot exist.
-  if( nFrom >= origStr.length() )
-    return MYODD_STRING::npos;  // cannot find it.
-
-  // look for that string
-  MYODD_CHAR* lpFind = _tcsistr( origStr.c_str()+ nFrom, srchStr.c_str() );
-  if( NULL == lpFind )
-    return MYODD_STRING::npos;  //  not found
-
-  return (size_t)(lpFind - origStr.c_str());
-}
-
-/**
- * Normal string search and replace, case insensitive,
- * Note that we don't change the original value
- *
- * @param const MYODD_STRING& the original text we are searching in
- * @param const MYODD_STRING& the string we are looking for, case insensitive
- * @param const MYODD_STRING& the string we will be replacing it with.
- * @return MYODD_STRING the replaced string
- */
-MYODD_STRING ireplace
-(
-  const MYODD_STRING& origStr,
-  const MYODD_STRING& srchStr, 
-  const MYODD_STRING& replaceStr
-)
-{
-  MYODD_STRING retVal(origStr);
-  ireplace_inplace( retVal, srchStr, replaceStr );
-  return retVal;
-}
-
-/**
- * Normal string search and replace, case insensitive,
- * This is 'inplace' meaning that the return value will be changed.
- *
- * @param const MYODD_STRING& the original text we are searching in
- * @param const MYODD_STRING& the string we are looking for, case insensitive
- * @param const MYODD_STRING& the string we will be replacing it with.
- * @return none
- */
-void ireplace_inplace
-(
-  MYODD_STRING& origStr,
-  const MYODD_STRING& srchStr, 
-  const MYODD_STRING& replaceStr
-)
-{
-  const size_t len = replaceStr.length();
-  const size_t lens = srchStr.length();
-  if( 0 == lens || (len == lens && 0 == ifind(replaceStr, srchStr)) )
-  {
-    return; //  what are we looking for?
-  }
-
-  MYODD_STRING::size_type loc = ifind(origStr, srchStr);
-  while (loc != MYODD_STRING::npos)
-  {
-    origStr.replace(loc, lens, replaceStr);
-    loc = ifind(origStr, srchStr, loc + len );
-  }
-}
-
-/**
  * Normal string search and replace,
  * This is 'inplace' meaning that the return value will be changed.
  *
  * @param const MYODD_STRING& the original text we are searching in
  * @param const MYODD_STRING& the string we are looking for
  * @param const MYODD_STRING& the string we will be replacing it with.
+ * @param bool caseSensitive if the replacement is case sensitive or not.
  * @return MYODD_STRING the replaced string
  */
-MYODD_STRING replace
+MYODD_STRING Replace
 (
-  const MYODD_STRING& origStr,
-  const MYODD_STRING& srchStr, 
-  const MYODD_STRING& replaceStr
+  const MYODD_STRING& haystack,
+  const MYODD_STRING& needle, 
+  const MYODD_STRING& replace,
+  bool caseSensitive /*=caseSensitive*/
 )
 {
-  MYODD_STRING retVal(origStr);
-  replace_inplace( retVal, srchStr, replaceStr );
-  return retVal;
+  const size_t needleLen = needle.length();
+  if( 0 == needleLen )
+  {
+    //no needle.
+    return haystack; //  what are we looking for?
+  }
+
+  const size_t replaceLen = replace.length();
+  if (replaceLen == needleLen && caseSensitive && needle == replace )
+  {
+    // the needle and the replacement are the same.
+    // nothing will change
+    // if case insensitve, we must look for the meedle.
+    return haystack;
+  }
+  // create the return value
+  MYODD_STRING result(haystack);
+
+  // look for the first needle.
+  auto loc = Find( result, needle, 0, caseSensitive);
+  while (loc != -1)
+  {
+    // replace the string
+    result.replace(loc, needleLen, replace);
+
+    // look for the next item from the last known location
+    // plus the len of the text we just replaced.
+    loc = Find(result, needle, loc + replaceLen, caseSensitive);
+  }
+
+  // return what we found/did
+  return result;
 }
 
-/**
- * Normal string search and replace,
- * Note that we don't change the original value
- *
- * @param const MYODD_STRING& the original text we are searching in
- * @param const MYODD_STRING& the string we are looking for
- * @param const MYODD_STRING& the string we will be replacing it with.
- * @return MYODD_STRING the replaced string
- */
-void replace_inplace
+int32_t Find
 (
-  MYODD_STRING& origStr,
-  const MYODD_STRING& srchStr, 
-  const MYODD_STRING& replaceStr
-)
+  const MYODD_STRING& haystack, 
+  const MYODD_STRING& needle, 
+  const uint32_t nFrom /*= 0*/, 
+  bool caseSensitive /*=true*/)
 {
-  const size_t len = replaceStr.length();
-  const size_t lens = srchStr.length();
-  if( 0 == lens || (len == lens && replaceStr == srchStr) )
+  auto it = haystack.end();
+  if (caseSensitive)
   {
-    return; //  what are we looking for?
+    it = std::search(
+      haystack.begin() + nFrom, haystack.end(),
+      needle.begin(), needle.end(),
+#ifdef _UNICODE
+      [](wchar_t ch1, wchar_t ch2) { return ch1 == ch2; }
+#else
+      [](char ch1, char ch2) { return ch1 == ch2; }
+#endif
+    );
   }
-
-  MYODD_STRING::size_type loc = origStr.find(srchStr);
-  while (loc != MYODD_STRING::npos)
+  else
   {
-    origStr.replace(loc, lens, replaceStr);
-    loc = origStr.find(srchStr, loc + len );
+    it = std::search(
+      haystack.begin() + nFrom, haystack.end(),
+      needle.begin(), needle.end(),
+#ifdef _UNICODE
+      [](wchar_t ch1, wchar_t ch2) { return std::toupper(ch1, std::locale())
+                                            ==
+                                            std::toupper(ch2, std::locale()); }
+#else
+      [](char ch1, char ch2) { return std::toupper(ch1) == std::toupper(ch2); }
+#endif
+    );
   }
+  return (it == haystack.end() ? -1 : it - haystack.begin() );
 }
 
 /**

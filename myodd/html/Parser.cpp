@@ -161,12 +161,12 @@ void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, bool isHtmlTag 
     hd->text.assign( begin, end );
 
     // special chars are done straight away
-    myodd::strings::ireplace_inplace( hd->text, _T("&nbsp;"), _T(" ") );
-    myodd::strings::ireplace_inplace( hd->text, _T("&lt;"), _T("<") );
-    myodd::strings::ireplace_inplace( hd->text, _T("&gt;"), _T(">") );
-    myodd::strings::ireplace_inplace( hd->text, _T("&amp;"), _T("&") );
-    myodd::strings::ireplace_inplace( hd->text, _T("&deg;"),  MYODD_STRING(1, MYODD_CHAR(176)));    //  degree
-    myodd::strings::ireplace_inplace( hd->text, _T("&plusmn;"),  MYODD_STRING(1, MYODD_CHAR(177))); //  Plus/minus symbol
+    myodd::strings::Replace( hd->text, _T("&nbsp;"), _T(" "), false );
+    myodd::strings::Replace( hd->text, _T("&lt;"), _T("<"), false);
+    myodd::strings::Replace( hd->text, _T("&gt;"), _T(">"), false);
+    myodd::strings::Replace( hd->text, _T("&amp;"), _T("&"), false);
+    myodd::strings::Replace( hd->text, _T("&deg;"),  MYODD_STRING(1, MYODD_CHAR(176)), false);    //  degree
+    myodd::strings::Replace( hd->text, _T("&plusmn;"),  MYODD_STRING(1, MYODD_CHAR(177)), false); //  Plus/minus symbol
   }
 
   // add this to the list.

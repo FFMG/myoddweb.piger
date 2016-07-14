@@ -435,8 +435,8 @@ void decimalToDegree
 double positionToDecimal(const MYODD_CHAR* lpString )
 {
   MYODD_STRING sPos( lpString );
-  sPos = myodd::strings::replace( sPos, _T("&apos;"), _T("'") );
-  sPos = myodd::strings::replace( sPos, _T("&quot;"), _T("\"") );
+  sPos = myodd::strings::Replace( sPos, _T("&apos;"), _T("'") );
+  sPos = myodd::strings::Replace( sPos, _T("&quot;"), _T("\"") );
 
   const MYODD_CHAR* lpPos = sPos.c_str();
 

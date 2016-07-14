@@ -23,36 +23,9 @@ namespace myodd{ namespace strings{
   MYODD_STRING lower(const MYODD_STRING& s);
 
   // search and replace
-  MYODD_STRING replace
-    (
-    const MYODD_STRING& origStr,
-    const MYODD_STRING& srchStr, 
-    const MYODD_STRING& replaceStr
-    );
+  MYODD_STRING Replace( const MYODD_STRING& haystack, const MYODD_STRING& needle, const MYODD_STRING& replace, bool caseSensitive = true );
+  int32_t Find(const MYODD_STRING& haystack, const MYODD_STRING& needle, const uint32_t nFrom = 0, bool caseSensitive = true );
 
-  void replace_inplace
-    (
-    MYODD_STRING& origStr,
-    const MYODD_STRING& srchStr, 
-    const MYODD_STRING& replaceStr
-    );
-
-  // search and ireplace
-  MYODD_STRING ireplace
-    (
-    const MYODD_STRING& origStr,
-    const MYODD_STRING& srchStr, 
-    const MYODD_STRING& replaceStr
-    );
-
-  void ireplace_inplace
-    (
-    MYODD_STRING& origStr,
-    const MYODD_STRING& srchStr, 
-    const MYODD_STRING& replaceStr
-    );
-
-  size_t ifind( const MYODD_STRING& origStr, const MYODD_STRING& srchStr, const size_t nFrom = 0 );
   int icompare( const MYODD_STRING& origStr, const MYODD_STRING& srchStr );
 
   // explode with a '\0' char

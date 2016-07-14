@@ -357,8 +357,8 @@ bool is_extension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
     return false; //  we cannot check 0 lengths
   }
 
-  e = myodd::strings::replace( e, _T("\\."), _T("." ));     //  in case the user escaped it already
-  e = myodd::strings::replace( e, _T("."), _T("\\." ));     //  escape it now.
+  e = myodd::strings::Replace( e, _T("\\."), _T("." ));     //  in case the user escaped it already
+  e = myodd::strings::Replace( e, _T("."), _T("\\." ));     //  escape it now.
   MYODD_STRING stdMatches = _T("^(.*)\\.(") + e + _T(")$");
 #ifdef _UNICODE
   boost::wsmatch matches;
@@ -583,11 +583,11 @@ bool UnExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
 
   //  we don't want the trailing back slash
   static MYODD_STRING appPath = GetAppPath( false );
-  if( MYODD_STRING::npos != myodd::strings::ifind( lpSrc, appPath) )
+  if( MYODD_STRING::npos != myodd::strings::Find( lpSrc, appPath, 0, false ) )
   {
     // we have to expand the app path first
     // otherwise the drive letter will be replaced by %systemdrive%
-    stdUnDst = myodd::strings::ireplace( stdSrc, appPath, FILE_APPPATH );
+    stdUnDst = myodd::strings::Replace( stdSrc, appPath, FILE_APPPATH, false );
     unExpandSize = stdUnDst.length();
   }
   else
@@ -677,13 +677,13 @@ bool ExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
   MYODD_STRING stdSrc = lpSrc;
 
   // look for the %apppath% in case we need to expand it.
-  if( MYODD_STRING::npos != myodd::strings::ifind( lpSrc, FILE_APPPATH) )
+  if( MYODD_STRING::npos != myodd::strings::Find( lpSrc, FILE_APPPATH, 0, false) )
   {
     //  we don't want the trailing back slash
     static MYODD_STRING appPath = GetAppPath( false );
 
     //  replace the string
-    stdSrc = myodd::strings::ireplace( stdSrc, FILE_APPPATH, appPath );
+    stdSrc = myodd::strings::Replace( stdSrc, FILE_APPPATH, appPath, false );
   }
 
   // Get the 'expanded' size of the argument.
@@ -1513,8 +1513,8 @@ bool GetAbsolutePath
 
   // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
   // don't use MYODD_FILE_SEPARATOR otherwise we might not replace anything at all.
-  sOrigin = myodd::strings::replace ( sOrigin   , SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
-  sRelative = myodd::strings::replace( sRelative, SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
+  sOrigin = myodd::strings::Replace( sOrigin   , SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
+  sRelative = myodd::strings::Replace( sRelative, SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
 
   //  will we need to add a trailing char?
   // remember we are not checking for MYODD_FILE_SEPARATOR as we replace all the "\"
@@ -1812,7 +1812,7 @@ bool is_dot(const MYODD_CHAR* lpFile )
 {
   // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
   MYODD_STRING sOrigin = lpFile;
-  sOrigin = strings::replace( sOrigin, _T("/"), _T("\\") );
+  sOrigin = strings::Replace( sOrigin, _T("/"), _T("\\") );
   
   std::vector<MYODD_STRING> e_sOrigin;
   auto size = strings::Explode( e_sOrigin, sOrigin, _T('\\'), MYODD_MAX_INT32, false );
