@@ -27,7 +27,7 @@ TEST_P(MyOddFilesIsExtension, TestIsExtension)
   auto is = GetParam().is;
   // default 'from'
 
-  ASSERT_EQ(is , myodd::files::is_extension(file, ext ));
+  ASSERT_EQ(is , myodd::files::IsExtension(file, ext ));
 }
 
 INSTANTIATE_TEST_CASE_P(TestIsExtension, MyOddFilesIsExtension,

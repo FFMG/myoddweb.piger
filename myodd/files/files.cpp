@@ -325,7 +325,7 @@ MYODD_STRING get_extension( const MYODD_STRING& fOriginal )
  * @param MYODD_STRING the extension we are checking for.
  * @return bool if the file extension is the one we wanted.
  */
-bool is_extension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
+bool IsExtension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
 {
   auto f( fOriginal );
   _TrimDeadChars( f );
