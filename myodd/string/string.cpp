@@ -323,14 +323,20 @@ int32_t Find
 (
   const MYODD_STRING& haystack, 
   const MYODD_STRING& needle, 
-  const uint32_t nFrom /*= 0*/, 
+  const uint32_t from /*= 0*/, 
   bool caseSensitive /*=true*/)
 {
+  //  are we looking past the end?
+  if (from >= haystack.length() )
+  {
+    return -1;
+  }
+
   auto it = haystack.end();
   if (caseSensitive)
   {
     it = std::search(
-      haystack.begin() + nFrom, haystack.end(),
+      haystack.begin() + from, haystack.end(),
       needle.begin(), needle.end(),
 #ifdef _UNICODE
       [](wchar_t ch1, wchar_t ch2) { return ch1 == ch2; }
@@ -342,7 +348,7 @@ int32_t Find
   else
   {
     it = std::search(
-      haystack.begin() + nFrom, haystack.end(),
+      haystack.begin() + from, haystack.end(),
       needle.begin(), needle.end(),
 #ifdef _UNICODE
       [](wchar_t ch1, wchar_t ch2) { return std::toupper(ch1, std::locale())

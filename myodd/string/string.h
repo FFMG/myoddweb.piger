@@ -24,7 +24,7 @@ namespace myodd{ namespace strings{
 
   // search and replace
   MYODD_STRING Replace( const MYODD_STRING& haystack, const MYODD_STRING& needle, const MYODD_STRING& replace, bool caseSensitive = true );
-  int32_t Find(const MYODD_STRING& haystack, const MYODD_STRING& needle, const uint32_t nFrom = 0, bool caseSensitive = true );
+  int32_t Find(const MYODD_STRING& haystack, const MYODD_STRING& needle, const uint32_t from = 0, bool caseSensitive = true );
 
   int icompare( const MYODD_STRING& origStr, const MYODD_STRING& srchStr );
 
