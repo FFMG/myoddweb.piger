@@ -16,7 +16,7 @@
 // -------------------------------------------------------------
 Actions::Actions() : 
   m_uCommand( 0 ),
-  m_tmpAction( 0 ),
+  m_tmpAction( nullptr ),
   m_sActionAsTyped( _T("" ) )
 {
 }
@@ -71,7 +71,7 @@ bool Actions::Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath )
   {
     const Action &a = *(*i);
     // is it the command we were after?
-    if( myodd::strings::icompare( a.Command(), szText ) == 0 )
+    if( myodd::strings::Compare( a.Command(), szText, false ) == 0 )
     {
       // but is it the right index?
       if( idx == currentIdx )
@@ -116,9 +116,9 @@ Actions::array_of_actions_it Actions::Find(const MYODD_STRING& szText, const MYO
     const Action &a = *(*i);
 
     //  the command cannot be NULL
-    if( myodd::strings::icompare( a.Command(), szText ) == 0 )
+    if( myodd::strings::Compare( a.Command(), szText, false ) == 0 )
     {
-      if( myodd::strings::icompare(a.File(), stdExpendedPath) == 0 )
+      if( myodd::strings::Compare(a.File(), stdExpendedPath, false) == 0 )
       {
         return i;
       }

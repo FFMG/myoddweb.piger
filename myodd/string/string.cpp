@@ -30,14 +30,6 @@ void Test()
 
   assert( _tcsistr( _T("Hello"), _T("no match")) == NULL );
 
-  assert( icompare( _T("Hello"), _T("Hello") ) == 0 );
-  assert( icompare( _T("Hello"), _T("hello") ) == 0 );
-  assert( icompare( _T("Hello"), _T("helo") ) != 0 );   //  no match
-
-  assert( Find( _T("Hello"), _T("hello"), 0, false) == 0 );
-  assert( Find( _T("HelloHello"), _T("hello"), 5, false) == 5 );
-  assert( Find( _T("HelloHello"), _T("hello"), 2, false ) == 5 );
-
   assert( ToString( (int)10, NULL ) == _T("10") );
   assert( ToString( (int)10 ) == _T("10") );
   assert( ToString( (double)10, NULL ) != _T("10") );
@@ -233,38 +225,28 @@ MYODD_STRING implode
 }
 
 /**
- * Compare 2 string but case insensitive.
- * @param const MYODD_STRING& the lefthand string
- * @param const MYODD_STRING& the right hand string
- * @return int 0 if they are the same or -1/1 depending on the strings length
+ * Compare 2 string
+ * @param const MYODD_STRING& lhs the lefthand string
+ * @param const MYODD_STRING& rhs the right hand string
+ * @param bool caseSensitive if this is case sensitive or not.
+ * @return int32_t 0 if they are the same or -1/1 depending on the strings length
  */
-int icompare( const MYODD_STRING& s1, const MYODD_STRING& s2 )
+int32_t Compare( const MYODD_STRING& lhs, const MYODD_STRING& rhs, bool caseSensitive )
 {
-  MYODD_STRING::const_iterator it1=s1.begin();
-  MYODD_STRING::const_iterator it2=s2.begin();
-
-  //stop when either string's end has been reached
-  while ( (it1!=s1.end()) && (it2!=s2.end()) ) 
-  { 
-    if( std::toupper((unsigned char)*it1) != std::toupper((unsigned char)*it2)) //letters differ?
-    {
-      // return -1 to indicate smaller than, 1 otherwise
-      return (std::toupper((unsigned char)*it1)  < std::toupper((unsigned char)*it2)) ? -1 : 1; 
-    }
-    //proceed to the next character in each string
-    ++it1;
-    ++it2;
-  }
-
-  size_t size1=s1.size(), 
-         size2=s2.size();// cache lengths
-
-  //return -1,0 or 1 according to strings' lengths
-  if (size1==size2)
+  if(caseSensitive)
   {
-    return 0;
+#ifdef _UNICODE
+    return wcscmp(lhs.c_str(), rhs.c_str());
+#else
+    return strcmp(lhs.c_str(), rhs.c_str());
+#endif
   }
-  return (size1<size2) ? -1 : 1;
+
+#ifdef _UNICODE
+  return wcsicmp( lhs.c_str(), rhs.c_str() );
+#else
+  return stricmp(lhs.c_str(), rhs.c_str());
+#endif
 }
 
 /**

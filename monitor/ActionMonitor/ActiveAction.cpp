@@ -246,7 +246,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
     GetEnvironmentVariable(keyName.c_str(), sCurrentValue, l);
 
     // if the two are not the same, then we need to update it.
-    if (myodd::strings::icompare(sCurrentValue, sValue) != 0)
+    if (myodd::strings::Compare(sCurrentValue, sValue, false) != 0)
     {
       // the two values are not the same, so set it.
       SetEnvironmentVariable(keyName.c_str(), sValue.c_str());
