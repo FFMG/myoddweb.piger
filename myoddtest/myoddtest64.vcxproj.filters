@@ -14,6 +14,9 @@
     <Filter Include="myodd\string">
       <UniqueIdentifier>{1011aab2-5fe5-4f58-abed-30871acbfa77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\files">
+      <UniqueIdentifier>{0904ed1b-37a6-40f9-a8ab-4e71e9b97ead}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -66,6 +69,9 @@
     </ClCompile>
     <ClCompile Include="string\teststring_compare.cpp">
       <Filter>myodd\string</Filter>
+    </ClCompile>
+    <ClCompile Include="files\testfiles_extension.cpp">
+      <Filter>myodd\files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

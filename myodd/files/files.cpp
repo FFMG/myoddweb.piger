@@ -21,13 +21,16 @@ static const MYODD_CHAR* FILE_APPPATH = _T("%apppath%");
  * @param MYODD_STRING& the string we want to remove dead code from
  * @return none 
  */
-inline void _trimDeadChars( MYODD_STRING& s )
+inline void _TrimDeadChars( MYODD_STRING& s )
 {
-  size_t l = s.length();
-  while( l>1 && s[l-1] == 0 )
+  auto l = s.length();
+  while( l>1 && s[--l] == 0 )
   {
-    s = s.substr( 0, l-1 );
-    --l;
+    s = s.substr(0, l );
+  }
+  while (l>0 && s[0] == 0)
+  {
+    s = s.substr(1, --l);
   }
 }
 
@@ -127,24 +130,6 @@ void Test()
 
   ASSERT( get_extension( _T("somefile.txt") ) == _T("txt") );
   ASSERT( get_extension( _T("somefile.txt") ) != _T("ftp") );
-
-  //  sanity checks
-  ASSERT( !is_extension( _T("somefile.txt"), _T("")) );
-  ASSERT( !is_extension( _T(""), _T("")) );
-  ASSERT( !is_extension( _T(""), _T("text")) );
-  ASSERT( !is_extension( _T("somefile.txt"), _T(".")) );
-
-  ASSERT( is_extension( _T("somefile.txt"), _T("txt")) );
-  ASSERT( is_extension( _T("somefile.txt"), _T(".txt")) );
-  ASSERT( is_extension( _T("somefile.txt"), _T("tXt")) );
-  ASSERT( is_extension( _T("somefile.TXT"), _T("txt")) );
-  ASSERT( !is_extension( _T("somefile.TXT"), _T("ftp")) );
-  ASSERT( !is_extension( _T("somefile.TXT"), _T(".ftp")) );
-
-  // special cases.
-  ASSERT( is_extension( _T("somefile.txt1.text2"), _T(".txt1\\.text2")) );  // the '.' is escaped.
-  ASSERT( is_extension( _T("somefile.txt1.text2"), _T(".txt1.text2")) );  // the '.' is not escaped.
-  ASSERT( is_extension( _T("somefile.txt1.text2"), _T("txt1.text2")) );
   
   MYODD_CHAR* lpdest = NULL;
   ASSERT( GetAbsolutePath( lpdest, _T( "../../somefile.txt" ), _T( "c:\\dira\\dirb\\" ) ) );
@@ -262,7 +247,7 @@ void add_extension
   bool strip_current_if_exists  
 )
 {
-  _trimDeadChars( f );
+  _TrimDeadChars( f );
   if( f.length() == 0 || e.length() == 0 )
   {
     // nothing to do...
@@ -305,7 +290,7 @@ void add_extension
  */
 void strip_extension( MYODD_STRING& f )
 {
-  _trimDeadChars( f );
+  _TrimDeadChars( f );
 
   size_t result;
   const MYODD_CHAR* pdest = _tcsrchr( f.c_str(), '.' );
@@ -328,7 +313,7 @@ void strip_extension( MYODD_STRING& f )
 MYODD_STRING get_extension( const MYODD_STRING& fOriginal )
 {
   MYODD_STRING f( fOriginal );
-  _trimDeadChars( f );
+  _TrimDeadChars( f );
 
   const MYODD_CHAR* pdest = _tcsrchr( f.c_str(), '.' );
   return (pdest ? MYODD_STRING(pdest+1) : _T(""));
@@ -342,11 +327,13 @@ MYODD_STRING get_extension( const MYODD_STRING& fOriginal )
  */
 bool is_extension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
 {
-  MYODD_STRING f( fOriginal );
-  _trimDeadChars( f );
+  auto f( fOriginal );
+  _TrimDeadChars( f );
+  strings::Trim(f);
 
-  MYODD_STRING e( fExt );
-  _trimDeadChars( e );
+  auto e( fExt );
+  _TrimDeadChars( e );
+  strings::Trim(e);
   if( e.length() > 1 && e[0] == '.' )
   {
     e = e.substr( 1 );
@@ -357,9 +344,9 @@ bool is_extension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
     return false; //  we cannot check 0 lengths
   }
 
-  e = myodd::strings::Replace( e, _T("\\."), _T("." ));     //  in case the user escaped it already
-  e = myodd::strings::Replace( e, _T("."), _T("\\." ));     //  escape it now.
-  MYODD_STRING stdMatches = _T("^(.*)\\.(") + e + _T(")$");
+  e = strings::Replace( e, _T("\\."), _T("." ));     //  in case the user escaped it already
+  e = strings::Replace( e, _T("."), _T("\\." ));     //  escape it now.
+  auto stdMatches = _T("^(.*)\\.(") + e + _T(")$");
 #ifdef _UNICODE
   boost::wsmatch matches;
   const boost::wregex aStringregex( stdMatches.c_str(), boost::regex_constants::icase );
@@ -410,7 +397,7 @@ void RemoveLeadingBackSlash
  */
 void RemoveLeadingBackSlash( MYODD_STRING& szPath)
 {
-  _trimDeadChars( szPath );
+  _TrimDeadChars( szPath );
 
   int idx = static_cast<int>(szPath.length())-1;
   if( idx<0 )
@@ -462,7 +449,7 @@ void RemoveTrailingBackSlash
  MYODD_STRING& szPath
 )
 {
-  _trimDeadChars( szPath );
+  _TrimDeadChars( szPath );
   
   int idx = static_cast<int>(szPath.length( ))-1;
 	if( idx<0 )
@@ -513,7 +500,7 @@ void AddTrailingBackSlash
  */
 void AddTrailingBackSlash( MYODD_STRING& subPath )
 {
-  _trimDeadChars( subPath );
+  _TrimDeadChars( subPath );
 
   //  make sure we have the ending '/' or '\' 
   size_t l = subPath.length();
