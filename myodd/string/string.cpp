@@ -230,14 +230,19 @@ MYODD_STRING implode
  * @param const MYODD_STRING& rhs the right hand string
  * @param bool caseSensitive if this is case sensitive or not.
  * @return int32_t 0 if they are the same or -1/1 depending on the strings length
+ *         <0	the first character that does not match has a lower value in lhs than in rhs
+ *         0	the contents of both strings are equal
+ *         >0	the first character that does not match has a greater value in lhs than in rhs
  */
 int32_t Compare( const MYODD_STRING& lhs, const MYODD_STRING& rhs, bool caseSensitive )
 {
   if(caseSensitive)
   {
 #ifdef _UNICODE
+    // http ://www.cplusplus.com/reference/cwchar/wcscmp/
     return wcscmp(lhs.c_str(), rhs.c_str());
 #else
+    // http://www.cplusplus.com/reference/cstring/strcmp/  
     return strcmp(lhs.c_str(), rhs.c_str());
 #endif
   }
