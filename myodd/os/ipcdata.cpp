@@ -419,7 +419,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
   size_t pointer = 0;
 
   //  get the version number
-  auto versionNumber = ReadVersionNumber( pData, pointer );
+  auto versionNumber = ReadVersionNumber( pData, dataSize, pointer );
   if (versionNumber > VersionNumber)
   {
     throw std::exception("Trying to read data with a version number past our version number.");
@@ -429,14 +429,14 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
   for (; pointer < dataSize;)
   {
     // get the next item type.
-    auto dataType = ReadDataType( pData, pointer );
+    auto dataType = ReadDataType( pData, dataSize, pointer );
 
     switch ( dataType)
     {
     case IpcDataType::Guid:
     {
       // set the guid.
-      _guid = ReadGuid(pData, pointer);
+      _guid = ReadGuid(pData, dataSize, pointer);
       _ipcArguments.push_back(new IpcArgument{
         new std::wstring(_guid),
         IpcDataType::Guid
@@ -447,7 +447,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
     case IpcDataType::Int32:
     {
       _ipcArguments.push_back(new IpcArgument{
-        new (int32_t)(ReadInt32(pData, pointer)),
+        new (int32_t)(ReadInt32(pData, dataSize, pointer)),
         IpcDataType::Int32
       });
     }
@@ -456,7 +456,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
     case IpcDataType::Int64:
     {
       _ipcArguments.push_back(new IpcArgument{
-        new (int64_t)(ReadInt64(pData, pointer)),
+        new (int64_t)(ReadInt64(pData, dataSize, pointer)),
         IpcDataType::Int64
       });
     }
@@ -465,7 +465,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
     case IpcDataType::String://string unicode
     {
       _ipcArguments.push_back(new IpcArgument{
-        new std::wstring(ReadString(pData, pointer)),
+        new std::wstring(ReadString(pData, dataSize, pointer)),
         IpcDataType::String
       });
     }
@@ -474,7 +474,7 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
     case IpcDataType::StringAscii:
     {
       _ipcArguments.push_back(new IpcArgument{
-        new std::string(ReadAsciiString(pData, pointer)),
+        new std::string(ReadAsciiString(pData, dataSize, pointer)),
         IpcDataType::StringAscii
       });
     }
@@ -506,19 +506,31 @@ void IpcData::Read(unsigned char* pData, unsigned int dataSize)
   }
 }
 
+void IpcData::ThrowIfReadingPastSize(const size_t dataSize, const size_t pointer, const size_t needed)
+{
+  if (pointer + needed > dataSize)
+  {
+    throw std::exception("Trying to read more data");
+  }
+}
+
 /**
  * Read the next data type
  * We update the pointer location.
  * @param unsigned char* pData the data container
+ * @param const size_t dataSize the max data size.
  * @param size_t& pointer the current pointer location.
  * @return unsigned short int the next data type.
  */
-IpcData::IpcDataType IpcData::ReadDataType(unsigned char* pData, size_t& pointer)
+IpcData::IpcDataType IpcData::ReadDataType(unsigned char* pData, const size_t dataSize, size_t& pointer)
 {
   // default value, we need to make sure that value is 'signed int' rahter than 'auto'
   unsigned short int dataType = 0;
   try
   {
+    // make sure we can read this.
+    ThrowIfReadingPastSize(dataSize, pointer, sizeof(dataType));
+
     // read the value.
     memcpy_s(&dataType, sizeof(dataType), pData + pointer, sizeof(dataType));
 
@@ -538,10 +550,11 @@ IpcData::IpcDataType IpcData::ReadDataType(unsigned char* pData, size_t& pointer
  * Read a Unicode string.
  * We update the pointer location.
  * @param unsigned char* pData the data container
+ * @param const size_t dataSize the max data size.
  * @param size_t& pointer the current pointer location.
  * @return std::wstring the string that we read.
  */
-std::wstring IpcData::ReadString(unsigned char* pData, size_t& pointer)
+std::wstring IpcData::ReadString(unsigned char* pData, const size_t dataSize, size_t& pointer)
 {
   // our return value
   std::wstring sDataValue = L"";
@@ -549,30 +562,38 @@ std::wstring IpcData::ReadString(unsigned char* pData, size_t& pointer)
   try
   {
     //  first we get the size, we could be passed a zero size string.
-    signed int dataSize = 0;
-    memcpy_s(&dataSize, sizeof(dataSize), pData + pointer, sizeof(dataSize));
+    signed int stringSize = 0;
+
+    // make sure we can read this.
+    ThrowIfReadingPastSize(dataSize, pointer, sizeof(stringSize));
+
+    memcpy_s(&stringSize, sizeof(dataSize), pData + pointer, sizeof(stringSize));
 
     // update the pointer location.
-    pointer += sizeof(dataSize);
+    pointer += sizeof(stringSize);
 
     // if we have anything to read, read it.
-    if (0 != dataSize)
+    if (0 != stringSize)
     {
       // create a wchar container.
       //
       // NB: The 'size' is the number of wide characters, not the number of bytes.
       //     This is why we must be carefull when passing data from one function to the other.
-      auto dataValue = new wchar_t[dataSize + 1];
+      auto dataValue = new wchar_t[stringSize + 1];
 
       // reset the data, be sure to add a terminating \0.
-      memset(dataValue, L'\0', (dataSize+1) * sizeof(wchar_t));
+      memset(dataValue, L'\0', (stringSize+1) * sizeof(wchar_t));
 
       // get the data
-      auto dataSizeToRead = static_cast<size_t>(dataSize) * sizeof(wchar_t);
-      memcpy_s(dataValue, dataSizeToRead, pData + pointer, dataSizeToRead);
+      auto stringSizeToRead = static_cast<size_t>(stringSize) * sizeof(wchar_t);
+
+      // make sure we can read this.
+      ThrowIfReadingPastSize(dataSize, pointer, stringSizeToRead);
+
+      memcpy_s(dataValue, stringSizeToRead, pData + pointer, stringSizeToRead);
 
       // update the pointer location
-      pointer += dataSizeToRead;
+      pointer += stringSizeToRead;
 
       //  copy it to our return string.
       sDataValue = dataValue;
@@ -594,23 +615,25 @@ std::wstring IpcData::ReadString(unsigned char* pData, size_t& pointer)
  * Read a Unicode guid.
  * We update the pointer location.
  * @param unsigned char* pData the data container
+ * @param const size_t dataSize the max data size.
  * @param size_t& pointer the current pointer location.
  * @return std::wstring the string that we read.
  */
-std::wstring IpcData::ReadGuid(unsigned char* pData, size_t& pointer)
+std::wstring IpcData::ReadGuid(unsigned char* pData, const size_t dataSize, size_t& pointer)
 {
   // we just use the string class.
-  return ReadString( pData, pointer );
+  return ReadString( pData, dataSize, pointer );
 }
 
 /**
  * Read an ascii string.
  * We update the pointer location.
  * @param unsigned char* pData the data container
+ * @param const size_t dataSize the max data size.
  * @param size_t& pointer the current pointer location.
  * @return std::string the string that we read.
  */
-std::string IpcData::ReadAsciiString(unsigned char* pData, size_t& pointer)
+std::string IpcData::ReadAsciiString(unsigned char* pData, const size_t dataSize, size_t& pointer)
 {
   // our return value
   std::string sDataValue = "";
@@ -618,26 +641,33 @@ std::string IpcData::ReadAsciiString(unsigned char* pData, size_t& pointer)
   try
   {
     //  first we get the size, we could be passed a zero size string.
-    signed int dataSize = 0;
-    memcpy_s(&dataSize, sizeof(dataSize), pData + pointer, sizeof(dataSize));
+    signed int stringSize = 0;
+
+    // make sure we can read this.
+    ThrowIfReadingPastSize(dataSize, pointer, sizeof(stringSize));
+
+    memcpy_s(&stringSize, sizeof(stringSize), pData + pointer, sizeof(stringSize));
 
     // update the pointer location.
-    pointer += sizeof(dataSize);
+    pointer += sizeof(stringSize);
 
     // if we have anything to read, read it.
-    if (0 != dataSize)
+    if (0 != stringSize)
     {
+      // make sure we can read this.
+      ThrowIfReadingPastSize(dataSize, pointer, stringSize);
+
       // create a wchar container.
-      auto dataValue = new char[dataSize + 1];
+      auto dataValue = new char[stringSize + 1];
 
       // reset the data, be sure to add a terminating \0.
-      memset(dataValue, '\0', dataSize + 1);
+      memset(dataValue, '\0', stringSize + 1);
 
       // get the data
-      memcpy_s(dataValue, dataSize, pData + pointer, dataSize);
+      memcpy_s(dataValue, stringSize, pData + pointer, stringSize);
 
       // update the pointer location
-      pointer += dataSize;
+      pointer += stringSize;
 
       //  copy it to our return string.
       sDataValue = dataValue;
@@ -659,14 +689,18 @@ std::string IpcData::ReadAsciiString(unsigned char* pData, size_t& pointer)
  * Read the number at our current location.
  * We update the pointer location.
  * @param unsigned char* pData the data container
+ * @param const size_t dataSize the max data size.
  * @param size_t& pointer the current pointer location.
  * @return int32_t the number.
  */
-int32_t IpcData::ReadInt32(unsigned char* pData, size_t& pointer)
+int32_t IpcData::ReadInt32(unsigned char* pData, const size_t dataSize, size_t& pointer)
 {
   int32_t dataValue = 0;
   try
   {
+    // make sure we can read this.
+    ThrowIfReadingPastSize(dataSize, pointer, sizeof(dataValue));
+
     // read the value.
     memcpy_s(&dataValue, sizeof(dataValue), pData + pointer, sizeof(dataValue));
 
@@ -686,14 +720,18 @@ int32_t IpcData::ReadInt32(unsigned char* pData, size_t& pointer)
  * Read the number at our current location.
  * We update the pointer location.
  * @param unsigned char* pData the data container
+ * @param const size_t dataSize the max data size.
  * @param size_t& pointer the current pointer location.
  * @return int32_t the number.
  */
-int64_t IpcData::ReadInt64(unsigned char* pData, size_t& pointer)
+int64_t IpcData::ReadInt64(unsigned char* pData, const size_t dataSize, size_t& pointer)
 {
   int64_t dataValue = 0;
   try
   {
+    // make sure we can read this.
+    ThrowIfReadingPastSize(dataSize, pointer, sizeof(dataValue));
+
     // read the value.
     memcpy_s(&dataValue, sizeof(dataValue), pData + pointer, sizeof(dataValue));
 
@@ -708,19 +746,24 @@ int64_t IpcData::ReadInt64(unsigned char* pData, size_t& pointer)
   // return what we found.
   return dataValue;
 }
+
 /**
  * Read the version number at our current location.
  * We update the pointer location.
  * @param unsigned char* pData the data container
+ * @param const size_t dataSize the max data size.
  * @param size_t& pointer the current pointer location.
  * @return signed int the version number.
  */
-signed int IpcData::ReadVersionNumber(unsigned char* pData, size_t& pointer)
+signed int IpcData::ReadVersionNumber(unsigned char* pData, const size_t dataSize, size_t& pointer)
 {
   // default value, we need to make sure that value is 'signed int' rahter than 'auto'
   signed int versionNumber = 0;
   try
   {
+    // make sure we can read this.
+    ThrowIfReadingPastSize(dataSize, pointer, sizeof(versionNumber));
+
     // read the value.
     memcpy_s(&versionNumber, sizeof(versionNumber), pData + pointer, sizeof(versionNumber));
 

@@ -87,26 +87,28 @@ namespace myodd {
       void Read(unsigned char* pData, unsigned int dataSize);
 
       // read the version number only.
-      static signed int ReadVersionNumber(unsigned char* pData, size_t& pointer );
+      static signed int ReadVersionNumber(unsigned char* pData, const size_t dataSize, size_t& pointer );
 
       // read the version number only.
-      static IpcDataType ReadDataType(unsigned char* pData, size_t& pointer);
+      static IpcDataType ReadDataType(unsigned char* pData, const size_t dataSize, size_t& pointer);
 
       // read a number
-      static int32_t ReadInt32(unsigned char* pData, size_t& pointer);
+      static int32_t ReadInt32(unsigned char* pData, const size_t dataSize, size_t& pointer);
 
       // read a number
-      static int64_t ReadInt64(unsigned char* pData, size_t& pointer);
+      static int64_t ReadInt64(unsigned char* pData, const size_t dataSize, size_t& pointer);
 
       // read a unicode string
-      static std::wstring ReadString(unsigned char* pData, size_t& pointer);
+      static std::wstring ReadString(unsigned char* pData, const size_t dataSize, size_t& pointer);
 
       // read a Ascii string
-      static std::string ReadAsciiString(unsigned char* pData, size_t& pointer);
+      static std::string ReadAsciiString(unsigned char* pData, const size_t dataSize, size_t& pointer);
 
       // read the guid
-      static std::wstring ReadGuid(unsigned char* pData, size_t& pointer);
+      static std::wstring ReadGuid(unsigned char* pData, const size_t dataSize, size_t& pointer);
 
+      // make sure we can read the data.
+      static void ThrowIfReadingPastSize(const size_t dataSize, const size_t pointer, const size_t needed);
     private:
       // all the arguments.
       struct IpcArgument
