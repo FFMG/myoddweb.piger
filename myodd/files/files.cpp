@@ -39,88 +39,11 @@ static const MYODD_CHAR* MYODD_FILE_WINSEPARATOR = _T("\\");
 
 // the default separator
 static const MYODD_CHAR* MYODD_FILE_SEPARATOR   = MYODD_FILE_WINSEPARATOR;
-static const MYODD_CHAR MYODD_FILE_SEPARATOR_C = MYODD_FILE_SEPARATOR[0];
 
 namespace myodd{ namespace files{
 void Test()
 #ifdef _DEBUG
 {
-  MYODD_STRING sPath = _T("\\Hello");
-  RemoveLeadingBackSlash( sPath );
-  ASSERT( sPath == _T("Hello") );
-
-  sPath = _T("\\Hello\\");
-  RemoveLeadingBackSlash( sPath );
-  ASSERT( sPath == _T("Hello\\") );
-
-  sPath = _T("\\\\Hello");
-  RemoveLeadingBackSlash( sPath );
-  ASSERT( sPath == _T("Hello") );
-
-  sPath = _T("");   //  empty string
-  RemoveLeadingBackSlash( sPath );
-  ASSERT( sPath == _T("") );
-
-  sPath = _T("");   //  empty string!
-  RemoveTrailingBackSlash( sPath );
-  ASSERT( sPath == _T("") );
-
-  sPath = _T("\\");   //  1 char
-  RemoveLeadingBackSlash( sPath );
-  ASSERT( sPath == _T("") );
-
-  sPath = _T("\\");   //  1 char
-  RemoveTrailingBackSlash( sPath );
-  ASSERT( sPath == _T("") );
-
-  sPath = _T("\\Hello\\");
-  RemoveTrailingBackSlash( sPath );
-  ASSERT( sPath == _T("\\Hello") );
-
-  sPath = _T("Hello\\\\");
-  RemoveTrailingBackSlash( sPath );
-  ASSERT( sPath == _T("Hello") );
-
-  MYODD_CHAR* directory = new TCHAR[T_MAX_PATH+1];
-  memset( directory, 0, T_MAX_PATH+1);
-
-  //  copy the directory
-  _tcscpy_s( directory, T_MAX_PATH+1, _T("Hello") );  
-  myodd::files::AddTrailingBackSlash( directory, T_MAX_PATH );
-  ASSERT( _tcscmp(directory, _T("Hello\\")) == 0 );
-
-  memset( directory, 0, T_MAX_PATH+1);
-  _tcscpy_s( directory, T_MAX_PATH+1, _T("Hello\\") );  
-  myodd::files::AddTrailingBackSlash( directory, T_MAX_PATH );
-  ASSERT( _tcscmp(directory, _T("Hello\\")) ==0 );
-
-  //  copy the directory
-  memset( directory, 0, T_MAX_PATH+1);
-  _tcscpy_s( directory, T_MAX_PATH+1, _T("Hello\\") );  
-  myodd::files::RemoveTrailingBackSlash( directory, T_MAX_PATH );
-  ASSERT( _tcscmp(directory, _T("Hello")) == 0 );
-
-  //  copy the directory
-  memset( directory, 0, T_MAX_PATH+1);
-  _tcscpy_s( directory, T_MAX_PATH+1, _T("Hello") );  
-  myodd::files::RemoveTrailingBackSlash( directory, T_MAX_PATH );
-  ASSERT( _tcscmp(directory, _T("Hello")) == 0 );
-
-  //  copy the directory
-  memset( directory, 0, T_MAX_PATH+1);
-  _tcscpy_s( directory, T_MAX_PATH+1, _T("Hello") );  
-  myodd::files::RemoveLeadingBackSlash( directory, T_MAX_PATH );
-  ASSERT( _tcscmp(directory, _T("Hello")) == 0 );
-
-  //  copy the directory
-  memset( directory, 0, T_MAX_PATH+1);
-  _tcscpy_s( directory, T_MAX_PATH+1, _T("\\Hello") );  
-  myodd::files::RemoveLeadingBackSlash( directory, T_MAX_PATH );
-  ASSERT( _tcscmp(directory, _T("Hello")) == 0 );
-
-  delete [] directory;
-
-
   ASSERT( GetBaseFromFile( _T("c:\\a\\b\\something.txt"), false ) == _T("c:\\a\\b\\") );
   ASSERT( GetBaseFromFile( _T("c:\\a\\b\\something.txt"), false, false ) == _T("c:\\a\\b") );
   ASSERT( GetBaseFromFile( _T("C:\\test.txt" ) ) == _T("C:\\"));
@@ -362,32 +285,6 @@ bool IsExtension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
   return false;
 }
 
-/**
- * Remove a leading backslash at the start of a path
- * This is normally used so we can joining 2 paths together.
- * @param MYODD_CHAR* the path we want to remove the backslash from
- * @param unsigned int the max number of characters.
- * @return none
- */
-void RemoveLeadingBackSlash
-(
-  MYODD_CHAR* szPath,	      // pointer to buffer to receive module path
- unsigned int nSize		// size of buffer, in characters
- )
-{
-  if( NULL == szPath )
-    return;
-
-  MYODD_STRING s( szPath, _tcslen(szPath) );
-
-  // the the MYODD_STRING version
-  RemoveLeadingBackSlash( s );
-
-  // re-copy it across
-  // strncpy( szPath, pstrRoot, nSize );
-  memset( szPath, 0, nSize );
-  _tcsncpy_s( szPath, nSize, s.c_str() , nSize );
-}
 
 /**
  * Remove a leading backslash at the start of a path
@@ -409,34 +306,6 @@ void RemoveLeadingBackSlash( MYODD_STRING& szPath)
   {
     szPath = szPath.substr( 1, idx-- );
   }
-}
-
-/**
- * Look for a trailing back slash at the end of the path and strip it.
- * As we are _removing_ a backslash the variable nSize might seem redundant, but it ensures that
- * the user can pass values with no null ending char.
- * @param MYODD_CHAR* the file that has a trailing back slash.
- * @param unsigned int the maximum size of the buffer to prevent overruns.
- * @return none 
- */
-void RemoveTrailingBackSlash
-(
-  MYODD_CHAR* szPath,	// pointer to buffer to receive module path
-  unsigned int nSize		  // size of buffer, in characters
-)
-{
-  if( NULL == szPath )
-    return;
-
-  MYODD_STRING s( szPath, _tcslen(szPath) );
-
-  // the the MYODD_STRING version
-  RemoveTrailingBackSlash( s );
-
-  // re-copy it across
-  // strncpy( szPath, pstrRoot, nSize );
-  memset( szPath, 0, nSize );
-  _tcsncpy_s( szPath, nSize, s.c_str() , nSize );
 }
 
 /**
@@ -467,51 +336,19 @@ void RemoveTrailingBackSlash
  * Add a trailing back slash at the end of a directory
  * @see AddTrailingBackSlash( MYODD_STRING& s )
  *
- * @param MYODD_CHAR* the path we are editing
- * @param unsigned long the max size of the file.
- * @return none 
- */
-void AddTrailingBackSlash
-(
-  MYODD_CHAR* szPath,	    // pointer to buffer to receive module path
-  unsigned int nSize	// size of buffer, in characters
-)
-{
-  if( NULL == szPath )
-    return;
-
-	MYODD_STRING s( szPath, _tcslen(szPath) );
-
-  // the the MYODD_STRING version
-  AddTrailingBackSlash( s );
-
-	// re-copy it across
-	// strncpy( szPath, pstrRoot, nSize );
-  memset( szPath, 0, nSize );
-  _tcsncpy_s( szPath, nSize, s.c_str() , nSize );
-}
-
-/**
- * Add a trailing back slash at the end of a directory
- * @see AddTrailingBackSlash( MYODD_STRING& s )
- *
  * @param MYODD_STRING& the string we want to add a trailing back slash
  * @return none 
  */
 void AddTrailingBackSlash( MYODD_STRING& subPath )
 {
+  //  remove the dead characters.
   _TrimDeadChars( subPath );
 
-  //  make sure we have the ending '/' or '\' 
-  size_t l = subPath.length();
-  if( l == 0 || (subPath[l-1] != '\\' && subPath[l-1] != '/') )
-  {
-    subPath += MYODD_FILE_SEPARATOR;
-  }
-  else
-  {
-    subPath[l-1] = MYODD_FILE_SEPARATOR_C;
-  }
+  //  remove the trailing backslash
+  RemoveTrailingBackSlash(subPath);
+
+  //  then just add the trailing back slash
+  subPath += MYODD_FILE_SEPARATOR;
 }
 
 /**
@@ -1759,9 +1596,6 @@ bool GetFullTempFileName(MYODD_CHAR*& lpFullPathFileName, const MYODD_CHAR* lpFi
     //  could not create the temp path.
     return false;
   }
-
-  // add the AddTrailingBackSlash to it.
-  myodd::files::AddTrailingBackSlash( lpTmpBuffer, T_MAX_PATH );
 
   // create the return buffer.
   lpFullPathFileName = new MYODD_CHAR[ T_MAX_PATH + 1];

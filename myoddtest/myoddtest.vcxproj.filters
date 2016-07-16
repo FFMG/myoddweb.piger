@@ -73,5 +73,8 @@
     <ClCompile Include="files\testfiles_extension.cpp">
       <Filter>myodd\files</Filter>
     </ClCompile>
+    <ClCompile Include="files\testfiles_backslash.cpp">
+      <Filter>myodd\files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

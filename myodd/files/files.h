@@ -23,27 +23,12 @@ bool IsExtension( const MYODD_STRING& f, const MYODD_STRING& e );
 
 // remove a leading back slash
 void RemoveLeadingBackSlash( MYODD_STRING& szPath);
-void RemoveLeadingBackSlash
-(
-  MYODD_CHAR* szPath,	      // pointer to buffer to receive module path
-  unsigned int nSize		// size of buffer, in characters
-);
 
 // remove a trialling back slash
 void RemoveTrailingBackSlash( MYODD_STRING& szPath);
-void RemoveTrailingBackSlash
-(
-  MYODD_CHAR* szPath,	      // pointer to buffer to receive module path
-  unsigned int nSize		// size of buffer, in characters
-);
 
 // add a trialling backlash
 void AddTrailingBackSlash( MYODD_STRING& subPath );
-void AddTrailingBackSlash
-(
-  MYODD_CHAR* szPath,	    // pointer to buffer to receive module path
-  unsigned int nSize	// size of buffer, in characters
-);
 
 // expand the environment variables.
 bool ExpandEnvironment(const MYODD_CHAR* src, MYODD_CHAR*& dest );

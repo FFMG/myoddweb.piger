@@ -536,23 +536,24 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
     return;
   }
 
-  TCHAR* directory = new TCHAR[T_MAX_PATH+1];
-  memset( directory, 0, T_MAX_PATH+1);
+  //  the end path
+  std::wstring directory = rootPath;  
 
-  //  copy the directory
-  _tcscpy_s( directory, T_MAX_PATH+1, rootPath );  
-  myodd::files::AddTrailingBackSlash( directory, T_MAX_PATH );
+  // make sure it has a trailing back slash.
+  myodd::files::AddTrailingBackSlash( directory );
 
   // add the extension
-  _tcscat_s( directory, T_MAX_PATH+1, extentionPath);
-  myodd::files::AddTrailingBackSlash( directory, T_MAX_PATH );
+  directory += extentionPath;
+
+  //  add a trailing back slash
+  myodd::files::AddTrailingBackSlash( directory );
 
   //
   //  we could refine the search to
   //  *.bat, *.exe, *.pl
   //  but I am not sure we really need to restrict anything
   // it is up to the user to ensure that they have 
-  MYODD_STRING sPath = MYODD_STRING(directory) + MYODD_STRING( _T("*.*") );
+  auto sPath = directory + _T("*.*");
 
   LPTSTR fullPath = NULL;
   if( !myodd::files::ExpandEnvironment( sPath.c_str(), fullPath ) )
@@ -612,7 +613,6 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   }
 
   delete [] fullPath;
-  delete [] directory;
 }
 
 // -------------------------------------------------------------
