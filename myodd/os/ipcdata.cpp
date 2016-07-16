@@ -510,7 +510,7 @@ void IpcData::ThrowIfReadingPastSize(const size_t dataSize, const size_t pointer
 {
   if (pointer + needed > dataSize)
   {
-    throw std::exception("Trying to read more data");
+    throw std::overflow_error("Trying to read more data");
   }
 }
 
