@@ -14,7 +14,7 @@ public:
   bool Initialize(); 
 
   //  check the extension.
-  static bool IsPyExt( LPCTSTR ext );
+  static bool IsExt( LPCTSTR ext );
 
   PyThreadState* GetMainPyThread() const {
     return _mainThreadState;

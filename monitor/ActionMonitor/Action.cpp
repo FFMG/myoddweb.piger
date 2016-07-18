@@ -392,9 +392,9 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_API_LUA
   // Do the API calls.
   //
-  if (LuaVirtualMachine::IsLuaExt(szExt.c_str()))
+  if (LuaVirtualMachine::IsExt(szExt.c_str()))
   {
-    ActiveLuaAction* ala = new ActiveLuaAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto ala = new ActiveLuaAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (ala->Initialize())
     {
       return ala;
@@ -408,9 +408,9 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_API_PY
   // Do the API calls.
   //
-  if (PythonVirtualMachine::IsPyExt(szExt.c_str()))
+  if (PythonVirtualMachine::IsExt(szExt.c_str()))
   {
-    ActivePythonAction* apa = new ActivePythonAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto apa = new ActivePythonAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if(apa->Initialize() )
     { 
       return apa;
@@ -424,9 +424,9 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_PS_PLUGIN
   // Do the API calls.
   //
-  if (PowershellVirtualMachine::IsPluginExt(szExt.c_str()))
+  if (PowershellVirtualMachine::IsExt(szExt.c_str()))
   {
-    ActivePowershellAction* apa = new ActivePowershellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto apa = new ActivePowershellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
     {
       return apa;
@@ -440,9 +440,9 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_API_PLUGIN
   // Do the API calls.
   //
-  if (PluginVirtualMachine::IsPluginExt(szExt.c_str()))
+  if (PluginVirtualMachine::IsExt(szExt.c_str()))
   {
-    ActivePluginAction* apa = new ActivePluginAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto apa = new ActivePluginAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
     {
       return apa;

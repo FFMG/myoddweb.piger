@@ -247,7 +247,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   return 1;
 }
 
-bool PowershellVirtualMachine::IsPluginExt(LPCTSTR ext)
+bool PowershellVirtualMachine::IsExt(LPCTSTR ext)
 {
   return (_tcsicmp(ext, _T("ps1")) == 0);
 }

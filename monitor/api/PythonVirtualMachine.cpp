@@ -170,7 +170,7 @@ bool PythonVirtualMachine::InitializeFunctions()
  * @param LPCTSTR ext the extension we want to check
  * @return bool if the given extension can be used by this vm
  */
-bool PythonVirtualMachine::IsPyExt( LPCTSTR ext )
+bool PythonVirtualMachine::IsExt( LPCTSTR ext )
 {
   return ( _tcsicmp( ext, _T("py") ) == 0 );
 }

@@ -182,7 +182,7 @@ bool PluginVirtualMachine::Register( LPCTSTR what, void* with )
  * @param void
  * @return void
  */
-bool PluginVirtualMachine::IsPluginExt( LPCTSTR ext )
+bool PluginVirtualMachine::IsExt( LPCTSTR ext )
 {
   return ( _tcsicmp( ext, _T("amp") ) == 0 );
 }

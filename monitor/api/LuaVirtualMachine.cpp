@@ -151,7 +151,7 @@ int LuaVirtualMachine::ExecuteInThread(const MYODD_STRING& szFile, LuaApi* api)
  * @param LPCTSTR the extensions.
  * @return bool true|false if the given extension is LUA or not.
  */
-bool LuaVirtualMachine::IsLuaExt( LPCTSTR ext )
+bool LuaVirtualMachine::IsExt( LPCTSTR ext )
 {
   return ( _tcsicmp( ext, _T("lua") ) == 0 );
 }
