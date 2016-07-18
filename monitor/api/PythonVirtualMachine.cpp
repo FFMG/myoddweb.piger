@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #ifdef ACTIONMONITOR_API_PY
 
-#include "helperapi.h"
 #include "PythonVirtualMachine.h"
 #include "files\files.h"
 #include "ActionMonitor.h"
@@ -166,13 +165,13 @@ bool PythonVirtualMachine::InitializeFunctions()
 
 
 /**
- * Check if the given extension can be handled by the vm.
- * @param LPCTSTR ext the extension we want to check
- * @return bool if the given extension can be used by this vm
+ * Check if a given file extension is used by this API or not.
+ * @param const MYODD_STRING& file the file we are checking
+ * @return bool true|false if the given extension is LUA or not.
  */
-bool PythonVirtualMachine::IsExt( LPCTSTR ext )
+bool PythonVirtualMachine::IsExt(const MYODD_STRING& file )
 {
-  return ( _tcsicmp( ext, _T("py") ) == 0 );
+  return myodd::files::IsExtension(file, _T("py"));
 }
 
 /**

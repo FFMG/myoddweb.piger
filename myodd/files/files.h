@@ -19,7 +19,7 @@ void strip_extension( MYODD_STRING& f );
 void add_extension( MYODD_STRING& f, const MYODD_STRING& e, bool strip_current_if_exists );
 
 MYODD_STRING get_extension( const MYODD_STRING& f );
-bool IsExtension( const MYODD_STRING& f, const MYODD_STRING& e );
+bool IsExtension(const MYODD_STRING& fOriginal, const MYODD_STRING& fExt);
 
 // remove a leading back slash
 void RemoveLeadingBackSlash( MYODD_STRING& szPath);

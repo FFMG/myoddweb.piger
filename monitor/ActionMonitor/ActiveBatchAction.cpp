@@ -32,8 +32,6 @@ bool ActiveBatchAction::OnInitialize()
 
 void ActiveBatchAction::OnExecuteInThread()
 {
-  auto szExt = Extension();
-
   //  the file.
   auto szFile = File();
 

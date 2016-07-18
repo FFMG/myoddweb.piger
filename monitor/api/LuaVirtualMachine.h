@@ -15,7 +15,7 @@ public:
   
   int ExecuteInThread(const MYODD_STRING& szFile, LuaApi* api );
 
-  static bool IsExt( LPCTSTR ext );
+  static bool IsExt(const MYODD_STRING& file );
 
 protected:
   lua_State* CreateState(LuaApi* api );

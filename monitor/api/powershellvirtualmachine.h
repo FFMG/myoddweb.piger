@@ -13,7 +13,7 @@ public:
   virtual ~PowershellVirtualMachine();
 
   int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action);
-  static bool IsExt(LPCTSTR ext);
+  static bool IsExt(const MYODD_STRING& file);
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
 

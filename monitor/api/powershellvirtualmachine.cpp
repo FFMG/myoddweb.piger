@@ -247,9 +247,14 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   return 1;
 }
 
-bool PowershellVirtualMachine::IsExt(LPCTSTR ext)
+/**
+ * Check if a given file extension is used by this API or not.
+ * @param const MYODD_STRING& file the file we are checking
+ * @return bool true|false if the given extension is LUA or not.
+ */
+bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
 {
-  return (_tcsicmp(ext, _T("ps1")) == 0);
+  return myodd::files::IsExtension(file, _T("ps1"));
 }
 
 PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action)

@@ -14,7 +14,7 @@ public:
   bool Initialize(); 
 
   //  check the extension.
-  static bool IsExt( LPCTSTR ext );
+  static bool IsExt( const MYODD_STRING& file );
 
   PyThreadState* GetMainPyThread() const {
     return _mainThreadState;

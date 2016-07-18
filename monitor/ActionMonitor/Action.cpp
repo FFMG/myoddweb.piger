@@ -68,9 +68,6 @@ Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = nullptr  */)
       m_szFile = szPath;
     }
   }// if we have an szPath != nullptr
-
-  // and the extension
-  m_szExt = myodd::files::get_extension( m_szFile );
 }
 
 /**
@@ -97,7 +94,6 @@ const Action& Action::operator=(const Action& action)
   {
     _szCommand = action._szCommand; 
     m_szFile   = action.m_szFile;
-    m_szExt    = action.m_szExt;
   }
   return *this;
 }
@@ -118,7 +114,7 @@ Action::~Action()
  */
 void Action::Reset()
 {
-  m_szExt = m_szFile = _szCommand = _T("");
+  m_szFile = _szCommand = _T("");
 }
 
 /**
@@ -388,11 +384,10 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
   //  get the last forground window handle
   auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
 
-  const auto& szExt = Extension();
 #ifdef ACTIONMONITOR_API_LUA
   // Do the API calls.
   //
-  if (LuaVirtualMachine::IsExt(szExt.c_str()))
+  if (LuaVirtualMachine::IsExt(m_szFile ))
   {
     auto ala = new ActiveLuaAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (ala->Initialize())
@@ -408,7 +403,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_API_PY
   // Do the API calls.
   //
-  if (PythonVirtualMachine::IsExt(szExt.c_str()))
+  if (PythonVirtualMachine::IsExt(m_szFile))
   {
     auto apa = new ActivePythonAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if(apa->Initialize() )
@@ -424,7 +419,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_PS_PLUGIN
   // Do the API calls.
   //
-  if (PowershellVirtualMachine::IsExt(szExt.c_str()))
+  if (PowershellVirtualMachine::IsExt(m_szFile))
   {
     auto apa = new ActivePowershellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
@@ -440,7 +435,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_API_PLUGIN
   // Do the API calls.
   //
-  if (PluginVirtualMachine::IsExt(szExt.c_str()))
+  if (PluginVirtualMachine::IsExt(m_szFile))
   {
     auto apa = new ActivePluginAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
@@ -454,7 +449,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #endif // ACTIONMONITOR_API_PLUGIN
 
   // Batch files...
-  if( _tcsicmp(szExt.c_str(), _T("bat")) == 0)
+  if( myodd::files::IsExtension (m_szFile, _T("bat")))
   {
     return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
   }

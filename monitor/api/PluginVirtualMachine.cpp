@@ -178,13 +178,13 @@ bool PluginVirtualMachine::Register( LPCTSTR what, void* with )
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * Check if a given file extension is used by this API or not.
+ * @param const MYODD_STRING& file the file we are checking
+ * @return bool true|false if the given extension is LUA or not.
  */
-bool PluginVirtualMachine::IsExt( LPCTSTR ext )
+bool PluginVirtualMachine::IsExt(const MYODD_STRING& file )
 {
-  return ( _tcsicmp( ext, _T("amp") ) == 0 );
+  return myodd::files::IsExtension(file, _T("amp"));
 }
 
 /**

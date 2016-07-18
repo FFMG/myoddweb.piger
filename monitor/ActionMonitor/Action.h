@@ -1,10 +1,3 @@
-// Action.h: interface for the Action class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#ifndef __Action_h__
-#define __Action_h__
-
 #pragma once
 
 #include <vector>
@@ -48,14 +41,10 @@ public:
   // ----------------------------
   //  this is the full file name + extentions
   const MYODD_STRING& File() const { return m_szFile; }
-  const MYODD_STRING& Extension() const { return m_szExt; }
 
   static bool Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged, HANDLE* hProcess );
 
 private:  
   MYODD_STRING _szCommand;  //  the command line only.
-  MYODD_STRING m_szFile;     //  the full path+extention
-  MYODD_STRING m_szExt;      //  the extention
+  MYODD_STRING m_szFile;    //  the full path+extention
 };
-
-#endif // __Action_h__

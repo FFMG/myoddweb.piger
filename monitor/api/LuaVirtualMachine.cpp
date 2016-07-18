@@ -148,12 +148,12 @@ int LuaVirtualMachine::ExecuteInThread(const MYODD_STRING& szFile, LuaApi* api)
 
 /**
  * Check if a given file extension is used by this API or not.
- * @param LPCTSTR the extensions.
+ * @param const MYODD_STRING& file the file we are checking
  * @return bool true|false if the given extension is LUA or not.
  */
-bool LuaVirtualMachine::IsExt( LPCTSTR ext )
+bool LuaVirtualMachine::IsExt(const MYODD_STRING& file )
 {
-  return ( _tcsicmp( ext, _T("lua") ) == 0 );
+  return myodd::files::IsExtension(file, _T("lua"));
 }
 
 LuaApi& LuaVirtualMachine::GetApi(lua_State* lua)
