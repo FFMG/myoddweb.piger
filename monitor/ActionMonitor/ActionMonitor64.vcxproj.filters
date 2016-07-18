@@ -126,6 +126,12 @@
     <ClCompile Include="ActiveBatchAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="ActiveCmdAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveComAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -248,6 +254,12 @@
       <Filter>api</Filter>
     </ClInclude>
     <ClInclude Include="ActiveBatchAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveCmdAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveComAction.h">
       <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>

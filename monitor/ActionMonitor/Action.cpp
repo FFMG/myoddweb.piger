@@ -11,6 +11,8 @@
 #include "activepluginaction.h"
 #include "activedefaultaction.h"
 #include "activebatchaction.h"
+#include "activecmdaction.h"
+#include "activecomaction.h"
 
 #include "os\os.h"
 #include "ActivePowershellAction.h"
@@ -452,6 +454,14 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
   if( myodd::files::IsExtension (m_szFile, _T("bat")))
   {
     return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
+  }
+  if (myodd::files::IsExtension(m_szFile, _T("cmd")))
+  {
+    return new ActiveCmdAction(*this, hTopHWnd, szCommandLine);
+  }
+  if (myodd::files::IsExtension(m_szFile, _T("com")))
+  {
+    return new ActiveComAction(*this, hTopHWnd, szCommandLine);
   }
 
   // run the default action.
