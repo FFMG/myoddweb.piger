@@ -13,7 +13,7 @@ More importantly, you are in control, you can write scripts for your commands.
 
 ## Install/Setup
 
-- Go grab the [latest release](https://github.com/FFMG/myoddweb.piger/releases/tag/0.4.4.0) and install it.
+- Go grab the [latest release](https://github.com/FFMG/myoddweb.piger/releases/latest) and install it.
 - Start Piger, (last step of the setup).
 - Hold the [Caps Lock] key and type something, like 'this' and see what option appear.
 - Select "this.version" and release the [Caps Lock] key.
