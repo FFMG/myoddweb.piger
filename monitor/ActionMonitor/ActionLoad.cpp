@@ -34,6 +34,6 @@ ActionLoad::~ActionLoad()
 ActiveAction* ActionLoad::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
-  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
+  auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
   return new ActiveUserMessageAction(*this, hTopHWnd, UWM_KEYBOARD_RELOAD);
 }
