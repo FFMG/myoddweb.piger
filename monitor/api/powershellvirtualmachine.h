@@ -17,8 +17,12 @@ public:
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
 
+  void DestroyScripts();
+
 protected:
   void Initialize();
+
+  bool _initialized;
 
   std::mutex _mutex;
 
@@ -29,6 +33,9 @@ protected:
   PowershellApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();
+
+  void WaitForApi(const std::wstring& uuid);
+
 
   static bool IsPowershell3Installed();
   static bool Powershell3Path(MYODD_STRING& szPath);

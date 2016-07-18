@@ -552,3 +552,24 @@ int CActionMonitorApp::ExitInstance()
 
   return CWinApp::ExitInstance();
 }
+
+/**
+ * Destroy the active actions.
+ * @return non.
+ */
+void CActionMonitorApp::DestroyActiveActions()
+{
+#ifdef ACTIONMONITOR_API_PLUGIN
+  // We have to kill all the API plugins.
+  // they should be all done and completed.
+  auto pg = GetPluginVirtualMachine();
+  pg->DestroyPlugins();
+#endif // ACTIONMONITOR_API_PLUGIN
+
+#ifdef ACTIONMONITOR_PS_PLUGIN
+  // We have to kill all the API plugins.
+  // they should be all done and completed.
+  auto ps = GetPowershellVirtualMachine();
+  ps->DestroyScripts();
+#endif // ACTIONMONITOR_PS_PLUGIN
+}

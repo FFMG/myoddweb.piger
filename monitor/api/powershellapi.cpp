@@ -8,7 +8,9 @@
  * @param void
  * @return void
  */
-PowershellApi::PowershellApi(const ActiveAction& action) : HelperApi(action )
+PowershellApi::PowershellApi(const ActiveAction& action) : 
+  HelperApi(action ), 
+  _hProcess( nullptr )
 {
 }
 
@@ -813,4 +815,22 @@ bool PowershellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
   // success.
   ipcResponse.Add(1);
   return true;
+}
+
+/**
+ * Set this API handle.
+ * @param HANDLE process the process we are setting.
+ */
+void PowershellApi::SetHandle(HANDLE process)
+{
+  _hProcess = process;
+}
+
+/**
+ * Get the current handle value.
+ * @return HANDLE the current handle.
+ */
+HANDLE PowershellApi::GetHandle() const
+{
+  return _hProcess;
 }

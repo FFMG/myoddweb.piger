@@ -11,12 +11,23 @@
 
 #include "powershellvirtualmachine.h"
 
-PowershellVirtualMachine::PowershellVirtualMachine()
+PowershellVirtualMachine::PowershellVirtualMachine() : 
+  _initialized( false )
 {
 }
 
 PowershellVirtualMachine::~PowershellVirtualMachine()
 {
+  if (_initialized)
+  {
+    auto pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
+    if (pThis)
+    {
+      pThis->RemoveMessageHandler(*this);
+      _initialized = false;
+    }
+  }
+
   //  Remove all the apis
   RemoveApis();
 }
@@ -29,6 +40,7 @@ void PowershellVirtualMachine::Initialize()
   if( pThis )
   {
     pThis->AddMessageHandler(*this);
+    _initialized = true;
   }
 }
 
@@ -168,7 +180,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   Initialize();
 
   //  create uuid and andd it to our list.
-  std::wstring uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
+  auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
   auto psApi = AddApi(uuid, action);
 
   //  do we have powerhsell3?
@@ -177,6 +189,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
     auto errorMsg = _T("Powersell 3 is not installed, so we cannot run this script!");
     psApi->Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
+    RemoveApi(uuid);
     return 0;
   }
 
@@ -186,6 +199,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
     auto errorMsg = _T("Powersell 3 could not be found in the installed path, so we cannot run this script!");
     psApi->Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
+    RemoveApi(uuid);
     return 0;
   }
 
@@ -199,6 +213,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
     myodd::log::LogError(errorMsg);
 
     // did not find the command let
+    RemoveApi(uuid);
     return 0;
   }
 
@@ -220,22 +235,13 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
     // it seems to have run, but according to MS it is possible that we do not get a valid process.
     if (hProcess != nullptr)
     {
-      for (;;)
       {
-        // wait for it to finish... a little.
-        auto singleObject = WaitForSingleObject(hProcess, 1000);
-
-        // if we didn't timeout then something else happened.
-        if (WAIT_TIMEOUT != singleObject)
-        {
-          if (NO_ERROR != singleObject)
-          {
-            myodd::log::LogWarning(_T("There was an error running powershell : '%s'"), arguments.c_str());
-          }
-          break;
-        }
+        //  lock us in
+        myodd::threads::Lock lock(_mutex);
+        psApi->SetHandle(hProcess);
       }
-      CloseHandle(hProcess);
+      
+      WaitForApi(uuid);
     }
   }
   else
@@ -294,6 +300,10 @@ PowershellApi* PowershellVirtualMachine::FindApi(const std::wstring& uuid) const
   return it->second;
 }
 
+/**
+ * Remove a single api from our list of apis.
+ * @param const std::wstring& uuid the uuid we want to remove.
+ */
 void PowershellVirtualMachine::RemoveApi(const std::wstring& uuid)
 {
   //  lock us in
@@ -401,5 +411,94 @@ bool PowershellVirtualMachine::IsPowershell3Installed()
 
   // if the value is 1 then it is installed.
   return (dwValue == 1 );
+}
+
+/**
+* Wait for an API to complete, (or be removed).
+* @param const std::wstring& uuid the uuid that we want to wait for.
+*/
+void PowershellVirtualMachine::WaitForApi(const std::wstring& uuid)
+{
+  HANDLE hProcess = nullptr;
+  for (;;)
+  {
+    {
+      //  lock us in
+      myodd::threads::Lock lock(_mutex);
+      auto api = FindApi(uuid);
+
+      // do we have that api?
+      if( api == nullptr )
+      {
+        // no
+        return;
+      }
+
+      // get the handle.
+      hProcess = api->GetHandle();
+
+      // do we have a handle?
+      if (hProcess == nullptr)
+      {
+        // no
+        return;
+      }
+    }
+
+    // wait for it to finish... a little.
+    auto singleObject = WaitForSingleObject(hProcess, 1000);
+
+    // if we didn't timeout then something else happened.
+    if (WAIT_TIMEOUT != singleObject)
+    {
+      if (NO_ERROR != singleObject)
+      {
+        myodd::log::LogWarning(_T("There was an error running powershell.") );
+      }
+      break;
+    }
+  }
+  CloseHandle(hProcess);
+
+  // we can now remove this api
+  RemoveApi(uuid);
+}
+
+/**
+ * Destroy all the currently running scripts.
+ */
+void PowershellVirtualMachine::DestroyScripts()
+{
+  //  are we initialised?
+  if( !_initialized )
+  {
+    return;
+  }
+
+  //  lock us in
+  myodd::threads::Lock lock(_mutex);
+
+  //  close all the handles.
+  for (auto it = _apis.begin(); it != _apis.end(); ++it)
+  {
+    try
+    {
+      auto hProcess = it->second->GetHandle();
+      if( hProcess )
+      {
+        CloseHandle(hProcess);
+        it->second->SetHandle(nullptr);
+      }
+    }
+    catch (const std::exception&)
+    {
+      //  there was a problem...
+      //  but we have to carry on to delete the others.
+      myodd::log::LogError(_T("There was a problem deleting a powershellApi : %s"), it->first);
+    }
+  }
+
+  //  we can now remove the apis.
+  RemoveApis();
 }
 #endif /*ACTIONMONITOR_PS_PLUGIN*/
