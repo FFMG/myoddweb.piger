@@ -253,7 +253,7 @@ Launch the explorer and navigate to the Google site, if one or more words are hi
 	  am_execute( browser, "http://www.google.com/search?hl=en&q=" .. query, false );
 	end
 
-## Batch files
+## Batch files (*\*.bat/\*.cmd/\*.com*)
 
 Windows batch files are just executed, they have no access to any of the plugins functions.
 
@@ -262,6 +262,10 @@ Any arguments given are simply passed.
   - %0 is the path to the exe, (Actionmonitor.exe).
 
 **NB**: Any batch files are "**Elevated**" this is because almost all scripts need to be elevated to run.
+
+If you don't want the script to be elevated, simply create a lua/powershell/python script, (elevated), and call the execute command, (and don't use the elevated variable).
+
+Look at 'calc.lua' example and replace it with your own batch file. 
 
 ### Example
 
