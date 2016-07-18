@@ -943,12 +943,8 @@ LRESULT CActionMonitorDlg::OnReload
   // those are the ones created by the end Action list.
   WaitForActiveWindows();
 
-#ifdef ACTIONMONITOR_API_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  PluginVirtualMachine* pg = App().GetPluginVirtualMachine( );
-  pg->DestroyPlugins();
-#endif // ACTIONMONITOR_API_PLUGIN
+  // destroy the active actions.
+  App().DestroyActiveActions();
 
   //
   //  Restart everything.
@@ -1017,6 +1013,9 @@ void CActionMonitorDlg::OnClose()
 {
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
+
+  // destroy the active actions.
+  App().DestroyActiveActions();
 
   //  hide the main window
   ShowWindow(0);

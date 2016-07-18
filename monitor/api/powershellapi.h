@@ -37,6 +37,12 @@ public:
   bool RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
 
   bool GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+
+  void SetHandle(HANDLE process);
+  HANDLE GetHandle() const;
+
+protected:
+  HANDLE _hProcess;
 };
 
 #endif

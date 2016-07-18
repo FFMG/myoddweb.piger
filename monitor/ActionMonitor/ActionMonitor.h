@@ -114,6 +114,8 @@ protected:
 public:
   PowershellVirtualMachine* GetPowershellVirtualMachine();
 #endif
+
+  void DestroyActiveActions();
 };
 
 CActionMonitorApp& App();
