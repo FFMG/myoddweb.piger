@@ -105,18 +105,7 @@ void Test()
   CleanFileName( dirtyFileName );
   ASSERT( dirtyFileName == _T("_bad___£"));
 
-  ASSERT( is_dot( _T("." )) );
-  ASSERT( is_dot( _T(".." )) );
-  ASSERT( is_dot( _T("c:\\example\\.." )) );
-  ASSERT( is_dot( _T("c://example\\.." )) );
-  ASSERT( !is_dot( _T("c://example\\..\\root\\" )) );
-
   ASSERT( GetFileName( _T("c:\\a\\b\\something.txt"), false ) == _T("something.txt") );
-
-  ASSERT( IsURL( _T("http:\\www.google.com")) );
-  ASSERT( IsURL( _T("ftp:\\www.google.com")) );
-  ASSERT( IsURL( _T("https:\\www.google.com")) );
-  ASSERT( IsURL( _T("ftps:\\www.google.com")) );
 }
 #else
 {
@@ -339,7 +328,7 @@ void AddTrailingBackSlash( MYODD_STRING& subPath )
 bool UnExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest )
 {
   MYODD_CHAR* unExpandEd;
-  if( !myodd::files::UnExpandEnvironment( src.c_str(), unExpandEd ))
+  if( !files::UnExpandEnvironment( src.c_str(), unExpandEd ))
   {
     return false;
   }
@@ -382,11 +371,11 @@ bool UnExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
 
   //  we don't want the trailing back slash
   static MYODD_STRING appPath = GetAppPath( false );
-  if( MYODD_STRING::npos != myodd::strings::Find( lpSrc, appPath, 0, false ) )
+  if( MYODD_STRING::npos != strings::Find( lpSrc, appPath, 0, false ) )
   {
     // we have to expand the app path first
     // otherwise the drive letter will be replaced by %systemdrive%
-    stdUnDst = myodd::strings::Replace( stdSrc, appPath, FILE_APPPATH, false );
+    stdUnDst = strings::Replace( stdSrc, appPath, FILE_APPPATH, false );
     unExpandSize = stdUnDst.length();
   }
   else
@@ -435,7 +424,7 @@ bool UnExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
 bool ExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest )
 {
   MYODD_CHAR* expandEd;
-  if( !myodd::files::ExpandEnvironment( src.c_str(), expandEd ))
+  if( !files::ExpandEnvironment( src.c_str(), expandEd ))
   {
     return false;
   }
@@ -476,13 +465,13 @@ bool ExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
   MYODD_STRING stdSrc = lpSrc;
 
   // look for the %apppath% in case we need to expand it.
-  if( MYODD_STRING::npos != myodd::strings::Find( lpSrc, FILE_APPPATH, 0, false) )
+  if( MYODD_STRING::npos != strings::Find( lpSrc, FILE_APPPATH, 0, false) )
   {
     //  we don't want the trailing back slash
     static MYODD_STRING appPath = GetAppPath( false );
 
     //  replace the string
-    stdSrc = myodd::strings::Replace( stdSrc, FILE_APPPATH, appPath, false );
+    stdSrc = strings::Replace( stdSrc, FILE_APPPATH, appPath, false );
   }
 
   // Get the 'expanded' size of the argument.
@@ -491,7 +480,7 @@ bool ExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
   if( 0 == expandSize )
   {
     // there was an error, use get last error.
-    myodd::log::LogSystem( _T("ExpandEnvironment Error: %d"), ::GetLastError() );
+    log::LogSystem( _T("ExpandEnvironment Error: %d"), ::GetLastError() );
     return false;
   }
 
@@ -505,7 +494,7 @@ bool ExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
   if( ExpandEnvironmentStrings( stdSrc.c_str(), dest, expandSize ) == 0 )
   {
     // there was an error, use get last error.
-    myodd::log::LogSystem( _T("ExpandEnvironment Error2: %d"), ::GetLastError() );
+    log::LogSystem( _T("ExpandEnvironment Error2: %d"), ::GetLastError() );
 
     // simply return false as there was an error.
     // use GetLastError( ... )
@@ -716,7 +705,7 @@ bool CreateFullDirectory( const MYODD_STRING& c, bool bIsFile )
 bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
 {
   MYODD_CHAR* lpDest = nullptr;
-  if( !myodd::files::ExpandEnvironment( lpPath, lpDest ))
+  if( !files::ExpandEnvironment( lpPath, lpDest ))
   {
     return false;
   }
@@ -985,7 +974,9 @@ bool IsURL(const MYODD_CHAR* lp )
 
   try
   {
-    const MYODD_CHAR* wild = _T("^(ftps?|https?|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):.+");
+    //  https://regex101.com/
+    // ^(([a-z|0-9]+):\/\/([\/a-z|0-9]+)([\/a-z|0-9.]+)(:[0-9]{2,})?(\/.+)?)+
+    auto wild = _T("^(([a-z|0-9]+):\\/\\/([\/a-z|0-9]+)([\/a-z|0-9.]+)(:[0-9]{2,})?(.+)?)+");
     stringRegex.assign( wild, boost::regex_constants::icase);
     if (boost::regex_match(url, matches, stringRegex))
     {
@@ -1073,7 +1064,7 @@ bool GetFileInformationByName(const MYODD_CHAR* file, BY_HANDLE_FILE_INFORMATION
 {
   // expand the file.
   MYODD_CHAR* lpDest;
-  if( !myodd::files::ExpandEnvironment( file, lpDest ))
+  if( !files::ExpandEnvironment( file, lpDest ))
   {
     return false;
   }
@@ -1178,7 +1169,7 @@ MYODD_STRING GetBaseFromFile
   if( bExpand )
   {
     MYODD_CHAR* lpDest = nullptr;
-    if( !myodd::files::ExpandEnvironment( lpPath, lpDest ))
+    if( !files::ExpandEnvironment( lpPath, lpDest ))
     {
       return _T("");
     }
@@ -1254,7 +1245,7 @@ bool GetAbsolutePath
 {
   //  pass this to the other function.
   MYODD_CHAR* lpDest = nullptr;
-  if( !myodd::files::GetAbsolutePath( lpDest, stdRelative.c_str(), lpOrigin ))
+  if( !files::GetAbsolutePath( lpDest, stdRelative.c_str(), lpOrigin ))
   {
     return false;
   }
@@ -1312,8 +1303,8 @@ bool GetAbsolutePath
 
   // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
   // don't use MYODD_FILE_SEPARATOR otherwise we might not replace anything at all.
-  sOrigin = myodd::strings::Replace( sOrigin   , SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
-  sRelative = myodd::strings::Replace( sRelative, SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
+  sOrigin = strings::Replace( sOrigin   , SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
+  sRelative = strings::Replace( sRelative, SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
 
   //  will we need to add a trailing char?
   // remember we are not checking for MYODD_FILE_SEPARATOR as we replace all the "\"
@@ -1433,7 +1424,7 @@ bool GetAbsolutePath
   // putting it all together...
   // note that we use MYODD_FILE_SEPARATOR and not SEPARATOR_REPLACE
   // this is in case both are not the same.
-  MYODD_STRING imp = myodd::strings::implode( e_sClean, MYODD_FILE_SEPARATOR );
+  MYODD_STRING imp = strings::implode( e_sClean, MYODD_FILE_SEPARATOR );
   if( addtrailing )
   {
     imp += MYODD_FILE_SEPARATOR;
@@ -1507,7 +1498,7 @@ bool GetFullTempFileName( MYODD_STRING& stdFileName, const MYODD_CHAR* lpPrefix,
 bool GetFullTempFileName(MYODD_CHAR*& lpFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt )
 {
   // add a unique, random number.
-  int unique_num = myodd::math::random_range( 0, 65535 );
+  int unique_num = math::random_range( 0, 65535 );
 
   // create the return file
   MYODD_CHAR* lpTmpFile = new TCHAR[T_MAX_PATH];
@@ -1594,9 +1585,9 @@ bool GetFullTempFileName(MYODD_CHAR*& lpFullPathFileName, const MYODD_CHAR* lpFi
  * @param const MYODD_CHAR* the file we are checking.
  * @return bool if it is a directory or not
  */
-bool is_dot( const MYODD_STRING& stdFile )
+bool IsDot( const MYODD_STRING& stdFile )
 {
-  return is_dot( stdFile.c_str() );
+  return IsDot( stdFile.c_str() );
 }
 
 /**
@@ -1604,7 +1595,7 @@ bool is_dot( const MYODD_STRING& stdFile )
  * @param const MYODD_CHAR* the file we are checking.
  * @return bool if it is a directory or not
  */
-bool is_dot(const MYODD_CHAR* lpFile )
+bool IsDot(const MYODD_CHAR* lpFile )
 {
   // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
   MYODD_STRING sOrigin = lpFile;
@@ -1658,7 +1649,7 @@ MYODD_STRING GetFileName(const MYODD_CHAR* lpPath, bool bExpand /*= true*/ )
   if( bExpand )
   {
     MYODD_CHAR* lpDest = nullptr;
-    if( !myodd::files::ExpandEnvironment( lpPath, lpDest ))
+    if( !files::ExpandEnvironment( lpPath, lpDest ))
     {
       return _T("");
     }
@@ -2022,7 +2013,7 @@ size_t GetKeys
         if( lpWild )
         {
           // limit the search
-          if( !myodd::strings::wildcmp( lpWild, (*it).c_str() ))
+          if( !strings::wildcmp( lpWild, (*it).c_str() ))
           {
             continue;
           }
@@ -2191,7 +2182,7 @@ MYODD_CHAR* Byte2Char
   switch( fileEncoding )
   {
   case uni8Bit:
-    convertedString = myodd::strings::String2WString( buf );
+    convertedString = strings::String2WString( buf );
     break;
 
   case uni16BE: 
@@ -2229,7 +2220,7 @@ MYODD_CHAR* Byte2Char
       // size_t actual = pCur - (Utf8_16::ubyte*)cbuf;
 
       // convert to MYODD_CHAR
-      convertedString = myodd::strings::String2WString( cbuf );
+      convertedString = strings::String2WString( cbuf );
 
       // clean up
       delete [] cbuf;
@@ -2238,7 +2229,7 @@ MYODD_CHAR* Byte2Char
     break;
 
   default:
-    convertedString = myodd::strings::String2WString( buf );
+    convertedString = strings::String2WString( buf );
     break;
   }
 

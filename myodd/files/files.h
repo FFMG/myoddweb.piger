@@ -51,6 +51,9 @@ bool IsDirectory( const MYODD_STRING& stdDir );
 bool IsURL(const MYODD_CHAR* lp );
 bool IsURL(const MYODD_STRING& stdUrl );
 
+bool IsDot(const MYODD_STRING& stdFile);
+bool IsDot(const MYODD_CHAR* lpFile);
+
 bool FileExists( const MYODD_STRING& c );
 bool FileExists(const MYODD_CHAR* c );
 
@@ -87,9 +90,6 @@ bool GetFullTempFileName(MYODD_CHAR*& lpFileName, const MYODD_CHAR* lpPrefix, co
 
 bool GetFullTempFileName( MYODD_STRING& stdFullPathFileName, const MYODD_CHAR* lpFileName );
 bool GetFullTempFileName(MYODD_CHAR*& lpFullPathFileName, const MYODD_CHAR* lpFileName );
-
-bool is_dot( const MYODD_STRING& stdFile );
-bool is_dot(const MYODD_CHAR* lpFile );
 
 long GetFileSizeInBytes( const MYODD_STRING& stdFullPathFileName);
 
