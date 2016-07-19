@@ -120,34 +120,6 @@ void Test()
   ASSERT( IsURL( _T("ftp:\\www.google.com")) );
   ASSERT( IsURL( _T("https:\\www.google.com")) );
   ASSERT( IsURL( _T("ftps:\\www.google.com")) );
-
-  MYODD_STRING f = _T("somefile");
-  add_extension( f, _T("txt"), false );  // strip extension false.
-  ASSERT( f == _T("somefile.txt") );
-
-  f = _T("somefile");
-  add_extension( f, _T("txt"), true );    // strip extension true.
-  ASSERT( f == _T("somefile.txt") );
-
-  f = _T("somefile.old");
-  add_extension( f, _T("txt"), true );    // strip extension true.
-  ASSERT( f == _T("somefile.txt") );
-
-  f = _T("somefile.");                    // with just a dot at the end
-  add_extension( f, _T("txt"), true );    // strip extension true.
-  ASSERT( f == _T("somefile.txt") );
-
-  f = _T("somefile.old");                    // with just a dot at the end 
-  add_extension( f, _T(".txt"), true );   // strip extension true.
-  ASSERT( f == _T("somefile.txt") );
-
-  f = _T("somefile.");                    // with just a dot at the end 
-  add_extension( f, _T(".txt"), true );   // strip extension true.
-  ASSERT( f == _T("somefile.txt") );
-
-  f = _T("somefile.");                     // with just a dot at the end 
-  add_extension( f, _T(".txt"), false );   // strip extension _false_.
-  ASSERT( f == _T("somefile.txt") );
 }
 #else
 {
@@ -163,15 +135,10 @@ void Test()
  * @param bool strip the current extension if there is one.
  * @return none
  */
-void add_extension
-( 
-  MYODD_STRING& f, 
-  const MYODD_STRING& e, 
-  bool strip_current_if_exists  
-)
+void AddExtension(MYODD_STRING& filename, const MYODD_STRING& extension, bool strip_current_if_exists ) 
 {
-  _TrimDeadChars( f );
-  if( f.length() == 0 || e.length() == 0 )
+  _TrimDeadChars( filename );
+  if( filename.length() == 0 || extension.length() == 0 )
   {
     // nothing to do...
     return;
@@ -179,23 +146,23 @@ void add_extension
 
   if( true == strip_current_if_exists )
   {
-    strip_extension( f ); //  remove the current extension.
+    StripExtension(filename); //  remove the current extension.
   }
 
-  if( *f.rbegin() == _T('.') )
+  if( *filename.rbegin() == _T('.') )
   {
-    f = f.substr( 0, f.length() -1 );
+    filename = filename.substr( 0, filename.length() -1 );
   }
 
   // do we have a dot in the extension?
   // we already know the size is not 0
-  if( *e.begin() == _T('.') )
+  if( *extension.begin() == _T('.') )
   {
-    f += e;
+    filename += extension;
   }
   else
   {
-    f += _T('.') + e;
+    filename += _T('.') + extension;
   }
 }
 
@@ -211,19 +178,21 @@ void add_extension
  * @param MYODD_STRING& the string we want to remove the extension from.
  * @return none 
  */
-void strip_extension( MYODD_STRING& f )
+void StripExtension( MYODD_STRING& filename)
 {
-  _TrimDeadChars( f );
+  _TrimDeadChars(filename);
 
-  size_t result;
-  const MYODD_CHAR* pdest = _tcsrchr( f.c_str(), '.' );
+  auto charFilename = filename.c_str();
+  auto pdest = _tcsrchr(charFilename, '.' );
 
-  if( pdest != NULL )
+  if( pdest != nullptr )
   {
-    result = (pdest - (f.c_str()));
-    if( result < f.length() )
+    // we do not want to remove the extension from something like '.htaccess'
+    // this is clearly not the extension but the filename.
+    auto result = (pdest - (charFilename));
+    if( result >0 && result < filename.length() )
     {
-      f = f.substr( 0, result );
+      filename = filename.substr( 0, result );
     }
   }
 }

@@ -15,8 +15,8 @@ namespace myodd{ namespace files{
 void Test();  //  test data
 
 // remove the file extension
-void strip_extension( MYODD_STRING& f );
-void add_extension( MYODD_STRING& f, const MYODD_STRING& e, bool strip_current_if_exists );
+void StripExtension( MYODD_STRING& filename );
+void AddExtension( MYODD_STRING& filename, const MYODD_STRING& extension, bool strip_current_if_exists );
 
 MYODD_STRING get_extension( const MYODD_STRING& f );
 bool IsExtension(const MYODD_STRING& fOriginal, const MYODD_STRING& fExt);
