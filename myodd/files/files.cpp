@@ -974,12 +974,72 @@ bool IsURL(const MYODD_CHAR* lp )
 
   try
   {
-    //  https://regex101.com/
-    // ^(([a-z|0-9]+):\/\/([\/a-z|0-9]+)([\/a-z|0-9.]+)(:[0-9]{2,})?(\/.+)?)+
-    auto wild = _T("^(([a-z|0-9]+):\\/\\/([\/a-z|0-9]+)([\/a-z|0-9.]+)(:[0-9]{2,})?(.+)?)+");
-    stringRegex.assign( wild, boost::regex_constants::icase);
-    if (boost::regex_match(url, matches, stringRegex))
+    //  get the protocol and remove it.
+    // http://www.example.com becomes www.example.com
+    auto protocol = _T("^([a-z0-9]+:\\/{2}).*");
+    stringRegex.assign(protocol, boost::regex_constants::icase);
+    if (!boost::regex_match(url, matches, stringRegex))
     {
+      return false;
+    }
+    url = url.substr(matches[1].length() );
+
+    // get the domain and path
+    std::vector<MYODD_STRING> domainAndPaths;
+    if (0 == myodd::strings::Explode(domainAndPaths, url, _T('/')))
+    {
+      return false;
+    }
+
+    //  look at the domain and path(s)
+    for (auto it = domainAndPaths.begin(); it != domainAndPaths.end(); ++it)
+    {
+      if (it == domainAndPaths.begin())
+      {
+        // the first character must be a letter, a number or &#...
+        // then if we have a colon, then it must be a port number.
+        auto domain = _T("^((&#|[[:alpha:]0-9])(&#|[[:alpha:]0-9\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*(:[0-9]{2,})?)$");
+
+        //  look for username and passowrd.
+        std::vector<MYODD_STRING> usernameAndPassword;
+        if (2 == myodd::strings::Explode(usernameAndPassword, *it, _T('@'), 2 ))
+        {
+          auto usernameAndPasswordPattern = _T("^(&#|[[:alpha:]0-9\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*?(:(&#|[[:alpha:]0-9\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*?)?$");
+          stringRegex.assign(usernameAndPasswordPattern);
+          if (!boost::regex_match(usernameAndPassword[0], matches, stringRegex))
+          {
+            return false;
+          }
+
+          stringRegex.assign(domain);
+          if (!boost::regex_match(usernameAndPassword[1], matches, stringRegex))
+          {
+            return false;
+          }
+        }
+        else
+        {
+          stringRegex.assign(domain);
+          if (!boost::regex_match(*it, matches, stringRegex))
+          {
+            return false;
+          }
+        }
+      }
+      else
+      {
+        // get the path, just about every character is allowed.
+        // the order does not really matter.
+        // we should devide the path and the query/parametter and fragment.
+        auto path = _T("^[[:alpha:]0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=]$");
+        stringRegex.assign(path);
+        if (!boost::regex_match(*it, matches, stringRegex))
+        {
+          return false;
+        }
+      }
+
+      //  if we are here, then all is good!
       return true;
     }
   }

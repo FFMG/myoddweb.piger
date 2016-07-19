@@ -1,4 +1,4 @@
-#include "string/string.h"
+﻿#include "string/string.h"
 #include "files/files.h"
 #include <gtest/gtest.h>
 
@@ -79,12 +79,57 @@ INSTANTIATE_TEST_CASE_P(TestIsUrl, MyOddFilesIsUrl,
     test_istype{ L"http://localhost", true },
     test_istype{ L"http://localhost", true },
     test_istype{ L"http://localhost:9090", true },
+    test_istype{ L"h://test", true },
+    test_istype{ L"http://&#x7D0D;&#x8C46;.example.org/%E2%80%AE", true },
+
+    test_istype{ L"http://w/file.html?12=(123)#1222", true },
 
     test_istype{ L"://www.google.com", false },
     test_istype{ L"http://www.google.com:/efdere", false }, //  no port
     test_istype{ L"http://www.google.com:s/efdere", false }, //  bad port
     test_istype{ L"http://www.google.com:9s/efdere", false }, //  bad port
     test_istype{ L"http://www.google.com:8080/efdere", true } //  good port
+  ));
+
+//  http://formvalidation.io/validators/uri/
+INSTANTIATE_TEST_CASE_P(TestValidUrls, MyOddFilesIsUrl,
+  testing::Values(
+    test_istype{ L"http://foo.com/blah_blah", true },
+    test_istype{ L"http://foo.com/blah_blah/", true },
+    test_istype{ L"http://foo.com/blah_blah_(wikipedia)", true },
+    test_istype{ L"http://foo.com/blah_blah_(wikipedia)_(again)", true },
+    test_istype{ L"http://www.example.com/wpstyle/?p=364", true },
+    test_istype{ L"https://www.example.com/foo/?bar=baz&inga=42&quux", true },
+//    test_istype{ L"http://✪df.ws/123", true },
+    test_istype{ L"http://userid:password@example.com:8080", true },
+    test_istype{ L"http://userid:password@example.com:8080/", true },
+    test_istype{ L"http://userid@example.com", true },
+    test_istype{ L"http://userid@example.com/", true },
+    test_istype{ L"http://userid@example.com:8080", true },
+    test_istype{ L"http://userid@example.com:8080/", true },
+    test_istype{ L"http://userid:password@example.com", true },
+    test_istype{ L"http://userid:password@example.com/", true },
+    test_istype{ L"http://142.42.1.1/", true },
+    test_istype{ L"http://142.42.1.1:8080/", true },
+//    test_istype{ L"http://➡.ws/䨹", true },
+//    test_istype{ L"http://⌘.ws", true },
+//    test_istype{ L"http://⌘.ws/", true },
+    test_istype{ L"http://foo.com/blah_(wikipedia)#cite-1", true },
+    test_istype{ L"http://foo.com/blah_(wikipedia)_blah#cite-1", true },
+    test_istype{ L"http://foo.com/unicode_(✪)_in_parens", true },
+    test_istype{ L"http://foo.com/(something)?after=parens", true },
+//    test_istype{ L"http://☺.damowmow.com/", true },
+    test_istype{ L"http://code.google.com/events/#&product=browser", true },
+    test_istype{ L"http://j.mp", true },
+    test_istype{ L"ftp://foo.bar/baz", true },
+    test_istype{ L"http://foo.bar/?q=Test%20URL-encoded%20stuff", true },
+    test_istype{ L"http://مثال.إختبار", true }, 	
+    test_istype{ L"http://例子.测试", true },
+//    test_istype{ L"http://उदाहरण.परीक्षा", true },
+//    test_istype{ L"http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com", true },
+    test_istype{ L"http://1337.net", true },
+    test_istype{ L"http://a.b-c.de", true },
+    test_istype{ L"http://223.255.255.254", true }
   ));
 
 //  http://formvalidation.io/validators/uri/
@@ -108,7 +153,6 @@ INSTANTIATE_TEST_CASE_P(TestInvalidUrls, MyOddFilesIsUrl,
   test_istype{ L"http:///a", false },
   test_istype{ L"foo.com", false },
   test_istype{ L"rdar ://1234", false },
-  test_istype{ L"h://test", false },
   test_istype{ L"http:// shouldfail.com", false },
   test_istype{ L":// should fail", false },
   test_istype{ L"http ://foo.bar/foo(bar)baz quux", false },
