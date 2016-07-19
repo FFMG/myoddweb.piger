@@ -82,7 +82,7 @@ TEST_P(MyOddFilesGetExtension, TestGetExtension)
   auto file = GetParam().file;
   auto ext = GetParam().ext;
 
-  ASSERT_EQ(ext, myodd::files::get_extension(file));
+  ASSERT_EQ(ext, myodd::files::GetExtension(file));
 }
 
 INSTANTIATE_TEST_CASE_P(TestAddExtension, MyOddFilesAddExtension,
@@ -173,7 +173,11 @@ INSTANTIATE_TEST_CASE_P(TestGetExtension, MyOddFilesGetExtension,
     test_extension{ L"file.TxT", L"TxT", false },
     test_extension{ L"file.TXT", L"TXT", false },
     test_extension{ L"file.LONG", L"LONG", false },
-    test_extension{ L".LONG", L"LONG", false },
+    test_extension{ L"longfilename.s", L"s", false },
     test_extension{ L".a.b.c", L"c", false },
-    test_extension{ L"somefile", L"", false }
+    test_extension{ L"somefile", L"", false },
+    test_extension{ L".notanextention", L"", false },
+    test_extension{ L".dot.then.ext", L"ext", false },
+    test_extension{ L"file.verylongextension", L"verylongextension", false },
+    test_extension{ L"file.vErYlONgexTENsion", L"vErYlONgexTENsion", false }
 ));

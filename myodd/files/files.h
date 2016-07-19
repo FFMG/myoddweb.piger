@@ -18,7 +18,7 @@ void Test();  //  test data
 void StripExtension( MYODD_STRING& filename );
 void AddExtension( MYODD_STRING& filename, const MYODD_STRING& extension, bool strip_current_if_exists );
 
-MYODD_STRING get_extension( const MYODD_STRING& f );
+MYODD_STRING GetExtension( const MYODD_STRING& filename );
 bool IsExtension(const MYODD_STRING& fOriginal, const MYODD_STRING& fExt);
 
 // remove a leading back slash
@@ -77,8 +77,8 @@ MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, 
 
 MYODD_STRING GetAppPath( bool bAddTrailling =true);
 
-bool GetAbsolutePath(MYODD_CHAR*& dest, const MYODD_CHAR* lpRelative, const MYODD_CHAR* lpOrigin = NULL );
-bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& lpRelative, const MYODD_CHAR* lpOrigin = NULL );
+bool GetAbsolutePath(MYODD_CHAR*& dest, const MYODD_CHAR* lpRelative, const MYODD_CHAR* lpOrigin = nullptr);
+bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& lpRelative, const MYODD_CHAR* lpOrigin = nullptr);
 
 void CleanFileName( MYODD_STRING& dirtyFileName );
 
@@ -98,7 +98,7 @@ size_t GetKeys
   const MYODD_CHAR* lpFileName,
   std::vector<MYODD_STRING>& tokens,
   const MYODD_CHAR* lpAppName,
-  const MYODD_CHAR* lpWild =NULL
+  const MYODD_CHAR* lpWild = nullptr
 );
 
 enum FileEncode {
@@ -113,7 +113,7 @@ enum FileEncode {
   uniEnd
 };
 
-FileEncode DetermineEncoding(const MYODD_CHAR* file, int* npSkip = NULL );
+FileEncode DetermineEncoding(const MYODD_CHAR* file, int* npSkip = nullptr );
 MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos = -1, __int64 nEndPos = -1 );
 
 MYODD_CHAR* Byte2Char( const char* buf, size_t len, FileEncode fileEncoding );
@@ -124,7 +124,7 @@ void Join( MYODD_STRING& returnPath, const MYODD_STRING& pathPartA, const MYODD_
 class Version
 {
 public:
-  Version(const MYODD_CHAR* lpFileName = NULL );
+  Version(const MYODD_CHAR* lpFileName = nullptr);
   virtual ~Version();
 
   unsigned short GetFileVersionMajor()        const{ return m_fileVersionMajor;}

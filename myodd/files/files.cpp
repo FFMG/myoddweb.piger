@@ -50,33 +50,30 @@ void Test()
   ASSERT( GetBaseFromFile( _T("test.txt" ) ) == MYODD_FILE_SEPARATOR );
   ASSERT( GetBaseFromFile( _T("C:\\dir/test.txt" ) ) == _T("C:\\dir\\"));
   ASSERT( GetBaseFromFile( _T("C:\\" ) ) == _T("C:\\"));
-
-  ASSERT( get_extension( _T("somefile.txt") ) == _T("txt") );
-  ASSERT( get_extension( _T("somefile.txt") ) != _T("ftp") );
   
-  MYODD_CHAR* lpdest = NULL;
+  MYODD_CHAR* lpdest = nullptr;
   ASSERT( GetAbsolutePath( lpdest, _T( "../../somefile.txt" ), _T( "c:\\dira\\dirb\\" ) ) );
   ASSERT( _tcsicmp( lpdest, _T("c:\\somefile.txt") ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
 
   ASSERT( GetAbsolutePath( lpdest, _T( "C:\\Documents and Settings\\All Users\\.\\Application Data\\..\\..\\" ) ) );
   ASSERT( _tcsicmp( lpdest, _T( "C:\\Documents and Settings\\" ) ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
   ASSERT( GetAbsolutePath( lpdest, _T( "C:\\Documents and Settings\\All Users\\Application Data\\..\\" ) ) );
   ASSERT( _tcsicmp( lpdest, _T( "C:\\Documents and Settings\\All Users\\" ) ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
   ASSERT( GetAbsolutePath( lpdest, _T( "C:\\Documents and Settings\\All Users\\Application Data\\..\\Application Data\\" ) ) );
   ASSERT( _tcsicmp( lpdest, _T( "C:\\Documents and Settings\\All Users\\Application Data\\" ) ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
 
   ASSERT( GetAbsolutePath( lpdest, _T("somepath2\\"), _T( "C:\\somepath1\\" ) ) );
   ASSERT( _tcsicmp( lpdest, _T( "C:\\somepath1\\somepath2\\" ) ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
 
 
   // this should not work because of the depth of the path
@@ -89,12 +86,12 @@ void Test()
   ASSERT( ExpandEnvironment( _T("%AppPath%"), lpdest ) );   //  case insensitive
   ASSERT( _tcsicmp( lpdest, appPath.c_str() ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
   ASSERT( ExpandEnvironment( _T("%AppPath%\\somedir\\somefile.txt"), lpdest ) );   //  case insensitive
   MYODD_STRING s = appPath + _T("\\somedir\\somefile.txt" );
   ASSERT( _tcsicmp( lpdest, s.c_str() ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
 
   ASSERT( UnExpandEnvironment( _T("%systemdrive%"), lpdest ) );
   delete [] lpdest;
@@ -102,7 +99,7 @@ void Test()
   ASSERT( UnExpandEnvironment( appPath.c_str(), lpdest ) );
   ASSERT( _tcsicmp( lpdest, FILE_APPPATH ) == 0 );
   delete [] lpdest;
-  lpdest = NULL;
+  lpdest = nullptr;
 
   MYODD_STRING dirtyFileName = _T("[bad]^*£");
   CleanFileName( dirtyFileName );
@@ -202,13 +199,22 @@ void StripExtension( MYODD_STRING& filename)
  * @param MYODD_STRING the file name
  * @return MYODD_STRING the extension, (or empty string if there are none).
  */
-MYODD_STRING get_extension( const MYODD_STRING& fOriginal )
+MYODD_STRING GetExtension( const MYODD_STRING& filename )
 {
-  MYODD_STRING f( fOriginal );
-  _TrimDeadChars( f );
+  // make a copy so we can strip the dead characters.
+  auto filenameCopy(filename);
+  _TrimDeadChars(filenameCopy);
 
-  const MYODD_CHAR* pdest = _tcsrchr( f.c_str(), '.' );
-  return (pdest ? MYODD_STRING(pdest+1) : _T(""));
+  // look for the last '.'
+  auto pos = filenameCopy.find_last_of( _T('.') );
+
+  // we don't want to return extensions like 'htaccess' from a file '.htaccess'
+  // this is because the file name itself is '.htaccess' with no extention.
+#ifdef _UNICODE
+  return (pos > 0 && pos != std::wstring::npos ? filenameCopy.substr( pos+1 ) : L"" );
+#else
+  return (pos > 0 && pos != std::string::npos ? filenameCopy.substr(pos + 1) : "");
+#endif
 }
 
 /**
@@ -458,8 +464,8 @@ bool ExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest )
  */
 bool ExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
 {
-  dest = NULL;
-  if( NULL == lpSrc || _tcslen( lpSrc ) == 0  )
+  dest = nullptr;
+  if(nullptr == lpSrc || _tcslen( lpSrc ) == 0  )
   {
     // no error, just nothing to do really.
     return true;
@@ -504,7 +510,7 @@ bool ExpandEnvironment(const MYODD_CHAR* lpSrc, MYODD_CHAR*& dest )
     // simply return false as there was an error.
     // use GetLastError( ... )
     delete [] dest;
-    dest = NULL;
+    dest = nullptr;
     return false;
   }
 
@@ -531,7 +537,7 @@ bool DeleteFile( const MYODD_STRING& c )
  */
 bool DeleteFile(const MYODD_CHAR* c )
 {
-  MYODD_CHAR* lpExpand = NULL;
+  MYODD_CHAR* lpExpand = nullptr;
   if( !ExpandEnvironment( c, lpExpand ) )
   {
     //  could not even expand that file.
@@ -552,7 +558,7 @@ bool DeleteFile(const MYODD_CHAR* c )
  * Copy a file to a new file.
  * @param const MYODD_STRING& the existing filename 
  * @param const MYODD_STRING& the name of the new file.
- * @param unsigned long* if not NULL we will pass the last error code
+ * @param unsigned long* if not nullptr we will pass the last error code
  * @return bool success or not.
  */
 bool CopyFile( const MYODD_STRING& lpExistingFileName, const MYODD_STRING& lpNewFileName, unsigned long* dwErr /*= 0*/ )
@@ -564,7 +570,7 @@ bool CopyFile( const MYODD_STRING& lpExistingFileName, const MYODD_STRING& lpNew
 * Copy a file to a new file.
 * @param const MYODD_STRING& the existing filename 
 * @param const MYODD_STRING& the name of the new file.
-* @param unsigned long* if not NULL we will pass the last error code
+* @param unsigned long* if not nullptr we will pass the last error code
 * @return bool success or not.
 */
 bool CopyFile(const MYODD_CHAR* lpExistingFileName, LPCTSTR lpNewFileName, unsigned long* dwErr /*= 0*/ )
@@ -634,7 +640,7 @@ bool FileExists( const MYODD_STRING& c )
  */
 bool FileExists(const MYODD_CHAR* c )
 {
-  MYODD_CHAR* lpExpand = NULL;
+  MYODD_CHAR* lpExpand = nullptr;
   if( !ExpandEnvironment( c, lpExpand ) )
   {
     // we could not even expand the file.
@@ -709,7 +715,7 @@ bool CreateFullDirectory( const MYODD_STRING& c, bool bIsFile )
  */
 bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
 {
-  MYODD_CHAR* lpDest = NULL;
+  MYODD_CHAR* lpDest = nullptr;
   if( !myodd::files::ExpandEnvironment( lpPath, lpDest ))
   {
     return false;
@@ -758,13 +764,13 @@ bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
   // now go back and create the parent directory.
   int r1 = -1, r2 = -1;
   const MYODD_CHAR* p1 = _tcsrchr( tmpDir, '\\' );
-  if( p1 != NULL )
+  if( p1 != nullptr)
   {
     r1 = (int)(p1 - tmpDir + 1);
   }
 
   const MYODD_CHAR* p2 = _tcsrchr( tmpDir, '/' );
-  if( p2 != NULL )
+  if( p2 != nullptr)
   {
     r2 = (int)(p2 - tmpDir + 1);
   }
@@ -773,7 +779,7 @@ bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
   {
     // this looks like a relative path
     // so we just create the directory from where ever we are.
-    return (CreateDirectory( tmpDir, NULL )?true:false);
+    return (CreateDirectory( tmpDir, nullptr)?true:false);
   }
   else if( r1 > r2 )
   {
@@ -804,7 +810,7 @@ bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
 
   // if we are here it worked and we are a directory, (all the sub directories were created).
   // all we need to do is to create our directory
-  bool bResult = (CreateDirectory( lpDest, NULL )?true:false);
+  bool bResult = (CreateDirectory( lpDest, nullptr)?true:false);
   delete [] lpDest;
   return bResult;
 }
@@ -832,7 +838,7 @@ bool IsFile(const MYODD_CHAR* lp )
 {
   // expand the string.
   // the user could have passed environment variables.
-  MYODD_CHAR* lpExpand = NULL;
+  MYODD_CHAR* lpExpand = nullptr;
   if( !ExpandEnvironment( lp, lpExpand ) )
   {
     // something broke
@@ -840,7 +846,7 @@ bool IsFile(const MYODD_CHAR* lp )
   }
 
   // if the value was empty we have nothing
-  if( NULL == lpExpand )
+  if(nullptr == lpExpand )
   {
     return false;
   }
@@ -893,7 +899,7 @@ bool IsDirectory(const MYODD_CHAR* lp )
 {
   // expand the string.
   // the user could have passed environment variables.
-  MYODD_CHAR* lpExpand = NULL;
+  MYODD_CHAR* lpExpand = nullptr;
   if( !ExpandEnvironment( lp, lpExpand ) )
   {
     // something broke
@@ -902,7 +908,7 @@ bool IsDirectory(const MYODD_CHAR* lp )
   }
 
   // if the value was empty we have nothing
-  if( NULL == lpExpand )
+  if(nullptr == lpExpand )
   {
     return false;
   }
@@ -1077,7 +1083,7 @@ bool GetFileInformationByName(const MYODD_CHAR* file, BY_HANDLE_FILE_INFORMATION
   if ((hSrcFile = CreateFile(lpDest,  
                              GENERIC_READ, 
                              FILE_SHARE_READ,
-                             NULL, 
+                             nullptr, 
                              OPEN_EXISTING, 0, 0)) == INVALID_HANDLE_VALUE)
   {
     delete [] lpDest;
@@ -1171,7 +1177,7 @@ MYODD_STRING GetBaseFromFile
   memset( tmpDir, 0, T_MAX_PATH+1 );
   if( bExpand )
   {
-    MYODD_CHAR* lpDest = NULL;
+    MYODD_CHAR* lpDest = nullptr;
     if( !myodd::files::ExpandEnvironment( lpPath, lpDest ))
     {
       return _T("");
@@ -1187,13 +1193,13 @@ MYODD_STRING GetBaseFromFile
   // now go back and create the parent directory.
   int r1 = -1, r2 = -1;
   const MYODD_CHAR* p1 = _tcsrchr( tmpDir, '\\' );
-  if( p1 != NULL )
+  if( p1 != nullptr)
   {
     r1 = (int)(p1 - tmpDir + 1);
   }
 
   const MYODD_CHAR* p2 = _tcsrchr( tmpDir, '/' );
-  if( p2 != NULL )
+  if( p2 != nullptr)
   {
     r2 = (int)(p2 - tmpDir + 1);
   }
@@ -1236,18 +1242,18 @@ MYODD_STRING GetBaseFromFile
 * It is up to the user to delete the container value.
 * @param MYODD_STRING& container for the return value, unset in case of error. 
 * @param const MYODD_STRING& the relative path we would like to get the absolute path from.
-* @param const MYODD_CHAR* the original path, if NULL we will use the current directory as origin.
+* @param const MYODD_CHAR* the original path, if nullptr we will use the current directory as origin.
 * @return bool if we were able to get the absolute path, false if the given path is unrealistic/impossible.
 */
 bool GetAbsolutePath
 ( 
  MYODD_STRING& dest, 
  const MYODD_STRING& stdRelative, 
-  const MYODD_CHAR* lpOrigin /*= NULL*/
+  const MYODD_CHAR* lpOrigin /*= nullptr*/
  )
 {
   //  pass this to the other function.
-  MYODD_CHAR* lpDest = NULL;
+  MYODD_CHAR* lpDest = nullptr;
   if( !myodd::files::GetAbsolutePath( lpDest, stdRelative.c_str(), lpOrigin ))
   {
     return false;
@@ -1265,18 +1271,18 @@ bool GetAbsolutePath
  * It is up to the user to delete the container value.
  * @param MYODD_CHAR*& container for the return value, unset in case of error. 
  * @param const MYODD_CHAR* the relative path we would like to get the absolute path from.
- * @param const MYODD_CHAR* the original path, if NULL we will use the current directory as origin.
+ * @param const MYODD_CHAR* the original path, if nullptr we will use the current directory as origin.
  * @return bool if we were able to get the absolute path, false if the given path is unrealistic/impossible.
  */
 bool GetAbsolutePath
 ( 
   MYODD_CHAR*& dest,
   const MYODD_CHAR* lpRelative,
-  const MYODD_CHAR* lpOrigin /*= NULL*/
+  const MYODD_CHAR* lpOrigin /*= nullptr*/
 )
 {
-  dest = NULL;
-  if( NULL == lpRelative )
+  dest = nullptr;
+  if(nullptr == lpRelative )
   {
     //  we need a relative path to work with.
     return false;
@@ -1284,7 +1290,7 @@ bool GetAbsolutePath
 
   MYODD_STRING sRelative( lpRelative );
   MYODD_STRING sOrigin( _T("") );
-  if( NULL == lpOrigin )
+  if(nullptr == lpOrigin )
   {
     MYODD_CHAR lpBuffer[ T_MAX_PATH ] = {0};
     if( 0 == ::GetCurrentDirectory( T_MAX_PATH, lpBuffer ) )
@@ -1370,7 +1376,7 @@ bool GetAbsolutePath
         {
           MYODD_STRING absolute = dest;
           delete [] dest;
-          dest = NULL;
+          dest = nullptr;
 
           return UnExpandEnvironment( absolute.c_str(), dest );
         }
@@ -1468,14 +1474,14 @@ void CleanFileName( MYODD_STRING& dirtyFileName )
  * Create a temp filename and return the FULL path
  * The file will be be unique
  * @param MYODD_STRING& the return value.
- * @param const MYODD_CHAR* the prefix or NULL if no prefix is needed.
- * @param const MYODD_CHAR* the prefix or NULL if no extension is needed, (if NULL '.tmp' will be added).
+ * @param const MYODD_CHAR* the prefix or nullptr if no prefix is needed.
+ * @param const MYODD_CHAR* the prefix or nullptr if no extension is needed, (if nullptr '.tmp' will be added).
  * @return bool success or not if there was an error
  */
 bool GetFullTempFileName( MYODD_STRING& stdFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt )
 {
   // use the MYODD_STRING function.
-  MYODD_CHAR* lpFileName = NULL;
+  MYODD_CHAR* lpFileName = nullptr;
   if( !GetFullTempFileName( lpFileName, lpPrefix, lpExt ) )
   {
     return false;
@@ -1494,8 +1500,8 @@ bool GetFullTempFileName( MYODD_STRING& stdFileName, const MYODD_CHAR* lpPrefix,
  * Create a temp filename and return the FULL path
  * The file will be be unique
  * @param MYODD_CHAR*& the return value, the calling function will need to delete that value.
- * @param const MYODD_CHAR* the prefix or NULL if no prefix is needed.
- * @param const MYODD_CHAR* the prefix or NULL if no extension is needed, (if NULL '.tmp' will be added).
+ * @param const MYODD_CHAR* the prefix or nullptr if no prefix is needed.
+ * @param const MYODD_CHAR* the prefix or nullptr if no extension is needed, (if nullptr '.tmp' will be added).
  * @return bool success or not if there was an error
  */
 bool GetFullTempFileName(MYODD_CHAR*& lpFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt )
@@ -1505,9 +1511,9 @@ bool GetFullTempFileName(MYODD_CHAR*& lpFileName, const MYODD_CHAR* lpPrefix, co
 
   // create the return file
   MYODD_CHAR* lpTmpFile = new TCHAR[T_MAX_PATH];
-  _stprintf_s( lpTmpFile, T_MAX_PATH, _T("%s%05d.%s"), (lpPrefix == NULL ? _T("~myodd") : lpPrefix),
+  _stprintf_s( lpTmpFile, T_MAX_PATH, _T("%s%05d.%s"), (lpPrefix == nullptr ? _T("~myodd") : lpPrefix),
                                                         unique_num,
-                                                       (lpExt == NULL ? _T("tmp") : lpExt)
+                                                       (lpExt == nullptr ? _T("tmp") : lpExt)
              );
   bool bResult = GetFullTempFileName( lpFileName, lpTmpFile ); 
 
@@ -1530,7 +1536,7 @@ bool GetFullTempFileName(MYODD_CHAR*& lpFileName, const MYODD_CHAR* lpPrefix, co
  */
 bool GetFullTempFileName( MYODD_STRING& stdFullPathFileName, const MYODD_CHAR* lpFileName )
 {
-  MYODD_CHAR* lpFullPathFileName = NULL;
+  MYODD_CHAR* lpFullPathFileName = nullptr;
   if( !GetFullTempFileName( lpFullPathFileName, lpFileName ) )
   {
     return false;
@@ -1651,7 +1657,7 @@ MYODD_STRING GetFileName(const MYODD_CHAR* lpPath, bool bExpand /*= true*/ )
   memset( tmpDir, 0, T_MAX_PATH+1 );
   if( bExpand )
   {
-    MYODD_CHAR* lpDest = NULL;
+    MYODD_CHAR* lpDest = nullptr;
     if( !myodd::files::ExpandEnvironment( lpPath, lpDest ))
     {
       return _T("");
@@ -1667,13 +1673,13 @@ MYODD_STRING GetFileName(const MYODD_CHAR* lpPath, bool bExpand /*= true*/ )
   // now go back and create the parent directory.
   int r1 = -1, r2 = -1;
   const MYODD_CHAR* p1 = _tcsrchr( tmpDir, '\\' );
-  if( p1 != NULL )
+  if( p1 != nullptr)
   {
     r1 = (int)(p1 - tmpDir + 1);
   }
 
   const MYODD_CHAR* p2 = _tcsrchr( tmpDir, '/' );
-  if( p2 != NULL )
+  if( p2 != nullptr)
   {
     r2 = (int)(p2 - tmpDir + 1);
   }
@@ -1698,14 +1704,14 @@ MYODD_STRING GetFileName(const MYODD_CHAR* lpPath, bool bExpand /*= true*/ )
 /**
  * Get the file encoding
  * @param const MYODD_CHAR* the file we are checking.
- * @param int* if not NULL we will set the number of characters to skip
+ * @param int* if not nullptr we will set the number of characters to skip
  * @return FileEncode the file encoding.
  */
 FileEncode DetermineEncoding(const MYODD_CHAR* file, int* npSkip )
 {
   if( npSkip )
     *npSkip = 0;
-  if( NULL == file )
+  if(nullptr == file )
   {
     assert( 0 ); //  what are we trying to do?
     return uniError;
@@ -1750,12 +1756,12 @@ FileEncode DetermineEncoding(const MYODD_CHAR* file, int* npSkip )
     encoding = uniUTF8;
     nSkip = 3;
   }
-  else if (nLen >= 2 && b[0] != NULL && b[1] == NULL && IsTextUnicode(b, (int)nLen, NULL))
+  else if (nLen >= 2 && b[0] != NULL && b[1] == NULL && IsTextUnicode(b, static_cast<int>(nLen), nullptr))
   {
     encoding = uni16LE_NoBOM;
     nSkip = 0;
   }
-  else if (nLen >= 2 && IsTextUnicode(b, (int)nLen, NULL))
+  else if (nLen >= 2 && IsTextUnicode(b, (int)nLen, nullptr))
   {
     encoding = uniUTF8NoBOM;
     nSkip = 0;
@@ -1776,14 +1782,14 @@ FileEncode DetermineEncoding(const MYODD_CHAR* file, int* npSkip )
  * @param const MYODD_CHAR* the file we want to read.
  * @param __int64 the start position we want to read from
  * @param __int64 the end position we want to read to.
- * @return MYODD_CHAR* the data or NULL if there was an error.
+ * @return MYODD_CHAR* the data or nullptr if there was an error.
  */
 MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos, __int64 nEndPos )
 {
   // sanity check
-  if( NULL == file )
+  if(nullptr == file )
   {
-    return NULL;
+    return nullptr;
   }
 
   // get the file encoding.
@@ -1792,7 +1798,7 @@ MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos, __int64 nEndPos 
 
   FILE* fp = 0;
   errno_t err = _tfopen_s( &fp, file, _T("rb" ));
-  if ( err || NULL == fp )
+  if ( err || nullptr == fp )
   {
     // could not open the file.
     return nullptr;
@@ -1826,14 +1832,14 @@ MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos, __int64 nEndPos 
   _fseeki64( fp, nStartPos+nSkip, SEEK_SET );
 
   // create the return buffer.
-  MYODD_CHAR* tbuf_ = NULL;
+  MYODD_CHAR* tbuf_ = nullptr;
   try
   {
     // @Todo this could be a problem here when length is longer than (size_t)-1
     // this will almost certainly never happen as the amount of memory needed would
     // probably exceed the amount of memory available.
     char* buf = new char[ (size_t)length+1 ]; 
-    if( NULL != buf )
+    if(nullptr != buf )
     {
       // @Todo this could be a problem here when length is longer than (size_t)-1
       // this will almost certainly never happen as the amount of memory needed would
@@ -1851,7 +1857,7 @@ MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos, __int64 nEndPos 
   catch( ... )
   {
     // are we out of memory?
-    tbuf_ = NULL;
+    tbuf_ = nullptr;
   }
   // we are done here
   fclose( fp );
@@ -1874,7 +1880,7 @@ void Join( MYODD_STRING& returnPath, const MYODD_STRING& pathPartA, const MYODD_
 }
 
 // --------------------------------------------------------------------------------------------------
-Version::Version(const MYODD_CHAR* lpFileName /*= NULL*/ )
+Version::Version(const MYODD_CHAR* lpFileName /*= nullptr*/ )
 {
   if( lpFileName )
   {
@@ -1884,7 +1890,7 @@ Version::Version(const MYODD_CHAR* lpFileName /*= NULL*/ )
   {
     MYODD_CHAR	strTempBuffer[ MAX_PATH ];
     // Retrieve the fully-qualified path from the current process
-    if ( NULL != ::GetModuleFileName( NULL,	// Current module
+    if ( NULL != ::GetModuleFileName(nullptr,	// Current module
                                       strTempBuffer,
                                       MAX_PATH ) )
     {
@@ -1916,7 +1922,7 @@ void Version::DetermineFileVersion(const MYODD_CHAR* lpFileName )
   // for a specified file.
   unsigned long	dwFileVersionInfoSize = GetFileVersionInfoSize( lpFileName, &dwHandle );
 
-  if ( NULL == dwFileVersionInfoSize )
+  if (NULL == dwFileVersionInfoSize )
   {
     return;	// Can't retrieve version information size.
   }
@@ -1963,10 +1969,10 @@ void Version::DetermineFileVersion(const MYODD_CHAR* lpFileName )
   // get the last time we wrote to the file.
   FILETIME fileTime = {0};
   HANDLE hFile = CreateFile(lpFileName, GENERIC_READ, FILE_SHARE_READ,
-                                      NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
   if( hFile ) 
   {
-    if( 0 != GetFileTime( hFile, NULL, NULL, &fileTime ) )
+    if( 0 != GetFileTime( hFile, nullptr, nullptr, &fileTime ) )
     {
       FileTimeToSystemTime(&fileTime, &m_fileSystemFime); 
     }
@@ -1978,8 +1984,8 @@ void Version::DetermineFileVersion(const MYODD_CHAR* lpFileName )
  * Get all the app keys from a .cfg filename.
  * @param const MYODD_CHAR* the name of the file
  * @param std::vector<MYODD_STRING>& the various keys.
- * @param const MYODD_CHAR* the app name, NULL if we want all the keys.
- * @param const MYODD_CHAR* | NULL the wild search to limit certain keys only or NULL to get all the keys.
+ * @param const MYODD_CHAR* the app name, nullptr if we want all the keys.
+ * @param const MYODD_CHAR* | nullptr the wild search to limit certain keys only or nullptr to get all the keys.
  * @return std::vector<MYODD_STRING> list of all the keys or some that match the seatch.
  */
 size_t GetKeys
@@ -1987,7 +1993,7 @@ size_t GetKeys
   const MYODD_CHAR* lpFileName,
   std::vector<MYODD_STRING>& tokens,
   const MYODD_CHAR* lpAppName,
-  const MYODD_CHAR* lpWild /*=NULL*/
+  const MYODD_CHAR* lpWild /*=nullptr*/
 )
 {
   tokens.clear();
@@ -1997,7 +2003,7 @@ size_t GetKeys
   while( true )
   {
     MYODD_CHAR* keys = new TCHAR[ keys_size ];
-    auto nLen = ::GetPrivateProfileString( lpAppName, NULL, _T(""), keys, keys_size, lpFileName );
+    auto nLen = ::GetPrivateProfileString( lpAppName, nullptr, _T(""), keys, keys_size, lpFileName );
     if( (keys_size-2) == nLen )
     {
       keys_size+=T_MAX_PATH;
@@ -2099,9 +2105,9 @@ Utf16_Iter::Utf16_Iter()
 
 void Utf16_Iter::reset()
 {
-  m_pBuf = NULL;
-  m_pRead = NULL;
-  m_pEnd = NULL;
+  m_pBuf = nullptr;
+  m_pRead = nullptr;
+  m_pEnd = nullptr;
   m_eState = eStart;
   m_nCur = 0;
   m_nCur16 = 0;
