@@ -129,7 +129,9 @@ INSTANTIATE_TEST_CASE_P(TestValidUrls, MyOddFilesIsUrl,
     test_istype{ L"http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com", true },
     test_istype{ L"http://1337.net", true },
     test_istype{ L"http://a.b-c.de", true },
-    test_istype{ L"http://223.255.255.254", true }
+    test_istype{ L"http://223.255.255.254", true },
+    test_istype{ L"ftp://foo:@host.com/", true },// null password is allowed.
+    test_istype{ L"ftp://anonymous@ftp.mozilla.org/", true} // no password
   ));
 
 //  http://formvalidation.io/validators/uri/
