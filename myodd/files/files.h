@@ -75,10 +75,10 @@ bool GetFileInformationByName(const MYODD_CHAR* file, BY_HANDLE_FILE_INFORMATION
 MYODD_STRING GetFileName(const MYODD_CHAR* lpPath, bool bExpand = true );
 MYODD_STRING GetFileName( const MYODD_STRING& stdPath, bool bExpand = true );
 
-MYODD_STRING GetBaseFromFile(const MYODD_CHAR* lpPath, bool bExpand = true, bool bAddTrailling = true );
-MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, bool bAddTrailling = true );
+MYODD_STRING GetBaseFromFile(const MYODD_CHAR* lpPath, bool bExpand = true, bool bAddTrailing = true );
+MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, bool bAddTrailing = true );
 
-MYODD_STRING GetAppPath( bool bAddTrailling =true);
+MYODD_STRING GetAppPath( bool bAddTrailing =true);
 
 bool GetAbsolutePath(MYODD_CHAR*& dest, const MYODD_CHAR* lpRelative, const MYODD_CHAR* lpOrigin = nullptr);
 bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& lpRelative, const MYODD_CHAR* lpOrigin = nullptr);

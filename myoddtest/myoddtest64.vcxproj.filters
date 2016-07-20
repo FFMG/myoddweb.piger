@@ -79,5 +79,8 @@
     <ClCompile Include="files\testfiles_is.cpp">
       <Filter>myodd\files</Filter>
     </ClCompile>
+    <ClCompile Include="files\testfiles_basefromfile.cpp">
+      <Filter>myodd\files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

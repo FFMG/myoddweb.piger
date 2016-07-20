@@ -44,13 +44,6 @@ namespace myodd{ namespace files{
 void Test()
 #ifdef _DEBUG
 {
-  ASSERT( GetBaseFromFile( _T("c:\\a\\b\\something.txt"), false ) == _T("c:\\a\\b\\") );
-  ASSERT( GetBaseFromFile( _T("c:\\a\\b\\something.txt"), false, false ) == _T("c:\\a\\b") );
-  ASSERT( GetBaseFromFile( _T("C:\\test.txt" ) ) == _T("C:\\"));
-  ASSERT( GetBaseFromFile( _T("test.txt" ) ) == MYODD_FILE_SEPARATOR );
-  ASSERT( GetBaseFromFile( _T("C:\\dir/test.txt" ) ) == _T("C:\\dir\\"));
-  ASSERT( GetBaseFromFile( _T("C:\\" ) ) == _T("C:\\"));
-  
   MYODD_CHAR* lpdest = nullptr;
   ASSERT( GetAbsolutePath( lpdest, _T( "../../somefile.txt" ), _T( "c:\\dira\\dirb\\" ) ) );
   ASSERT( _tcsicmp( lpdest, _T("c:\\somefile.txt") ) == 0 );
@@ -1218,17 +1211,17 @@ MYODD_STRING GetAppPath( bool bAddtrailing /*=true*/)
  * @see GetFileName( ... ) for the file name
  * @param const MYODD_CHAR* the full path we are getting.
  * @param bool if we want to expand the string or not, used to prevent recursive calls.
- * @param bool add a trailling backslash or not.
+ * @param bool add a trailing backslash or not.
  * @return MYODD_STRING the directory of the file given
  */
 MYODD_STRING GetBaseFromFile
 ( 
   const MYODD_STRING& stdPath, 
   bool bExpand /*= true*/,
-  bool bAddTrailling /*= true*/
+  bool bAddTrailing /*= true*/
 )
 {
-  return GetBaseFromFile( stdPath.c_str(), bExpand, bAddTrailling );
+  return GetBaseFromFile( stdPath.c_str(), bExpand, bAddTrailing );
 }
 
 /**
@@ -1243,7 +1236,7 @@ MYODD_STRING GetBaseFromFile
 ( 
   const MYODD_CHAR* lpPath,
   bool bExpand /*= true*/, 
-  bool bAddTrailling /*= true*/ 
+  bool bAddTrailing /*= true*/ 
 )
 {
   // expand the full path
@@ -1300,7 +1293,7 @@ MYODD_STRING GetBaseFromFile
   }
 
   MYODD_STRING s = ( tmpDir );
-  if( bAddTrailling )
+  if( bAddTrailing )
   {
     //  we have to add the trailing in case there was none to start with.
     AddTrailingBackSlash( s );
