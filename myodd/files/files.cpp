@@ -998,13 +998,13 @@ bool IsURL(const MYODD_CHAR* lp )
       {
         // the first character must be a letter, a number or &#...
         // then if we have a colon, then it must be a port number.
-        auto domain = _T("^((&#|[[:alpha:]0-9])(&#|[[:alpha:]0-9\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*(:[0-9]{2,})?)$");
+        auto domain = _T("^((&#|[[:alnum:]\\-_])(&#|[[:alnum:]\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*(:[0-9]{2,})?)$");
 
         //  look for username and passowrd.
         std::vector<MYODD_STRING> usernameAndPassword;
         if (2 == myodd::strings::Explode(usernameAndPassword, *it, _T('@'), 2 ))
         {
-          auto usernameAndPasswordPattern = _T("^(&#|[[:alpha:]0-9\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*?(:(&#|[[:alpha:]0-9\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*?)?$");
+          auto usernameAndPasswordPattern = _T("^[^:]*(:.*)?");
           stringRegex.assign(usernameAndPasswordPattern);
           if (!boost::regex_match(usernameAndPassword[0], matches, stringRegex))
           {
