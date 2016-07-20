@@ -796,171 +796,22 @@ bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
 }
 
 /**
- * Check if the string given is a valid existing file on the drive.
- * the string is expanded.
- *
- * @param const MYODD_STRING& stdFile the string we are checking for.
- * @return bool true|false if it is a file or not.
- */
-bool IsFile(const MYODD_STRING& stdFile)
-{
-  return IsFile(stdFile.c_str());
-}
-
-/**
- * Check if the string given is a valid existing file on the drive.
- * the string is expanded.
- *
- * @param const MYODD_CHAR* the string we are checking for.
- * @return bool true|false if it is a file or not.
- */
-bool IsFile(const MYODD_CHAR* lp )
-{
-  // expand the string.
-  // the user could have passed environment variables.
-  MYODD_CHAR* lpExpand = nullptr;
-  if( !ExpandEnvironment( lp, lpExpand ) )
-  {
-    // something broke
-    return false;
-  }
-
-  // if the value was empty we have nothing
-  if(nullptr == lpExpand )
-  {
-    return false;
-  }
-
-  _tfinddata_t fdata;
-  intptr_t ffhandle = _tfindfirst( lpExpand, &fdata );
-
-  // we must delete the file now.
-  delete [] lpExpand;
-
-  // if the file was not found then it is not valid.
-  // no need to go further.
-  if( -1 == ffhandle )
-  {
-    return false;
-  }
-
-  // clear the handle
-  _findclose( ffhandle );
-
-  // if it is a directory then it is not a file...
-  if( (fdata.attrib & _A_SUBDIR) == _A_SUBDIR )
-  {
-    return false;
-  }
-
-  return true;
-}
-
-/**
- * Check if the string given is a valid existing directory on the drive.
- * the string is expanded.
- *
- * @param const MYODD_CHAR* the string we are checking for.
- * @return bool true|false if it is a directory or not.
- */
-bool IsDirectory( const MYODD_STRING& stdDir )
-{
-  return IsDirectory( stdDir.c_str() );
-}
-
-/**
- * Check if the string given is a valid existing directory on the drive.
- * the string is expanded.
- *
- * @param const MYODD_CHAR* the string we are checking for.
- * @return bool true|false if it is a directory or not.
- */
-bool IsDirectory(const MYODD_CHAR* lp )
-{
-  // expand the string.
-  // the user could have passed environment variables.
-  MYODD_CHAR* lpExpand = nullptr;
-  if( !ExpandEnvironment( lp, lpExpand ) )
-  {
-    // something broke
-    // look inside the ExpandEnvironment( ... ) for details.
-    return false;
-  }
-
-  // if the value was empty we have nothing
-  if(nullptr == lpExpand )
-  {
-    return false;
-  }
-
-  _tfinddata_t fdata;
-  intptr_t ffhandle = _tfindfirst( lpExpand, &fdata );
-  if( -1 == ffhandle )
-  {
-    MYODD_STRING s = lpExpand;
-    AddTrailingBackSlash( s );
-    s += _T("*.*");
-
-    // we can clear this now as we no longer need it.
-    delete [] lpExpand;
-
-    // if we find something we will not check 
-    // the file attrib as know it is a directory.
-    ffhandle = _tfindfirst( s.c_str(), &fdata );
-    if( -1 == ffhandle )
-    {
-      return false;
-    }
-
-    // clear the handle
-    // we found this item and it is a directory.
-    _findclose( ffhandle );
-    return true;
-  }// find returned a -1
-
-  // we no longer need this.
-  delete [] lpExpand;
-
-  // clear the handle
-  _findclose( ffhandle );
-
-  if( (fdata.attrib & _A_SUBDIR) != _A_SUBDIR )
-  {
-    return false;
-  }
-
-  return true;
-}
-
-/**
-* Check if the string given LOOKS like a valid URL
-* This is a very basic check, we cannot actually ping the site to enusre that it is valid.
-*
-* @param const MYODD_STRING& stdUrl the string we are checking for.
-* @return bool true|false if it is a directory or not.
-*/
-bool IsURL(const MYODD_STRING& stdUrl)
-{
-  return IsURL(stdUrl.c_str());
-}
-
-/**
  * Check if the string given LOOKS like a valid URL
  * This is a very basic check, we cannot actually ping the site to enusre that it is valid.
  *
- * @param const MYODD_CHAR* the string we are checking for.
+ * @param const MYODD_STRING& stdUrl the string we are checking for.
  * @return bool true|false if it is a directory or not.
  */
-bool IsURL(const MYODD_CHAR* lp )
+bool IsURL(const MYODD_STRING& givenUrl)
 {
 #ifdef _UNICODE
-    boost::wsmatch matches;
-    boost::wregex stringRegex;
-    std::wstring url( lp );
+  boost::wsmatch matches;
+  boost::wregex stringRegex;
+  std::wstring url(givenUrl);
 #else
-    boost::smatch matches;
-    boost::regex stringRegex;
-    std::string url( lp );
+  boost::smatch matches;
+  boost::regex stringRegex;
+  std::string url(givenUrl);
 #endif
 
   try
@@ -979,7 +830,7 @@ bool IsURL(const MYODD_CHAR* lp )
 
     // https://www.mattcutts.com/blog/seo-glossary-url-definitions/
     auto protocolIdentifier = static_cast<MYODD_STRING>(matches[1]);
-    url = url.substr(protocolIdentifier.length() );
+    url = url.substr(protocolIdentifier.length());
 
     // get the domain and path
     std::vector<MYODD_STRING> hostAndPaths;
@@ -997,11 +848,11 @@ bool IsURL(const MYODD_CHAR* lp )
     // we use all non capturing groups as we do not need the values.
     const auto pattern_host = _T("^((?:&#|[[:alnum:]]|[\\-_])")  // first character '&#' or :alnum: or special chars.
                                                                  // following charaters '&#' or :alnum: or special chars.  
-                              _T("(?:&#|[[:alnum:]]|[\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
-                              _T("(?::[0-9]{2,})?)$");           //  posible port ':' and at least 2 numbers.
+      _T("(?:&#|[[:alnum:]]|[\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
+      _T("(?::[0-9]{2,})?)$");           //  posible port ':' and at least 2 numbers.
 
-    // the pattern for the path.
-    // very similar to the host, but without the port values.
+                                         // the pattern for the path.
+                                         // very similar to the host, but without the port values.
     const auto pattern_path = _T("^[[:alpha:]0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=]$");
 
     // pattern for the username and password.
@@ -1016,7 +867,7 @@ bool IsURL(const MYODD_CHAR* lp )
         //  look for username and passowrd.
         // if we can split the string into 2 parts then we have a username/password
         std::vector<MYODD_STRING> usernameAndPassword;
-        if (2 == strings::Explode(usernameAndPassword, *it, _T('@'), 2 ))
+        if (2 == strings::Explode(usernameAndPassword, *it, _T('@'), 2))
         {
           // in the first string read the username[:password] 
           stringRegex.assign(pattern_usernameAndPassword);
@@ -1059,18 +910,136 @@ bool IsURL(const MYODD_CHAR* lp )
       return true;
     }
   }
-  catch( const std::runtime_error & e )
+  catch (const std::runtime_error & e)
   {
-    UNUSED_ALWAYS( e );
+    UNUSED_ALWAYS(e);
     // std::runtime_error if the complexity of matching the expression 
     // against an N character string begins to exceed O(N2), 
     // or if the program runs out of stack space
   }
-  catch( ... )
+  catch (...)
   {
     // boost couldn't work it out.
   }
   return false;
+}
+
+/**
+ * Check if a given string is a dot/dotdot directory
+ * @param const MYODD_CHAR* the file we are checking.
+ * @return bool if it is a directory or not
+ */
+bool IsDot(const MYODD_STRING& givenFile)
+{
+  // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
+  auto copyOfGivenFile = strings::Replace(givenFile, _T("/"), _T("\\"));
+
+  std::vector<MYODD_STRING> v_copyOfGivenFile;
+  auto size = strings::Explode(v_copyOfGivenFile, copyOfGivenFile, _T('\\'), MYODD_MAX_INT32, false);
+  if (size == 0)
+  {
+    return false;
+  }
+
+  // check if it is a dot.
+  if (v_copyOfGivenFile[size - 1] == _T(".."))
+  {
+    return true;
+  }
+  if (v_copyOfGivenFile[size - 1] == _T("."))
+  {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Check if the string given is a valid existing file on the drive.
+ * the string is expanded.
+ *
+ * @param const MYODD_STRING& stdFile the string we are checking for.
+ * @return bool true|false if it is a file or not.
+ */
+bool IsFile( const MYODD_STRING& givenFile )
+{
+  // expand the string.
+  // the user could have passed environment variables.
+  auto expandedGivenFile = givenFile;
+  if( !ExpandEnvironment(givenFile, expandedGivenFile) )
+  {
+    // something broke
+    return false;
+  }
+
+  _tfinddata_t fdata;
+  auto ffhandle = _tfindfirst(expandedGivenFile.c_str(), &fdata );
+
+  // if the file was not found then it is not valid.
+  // no need to go further.
+  if( -1 == ffhandle )
+  {
+    return false;
+  }
+
+  // clear the handle
+  _findclose( ffhandle );
+
+  // if it is a directory then it is not a file...
+  if( (fdata.attrib & _A_SUBDIR) == _A_SUBDIR )
+  {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Check if the string given is a valid existing directory on the drive.
+ * the string is expanded.
+ *
+ * @param const MYODD_CHAR* the string we are checking for.
+ * @return bool true|false if it is a directory or not.
+ */
+bool IsDirectory( const MYODD_STRING& givenDirectory )
+{
+  // expand the string.
+  // the user could have passed environment variables.
+  auto expandedGivenDirectory = givenDirectory;
+  if( !ExpandEnvironment(givenDirectory, expandedGivenDirectory) )
+  {
+    // something broke
+    // look inside the ExpandEnvironment( ... ) for details.
+    return false;
+  }
+
+  _tfinddata_t fdata;
+  intptr_t ffhandle = _tfindfirst(expandedGivenDirectory.c_str(), &fdata );
+  if( -1 == ffhandle )
+  {
+    files::Join(expandedGivenDirectory, expandedGivenDirectory, _T("*.*"));
+
+    // if we find something we will not check 
+    // the file attrib as know it is a directory.
+    ffhandle = _tfindfirst(expandedGivenDirectory.c_str(), &fdata );
+    if( -1 == ffhandle )
+    {
+      return false;
+    }
+
+    // clear the handle
+    // we found this item and it is a directory.
+    _findclose( ffhandle );
+    return true;
+  }// find returned a -1
+
+  // clear the handle
+  _findclose( ffhandle );
+
+  if( (fdata.attrib & _A_SUBDIR) != _A_SUBDIR )
+  {
+    return false;
+  }
+
+  return true;
 }
 
 /**
@@ -1654,44 +1623,6 @@ bool GetFullTempFileName(MYODD_CHAR*& lpFullPathFileName, const MYODD_CHAR* lpFi
   // it is not up to us to make sure that the file exists
   // or not, we do not want to delete it, in case the user needs it.
   return true;
-}
-
-/**
- * Check if a given string is a dot/dotdot directory
- * @param const MYODD_CHAR* the file we are checking.
- * @return bool if it is a directory or not
- */
-bool IsDot( const MYODD_STRING& stdFile )
-{
-  return IsDot( stdFile.c_str() );
-}
-
-/**
- * Check if a given string is a dot/dotdot directory
- * @param const MYODD_CHAR* the file we are checking.
- * @return bool if it is a directory or not
- */
-bool IsDot(const MYODD_CHAR* lpFile )
-{
-  // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
-  MYODD_STRING sOrigin = lpFile;
-  sOrigin = strings::Replace( sOrigin, _T("/"), _T("\\") );
-  
-  std::vector<MYODD_STRING> e_sOrigin;
-  auto size = strings::Explode( e_sOrigin, sOrigin, _T('\\'), MYODD_MAX_INT32, false );
-  if( size == 0 )
-  {
-    return false;
-  }
-  if( e_sOrigin[size-1] == _T("..") )
-  {
-    return true;
-  }
-  if( e_sOrigin[size-1] == _T(".") )
-  {
-    return true;
-  }
-  return false;
 }
 
 /**

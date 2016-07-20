@@ -1,6 +1,7 @@
 ﻿#include "string/string.h"
 #include "files/files.h"
 #include <gtest/gtest.h>
+#include "../testcommon.h"
 
 const struct test_istype
 {
@@ -23,6 +24,10 @@ struct MyOddFilesIsUrl : testing::Test, testing::WithParamInterface<test_istype>
 {
 };
 
+struct MyOddFilesIsDirectory : testing::Test, testing::WithParamInterface<test_istype>
+{
+};
+
 TEST_P(MyOddFilesIsDot, TestIsDot)
 {
   auto is = GetParam().is;
@@ -38,6 +43,28 @@ TEST_P(MyOddFilesIsUrl, TestIsUrl)
 
   ASSERT_EQ(is, myodd::files::IsURL(given));
 }
+
+TEST_P(MyOddFilesIsDirectory, TestIsDirectory)
+{
+  auto is = GetParam().is;
+  auto given = GetParam().given;
+
+  ASSERT_EQ(is, myodd::files::IsDirectory(given));
+}
+
+INSTANTIATE_TEST_CASE_P(TestIsDirectoryEnvironment, MyOddFilesIsDirectory,
+  testing::Values(
+    test_istype{ L"%appdata%", true },
+    test_istype{ L"%ALLUSERSPROFILE%", true },
+    test_istype{ L"%HOMEDRIVE%", true },
+    test_istype{ L"%ProgramData%", true },
+    test_istype{ L"%ProgramFiles%", true },
+    test_istype{ L"%SYSTEMROOT%", true },
+    test_istype{ L"%TEMP%", true },
+    test_istype{ L"%TEMP%\\*.*", true },
+    test_istype{ L"%TMP%", true },
+    test_istype{ L"%USERPROFILE%", true }
+  ));
 
 INSTANTIATE_TEST_CASE_P(TestIsDot, MyOddFilesIsDot,
   testing::Values(
@@ -176,3 +203,93 @@ INSTANTIATE_TEST_CASE_P(TestInvalidUrls, MyOddFilesIsUrl,
   test_istype{ L"http ://10.1.1.1", false },
   test_istype{ L"http ://10.1.1.254", false }
 ));
+
+#include <fstream>
+#include <iostream>
+
+TEST(TestIsDirectory, TestTempDirectory)
+{
+  // get the temp directory
+  MYODD_STRING tempDirectory;
+  if (!myodd::files::ExpandEnvironment(_T("%temp%"), tempDirectory))
+  {
+    FAIL();
+  }
+
+  // it is a directory
+  ASSERT_TRUE(myodd::files::IsDirectory(tempDirectory));
+
+  // but not a file.
+  ASSERT_FALSE(myodd::files::IsFile(tempDirectory));
+
+  MYODD_STRING file;
+  myodd::files::Join(file, tempDirectory, Uuid());
+
+  // not yet a file
+  ASSERT_FALSE(myodd::files::IsFile(file));
+
+  // create it
+  std::wofstream fs( file );
+  if (!fs)
+  {
+    FAIL();
+    return;
+  }
+  fs << "ghgh";
+  fs.close();
+
+  // it is now a file.
+  ASSERT_TRUE(myodd::files::IsFile(file));
+
+  // drop it
+  ASSERT_TRUE(myodd::files::DeleteFile(file));
+
+  // no longer a file.
+  ASSERT_FALSE(myodd::files::IsFile(file));
+}
+
+TEST(TestIsDirectory, TestTempDirectoryExpanded)
+{
+  // get the temp directory
+  MYODD_STRING tempDirectory;
+  if (!myodd::files::ExpandEnvironment(_T("%temp%"), tempDirectory))
+  {
+    FAIL();
+  }
+
+  // it is a directory
+  ASSERT_TRUE(myodd::files::IsDirectory(_T("%temp%")));
+
+  // but not a file.
+  ASSERT_FALSE(myodd::files::IsFile(_T("%temp%")));
+
+  auto uuid = Uuid();
+  MYODD_STRING file;
+  myodd::files::Join(file, _T("%temp%"), uuid );
+
+  // not yet a file
+  ASSERT_FALSE(myodd::files::IsFile(file));
+
+  MYODD_STRING fileActual;
+  myodd::files::Join(fileActual, tempDirectory, uuid );
+
+  // create it
+  std::wofstream fs(fileActual);
+  if (!fs)
+  {
+    FAIL();
+    return;
+  }
+  fs << "ghgh";
+  fs.close();
+
+  // it is now a file.
+  ASSERT_TRUE(myodd::files::IsFile(file));
+
+  // drop it
+  ASSERT_TRUE(myodd::files::DeleteFile(file));
+
+  // no longer a file.
+  ASSERT_FALSE(myodd::files::IsFile(file));
+  ASSERT_FALSE(myodd::files::IsFile(fileActual));
+}

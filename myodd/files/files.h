@@ -42,17 +42,10 @@ bool UnExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest );
 bool CreateFullDirectory(const MYODD_CHAR* c, bool bIsFile );
 bool CreateFullDirectory( const MYODD_STRING& c, bool bIsFile );
 
-bool IsFile(const MYODD_CHAR* lp );
-bool IsFile(const MYODD_STRING& stdFile);
-
-bool IsDirectory(const MYODD_CHAR* lp );
-bool IsDirectory( const MYODD_STRING& stdDir );
-
-bool IsURL(const MYODD_CHAR* lp );
-bool IsURL(const MYODD_STRING& stdUrl );
-
-bool IsDot(const MYODD_STRING& stdFile);
-bool IsDot(const MYODD_CHAR* lpFile);
+bool IsDirectory( const MYODD_STRING& givenDirectory );
+bool IsURL( const MYODD_STRING& givenUrl );
+bool IsDot( const MYODD_STRING& givenFile );
+bool IsFile( const MYODD_STRING& givenFile );
 
 bool FileExists( const MYODD_STRING& c );
 bool FileExists(const MYODD_CHAR* c );
