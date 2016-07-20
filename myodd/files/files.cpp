@@ -974,44 +974,68 @@ bool IsURL(const MYODD_CHAR* lp )
 
   try
   {
-    //  get the protocol and remove it.
+    //  clean it up.
+    _TrimDeadChars(url);
+
+    //  get the protocol identifier and remove it.
     // http://www.example.com becomes www.example.com
-    auto protocol = _T("^([a-z0-9]+:\\/{2}).*");
-    stringRegex.assign(protocol, boost::regex_constants::icase);
+    const auto pattern_protocol = _T("^([[:alnum:]]+:\\/{2}).*");
+    stringRegex.assign(pattern_protocol);
     if (!boost::regex_match(url, matches, stringRegex))
     {
       return false;
     }
-    url = url.substr(matches[1].length() );
+
+    // https://www.mattcutts.com/blog/seo-glossary-url-definitions/
+    auto protocolIdentifier = static_cast<MYODD_STRING>(matches[1]);
+    url = url.substr(protocolIdentifier.length() );
 
     // get the domain and path
-    std::vector<MYODD_STRING> domainAndPaths;
-    if (0 == myodd::strings::Explode(domainAndPaths, url, _T('/')))
+    std::vector<MYODD_STRING> hostAndPaths;
+    if (0 == myodd::strings::Explode(hostAndPaths, url, _T('/')))
     {
+      // if we are here, we got a protocol, but nothing after that
+      // in other words, we got "http://" and nothing else.
+      // so we cannot go any further than that.
       return false;
     }
 
-    //  look at the domain and path(s)
-    for (auto it = domainAndPaths.begin(); it != domainAndPaths.end(); ++it)
-    {
-      if (it == domainAndPaths.begin())
-      {
-        // the first character must be a letter, a number or &#...
-        // then if we have a colon, then it must be a port number.
-        auto domain = _T("^((&#|[[:alnum:]\\-_])(&#|[[:alnum:]\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*(:[0-9]{2,})?)$");
+    // the pattern for the domain.
+    // the first character must be a letter, a number or &#...
+    // then if we have a colon, then it must be a port number.
+    // we use all non capturing groups as we do not need the values.
+    const auto pattern_host = _T("^((?:&#|[[:alnum:]]|[\\-_])")  // first character '&#' or :alnum: or special chars.
+                                                                 // following charaters '&#' or :alnum: or special chars.  
+                              _T("(?:&#|[[:alnum:]]|[\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
+                              _T("(?::[0-9]{2,})?)$");           //  posible port ':' and at least 2 numbers.
 
+    // the pattern for the path.
+    // very similar to the host, but without the port values.
+    const auto pattern_path = _T("^[[:alpha:]0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=]$");
+
+    // pattern for the username and password.
+    // we use all non capturing groups as we do not need the values.
+    const auto pattern_usernameAndPassword = _T("^(?:\\S+(?::\\S*)?)?$");
+
+    //  look at the domain and path(s)
+    for (auto it = hostAndPaths.begin(); it != hostAndPaths.end(); ++it)
+    {
+      if (it == hostAndPaths.begin())
+      {
         //  look for username and passowrd.
+        // if we can split the string into 2 parts then we have a username/password
         std::vector<MYODD_STRING> usernameAndPassword;
-        if (2 == myodd::strings::Explode(usernameAndPassword, *it, _T('@'), 2 ))
+        if (2 == strings::Explode(usernameAndPassword, *it, _T('@'), 2 ))
         {
-          auto usernameAndPasswordPattern = _T("^[^:]*(:.*)?");
-          stringRegex.assign(usernameAndPasswordPattern);
+          // in the first string read the username[:password] 
+          stringRegex.assign(pattern_usernameAndPassword);
           if (!boost::regex_match(usernameAndPassword[0], matches, stringRegex))
           {
             return false;
           }
 
-          stringRegex.assign(domain);
+          // the second string now contains the host
+          stringRegex.assign(pattern_host);
           if (!boost::regex_match(usernameAndPassword[1], matches, stringRegex))
           {
             return false;
@@ -1019,7 +1043,9 @@ bool IsURL(const MYODD_CHAR* lp )
         }
         else
         {
-          stringRegex.assign(domain);
+          // we have no username/password, so we can check the 
+          // entire string for a valid host.
+          stringRegex.assign(pattern_host);
           if (!boost::regex_match(*it, matches, stringRegex))
           {
             return false;
@@ -1031,8 +1057,7 @@ bool IsURL(const MYODD_CHAR* lp )
         // get the path, just about every character is allowed.
         // the order does not really matter.
         // we should devide the path and the query/parametter and fragment.
-        auto path = _T("^[[:alpha:]0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=]$");
-        stringRegex.assign(path);
+        stringRegex.assign(pattern_path);
         if (!boost::regex_match(*it, matches, stringRegex))
         {
           return false;
