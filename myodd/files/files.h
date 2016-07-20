@@ -72,8 +72,7 @@ bool HasFileInformationChanged(const MYODD_CHAR* file, const BY_HANDLE_FILE_INFO
 bool GetFileInformationByName( const MYODD_STRING& file, BY_HANDLE_FILE_INFORMATION& info );
 bool GetFileInformationByName(const MYODD_CHAR* file, BY_HANDLE_FILE_INFORMATION& info );
 
-MYODD_STRING GetFileName(const MYODD_CHAR* lpPath, bool bExpand = true );
-MYODD_STRING GetFileName( const MYODD_STRING& stdPath, bool bExpand = true );
+MYODD_STRING GetFileName( const MYODD_STRING& givenPath, bool bExpand = true );
 
 MYODD_STRING GetBaseFromFile(const MYODD_CHAR* lpPath, bool bExpand = true, bool bAddTrailing = true );
 MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, bool bAddTrailing = true );

@@ -97,8 +97,6 @@ void Test()
   MYODD_STRING dirtyFileName = _T("[bad]^*£");
   CleanFileName( dirtyFileName );
   ASSERT( dirtyFileName == _T("_bad___£"));
-
-  ASSERT( GetFileName( _T("c:\\a\\b\\something.txt"), false ) == _T("something.txt") );
 }
 #else
 {
@@ -1700,74 +1698,38 @@ bool IsDot(const MYODD_CHAR* lpFile )
 * Get the filename from a full path, so "c:\somthing\whatever.txt" would return "whatever.txt"
 * we don't check if the file exits as it might not be a real file.
 * @see GetBaseFromFile( ... )
-* @param const MYODD_CHAR* the full path we are getting.
+* @param const MYODD_STRING& givenPath the full path we are getting.
 * @param bool if we want to expand the string or not, used to prevent recursive calls.
 * @return MYODD_STRING the filename of the file given without the directory
 */
-MYODD_STRING GetFileName( const MYODD_STRING& stdPath, bool bExpand /*= true*/ )
+MYODD_STRING GetFileName( const MYODD_STRING& givenPath, bool bExpand /*= true*/ )
 {
-  return GetFileName( stdPath.c_str(), bExpand );
-}
-
-/**
- * Get the filename from a full path, so "c:\somthing\whatever.txt" would return "whatever.txt"
- * we don't check if the file exits as it might not be a real file.
- * @see GetBaseFromFile( ... )
- * @param const MYODD_CHAR* the full path we are getting.
- * @param bool if we want to expand the string or not, used to prevent recursive calls.
- * @return MYODD_STRING the filename of the file given without the directory
- */
-MYODD_STRING GetFileName(const MYODD_CHAR* lpPath, bool bExpand /*= true*/ )
-{
-  // expand the full path
+  // we want to expand the environment variable.
   // this is in case the user uses some weird environment variable that contains the file name in it.
-  // reverse look for the first '\' or '/'
-  MYODD_CHAR tmpDir[ T_MAX_PATH+1 ];
-  memset( tmpDir, 0, T_MAX_PATH+1 );
+  MYODD_STRING copyOfGivenPath;
   if( bExpand )
   {
-    MYODD_CHAR* lpDest = nullptr;
-    if( !files::ExpandEnvironment( lpPath, lpDest ))
+    //  try and expand it.
+    if( !files::ExpandEnvironment(givenPath, copyOfGivenPath))
     {
       return _T("");
     }
-    _tcscpy_s( tmpDir, _countof( tmpDir ), lpDest );
-    delete [] lpDest;
   }
   else
   {
-    _tcscpy_s( tmpDir, _countof( tmpDir ), lpPath );
+    // not expanding so we are using what was given
+    copyOfGivenPath = givenPath;
   }
+  // make sure that we use only '\'
+  copyOfGivenPath = strings::Replace(copyOfGivenPath, _T("/"), _T("\\"), false);
 
   // now go back and create the parent directory.
-  int r1 = -1, r2 = -1;
-  const MYODD_CHAR* p1 = _tcsrchr( tmpDir, '\\' );
-  if( p1 != nullptr)
-  {
-    r1 = (int)(p1 - tmpDir + 1);
-  }
-
-  const MYODD_CHAR* p2 = _tcsrchr( tmpDir, '/' );
-  if( p2 != nullptr)
-  {
-    r2 = (int)(p2 - tmpDir + 1);
-  }
-
-  if( r1 == -1 && r2 == r2 -1 )
-  {
-    return tmpDir;  // return was was passed.
-  }
-
-  MYODD_STRING s = _T("");
-  if( r1 > r2 )
-  {
-    s = tmpDir + r1;
-  }
-  else if( r2 > r1 )
-  {
-    s = tmpDir + r2;
-  }  
-  return s;
+  auto pos = copyOfGivenPath.find_last_of(_T('\\'));
+#ifdef _UNICODE
+  return (pos != std::wstring::npos ? copyOfGivenPath.substr(pos + 1) : L"");
+#else
+  return (pos != std::string::npos ? copyOfGivenPath.substr(pos + 1) : "");
+#endif
 }
 
 /**

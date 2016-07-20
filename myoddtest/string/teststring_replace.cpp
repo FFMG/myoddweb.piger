@@ -73,5 +73,6 @@ INSTANTIATE_TEST_CASE_P(VariousReplace, MyOddStringCaseInSensitiveReplace,
     test_replace{ L"ABC", L"B", L"b", L"AbC" },
     test_replace{ L"xAxCX", L"x", L"z", L"zAzCz" },
     test_replace{ L"ABC", L"A", L"A", L"ABC" },
-    test_replace{ L"ABC", L"a", L"A", L"ABC" }
+    test_replace{ L"ABC", L"a", L"A", L"ABC" },
+    test_replace{ L"ABC", L"", L"", L"ABC" }  //  replace nothing with nothing
 ));
