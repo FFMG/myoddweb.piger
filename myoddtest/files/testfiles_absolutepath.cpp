@@ -37,11 +37,6 @@ TEST_P(MyOddFilesAbsolutePath, TestAbsolutePath)
   }
 }
 
-/*
-ASSERT(GetAbsolutePath(lpdest, _T("")));
-ASSERT(_tcsicmp(lpdest, _T("C:\\Documents and Settings\\All Users\\")) == 0);
-*/
-
 INSTANTIATE_TEST_CASE_P(TestAbsolutePath, MyOddFilesAbsolutePath,
   testing::Values(
     test_absolutepath{ L"../../somefile.txt", L"c:\\dira\\dirb\\", L"c:\\somefile.txt", true },
@@ -49,15 +44,26 @@ INSTANTIATE_TEST_CASE_P(TestAbsolutePath, MyOddFilesAbsolutePath,
     test_absolutepath{ L"somepath2\\", L"C:\\somepath1\\", L"C:\\somepath1\\somepath2\\", true },
 
     // origin does not matter.
-    test_absolutepath{ L"c:\\aaa\\bbb\\ccc\\..\\..\\file.txt", L"\\zzz\\yyy", L"c:\\aaa\\file.txt", true },
+    test_absolutepath{ L"c:\\aaa\\bbb\\ccc\\..\\..\\file.txt", L"", L"c:\\aaa\\file.txt", true },
 
     //  null origin
     test_absolutepath{ L"C:\\Documents and Settings\\All Users\\Application Data\\..\\Application Data\\", L"", L"C:\\Documents and Settings\\All Users\\Application Data\\", true },
     test_absolutepath{ L"C:\\Documents and Settings\\All Users\\Application Data\\..\\", L"", L"C:\\Documents and Settings\\All Users\\", true },
 
     // this should not work because of the depth of the path
-    test_absolutepath{ L"../../../somefile.txt", L"c:\\dira\\dirb\\", L"", false },
+    test_absolutepath{ L"../../../somefile.txt", L"\\dira\\dirb\\", L"", false },
 
     //  too deep into itself
-    test_absolutepath{ L"c:\\aaa\\bbb\\ccc\\..\\..\\..\\..\\..\\file.txt", L"\\zzz\\yyy", L"\\aaa\\file.txt", false }
+    test_absolutepath{ L"\\aaa\\bbb\\ccc\\..\\..\\..\\..\\file.txt", L"", L"", false }
 ));
+
+
+INSTANTIATE_TEST_CASE_P(TestVariousEdgeCases, MyOddFilesAbsolutePath,
+  testing::Values(
+    // all the '.\\' are removed
+    test_absolutepath{ L".\\.\\.\\.\\.\\Test", L"", L"Test", true },
+    test_absolutepath{ L"c:\\.\\.\\.\\.\\.\\Test", L"", L"c:\\Test", true },
+
+    // the last '.' is wrong
+    test_absolutepath{ L".\\.\\.\\.\\.\\.Test", L"", L".Test", true }
+  ));

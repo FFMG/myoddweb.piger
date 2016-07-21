@@ -72,7 +72,11 @@ MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, 
 
 MYODD_STRING GetAppPath( bool bAddTrailing =true);
 
-bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin = nullptr );
+#ifdef _UNICODE
+bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin = L"." );
+#else
+bool GetAbsolutePath(MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin = ".");
+#endif
 
 void CleanFileName( MYODD_STRING& dirtyFileName );
 

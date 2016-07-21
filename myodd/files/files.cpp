@@ -39,6 +39,7 @@ static const MYODD_CHAR* MYODD_FILE_WINSEPARATOR = _T("\\");
 
 // the default separator
 static const MYODD_CHAR* MYODD_FILE_SEPARATOR   = MYODD_FILE_WINSEPARATOR;
+static const MYODD_CHAR MYODD_FILE_SEPARATOR_C  = MYODD_FILE_WINSEPARATOR[0];
 
 namespace myodd{ namespace files{
 void Test()
@@ -780,12 +781,12 @@ bool IsURL(const MYODD_STRING& givenUrl)
 #ifdef _UNICODE
   boost::wsmatch matches;
   boost::wregex stringRegex;
-  std::wstring url(givenUrl);
 #else
   boost::smatch matches;
   boost::regex stringRegex;
-  std::string url(givenUrl);
 #endif
+
+  MYODD_STRING url(givenUrl);
 
   try
   {
@@ -1256,150 +1257,112 @@ MYODD_STRING GetBaseFromFile
 */
 bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin )
 {
-  MYODD_STRING sRelative(givenRelative);
-  MYODD_STRING sOrigin( _T("") );
-  if(givenOrigin.length() == 0 )
+  //
+  // first do some house-keeping
+  //
+
+  // reset the result.
+  dest.clear();
+
+  // make copies.
+  auto copyOfRelative = givenRelative;
+  auto copyOfOrigin = givenOrigin;
+
+  // clean them up
+  _TrimDeadChars(copyOfRelative);
+  _TrimDeadChars(copyOfOrigin);
+
+  // clean them
+  strings::Trim(copyOfRelative);
+  strings::Trim(copyOfOrigin);
+
+  // make sure that the directory separators are correct.
+  copyOfRelative = strings::Replace(copyOfRelative, _T("/"), MYODD_FILE_SEPARATOR, false);
+  copyOfOrigin = strings::Replace(copyOfOrigin, _T("/"), MYODD_FILE_SEPARATOR, false);
+
+  // the origin must have a trailing backslash
+  // makes it easier if we are adding the working directory.
+  files::AddTrailingBackSlash(copyOfOrigin);
+
+  // there is a special case for the origin been '.\' or '.'
+  // in this case we want to assume that the user wants the 'current directory'
+#ifdef _UNICODE
+  boost::wsmatch matches;
+  boost::wregex stringRegex;
+#else
+  boost::smatch matches;
+  boost::regex stringRegex;
+#endif
+
+  //  ^((?:\.[\/\\])+)
+  const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
+  stringRegex.assign(pattern);
+  if (boost::regex_match(copyOfOrigin, matches, stringRegex))
   {
-    MYODD_CHAR lpBuffer[ T_MAX_PATH ] = {0};
-    if( 0 == ::GetCurrentDirectory( T_MAX_PATH, lpBuffer ) )
+    // because we added a trailing back slash earlier
+    // we can replace the all the '././././' with the current directory
+    // even if the user just gave us a '.', (as it would be converted to '.'
+    // but if they gave us '.aaa' then this is not valid and would not be replace anyway.
+    MYODD_CHAR lpBuffer[T_MAX_PATH] = { 0 };
+    if (0 == ::GetCurrentDirectory(T_MAX_PATH, lpBuffer))
     {
-      //  could not get my own directory.
+      //  could not get the current directory???
       return false;
     }
-    sOrigin = lpBuffer;
-  }
-  else
-  {
-    sOrigin = givenOrigin;
+
+    // join the current directory and the remainder.
+    files::Join( copyOfOrigin, lpBuffer, copyOfOrigin.substr( matches[1].length()));
   }
 
-  // what we will be replacing everything with.
-  static const MYODD_CHAR* SEPARATOR_REPLACE = _T("\\" );
-  static MYODD_CHAR SEPARATOR_REPLACE_C = _T('\\' );
-  static const MYODD_CHAR* SEPARATOR_REPLACE_FROM = _T("/");
+  // we can now join them both
+  MYODD_STRING pathToEvaluate;
+  files::Join(pathToEvaluate, copyOfOrigin, copyOfRelative);
+  
+  // now we need to get the absolute path of both of them.
+  std::vector<MYODD_STRING> partsOfPathToEvaluate;
+  strings::Explode(partsOfPathToEvaluate, pathToEvaluate, MYODD_FILE_SEPARATOR_C, MYODD_MAX_INT32, false);
 
-  // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
-  // don't use MYODD_FILE_SEPARATOR otherwise we might not replace anything at all.
-  sOrigin = strings::Replace( sOrigin   , SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
-  sRelative = strings::Replace( sRelative, SEPARATOR_REPLACE_FROM, SEPARATOR_REPLACE );
-
-  //  will we need to add a trailing char?
-  // remember we are not checking for MYODD_FILE_SEPARATOR as we replace all the "\"
-  auto addtrailing = (sRelative[ sRelative.length() -1 ] == SEPARATOR_REPLACE_C );
-
-  // split them all
-  std::vector<MYODD_STRING> e_sRelative;
-  strings::Explode( e_sRelative, sRelative, SEPARATOR_REPLACE_C, MYODD_MAX_INT32, false );
-
-  std::vector<MYODD_STRING> e_sOrigin;
-  strings::Explode( e_sOrigin, sOrigin, SEPARATOR_REPLACE_C, MYODD_MAX_INT32, false );
-  // reverse from the origin path we only reverse the ../
-
-  size_t dotdotCount = 0;
-  size_t dotCount = 0;
-  for( std::vector<MYODD_STRING>::const_iterator it = e_sRelative.begin();
-       it != e_sRelative.end();
-       ++it )
+  // now we need to know we we go forward or backward in our final solution.
+  std::vector<MYODD_STRING> evaluatedParts;
+  for( auto it = partsOfPathToEvaluate.begin(); it != partsOfPathToEvaluate.end(); ++it )
   {
-    if( (*it).length() == 0 )
+    if ( *it == _T("."))
     {
-      // maybe the user has passed a UNC path
-      // either way MS does not really moan about it.
-      continue;
-    }
-    else if( files::IsDot(*it) )
-    {
-      ++dotdotCount;
+      //  this means nothing
       continue;
     }
 
-    // we are done.
-    // we do not want to go further into the path
-    // if the user has something like ../../somepath1/somepath2/.../text.txt then we should convert it 
-    // to ../../somepath1/text.txt
-    break;
-  }
-
-  if( dotdotCount == 0 )
-  {
-    // we will not be using the original path
-    // because the path that was given does not seem to be a relative path in the first place.
-    e_sOrigin.clear();
-
-    // if this really look like it is not a path at all then we are relative to our path
-    // relative = "example/something/"
-    // origin = "c:/origin/path/"
-    // return = "c:/origin/path/example/something/"
-    if( sRelative.find( _T("%") ) !=  MYODD_STRING::npos )
+    if (*it == _T(".."))
     {
-      MYODD_STRING expanded = _T("");
-      if( ExpandEnvironment( sRelative, expanded ) )
+      // before we go backward, can we go backward...
+      if( evaluatedParts.size() == 0 )
       {
-        if( GetAbsolutePath( dest, expanded.c_str(), sOrigin.c_str() ) )
-        {
-          auto absolute = dest;
-          return UnExpandEnvironment( absolute, dest );
-        }
-      }
-    }
-    else if( sRelative.find( _T(":") ) ==  MYODD_STRING::npos )
-    {
-      // so what we will do is actually add the origin to the given path
-      // and try and see if we can get that to work.
-      AddTrailingBackSlash(sOrigin);
-      MYODD_STRING correctedPath = sOrigin + sRelative;
-      return GetAbsolutePath( dest, correctedPath, sOrigin.c_str() );
-    }
-  }
-  else if( dotdotCount >= e_sOrigin.size() )
-  {
-    return false; // cannot work it out from here sorry.
-                  // we have more dots to reverse from than we have directories to walk.
-  }
-
-  // reverse from the origin path we only reverse the ../
-  for( size_t pop_back = 0; pop_back < dotdotCount; ++pop_back )
-    e_sOrigin.pop_back();
-
-  // add the relative path at the end of it
-  for (size_t push_back = (dotdotCount + dotCount); push_back < e_sRelative.size(); ++push_back)
-  {
-    e_sOrigin.push_back(e_sRelative[push_back]);
-  }
-
-  // finally clean everything up.
-  std::vector<MYODD_STRING> e_sClean;
-  for( std::vector<MYODD_STRING>::const_iterator it = e_sOrigin.begin();
-       it != e_sOrigin.end();
-       ++it
-    )
-  {
-    if( *it == _T("..") )
-    {
-      //  we have to go back one step.
-      // but do we have any steps to go back to?
-      if( e_sClean.size() == 0 )
-      {
+        // nope, we cannot go back onto ourselves.
         return false;
       }
-      e_sClean.pop_back();
+
+      // go back one step
+      evaluatedParts.pop_back();
       continue;
     }
-    else if( *it == _T(".") )  //  not pretty, but allowed.
-    {
-      continue;
-    }
-    e_sClean.push_back( *it );
+
+    // this is neither a single nor double dot
+    // so we can just add it to our list.
+    // (this could be empty as well).
+    evaluatedParts.push_back(*it);
   }
 
-  // putting it all together...
-  // note that we use MYODD_FILE_SEPARATOR and not SEPARATOR_REPLACE
-  // this is in case both are not the same.
-  dest = strings::implode( e_sClean, MYODD_FILE_SEPARATOR );
-  if( addtrailing )
+  // this is it... put it all back together now.
+  dest = strings::implode(evaluatedParts, MYODD_FILE_SEPARATOR );
+
+  const auto pattern_end = _T("[\\/\\\\]$");
+  stringRegex.assign(pattern_end);
+  if (boost::regex_search(copyOfRelative, matches, stringRegex))
   {
-    dest += MYODD_FILE_SEPARATOR;
+    AddTrailingBackSlash(dest);
   }
+
+  // success!
   return true;
 }
 
