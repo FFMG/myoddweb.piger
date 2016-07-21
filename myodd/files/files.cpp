@@ -1317,7 +1317,12 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   // we can now join them both
   MYODD_STRING pathToEvaluate;
   files::Join(pathToEvaluate, copyOfOrigin, copyOfRelative);
-  
+
+  // Expand the environment variable.
+  // but we save the 'before' value.
+  const auto unexpandedPathToEvaluate = pathToEvaluate;
+  ExpandEnvironment(pathToEvaluate, pathToEvaluate);
+
   // now we need to get the absolute path of both of them.
   std::vector<MYODD_STRING> partsOfPathToEvaluate;
   strings::Explode(partsOfPathToEvaluate, pathToEvaluate, MYODD_FILE_SEPARATOR_C, MYODD_MAX_INT32, false);
@@ -1362,6 +1367,12 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
     AddTrailingBackSlash(dest);
   }
 
+  // now check if we need to unexpand the data.
+  // this is where we use the before expand value.
+  if (0 != strings::Compare(pathToEvaluate, unexpandedPathToEvaluate, false))
+  {
+    files::UnExpandEnvironment(dest, dest);
+  }
   // success!
   return true;
 }

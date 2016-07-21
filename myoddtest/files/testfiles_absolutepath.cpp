@@ -57,13 +57,40 @@ INSTANTIATE_TEST_CASE_P(TestAbsolutePath, MyOddFilesAbsolutePath,
     test_absolutepath{ L"\\aaa\\bbb\\ccc\\..\\..\\..\\..\\file.txt", L"", L"", false }
 ));
 
-
 INSTANTIATE_TEST_CASE_P(TestVariousEdgeCases, MyOddFilesAbsolutePath,
   testing::Values(
     // all the '.\\' are removed
     test_absolutepath{ L".\\.\\.\\.\\.\\Test", L"", L"Test", true },
     test_absolutepath{ L"c:\\.\\.\\.\\.\\.\\Test", L"", L"c:\\Test", true },
 
-    // the last '.' is wrong
-    test_absolutepath{ L".\\.\\.\\.\\.\\.Test", L"", L".Test", true }
+    // the last '.' is wrong, so we just leave it...
+    test_absolutepath{ L".\\.\\.\\.\\.\\.Test", L"", L".Test", true },
+
+    // this might look like an environment variable
+    // but it is not one.
+    test_absolutepath{ L"%blah%\\Test\\..", L"", L"%blah%", true },
+    test_absolutepath{ L"%blah%\\Test\\..\\", L"", L"%blah%\\", true },
+
+    // the fact that the origine itslef goes back one step, 
+    // there isn't much I can do from here. It has to return false.
+    test_absolutepath{ L"\\Test\\", L"..\\somewhere\\", L"", false }
   ));
+
+TEST(TestExpandValues)
+{
+  MYODD_STRING exp;
+  exp = _T("%appdata%\\Test");
+  myodd::files::ExpandEnvironment( exp, exp);
+  myodd::files::UnExpandEnvironment(exp, exp);
+
+  MYODD_STRING dest;
+  ASSERT_TRUE( myodd::files::GetAbsolutePath(dest, L"\\Test", L"%appdata%"));
+  ASSERT_EQ(exp, dest);
+
+  exp = _T("%tmp%\\Test");
+  myodd::files::ExpandEnvironment(exp, exp);
+  myodd::files::UnExpandEnvironment(exp, exp);
+
+  ASSERT_TRUE(myodd::files::GetAbsolutePath(dest, L"\\Test", L"%tmp%"));
+  ASSERT_EQ(exp, dest);
+}
