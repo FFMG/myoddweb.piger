@@ -45,33 +45,6 @@ void Test()
 #ifdef _DEBUG
 {
   MYODD_CHAR* lpdest = nullptr;
-  ASSERT( GetAbsolutePath( lpdest, _T( "../../somefile.txt" ), _T( "c:\\dira\\dirb\\" ) ) );
-  ASSERT( _tcsicmp( lpdest, _T("c:\\somefile.txt") ) == 0 );
-  delete [] lpdest;
-  lpdest = nullptr;
-
-  ASSERT( GetAbsolutePath( lpdest, _T( "C:\\Documents and Settings\\All Users\\.\\Application Data\\..\\..\\" ) ) );
-  ASSERT( _tcsicmp( lpdest, _T( "C:\\Documents and Settings\\" ) ) == 0 );
-  delete [] lpdest;
-  lpdest = nullptr;
-  ASSERT( GetAbsolutePath( lpdest, _T( "C:\\Documents and Settings\\All Users\\Application Data\\..\\" ) ) );
-  ASSERT( _tcsicmp( lpdest, _T( "C:\\Documents and Settings\\All Users\\" ) ) == 0 );
-  delete [] lpdest;
-  lpdest = nullptr;
-  ASSERT( GetAbsolutePath( lpdest, _T( "C:\\Documents and Settings\\All Users\\Application Data\\..\\Application Data\\" ) ) );
-  ASSERT( _tcsicmp( lpdest, _T( "C:\\Documents and Settings\\All Users\\Application Data\\" ) ) == 0 );
-  delete [] lpdest;
-  lpdest = nullptr;
-
-  ASSERT( GetAbsolutePath( lpdest, _T("somepath2\\"), _T( "C:\\somepath1\\" ) ) );
-  ASSERT( _tcsicmp( lpdest, _T( "C:\\somepath1\\somepath2\\" ) ) == 0 );
-  delete [] lpdest;
-  lpdest = nullptr;
-
-
-  // this should not work because of the depth of the path
-  ASSERT( !GetAbsolutePath( lpdest, _T( "../../../somefile.txt" ), _T( "c:\\dira\\dirb\\" ) ) );
-
   MYODD_STRING appPath = GetAppPath( false );
   ASSERT( ExpandEnvironment( FILE_APPPATH, lpdest ) );
   ASSERT( _tcsicmp( lpdest, appPath.c_str() ) == 0 );
@@ -1278,55 +1251,14 @@ MYODD_STRING GetBaseFromFile
 * It is up to the user to delete the container value.
 * @param MYODD_STRING& container for the return value, unset in case of error. 
 * @param const MYODD_STRING& the relative path we would like to get the absolute path from.
-* @param const MYODD_CHAR* the original path, if nullptr we will use the current directory as origin.
+* @param const MYODD_STRING& the original path, if empty we will use the current directory as origin.
 * @return bool if we were able to get the absolute path, false if the given path is unrealistic/impossible.
 */
-bool GetAbsolutePath
-( 
- MYODD_STRING& dest, 
- const MYODD_STRING& stdRelative, 
-  const MYODD_CHAR* lpOrigin /*= nullptr*/
- )
+bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin )
 {
-  //  pass this to the other function.
-  MYODD_CHAR* lpDest = nullptr;
-  if( !files::GetAbsolutePath( lpDest, stdRelative.c_str(), lpOrigin ))
-  {
-    return false;
-  }
-
-  // copy the new value over.
-  dest = lpDest;
-  delete [] lpDest;
-
-  return true;
-}
-
-/**
- * Get the absolute path given a relative path.
- * It is up to the user to delete the container value.
- * @param MYODD_CHAR*& container for the return value, unset in case of error. 
- * @param const MYODD_CHAR* the relative path we would like to get the absolute path from.
- * @param const MYODD_CHAR* the original path, if nullptr we will use the current directory as origin.
- * @return bool if we were able to get the absolute path, false if the given path is unrealistic/impossible.
- */
-bool GetAbsolutePath
-( 
-  MYODD_CHAR*& dest,
-  const MYODD_CHAR* lpRelative,
-  const MYODD_CHAR* lpOrigin /*= nullptr*/
-)
-{
-  dest = nullptr;
-  if(nullptr == lpRelative )
-  {
-    //  we need a relative path to work with.
-    return false;
-  }
-
-  MYODD_STRING sRelative( lpRelative );
+  MYODD_STRING sRelative(givenRelative);
   MYODD_STRING sOrigin( _T("") );
-  if(nullptr == lpOrigin )
+  if(givenOrigin.length() == 0 )
   {
     MYODD_CHAR lpBuffer[ T_MAX_PATH ] = {0};
     if( 0 == ::GetCurrentDirectory( T_MAX_PATH, lpBuffer ) )
@@ -1338,7 +1270,7 @@ bool GetAbsolutePath
   }
   else
   {
-    sOrigin = lpOrigin;
+    sOrigin = givenOrigin;
   }
 
   // what we will be replacing everything with.
@@ -1353,7 +1285,7 @@ bool GetAbsolutePath
 
   //  will we need to add a trailing char?
   // remember we are not checking for MYODD_FILE_SEPARATOR as we replace all the "\"
-  bool addtrailing = (sRelative[ sRelative.length() -1 ] == SEPARATOR_REPLACE_C );
+  auto addtrailing = (sRelative[ sRelative.length() -1 ] == SEPARATOR_REPLACE_C );
 
   // split them all
   std::vector<MYODD_STRING> e_sRelative;
@@ -1375,14 +1307,9 @@ bool GetAbsolutePath
       // either way MS does not really moan about it.
       continue;
     }
-    else if( *it == _T("..") )
+    else if( files::IsDot(*it) )
     {
       ++dotdotCount;
-      continue;
-    }
-    else if( *it == _T(".") )  //  not pretty, but allowed.
-    {
-      ++dotCount;
       continue;
     }
 
@@ -1397,7 +1324,7 @@ bool GetAbsolutePath
   {
     // we will not be using the original path
     // because the path that was given does not seem to be a relative path in the first place.
-    e_sOrigin.erase( e_sOrigin.begin(), e_sOrigin.end() );
+    e_sOrigin.clear();
 
     // if this really look like it is not a path at all then we are relative to our path
     // relative = "example/something/"
@@ -1410,11 +1337,8 @@ bool GetAbsolutePath
       {
         if( GetAbsolutePath( dest, expanded.c_str(), sOrigin.c_str() ) )
         {
-          MYODD_STRING absolute = dest;
-          delete [] dest;
-          dest = nullptr;
-
-          return UnExpandEnvironment( absolute.c_str(), dest );
+          auto absolute = dest;
+          return UnExpandEnvironment( absolute, dest );
         }
       }
     }
@@ -1424,7 +1348,7 @@ bool GetAbsolutePath
       // and try and see if we can get that to work.
       AddTrailingBackSlash(sOrigin);
       MYODD_STRING correctedPath = sOrigin + sRelative;
-      return GetAbsolutePath( dest, correctedPath.c_str(), sOrigin.c_str() );
+      return GetAbsolutePath( dest, correctedPath, sOrigin.c_str() );
     }
   }
   else if( dotdotCount >= e_sOrigin.size() )
@@ -1438,8 +1362,10 @@ bool GetAbsolutePath
     e_sOrigin.pop_back();
 
   // add the relative path at the end of it
-  for( size_t push_back = (dotdotCount+dotCount); push_back < e_sRelative.size(); ++push_back )
-    e_sOrigin.push_back( e_sRelative[push_back] );
+  for (size_t push_back = (dotdotCount + dotCount); push_back < e_sRelative.size(); ++push_back)
+  {
+    e_sOrigin.push_back(e_sRelative[push_back]);
+  }
 
   // finally clean everything up.
   std::vector<MYODD_STRING> e_sClean;
@@ -1469,18 +1395,11 @@ bool GetAbsolutePath
   // putting it all together...
   // note that we use MYODD_FILE_SEPARATOR and not SEPARATOR_REPLACE
   // this is in case both are not the same.
-  MYODD_STRING imp = strings::implode( e_sClean, MYODD_FILE_SEPARATOR );
+  dest = strings::implode( e_sClean, MYODD_FILE_SEPARATOR );
   if( addtrailing )
   {
-    imp += MYODD_FILE_SEPARATOR;
+    dest += MYODD_FILE_SEPARATOR;
   }
-  size_t implodeSize = imp.length()+1;
-
-  dest = new MYODD_CHAR[ implodeSize ];
-  memset( dest, 0, implodeSize );
-
-  _tcscpy_s( dest, implodeSize, imp.c_str() );
-
   return true;
 }
 

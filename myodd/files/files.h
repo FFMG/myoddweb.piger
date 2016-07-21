@@ -72,8 +72,7 @@ MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, 
 
 MYODD_STRING GetAppPath( bool bAddTrailing =true);
 
-bool GetAbsolutePath(MYODD_CHAR*& dest, const MYODD_CHAR* lpRelative, const MYODD_CHAR* lpOrigin = nullptr);
-bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& lpRelative, const MYODD_CHAR* lpOrigin = nullptr);
+bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin = nullptr );
 
 void CleanFileName( MYODD_STRING& dirtyFileName );
 

@@ -398,7 +398,7 @@ namespace myodd{ namespace log{
     myodd::files::AddTrailingBackSlash( m_sDirectory );
 
     //  expand the path, in case the user changes their path or something.
-    if( !myodd::files::GetAbsolutePath( m_sDirectory, m_sDirectory ) )
+    if( !myodd::files::GetAbsolutePath( m_sDirectory, m_sDirectory ))
     {
       return false;
     }
