@@ -67,10 +67,6 @@ void Test()
   ASSERT( _tcsicmp( lpdest, FILE_APPPATH ) == 0 );
   delete [] lpdest;
   lpdest = nullptr;
-
-  MYODD_STRING dirtyFileName = _T("[bad]^*£");
-  CleanFileName( dirtyFileName );
-  ASSERT( dirtyFileName == _T("_bad___£"));
 }
 #else
 {
@@ -1385,17 +1381,30 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
  */
 void CleanFileName( MYODD_STRING& dirtyFileName )
 {
-  static MYODD_CHAR* badChars = _T("?[]/\\=+<>:;\",*|^\"");
-  BOOST_FOREACH(MYODD_CHAR &tch, dirtyFileName )
+  // the bad characters.
+  static auto badChars = _T("?[]/\\=+<>:;\",*|^");
+
+  // the good characters.
+  static auto goodChar = _T('_');
+
+  // go around looking for a bad characters.
+  for(;;)
   {
-    BOOST_FOREACH( const MYODD_CHAR& bad, badChars )
+    // look for the first bad character
+    auto found = dirtyFileName.find_first_of(badChars);
+
+    // did we find it?
+#ifdef _UNICODE
+    if( std::wstring::npos == found )
+#else
+    if (std::wstring::npos == found)
+#endif
     {
-      if( tch == bad )
-      {
-        tch = '_';
-        break;
-      }
+      break;
     }
+
+    // then replace it.
+    dirtyFileName[found] = goodChar;
   }
 }
 

@@ -88,5 +88,8 @@
     <ClCompile Include="files\testfiles_absolutepath.cpp">
       <Filter>myodd\files</Filter>
     </ClCompile>
+    <ClCompile Include="files\testfiles_cleanfilename.cpp">
+      <Filter>myodd\files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
