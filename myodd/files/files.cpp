@@ -1296,7 +1296,7 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
 
   //  ^((?:\.[\/\\])+)
   const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
-  stringRegex.assign(pattern);
+  stringRegex.assign( pattern );
   if (boost::regex_match(copyOfOrigin, matches, stringRegex))
   {
     // because we added a trailing back slash earlier

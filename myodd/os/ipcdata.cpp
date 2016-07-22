@@ -587,8 +587,19 @@ std::wstring IpcData::ReadString(unsigned char* pData, const size_t dataSize, si
       // get the data
       auto stringSizeToRead = static_cast<size_t>(stringSize) * sizeof(wchar_t);
 
-      // make sure we can read this.
-      ThrowIfReadingPastSize(dataSize, pointer, stringSizeToRead);
+      try
+      {
+        // make sure we can read this.
+        ThrowIfReadingPastSize(dataSize, pointer, stringSizeToRead);
+      }
+      catch(...)
+      {
+        // cleanup
+        delete [] dataValue;
+
+        // rethrow
+        throw;
+      }
 
       memcpy_s(dataValue, stringSizeToRead, pData + pointer, stringSizeToRead);
 
