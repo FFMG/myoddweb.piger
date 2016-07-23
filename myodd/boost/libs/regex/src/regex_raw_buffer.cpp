@@ -40,7 +40,7 @@ void BOOST_REGEX_CALL raw_storage::resize(size_type n)
    while(newsize < n)
       newsize *= 2;
    size_type datasize = end - start;
-   // extend newsize to WORD/unsigned long boundary:
+   // extend newsize to WORD/DWORD boundary:
    newsize = (newsize + padding_mask) & ~(padding_mask);
 
    // allocate and copy data:
