@@ -5,7 +5,6 @@
 #include "../math/math.h"
 #include "../log/log.h"
 #include <io.h>
-#include <boost/regex.hpp>
 
 // Look for version.lib
 #pragma comment( lib, "version.lib" )
@@ -867,10 +866,11 @@ bool IsURL(const MYODD_STRING& givenUrl)
       {
         // empty is allowed, it just means we have a '/', (at the end)
         // or that we have doubles '/', not ideal, but not a train smash
-        if( (*it).length() == 0 )
+        if ((*it).length() == 0)
         {
           continue;
         }
+
         // get the path, just about every character is allowed.
         // the order does not really matter.
         // we should devide the path and the query/parametter and fragment.
