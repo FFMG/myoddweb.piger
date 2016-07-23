@@ -75,6 +75,12 @@
     <Filter Include="os">
       <UniqueIdentifier>{1f0f441e-0f5d-46e1-abc1-bbb86cb6ce98}</UniqueIdentifier>
     </Filter>
+    <Filter Include="pcre2">
+      <UniqueIdentifier>{21d2b523-65f7-4ac6-9a09-bcd13a7d8e8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pcre2\src">
+      <UniqueIdentifier>{939e4a2b-8889-477d-a795-0df8e6da7eb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -266,6 +272,78 @@
     <ClCompile Include="os\ipclistenerwnd.cpp">
       <Filter>os</Filter>
     </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_xclass.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_valid_utf.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_ucd.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_tables.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_substring.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_substitute.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_study.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_string_utils.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_serialize.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_pattern_info.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_ord2utf.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_newline.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_match_data.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_match.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_maketables.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_jit_compile.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_find_bracket.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_error.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_dfa_match.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_context.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_compile.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_auto_possess.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\dftables.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_config.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -416,6 +494,9 @@
     </ClInclude>
     <ClInclude Include="os\ipcmessagehandler.h">
       <Filter>os</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre2\src\config.h">
+      <Filter>pcre2\src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
