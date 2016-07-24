@@ -1,10 +1,12 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 #include "../files/files.h"
 #include "../string/string.h"
 #include "../math/math.h"
 #include "../log/log.h"
+#include "../pcre2/regex2.h"
 #include <io.h>
+#include <boost\regex.h>
 
 // Look for version.lib
 #pragma comment( lib, "version.lib" )
@@ -772,13 +774,8 @@ bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
  */
 bool IsURL(const MYODD_STRING& givenUrl)
 {
-#ifdef _UNICODE
-  boost::wsmatch matches;
-  boost::wregex stringRegex;
-#else
-  boost::smatch matches;
-  boost::regex stringRegex;
-#endif
+  auto stringRegex = regex::Regex2();
+  auto matches = regex::Regex2::matches();
 
   MYODD_STRING url(givenUrl);
 
@@ -790,8 +787,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
     //  get the protocol identifier and remove it.
     // http://www.example.com becomes www.example.com
     const auto pattern_protocol = _T("^([[:alnum:]]+:\\/{2}).*");
-    stringRegex.assign(pattern_protocol);
-    if (!boost::regex_match(url, matches, stringRegex))
+    if (0 == stringRegex.u8match(pattern_protocol, url.c_str(), matches, false))
     {
       return false;
     }
@@ -816,12 +812,12 @@ bool IsURL(const MYODD_STRING& givenUrl)
     // we use all non capturing groups as we do not need the values.
     const auto pattern_host = _T("^((?:&#|%[0-9]|[[:alnum:]]|[\\-_])")  // first character '&#' or :alnum: or special chars.
                                                                         // following charaters '&#' or :alnum: or special chars.  
-                              _T("(?:&#|[[:alnum:]]|[\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
+                              _T("(?:&#|[[:alnum:]]|[\\p{S}\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
                               _T("(?::[0-9]{2,})?)$");                  //  posible port ':' and at least 2 numbers.
 
                                          // the pattern for the path.
                                          // very similar to the host, but without the port values.
-    const auto pattern_path = _T("^(?:%[0-9]|[[:alpha:]]|[0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])+$");
+    const auto pattern_path = _T("^(?:%[0-9]|[[:alpha:]]|[\\p{S}0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])+$");
 
     // pattern for the username and password.
     // we use all non capturing groups as we do not need the values.
@@ -838,15 +834,13 @@ bool IsURL(const MYODD_STRING& givenUrl)
         if (2 == strings::Explode(usernameAndPassword, *it, _T('@'), 2))
         {
           // in the first string read the username[:password] 
-          stringRegex.assign(pattern_usernameAndPassword);
-          if (!boost::regex_match(usernameAndPassword[0], matches, stringRegex))
+          if ( 0 == stringRegex.u8match(pattern_usernameAndPassword, usernameAndPassword[0].c_str(), false ))
           {
             return false;
           }
 
           // the second string now contains the host
-          stringRegex.assign(pattern_host);
-          if (!boost::regex_match(usernameAndPassword[1], matches, stringRegex))
+          if (0 == stringRegex.u8match(pattern_host, usernameAndPassword[1].c_str(), false))
           {
             return false;
           }
@@ -855,8 +849,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
         {
           // we have no username/password, so we can check the 
           // entire string for a valid host.
-          stringRegex.assign(pattern_host);
-          if (!boost::regex_match(*it, matches, stringRegex))
+          if ( 0 == stringRegex.u8match(pattern_host, (*it).c_str(), false))
           {
             return false;
           }
@@ -874,8 +867,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
         // get the path, just about every character is allowed.
         // the order does not really matter.
         // we should devide the path and the query/parametter and fragment.
-        stringRegex.assign(pattern_path);
-        if (!boost::regex_match(*it, matches, stringRegex))
+        if ( 0 == stringRegex.u8match(pattern_path, (*it).c_str(), false))
         {
           return false;
         }

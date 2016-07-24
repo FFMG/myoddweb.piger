@@ -338,10 +338,13 @@
     <ClCompile Include="pcre2\src\pcre2_auto_possess.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
-    <ClCompile Include="pcre2\src\dftables.c">
+    <ClCompile Include="pcre2\src\pcre2_config.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_config.c">
+    <ClCompile Include="pcre2\regex2.cpp">
+      <Filter>pcre2</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_chartables.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -497,6 +500,9 @@
     </ClInclude>
     <ClInclude Include="pcre2\src\config.h">
       <Filter>pcre2\src</Filter>
+    </ClInclude>
+    <ClInclude Include="pcre2\regex2.h">
+      <Filter>pcre2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
