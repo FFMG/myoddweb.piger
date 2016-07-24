@@ -787,7 +787,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
     //  get the protocol identifier and remove it.
     // http://www.example.com becomes www.example.com
     const auto pattern_protocol = _T("^([[:alnum:]]+:\\/{2}).*");
-    if (0 == stringRegex.u8match(pattern_protocol, url.c_str(), matches, false))
+    if (0 == stringRegex.Match(pattern_protocol, url.c_str(), matches, false))
     {
       return false;
     }
@@ -834,13 +834,13 @@ bool IsURL(const MYODD_STRING& givenUrl)
         if (2 == strings::Explode(usernameAndPassword, *it, _T('@'), 2))
         {
           // in the first string read the username[:password] 
-          if ( 0 == stringRegex.u8match(pattern_usernameAndPassword, usernameAndPassword[0].c_str(), false ))
+          if ( 0 == stringRegex.Match(pattern_usernameAndPassword, usernameAndPassword[0].c_str(), false ))
           {
             return false;
           }
 
           // the second string now contains the host
-          if (0 == stringRegex.u8match(pattern_host, usernameAndPassword[1].c_str(), false))
+          if (0 == stringRegex.Match(pattern_host, usernameAndPassword[1].c_str(), false))
           {
             return false;
           }
@@ -849,7 +849,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
         {
           // we have no username/password, so we can check the 
           // entire string for a valid host.
-          if ( 0 == stringRegex.u8match(pattern_host, (*it).c_str(), false))
+          if ( 0 == stringRegex.Match(pattern_host, (*it).c_str(), false))
           {
             return false;
           }
@@ -867,7 +867,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
         // get the path, just about every character is allowed.
         // the order does not really matter.
         // we should devide the path and the query/parametter and fragment.
-        if ( 0 == stringRegex.u8match(pattern_path, (*it).c_str(), false))
+        if ( 0 == stringRegex.Match(pattern_path, (*it).c_str(), false))
         {
           return false;
         }

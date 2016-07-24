@@ -36,25 +36,25 @@ namespace myodd {
       typedef std::vector<std::wstring> matches;
 
     public:
-      int u8match(const wchar_t *rePattern,
+      int Match(const wchar_t *rePattern,
         const wchar_t *wsubject,
         bool caseSensitive = false
       )const;
 
-      int u8match(const wchar_t *rePattern,
+      int Match(const wchar_t *rePattern,
         const wchar_t *wsubject,
         matches& wmatches,
         bool caseSensitive = false
       )const;
 
-      int u8replace(const wchar_t* rePattern,
+      int Replace(const wchar_t* rePattern,
         const wchar_t* replacement,
         const wchar_t* subject,
         std::wstring& replaceResult,
         bool caseSensitive = false
       ) const;
 
-      int u8replace(const wchar_t* rePattern,
+      int Replace(const wchar_t* rePattern,
         const wchar_t* replacement,
         std::wstring& subjectResult,
         bool caseSensitive = false
@@ -63,9 +63,9 @@ namespace myodd {
     protected:
       pcre2_code *u8compile(const wchar_t *pattern, bool caseSensitive) const;
 
-      int u8match(const wchar_t *rePattern,
+      int Match(const wchar_t *rePattern,
         const wchar_t *subject,
-        matches* pu8matches,
+        matches* pmatches,
         bool caseSensitive = false
       )const;
     };

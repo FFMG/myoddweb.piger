@@ -19,13 +19,13 @@ namespace myodd {
     * @param bool caseSensitive if the replacement is case sensitive or not.
     * @return int the number of items replaced.
     */
-    int Regex2::u8replace(const wchar_t* rePattern,
+    int Regex2::Replace(const wchar_t* rePattern,
       const wchar_t* replacement,
       std::wstring& subjectResult,
       bool caseSensitive /*= false*/
     ) const
     {
-      return u8replace(rePattern, replacement, subjectResult.c_str(), subjectResult, caseSensitive);
+      return Replace(rePattern, replacement, subjectResult.c_str(), subjectResult, caseSensitive);
     }
 
     /**
@@ -37,14 +37,14 @@ namespace myodd {
     * @param bool caseSensitive if the replacement is case sensitive or not.
     * @return int the number of items replaced.
     */
-    int Regex2::u8replace(const wchar_t* rePattern,
+    int Regex2::Replace(const wchar_t* rePattern,
       const wchar_t* replacement,
       const wchar_t* subject,
       std::wstring& replaceResult,
       bool caseSensitive /*= false*/
     ) const
     {
-      if (NULL == rePattern || NULL == replacement || NULL == subject)
+      if (nullptr == rePattern || nullptr == replacement || nullptr == subject)
       {
         return PCRE2_ERROR_BADDATA;
       }
@@ -52,7 +52,7 @@ namespace myodd {
       int rc;
 
       pcre2_code *compiled_re = u8compile(rePattern, caseSensitive);
-      if (NULL == compiled_re)
+      if (nullptr == compiled_re)
       {
         return  PCRE2_ERROR_BADDATA;
       }
@@ -73,8 +73,8 @@ namespace myodd {
         subject_length,
         0,
         PCRE2_SUBSTITUTE_GLOBAL,
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         pcre2_replacement,
         replacement_length,
         output,
@@ -130,14 +130,14 @@ namespace myodd {
         (caseSensitive ? 0 : PCRE2_CASELESS), /* default options */
         &errornumber,                         /* for error number */
         &erroroffset,                         /* for error offset */
-        NULL);                                /* use default compile context */
+        nullptr);                             /* use default compile context */
 
       pcre2_jit_compile(re, PCRE2_JIT_COMPLETE);
 
-      if (re == NULL) {
+      if (re == nullptr) {
         PCRE2_UCHAR buffer[256];
         pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
-        return NULL;
+        return nullptr;
       }
 
       return re;
@@ -150,22 +150,22 @@ namespace myodd {
     * @param bool caseSensitive if this is case sensitive or not.
     * @return int the number of items matched.
     */
-    int Regex2::u8match(const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive /*= false*/) const
+    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive /*= false*/) const
     {
-      return u8match(rePattern, wsubject, (matches*)NULL, caseSensitive);
+      return Match(rePattern, wsubject, (matches*)nullptr, caseSensitive);
     }
 
     /**
     * Get the number of matches to a certain pattern in a subject.
     * @param const wchar_t *rePattern the pattern we are looking for.
     * @param const wchar_t *wsubject the subject containing the data we want.
-    * @param matches& u8matches the matches we are after.
+    * @param matches& matches the matches we are after.
     * @param bool caseSensitive if this is case sensitive or not.
     * @return int the number of items matched.
     */
-    int Regex2::u8match(const wchar_t *rePattern, const wchar_t *wsubject, matches& u8matches, bool caseSensitive /*= false*/) const
+    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, matches& matches, bool caseSensitive /*= false*/) const
     {
-      return u8match(rePattern, wsubject, &u8matches, caseSensitive);
+      return Match(rePattern, wsubject, &matches, caseSensitive);
     }
 
     /**
@@ -173,19 +173,19 @@ namespace myodd {
     * Get the number of matches to a certain pattern in a subject.
     * @param const wchar_t *rePattern the pattern we are looking for.
     * @param const wchar_t *wsubject the subject containing the data we want.
-    * @param matches* u8matches the matches we are after, if NULL we will not be adding anything to that list.
+    * @param matches* matches the matches we are after, if nullptr we will not be adding anything to that list.
     * @param bool caseSensitive if this is case sensitive or not.
     * @return int the number of items matched.
     */
-    int Regex2::u8match
+    int Regex2::Match
     (
       const wchar_t *rePattern,
       const wchar_t *wsubject,
-      matches* pu8matches,
+      matches* pmatches,
       bool caseSensitive /*= false*/
     ) const
     {
-      if (NULL == rePattern || NULL == wsubject)
+      if (nullptr == rePattern || nullptr == wsubject)
       {
         return PCRE2_ERROR_BADDATA;
       }
@@ -208,7 +208,7 @@ namespace myodd {
 
       //  if we cannot compile then this is not valid.
       pcre2_code *compiled_re = u8compile(rePattern, caseSensitive);
-      if (NULL == compiled_re)
+      if (nullptr == compiled_re)
       {
         return  PCRE2_ERROR_BADDATA;
       }
@@ -217,7 +217,7 @@ namespace myodd {
       PCRE2_SPTR pcre2_subject = (PCRE2_SPTR)wsubject;
 
       int totalCount = 0;
-      pcre2_match_data* match_data = pcre2_match_data_create_from_pattern(compiled_re, NULL);
+      pcre2_match_data* match_data = pcre2_match_data_create_from_pattern(compiled_re, nullptr);
       size_t offset = 0;
       for (;;)
       {
@@ -228,7 +228,7 @@ namespace myodd {
           offset,
           0,
           match_data,
-          NULL);
+          nullptr);
 
         if (rc < 1)
         {
@@ -241,10 +241,10 @@ namespace myodd {
         {
           size_t substring_length = ovector[2 * i + 1] - ovector[2 * i];
 
-          if (pu8matches != NULL)
+          if (pmatches != nullptr)
           {
             PCRE2_SPTR substring_start = pcre2_subject + ovector[2 * i];
-            pu8matches->push_back(
+            pmatches->push_back(
               std::wstring((wchar_t *)substring_start, (wchar_t *)substring_start + substring_length)
             );
           }
