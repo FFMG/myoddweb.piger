@@ -810,14 +810,14 @@ bool IsURL(const MYODD_STRING& givenUrl)
     // the first character must be a letter, a number or &#...
     // then if we have a colon, then it must be a port number.
     // we use all non capturing groups as we do not need the values.
-    const auto pattern_host = _T("^((?:&#|%[0-9]|[[:alnum:]]|[\\-_])")  // first character '&#' or :alnum: or special chars.
+    const auto pattern_host = _T("^((?:&#|%[0-9A-Z]|[\\p{L}0-9\\-_])")  // first character '&#' or :alnum: or special chars.
                                                                         // following charaters '&#' or :alnum: or special chars.  
-                              _T("(?:&#|[[:alnum:]]|[\\p{S}\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
+                              _T("(?:&#|[0-9\\p{L}\\p{S}\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
                               _T("(?::[0-9]{2,})?)$");                  //  posible port ':' and at least 2 numbers.
 
                                          // the pattern for the path.
                                          // very similar to the host, but without the port values.
-    const auto pattern_path = _T("^(?:%[0-9]|[[:alpha:]]|[\\p{S}0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])+$");
+    const auto pattern_path = _T("^(?:%[0-9A-Z]|[[:alpha:]]|[\\p{S}0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])+$");
 
     // pattern for the username and password.
     // we use all non capturing groups as we do not need the values.
