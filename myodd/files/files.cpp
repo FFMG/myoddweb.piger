@@ -765,6 +765,83 @@ bool CreateFullDirectory(const MYODD_CHAR* lpPath, bool bIsFile )
   return bResult;
 }
 
+bool _IsUrlCommon(const MYODD_STRING& path)
+{
+  // empty is allowed, it just means we have a '/', (at the end)
+  // or that we have doubles '/', not ideal, but not a train smash
+  if ( path.length() == 0)
+  {
+    return true;
+  }
+
+  // the pattern for each sections.
+  regex::Regex2 stringRegex;
+  static const auto pattern = _T("^(?:[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}])+$");
+  if (0 == stringRegex.Match(pattern, path.c_str(), false))
+  {
+    return false;
+  }
+  return true;
+}
+
+bool _IsUrlFirst(const MYODD_STRING& path)
+{
+  MYODD_STRING authority;
+  MYODD_STRING host = path;
+  MYODD_STRING port;
+
+  // get the authority
+  std::vector<MYODD_STRING> authorityAndHost;
+  if (2 == strings::Explode(authorityAndHost, host, _T('@'), 2))
+  {
+    authority = authorityAndHost[0];
+    host = authorityAndHost[1];
+
+    // check the authority now
+    regex::Regex2 stringRegex;
+    static const auto pattern = _T("^(?:\\S+(?::\\S*)?)?$");
+
+    // in the first string read the username[:password] 
+    if (0 == stringRegex.Match(pattern, authority.c_str(), false))
+    {
+      return false;
+    }
+  }
+
+  // get the port
+  std::vector<MYODD_STRING> hostAndPort;
+  if (2 == strings::Explode(hostAndPort, host, _T(':'), 2))
+  {
+    host = hostAndPort[0];
+    port = hostAndPort[1];
+
+    // check the port now.
+    regex::Regex2 stringRegex;
+    static const auto pattern = _T("^[0-9]{2,}$");
+
+    if (0 == stringRegex.Match(pattern, port.c_str(), false))
+    {
+      return false;
+    }
+  }
+
+  regex::Regex2 stringRegex;
+  static const auto pattern = _T("^(?:[\\?\\.#])");
+  if (0 != stringRegex.Match(pattern, host.c_str(), false))
+  {
+    return false;
+  }
+  
+  // first item cannot be '/'
+  if (host.length() == 0)
+  {
+    return false;
+  }
+
+  //  now the host must be valid.
+  return _IsUrlCommon(host);
+}
+
 /**
  * Check if the string given LOOKS like a valid URL
  * This is a very basic check, we cannot actually ping the site to enusre that it is valid.
@@ -798,7 +875,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
 
     // get the domain and path
     std::vector<MYODD_STRING> hostAndPaths;
-    if (0 == myodd::strings::Explode(hostAndPaths, url, _T('/')))
+    if (url.length() == 0 || 0 == myodd::strings::Explode(hostAndPaths, url, _T('/')))
     {
       // if we are here, we got a protocol, but nothing after that
       // in other words, we got "http://" and nothing else.
@@ -806,68 +883,19 @@ bool IsURL(const MYODD_STRING& givenUrl)
       return false;
     }
 
-    // the pattern for the domain.
-    // the first character must be a letter, a number or &#...
-    // then if we have a colon, then it must be a port number.
-    // we use all non capturing groups as we do not need the values.
-    const auto pattern_host = _T("^((?:&#|%[0-9A-Z]|[\\p{L}0-9\\-_])")  // first character '&#' or :alnum: or special chars.
-                                                                        // following charaters '&#' or :alnum: or special chars.  
-                              _T("(?:&#|[0-9\\p{L}\\p{S}\\-\\._~\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])*")
-                              _T("(?::[0-9]{2,})?)$");                  //  posible port ':' and at least 2 numbers.
-
-                                         // the pattern for the path.
-                                         // very similar to the host, but without the port values.
-    const auto pattern_path = _T("^(?:%[0-9A-Z]|[[:alpha:]]|[\\p{S}0-9\\-\\._~:\\?#\\[\\]@!$&'\\(\\)\\*\\+,;=])+$");
-
-    // pattern for the username and password.
-    // we use all non capturing groups as we do not need the values.
-    const auto pattern_usernameAndPassword = _T("^(?:\\S+(?::\\S*)?)?$");
-
     //  look at the domain and path(s)
     for (auto it = hostAndPaths.begin(); it != hostAndPaths.end(); ++it)
     {
       if (it == hostAndPaths.begin())
       {
-        //  look for username and passowrd.
-        // if we can split the string into 2 parts then we have a username/password
-        std::vector<MYODD_STRING> usernameAndPassword;
-        if (2 == strings::Explode(usernameAndPassword, *it, _T('@'), 2))
+        if (!_IsUrlFirst( *it ))
         {
-          // in the first string read the username[:password] 
-          if ( 0 == stringRegex.Match(pattern_usernameAndPassword, usernameAndPassword[0].c_str(), false ))
-          {
-            return false;
-          }
-
-          // the second string now contains the host
-          if (0 == stringRegex.Match(pattern_host, usernameAndPassword[1].c_str(), false))
-          {
-            return false;
-          }
-        }
-        else
-        {
-          // we have no username/password, so we can check the 
-          // entire string for a valid host.
-          if ( 0 == stringRegex.Match(pattern_host, (*it).c_str(), false))
-          {
-            return false;
-          }
+          return false;
         }
       }
       else
       {
-        // empty is allowed, it just means we have a '/', (at the end)
-        // or that we have doubles '/', not ideal, but not a train smash
-        if ((*it).length() == 0)
-        {
-          continue;
-        }
-
-        // get the path, just about every character is allowed.
-        // the order does not really matter.
-        // we should devide the path and the query/parametter and fragment.
-        if ( 0 == stringRegex.Match(pattern_path, (*it).c_str(), false))
+        if (!_IsUrlCommon( *it ))
         {
           return false;
         }
