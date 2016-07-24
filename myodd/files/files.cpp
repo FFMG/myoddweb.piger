@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 
 #include "../files/files.h"
 #include "../string/string.h"
@@ -1279,18 +1279,12 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
 
   // there is a special case for the origin been '.\' or '.'
   // in this case we want to assume that the user wants the 'current directory'
-#ifdef _UNICODE
-  boost::wsmatch matches;
-  boost::wregex stringRegex;
-#else
-  boost::smatch matches;
-  boost::regex stringRegex;
-#endif
+  regex::Regex2::matches matches;
+  regex::Regex2 stringRegex;
 
   //  ^((?:\.[\/\\])+)
   const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
-  stringRegex.assign( pattern );
-  if (boost::regex_match(copyOfOrigin, matches, stringRegex))
+  if (stringRegex.Match(pattern, copyOfOrigin.c_str(), matches ) > 1 )
   {
     // because we added a trailing back slash earlier
     // we can replace the all the '././././' with the current directory
@@ -1354,8 +1348,7 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   dest = strings::implode(evaluatedParts, MYODD_FILE_SEPARATOR );
 
   const auto pattern_end = _T("[\\/\\\\]$");
-  stringRegex.assign(pattern_end);
-  if (boost::regex_search(copyOfRelative, matches, stringRegex))
+  if (stringRegex.Match(pattern_end, copyOfRelative.c_str(), false) > 0 )
   {
     AddTrailingBackSlash(dest);
   }

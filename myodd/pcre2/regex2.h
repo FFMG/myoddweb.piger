@@ -15,10 +15,12 @@
 #pragma warning(disable : 4210)
 #pragma warning(disable : 4232)
 #pragma warning(disable : 4244)
+#pragma warning(disable : 4267)
 #pragma warning(disable : 4305)
 #pragma warning(disable : 4306)
 #pragma warning(disable : 4702)
 #pragma warning(disable : 4706)
+#pragma warning(disable : 4996)
 #endif /* defined(_MSC_VER) */
 
 #include "..\pcre2\src\pcre2.h"
