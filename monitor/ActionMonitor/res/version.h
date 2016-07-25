@@ -3,14 +3,14 @@
 #define VERSION_MAJOR          0
 #define VERSION_MINOR          6
 #define VERSION_MAINTENANCE   16
-#define VERSION_BUILD          5
+#define VERSION_BUILD          6
 
-#define VERSION_HOUR          21
-#define VERSION_MINUTE        56 
+#define VERSION_HOUR           6
+#define VERSION_MINUTE        30 
 
 #define VERSION_YEAR        2016
 #define VERSION_MONTH          7
-#define VERSION_DAY           24
+#define VERSION_DAY           25
 
 //
 // No need to edit below...

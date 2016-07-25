@@ -76,7 +76,7 @@ INSTANTIATE_TEST_CASE_P(TestVariousEdgeCases, MyOddFilesAbsolutePath,
     test_absolutepath{ L"\\Test\\", L"..\\somewhere\\", L"", false }
   ));
 
-TEST(TestAbsolutePathExpandValues)
+TEST(TestAbsolutePathExpandValues, TestExpendingValues )
 {
   MYODD_STRING exp;
   exp = _T("%appdata%\\Test");

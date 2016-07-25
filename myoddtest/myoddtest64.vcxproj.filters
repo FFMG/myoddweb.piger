@@ -17,6 +17,9 @@
     <Filter Include="myodd\files">
       <UniqueIdentifier>{0904ed1b-37a6-40f9-a8ab-4e71e9b97ead}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\pcre2">
+      <UniqueIdentifier>{41774f18-9db6-47f8-be17-0972cb63182e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -90,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="files\testfiles_cleanfilename.cpp">
       <Filter>myodd\os</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\test_match.cpp">
+      <Filter>myodd\pcre2</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
