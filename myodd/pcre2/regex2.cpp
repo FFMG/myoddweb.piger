@@ -19,30 +19,21 @@ namespace myodd {
     * @param bool caseSensitive if the replacement is case sensitive or not.
     * @return int the number of items replaced.
     */
-    int Regex2::Replace(const wchar_t* rePattern,
-      const wchar_t* replacement,
-      std::wstring& subjectResult,
-      bool caseSensitive /*= false*/
-    ) const
+    int Regex2::Replace(const wchar_t* rePattern, const wchar_t* replacement, std::wstring& subjectResult, bool caseSensitive /*= false*/ )
     {
       return Replace(rePattern, replacement, subjectResult.c_str(), subjectResult, caseSensitive);
     }
 
     /**
-    * Search for a pattern in a string and replace that string with given replacement string.
-    * @param const wchar_t* rePattern the pattern we are looking for.
-    * @param const wchar_t* replacement the string we want to replace with.
-    * @param const wchar_t* subject the string that contains the string we want to replace.
-    * @param std::wstring& subjectResult, the replaced string.
-    * @param bool caseSensitive if the replacement is case sensitive or not.
-    * @return int the number of items replaced.
-    */
-    int Regex2::Replace(const wchar_t* rePattern,
-      const wchar_t* replacement,
-      const wchar_t* subject,
-      std::wstring& replaceResult,
-      bool caseSensitive /*= false*/
-    ) const
+     * Search for a pattern in a string and replace that string with given replacement string.
+     * @param const wchar_t* rePattern the pattern we are looking for.
+     * @param const wchar_t* replacement the string we want to replace with.
+     * @param const wchar_t* subject the string that contains the string we want to replace.
+     * @param std::wstring& subjectResult, the replaced string.
+     * @param bool caseSensitive if the replacement is case sensitive or not.
+     * @return int the number of items replaced.
+     */
+    int Regex2::Replace(const wchar_t* rePattern, const wchar_t* replacement, const wchar_t* subject, std::wstring& replaceResult, bool caseSensitive /*= false*/ )
     {
       if (nullptr == rePattern || nullptr == replacement || nullptr == subject)
       {
@@ -51,7 +42,7 @@ namespace myodd {
 
       int rc;
 
-      pcre2_code *compiled_re = u8compile(rePattern, caseSensitive);
+      auto compiled_re = _Compile(rePattern, caseSensitive);
       if (nullptr == compiled_re)
       {
         return  PCRE2_ERROR_BADDATA;
@@ -111,14 +102,14 @@ namespace myodd {
     }
 
     /**
-    * Compile the patern into usable code.
-    * @param const wchar_t *rePattern the pattern we want to use.
-    * @param bool caseSensitive if this is case sensitive or not.
-    * @return pcre2_code the compiled patern.
-    */
-    pcre2_code *Regex2::u8compile(const wchar_t *rePattern, bool caseSensitive) const
+     * Compile the patern into usable code.
+     * @param const wchar_t *rePattern the pattern we want to use.
+     * @param bool caseSensitive if this is case sensitive or not.
+     * @return pcre2_code the compiled patern.
+     */
+    pcre2_code* Regex2::_Compile(const wchar_t *rePattern, bool caseSensitive)
     {
-      PCRE2_SPTR pcre2_pattern = (PCRE2_SPTR)rePattern;
+      auto pcre2_pattern = (PCRE2_SPTR)rePattern;
 
       pcre2_code *re;
       int errornumber;
@@ -144,46 +135,65 @@ namespace myodd {
     }
 
     /**
-    * Get the number of matches to a certain pattern in a subject.
-    * @param const wchar_t *rePattern the pattern we are looking for.
-    * @param const wchar_t *wsubject the subject containing the data we want.
-    * @param bool caseSensitive if this is case sensitive or not.
-    * @return int the number of items matched.
-    */
-    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive /*= false*/) const
+     * Get the number of matches to a certain pattern in a subject.
+     * @param const wchar_t *rePattern the pattern we are looking for.
+     * @param const wchar_t *wsubject the subject containing the data we want.
+     * @param bool caseSensitive if this is case sensitive or not.
+     * @return int the number of items matched.
+     */
+    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive /*= false*/)
     {
-      return Match(rePattern, wsubject, (matches*)nullptr, caseSensitive);
+      return _Match(rePattern, wsubject, caseSensitive, (matches*)nullptr);
     }
 
     /**
-    * Get the number of matches to a certain pattern in a subject.
-    * @param const wchar_t *rePattern the pattern we are looking for.
-    * @param const wchar_t *wsubject the subject containing the data we want.
-    * @param matches& matches the matches we are after.
-    * @param bool caseSensitive if this is case sensitive or not.
-    * @return int the number of items matched.
-    */
-    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, matches& matches, bool caseSensitive /*= false*/) const
+     * Get the number of matches to a certain pattern in a subject.
+     * @param const wchar_t *rePattern the pattern we are looking for.
+     * @param const wchar_t *wsubject the subject containing the data we want.
+     * @param bool caseSensitive if this is case sensitive or not.
+     * @return int the number of items matched.
+     */
+    int Regex2::Match(const wchar_t *rePattern, const std::wstring& wsubject, bool caseSensitive /*= false*/)
     {
-      return Match(rePattern, wsubject, &matches, caseSensitive);
+      return _Match(rePattern, wsubject.c_str(), caseSensitive, (matches*)nullptr);
     }
 
     /**
-    * Private function to find matches.
-    * Get the number of matches to a certain pattern in a subject.
-    * @param const wchar_t *rePattern the pattern we are looking for.
-    * @param const wchar_t *wsubject the subject containing the data we want.
-    * @param matches* matches the matches we are after, if nullptr we will not be adding anything to that list.
-    * @param bool caseSensitive if this is case sensitive or not.
-    * @return int the number of items matched.
-    */
-    int Regex2::Match
-    (
-      const wchar_t *rePattern,
-      const wchar_t *wsubject,
-      matches* pmatches,
-      bool caseSensitive /*= false*/
-    ) const
+     * Get the number of matches to a certain pattern in a subject.
+     * @param const wchar_t *rePattern the pattern we are looking for.
+     * @param const wchar_t *wsubject the subject containing the data we want.
+     * @param matches& matches the matches we are after.
+     * @param bool caseSensitive if this is case sensitive or not.
+     * @return int the number of items matched.
+     */
+    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, matches& matches, bool caseSensitive /*= false*/)
+    {
+      return _Match(rePattern, wsubject, caseSensitive, &matches );
+    }
+
+    /**
+     * Get the number of matches to a certain pattern in a subject.
+     * @param const wchar_t *rePattern the pattern we are looking for.
+     * @param const std::wstring& wsubject the subject containing the data we want.
+     * @param matches& matches the matches we are after.
+     * @param bool caseSensitive if this is case sensitive or not.
+     * @return int the number of items matched.
+     */
+    int Regex2::Match(const wchar_t *rePattern, const std::wstring& wsubject, matches& matches, bool caseSensitive /*= false*/)
+    {
+      return _Match(rePattern, wsubject.c_str(), caseSensitive, &matches );
+    }
+
+    /**
+     * Private function to find matches.
+     * Get the number of matches to a certain pattern in a subject.
+     * @param const wchar_t *rePattern the pattern we are looking for.
+     * @param const wchar_t *wsubject the subject containing the data we want.
+     * @param bool caseSensitive if this is case sensitive or not.
+     * @param matches* matches the matches we are after, if nullptr we will not be adding anything to that list.
+     * @return int the number of items matched.
+     */
+    int Regex2::_Match( const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive, matches* pmatches )
     {
       if (nullptr == rePattern || nullptr == wsubject)
       {
@@ -207,18 +217,24 @@ namespace myodd {
       }
 
       //  if we cannot compile then this is not valid.
-      pcre2_code *compiled_re = u8compile(rePattern, caseSensitive);
+      auto compiled_re = _Compile(rePattern, caseSensitive);
       if (nullptr == compiled_re)
       {
         return  PCRE2_ERROR_BADDATA;
       }
 
-      PCRE2_SIZE *ovector;
       PCRE2_SPTR pcre2_subject = (PCRE2_SPTR)wsubject;
 
       int totalCount = 0;
       pcre2_match_data* match_data = pcre2_match_data_create_from_pattern(compiled_re, nullptr);
-      size_t offset = 0;
+
+      int num = 0;
+      if (0 != pcre2_pattern_info(compiled_re, PCRE2_INFO_CAPTURECOUNT, &num)) 
+      {
+        return  PCRE2_ERROR_BADDATA;
+      }
+
+      PCRE2_SIZE offset = 0;
       for (;;)
       {
         int rc = pcre2_match(
@@ -226,7 +242,7 @@ namespace myodd {
           pcre2_subject,
           subject_length,
           offset,
-          0,
+          PCRE2_NO_UTF_CHECK | PCRE2_NOTEMPTY_ATSTART,
           match_data,
           nullptr);
 
@@ -235,12 +251,10 @@ namespace myodd {
           break;
         }
 
-        ovector = pcre2_get_ovector_pointer(match_data);
-
+        auto ovector = pcre2_get_ovector_pointer(match_data);
         for (int i = 0; i < rc; i++)
         {
-          size_t substring_length = ovector[2 * i + 1] - ovector[2 * i];
-
+          auto substring_length = ovector[2 * i + 1] - ovector[2 * i];
           if (pmatches != nullptr)
           {
             PCRE2_SPTR substring_start = pcre2_subject + ovector[2 * i];

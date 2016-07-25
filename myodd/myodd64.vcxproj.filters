@@ -272,80 +272,8 @@
     <ClCompile Include="os\ipclistenerwnd.cpp">
       <Filter>os</Filter>
     </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_xclass.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_valid_utf.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_ucd.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_tables.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_substring.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_substitute.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_study.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_string_utils.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_serialize.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_pattern_info.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_ord2utf.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_newline.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_match_data.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_match.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_maketables.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_jit_compile.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_find_bracket.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_error.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_dfa_match.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_context.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_compile.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_auto_possess.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_config.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
     <ClCompile Include="pcre2\regex2.cpp">
       <Filter>pcre2</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_chartables.c">
-      <Filter>pcre2\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

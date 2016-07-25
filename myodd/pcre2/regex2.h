@@ -30,12 +30,13 @@
 
 #include "..\pcre2\src\pcre2.h"
 #include <vector>
+#include <string>
 
 namespace myodd {
   namespace regex {
     class Regex2
     {
-    public:
+    private:
       Regex2();
       virtual ~Regex2();
 
@@ -43,38 +44,19 @@ namespace myodd {
       typedef std::vector<std::wstring> matches;
 
     public:
-      int Match(const wchar_t *rePattern,
-        const wchar_t *wsubject,
-        bool caseSensitive = false
-      )const;
+      static int Match(const wchar_t* rePattern, const std::wstring& wsubject, bool caseSensitive = false );
+      static int Match(const wchar_t* rePattern, const wchar_t* wsubject, bool caseSensitive = false);
 
-      int Match(const wchar_t *rePattern,
-        const wchar_t *wsubject,
-        matches& wmatches,
-        bool caseSensitive = false
-      )const;
+      static int Match(const wchar_t *rePattern, const std::wstring& wsubject, matches& wmatches, bool caseSensitive = false );
+      static int Match(const wchar_t *rePattern, const wchar_t *wsubject, matches& wmatches, bool caseSensitive = false);
 
-      int Replace(const wchar_t* rePattern,
-        const wchar_t* replacement,
-        const wchar_t* subject,
-        std::wstring& replaceResult,
-        bool caseSensitive = false
-      ) const;
+      static int Replace(const wchar_t* rePattern, const wchar_t* replacement, const wchar_t* subject, std::wstring& replaceResult, bool caseSensitive = false );
 
-      int Replace(const wchar_t* rePattern,
-        const wchar_t* replacement,
-        std::wstring& subjectResult,
-        bool caseSensitive = false
-      ) const;
+      static int Replace(const wchar_t* rePattern, const wchar_t* replacement, std::wstring& subjectResult, bool caseSensitive = false);
 
     protected:
-      pcre2_code *u8compile(const wchar_t *pattern, bool caseSensitive) const;
-
-      int Match(const wchar_t *rePattern,
-        const wchar_t *subject,
-        matches* pmatches,
-        bool caseSensitive = false
-      )const;
+      static pcre2_code* _Compile(const wchar_t *pattern, bool caseSensitive);
+      static int _Match(const wchar_t *rePattern, const wchar_t *subject, bool caseSensitive, matches* pmatches );
     };
   }
 };

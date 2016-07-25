@@ -775,9 +775,8 @@ bool _IsUrlCommon(const MYODD_STRING& path)
   }
 
   // the pattern for each sections.
-  regex::Regex2 stringRegex;
   static const auto pattern = _T("^(?:[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}])+$");
-  if (0 == stringRegex.Match(pattern, path.c_str(), false))
+  if (0 == regex::Regex2::Match(pattern, path, false))
   {
     return false;
   }
@@ -798,11 +797,10 @@ bool _IsUrlFirst(const MYODD_STRING& path)
     host = authorityAndHost[1];
 
     // check the authority now
-    regex::Regex2 stringRegex;
     static const auto pattern = _T("^(?:\\S+(?::\\S*)?)?$");
 
     // in the first string read the username[:password] 
-    if (0 == stringRegex.Match(pattern, authority.c_str(), false))
+    if (0 == regex::Regex2::Match(pattern, authority, false))
     {
       return false;
     }
@@ -816,18 +814,16 @@ bool _IsUrlFirst(const MYODD_STRING& path)
     port = hostAndPort[1];
 
     // check the port now.
-    regex::Regex2 stringRegex;
     static const auto pattern = _T("^[0-9]{2,}$");
 
-    if (0 == stringRegex.Match(pattern, port.c_str(), false))
+    if (0 == regex::Regex2::Match(pattern, port, false))
     {
       return false;
     }
   }
 
-  regex::Regex2 stringRegex;
   static const auto pattern = _T("^(?:[\\?\\.#])");
-  if (0 != stringRegex.Match(pattern, host.c_str(), false))
+  if (0 != regex::Regex2::Match(pattern, host, false))
   {
     return false;
   }
@@ -851,9 +847,7 @@ bool _IsUrlFirst(const MYODD_STRING& path)
  */
 bool IsURL(const MYODD_STRING& givenUrl)
 {
-  auto stringRegex = regex::Regex2();
   auto matches = regex::Regex2::matches();
-
   MYODD_STRING url(givenUrl);
 
   try
@@ -864,7 +858,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
     //  get the protocol identifier and remove it.
     // http://www.example.com becomes www.example.com
     const auto pattern_protocol = _T("^([[:alnum:]]+:\\/{2}).*");
-    if (0 == stringRegex.Match(pattern_protocol, url.c_str(), matches, false))
+    if (0 == regex::Regex2::Match(pattern_protocol, url, matches, false))
     {
       return false;
     }
@@ -875,7 +869,7 @@ bool IsURL(const MYODD_STRING& givenUrl)
 
     // get the domain and path
     std::vector<MYODD_STRING> hostAndPaths;
-    if (url.length() == 0 || 0 == myodd::strings::Explode(hostAndPaths, url, _T('/')))
+    if (url.length() == 0 || 0 == strings::Explode(hostAndPaths, url, _T('/')))
     {
       // if we are here, we got a protocol, but nothing after that
       // in other words, we got "http://" and nothing else.
@@ -1308,11 +1302,10 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   // there is a special case for the origin been '.\' or '.'
   // in this case we want to assume that the user wants the 'current directory'
   regex::Regex2::matches matches;
-  regex::Regex2 stringRegex;
 
   //  ^((?:\.[\/\\])+)
   const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
-  if (stringRegex.Match(pattern, copyOfOrigin.c_str(), matches ) > 1 )
+  if (regex::Regex2::Match(pattern, copyOfOrigin, matches ) > 1 )
   {
     // because we added a trailing back slash earlier
     // we can replace the all the '././././' with the current directory
@@ -1376,7 +1369,7 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   dest = strings::implode(evaluatedParts, MYODD_FILE_SEPARATOR );
 
   const auto pattern_end = _T("[\\/\\\\]$");
-  if (stringRegex.Match(pattern_end, copyOfRelative.c_str(), false) > 0 )
+  if (regex::Regex2::Match(pattern_end, copyOfRelative, false) > 0 )
   {
     AddTrailingBackSlash(dest);
   }
