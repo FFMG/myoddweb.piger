@@ -41,14 +41,14 @@ namespace myodd {
       virtual ~Regex2();
 
     public:
-      typedef std::vector<std::wstring> matches;
+      typedef std::vector<std::wstring> Matches;
 
     public:
-      static int Match(const wchar_t* rePattern, const std::wstring& wsubject, bool caseSensitive = false );
-      static int Match(const wchar_t* rePattern, const wchar_t* wsubject, bool caseSensitive = false);
+      static bool Search(const wchar_t* rePattern, const std::wstring& wsubject, bool caseSensitive = false );
+      static bool Search(const wchar_t* rePattern, const wchar_t* wsubject, bool caseSensitive = false);
 
-      static int Match(const wchar_t *rePattern, const std::wstring& wsubject, matches& wmatches, bool caseSensitive = false );
-      static int Match(const wchar_t *rePattern, const wchar_t *wsubject, matches& wmatches, bool caseSensitive = false);
+      static int Match(const wchar_t *rePattern, const std::wstring& wsubject, Matches& wmatches, bool caseSensitive = false );
+      static int Match(const wchar_t *rePattern, const wchar_t *wsubject, Matches& wmatches, bool caseSensitive = false);
 
       static int Replace(const wchar_t* rePattern, const wchar_t* replacement, const wchar_t* subject, std::wstring& replaceResult, bool caseSensitive = false );
 
@@ -56,7 +56,7 @@ namespace myodd {
 
     protected:
       static pcre2_code* _Compile(const wchar_t *pattern, bool caseSensitive);
-      static int _Match(const wchar_t *rePattern, const wchar_t *subject, bool caseSensitive, matches* pmatches );
+      static int _Match(const wchar_t *rePattern, const wchar_t *subject, bool caseSensitive, Matches* pmatches );
     };
   }
 };

@@ -776,11 +776,7 @@ bool _IsUrlCommon(const MYODD_STRING& path)
 
   // the pattern for each sections.
   static const auto pattern = _T("^(?:[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}])+$");
-  if (0 == regex::Regex2::Match(pattern, path, false))
-  {
-    return false;
-  }
-  return true;
+  return regex::Regex2::Search(pattern, path, false);
 }
 
 bool _IsUrlFirst(const MYODD_STRING& path)
@@ -800,7 +796,7 @@ bool _IsUrlFirst(const MYODD_STRING& path)
     static const auto pattern = _T("^(?:\\S+(?::\\S*)?)?$");
 
     // in the first string read the username[:password] 
-    if (0 == regex::Regex2::Match(pattern, authority, false))
+    if (!regex::Regex2::Search(pattern, authority, false))
     {
       return false;
     }
@@ -816,14 +812,15 @@ bool _IsUrlFirst(const MYODD_STRING& path)
     // check the port now.
     static const auto pattern = _T("^[0-9]{2,}$");
 
-    if (0 == regex::Regex2::Match(pattern, port, false))
+    if (!regex::Regex2::Search(pattern, port, false))
     {
       return false;
     }
   }
 
+  // look for invalid parametters
   static const auto pattern = _T("^(?:[\\?\\.#])");
-  if (0 != regex::Regex2::Match(pattern, host, false))
+  if (regex::Regex2::Search(pattern, host, false))
   {
     return false;
   }
@@ -847,7 +844,7 @@ bool _IsUrlFirst(const MYODD_STRING& path)
  */
 bool IsURL(const MYODD_STRING& givenUrl)
 {
-  auto matches = regex::Regex2::matches();
+  auto matches = regex::Regex2::Matches();
   MYODD_STRING url(givenUrl);
 
   try
@@ -1301,7 +1298,7 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
 
   // there is a special case for the origin been '.\' or '.'
   // in this case we want to assume that the user wants the 'current directory'
-  regex::Regex2::matches matches;
+  regex::Regex2::Matches matches;
 
   //  ^((?:\.[\/\\])+)
   const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
@@ -1369,7 +1366,7 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   dest = strings::implode(evaluatedParts, MYODD_FILE_SEPARATOR );
 
   const auto pattern_end = _T("[\\/\\\\]$");
-  if (regex::Regex2::Match(pattern_end, copyOfRelative, false) > 0 )
+  if ( regex::Regex2::Search(pattern_end, copyOfRelative, false) )
   {
     AddTrailingBackSlash(dest);
   }

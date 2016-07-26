@@ -135,38 +135,38 @@ namespace myodd {
     }
 
     /**
-     * Get the number of matches to a certain pattern in a subject.
+     * Check if we have one or more items match our pattern.
      * @param const wchar_t *rePattern the pattern we are looking for.
      * @param const wchar_t *wsubject the subject containing the data we want.
      * @param bool caseSensitive if this is case sensitive or not.
-     * @return int the number of items matched.
+     * @return bool if we match one or more items.
      */
-    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive /*= false*/)
+    bool Regex2::Search(const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive /*= false*/)
     {
-      return _Match(rePattern, wsubject, caseSensitive, (matches*)nullptr);
+      return (_Match(rePattern, wsubject, caseSensitive, (Matches*)nullptr) > 0 );
+    }
+
+    /**
+     * Check if we have one or more items match our pattern.
+     * @param const wchar_t *rePattern the pattern we are looking for.
+     * @param const wchar_t *wsubject the subject containing the data we want.
+     * @param bool caseSensitive if this is case sensitive or not.
+     * @return bool if we match one or more items.
+     */
+    bool Regex2::Search(const wchar_t *rePattern, const std::wstring& wsubject, bool caseSensitive /*= false*/)
+    {
+      return (_Match(rePattern, wsubject.c_str(), caseSensitive, (Matches*)nullptr) > 0);
     }
 
     /**
      * Get the number of matches to a certain pattern in a subject.
      * @param const wchar_t *rePattern the pattern we are looking for.
      * @param const wchar_t *wsubject the subject containing the data we want.
+     * @param Matches& matches the matches we are after.
      * @param bool caseSensitive if this is case sensitive or not.
      * @return int the number of items matched.
      */
-    int Regex2::Match(const wchar_t *rePattern, const std::wstring& wsubject, bool caseSensitive /*= false*/)
-    {
-      return _Match(rePattern, wsubject.c_str(), caseSensitive, (matches*)nullptr);
-    }
-
-    /**
-     * Get the number of matches to a certain pattern in a subject.
-     * @param const wchar_t *rePattern the pattern we are looking for.
-     * @param const wchar_t *wsubject the subject containing the data we want.
-     * @param matches& matches the matches we are after.
-     * @param bool caseSensitive if this is case sensitive or not.
-     * @return int the number of items matched.
-     */
-    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, matches& matches, bool caseSensitive /*= false*/)
+    int Regex2::Match(const wchar_t *rePattern, const wchar_t *wsubject, Matches& matches, bool caseSensitive /*= false*/)
     {
       return _Match(rePattern, wsubject, caseSensitive, &matches );
     }
@@ -175,11 +175,11 @@ namespace myodd {
      * Get the number of matches to a certain pattern in a subject.
      * @param const wchar_t *rePattern the pattern we are looking for.
      * @param const std::wstring& wsubject the subject containing the data we want.
-     * @param matches& matches the matches we are after.
+     * @param Matches& matches the matches we are after.
      * @param bool caseSensitive if this is case sensitive or not.
      * @return int the number of items matched.
      */
-    int Regex2::Match(const wchar_t *rePattern, const std::wstring& wsubject, matches& matches, bool caseSensitive /*= false*/)
+    int Regex2::Match(const wchar_t *rePattern, const std::wstring& wsubject, Matches& matches, bool caseSensitive /*= false*/)
     {
       return _Match(rePattern, wsubject.c_str(), caseSensitive, &matches );
     }
@@ -190,11 +190,18 @@ namespace myodd {
      * @param const wchar_t *rePattern the pattern we are looking for.
      * @param const wchar_t *wsubject the subject containing the data we want.
      * @param bool caseSensitive if this is case sensitive or not.
-     * @param matches* matches the matches we are after, if nullptr we will not be adding anything to that list.
+     * @param Matches* matches the matches we are after, if nullptr we will not be adding anything to that list.
      * @return int the number of items matched.
      */
-    int Regex2::_Match( const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive, matches* pmatches )
+    int Regex2::_Match( const wchar_t *rePattern, const wchar_t *wsubject, bool caseSensitive, Matches* pmatches )
     {
+      // clear the matches
+      if (pmatches)
+      {
+        pmatches->clear();
+      }
+
+      // do we have a pattern or subject?
       if (nullptr == rePattern || nullptr == wsubject)
       {
         return PCRE2_ERROR_BADDATA;
@@ -223,16 +230,10 @@ namespace myodd {
         return  PCRE2_ERROR_BADDATA;
       }
 
-      PCRE2_SPTR pcre2_subject = (PCRE2_SPTR)wsubject;
+      const auto pcre2_subject = (PCRE2_SPTR)wsubject;
 
       int totalCount = 0;
-      pcre2_match_data* match_data = pcre2_match_data_create_from_pattern(compiled_re, nullptr);
-
-      int num = 0;
-      if (0 != pcre2_pattern_info(compiled_re, PCRE2_INFO_CAPTURECOUNT, &num)) 
-      {
-        return  PCRE2_ERROR_BADDATA;
-      }
+      auto match_data = pcre2_match_data_create_from_pattern(compiled_re, nullptr);
 
       PCRE2_SIZE offset = 0;
       for (;;)
@@ -246,8 +247,21 @@ namespace myodd {
           match_data,
           nullptr);
 
+        // do we have anything?
         if (rc < 1)
         {
+          break;
+        }
+
+        // if we are just looking for a count
+        // then we can bail out now.
+        if (nullptr == pmatches)
+        {
+          // get a pattern count
+          pcre2_pattern_info(compiled_re, PCRE2_INFO_CAPTURECOUNT, &totalCount);
+
+          // and add the actual subject itslef.
+          ++totalCount;
           break;
         }
 
@@ -255,7 +269,7 @@ namespace myodd {
         for (int i = 0; i < rc; i++)
         {
           auto substring_length = ovector[2 * i + 1] - ovector[2 * i];
-          if (pmatches != nullptr)
+          if ( nullptr !=  pmatches)
           {
             PCRE2_SPTR substring_start = pcre2_subject + ovector[2 * i];
             pmatches->push_back(
@@ -263,16 +277,13 @@ namespace myodd {
             );
           }
           offset = ovector[2 * i] + substring_length;
-
-          // we found one more.
-          ++totalCount;
         }
 
+        // we found one more.
+        totalCount += rc;
       }
-
       pcre2_match_data_free(match_data);   /* Release memory used for the match */
       pcre2_code_free(compiled_re);        /* data and the compiled pattern. */
-
       return totalCount;
     }
   }
