@@ -67,7 +67,7 @@ TEST(Pcre2TestsMatch, SimpleTestLettersCategories)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2TestsMatch, ZeroMatchAsNeeded)
+TEST(Pcre2TestsMatch, InSomeCasesSensitiveFlagDoesNotMatter)
 {
   // test a simple match
   const wchar_t *pattern = L"(?:\\p{L})";
@@ -75,6 +75,18 @@ TEST(Pcre2TestsMatch, ZeroMatchAsNeeded)
 
   myodd::regex::Regex2::Matches m;
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, false));
+  ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, true));
+}
+
+TEST(Pcre2TestsMatch, ZeroMatchesRegadlessCaseLowerCase)
+{
+  // we only want lower case
+  const wchar_t *pattern = L"(?:\\p{Ll})";
+  const wchar_t *subject = L"ABC";
+
+  myodd::regex::Regex2::Matches m;
+  ASSERT_EQ(0, myodd::regex::Regex2::Match(pattern, subject, m, false));
+  ASSERT_EQ(0, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
 TEST(Pcre2TestsMatch, MatchWithinMatch)
@@ -95,8 +107,23 @@ TEST(Pcre2TestsMatch, MatchNextToAnotherMatch)
 
   auto matches = myodd::regex::Regex2::Matches();
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, matches, false));
+  ASSERT_EQ(matches[0], L"Hello World");  //  even with no brackets, this was a match
   ASSERT_EQ(matches[1], L"He");
   ASSERT_EQ(matches[2], L"Wo");
+}
+
+TEST(Pcre2TestsMatch, MatchNextToAnotherMatchCatchAllBracket)
+{
+  // test a simple match
+  const wchar_t *pattern = L"((He)llo (wo)rld)";
+  const wchar_t *subject = L"Hello World";
+
+  auto matches = myodd::regex::Regex2::Matches();
+  ASSERT_EQ(4, myodd::regex::Regex2::Match(pattern, subject, matches, false));
+  ASSERT_EQ(matches[0], L"Hello World");  //  even with no brackets, this was a match
+  ASSERT_EQ(matches[1], L"Hello World");  //  then the one with the bracket.
+  ASSERT_EQ(matches[2], L"He");
+  ASSERT_EQ(matches[3], L"Wo");
 }
 
 TEST(Pcre2TestsMatch, SearchUsingTheSameMatchVector)
