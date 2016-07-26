@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <pcre2\regex2.h>
 
-TEST(Pcre2TestsMatch, NullSubject)
+TEST(Pcre2TestsSearch, NullSubject)
 {
   // test a simple match
   const wchar_t *pattern = L"[a-z]";
@@ -10,7 +10,7 @@ TEST(Pcre2TestsMatch, NullSubject)
   ASSERT_EQ(PCRE2_ERROR_BADDATA, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2TestsMatch, NullPattern)
+TEST(Pcre2TestsSearch, NullPattern)
 {
   // test a simple match
   const wchar_t *pattern = nullptr;
@@ -19,7 +19,7 @@ TEST(Pcre2TestsMatch, NullPattern)
   ASSERT_EQ(PCRE2_ERROR_BADDATA, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2TestsMatch, NullPatternAndSubject)
+TEST(Pcre2TestsSearch, NullPatternAndSubject)
 {
   // test a simple match
   const wchar_t *pattern = nullptr;
@@ -28,16 +28,16 @@ TEST(Pcre2TestsMatch, NullPatternAndSubject)
   ASSERT_EQ(PCRE2_ERROR_BADDATA, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2TestsMatch, SimpleTestCaseSensitive)
+TEST(Pcre2TestsSearch, SimpleTestCaseSensitive)
 {
   // test a simple match
   const wchar_t *pattern = L"[a-z]";
   const wchar_t *subject = L"ABCabc";
   myodd::regex::Regex2::Matches m;
-  ASSERT_EQ( 6, myodd::regex::Regex2::Match(pattern, subject, m, false));
+  ASSERT_EQ(6, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2TestsMatch, SimpleTestCaseInSensitive)
+TEST(Pcre2TestsSearch, SimpleTestCaseInSensitive)
 {
   // test a simple match
   const wchar_t *pattern = L"[a-z]";
@@ -46,7 +46,7 @@ TEST(Pcre2TestsMatch, SimpleTestCaseInSensitive)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
-TEST(Pcre2TestsMatch, SimpleTestCaseInSensitiveLettersCategories)
+TEST(Pcre2TestsSearch, SimpleTestCaseInSensitiveLettersCategories)
 {
   // test a simple match
   const wchar_t *pattern = L"[\\p{L}]";
@@ -57,7 +57,7 @@ TEST(Pcre2TestsMatch, SimpleTestCaseInSensitiveLettersCategories)
   ASSERT_EQ(6, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
-TEST(Pcre2TestsMatch, SimpleTestLettersCategories)
+TEST(Pcre2TestsSearch, SimpleTestLettersCategories)
 {
   // test a simple match
   const wchar_t *pattern = L"[\\p{L}]";
@@ -67,7 +67,7 @@ TEST(Pcre2TestsMatch, SimpleTestLettersCategories)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2TestsMatch, ZeroMatchAsNeeded)
+TEST(Pcre2TestsSearch, ZeroMatchAsNeeded)
 {
   // test a simple match
   const wchar_t *pattern = L"(?:\\p{L})";
@@ -77,7 +77,7 @@ TEST(Pcre2TestsMatch, ZeroMatchAsNeeded)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2TestsMatch, MatchWithinMatch)
+TEST(Pcre2TestsSearch, MatchWithinMatch)
 {
   // test a simple match
   const wchar_t *pattern = L"(Hel(lo))";
@@ -87,7 +87,7 @@ TEST(Pcre2TestsMatch, MatchWithinMatch)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, matches, false));
 }
 
-TEST(Pcre2TestsMatch, MatchNextToAnotherMatch)
+TEST(Pcre2TestsSearch, MatchNextToAnotherMatch)
 {
   // test a simple match
   const wchar_t *pattern = L"(He)llo (wo)rld";
@@ -99,7 +99,7 @@ TEST(Pcre2TestsMatch, MatchNextToAnotherMatch)
   ASSERT_EQ(matches[2], L"Wo");
 }
 
-TEST(Pcre2TestsMatch, SearchUsingTheSameMatchVector)
+TEST(Pcre2TestsSearch, SearchUsingTheSameMatchVector)
 {
   // repeat the search and make sure that the match contains are cleared.
   const wchar_t *pattern1 = L"(He)llo (wo)rld";
