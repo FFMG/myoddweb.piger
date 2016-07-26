@@ -46,6 +46,15 @@ TEST(Pcre2Tests, SimpleTestCaseInSensitive)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
+TEST(Pcre2Tests, NoMatch)
+{
+  // test a simple match
+  const wchar_t *pattern = L"[a-z]";
+  const wchar_t *subject = L"ABC";
+  myodd::regex::Regex2::Matches m;
+  ASSERT_EQ(0, myodd::regex::Regex2::Match(pattern, subject, m, true));
+}
+
 TEST(Pcre2Tests, SimpleTestCaseInSensitiveLettersCategories)
 {
   // test a simple match
