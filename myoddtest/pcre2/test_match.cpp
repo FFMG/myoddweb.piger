@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <pcre2\regex2.h>
 
-TEST(Pcre2Tests, NullSubject)
+TEST(Pcre2TestsMatch, NullSubject)
 {
   // test a simple match
   const wchar_t *pattern = L"[a-z]";
@@ -10,7 +10,7 @@ TEST(Pcre2Tests, NullSubject)
   ASSERT_EQ(PCRE2_ERROR_BADDATA, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2Tests, NullPattern)
+TEST(Pcre2TestsMatch, NullPattern)
 {
   // test a simple match
   const wchar_t *pattern = nullptr;
@@ -19,7 +19,7 @@ TEST(Pcre2Tests, NullPattern)
   ASSERT_EQ(PCRE2_ERROR_BADDATA, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2Tests, NullPatternAndSubject)
+TEST(Pcre2TestsMatch, NullPatternAndSubject)
 {
   // test a simple match
   const wchar_t *pattern = nullptr;
@@ -28,7 +28,7 @@ TEST(Pcre2Tests, NullPatternAndSubject)
   ASSERT_EQ(PCRE2_ERROR_BADDATA, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2Tests, SimpleTestCaseSensitive)
+TEST(Pcre2TestsMatch, SimpleTestCaseSensitive)
 {
   // test a simple match
   const wchar_t *pattern = L"[a-z]";
@@ -37,7 +37,7 @@ TEST(Pcre2Tests, SimpleTestCaseSensitive)
   ASSERT_EQ( 6, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2Tests, SimpleTestCaseInSensitive)
+TEST(Pcre2TestsMatch, SimpleTestCaseInSensitive)
 {
   // test a simple match
   const wchar_t *pattern = L"[a-z]";
@@ -46,7 +46,7 @@ TEST(Pcre2Tests, SimpleTestCaseInSensitive)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
-TEST(Pcre2Tests, NoMatch)
+TEST(Pcre2TestsMatch, NoMatch)
 {
   // test a simple match
   const wchar_t *pattern = L"[a-z]";
@@ -55,7 +55,7 @@ TEST(Pcre2Tests, NoMatch)
   ASSERT_EQ(0, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
-TEST(Pcre2Tests, SimpleTestCaseInSensitiveLettersCategories)
+TEST(Pcre2TestsMatch, SimpleTestCaseInSensitiveLettersCategories)
 {
   // test a simple match
   const wchar_t *pattern = L"[\\p{L}]";
@@ -66,7 +66,7 @@ TEST(Pcre2Tests, SimpleTestCaseInSensitiveLettersCategories)
   ASSERT_EQ(6, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
-TEST(Pcre2Tests, SimpleTestLettersCategories)
+TEST(Pcre2TestsMatch, SimpleTestLettersCategories)
 {
   // test a simple match
   const wchar_t *pattern = L"[\\p{L}]";
@@ -76,7 +76,7 @@ TEST(Pcre2Tests, SimpleTestLettersCategories)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, false));
 }
 
-TEST(Pcre2Tests, ZeroMatchAsNeeded)
+TEST(Pcre2TestsMatch, InSomeCasesSensitiveFlagDoesNotMatter)
 {
   // test a simple match
   const wchar_t *pattern = L"(?:\\p{L})";
@@ -84,9 +84,21 @@ TEST(Pcre2Tests, ZeroMatchAsNeeded)
 
   myodd::regex::Regex2::Matches m;
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, false));
+  ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, m, true));
 }
 
-TEST(Pcre2Tests, MatchWithinMatch)
+TEST(Pcre2TestsMatch, ZeroMatchesRegadlessCaseLowerCase)
+{
+  // we only want lower case
+  const wchar_t *pattern = L"(?:\\p{Ll})";
+  const wchar_t *subject = L"ABC";
+
+  myodd::regex::Regex2::Matches m;
+  ASSERT_EQ(0, myodd::regex::Regex2::Match(pattern, subject, m, false));
+  ASSERT_EQ(0, myodd::regex::Regex2::Match(pattern, subject, m, true));
+}
+
+TEST(Pcre2TestsMatch, MatchWithinMatch)
 {
   // test a simple match
   const wchar_t *pattern = L"(Hel(lo))";
@@ -96,7 +108,7 @@ TEST(Pcre2Tests, MatchWithinMatch)
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, matches, false));
 }
 
-TEST(Pcre2Tests, MatchNextToAnotherMatch)
+TEST(Pcre2TestsMatch, MatchNextToAnotherMatch)
 {
   // test a simple match
   const wchar_t *pattern = L"(He)llo (wo)rld";
@@ -104,11 +116,26 @@ TEST(Pcre2Tests, MatchNextToAnotherMatch)
 
   auto matches = myodd::regex::Regex2::Matches();
   ASSERT_EQ(3, myodd::regex::Regex2::Match(pattern, subject, matches, false));
+  ASSERT_EQ(matches[0], L"Hello World");  //  even with no brackets, this was a match
   ASSERT_EQ(matches[1], L"He");
   ASSERT_EQ(matches[2], L"Wo");
 }
 
-TEST(Pcre2Tests, SearchUsingTheSameMatchVector)
+TEST(Pcre2TestsMatch, MatchNextToAnotherMatchCatchAllBracket)
+{
+  // test a simple match
+  const wchar_t *pattern = L"((He)llo (wo)rld)";
+  const wchar_t *subject = L"Hello World";
+
+  auto matches = myodd::regex::Regex2::Matches();
+  ASSERT_EQ(4, myodd::regex::Regex2::Match(pattern, subject, matches, false));
+  ASSERT_EQ(matches[0], L"Hello World");  //  even with no brackets, this was a match
+  ASSERT_EQ(matches[1], L"Hello World");  //  then the one with the bracket.
+  ASSERT_EQ(matches[2], L"He");
+  ASSERT_EQ(matches[3], L"Wo");
+}
+
+TEST(Pcre2TestsMatch, SearchUsingTheSameMatchVector)
 {
   // repeat the search and make sure that the match contains are cleared.
   const wchar_t *pattern1 = L"(He)llo (wo)rld";

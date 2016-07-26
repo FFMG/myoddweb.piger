@@ -23,12 +23,15 @@
 #pragma warning(disable : 4996)
 #endif /* defined(_MSC_VER) */
 
-#ifndef PCRE2_CODE_UNIT_WIDTH
-  #error You have to include the pre-processor for PCRE2
-  #error   Use: 'PCRE2_CODE_UNIT_WIDTH = 16; HAVE_CONFIG_H; PCRE2_STATIC'
-#endif // !PCRE2_CODE_UNIT_WIDTH
+#ifndef PCRE2_CODE_UNIT_WIDTH 
+#define PCRE2_CODE_UNIT_WIDTH 16
+#endif // !PCRE2_CODE_UNIT_WIDTH 
 
-#include "..\pcre2\src\pcre2.h"
+#ifndef HAVE_CONFIG_H 
+#define HAVE_CONFIG_H
+#endif // !HAVE_CONFIG_H 
+
+#include <..\pcre2\src\pcre2.h>
 #include <vector>
 #include <string>
 
