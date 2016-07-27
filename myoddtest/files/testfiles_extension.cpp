@@ -146,8 +146,11 @@ INSTANTIATE_TEST_CASE_P(TestIsExtension, MyOddFilesIsExtension,
     test_extension{ L"somefile.TXT", L".TXT", true },
     test_extension{ L"somefile.TxT", L".txt", true },
     test_extension{ L"somefile.TxT", L".tXt", true },
-    test_extension{ L"somefile.TxT", L".TXT", true }
-  ));
+    test_extension{ L"somefile.TxT", L".TXT", true }, 
+    test_extension{ L"somefile.$t", L".$t", true },    //  special regex character, still valid.
+    test_extension{ L"somefile.[t", L".[t", true },
+    test_extension{ L"somefile.\\t", L".\\t", true }
+  )); 
 
 INSTANTIATE_TEST_CASE_P(TestIsExtensionSpecialCases, MyOddFilesIsExtension,
   testing::Values(

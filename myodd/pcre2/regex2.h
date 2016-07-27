@@ -47,6 +47,8 @@ namespace myodd {
       typedef std::vector<std::wstring> Matches;
 
     public:
+      static std::wstring Escape(const std::wstring& src );
+
       static bool Search(const wchar_t* rePattern, const std::wstring& wsubject, bool caseSensitive = false );
       static bool Search(const wchar_t* rePattern, const wchar_t* wsubject, bool caseSensitive = false);
 

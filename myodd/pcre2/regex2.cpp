@@ -286,5 +286,26 @@ namespace myodd {
       pcre2_code_free(compiled_re);        /* data and the compiled pattern. */
       return totalCount;
     }
+
+    /**
+     * Escape a string that might contain reserved regex characters.
+     * @param const std::wstring& src the string we want to escape.
+     * @return string the escaped string.
+     */
+    std::wstring Regex2::Escape(const std::wstring& src)
+    {
+      // the pattern
+      //            . \ + * ? [ ^ ] $ ( ) { } = ! > < | : -': 
+      // @see https://msdn.microsoft.com/en-us/library/4edbef7e(v=vs.110).aspx
+      static const wchar_t* pattern = L"([\\.\\\\\\+\\*\\?\\[\\^\\]\\$\\(\\)\\{\\}\\=\\!\\>\\<\\|\\:\\-\\'\\:])";
+
+      // the replacement.
+      static const wchar_t* replacement = L"\\$1";
+      auto result = src;
+      myodd::regex::Regex2::Replace(pattern, replacement, src.c_str(), result, true );
+
+      // return the result.
+      return result;
+    }
   }
 };
