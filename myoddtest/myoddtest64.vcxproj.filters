@@ -100,5 +100,8 @@
     <ClCompile Include="pcre2\test_search.cpp">
       <Filter>myodd\pcre2</Filter>
     </ClCompile>
+    <ClCompile Include="pcre2\test_replace.cpp">
+      <Filter>myodd\pcre2</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
