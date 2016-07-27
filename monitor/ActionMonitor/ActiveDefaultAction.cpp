@@ -36,7 +36,7 @@ void ActiveDefaultAction::OnExecuteInThread()
   // we should always try and create an ActiveAction for each known extensions.
   // otherwise, who knows how this will run, (for example and swf extension might not be able to run).
   auto szFile = File();
-  auto szExt = myodd::files::get_extension( szFile );;
+  auto szExt = myodd::files::GetExtension( szFile );;
   auto szCommand = Command();
   myodd::log::LogWarning(_T("Will try and execute the command '%s' from file '%s'"), szExt.c_str(), szCommand.c_str());
 

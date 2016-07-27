@@ -603,7 +603,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
       //  if we don't want to show the extension then strip it.
       if( myodd::config::get( _T("commands\\show.extentions"), 0 ) == false )
       {
-        myodd::files::strip_extension( szName );
+        myodd::files::StripExtension( szName );
       }        
 
       Add( szName.c_str(), szFullPath.c_str() );
