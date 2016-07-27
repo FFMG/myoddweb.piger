@@ -5,8 +5,8 @@
 #define VERSION_MAINTENANCE   16
 #define VERSION_BUILD         12
 
-#define VERSION_HOUR          10
-#define VERSION_MINUTE        31
+#define VERSION_HOUR          11
+#define VERSION_MINUTE        18
 
 #define VERSION_YEAR        2016
 #define VERSION_MONTH          7
