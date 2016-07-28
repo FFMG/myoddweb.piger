@@ -178,7 +178,7 @@ bool IsExtension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
   auto f( fOriginal );
   _TrimDeadChars( f );
   strings::Trim(f);
-
+  
   auto e( fExt );
   _TrimDeadChars( e );
   strings::Trim(e);
@@ -192,8 +192,11 @@ bool IsExtension( const MYODD_STRING& fOriginal, const MYODD_STRING& fExt )
     return false; //  we cannot check 0 lengths
   }
 
+  // escape the characters.
   e = strings::Replace( e, _T("\\."), _T("." ));     //  in case the user escaped it already
-  e = strings::Replace( e, _T("."), _T("\\." ));     //  escape it now.
+
+  // escape all the other characters.
+  e = myodd::regex::Regex2::Escape(e);
   auto stdMatches = _T("^(.*)\\.(") + e + _T(")$");
 #ifdef _UNICODE
   boost::wsmatch matches;
