@@ -76,6 +76,13 @@ INSTANTIATE_TEST_CASE_P(TestVariousEdgeCases, MyOddFilesAbsolutePath,
     test_absolutepath{ L"\\Test\\", L"..\\somewhere\\", L"", false }
   ));
 
+INSTANTIATE_TEST_CASE_P(TestEdgecases, MyOddFilesAbsolutePath,
+  testing::Values(
+    test_absolutepath{ L"c:/somefile.txt", L"c:\\dira\\dirb\\", L"c:\\somefile.txt", true },
+    test_absolutepath{ L"c:\\somefile.txt", L"c:\\dira\\dirb\\", L"c:\\somefile.txt", true },
+    test_absolutepath{ L"c:\\dira\\dirb\\..\\..\\dirc\\somefile.txt", L"c:\\dira\\dirb\\", L"c:\\dirc\\somefile.txt", true }
+));
+
 TEST(TestAbsolutePathExpandValues, TestExpendingValues )
 {
   MYODD_STRING exp;

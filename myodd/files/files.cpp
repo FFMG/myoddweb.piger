@@ -1299,37 +1299,47 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   // makes it easier if we are adding the working directory.
   files::AddTrailingBackSlash(copyOfOrigin);
 
-  // there is a special case for the origin been '.\' or '.'
-  // in this case we want to assume that the user wants the 'current directory'
-  regex::Regex2::Matches matches;
+  // Expand the environment variable.
+  auto unExpandedCopyOfOrigin = copyOfOrigin;
+  files::ExpandEnvironment(copyOfOrigin, copyOfOrigin);
 
-  //  ^((?:\.[\/\\])+)
-  const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
-  if (regex::Regex2::Match(pattern, copyOfOrigin, matches ) > 1 )
+  auto unExpandedCopyOfRelative = copyOfRelative;
+  files::ExpandEnvironment(copyOfRelative, copyOfRelative);
+
+  MYODD_STRING pathToEvaluate;
+  // (?:\\\\[^.]|[a-zA-Z]:[\\\/])
+  if (!regex::Regex2::Search(_T("(?:\\\\\\\\[^.]|[a-zA-Z]:[\\\\\\/])"), copyOfRelative))
   {
-    // because we added a trailing back slash earlier
-    // we can replace the all the '././././' with the current directory
-    // even if the user just gave us a '.', (as it would be converted to '.'
-    // but if they gave us '.aaa' then this is not valid and would not be replace anyway.
-    MYODD_CHAR lpBuffer[T_MAX_PATH] = { 0 };
-    if (0 == ::GetCurrentDirectory(T_MAX_PATH, lpBuffer))
+    // there is a special case for the origin been '.\' or '.'
+    // in this case we want to assume that the user wants the 'current directory'
+    regex::Regex2::Matches matches;
+
+    //  ^((?:\.[\/\\])+)
+    const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
+    if (regex::Regex2::Match(pattern, copyOfOrigin, matches) > 1)
     {
-      //  could not get the current directory???
-      return false;
+      // because we added a trailing back slash earlier
+      // we can replace the all the '././././' with the current directory
+      // even if the user just gave us a '.', (as it would be converted to '.'
+      // but if they gave us '.aaa' then this is not valid and would not be replace anyway.
+      MYODD_CHAR lpBuffer[T_MAX_PATH] = { 0 };
+      if (0 == ::GetCurrentDirectory(T_MAX_PATH, lpBuffer))
+      {
+        //  could not get the current directory???
+        return false;
+      }
+
+      // join the current directory and the remainder.
+      files::Join(copyOfOrigin, lpBuffer, copyOfOrigin.substr(matches[1].length()));
     }
 
-    // join the current directory and the remainder.
-    files::Join( copyOfOrigin, lpBuffer, copyOfOrigin.substr( matches[1].length()));
+    // we can now join them both
+    files::Join(pathToEvaluate, copyOfOrigin, copyOfRelative);
   }
-
-  // we can now join them both
-  MYODD_STRING pathToEvaluate;
-  files::Join(pathToEvaluate, copyOfOrigin, copyOfRelative);
-
-  // Expand the environment variable.
-  // but we save the 'before' value.
-  const auto unexpandedPathToEvaluate = pathToEvaluate;
-  ExpandEnvironment(pathToEvaluate, pathToEvaluate);
+  else
+  {
+    pathToEvaluate = copyOfRelative;
+  }
 
   // now we need to get the absolute path of both of them.
   std::vector<MYODD_STRING> partsOfPathToEvaluate;
@@ -1376,7 +1386,9 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
 
   // now check if we need to unexpand the data.
   // this is where we use the before expand value.
-  if (0 != strings::Compare(pathToEvaluate, unexpandedPathToEvaluate, false))
+  if (0 != strings::Compare(copyOfOrigin, unExpandedCopyOfOrigin, false) ||
+     (0 != strings::Compare(copyOfRelative, unExpandedCopyOfRelative, false))
+      )
   {
     files::UnExpandEnvironment(dest, dest);
   }
