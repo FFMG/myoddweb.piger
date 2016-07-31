@@ -1277,9 +1277,6 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   // first do some house-keeping
   //
 
-  // reset the result.
-  dest.clear();
-
   // make copies.
   auto copyOfRelative = givenRelative;
   auto copyOfOrigin = givenOrigin;
@@ -1366,6 +1363,7 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
       if( evaluatedParts.size() == 0 )
       {
         // nope, we cannot go back onto ourselves.
+        dest.clear();
         return false;
       }
 

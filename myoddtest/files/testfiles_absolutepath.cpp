@@ -24,9 +24,15 @@ struct MyOddFilesAbsolutePath : testing::Test, testing::WithParamInterface<test_
 
 TEST_P(MyOddFilesAbsolutePath, TestAbsolutePath)
 {
-  auto relative = GetParam().relative;
-  auto origin = GetParam().origin;
-  auto result = GetParam().result;
+  const auto relative = GetParam().relative;
+  const auto origin = GetParam().origin;
+  const auto result = GetParam().result;
+
+  // copy them
+  auto relative1 = relative;
+  auto origin1 = origin;
+  auto relative2 = relative;
+  auto origin2 = origin;
 
   MYODD_STRING dest;
   ASSERT_EQ(result, myodd::files::GetAbsolutePath(dest, relative, origin ));
@@ -34,6 +40,27 @@ TEST_P(MyOddFilesAbsolutePath, TestAbsolutePath)
   {
     auto expected = GetParam().expected;
     ASSERT_EQ(expected, dest);
+  }
+  else
+  {
+    //  false should clear the result.
+    ASSERT_EQ(L"", dest);
+  }
+
+  // now test that the destination is set to whatever but 'relative'/'origin' are not changed.
+  ASSERT_EQ(result, myodd::files::GetAbsolutePath(relative1, relative1, origin1));
+
+  // nothing should have changed origin
+  ASSERT_EQ(origin1, origin2);
+  if (result)
+  {
+    auto expected = GetParam().expected;
+    ASSERT_EQ(expected, relative1);
+  }
+  else
+  {
+    //  false should clear the result.
+    ASSERT_EQ(L"", relative1 );
   }
 }
 
