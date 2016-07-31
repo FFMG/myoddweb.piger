@@ -202,6 +202,7 @@
     <ClCompile Include="ActiveCmdAction.cpp" />
     <ClCompile Include="ActiveComAction.cpp" />
     <ClCompile Include="ActiveDefaultAction.cpp" />
+    <ClCompile Include="ActiveExeAction.cpp" />
     <ClCompile Include="ActiveLuaAction.cpp" />
     <ClCompile Include="ActivePluginAction.cpp" />
     <ClCompile Include="ActivePowershellAction.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="ActiveCmdAction.h" />
     <ClInclude Include="ActiveComAction.h" />
     <ClInclude Include="ActiveDefaultAction.h" />
+    <ClInclude Include="ActiveExeAction.h" />
     <ClInclude Include="ActiveLuaAction.h" />
     <ClInclude Include="ActivePluginAction.h" />
     <ClInclude Include="ActivePowershellAction.h" />

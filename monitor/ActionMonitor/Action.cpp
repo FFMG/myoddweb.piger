@@ -13,6 +13,7 @@
 #include "activebatchaction.h"
 #include "activecmdaction.h"
 #include "activecomaction.h"
+#include "activeexeaction.h"
 
 #include "os\os.h"
 #include "ActivePowershellAction.h"
@@ -462,6 +463,10 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
   if (myodd::files::IsExtension(m_szFile, _T("com")))
   {
     return new ActiveComAction(*this, hTopHWnd, szCommandLine);
+  }
+  if (myodd::files::IsExtension(m_szFile, _T("exe")))
+  {
+    return new ActiveExeAction(*this, hTopHWnd, szCommandLine, isPrivileged);
   }
 
   // run the default action.

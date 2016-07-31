@@ -1,16 +1,16 @@
 #include <tchar.h>
 
 #define VERSION_MAJOR          0
-#define VERSION_MINOR          6
-#define VERSION_MAINTENANCE   16
-#define VERSION_BUILD         14
+#define VERSION_MINOR          7
+#define VERSION_MAINTENANCE    1
+#define VERSION_BUILD          4
 
-#define VERSION_HOUR           9
-#define VERSION_MINUTE        38
+#define VERSION_HOUR           8
+#define VERSION_MINUTE        40
 
 #define VERSION_YEAR        2016
 #define VERSION_MONTH          7
-#define VERSION_DAY           28
+#define VERSION_DAY           31
 
 //
 // No need to edit below...

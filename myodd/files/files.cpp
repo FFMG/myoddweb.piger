@@ -1263,21 +1263,19 @@ MYODD_STRING GetBaseFromFile
 }
 
 /**
-* Get the absolute path given a relative path.
-* It is up to the user to delete the container value.
-* @param MYODD_STRING& container for the return value, unset in case of error. 
-* @param const MYODD_STRING& the relative path we would like to get the absolute path from.
-* @param const MYODD_STRING& the original path, if empty we will use the current directory as origin.
-* @return bool if we were able to get the absolute path, false if the given path is unrealistic/impossible.
-*/
+ * Get the absolute path given a relative path.
+ * It is up to the user to delete the container value.
+ * @param MYODD_STRING& container for the return value, unset in case of error. 
+ * @param const MYODD_STRING& the relative path we would like to get the absolute path from.
+ * @param const MYODD_STRING& the original path, if empty we will use the current directory as origin.
+ *                            if the path is '.' or '.\xxx' the current path will be added to it. 
+ * @return bool if we were able to get the absolute path, false if the given path is unrealistic/impossible.
+ */
 bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin )
 {
   //
   // first do some house-keeping
   //
-
-  // reset the result.
-  dest.clear();
 
   // make copies.
   auto copyOfRelative = givenRelative;
@@ -1299,37 +1297,51 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
   // makes it easier if we are adding the working directory.
   files::AddTrailingBackSlash(copyOfOrigin);
 
-  // there is a special case for the origin been '.\' or '.'
-  // in this case we want to assume that the user wants the 'current directory'
-  regex::Regex2::Matches matches;
+  // save the unexpanded variables.
+  auto unExpandedCopyOfOrigin = copyOfOrigin;
+  auto unExpandedCopyOfRelative = copyOfRelative;
 
-  //  ^((?:\.[\/\\])+)
-  const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
-  if (regex::Regex2::Match(pattern, copyOfOrigin, matches ) > 1 )
+  // expand the relative path.
+  files::ExpandEnvironment(copyOfRelative, copyOfRelative);
+
+  // assume we will not be using the origin, (the path given was good enough).
+  auto useOrigin = false;
+
+  MYODD_STRING pathToEvaluate;
+
+  // (?:\\\\[^.]|[a-zA-Z]:[\\\/])
+  if (!regex::Regex2::Search(_T("(?:\\\\\\\\[^.]|[a-zA-Z]:[\\\\\\/])"), copyOfRelative))
   {
-    // because we added a trailing back slash earlier
-    // we can replace the all the '././././' with the current directory
-    // even if the user just gave us a '.', (as it would be converted to '.'
-    // but if they gave us '.aaa' then this is not valid and would not be replace anyway.
-    MYODD_CHAR lpBuffer[T_MAX_PATH] = { 0 };
-    if (0 == ::GetCurrentDirectory(T_MAX_PATH, lpBuffer))
+    // we will be using the origin hrere.
+    useOrigin = true;
+
+    // we need to expand the origine now.
+    files::ExpandEnvironment(copyOfOrigin, copyOfOrigin);
+
+    // there is a special case for the origin been '.\' or '.'
+    // in this case we want to assume that the user wants the 'current directory'
+    regex::Regex2::Matches matches;
+
+    // if the origin has a '.' or './' then we need to add the current path to it.
+    // that's an assumption made to make the life of the caller easier.
+    // ^((?:\.[\/\\])+)
+    const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
+    if (regex::Regex2::Match(pattern, copyOfOrigin, matches) > 1)
     {
-      //  could not get the current directory???
-      return false;
+      // we can replace the all the '././././' with the 
+      // current directory even if the user just gave us a '.'
+      
+      // join the current directory and the origin without the '.' or './'.
+      files::Join(copyOfOrigin, GetAppPath(true), copyOfOrigin.substr(matches[1].length()));
     }
 
-    // join the current directory and the remainder.
-    files::Join( copyOfOrigin, lpBuffer, copyOfOrigin.substr( matches[1].length()));
+    // we can now join the origin and relative path.
+    files::Join(pathToEvaluate, copyOfOrigin, copyOfRelative);
   }
-
-  // we can now join them both
-  MYODD_STRING pathToEvaluate;
-  files::Join(pathToEvaluate, copyOfOrigin, copyOfRelative);
-
-  // Expand the environment variable.
-  // but we save the 'before' value.
-  const auto unexpandedPathToEvaluate = pathToEvaluate;
-  ExpandEnvironment(pathToEvaluate, pathToEvaluate);
+  else
+  {
+    pathToEvaluate = copyOfRelative;
+  }
 
   // now we need to get the absolute path of both of them.
   std::vector<MYODD_STRING> partsOfPathToEvaluate;
@@ -1351,6 +1363,7 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
       if( evaluatedParts.size() == 0 )
       {
         // nope, we cannot go back onto ourselves.
+        dest.clear();
         return false;
       }
 
@@ -1376,10 +1389,27 @@ bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, con
 
   // now check if we need to unexpand the data.
   // this is where we use the before expand value.
-  if (0 != strings::Compare(pathToEvaluate, unexpandedPathToEvaluate, false))
+  if (0 != strings::Compare(copyOfOrigin, unExpandedCopyOfOrigin, false) ||
+     (0 != strings::Compare(copyOfRelative, unExpandedCopyOfRelative, false))
+      )
   {
     files::UnExpandEnvironment(dest, dest);
   }
+
+  // was the original file UNC?
+  // or, if we did not use the original, was the relative path UNC
+  if (useOrigin)
+  {
+    if (myodd::regex::Regex2::Search(_T("(?:\\\\{2})"), unExpandedCopyOfOrigin))
+    {
+      dest = _T("\\\\") + dest;
+    }
+  }
+  else if (myodd::regex::Regex2::Search(_T("(?:\\\\{2})"), unExpandedCopyOfRelative))
+  {
+    dest = _T("\\\\") + dest;
+  }
+
   // success!
   return true;
 }
