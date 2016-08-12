@@ -81,6 +81,9 @@
     <Filter Include="pcre2\src">
       <UniqueIdentifier>{91dfa33b-2db1-45ee-85f9-94472faf090f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cache">
+      <UniqueIdentifier>{df4348ee-20f9-44d5-b8ca-c84987b98608}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -347,6 +350,15 @@
     <ClCompile Include="pcre2\src\pcre2_chartables.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
+    <ClCompile Include="cache\cacheitem.cpp">
+      <Filter>cache</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\cacheitempolicy.cpp">
+      <Filter>cache</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\memorycache.cpp">
+      <Filter>cache</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -503,6 +515,15 @@
     </ClInclude>
     <ClInclude Include="pcre2\regex2.h">
       <Filter>pcre2</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\cacheitem.h">
+      <Filter>cache</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\cacheitempolicy.h">
+      <Filter>cache</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\memorycache.h">
+      <Filter>cache</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

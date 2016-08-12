@@ -20,6 +20,9 @@
     <Filter Include="myodd\pcre2">
       <UniqueIdentifier>{41774f18-9db6-47f8-be17-0972cb63182e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\cache">
+      <UniqueIdentifier>{b7334aae-80d1-40cf-ac5b-2b8841dda229}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -105,6 +108,12 @@
     </ClCompile>
     <ClCompile Include="pcre2\test_escape.cpp">
       <Filter>myodd\pcre2</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\testmemorycachebasic.cpp">
+      <Filter>myodd\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\testcacheitembasic.cpp">
+      <Filter>myodd\cache</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

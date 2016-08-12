@@ -81,6 +81,9 @@
     <Filter Include="pcre2\src">
       <UniqueIdentifier>{939e4a2b-8889-477d-a795-0df8e6da7eb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cache">
+      <UniqueIdentifier>{e5ee2994-802a-4022-a5eb-a795645ab708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common\program_options.cpp">
@@ -347,6 +350,15 @@
     <ClCompile Include="pcre2\src\pcre2_xclass.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
+    <ClCompile Include="cache\memorycache.cpp">
+      <Filter>cache</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\cacheitem.cpp">
+      <Filter>cache</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\cacheitempolicy.cpp">
+      <Filter>cache</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -503,6 +515,15 @@
     </ClInclude>
     <ClInclude Include="pcre2\src\config.h">
       <Filter>pcre2\src</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\memorycache.h">
+      <Filter>cache</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\cacheitem.h">
+      <Filter>cache</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\cacheitempolicy.h">
+      <Filter>cache</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
