@@ -74,5 +74,12 @@ TEST(BasicCacheItem, DefaultValueIsNull )
 {
   auto key = Uuid();
   myodd::cache::CacheItem ci(key.c_str());
-  ASSERT_EQ(nullptr, ci.Value<const char*>() );
+  ASSERT_EQ(nullptr, ci.Value<const char *>());
+}
+
+TEST(BasicCacheItem, DefaultValueIsNotNull)
+{
+  auto key = Uuid();
+  myodd::cache::CacheItem ci(key.c_str());
+  ASSERT_EQ(nullptr, ci.Value<const char *>());
 }

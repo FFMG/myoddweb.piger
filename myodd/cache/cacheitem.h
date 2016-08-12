@@ -33,7 +33,13 @@ namespace myodd {
       const wchar_t* RegionName() const;
 
       template<class T>
-      const T& Value() const;
+      T Value() const {
+        if (nullptr == _value)
+        {
+          return static_cast<T>(_value);
+        }
+       
+      }
 
       void Key(const wchar_t* key);
       void RegionName(const wchar_t* regionName);
