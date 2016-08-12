@@ -4,23 +4,24 @@
 
 namespace myodd {
   namespace cache {
+
+    /**
+    * Initializes a new CacheItem instance using the specified key of a cache entry.
+    * @param const wchar_t* key A unique identifier for a CacheItem entry.
+    */
+    CacheItem::CacheItem(const wchar_t* key ) :
+      CacheItem(key, nullptr, nullptr )
+    {
+    }
+
     /**
      * Initializes a new CacheItem instance using the specified key of a cache entry.
      * @param const wchar_t* key A unique identifier for a CacheItem entry.
+     * @param T value the value we want to set this item as. 
+     * @param const wchar_t* regionName the region name.
      */
-    CacheItem::CacheItem(const wchar_t* key) : CacheItem( key, nullptr, nullptr )
-    {
-
-    }
-
     template<class T>
-    CacheItem::CacheItem(const wchar_t* key, const T& value)
-    {
-
-    }
-
-    template<class T>
-    CacheItem::CacheItem(const wchar_t* key, const T& value, const wchar_t* regionName) : 
+    CacheItem::CacheItem(const wchar_t* key, T value/* = nullptr*/, const wchar_t* regionName/* = nullptr*/) : 
       _value_type_index( typeid(nullptr) ),
       _key( nullptr ),
       _regionName( nullptr ),

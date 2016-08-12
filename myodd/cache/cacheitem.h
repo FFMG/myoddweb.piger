@@ -19,14 +19,11 @@ namespace myodd {
     class CacheItem
     {
     public:
-      CacheItem(const wchar_t* key);
+      CacheItem(const wchar_t* key );
 
       template<class T>
-      CacheItem(const wchar_t* key, const T& value );
-
-      template<class T>
-      CacheItem(const wchar_t* key, const T& value, const wchar_t* regionName );
-
+      CacheItem(const wchar_t* key, T value, const wchar_t* regionName = nullptr);
+      
       virtual ~CacheItem();
 
       const wchar_t* Key() const;
