@@ -350,9 +350,6 @@
     <ClCompile Include="pcre2\src\pcre2_chartables.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
-    <ClCompile Include="cache\cacheitem.cpp">
-      <Filter>cache</Filter>
-    </ClCompile>
     <ClCompile Include="cache\cacheitempolicy.cpp">
       <Filter>cache</Filter>
     </ClCompile>

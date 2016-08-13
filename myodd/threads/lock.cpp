@@ -5,7 +5,7 @@ namespace myodd {
   namespace threads {
     Lock::Lock(std::mutex &mutex) :
       _mutex(mutex),
-      _guard(NULL)
+      _guard(nullptr)
     {
       try
       {

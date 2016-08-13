@@ -353,9 +353,6 @@
     <ClCompile Include="cache\memorycache.cpp">
       <Filter>cache</Filter>
     </ClCompile>
-    <ClCompile Include="cache\cacheitem.cpp">
-      <Filter>cache</Filter>
-    </ClCompile>
     <ClCompile Include="cache\cacheitempolicy.cpp">
       <Filter>cache</Filter>
     </ClCompile>

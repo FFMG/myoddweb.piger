@@ -6,7 +6,7 @@
 TEST(BasicCacheItem, SetKey)
 {
   auto key = Uuid();
-  myodd::cache::CacheItem ci(key.c_str() );
+  myodd::cache::CacheItem<int> ci(key.c_str() );
   ASSERT_EQ(key, ci.Key());
 
   auto newKey = Uuid();
@@ -19,7 +19,7 @@ TEST(BasicCacheItem, SetKeyAndRegionName)
 {
   auto key = Uuid();
   auto regionName = Uuid();
-  myodd::cache::CacheItem ci(key.c_str(), nullptr, regionName.c_str() );
+  myodd::cache::CacheItem<int> ci(key.c_str(), 0, regionName.c_str() );
   ASSERT_EQ(key, ci.Key());
   ASSERT_EQ(regionName, ci.RegionName());
 
@@ -36,20 +36,20 @@ TEST(BasicCacheItem, SetKeyAndRegionName)
 TEST(BasicCacheItem, RegionNameIsNullByDefault)
 {
   auto key = Uuid();
-  myodd::cache::CacheItem ci(key.c_str());
+  myodd::cache::CacheItem<int> ci(key.c_str());
   ASSERT_EQ(nullptr, ci.RegionName());
 }
 
 TEST(BasicCacheItem, RegionNameCanBeSetToNull)
 {
   auto key = Uuid();
-  myodd::cache::CacheItem ci(key.c_str(), nullptr, nullptr );
+  myodd::cache::CacheItem<int> ci(key.c_str(), 0, nullptr );
   ASSERT_EQ(nullptr, ci.RegionName());
 }
 
 TEST(BasicCacheItem, KeyCanBeNullInConstructor)
 {
-  myodd::cache::CacheItem ci( nullptr );
+  myodd::cache::CacheItem<int> ci( nullptr );
   ASSERT_EQ(nullptr, ci.Key());
 
   auto newKey = Uuid();
@@ -61,7 +61,7 @@ TEST(BasicCacheItem, KeyCanBeNullInConstructor)
 TEST(BasicCacheItem, KeyCanBeSetToNull)
 {
   auto key = Uuid();
-  myodd::cache::CacheItem ci(key.c_str());
+  myodd::cache::CacheItem<int> ci(key.c_str());
   ASSERT_EQ(key, ci.Key());
 
   auto newKey = nullptr;
@@ -73,13 +73,13 @@ TEST(BasicCacheItem, KeyCanBeSetToNull)
 TEST(BasicCacheItem, DefaultValueIsNull )
 {
   auto key = Uuid();
-  myodd::cache::CacheItem ci(key.c_str());
-  ASSERT_EQ(nullptr, ci.Value<const char *>());
+  myodd::cache::CacheItem<const char*> ci(key.c_str());
+  ASSERT_EQ(nullptr, ci.Value());
 }
 
-TEST(BasicCacheItem, DefaultValueIsNotNull)
+TEST(BasicCacheItem, DefaultValueIsSetToInt)
 {
   auto key = Uuid();
-  myodd::cache::CacheItem ci(key.c_str());
-  ASSERT_EQ(nullptr, ci.Value<const char *>());
+  myodd::cache::CacheItem<int> ci(key.c_str(), 10 );
+  ASSERT_EQ(10, ci.Value());
 }
