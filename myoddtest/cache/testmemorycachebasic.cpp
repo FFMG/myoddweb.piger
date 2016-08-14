@@ -44,6 +44,14 @@ TEST(BasicMemoryTests, ContainsRegionNameMustBeNull)
   EXPECT_THROW(mc.Contains(keyCacheItem.c_str(), regionName.c_str() ), std::invalid_argument);
 }
 
+TEST(BasicMemoryTests, CannotPassARegionWithGetCount)
+{
+  auto regionName = Uuid();
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  EXPECT_THROW(mc.GetCount( regionName.c_str()), std::invalid_argument);
+}
+
 TEST(BasicMemoryTests, DoesNotContain )
 {
   auto keyCacheItem = Uuid();
@@ -59,7 +67,7 @@ TEST(BasicMemoryTests, DoesNotContainThenAddThenContains )
   myodd::cache::MemoryCache mc(key.c_str());
   ASSERT_FALSE(mc.Contains(keyCacheItem.c_str()));
 
-  auto ci = myodd::cache::CacheItem<int>(keyCacheItem.c_str(), 10);
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
   myodd::cache::CacheItemPolicy policy;
   mc.Add(ci, policy);
   ASSERT_TRUE(mc.Contains(keyCacheItem.c_str()));
@@ -72,7 +80,7 @@ TEST(BasicMemoryTests, AddingTwiceDoesNotRemoveIt)
   myodd::cache::MemoryCache mc(key.c_str());
   ASSERT_FALSE(mc.Contains(keyCacheItem.c_str()));
 
-  auto ci = myodd::cache::CacheItem<int>(keyCacheItem.c_str(), 10);
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
   myodd::cache::CacheItemPolicy policy;
   mc.Add(ci, policy);
   ASSERT_TRUE(mc.Contains(keyCacheItem.c_str()));
@@ -87,7 +95,7 @@ TEST(BasicMemoryTests, AddingTwiceDoesNotRemoveIt)
 TEST(BasicMemoryTests, JustAddOne)
 {
   auto keyCacheItem = Uuid();
-  auto ci = myodd::cache::CacheItem<int>(keyCacheItem.c_str(), 10 );
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10 );
   myodd::cache::CacheItemPolicy policy;
 
   auto key = Uuid();
@@ -100,8 +108,8 @@ TEST(BasicMemoryTests, JustAddItemMoreThanOnce)
   myodd::cache::CacheItemPolicy policy;
 
   auto keyCacheItem = Uuid();
-  auto ci1 = myodd::cache::CacheItem<int>(keyCacheItem.c_str(), 10);
-  auto ci2 = myodd::cache::CacheItem<int>(keyCacheItem.c_str(), 20);
+  auto ci1 = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
+  auto ci2 = myodd::cache::CacheItem(keyCacheItem.c_str(), 20);
 
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
@@ -123,4 +131,59 @@ TEST(BasicMemoryTests, JustAddItemMoreThanOnceUsingKeyName)
 
   // we cannot add another item with the same key name
   ASSERT_FALSE(mc.Add(keyCacheItem.c_str(), 40, policy));
+}
+
+TEST(BasicMemoryTests, AddItemsAndCheckNumbers )
+{
+  myodd::cache::CacheItemPolicy policy;
+
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  ASSERT_EQ(0, mc.GetCount());
+
+  for (auto i = 0; i < 10; ++i)
+  {
+    // we have not added it yet.
+    ASSERT_EQ(i, mc.GetCount());
+
+    auto keyCacheItem = Uuid();
+    auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
+
+    //  add it and check the numbers.
+    ASSERT_TRUE(mc.Add(ci, policy));
+    ASSERT_EQ(i+1, mc.GetCount());
+
+    // adding it again does not change the count.
+    ASSERT_FALSE(mc.Add(ci, policy));
+    ASSERT_EQ(i+1, mc.GetCount());
+  }
+}
+
+TEST(BasicMemoryTests, GetCacheItemKeyCannotBeNull)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  EXPECT_THROW(mc.GetCacheItem(nullptr), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, GetCacheItemRegionNameMustBeNull)
+{
+  auto keyCacheItem = Uuid();
+  auto regionName = Uuid();
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  EXPECT_THROW(mc.GetCacheItem(keyCacheItem.c_str(), regionName.c_str()), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, GetACacheItemThatDoesNotExist)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  //  add an item
+  auto keyCacheItem = Uuid();
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
+
+  auto anotherKeyCacheItem = Uuid();
+  EXPECT_THROW(mc.GetCacheItem(anotherKeyCacheItem.c_str() ), std::out_of_range );
 }

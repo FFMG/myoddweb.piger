@@ -1,6 +1,7 @@
 #pragma once
 #include <typeindex>  //  typeindex
 #include <wchar.h>
+#include <boost/any.hpp>
 
 namespace myodd {
   namespace cache {
@@ -8,7 +9,6 @@ namespace myodd {
      * Implementation of CacheItem
      * https://msdn.microsoft.com/en-us/library/system.runtime.caching.cacheitem(v=vs.110).aspx
      */
-    template <class T>
     class CacheItem
     {
     public:
@@ -28,7 +28,7 @@ namespace myodd {
        * @param const wchar_t* key A unique identifier for a CacheItem entry.
        */
       CacheItem(const wchar_t* key) :
-        CacheItem(key, T(), nullptr)
+        CacheItem(key, nullptr, nullptr)
       {
       }
 
@@ -38,7 +38,7 @@ namespace myodd {
        * @param T value the value we want to set this item as.
        * @param const wchar_t* regionName the region name.
        */
-      CacheItem(const wchar_t* key, T value, const wchar_t* regionName = nullptr) :
+      CacheItem(const wchar_t* key, const boost::any& value, const wchar_t* regionName = nullptr) :
         _key(nullptr),
         _regionName(nullptr),
         _value(value)
@@ -127,7 +127,7 @@ namespace myodd {
        * Set the value 
        * @param T value, the value we want to set.
        */
-      void Value(T value)
+      void Value(const boost::any& value)
       {
         // clean the value
         CleanValue();
@@ -139,9 +139,21 @@ namespace myodd {
       /**
        * Get the current value
        */
-      const T& Value() const
+      template<class T>
+      T Value() const
       {
-        return _value;
+        try
+        {
+          if (_value.empty())
+          {
+            return std::is_pointer<T>::value ? (T)nullptr : T();
+          }
+          return boost::any_cast<T>(_value);
+        }
+        catch ( boost::bad_any_cast )
+        {
+          return std::is_pointer<T>::value ? (T)nullptr : T();
+        }
       }
     private:
       /**
@@ -210,26 +222,26 @@ namespace myodd {
       wchar_t* _key;
       wchar_t* _regionName;
 
-      T _value;
-    };
+      boost::any _value;
 
-    /**
-     * same as wcsncpy but we have to go around the MS warnings...
-     */
-    static void _valid_wcsncpy(
-      wchar_t *strDest,
-      const wchar_t *strSource,
-      size_t count
-    )
-    {
+      /**
+      * same as wcsncpy but we have to go around the MS warnings...
+      */
+      static void _valid_wcsncpy(
+        wchar_t *strDest,
+        const wchar_t *strSource,
+        size_t count
+      )
+      {
 #if (defined(_WIN32) || defined(WIN32))
 #pragma warning( push )
 #pragma warning(disable:4996)
 #endif
-      wcsncpy(strDest, strSource, count);
+        wcsncpy(strDest, strSource, count);
 #if (defined(_WIN32) || defined(WIN32))
 #pragma warning( pop )
 #endif
-    }
+      }
+    };
   }
 }

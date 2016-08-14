@@ -95,10 +95,31 @@ namespace myodd {
       MemoryCache::Lock guard( _mutex );
 
       // now look for the value.
-      CachItems::const_iterator it = _cacheItems.find(std::wstring(key));
+      const auto it = _cacheItems.find(std::wstring(key));
 
       // have we found anything?
       return (it != _cacheItems.end());
+    }
+
+    /**
+     * Returns the total number of cache entries in the cache.
+     * @see https://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.getcount(v=vs.110).aspx
+     * @param const wchar_t* regionName A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
+     * @return size_t The number of entries in the cache.
+     */
+    size_t MemoryCache::GetCount(const wchar_t* regionName ) const
+    {
+      //  the region nust be null
+      if (nullptr != regionName)
+      {
+        throw std::invalid_argument("The regionName must be null!");
+      }
+
+      // we must lock so it does not change mid-flight.
+      MemoryCache::Lock guard(_mutex);
+
+      //  return the size
+      return _cacheItems.size();
     }
   }
 }
