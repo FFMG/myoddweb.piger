@@ -35,7 +35,8 @@ namespace myodd {
        * @param CacheItemPolicy policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      bool Add(const CacheItem& item, const CacheItemPolicy& policy)
+      template<class T>
+      bool Add(const CacheItem<T>& item, const CacheItemPolicy& policy)
       {
         // lock the threads so we don't have a race condition.
         MemoryCache::Lock guard(_mutex);
@@ -48,7 +49,7 @@ namespace myodd {
         }
 
         // copy this item
-        auto copyOfItem = new CacheItem(item);
+        auto copyOfItem = new CacheItem<T>(item);
 
         // we can now add it to our list.
         _cacheItems.emplace(
@@ -57,12 +58,14 @@ namespace myodd {
               //  lambda delete function
               [](void *ptr)
               {
-                delete static_cast<CacheItem*>(ptr); 
+                delete static_cast<CacheItem<T>*>(ptr); 
               },
               // lamdbad get function
-              []()
+              [](void *ptr, size_t& l)
               { 
-                return (CacheItem*)nullptr;
+                l = sizeof T;
+                auto cacheItem = static_cast<CacheItem<T>*>(ptr);
+                return (void*)(new T( cacheItem->Value<T>() ));
               }
             ))
         );
@@ -80,10 +83,11 @@ namespace myodd {
        * @param const wchar_t* regionName = nullptr Optional. A named region in the cache to which the cache entry can be added, if regions are implemented. The default value for the optional parameter is null.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      bool Add(const wchar_t* key, const boost::any& value, CacheItemPolicy policy, const wchar_t* regionName = nullptr )
+      template<class T>
+      bool Add(const wchar_t* key, T value, CacheItemPolicy policy, const wchar_t* regionName = nullptr )
       {
         //  just pass the value to the CacheItem function.
-        return Add( CacheItem(key, value, regionName), policy);
+        return Add( CacheItem<T>(key, value, regionName), policy);
       }
 
       /**
@@ -107,7 +111,8 @@ namespace myodd {
        * @param A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
        * @return const CacheItem<T>& the cache item, we will throw if the item does not exist.
        */
-      const CacheItem& GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const
+      template< class T>
+      CacheItem<T> GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const
       {
         //  the region nust be null
         if (nullptr != regionName)
@@ -131,7 +136,8 @@ namespace myodd {
           throw std::out_of_range("Could not locate this key");
         }
 
-        auto xx = it->second.getValue<int>();
+        const T& value = it->second.getValue<T>();
+        auto t = CacheItem<T>( key, value, regionName);
       }
 
     private:

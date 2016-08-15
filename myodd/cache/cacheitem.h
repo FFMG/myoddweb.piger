@@ -1,7 +1,6 @@
 #pragma once
 #include <typeindex>  //  typeindex
 #include <wchar.h>
-#include <boost/any.hpp>
 #include <memory> // unique_ptr
 
 namespace myodd {
@@ -10,6 +9,7 @@ namespace myodd {
      * Implementation of CacheItem
      * https://msdn.microsoft.com/en-us/library/system.runtime.caching.cacheitem(v=vs.110).aspx
      */
+    template <class T>
     class CacheItem
     {
     public:
@@ -29,7 +29,7 @@ namespace myodd {
        * @param const wchar_t* key A unique identifier for a CacheItem entry.
        */
       CacheItem(const wchar_t* key) :
-        CacheItem(key, nullptr, nullptr)
+        CacheItem(key, T(), nullptr)
       {
       }
 
@@ -39,7 +39,7 @@ namespace myodd {
        * @param T value the value we want to set this item as.
        * @param const wchar_t* regionName the region name.
        */
-      CacheItem(const wchar_t* key, const boost::any& value, const wchar_t* regionName = nullptr) :
+      CacheItem(const wchar_t* key, T value, const wchar_t* regionName = nullptr) :
         _key(nullptr),
         _regionName(nullptr),
         _value(value)
@@ -128,7 +128,7 @@ namespace myodd {
        * Set the value 
        * @param T value, the value we want to set.
        */
-      void Value(const boost::any& value)
+      void Value( T value)
       {
         // clean the value
         CleanValue();
@@ -143,18 +143,7 @@ namespace myodd {
       template<class T>
       T Value() const
       {
-        try
-        {
-          if (_value.empty())
-          {
-            return T();
-          }
-          return boost::any_cast<T>(_value);
-        }
-        catch ( boost::bad_any_cast )
-        {
-          return T();
-        }
+        return T(_value);
       }
     private:
       /**
@@ -223,7 +212,7 @@ namespace myodd {
       wchar_t* _key;
       wchar_t* _regionName;
 
-      boost::any _value;
+      T _value;
 
       /**
       * same as wcsncpy but we have to go around the MS warnings...
@@ -248,12 +237,12 @@ namespace myodd {
     class CacheItemPtr : public std::unique_ptr<void, void(*)(void*)>
     {
     public:
-      CacheItem*(*_Du)();
+      void*(*_Du)(void *ptr, size_t& l);
 
     public:
       CacheItemPtr(pointer _Ptr,
         typename std::remove_reference<void(*)(void*)>::type&& _Dt,
-        CacheItem*(*pt2Func)()
+        void*(*pt2Func)(void *ptr, size_t& l )
       ) _NOEXCEPT
         : std::unique_ptr<void, void(*)(void*)>(_Ptr, _Dt),
         _Du( pt2Func )
@@ -264,8 +253,13 @@ namespace myodd {
       template< class T>
       T getValue() const
       {
-        CacheItem* x = _Du();
-        return T();
+        size_t l;
+        void* x = _Du( get(), l );
+        T xx = 10;
+        size_t lt = sizeof T;
+        memset(&xx, 0, lt );
+        memcpy(&xx, x, l);
+        return xx;
       }
     protected:
 
