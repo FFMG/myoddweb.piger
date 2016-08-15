@@ -187,3 +187,15 @@ TEST(BasicMemoryTests, GetACacheItemThatDoesNotExist)
   auto anotherKeyCacheItem = Uuid();
   EXPECT_THROW(mc.GetCacheItem(anotherKeyCacheItem.c_str() ), std::out_of_range );
 }
+
+TEST(BasicMemoryTests, GetGetCacheItemAndCheckValues)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  //  add an item
+  auto keyCacheItem = Uuid();
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
+
+  auto ciGet = mc.GetCacheItem(keyCacheItem.c_str());
+}

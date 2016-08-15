@@ -2,6 +2,7 @@
 #include <typeindex>  //  typeindex
 #include <wchar.h>
 #include <boost/any.hpp>
+#include <memory> // unique_ptr
 
 namespace myodd {
   namespace cache {
@@ -146,13 +147,13 @@ namespace myodd {
         {
           if (_value.empty())
           {
-            return std::is_pointer<T>::value ? (T)nullptr : T();
+            return T();
           }
           return boost::any_cast<T>(_value);
         }
         catch ( boost::bad_any_cast )
         {
-          return std::is_pointer<T>::value ? (T)nullptr : T();
+          return T();
         }
       }
     private:
@@ -242,6 +243,32 @@ namespace myodd {
 #pragma warning( pop )
 #endif
       }
+    };
+
+    class CacheItemPtr : public std::unique_ptr<void, void(*)(void*)>
+    {
+    public:
+      CacheItem*(*_Du)();
+
+    public:
+      CacheItemPtr(pointer _Ptr,
+        typename std::remove_reference<void(*)(void*)>::type&& _Dt,
+        CacheItem*(*pt2Func)()
+      ) _NOEXCEPT
+        : std::unique_ptr<void, void(*)(void*)>(_Ptr, _Dt),
+        _Du( pt2Func )
+      {
+
+      }
+
+      template< class T>
+      T getValue() const
+      {
+        CacheItem* x = _Du();
+        return T();
+      }
+    protected:
+
     };
   }
 }

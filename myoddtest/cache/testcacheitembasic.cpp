@@ -83,3 +83,12 @@ TEST(BasicCacheItem, DefaultValueIsSetToInt)
   myodd::cache::CacheItem ci(key.c_str(), 10 );
   ASSERT_EQ(10, ci.Value<int>());
 }
+
+TEST(BasicCacheItem, IntCanBeCastToFloatOrDouble)
+{
+  auto key = Uuid();
+  myodd::cache::CacheItem ci(key.c_str(), 10);
+  ASSERT_EQ(10, ci.Value<int>());
+  ASSERT_EQ(10., ci.Value<float>());
+  ASSERT_EQ(10., ci.Value<double>());
+}

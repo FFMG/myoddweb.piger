@@ -53,10 +53,18 @@ namespace myodd {
         // we can now add it to our list.
         _cacheItems.emplace(
           std::make_pair( std::wstring(item.Key()),
-            CachItemsPtr( copyOfItem , [](void *ptr) 
-            {
-              delete static_cast<CacheItem*>(ptr); 
-            }))
+            CacheItemPtr( copyOfItem , 
+              //  lambda delete function
+              [](void *ptr)
+              {
+                delete static_cast<CacheItem*>(ptr); 
+              },
+              // lamdbad get function
+              []()
+              { 
+                return (CacheItem*)nullptr;
+              }
+            ))
         );
 
         // success.
@@ -122,6 +130,8 @@ namespace myodd {
         {
           throw std::out_of_range("Could not locate this key");
         }
+
+        auto xx = it->second.getValue<int>();
       }
 
     private:
@@ -130,8 +140,7 @@ namespace myodd {
       mutable std::mutex _mutex;
 
       // all our items.
-      typedef std::unique_ptr<void, void(*)(void*)> CachItemsPtr;
-      typedef std::map< std::wstring, CachItemsPtr > CachItems;
+      typedef std::map< std::wstring, CacheItemPtr > CachItems;
       CachItems _cacheItems;
 
       // the name of this collection
