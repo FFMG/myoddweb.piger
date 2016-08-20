@@ -10,6 +10,9 @@ namespace myodd {
       type_unknown,
       type_null,
 
+      // bool
+      Boolean_bool,
+
       // short int
       Integer_short_int,
 

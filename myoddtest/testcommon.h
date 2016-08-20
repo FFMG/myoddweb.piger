@@ -43,6 +43,18 @@ T IntRandomNumber()
   return unif(re);
 }
 
+inline bool BoolRandomNumber()
+{
+
+  // construct a trivial random generator engine from a time-based seed:
+  unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+  std::default_random_engine generator(seed);
+  std::default_random_engine re(seed);
+
+  std::uniform_int_distribution<int> unif(0, 1);
+  return (unif(re) != 0);
+}
+
 inline std::wstring Uuid()
 {
   return boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());

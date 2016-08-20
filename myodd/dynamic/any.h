@@ -76,6 +76,11 @@ namespace myodd {
           _ldvalue = nullptr;
           return;
 
+        case Boolean_bool:
+          _llivalue = new long long int( value ? 1: 0 );
+          _ldvalue = new long double( value ? 1 : 0 );
+          return;
+
         // int
         case dynamic::Integer_short_int:
         case dynamic::Integer_unsigned_short_int:
@@ -186,6 +191,12 @@ namespace myodd {
           return dynamic::Floating_point_long_double;
         }
 
+        //
+        if (std::is_same<T, bool>::value)
+        {
+          return dynamic::Boolean_bool;
+        }
+
         // we do not know how to handle this.
         return dynamic::type_unknown;
       }
@@ -214,12 +225,33 @@ namespace myodd {
         case dynamic::Type::Floating_point_long_double:
           return static_cast<T>(*_ldvalue);
 
+        case dynamic::Type::Boolean_bool:
+          return static_cast<T>(*_ldvalue);
+
         default:
           break; 
         }
 
         // we cannot cast this.
         throw std::bad_cast();
+      }
+
+
+      /**
+       * Try and cast this to a posible value.
+       * @return bool the value we are looking for.
+       */
+      template<>
+      bool CastTo<bool>() const
+      {
+        switch (_type)
+        {
+        case dynamic::Type::type_null:
+          return false;
+        }
+
+        //  value to true/false
+        return (*_llivalue != 0 ? true : false);
       }
 
       /**

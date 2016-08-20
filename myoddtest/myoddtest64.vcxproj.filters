@@ -133,5 +133,8 @@
     <ClCompile Include="dynamic\testany_floatingpoint.cpp">
       <Filter>myodd\dynamic</Filter>
     </ClCompile>
+    <ClCompile Include="dynamic\testany_boolean.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
