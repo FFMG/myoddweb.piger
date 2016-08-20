@@ -24,3 +24,42 @@ TEST(AnyTestFloatingPoint, CheckTheDataTypeLongDouble)
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Floating_point_long_double, x.Type());
 }
+
+TEST(AnyTestFloatingPoint, DefaultNumberIsZeroDouble)
+{
+  auto x = myodd::dynamic::Any();
+  ASSERT_EQ( 0, (double)x );
+}
+
+TEST(AnyTestFloatingPoint, DefaultNumberIsZeroFloat)
+{
+  auto x = myodd::dynamic::Any();
+  ASSERT_EQ(0, (float)x);
+}
+
+TEST(AnyTestFloatingPoint, DefaultNumberIsZeroLongDouble)
+{
+  auto x = myodd::dynamic::Any();
+  ASSERT_EQ(0, (long double)x);
+}
+
+TEST(AnyTestFloatingPoint, ALongNumberCanBeALongDouble)
+{
+  long value = IntRandomNumber<long>();
+  auto x = myodd::dynamic::Any( value );
+  ASSERT_EQ((long double)value, (long double)x);
+}
+
+TEST(AnyTestFloatingPoint, ALongNumberCanBeADouble)
+{
+  long value = IntRandomNumber<long>();
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ((double)value, (double)x);
+}
+
+TEST(AnyTestFloatingPoint, AnIntNumberCanBeAFloat)
+{
+  int value = IntRandomNumber<int>();
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ((float)value, (float)x);
+}
