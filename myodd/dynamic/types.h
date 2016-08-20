@@ -32,7 +32,16 @@ namespace myodd {
       Integer_long_long_int,
 
       // unsigned
-      Integer_unsigned_long_long_int
+      Integer_unsigned_long_long_int,
+
+      // float
+      Floating_point_float,
+
+      // double
+      Floating_point_double,
+
+      // long double.
+      Floating_point_long_double
     };
   }
 }

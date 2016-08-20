@@ -13,6 +13,7 @@ namespace myodd {
        */
       Any() :
         _llivalue(nullptr),
+        _ldvalue( nullptr ),
         _type( Type::type_null )
       {
       }
@@ -72,6 +73,7 @@ namespace myodd {
         {
         case dynamic::type_null:
           _llivalue = nullptr;
+          _ldvalue = nullptr;
           return;
 
         // int
@@ -84,7 +86,17 @@ namespace myodd {
         case dynamic::Integer_long_long_int:
         case dynamic::Integer_unsigned_long_long_int:
           // we can cast those into long/long
-          _llivalue = new long long(value); 
+          _llivalue = new long long int(static_cast<long long int>(value));
+          _ldvalue = new long double(static_cast<long double>(*_llivalue));
+          return;
+
+        // double
+        case dynamic::Floating_point_double:
+        case dynamic::Floating_point_float:
+        case dynamic::Floating_point_long_double:
+          // we can cast those into long/long
+          _ldvalue = new long double(static_cast<long double>(value));
+          _llivalue = new long long int(static_cast<long long int>(*_ldvalue));
           return;
 
         case dynamic::type_unknown:
@@ -156,6 +168,24 @@ namespace myodd {
           return dynamic::Integer_unsigned_long_long_int;
         }
 
+        //
+        if (std::is_same<T, double>::value)
+        {
+          return dynamic::Floating_point_double;
+        }
+
+        //
+        if (std::is_same<T, float>::value)
+        {
+          return dynamic::Floating_point_float;
+        }
+
+        //
+        if (std::is_same<T, long double>::value)
+        {
+          return dynamic::Floating_point_long_double;
+        }
+
         // we do not know how to handle this.
         return dynamic::type_unknown;
       }
@@ -179,6 +209,11 @@ namespace myodd {
         case dynamic::Type::Integer_unsigned_long_long_int:
           return static_cast<T>(*_llivalue);
 
+        case dynamic::Type::Floating_point_double:
+        case dynamic::Type::Floating_point_float:
+        case dynamic::Type::Floating_point_long_double:
+          return static_cast<T>(*_ldvalue);
+
         default:
           break; 
         }
@@ -192,18 +227,22 @@ namespace myodd {
        */
       void CleanValues()
       {
-        //  delete if need be
-        if (_llivalue)
-        {
-          delete _llivalue;
-        }
+        //  delete long long integer if need be
+        delete _llivalue;
+
+        //  delete long double if need be
+        delete _ldvalue;
 
         // reset the values
         _llivalue = nullptr;
+        _ldvalue = nullptr;
       }
 
       // the biggest integer value.
       long long int* _llivalue;
+
+      // the biggest floating point value
+      long double* _ldvalue;
 
       // the variable type
       dynamic::Type _type;
