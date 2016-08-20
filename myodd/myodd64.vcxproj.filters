@@ -84,6 +84,9 @@
     <Filter Include="cache">
       <UniqueIdentifier>{e5ee2994-802a-4022-a5eb-a795645ab708}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dynamic">
+      <UniqueIdentifier>{371607f0-0624-4f48-9663-416e3fa1d542}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common\program_options.cpp">
@@ -521,6 +524,12 @@
     </ClInclude>
     <ClInclude Include="cache\cacheitempolicy.h">
       <Filter>cache</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\any.h">
+      <Filter>dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic\types.h">
+      <Filter>dynamic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

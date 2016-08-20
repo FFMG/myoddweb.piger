@@ -772,6 +772,7 @@
     <None Include="sqlite\sqlite3.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cache\any.h" />
     <ClInclude Include="cache\cacheitem.h" />
     <ClInclude Include="cache\cacheitempolicy.h" />
     <ClInclude Include="cache\memorycache.h" />
@@ -783,6 +784,7 @@
     <ClInclude Include="config\ConfigObject.h" />
     <ClInclude Include="containers\idx_map.h" />
     <ClInclude Include="containers\Matrix2D.h" />
+    <ClInclude Include="dynamic\types.h" />
     <ClInclude Include="files\files.h" />
     <ClInclude Include="geo\geo.h" />
     <ClInclude Include="html\html.h" />

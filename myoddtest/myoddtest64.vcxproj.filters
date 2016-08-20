@@ -23,6 +23,9 @@
     <Filter Include="myodd\cache">
       <UniqueIdentifier>{b7334aae-80d1-40cf-ac5b-2b8841dda229}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\dynamic">
+      <UniqueIdentifier>{fde5d0cb-3b4f-4676-885f-7ad74b3804a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -33,6 +36,9 @@
     </ClInclude>
     <ClInclude Include="testcommon.h">
       <Filter>myodd</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic\testany_int.h">
+      <Filter>myodd\dynamic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +120,15 @@
     </ClCompile>
     <ClCompile Include="cache\testcacheitembasic.cpp">
       <Filter>myodd\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_long.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_longlong.cpp">
+      <Filter>myodd\dynamic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
