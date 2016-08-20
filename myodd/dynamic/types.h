@@ -20,11 +20,10 @@ namespace myodd {
       Integer_int,
 
       // unsigned
-      Integer_unsigned,
       Integer_unsigned_int,
 
       // long int
-      type_long,
+      Integer_long_int,
 
       // long long int
       type_longlong,

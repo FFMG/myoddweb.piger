@@ -78,7 +78,8 @@ namespace myodd {
         case dynamic::Integer_short_int:
         case dynamic::Integer_unsigned_short_int:
         case dynamic::Integer_int:
-        case dynamic::type_long:
+        case dynamic::Integer_unsigned_int:
+        case dynamic::Integer_long_int:
         case dynamic::type_longlong:
           // we can cast those into long/long
           _llvalue = new long long(value); 
@@ -123,10 +124,18 @@ namespace myodd {
           return dynamic::Integer_int;
         }
 
+        //
+        if (std::is_same<T, unsigned int>::value)
+        {
+          return dynamic::Integer_unsigned_int;
+        }
+
+        //
         if (std::is_same<T, long>::value)
         {
-          return dynamic::type_long;
+          return dynamic::Integer_long_int;
         }
+
         if (std::is_same<T, long long>::value)
         {
           return dynamic::type_longlong;
@@ -148,7 +157,7 @@ namespace myodd {
           return 0;
 
         case dynamic::Type::Integer_int:
-        case dynamic::Type::type_long:
+        case dynamic::Type::Integer_long_int:
         case dynamic::Type::type_longlong:
           return static_cast<T>(*_llvalue);
 

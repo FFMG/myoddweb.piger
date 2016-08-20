@@ -8,13 +8,6 @@ TEST(AnyTestLong, NullWillReturnAnLong)
   ASSERT_EQ(0, (long)x);
 }
 
-TEST(AnyTestLong, CheckTheDataType)
-{
-  long value = 10;
-  auto x = myodd::dynamic::Any(value);
-  ASSERT_EQ( myodd::dynamic::Type::type_long, x.Type() );
-}
-
 TEST(AnyTestLong, DefaultConstructorConstLong)
 {
   auto x = myodd::dynamic::Any( (long)10 );
@@ -28,8 +21,36 @@ TEST(AnyTestLong, DefaultConstructorNonConstLong)
   ASSERT_EQ(10, (long)x);
 }
 
-TEST(AnyTestInt, AValidIntToLong)
+TEST(AnyTestLong, AValidIntToLong)
 {
   auto x = myodd::dynamic::Any((int)10);
   ASSERT_EQ(10, (long)x);
+}
+
+TEST(AnyTestLong, CheckTheDataTypeLong)
+{
+  long value = 10;
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ(myodd::dynamic::Type::Integer_long_int, x.Type());
+}
+
+TEST(AnyTestLong, CheckTheDataTypeLongInt)
+{
+  long int value = 10;
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ(myodd::dynamic::Type::Integer_long_int, x.Type());
+}
+
+TEST(AnyTestLong, CheckTheDataTypeSignedLong)
+{
+  signed long value = 10;
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ(myodd::dynamic::Type::Integer_long_int, x.Type());
+}
+
+TEST(AnyTestLong, CheckTheDataTypeSignedLongInt)
+{
+  signed long int value = 10;
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ(myodd::dynamic::Type::Integer_long_int, x.Type());
 }
