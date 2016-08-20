@@ -1,6 +1,8 @@
 #include "dynamic/any.h"
 #include <gtest/gtest.h>
 
+#include "../testcommon.h"
+
 // --gtest_filter=AnyTestInt* 
 TEST(AnyTestInt, NullWillReturnAnInt)
 {
@@ -10,14 +12,14 @@ TEST(AnyTestInt, NullWillReturnAnInt)
 
 TEST(AnyTestInt, CheckTheDataTypeInt)
 {
-  int value = 10;
+  int value = IntRandomNumber<int>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ( myodd::dynamic::Type::Integer_int, x.Type() );
 }
 
 TEST(AnyTestInt, CheckTheDataTypeSigned)
 {
-  signed value = 10;
+  signed value = IntRandomNumber<signed>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_int, x.Type());
 }
@@ -31,7 +33,7 @@ TEST(AnyTestInt, CheckTheDataTypeSignedInt)
 
 TEST(AnyTestInt, DefaultConstructorConstInt)
 {
-  auto x = myodd::dynamic::Any( (int)10 );
+  auto x = myodd::dynamic::Any( (int)10);
   ASSERT_EQ(10, (int)x);
 }
 
@@ -39,13 +41,14 @@ TEST(AnyTestInt, DefaultConstructorNonConstInt)
 {
   int value = 10;
   auto x = myodd::dynamic::Any(value);
-  ASSERT_EQ(10, (int)x);
+  ASSERT_EQ(value, (int)x);
 }
 
 TEST(AnyTestInt, AValidLongToInt)
 {
-  auto x = myodd::dynamic::Any((long)10);
-  ASSERT_EQ(10, (int)x);
+  long l = 10;
+  auto x = myodd::dynamic::Any(l);
+  ASSERT_EQ((int)l, (int)x);
 }
 
 TEST(AnyTestInt, CheckTheDataTypeShort )
@@ -99,7 +102,7 @@ TEST(AnyTestInt, CheckTheDataTypeUnsignedUnsigned)
 
 TEST(AnyTestInt, CheckTheDataTypeUnsignedUnsignedInt)
 {
-  unsigned value = 10;
+  unsigned int value = 10;
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_int, x.Type());
 }

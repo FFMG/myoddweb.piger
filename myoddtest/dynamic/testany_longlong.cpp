@@ -1,6 +1,8 @@
 #include "dynamic/any.h"
 #include <gtest/gtest.h>
 
+#include "../testcommon.h"
+
 // --gtest_filter=AnyTestLongLong* 
 TEST(AnyTestLongLong, NullWillReturnAnLong)
 {
@@ -10,61 +12,63 @@ TEST(AnyTestLongLong, NullWillReturnAnLong)
 
 TEST(AnyTestLongLong, DefaultConstructorConstLong)
 {
-  auto x = myodd::dynamic::Any( (long long)10 );
-  ASSERT_EQ(10, (long long)x);
+  const long long value = IntRandomNumber<long long>();
+  auto x = myodd::dynamic::Any( value );
+  ASSERT_EQ((long long)value, (long long)x);
 }
 
 TEST(AnyTestLongLong, DefaultConstructorNonConstLong)
 {
-  long value = 10;
+  long value = IntRandomNumber<long>();
   auto x = myodd::dynamic::Any(value);
-  ASSERT_EQ(10, (long long)x);
+  ASSERT_EQ((long long)value, (long long)x);
 }
 
 TEST(AnyTestInt, AValidIntToLongLong)
 {
-  auto x = myodd::dynamic::Any((int)10);
-  ASSERT_EQ(10, (long long)x);
+  int value = IntRandomNumber<int>();
+  auto x = myodd::dynamic::Any( value );
+  ASSERT_EQ((long long)value, (long long)x);
 }
 
 TEST(AnyTestLongLong, CheckTheDataTypeLongLong)
 {
-  long long value = 10;
+  long long value = IntRandomNumber<long long>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_long_int, x.Type());
 }
 
 TEST(AnyTestLongLong, CheckTheDataTypeLongLongInt)
 {
-  long long int value = 10;
+  long long int value = IntRandomNumber<long long int>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_long_int, x.Type());
 }
 
 TEST(AnyTestLongLong, CheckTheDataTypeSignedLongLong)
 {
-  signed long long value = 10;
+  signed long long value = IntRandomNumber<signed long long>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_long_int, x.Type());
 }
 
 TEST(AnyTestLongLong, CheckTheDataTypeSignedLongLongInt)
 {
-  signed long long int value = 10;
+  signed long long int value = IntRandomNumber<signed long long int>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_long_int, x.Type());
 }
 
 TEST(AnyTestLongLong, CheckTheDataTypeUnsignedLongLong )
 {
-  unsigned long long value = 10;
+  unsigned long long value = IntRandomNumber<unsigned long long>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_long_int, x.Type());
 }
 
 TEST(AnyTestLongLong, CheckTheDataTypeUnsignedLongLongInt)
 {
-  unsigned long long int value = 10;
+  unsigned long long int value = IntRandomNumber<unsigned long long int>();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_long_int, x.Type());
 }
