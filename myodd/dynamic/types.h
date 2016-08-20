@@ -29,9 +29,10 @@ namespace myodd {
       Integer_unsigned_long_int,
 
       // long long int
-      type_longlong,
+      Integer_long_long_int,
 
-
+      // unsigned
+      Integer_unsigned_long_long_int
     };
   }
 }

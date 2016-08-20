@@ -12,7 +12,7 @@ namespace myodd {
        * default constructor.
        */
       Any() :
-        _llvalue(nullptr),
+        _llivalue(nullptr),
         _type( Type::type_null )
       {
       }
@@ -71,7 +71,7 @@ namespace myodd {
         switch (_type)
         {
         case dynamic::type_null:
-          _llvalue = nullptr;
+          _llivalue = nullptr;
           return;
 
         // int
@@ -81,9 +81,10 @@ namespace myodd {
         case dynamic::Integer_unsigned_int:
         case dynamic::Integer_long_int:
         case dynamic::Integer_unsigned_long_int:
-        case dynamic::type_longlong:
+        case dynamic::Integer_long_long_int:
+        case dynamic::Integer_unsigned_long_long_int:
           // we can cast those into long/long
-          _llvalue = new long long(value); 
+          _llivalue = new long long(value); 
           return;
 
         case dynamic::type_unknown:
@@ -143,10 +144,18 @@ namespace myodd {
           return dynamic::Integer_unsigned_long_int;
         }
         
-        if (std::is_same<T, long long>::value)
+        //
+        if (std::is_same<T, long long int>::value)
         {
-          return dynamic::type_longlong;
+          return dynamic::Integer_long_long_int;
         }
+
+        //
+        if (std::is_same<T, unsigned long long int>::value)
+        {
+          return dynamic::Integer_unsigned_long_long_int;
+        }
+
         // we do not know how to handle this.
         return dynamic::type_unknown;
       }
@@ -166,8 +175,9 @@ namespace myodd {
         case dynamic::Type::Integer_int:
         case dynamic::Type::Integer_long_int:
         case dynamic::Type::Integer_unsigned_long_int:
-        case dynamic::Type::type_longlong:
-          return static_cast<T>(*_llvalue);
+        case dynamic::Type::Integer_long_long_int:
+        case dynamic::Type::Integer_unsigned_long_long_int:
+          return static_cast<T>(*_llivalue);
 
         default:
           break; 
@@ -183,17 +193,17 @@ namespace myodd {
       void CleanValues()
       {
         //  delete if need be
-        if (_llvalue)
+        if (_llivalue)
         {
-          delete _llvalue;
+          delete _llivalue;
         }
 
         // reset the values
-        _llvalue = nullptr;
+        _llivalue = nullptr;
       }
 
-      // the actual value
-      long long* _llvalue;
+      // the biggest integer value.
+      long long int* _llivalue;
 
       // the variable type
       dynamic::Type _type;
