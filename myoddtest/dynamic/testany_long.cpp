@@ -54,3 +54,17 @@ TEST(AnyTestLong, CheckTheDataTypeSignedLongInt)
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_int, x.Type());
 }
+
+TEST(AnyTestLong, CheckTheDataTypeUnsignedLong)
+{
+  unsigned long value = 10;
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_int, x.Type());
+}
+
+TEST(AnyTestLong, CheckTheDataTypeUnsignedLongInt)
+{
+  unsigned long int value = 10;
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_int, x.Type());
+}

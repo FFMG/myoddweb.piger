@@ -25,6 +25,9 @@ namespace myodd {
       // long int
       Integer_long_int,
 
+      // unsigned
+      Integer_unsigned_long_int,
+
       // long long int
       type_longlong,
 
