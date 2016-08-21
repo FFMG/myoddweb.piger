@@ -37,9 +37,6 @@
     <ClInclude Include="testcommon.h">
       <Filter>myodd</Filter>
     </ClInclude>
-    <ClInclude Include="dynamic\testany_int.h">
-      <Filter>myodd\dynamic</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -134,6 +131,9 @@
       <Filter>myodd\dynamic</Filter>
     </ClCompile>
     <ClCompile Include="dynamic\testany_boolean.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_int.cpp">
       <Filter>myodd\dynamic</Filter>
     </ClCompile>
   </ItemGroup>

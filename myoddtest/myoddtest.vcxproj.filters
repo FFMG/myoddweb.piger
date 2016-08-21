@@ -23,6 +23,9 @@
     <Filter Include="myodd\cache">
       <UniqueIdentifier>{9afbd94a-54d9-4dbc-95ec-355094356a2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\dynamic">
+      <UniqueIdentifier>{d787f7a0-1e33-4204-9307-05d6b04d8f53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -114,6 +117,24 @@
     </ClCompile>
     <ClCompile Include="cache\testcacheitembasic.cpp">
       <Filter>myodd\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_boolean.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_floatingpoint.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_int.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_long.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="dynamic\testany_longlong.cpp">
+      <Filter>myodd\dynamic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

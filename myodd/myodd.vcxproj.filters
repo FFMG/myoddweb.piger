@@ -84,6 +84,9 @@
     <Filter Include="cache">
       <UniqueIdentifier>{df4348ee-20f9-44d5-b8ca-c84987b98608}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dynamic">
+      <UniqueIdentifier>{3108b6f9-744c-4233-a9dd-8a2bd5195188}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -521,6 +524,12 @@
     </ClInclude>
     <ClInclude Include="cache\memorycache.h">
       <Filter>cache</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic\any.h">
+      <Filter>dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic\types.h">
+      <Filter>dynamic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
