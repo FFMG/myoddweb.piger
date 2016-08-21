@@ -193,7 +193,7 @@ namespace myodd {
         // clear all the values.
         CleanValues();
 
-        // guess the data type to see if we can handle it.
+        // set the type
         _type = dynamic::get_type<T>::value;
         switch ( Type() )
         {
@@ -202,7 +202,7 @@ namespace myodd {
           _ldvalue = nullptr;
           return;
 
-        case Boolean_bool:
+        case dynamic::Boolean_bool:
           _llivalue = new long long int( value ? 1: 0 );
           _ldvalue = new long double( value ? 1 : 0 );
           return;
@@ -235,7 +235,7 @@ namespace myodd {
 
         default:
           // is this a new type that we are not handling?
-          throw std::exception("Dynamice type is not handled.");
+          throw std::exception("Dynamic type is not handled.");
         }
 
         // we could not deduce the value from this.
@@ -253,10 +253,51 @@ namespace myodd {
         // clear all the values.
         CleanValues();
 
+        // set the type
+        _type = dynamic::get_type<T>::value;
+
         // if not null then we can set it.
         if (nullptr != value)
         {
           CastFrom(*value);
+        }
+        else
+        {
+          // if it is null we must still set the type, but default the values to zeros.
+          switch ( Type() )
+          {
+          case dynamic::type_null:
+            _llivalue = nullptr;
+            _ldvalue = nullptr;
+            return;
+
+          case dynamic::Boolean_bool:
+          case dynamic::Integer_short_int:
+          case dynamic::Integer_unsigned_short_int:
+          case dynamic::Integer_int:
+          case dynamic::Integer_unsigned_int:
+          case dynamic::Integer_long_int:
+          case dynamic::Integer_unsigned_long_int:
+          case dynamic::Integer_long_long_int:
+          case dynamic::Integer_unsigned_long_long_int:
+          case dynamic::Floating_point_double:
+          case dynamic::Floating_point_float:
+          case dynamic::Floating_point_long_double:
+            // default values.
+            _llivalue = new long long int(0);
+            _ldvalue = new long double(0);
+            return;
+
+          case dynamic::type_unknown:
+            break;
+
+          default:
+            // is this a new type that we are not handling?
+            throw std::exception("Dynamic type is not handled.");
+          }
+
+          // we could not deduce the value from this.
+          throw std::bad_cast();
         }
       }
 
