@@ -30,6 +30,26 @@ namespace myodd {
       }
 
       /**
+      * Copy constructor
+      * @param const int& the value we want to copy/set
+      */
+      template<typename T>
+      Any( T* value) :
+        Any()
+      {
+        CastFrom(value);
+      }
+
+      /**
+       * Copy constructor
+       */
+      Any(const Any& any) :
+        Any()
+      {
+        *this = any;
+      }
+
+      /**
        * Destructor.
        */
       virtual ~Any()
@@ -47,6 +67,72 @@ namespace myodd {
       }
 
       /**
+       * The equal operator
+       * @param const Any &other the value we are comparing
+       * @return bool if the values are equal
+       */
+      bool operator==(const Any& other) const
+      {
+        return (Compare( *this, other ) == 0);
+      }
+
+      /**
+       * The friend equal operator.
+       * @param const Any &other the value we are comparing
+       * @return bool if the values are equal
+       */
+      template<typename T>
+      friend bool operator==(const T& lhs , const Any& rhs)
+      {
+        return (Compare(Any(lhs), rhs ) == 0);
+      }
+
+      /**
+       * The not equal operator
+       * @param const Any &other the value we are comparing
+       * @return bool if the values are _not_ equal
+       */
+      bool operator!=(const Any &other) const
+      {
+        return (Compare(*this, other) != 0);
+      }
+
+      /**
+       * The friend equal operator.
+       * @param const Any &other the value we are comparing
+       * @return bool if the values are equal
+       */
+      template<typename T>
+      friend bool operator!=(const T& lhs , const Any& rhs)
+      {
+        return (Compare(Any(lhs), rhs ) != 0);
+      }
+
+      /** 
+       * The equal operator
+       * @param const Any& other the value we are trying to set.
+       * @return const Any& this value.
+       */
+      const Any& operator = (const Any& other)
+      {
+        if (this != &other)
+        {
+          // clear everything
+          CleanValues();
+
+          // copy the values over.
+          _type = other._type;
+
+          // long long int
+          _llivalue = new long long int(*other._llivalue);
+
+          // long double
+          _ldvalue = new long double(*other._ldvalue);
+        }
+        return *this;
+      }
+
+      /**
       * Return the data type
       * @return const Type& the data type.
       */
@@ -56,6 +142,46 @@ namespace myodd {
       }
 
     protected:
+      /**
+       * Compare 2 values and return 0 if they are both the same.
+       * @param const Any& lhs the lhs value been compared.
+       * @param const Any& rhs the lhs value been compared.
+       * @return short, 0 if equal, -1 if type not the same, >=1 if value not same.
+       */
+      static short Compare(const Any& lhs, const Any& rhs)
+      {
+        // if the types are not the same
+        if (lhs.Type() != rhs.Type())
+        {
+          return -1;
+        }
+
+        // special case for null
+        switch (lhs.Type())
+        {
+        case dynamic::type_unknown:
+        case dynamic::type_null:
+          //  just compare the llivalue, they should be null anyway.
+          return (lhs._llivalue == nullptr && lhs._llivalue == rhs._llivalue) ? 0 : 1;
+        }
+
+        // compare the values now.
+        //
+        if (*lhs._llivalue != *rhs._llivalue)
+        {
+          return 1;
+        }
+
+        // 
+        if (*lhs._ldvalue != *rhs._ldvalue)
+        {
+          return 2;
+        }
+
+        // looks the same
+        return 0;
+      }
+
       /**
        * Try and create from a given value.
        * @throw std::bad_cast() if we are trying to create from an unknwon value.
@@ -69,7 +195,7 @@ namespace myodd {
 
         // guess the data type to see if we can handle it.
         _type = GuessType( value );
-        switch (_type)
+        switch ( Type() )
         {
         case dynamic::type_null:
           _llivalue = nullptr;
@@ -114,6 +240,35 @@ namespace myodd {
 
         // we could not deduce the value from this.
         throw std::bad_cast();
+      }
+
+      /**
+       * Try and create from a given value.
+       * @throw std::bad_cast() if we are trying to create from an unknwon value.
+       * @param const T& value the value we are trying to create from.
+       */
+      template<typename T>
+      void CastFrom(T* value)
+      {
+        // clear all the values.
+        CleanValues();
+
+        // if not null then we can set it.
+        if (nullptr != value)
+        {
+          CastFrom(*value);
+        }
+      }
+
+      /**
+      * Try and create from a given value.
+      * @throw std::bad_cast() if we are trying to create from an unknwon value.
+      * @param const T& value the value we are trying to create from.
+      */
+      void CastFrom(nullptr_t)
+      {
+        // clear all the values.
+        CleanValues();
       }
 
       /**

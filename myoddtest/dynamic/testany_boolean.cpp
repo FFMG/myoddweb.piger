@@ -47,11 +47,11 @@ TEST(AnyTestBoolean, RealNumberCanBeABool)
 TEST(AnyTestBoolean, ZeroIsFalse)
 {
   auto x = myodd::dynamic::Any(0);
-  ASSERT_FALSE( x );
+  ASSERT_FALSE( (bool)x );
 }
 
 TEST(AnyTestBoolean, NonZeroIsTrue)
 {
   auto x = myodd::dynamic::Any(1);
-  ASSERT_TRUE(x);
+  ASSERT_TRUE( (bool)x);
 }
