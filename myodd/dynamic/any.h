@@ -194,7 +194,7 @@ namespace myodd {
         CleanValues();
 
         // guess the data type to see if we can handle it.
-        _type = GuessType( value );
+        _type = dynamic::get_type<T>::value;
         switch ( Type() )
         {
         case dynamic::type_null:
@@ -269,91 +269,6 @@ namespace myodd {
       {
         // clear all the values.
         CleanValues();
-      }
-
-      /**
-       * Try and guess the data type to convert to a dynamic::Type enum
-       * We return type_unknown if not handled.
-       * @param const T& the value we are trying to guess.
-       * @return dynamic::Type the guessed type.
-       */
-      template<typename T>
-      dynamic::Type GuessType(const T&) const
-      {
-        //
-        if (std::is_same<T, short int>::value)
-        {
-          return dynamic::Integer_short_int;
-        }
-
-        //
-        if (std::is_same<T, unsigned short int>::value)
-        {
-          return dynamic::Integer_unsigned_short_int;
-        }
-
-        //
-        if (std::is_same<T, int>::value)
-        {
-          return dynamic::Integer_int;
-        }
-
-        //
-        if (std::is_same<T, unsigned int>::value)
-        {
-          return dynamic::Integer_unsigned_int;
-        }
-
-        //
-        if (std::is_same<T, long int>::value)
-        {
-          return dynamic::Integer_long_int;
-        }
-
-        //
-        if (std::is_same<T, unsigned long int>::value)
-        {
-          return dynamic::Integer_unsigned_long_int;
-        }
-        
-        //
-        if (std::is_same<T, long long int>::value)
-        {
-          return dynamic::Integer_long_long_int;
-        }
-
-        //
-        if (std::is_same<T, unsigned long long int>::value)
-        {
-          return dynamic::Integer_unsigned_long_long_int;
-        }
-
-        //
-        if (std::is_same<T, double>::value)
-        {
-          return dynamic::Floating_point_double;
-        }
-
-        //
-        if (std::is_same<T, float>::value)
-        {
-          return dynamic::Floating_point_float;
-        }
-
-        //
-        if (std::is_same<T, long double>::value)
-        {
-          return dynamic::Floating_point_long_double;
-        }
-
-        //
-        if (std::is_same<T, bool>::value)
-        {
-          return dynamic::Boolean_bool;
-        }
-
-        // we do not know how to handle this.
-        return dynamic::type_unknown;
       }
 
       /**
