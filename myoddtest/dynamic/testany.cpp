@@ -107,6 +107,13 @@ TEST(AnyTest, AddressOfPointerIsNullButSignedCharTypeIsRespected)
   ASSERT_EQ(myodd::dynamic::Type::Character_signed_char, x.Type());
 }
 
+TEST(AnyTest, AddressOfPointerIsNullButWideCharTypeIsRespected)
+{
+  wchar_t* b = nullptr;
+  auto x = myodd::dynamic::Any(b);
+  ASSERT_EQ(myodd::dynamic::Type::Character_wchar_t, x.Type());
+}
+
 TEST(AnyTest, AddressOfPointerIsNullButBoolTypeIsRespected)
 {
   bool* b = nullptr;

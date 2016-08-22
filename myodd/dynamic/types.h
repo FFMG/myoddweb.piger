@@ -17,6 +17,7 @@ namespace myodd {
       Character_signed_char,
       Character_unsigned_char,
       Character_char,
+      Character_wchar_t,
 
       // short int
       Integer_short_int,
@@ -146,6 +147,12 @@ namespace myodd {
     struct get_type<char>
     {
       static constexpr dynamic::Type value = dynamic::Character_char;
+    };
+
+    template<>
+    struct get_type<wchar_t>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_wchar_t;
     };
   }
 }

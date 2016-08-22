@@ -55,3 +55,10 @@ TEST(AnyTestBoolean, NonZeroIsTrue)
   auto x = myodd::dynamic::Any(1);
   ASSERT_TRUE( (bool)x);
 }
+
+TEST(AnyTestCharacter, ValueIskept)
+{
+  auto b = BoolRandomNumber();
+  auto x = myodd::dynamic::Any(b);
+  ASSERT_EQ(b, x);
+}

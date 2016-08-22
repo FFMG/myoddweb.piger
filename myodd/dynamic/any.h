@@ -211,6 +211,7 @@ namespace myodd {
         case dynamic::Character_char:
         case dynamic::Character_unsigned_char:
         case dynamic::Character_signed_char:
+        case dynamic::Character_wchar_t:
 
         // int
         case dynamic::Integer_short_int:
@@ -276,7 +277,16 @@ namespace myodd {
             _ldvalue = nullptr;
             return;
 
+          // boolean
           case dynamic::Boolean_bool:
+
+          // characters
+          case dynamic::Character_char:
+          case dynamic::Character_unsigned_char:
+          case dynamic::Character_signed_char:
+          case dynamic::Character_wchar_t:
+
+          // int
           case dynamic::Integer_short_int:
           case dynamic::Integer_unsigned_short_int:
           case dynamic::Integer_int:
