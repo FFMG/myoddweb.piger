@@ -47,6 +47,31 @@ TEST(AnyTestOperators, TwoNullValuesAreNotLessThanEachOthers)
   auto x = myodd::dynamic::Any( nullptr );
   auto y = myodd::dynamic::Any( nullptr );
   ASSERT_FALSE(x < y);
+  ASSERT_TRUE(x == y);
+}
+
+TEST(AnyTestOperators, TwoNullValuesAreNotMoreThanEachOthers)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(nullptr);
+  ASSERT_FALSE(x > y);
+  ASSERT_TRUE(x == y);
+}
+
+TEST(AnyTestOperators, TwoNullValuesCanBeLessOrEqual)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(nullptr);
+  ASSERT_TRUE(x <= y);
+  ASSERT_TRUE(x == y);
+}
+
+TEST(AnyTestOperators, TwoNullValuesCanBeMoreOrEqual)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(nullptr);
+  ASSERT_TRUE(x >= y);
+  ASSERT_TRUE(x == y);
 }
 
 TEST(AnyTestOperators, NullLhsIsLessThanBigNumber)
@@ -55,6 +80,7 @@ TEST(AnyTestOperators, NullLhsIsLessThanBigNumber)
   auto y = myodd::dynamic::Any( IntRandomNumber<unsigned int>( false ) );
   ASSERT_TRUE(x < y);
   ASSERT_FALSE(x > y);
+  ASSERT_FALSE(x >= y);
 }
 
 TEST(AnyTestOperators, NullRhsIsLessThanSmallNegNumber)
@@ -65,4 +91,12 @@ TEST(AnyTestOperators, NullRhsIsLessThanSmallNegNumber)
   auto y = myodd::dynamic::Any(nullptr);
   ASSERT_TRUE(x < y);
   ASSERT_FALSE(x > y);
+  ASSERT_FALSE(x >= y);
+}
+
+TEST(AnyTestOperators, NullEqualsAnyNul )
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  ASSERT_TRUE(x == nullptr );
+  ASSERT_TRUE(nullptr ==  x);
 }

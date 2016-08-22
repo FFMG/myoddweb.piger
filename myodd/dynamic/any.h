@@ -108,7 +108,12 @@ namespace myodd {
         return (Compare(Any(lhs), rhs ) != 0);
       }
 
-      bool operator< (const Any& rhs) 
+      /**
+       * Relational operator less than
+       * @param const Any& rhs
+       * @return bool if *this < rhs
+       */
+      bool operator< (const Any& rhs) const
       {
         // we use the double number as it is more precise
         if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
@@ -133,20 +138,39 @@ namespace myodd {
         return (*_ldvalue < *rhs._ldvalue);
       }
 
-
-      template<typename T>
-      friend bool operator< (const T& lhs, const Any& rhs) {
+      /**
+       * Relational operator less than
+       * @param const T& lhs
+       * @param const Any& rhs
+       * @return bool if lhs < rhs
+       */
+      template<typename T> friend bool operator< (const T& lhs, const Any& rhs) {
         return Any(lhs) < rhs;
       }
 
-      template<typename T>
-      friend bool operator> (const T& lhs, const Any& rhs) { return rhs < lhs; }
+      /**
+       * Relational operator greater than
+       * @param const T& lhs
+       * @param const Any& rhs
+       * @return bool if lhs > rhs
+       */
+      template<typename T>  friend bool operator> (const T& lhs, const Any& rhs) { return rhs < lhs; }
 
-      template<typename T>
-      friend bool operator<=(const T& lhs, const Any& rhs) { return !(lhs > rhs); }
+      /**
+       * Relational operator less or equal than
+       * @param const T& lhs
+       * @param const Any& rhs
+       * @return bool if lhs <= rhs
+       */
+      template<typename T> friend bool operator<=(const T& lhs, const Any& rhs) { return !(lhs > rhs); }
 
-      template<typename T>
-      friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
+      /**
+       * Relational operator more or equal than
+       * @param const T& lhs
+       * @param const Any& rhs
+       * @return bool if lhs >= rhs
+       */
+      template<typename T> friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
 
       /** 
        * The equal operator
