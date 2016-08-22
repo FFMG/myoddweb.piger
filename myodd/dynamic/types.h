@@ -13,6 +13,11 @@ namespace myodd {
       // bool
       Boolean_bool,
 
+      // character
+      Character_signed_char,
+      Character_unsigned_char,
+      Character_char,
+
       // short int
       Integer_short_int,
 
@@ -123,6 +128,24 @@ namespace myodd {
     struct get_type<bool>
     {
       static constexpr dynamic::Type value = dynamic::Boolean_bool;
+    };
+
+    template<>
+    struct get_type<unsigned char>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_unsigned_char;
+    };
+
+    template<>
+    struct get_type<signed char>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_signed_char;
+    };
+
+    template<>
+    struct get_type<char>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_char;
     };
   }
 }

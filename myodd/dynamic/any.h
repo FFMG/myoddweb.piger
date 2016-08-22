@@ -207,6 +207,11 @@ namespace myodd {
           _ldvalue = new long double( value ? 1 : 0 );
           return;
 
+        // characters
+        case dynamic::Character_char:
+        case dynamic::Character_unsigned_char:
+        case dynamic::Character_signed_char:
+
         // int
         case dynamic::Integer_short_int:
         case dynamic::Integer_unsigned_short_int:
@@ -319,7 +324,7 @@ namespace myodd {
       template<typename T>
       T CastTo() const
       {
-        switch (_type)
+        switch ( Type() )
         {
         case dynamic::Type::type_null:
           return 0;
@@ -337,6 +342,11 @@ namespace myodd {
           return static_cast<T>(*_ldvalue);
 
         case dynamic::Type::Boolean_bool:
+          return static_cast<T>(*_ldvalue);
+
+        case dynamic::Type::Character_char:
+        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Type::Character_signed_char:
           return static_cast<T>(*_ldvalue);
 
         default:

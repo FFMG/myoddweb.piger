@@ -136,5 +136,8 @@
     <ClCompile Include="dynamic\testany_int.cpp">
       <Filter>myodd\dynamic</Filter>
     </ClCompile>
+    <ClCompile Include="dynamic\testany_char.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -86,6 +86,27 @@ TEST(AnyTest, AddressOfPointerIsNullButUnsignedShortIntTypeIsRespected)
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_short_int, x.Type());
 }
 
+TEST(AnyTest, AddressOfPointerIsNullButCharTypeIsRespected)
+{
+  char* b = nullptr;
+  auto x = myodd::dynamic::Any(b);
+  ASSERT_EQ(myodd::dynamic::Type::Character_char, x.Type());
+}
+
+TEST(AnyTest, AddressOfPointerIsNullButUnsignedCharTypeIsRespected)
+{
+  unsigned char* b = nullptr;
+  auto x = myodd::dynamic::Any(b);
+  ASSERT_EQ(myodd::dynamic::Type::Character_unsigned_char, x.Type());
+}
+
+TEST(AnyTest, AddressOfPointerIsNullButSignedCharTypeIsRespected)
+{
+  signed char* b = nullptr;
+  auto x = myodd::dynamic::Any(b);
+  ASSERT_EQ(myodd::dynamic::Type::Character_signed_char, x.Type());
+}
+
 TEST(AnyTest, AddressOfPointerIsNullButBoolTypeIsRespected)
 {
   bool* b = nullptr;
