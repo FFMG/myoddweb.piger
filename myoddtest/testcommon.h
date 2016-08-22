@@ -29,7 +29,7 @@ T RealRandomNumber()
 }
 
 template<typename T>
-T IntRandomNumber()
+T IntRandomNumber( bool canBeZero = true )
 {
 
   // construct a trivial random generator engine from a time-based seed:
@@ -39,8 +39,14 @@ T IntRandomNumber()
 
   T lower_bound = std::numeric_limits<T>::min();
   T upper_bound = std::numeric_limits<T>::max();
+  
   std::uniform_int_distribution<T> unif(lower_bound, upper_bound);
-  return unif(re);
+  auto value =  unif(re);
+  if (canBeZero == false && value == 0 )
+  {
+    return IntRandomNumber<T>(canBeZero);
+  }
+  return value;
 }
 
 template<typename T>

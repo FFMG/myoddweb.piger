@@ -161,3 +161,34 @@ TEST(AnyTest, EqualOperatorFromNothing)
   ASSERT_EQ(myodd::dynamic::Type::Integer_short_int, y.Type());
   ASSERT_EQ(value, y);
 }
+
+TEST(AnyTest, SetAnyNullValueToNewValue)
+{
+  //  all the underlying values are null
+  auto x = myodd::dynamic::Any(nullptr);
+
+  // so that should not throw.
+  auto y = x;
+
+  // and the type should be valid.
+  ASSERT_EQ(myodd::dynamic::Type::type_null, y.Type());
+}
+
+TEST(AnyTest, SetAnyNullValueToOldValue)
+{
+  //  all the underlying values are null
+  auto x = myodd::dynamic::Any(nullptr);
+
+  //  y is an existing value
+  auto y = myodd::dynamic::Any( IntRandomNumber<int>() );
+
+  // setting x to y should not throw.
+  y = x;
+
+  // and the type should be valid.
+  ASSERT_EQ(myodd::dynamic::Type::type_null, y.Type());
+
+  // and the value should be zero
+  // we have to cast to int as we compare types.
+  ASSERT_EQ(0, (int)y );
+}

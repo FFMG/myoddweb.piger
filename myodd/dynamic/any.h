@@ -108,6 +108,46 @@ namespace myodd {
         return (Compare(Any(lhs), rhs ) != 0);
       }
 
+      bool operator< (const Any& rhs) 
+      {
+        // we use the double number as it is more precise
+        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        {
+          //  null is not smaller than null
+          return false;
+        }
+
+        // is the lhs null?
+        if (Type() == dynamic::type_null )
+        {
+          return 0 < *rhs._ldvalue;
+        }
+
+        // is the rhs null?
+        if (rhs.Type() == dynamic::type_null)
+        {
+          return *_ldvalue < 0;
+        }
+
+        // neither values are null
+        return (*_ldvalue < *rhs._ldvalue);
+      }
+
+
+      template<typename T>
+      friend bool operator< (const T& lhs, const Any& rhs) {
+        return Any(lhs) < rhs;
+      }
+
+      template<typename T>
+      friend bool operator> (const T& lhs, const Any& rhs) { return rhs < lhs; }
+
+      template<typename T>
+      friend bool operator<=(const T& lhs, const Any& rhs) { return !(lhs > rhs); }
+
+      template<typename T>
+      friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
+
       /** 
        * The equal operator
        * @param const Any& other the value we are trying to set.
@@ -124,10 +164,10 @@ namespace myodd {
           _type = other._type;
 
           // long long int
-          _llivalue = new long long int(*other._llivalue);
+          _llivalue = other._llivalue ? new long long int(*other._llivalue) : nullptr;
 
           // long double
-          _ldvalue = new long double(*other._ldvalue);
+          _ldvalue = other._ldvalue ? new long double(*other._ldvalue) : nullptr;
         }
         return *this;
       }
