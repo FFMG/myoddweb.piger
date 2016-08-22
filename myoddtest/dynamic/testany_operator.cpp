@@ -97,6 +97,123 @@ TEST(AnyTestOperators, NullRhsIsLessThanSmallNegNumber)
 TEST(AnyTestOperators, NullEqualsAnyNul )
 {
   auto x = myodd::dynamic::Any(nullptr);
-  ASSERT_TRUE(x == nullptr );
+  ASSERT_TRUE( x == nullptr );
   ASSERT_TRUE(nullptr ==  x);
+}
+
+TEST(AnyTestOperators, NullPlusNullEqualNull)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(nullptr);
+  x += y;
+  ASSERT_EQ(myodd::dynamic::type_null, x.Type() );
+  ASSERT_EQ(0, (int)x );
+}
+
+TEST(AnyTestOperators, AddNumberToNull)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(10);
+  x += y;
+  ASSERT_EQ(10, x);
+}
+
+TEST(AnyTestOperators, AddNullToNumber)
+{
+  auto x = myodd::dynamic::Any(10);
+  auto y = myodd::dynamic::Any(nullptr);
+  x += y;
+  ASSERT_EQ(10, x);
+}
+
+TEST(AnyTestOperators, AddTwoAny)
+{
+  auto x = myodd::dynamic::Any(10);
+  auto y = myodd::dynamic::Any(20);
+  x += y;
+  ASSERT_EQ(30, x);
+}
+
+TEST(AnyTestOperators, AddANumberToAny)
+{
+  auto x = myodd::dynamic::Any(10);
+  x += 20;
+  ASSERT_EQ(30, x);
+}
+
+TEST(AnyTestOperators, AddAnyToANumber)
+{
+  auto x = myodd::dynamic::Any(10);
+  x = 20 + x;
+  ASSERT_EQ(30, x);
+}
+
+TEST(AnyTestOperators, AddAnyToANumberAndCreate)
+{
+  auto x = myodd::dynamic::Any(10);
+  auto y = 20 + x;
+  ASSERT_EQ(30, y);
+}
+
+TEST(AnyTestOperators, AddTwoDifferentTypes )
+{
+  auto x = myodd::dynamic::Any( (int)10 );
+  auto y = myodd::dynamic::Any( (double)20.5 );
+  auto z = x + y;
+  ASSERT_EQ(30.5, z );
+  ASSERT_EQ(10, x);
+  ASSERT_EQ(20.5, y);
+}
+
+TEST(AnyTestOperators, AddTwoBlooean)
+{
+  auto x = myodd::dynamic::Any( true );
+  auto y = myodd::dynamic::Any( false );
+  auto z = x + y;
+  ASSERT_EQ(1, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(false, y);
+}
+
+TEST(AnyTestOperators, AddANumberToABoolean)
+{
+  auto x = myodd::dynamic::Any(true);
+  auto y = myodd::dynamic::Any(10);
+  auto z = x + y;
+  ASSERT_EQ(11, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(10, y);
+}
+
+TEST(AnyTestOperators, AddNullToABooleanBecomesAnInt)
+{
+  auto x = myodd::dynamic::Any( nullptr );
+  auto y = myodd::dynamic::Any( true );
+  auto z = x + y;
+  ASSERT_EQ(1, z);
+  ASSERT_EQ(nullptr, x);
+  ASSERT_EQ(true, y);
+}
+
+TEST(AnyTestOperators, AddBooleanToNullBecomesAnInt)
+{
+  auto x = myodd::dynamic::Any(true);
+  auto y = myodd::dynamic::Any(nullptr);
+  auto z = x + y;
+  ASSERT_EQ(1, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(nullptr, y);
+}
+
+TEST(AnyTestOperators, ChainNumberAddition)
+{
+  auto w = myodd::dynamic::Any((long)10);
+  auto x = myodd::dynamic::Any((long)20);
+  auto y = myodd::dynamic::Any((long)30);
+  
+  auto z = w + x + y;
+  ASSERT_EQ((long)60, z);
+  ASSERT_EQ((long)10, w);
+  ASSERT_EQ((long)20, x);
+  ASSERT_EQ((long)30, y);
 }

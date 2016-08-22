@@ -53,6 +53,75 @@ namespace myodd {
       Floating_point_long_double
     };
 
+    /**
+     * Check if the given type is null or not.
+     * @param const Type& type the type we are checking.
+     * @return bool if it is or not.
+     */
+    inline bool is_type_null(Type type)
+    {
+      switch (type)
+      {
+      case type_null:
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Check if the given type is a boolean or not.
+     * @param const Type& type the type we are checking.
+     * @return bool if it is or not.
+     */
+    inline bool is_type_boolean(Type type)
+    {
+      switch (type)
+      {
+      case Boolean_bool:
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Check if the given type is a floating or not.
+     * @param const Type& type the type we are checking.
+     * @return bool if it is or not.
+     */
+    inline bool is_type_floating( Type type )
+    {
+      switch (type )
+      {
+      case Floating_point_float:
+      case Floating_point_double:
+      case Floating_point_long_double:
+        return true;
+      }
+      return false;
+    }
+
+    /**
+     * Check if the given type is an integer or not.
+     * @param const Type& type the type we are checking.
+     * @return bool if it is or not.
+     */
+    inline bool is_type_integer( const Type& type)
+    {
+      switch (type)
+      {
+      case Integer_short_int:
+      case Integer_unsigned_short_int:
+      case Integer_int:
+      case Integer_unsigned_int:
+      case Integer_long_int:
+      case Integer_unsigned_long_int:
+      case Integer_long_long_int:
+      case Integer_unsigned_long_long_int:
+        return true;
+      }
+      return false;
+    }
+
     template<typename T>
     struct get_type
     {

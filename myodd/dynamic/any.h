@@ -172,6 +172,70 @@ namespace myodd {
        */
       template<typename T> friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
 
+      /**
+       * Binary arithmetic operators - adition
+       * @param const Any& the item we are adding to this.
+       * @return Any& *this+rhs
+       */
+      Any& operator+=(const Any& rhs)
+      {
+        // add us to the other number and update our value.
+        *this = *this + rhs;
+
+        // return the result by reference
+        return *this;
+      }
+
+      /**
+      * Binary arithmetic operators - adition
+      * @param Any the item we are adding to this.
+      * @param const Any& the item we are adding to this.
+      * @return Any *this+rhs
+      */
+      template<typename T> friend Any operator+(Any lhs, const T& rhs) { lhs += Any(rhs); return lhs; }
+
+      /**
+       * Binary arithmetic operators - adition
+       * @param const Any& the item we are adding to this.
+       * @return Any *this+rhs
+       */
+      Any operator+(const Any& rhs) const
+      {
+        // we use the double number as it is more precise
+        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        {
+          // null+null = null
+          return *this;
+        }
+
+        // is the lhs null if it is then we have to set the value?
+        if (Type() == dynamic::type_null)
+        {
+          Any value = rhs;
+          value._type = CalculateType(Type(), rhs.Type());
+          return value;
+        }
+
+        // is the rhs null if it is then we have to set the value?
+        if (rhs.Type() == dynamic::type_null)
+        {
+          // nothing changes...
+          // because this + null == this
+          Any value = *this;
+          value._type = CalculateType(Type(), rhs.Type());
+          return value;
+        }
+
+        // add the values.
+        Any value = (*_ldvalue + *rhs._ldvalue);
+
+        // update the type.
+        value._type = CalculateType( Type(), rhs.Type() );
+
+        // return the value.
+        return value;
+      }
+
       /** 
        * The equal operator
        * @param const Any& other the value we are trying to set.
@@ -206,6 +270,53 @@ namespace myodd {
       }
 
     protected:
+      dynamic::Type CalculateType(const dynamic::Type& lhsOriginal, const dynamic::Type& rhsOriginal) const
+      {
+        //  null values become ints.
+        if (is_type_null(lhsOriginal))
+        {
+          return CalculateType(dynamic::Integer_int, rhsOriginal);
+        }
+
+        if (is_type_null(rhsOriginal))
+        {
+          return CalculateType( lhsOriginal, dynamic::Integer_int);
+        }
+
+        //  booleans values become ints.
+        if (is_type_boolean(lhsOriginal))
+        {
+          return CalculateType(dynamic::Integer_int, rhsOriginal);
+        }
+
+        if (is_type_boolean(rhsOriginal))
+        {
+          return CalculateType(lhsOriginal, dynamic::Integer_int);
+        }
+
+        // if they are both the same, then use it.
+        if (rhsOriginal == lhsOriginal )
+        {
+          return lhsOriginal;
+        }
+
+        // if lhs is floating and rhs is not, then use floating.
+        if (is_type_floating(lhsOriginal) && !is_type_floating(rhsOriginal))
+        {
+          return lhsOriginal;
+        }
+
+        // same the other way around.
+        if (!is_type_floating(lhsOriginal) && is_type_floating(rhsOriginal) )
+        {
+          return rhsOriginal;
+        }
+
+        // if we are here, they are both the same type, (floating/integer)
+        // so we need to return the greatest of them both.
+        return lhsOriginal;
+      }
+
       /**
        * Compare 2 values and return 0 if they are both the same.
        * @param const Any& lhs the lhs value been compared.
