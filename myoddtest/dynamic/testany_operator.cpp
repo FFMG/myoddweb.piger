@@ -248,6 +248,16 @@ TEST(AnyTestOperators, AddTwoCharOnlyIfTheCharIsANumber)
   ASSERT_EQ('9', y);
 }
 
+TEST(AnyTestOperators, AddTwoWideCharOnlyIfTheCharIsANumber)
+{
+  auto x = myodd::dynamic::Any(L'1');
+  auto y = myodd::dynamic::Any(L'9');
+  auto z = x + y;
+  ASSERT_EQ(10, z);
+  ASSERT_EQ(L'1', x);
+  ASSERT_EQ(L'9', y);
+}
+
 TEST(AnyTestOperators, AddTwoCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any('a');
@@ -258,6 +268,16 @@ TEST(AnyTestOperators, AddTwoCharZeroIfNoneAreNumbers)
   ASSERT_EQ('&', y);
 }
 
+TEST(AnyTestOperators, AddTwoWideCharZeroIfNoneAreNumbers)
+{
+  auto x = myodd::dynamic::Any(L'a');
+  auto y = myodd::dynamic::Any(L'&');
+  auto z = x + y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ(L'a', x);
+  ASSERT_EQ(L'&', y);
+}
+
 TEST(AnyTestOperators, AddTwoCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any('1');
@@ -266,6 +286,26 @@ TEST(AnyTestOperators, AddTwoCharIfOneIsANumber)
   ASSERT_EQ(1, z);
   ASSERT_EQ('1', x);
   ASSERT_EQ('&', y);
+}
+
+TEST(AnyTestOperators, AddTwoWideCharIfOneIsANumber)
+{
+  auto x = myodd::dynamic::Any(L'1');
+  auto y = myodd::dynamic::Any(L'&');
+  auto z = x + y;
+  ASSERT_EQ(1, z);
+  ASSERT_EQ(L'1', x);
+  ASSERT_EQ(L'&', y);
+}
+
+TEST(AnyTestOperators, AddACharAndAWideChar )
+{
+  auto x = myodd::dynamic::Any(L'1');
+  auto y = myodd::dynamic::Any('2');
+  auto z = x + y;
+  ASSERT_EQ(3, z);
+  ASSERT_EQ(L'1', x);
+  ASSERT_EQ('2', y);
 }
 
 // 'a' + 10 = 10

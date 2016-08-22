@@ -196,9 +196,40 @@ TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToWChar)
   ASSERT_TRUE(c >= std::numeric_limits<wchar_t>::min() && c <= std::numeric_limits<wchar_t>::max());
 }
 
-TEST(AnyTestCharacter, LettersAreEqualToZero)
+TEST(AnyTestCharacter, CharLetterEqualToZero)
 {
   auto c = myodd::dynamic::Any('a');
   ASSERT_EQ(0, (int)c );
+  ASSERT_EQ((float)0, (float)c);
+  ASSERT_EQ((double)0, (double)c);
+  ASSERT_EQ((long)0, (long)c);
   ASSERT_EQ('a', c);
+}
+
+TEST(AnyTestCharacter, WideCharLetterEqualToZero)
+{
+  auto c = myodd::dynamic::Any(L'a');
+  ASSERT_EQ(0, (int)c);
+  ASSERT_EQ((float)0, (float)c);
+  ASSERT_EQ((double)0, (double)c);
+  ASSERT_EQ((long)0, (long)c);
+  ASSERT_EQ(L'a', c);
+}
+
+TEST(AnyTestCharacter, UnsignedCharLetterEqualToZero)
+{
+  auto c = myodd::dynamic::Any( unsigned char('a'));
+  ASSERT_EQ(0, (int)c);
+  ASSERT_EQ((float)0, (float)c);
+  ASSERT_EQ((double)0, (double)c);
+  ASSERT_EQ((long)0, (long)c);
+  ASSERT_EQ(unsigned char('a'), c);
+}
+
+TEST(AnyTestCharacter, CastCharToWideChar)
+{
+  auto c = CharRandom<char>();
+  auto x = myodd::dynamic::Any(c);
+  auto w = (wchar_t)x;
+  ASSERT_EQ((wchar_t)c, w);
 }
