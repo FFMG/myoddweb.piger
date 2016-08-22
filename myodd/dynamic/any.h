@@ -372,6 +372,33 @@ namespace myodd {
           return 2;
         }
 
+        //  null/not null
+        if (lhs._cvalue && !rhs._cvalue)
+        {
+          return 3;
+        }
+
+        //  null/not null
+        if (!lhs._cvalue && rhs._cvalue)
+        {
+          return 3;
+        }
+
+        //  null/not null
+        if (lhs._cvalue && rhs._cvalue)
+        {
+          if (lhs._lcvalue != rhs._lcvalue)
+          {
+            return 4;
+          }
+
+          //  the lenght is the same, so we can use the size of lhs
+          if (0 != std::memcmp(lhs._cvalue, rhs._cvalue, lhs._lcvalue))
+          {
+            return 4;
+          }
+        }
+
         // looks the same
         return 0;
       }
@@ -500,7 +527,35 @@ namespace myodd {
         // if not null then we can set it.
         if (nullptr != value)
         {
-          CastFrom(*value);
+          switch (Type())
+          {
+            // characters
+          case dynamic::Character_char:
+          case dynamic::Character_unsigned_char:
+          case dynamic::Character_signed_char:
+          {
+            const char* c = (const char*)value;
+
+            // default values.
+            _lcvalue = std::strlen(c) + sizeof T;
+            _cvalue = new char[_lcvalue];
+            std::memset(_cvalue, 0, _lcvalue);
+            std::memcpy(_cvalue, c, _lcvalue);
+
+            _llivalue = new long long int(std::strtoll(c, nullptr, 0));
+            _ldvalue = new long double(std::strtold(c,nullptr));
+          }
+          break;
+
+          case dynamic::Character_wchar_t:
+          {
+          }
+          break;
+
+          default:
+            CastFrom(*value);
+            break;
+          }
         }
         else
         {
@@ -605,6 +660,11 @@ namespace myodd {
         case dynamic::Type::Character_unsigned_char:
         case dynamic::Type::Character_signed_char:
         case dynamic::Type::Character_wchar_t:
+          if (dynamic::is_type_floating(dynamic::get_type<T>::value))
+          {
+            return static_cast<T>(*_ldvalue);
+          }
+          return static_cast<T>(*_llivalue);
 
         // Integer
         case dynamic::Type::Integer_int:
