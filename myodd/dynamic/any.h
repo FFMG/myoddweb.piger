@@ -204,16 +204,14 @@ namespace myodd {
         // we use the double number as it is more precise
         if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
         {
-          // null+null = null
-          return *this;
+          // null+null = int(0)
+          return Any( (int)0 );
         }
 
         // is the lhs null if it is then we have to set the value?
         if (Type() == dynamic::type_null)
         {
-          Any value = rhs;
-          value._type = CalculateType(Type(), rhs.Type());
-          return value;
+          return Any(0) + rhs;
         }
 
         // is the rhs null if it is then we have to set the value?
@@ -221,9 +219,7 @@ namespace myodd {
         {
           // nothing changes...
           // because this + null == this
-          Any value = *this;
-          value._type = CalculateType(Type(), rhs.Type());
-          return value;
+          return *this + Any(0);
         }
 
         // add the values.
@@ -281,6 +277,17 @@ namespace myodd {
         if (is_type_null(rhsOriginal))
         {
           return CalculateType( lhsOriginal, dynamic::Integer_int);
+        }
+
+        //  char values become ints.
+        if (is_type_character(lhsOriginal))
+        {
+          return CalculateType(dynamic::Integer_int, rhsOriginal);
+        }
+
+        if (is_type_character(rhsOriginal))
+        {
+          return CalculateType(lhsOriginal, dynamic::Integer_int);
         }
 
         //  booleans values become ints.

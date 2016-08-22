@@ -58,6 +58,24 @@ namespace myodd {
      * @param const Type& type the type we are checking.
      * @return bool if it is or not.
      */
+    inline bool is_type_character(Type type)
+    {
+      switch (type)
+      {
+      case Character_signed_char:
+      case Character_unsigned_char:
+      case Character_char:
+      case Character_wchar_t:
+        return true;
+      }
+      return false;
+    }
+    
+    /**
+     * Check if the given type is null or not.
+     * @param const Type& type the type we are checking.
+     * @return bool if it is or not.
+     */
     inline bool is_type_null(Type type)
     {
       switch (type)

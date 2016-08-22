@@ -101,14 +101,34 @@ TEST(AnyTestOperators, NullEqualsAnyNul )
   ASSERT_TRUE(nullptr ==  x);
 }
 
-TEST(AnyTestOperators, NullPlusNullEqualNull)
+TEST(AnyTestOperators, NullPlusNullEqualZero)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(nullptr);
+  auto z = x + y;
+  ASSERT_EQ( 0, z);
+  ASSERT_EQ( myodd::dynamic::Integer_int, z.Type() );
+  ASSERT_EQ(nullptr, x);
+  ASSERT_EQ(myodd::dynamic::type_null, x.Type());
+  ASSERT_EQ(nullptr, y);
+  ASSERT_EQ(myodd::dynamic::type_null, y.Type());
+}
+
+TEST(AnyTestOperators, NullPlusNullEqualZeroShortcut)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
   x += y;
-  ASSERT_EQ(myodd::dynamic::type_null, x.Type() );
-  ASSERT_EQ(0, (int)x );
+
+  // x is updated
+  ASSERT_EQ(0, x);
+  ASSERT_EQ(myodd::dynamic::Integer_int, x.Type());
+
+  // y has not changed
+  ASSERT_EQ(nullptr, y);
+  ASSERT_EQ(myodd::dynamic::type_null, y.Type());
 }
+
 
 TEST(AnyTestOperators, AddNumberToNull)
 {
@@ -217,3 +237,9 @@ TEST(AnyTestOperators, ChainNumberAddition)
   ASSERT_EQ((long)20, x);
   ASSERT_EQ((long)30, y);
 }
+
+// 'a' + 10 = 10
+// '2' + 1 = 1
+// "20" + 10 = 30
+// "aaa" + 10 = 10
+// 10 + "aaa" = 10
