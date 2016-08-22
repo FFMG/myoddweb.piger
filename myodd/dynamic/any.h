@@ -519,7 +519,33 @@ namespace myodd {
           case dynamic::Character_char:
           case dynamic::Character_unsigned_char:
           case dynamic::Character_signed_char:
+          {
+            const char c = '\0';
+
+            // default values.
+            _lcvalue = sizeof T;
+            _cvalue = new char[_lcvalue];
+            std::memset(_cvalue, 0, _lcvalue);
+            std::memcpy(_cvalue, &c, _lcvalue);
+
+            _llivalue = new long long int(0);
+            _ldvalue = new long double(0);
+          }
+          return;
+
           case dynamic::Character_wchar_t:
+          {
+            // default values.
+            const wchar_t w = L'\0';
+            _lcvalue = sizeof w;
+            _cvalue = new char[_lcvalue];
+            std::memset(_cvalue, 0, _lcvalue);
+            std::memcpy(_cvalue, &w, _lcvalue);
+
+            _llivalue = new long long int(0);
+            _ldvalue = new long double(0);
+          }
+          return;
 
           // int
           case dynamic::Integer_short_int:

@@ -233,3 +233,9 @@ TEST(AnyTestCharacter, CastCharToWideChar)
   auto w = (wchar_t)x;
   ASSERT_EQ((wchar_t)c, w);
 }
+
+TEST(AnyTestCharacter, StringNumber)
+{
+  auto x = myodd::dynamic::Any("1234");
+  ASSERT_EQ(1234, x);
+}

@@ -86,13 +86,6 @@ TEST(AnyTest, AddressOfPointerIsNullButUnsignedShortIntTypeIsRespected)
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_short_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButCharTypeIsRespected)
-{
-  char* b = nullptr;
-  auto x = myodd::dynamic::Any(b);
-  ASSERT_EQ(myodd::dynamic::Type::Character_char, x.Type());
-}
-
 TEST(AnyTest, AddressOfPointerIsNullButUnsignedCharTypeIsRespected)
 {
   unsigned char* b = nullptr;
@@ -119,6 +112,20 @@ TEST(AnyTest, AddressOfPointerIsNullButBoolTypeIsRespected)
   bool* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Boolean_bool, x.Type());
+}
+
+TEST(AnyTest, AddressOfPointerIsNullButCharTypeIsRespected)
+{
+  char* c = nullptr;
+  auto x = myodd::dynamic::Any(c);
+  ASSERT_EQ('\0', x);
+}
+
+TEST(AnyTest, AddressOfPointerIsNullButConstCharTypeIsRespected)
+{
+  const char* c = nullptr;
+  auto x = myodd::dynamic::Any(c);
+  ASSERT_EQ('\0', x);
 }
 
 TEST(AnyTest, CanCreateWithAPointerValueInt)

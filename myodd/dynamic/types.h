@@ -153,7 +153,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const short int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_short_int;
+    };
+
+    template<>
     struct get_type<unsigned short int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_unsigned_short_int;
+    };
+
+    template<>
+    struct get_type<const unsigned short int>
     {
       static constexpr dynamic::Type value = dynamic::Integer_unsigned_short_int;
     };
@@ -165,7 +177,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_int;
+    };
+
+    template<>
     struct get_type<unsigned int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_unsigned_int;
+    };
+
+    template<>
+    struct get_type<const unsigned int>
     {
       static constexpr dynamic::Type value = dynamic::Integer_unsigned_int;
     };
@@ -177,7 +201,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const long int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_long_int;
+    };
+
+    template<>
     struct get_type<unsigned long int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_unsigned_long_int;
+    };
+
+    template<>
+    struct get_type<const unsigned long int>
     {
       static constexpr dynamic::Type value = dynamic::Integer_unsigned_long_int;
     };
@@ -189,7 +225,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const long long int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_long_long_int;
+    };
+
+    template<>
     struct get_type<unsigned long long int>
+    {
+      static constexpr dynamic::Type value = dynamic::Integer_unsigned_long_long_int;
+    };
+
+    template<>
+    struct get_type<const unsigned long long int>
     {
       static constexpr dynamic::Type value = dynamic::Integer_unsigned_long_long_int;
     };
@@ -201,7 +249,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const double>
+    {
+      static constexpr dynamic::Type value = dynamic::Floating_point_double;
+    };
+
+    template<>
     struct get_type<float>
+    {
+      static constexpr dynamic::Type value = dynamic::Floating_point_float;
+    };
+
+    template<>
+    struct get_type<const float>
     {
       static constexpr dynamic::Type value = dynamic::Floating_point_float;
     };
@@ -213,7 +273,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const long double>
+    {
+      static constexpr dynamic::Type value = dynamic::Floating_point_long_double;
+    };
+
+    template<>
     struct get_type<bool>
+    {
+      static constexpr dynamic::Type value = dynamic::Boolean_bool;
+    };
+
+    template<>
+    struct get_type<const bool>
     {
       static constexpr dynamic::Type value = dynamic::Boolean_bool;
     };
@@ -225,7 +297,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const unsigned char>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_unsigned_char;
+    };
+
+    template<>
     struct get_type<signed char>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_signed_char;
+    };
+
+    template<>
+    struct get_type<const signed char>
     {
       static constexpr dynamic::Type value = dynamic::Character_signed_char;
     };
@@ -237,7 +321,19 @@ namespace myodd {
     };
 
     template<>
+    struct get_type<const char>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_char;
+    };
+
+    template<>
     struct get_type<wchar_t>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_wchar_t;
+    };
+
+    template<>
+    struct get_type<const wchar_t>
     {
       static constexpr dynamic::Type value = dynamic::Character_wchar_t;
     };
