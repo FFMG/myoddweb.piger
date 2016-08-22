@@ -139,3 +139,31 @@ TEST(AnyTestCharacter, DefaultValueIsZeroWChar)
   auto x = myodd::dynamic::Any();
   ASSERT_EQ( L'\0', (wchar_t)x );
 }
+
+TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToChar)
+{
+  //  get a large number
+  unsigned long long int ulli = std::numeric_limits<unsigned long long int>::max();
+
+  // create an any with it.
+  auto x = myodd::dynamic::Any(ulli);
+
+  // get the value as a char.
+  // the actual value is implementation specific
+  char c = x;
+  ASSERT_TRUE(c >= std::numeric_limits<char>::min() && c <= std::numeric_limits<char>::max());
+}
+
+TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToWChar)
+{
+  //  get a large number
+  unsigned long long int ulli = std::numeric_limits<unsigned long long int>::max();
+
+  // create an any with it.
+  auto x = myodd::dynamic::Any(ulli);
+
+  // get the value as a wchar_t.
+  // the actual value is implementation specific
+  wchar_t c = x;
+  ASSERT_TRUE(c >= std::numeric_limits<wchar_t>::min() && c <= std::numeric_limits<wchar_t>::max());
+}
