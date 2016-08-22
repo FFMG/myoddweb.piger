@@ -2,6 +2,7 @@
 
 #include <typeinfo>       // std::bad_cast
 #include "types.h"        // data type
+#include <algorithm>      // memcpy
 
 namespace myodd {
   namespace dynamic {
@@ -12,8 +13,10 @@ namespace myodd {
        * default constructor.
        */
       Any() :
-        _llivalue(nullptr),
+        _llivalue( nullptr),
         _ldvalue( nullptr ),
+        _cvalue( nullptr ),
+        _lcvalue(0),
         _type( Type::type_null )
       {
       }
@@ -252,6 +255,15 @@ namespace myodd {
 
           // long double
           _ldvalue = other._ldvalue ? new long double(*other._ldvalue) : nullptr;
+
+          // the char value
+          if (other._lcvalue > 0 && other._cvalue)
+          {
+            _lcvalue = other._lcvalue;
+            _cvalue = new char[_lcvalue];
+            std::memset(_cvalue, 0, _lcvalue);
+            std::memcpy(_cvalue, other._cvalue, _lcvalue);
+          }
         }
         return *this;
       }
@@ -393,7 +405,48 @@ namespace myodd {
         case dynamic::Character_char:
         case dynamic::Character_unsigned_char:
         case dynamic::Character_signed_char:
+        {
+          auto c = static_cast<char>(value);
+          _lcvalue = sizeof T;
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, &c, _lcvalue);
+
+          if (c >= '0' && c <= '9')
+          {
+            auto number = c - '0';
+            _llivalue = new long long int(number);
+            _ldvalue = new long double(number);
+          }
+          else
+          {
+            _llivalue = new long long int(0);
+            _ldvalue = new long double(0);
+          }
+        }
+        return;
+
         case dynamic::Character_wchar_t:
+        {
+          auto c = static_cast<wchar_t>(value);
+          _lcvalue = sizeof T;
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, &c, _lcvalue);
+
+          if (c >= L'0' && c <= L'9')
+          {
+            auto number = c - L'0';
+            _llivalue = new long long int(number);
+            _ldvalue = new long double(number);
+          }
+          else
+          {
+            _llivalue = new long long int(0);
+            _ldvalue = new long double(0);
+          }
+        }
+        return;
 
         // int
         case dynamic::Integer_short_int:
@@ -521,6 +574,13 @@ namespace myodd {
         case dynamic::Type::type_null:
           return 0;
 
+        // char
+        case dynamic::Type::Character_char:
+        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Type::Character_signed_char:
+        case dynamic::Type::Character_wchar_t:
+
+        // Integer
         case dynamic::Type::Integer_int:
         case dynamic::Type::Integer_long_int:
         case dynamic::Type::Integer_unsigned_long_int:
@@ -536,11 +596,6 @@ namespace myodd {
         case dynamic::Type::Boolean_bool:
           return static_cast<T>(*_ldvalue);
 
-        case dynamic::Type::Character_char:
-        case dynamic::Type::Character_unsigned_char:
-        case dynamic::Type::Character_signed_char:
-          return static_cast<T>(*_ldvalue);
-
         default:
           break; 
         }
@@ -549,6 +604,114 @@ namespace myodd {
         throw std::bad_cast();
       }
 
+      /**
+       * Try and cast this to a posible value.
+       * @return char the value we are looking for.
+       */
+      template<>
+      char CastTo<char>() const
+      {
+        switch (Type())
+        {
+        case dynamic::Type::type_null:
+          return '\0';
+
+        case dynamic::Type::Character_wchar_t:
+          return static_cast<char>(*(wchar_t*)_cvalue);
+
+        case dynamic::Type::Character_char:
+          return static_cast<char>(*(char*)_cvalue);
+
+        case dynamic::Type::Character_signed_char:
+          return static_cast<char>(*(signed char*)_cvalue);
+
+        case dynamic::Type::Character_unsigned_char:
+          return static_cast<char>(*(unsigned char*)_cvalue);
+        }
+        return static_cast<char>(*_llivalue);
+
+      }
+
+      /**
+      * Try and cast this to a posible value.
+      * @return wchar_t the value we are looking for.
+      */
+      template<>
+      wchar_t CastTo<wchar_t>() const
+      {
+        switch (Type())
+        {
+        case dynamic::Type::type_null:
+          return '\0';
+
+        case dynamic::Type::Character_wchar_t:
+          return static_cast<wchar_t>(*(wchar_t*)_cvalue);
+
+        case dynamic::Type::Character_char:
+          return static_cast<wchar_t>(*(char*)_cvalue);
+
+        case dynamic::Type::Character_signed_char:
+          return static_cast<wchar_t>(*(signed char*)_cvalue);
+
+        case dynamic::Type::Character_unsigned_char:
+          return static_cast<wchar_t>(*(unsigned char*)_cvalue);
+        }
+        return static_cast<wchar_t>(*_llivalue);
+      }
+
+      /**
+       * Try and cast this to a posible value.
+       * @return unsigned char the value we are looking for.
+       */
+      template<>
+      unsigned char CastTo<unsigned char>() const
+      {
+        switch (Type())
+        {
+        case dynamic::Type::type_null:
+          return '\0';
+
+        case dynamic::Type::Character_wchar_t:
+          return static_cast<unsigned char>(*(wchar_t*)_cvalue);
+
+        case dynamic::Type::Character_char:
+          return static_cast<unsigned char>(*(char*)_cvalue);
+
+        case dynamic::Type::Character_signed_char:
+          return static_cast<unsigned char>(*(signed char*)_cvalue);
+
+        case dynamic::Type::Character_unsigned_char:
+          return static_cast<unsigned char>(*(unsigned char*)_cvalue);
+        }
+        return static_cast<unsigned char>(*_llivalue);
+      }
+
+      /**
+      * Try and cast this to a posible value.
+      * @return unsigned char the value we are looking for.
+      */
+      template<>
+      signed char CastTo<signed char>() const
+      {
+        switch (Type())
+        {
+        case dynamic::Type::type_null:
+          return '\0';
+
+        case dynamic::Type::Character_wchar_t:
+          return static_cast<signed char>(*(wchar_t*)_cvalue);
+
+        case dynamic::Type::Character_char:
+          return static_cast<signed char>(*(char*)_cvalue);
+
+        case dynamic::Type::Character_signed_char:
+          return static_cast<signed char>(*(signed char*)_cvalue);
+
+        case dynamic::Type::Character_unsigned_char:
+          return static_cast<signed char>(*(unsigned char*)_cvalue);
+        }
+        return static_cast<signed char>(*_llivalue);
+      }
 
       /**
        * Try and cast this to a posible value.
@@ -557,7 +720,7 @@ namespace myodd {
       template<>
       bool CastTo<bool>() const
       {
-        switch (_type)
+        switch (Type())
         {
         case dynamic::Type::type_null:
           return false;
@@ -578,9 +741,13 @@ namespace myodd {
         //  delete long double if need be
         delete _ldvalue;
 
+        // delete the char if need be
+        delete _cvalue;
+
         // reset the values
         _llivalue = nullptr;
         _ldvalue = nullptr;
+        _cvalue = nullptr;
       }
 
       // the biggest integer value.
@@ -588,6 +755,10 @@ namespace myodd {
 
       // the biggest floating point value
       long double* _ldvalue;
+
+      // the char
+      char* _cvalue;
+      size_t _lcvalue;
 
       // the variable type
       dynamic::Type _type;

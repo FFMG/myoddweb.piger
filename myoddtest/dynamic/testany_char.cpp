@@ -64,28 +64,56 @@ TEST(AnyTestCharacter, CharToLong)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
-  ASSERT_EQ((long)c, (long)x);
+  if (c >= '0' && c <= '9')
+  {
+    ASSERT_EQ((long)(c - '0'), (long)x);
+  }
+  else
+  {
+    ASSERT_EQ((long)0, (long)x);
+  }
 }
 
 TEST(AnyTestCharacter, UnsignedCharToLong)
 {
   unsigned char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
-  ASSERT_EQ((long)c, (long)x);
+  if (c >= '0' && c <= '9')
+  {
+    ASSERT_EQ((long)(c - '0'), (long)x);
+  }
+  else
+  {
+    ASSERT_EQ((long)0, (long)x);
+  }
 }
 
 TEST(AnyTestCharacter, CharToDouble)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
-  ASSERT_EQ((double)c, (double)x);
+  if (c >= '0' && c <= '9')
+  {
+    ASSERT_EQ((double)(c - '0'), (double)x);
+  }
+  else
+  {
+    ASSERT_EQ((double)0, (double)x);
+  }
 }
 
 TEST(AnyTestCharacter, UnsignedCharToDouble)
 {
   unsigned char c = CharRandom<unsigned char>();
   auto x = myodd::dynamic::Any(c);
-  ASSERT_EQ((double)c, (double)x);
+  if (c >= '0' && c <= '9')
+  {
+    ASSERT_EQ((double)(c - '0'), (double)x);
+  }
+  else
+  {
+    ASSERT_EQ((double)0, (double)x);
+  }
 }
 
 TEST(AnyTestCharacter, CharValueIskept)
@@ -166,4 +194,11 @@ TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToWChar)
   // the actual value is implementation specific
   wchar_t c = x;
   ASSERT_TRUE(c >= std::numeric_limits<wchar_t>::min() && c <= std::numeric_limits<wchar_t>::max());
+}
+
+TEST(AnyTestCharacter, LettersAreEqualToZero)
+{
+  auto c = myodd::dynamic::Any('a');
+  ASSERT_EQ(0, (int)c );
+  ASSERT_EQ('a', c);
 }

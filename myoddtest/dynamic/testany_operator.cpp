@@ -238,6 +238,36 @@ TEST(AnyTestOperators, ChainNumberAddition)
   ASSERT_EQ((long)30, y);
 }
 
+TEST(AnyTestOperators, AddTwoCharOnlyIfTheCharIsANumber)
+{
+  auto x = myodd::dynamic::Any('1');
+  auto y = myodd::dynamic::Any('9' );
+  auto z = x + y;
+  ASSERT_EQ(10, z);
+  ASSERT_EQ('1', x);
+  ASSERT_EQ('9', y);
+}
+
+TEST(AnyTestOperators, AddTwoCharZeroIfNoneAreNumbers)
+{
+  auto x = myodd::dynamic::Any('a');
+  auto y = myodd::dynamic::Any('&');
+  auto z = x + y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ('a', x);
+  ASSERT_EQ('&', y);
+}
+
+TEST(AnyTestOperators, AddTwoCharIfOneIsANumber)
+{
+  auto x = myodd::dynamic::Any('1');
+  auto y = myodd::dynamic::Any('&');
+  auto z = x + y;
+  ASSERT_EQ(1, z);
+  ASSERT_EQ('1', x);
+  ASSERT_EQ('&', y);
+}
+
 // 'a' + 10 = 10
 // '2' + 1 = 1
 // "20" + 10 = 30
