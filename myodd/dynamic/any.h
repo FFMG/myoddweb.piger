@@ -730,10 +730,11 @@ namespace myodd {
         else
         {
           const char *fmt = "%i";
-          auto lcvalue = std::snprintf(nullptr, 0, fmt, *_llivalue);
-          auto cvalue = new char[lcvalue+1];
+          auto lcvalue = std::snprintf(nullptr, 0, fmt, *_llivalue)+1;
+          auto cvalue = new char[lcvalue];
           std::memset(cvalue, 0, lcvalue);
           std::snprintf(cvalue, lcvalue, fmt, *_llivalue);
+          return static_cast<char*>(cvalue);
         }
         return static_cast<char*>(_cvalue);
       }
