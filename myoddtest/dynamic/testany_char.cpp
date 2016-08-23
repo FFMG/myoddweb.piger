@@ -390,9 +390,16 @@ TEST(AnyTestCharacter, CompareAFloatNumberAndAWideString)
   ASSERT_EQ((wchar_t*)y, x);
 }
 
-TEST(AnyTestCharacter, CastFromCharToWide)
+TEST(AnyTestCharacter, CastFromWideCharToChar)
 {
   auto x = myodd::dynamic::Any(L"1234.456789");
   ASSERT_STREQ((const char*)x, "1234.456789");
   ASSERT_STREQ((char*)x, "1234.456789");
+}
+
+TEST(AnyTestCharacter, CastFromCharToWideChar)
+{
+  auto x = myodd::dynamic::Any("1234.456789");
+  ASSERT_STREQ((wchar_t*)x, L"1234.456789");
+  ASSERT_STREQ((wchar_t*)x, L"1234.456789");
 }

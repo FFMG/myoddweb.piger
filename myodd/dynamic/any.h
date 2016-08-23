@@ -813,7 +813,11 @@ namespace myodd {
         case dynamic::Type::Character_char:
         case dynamic::Type::Character_signed_char:
         case dynamic::Type::Character_unsigned_char:
-          throw std::bad_cast();
+          if (nullptr == _swvalue)
+          {
+            const_cast<Any*>(this)->CreateWideString();
+          }
+          return _swvalue->c_str();
         }
 
         // do we need to create the string representation?
@@ -835,7 +839,29 @@ namespace myodd {
           return;
         }
 
+        // create the new string
         _swvalue = new std::wstring();
+
+        // are we a char?
+        switch (Type())
+        {
+          case dynamic::Character_char:
+          case dynamic::Character_unsigned_char:
+          case dynamic::Character_signed_char:
+          {
+            if (nullptr == _cvalue)
+            {
+              *_swvalue = L"";
+              return;
+            }
+
+            using convert_typeX = std::codecvt_utf8<wchar_t>;
+            std::wstring_convert<convert_typeX, wchar_t> converterX;
+            *_swvalue = converterX.from_bytes((const char*)_cvalue);
+          }
+          return;
+        }
+
         if (dynamic::is_type_floating(Type()))
         {
           *_swvalue = std::to_wstring(*_ldvalue);
