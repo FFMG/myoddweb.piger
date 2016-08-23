@@ -397,9 +397,23 @@ TEST(AnyTestCharacter, CastFromWideCharToChar)
   ASSERT_STREQ((char*)x, "1234.456789");
 }
 
+TEST(AnyTestCharacter, CastFromNullWideCharToChar)
+{
+  auto x = myodd::dynamic::Any( (wchar_t*)nullptr );
+  ASSERT_STREQ((const char*)x, "");
+  ASSERT_STREQ((char*)x, "");
+}
+
 TEST(AnyTestCharacter, CastFromCharToWideChar)
 {
   auto x = myodd::dynamic::Any("1234.456789");
   ASSERT_STREQ((wchar_t*)x, L"1234.456789");
   ASSERT_STREQ((wchar_t*)x, L"1234.456789");
+}
+
+TEST(AnyTestCharacter, CastFromNullCharToWideChar)
+{
+  auto x = myodd::dynamic::Any( (char*)nullptr );
+  ASSERT_STREQ((wchar_t*)x, L"");
+  ASSERT_STREQ((wchar_t*)x, L"");
 }
