@@ -525,7 +525,7 @@
     <ClInclude Include="cache\cacheitempolicy.h">
       <Filter>cache</Filter>
     </ClInclude>
-    <ClInclude Include="cache\any.h">
+    <ClInclude Include="dynamic\any.h">
       <Filter>dynamic</Filter>
     </ClInclude>
     <ClInclude Include="dynamic\types.h">
