@@ -558,8 +558,29 @@ TEST(AnyTestOperators, SubstractACharAndAWideChar)
   ASSERT_EQ('1', y);
 }
 
-// 'a' + 10 = 10
-// '2' + 1 = 1
-// "20" + 10 = 30
-// "aaa" + 10 = 10
-// 10 + "aaa" = 10
+TEST(AnyTestOperators, AdditionAndSubstraction)
+{
+  auto w = myodd::dynamic::Any((long)40);
+  auto x = myodd::dynamic::Any((long)20);
+  auto y = myodd::dynamic::Any((long)10);
+
+  auto z = w + x - y;
+  ASSERT_EQ((long)50, z);
+  ASSERT_EQ((long)40, w);
+  ASSERT_EQ((long)20, x);
+  ASSERT_EQ((long)10, y);
+}
+
+TEST(AnyTestOperators, AdditionAndSubstractionReUseNumbers)
+{
+  auto w = myodd::dynamic::Any((long)40);
+  auto x = myodd::dynamic::Any((long)20);
+  auto y = myodd::dynamic::Any((long)10);
+
+  auto z = w + x - y - w + x;
+       // 40 + 20 - 10 - 40 + 20 = 30
+  ASSERT_EQ((long)30, z);
+  ASSERT_EQ((long)40, w);
+  ASSERT_EQ((long)20, x);
+  ASSERT_EQ((long)10, y);
+}
