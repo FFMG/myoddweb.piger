@@ -440,14 +440,6 @@ namespace myodd {
           _ldvalue = new long double( value ? 1 : 0 );
           return;
 
-        // characters
-        case dynamic::Character_char:
-        case dynamic::Character_unsigned_char:
-        case dynamic::Character_signed_char:
-        case dynamic::Character_wchar_t:
-          CreateFromCharacter( value );
-          return;
-
         // int
         case dynamic::Integer_short_int:
         case dynamic::Integer_unsigned_short_int:
@@ -500,20 +492,7 @@ namespace myodd {
         // if not null then we can set it.
         if (nullptr != value)
         {
-          switch (Type())
-          {
-            // characters
-          case dynamic::Character_char:
-          case dynamic::Character_unsigned_char:
-          case dynamic::Character_signed_char:
-          case dynamic::Character_wchar_t:
-            CreateFromCharacters(value);
-            break;
-
-          default:
-            CastFrom(*value);
-            break;
-          }
+          CastFrom(*value);
         }
         else
         {
@@ -528,38 +507,6 @@ namespace myodd {
           // boolean
           case dynamic::Boolean_bool:
 
-          // characters
-          case dynamic::Character_char:
-          case dynamic::Character_unsigned_char:
-          case dynamic::Character_signed_char:
-          {
-            const char c = '\0';
-
-            // default values.
-            _lcvalue = sizeof T;
-            _cvalue = new char[_lcvalue];
-            std::memset(_cvalue, 0, _lcvalue);
-            std::memcpy(_cvalue, &c, _lcvalue);
-
-            _llivalue = new long long int(0);
-            _ldvalue = new long double(0);
-          }
-          return;
-
-          case dynamic::Character_wchar_t:
-          {
-            // default values.
-            const wchar_t w = L'\0';
-            _lcvalue = sizeof w;
-            _cvalue = new char[_lcvalue];
-            std::memset(_cvalue, 0, _lcvalue);
-            std::memcpy(_cvalue, &w, _lcvalue);
-
-            _llivalue = new long long int(0);
-            _ldvalue = new long double(0);
-          }
-          return;
-
           // int
           case dynamic::Integer_short_int:
           case dynamic::Integer_unsigned_short_int:
@@ -569,10 +516,11 @@ namespace myodd {
           case dynamic::Integer_unsigned_long_int:
           case dynamic::Integer_long_long_int:
           case dynamic::Integer_unsigned_long_long_int:
+
+          // floating points.
           case dynamic::Floating_point_double:
           case dynamic::Floating_point_float:
           case dynamic::Floating_point_long_double:
-            // default values.
             _llivalue = new long long int(0);
             _ldvalue = new long double(0);
             return;
@@ -591,6 +539,86 @@ namespace myodd {
       }
 
       /**
+       * Create from a character pointer.
+       * @param char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<char>(char* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a character pointer.
+       * @param char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<const char>(const char* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a character pointer.
+       * @param signed char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<signed char>(signed char* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a character pointer.
+       * @param signed char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<const signed char>(const signed char* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a character pointer.
+       * @param unsigned char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<unsigned char>(unsigned char* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a character pointer.
+       * @param unsigned char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<const unsigned char>(const unsigned char* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a character pointer.
+       * @param wchar_t* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<wchar_t>(wchar_t* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a character pointer.
+       * @param wchar_t* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<const wchar_t>(const wchar_t* value)
+      {
+        CreateFromCharacters(value);
+      }
+
+      /**
       * Try and create from a given value.
       * @throw std::bad_cast() if we are trying to create from an unknwon value.
       * @param const T& value the value we are trying to create from.
@@ -601,6 +629,46 @@ namespace myodd {
         CleanValues();
       }
 
+      /**
+       * Create from a given value.
+       * @param const char& value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<char>(const char& value)
+      {
+        CreateFromCharacter(value);
+      }
+
+      /**
+       * Create from a given value.
+       * @param const signed char& value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<signed char>(const signed char& value)
+      {
+        CreateFromCharacter(value);
+      }
+
+      /**
+       * Create from a given value.
+       * @param const unsigned char& value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<unsigned char>(const unsigned char& value)
+      {
+        CreateFromCharacter(value);
+      }
+
+      /**
+       * Create from a given value.
+       * @param const wchar_t& value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<wchar_t>(const wchar_t& value)
+      {
+        CreateFromCharacter(value);
+      }
+      
       /**
        * Try and cast this to a posible value.
        * @return T the value we are looking for.
@@ -831,9 +899,9 @@ namespace myodd {
       }
 
       /**
-      * Create a value from a multiple characters..
-      * @param const T* value the character we are creating from.
-      */
+       * Create a value from a multiple characters..
+       * @param const T* value the character we are creating from.
+       */
       template<typename T>
       void CreateFromCharacters(const T* value)
       {
@@ -843,20 +911,38 @@ namespace myodd {
         // set the type
         _type = dynamic::get_type<T>::value;
 
-        // default values.
-        _lcvalue = std::strlen((const char*)value) + sizeof T;
-        _cvalue = new char[_lcvalue];
-        std::memset(_cvalue, 0, _lcvalue);
-        std::memcpy(_cvalue, value, _lcvalue);
+        if (nullptr != value)
+        {
+          // default values.
+          _lcvalue = std::strlen((const char*)value) + sizeof T;
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, value, _lcvalue);
 
-        _llivalue = new long long int(std::strtoll(_cvalue, nullptr, 0));
-        _ldvalue = new long double(std::strtold(_cvalue, nullptr));
+          _llivalue = new long long int(std::strtoll(_cvalue, nullptr, 0));
+          _ldvalue = new long double(std::strtold(_cvalue, nullptr));
+        }
+        else
+        {
+          // create a default value for the string.
+          const char c = '\0';
+
+          // default values.
+          _lcvalue = sizeof T;
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, &c, _lcvalue);
+
+          // default values are 0
+          _llivalue = new long long int(0);
+          _ldvalue = new long double(0);
+        }
       }
 
       /**
-      * Create a value from a multiple characters..
-      * @param const T* value the character we are creating from.
-      */
+       * Create a value from a multiple characters..
+       * @param const T* value the character we are creating from.
+       */
       template<>
       void CreateFromCharacters<wchar_t>( const wchar_t* value)
       {
@@ -866,14 +952,30 @@ namespace myodd {
         // set the type
         _type = dynamic::get_type<wchar_t>::value;
 
-        // default values.
-        _lcvalue = (std::wcslen(value) + 1) * sizeof value;
-        _cvalue = new char[_lcvalue];
-        std::memset(_cvalue, 0, _lcvalue);
-        std::memcpy(_cvalue, value, _lcvalue);
+        if (nullptr != value)
+        {
+          // default values.
+          _lcvalue = (std::wcslen(value) + 1) * sizeof value;
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, value, _lcvalue);
 
-        _llivalue = new long long int(std::wcstoll(value, nullptr, 0));
-        _ldvalue = new long double(std::wcstold(value, nullptr));
+          _llivalue = new long long int(std::wcstoll(value, nullptr, 0));
+          _ldvalue = new long double(std::wcstold(value, nullptr));
+        }
+        else
+        {
+          // create a default value for the string.
+          const wchar_t wide = L'\0';
+          _lcvalue = sizeof wide;
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, &wide, _lcvalue);
+
+          // default values are 0
+          _llivalue = new long long int(0);
+          _ldvalue = new long double(0);
+        }
       }
 
       /**

@@ -359,6 +359,5 @@ TEST(AnyTestCharacter, CompareANumberAndAString)
   auto x = myodd::dynamic::Any("1234");
   auto y = myodd::dynamic::Any(1234);
   ASSERT_EQ((int)x, y);
-  auto z = (const char*)y;
-  ASSERT_EQ(z, x);
+  ASSERT_EQ((const char*)y, x);
 }
