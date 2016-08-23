@@ -2,7 +2,10 @@
 
 #include <typeinfo>       // std::bad_cast
 #include <algorithm>      // memcpy
+
 #include <string>
+#include <locale>
+#include <codecvt>
 
 #include "types.h"        // data type
 
@@ -95,10 +98,10 @@ namespace myodd {
       }
 
       /**
-      * The friend equal operator.
-      * @param const Any &other the value we are comparing
-      * @return bool if the values are equal
-      */
+       * The friend equal operator.
+       * @param const Any &other the value we are comparing
+       * @return bool if the values are equal
+       */
       template<typename T>
       friend bool operator==(const Any& lhs, const T& rhs )
       {
@@ -772,7 +775,11 @@ namespace myodd {
           return '\0';
 
         case dynamic::Type::Character_wchar_t:
-          throw std::bad_cast();
+          if (nullptr == _svalue)
+          {
+            const_cast<Any*>(this)->CreateString();
+          }
+          return (T*)_svalue->c_str();
 
         case dynamic::Type::Character_char:
         case dynamic::Type::Character_signed_char:
@@ -849,7 +856,24 @@ namespace myodd {
           return;
         }
 
+        //  we will need a new string
         _svalue = new std::string();
+
+        // are we a wchar_t?
+        if (Type() == dynamic::Character_wchar_t)
+        {
+          if (nullptr == _cvalue)
+          {
+            *_svalue = "";
+            return;
+          }
+
+          using convert_typeX = std::codecvt_utf8<wchar_t>;
+          std::wstring_convert<convert_typeX, wchar_t> converterX;
+          *_svalue = converterX.to_bytes( (const wchar_t*)_cvalue);
+          return;
+        }
+
         if (dynamic::is_type_floating(Type()))
         {
           *_svalue = std::to_string(*_ldvalue);
@@ -1027,7 +1051,7 @@ namespace myodd {
         if (nullptr != value)
         {
           // default values.
-          _lcvalue = std::strlen((const char*)value) + sizeof(T);
+          _lcvalue = (std::strlen((const char*)value)+1) * sizeof(T);
           _cvalue = new char[_lcvalue];
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
@@ -1068,7 +1092,7 @@ namespace myodd {
         if (nullptr != value)
         {
           // default values.
-          _lcvalue = std::wcslen(value) * sizeof(wchar_t);
+          _lcvalue = (std::wcslen(value)+1) * sizeof(wchar_t);
           _cvalue = new char[_lcvalue];
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
