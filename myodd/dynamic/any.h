@@ -3,6 +3,7 @@
 #include <typeinfo>       // std::bad_cast
 #include "types.h"        // data type
 #include <algorithm>      // memcpy
+#include <string>
 
 namespace myodd {
   namespace dynamic {
@@ -88,6 +89,17 @@ namespace myodd {
       friend bool operator==(const T& lhs , const Any& rhs)
       {
         return (Compare(Any(lhs), rhs ) == 0);
+      }
+
+      /**
+      * The friend equal operator.
+      * @param const Any &other the value we are comparing
+      * @return bool if the values are equal
+      */
+      template<typename T>
+      friend bool operator==(const Any& lhs, const T& rhs )
+      {
+        return (Compare(lhs, Any(rhs)) == 0);
       }
 
       /**
@@ -692,6 +704,42 @@ namespace myodd {
 
       /**
        * Try and cast this to a posible value.
+       * @return char* the value we are looking for.
+       */
+      template<>
+      const char* CastTo<const char*>() const
+      {
+        switch (Type())
+        {
+        case dynamic::Type::type_null:
+          return '\0';
+
+        case dynamic::Type::Character_wchar_t:
+          throw std::bad_cast();
+
+        case dynamic::Type::Character_char:
+        case dynamic::Type::Character_signed_char:
+        case dynamic::Type::Character_unsigned_char:
+          return static_cast<char*>(_cvalue);
+        }
+
+        if (dynamic::is_type_floating(Type()))
+        {
+
+        }
+        else
+        {
+          const char *fmt = "%i";
+          auto lcvalue = std::snprintf(nullptr, 0, fmt, *_llivalue);
+          auto cvalue = new char[lcvalue+1];
+          std::memset(cvalue, 0, lcvalue);
+          std::snprintf(cvalue, lcvalue, fmt, *_llivalue);
+        }
+        return static_cast<char*>(_cvalue);
+      }
+
+      /**
+       * Try and cast this to a posible value.
        * @return char the value we are looking for.
        */
       template<>
@@ -715,7 +763,6 @@ namespace myodd {
           return static_cast<char>(*(unsigned char*)_cvalue);
         }
         return static_cast<char>(*_llivalue);
-
       }
 
       /**
