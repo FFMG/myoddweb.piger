@@ -723,6 +723,26 @@ namespace myodd {
       template<>
       const char* CastTo<const char*>() const
       {
+        return ReturnFromCharacters<const char>();
+      }
+
+      /**
+       * Try and cast this to a posible value.
+       * @return char* the value we are looking for.
+       */
+      template<>
+      char* CastTo<char*>() const
+      {
+        return ReturnFromCharacters<char>();
+      }
+
+      /**
+       * Return a character
+       * @return T* the character we want to return no.
+       */
+      template<typename T>
+      T* ReturnFromCharacters() const
+      {
         switch (Type())
         {
         case dynamic::Type::type_null:
@@ -739,7 +759,12 @@ namespace myodd {
 
         if (dynamic::is_type_floating(Type()))
         {
-
+          const char *fmt = "%Lf";
+          auto lcvalue = std::snprintf(nullptr, 0, fmt, *_ldvalue) + 1;
+          auto cvalue = new char[lcvalue];
+          std::memset(cvalue, 0, lcvalue);
+          std::snprintf(cvalue, lcvalue, fmt, *_ldvalue);
+          return static_cast<char*>(cvalue);
         }
         else
         {

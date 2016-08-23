@@ -360,4 +360,14 @@ TEST(AnyTestCharacter, CompareANumberAndAString)
   auto y = myodd::dynamic::Any(1234);
   ASSERT_EQ((int)x, y);
   ASSERT_EQ((const char*)y, x);
+  ASSERT_EQ((char*)y, x);
+}
+
+TEST(AnyTestCharacter, CompareAFloatNumberAndAString)
+{
+  auto x = myodd::dynamic::Any("1234.56789");
+  auto y = myodd::dynamic::Any(1234.56789);
+  ASSERT_EQ((double)x, y);
+  ASSERT_EQ((const char*)y, x);
+  ASSERT_EQ((char*)y, x);
 }
