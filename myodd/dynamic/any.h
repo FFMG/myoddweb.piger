@@ -4,8 +4,7 @@
 #include <algorithm>      // memcpy
 
 #include <string>
-#include <locale>
-#include <codecvt>
+#include <codecvt>        //  string <-> wstring
 
 #include "types.h"        // data type
 
@@ -194,7 +193,7 @@ namespace myodd {
       template<typename T> friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
 
       /**
-       * Binary arithmetic operators - adition
+       * Binary arithmetic operators - addition
        * @param const Any& the item we are adding to this.
        * @return Any& *this+rhs
        */
@@ -208,15 +207,7 @@ namespace myodd {
       }
 
       /**
-      * Binary arithmetic operators - adition
-      * @param Any the item we are adding to this.
-      * @param const Any& the item we are adding to this.
-      * @return Any *this+rhs
-      */
-      template<typename T> friend Any operator+(Any lhs, const T& rhs) { lhs += Any(rhs); return lhs; }
-
-      /**
-       * Binary arithmetic operators - adition
+       * Binary arithmetic operators - addition
        * @param const Any& the item we are adding to this.
        * @return Any *this+rhs
        */
@@ -226,7 +217,7 @@ namespace myodd {
         if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
         {
           // null+null = int(0)
-          return Any( (int)0 );
+          return Any((int)0);
         }
 
         // is the lhs null if it is then we have to set the value?
@@ -247,11 +238,79 @@ namespace myodd {
         Any value = (*_ldvalue + *rhs._ldvalue);
 
         // update the type.
-        value._type = CalculateType( Type(), rhs.Type() );
+        value._type = CalculateType(Type(), rhs.Type());
 
         // return the value.
         return value;
       }
+
+      /**
+       * Binary arithmetic operators - addition
+       * @param Any the item we are adding to this.
+       * @param const Any& the item we are adding to this.
+       * @return Any *this+rhs
+       */
+      template<typename T> friend Any operator+(Any lhs, const T& rhs) { lhs += Any(rhs); return lhs; }
+
+      /**
+       * Binary arithmetic operators - subtraction
+       * @param const Any& the item we are subtraction from this.
+       * @return Any& *this-rhs
+       */
+      Any& operator-=(const Any& rhs)
+      {
+        // add us to the other number and update our value.
+        *this = *this - rhs;
+
+        // return the result by reference
+        return *this;
+      }
+
+      /**
+       * Binary arithmetic operators - subtraction
+       * @param const Any& the item we are subtraction from this.
+       * @return Any *this-rhs
+       */
+      Any operator-(const Any& rhs) const
+      {
+        // we use the double number as it is more precise
+        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        {
+          // null-null = int(0)
+          return Any((int)0);
+        }
+
+        // is the lhs null if it is then we have to set the value?
+        if (Type() == dynamic::type_null)
+        {
+          return Any(0) - rhs;
+        }
+
+        // is the rhs null if it is then we have to set the value?
+        if (rhs.Type() == dynamic::type_null)
+        {
+          // nothing changes...
+          // because this - null == this
+          return *this - Any(0);
+        }
+
+        // add the values.
+        Any value = (*_ldvalue - *rhs._ldvalue);
+
+        // update the type.
+        value._type = CalculateType(Type(), rhs.Type());
+
+        // return the value.
+        return value;
+      }
+
+      /**
+       * Binary arithmetic operators - substration
+       * @param Any the item we are subtracting from this.
+       * @param const Any& the item we are subtracting from this.
+       * @return Any *this-rhs
+       */
+      template<typename T> friend Any operator-(Any lhs, const T& rhs) { lhs -= Any(rhs); return lhs; }
 
       /** 
        * The equal operator
