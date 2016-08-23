@@ -1,9 +1,10 @@
 #pragma once
 
 #include <typeinfo>       // std::bad_cast
-#include "types.h"        // data type
 #include <algorithm>      // memcpy
 #include <string>
+
+#include "types.h"        // data type
 
 namespace myodd {
   namespace dynamic {
@@ -17,6 +18,8 @@ namespace myodd {
         _llivalue( nullptr),
         _ldvalue( nullptr ),
         _cvalue( nullptr ),
+        _svalue( nullptr ),
+        _swvalue( nullptr ),
         _lcvalue(0),
         _type( Type::type_null )
       {
@@ -737,6 +740,26 @@ namespace myodd {
       }
 
       /**
+       * Try and cast this to a posible value.
+       * @return wchar_t* the value we are looking for.
+       */
+      template<>
+      wchar_t* CastTo<wchar_t*>() const
+      {
+        return (wchar_t*)ReturnFromCharacters<const wchar_t>();
+      }
+
+      /**
+       * Try and cast this to a posible value.
+       * @return const wchar_t* the value we are looking for.
+       */
+      template<>
+      const wchar_t* CastTo<const wchar_t*>() const
+      {
+        return ReturnFromCharacters<const wchar_t>();
+      }
+
+      /**
        * Return a character
        * @return T* the character we want to return no.
        */
@@ -757,25 +780,84 @@ namespace myodd {
           return static_cast<char*>(_cvalue);
         }
 
+        // do we need to create the string representation?
+        if (nullptr == _svalue)
+        {
+          const_cast<Any*>(this)->CreateString();
+        }
+        return (T*)_svalue->c_str();
+      }
+
+      /**
+      * Return a character
+      * @return T* the character we want to return no.
+      */
+      template<>
+      const wchar_t* ReturnFromCharacters<const wchar_t>() const
+      {
+        switch (Type())
+        {
+        case dynamic::Type::type_null:
+          return '\0';
+
+        case dynamic::Type::Character_wchar_t:
+          return static_cast<wchar_t*>( (void*)_cvalue);
+
+        case dynamic::Type::Character_char:
+        case dynamic::Type::Character_signed_char:
+        case dynamic::Type::Character_unsigned_char:
+          throw std::bad_cast();
+        }
+
+        // do we need to create the string representation?
+        if (nullptr == _swvalue)
+        {
+          const_cast<Any*>(this)->CreateWideString();
+        }
+        return _swvalue->c_str();
+      }
+
+      /**
+       * Create the cosmetic representation of the string.
+       */
+      void CreateWideString()
+      {
+        //  do we need to do anyting?
+        if (nullptr != _swvalue)
+        {
+          return;
+        }
+
+        _swvalue = new std::wstring();
         if (dynamic::is_type_floating(Type()))
         {
-          const char *fmt = "%Lf";
-          auto lcvalue = std::snprintf(nullptr, 0, fmt, *_ldvalue) + 1;
-          auto cvalue = new char[lcvalue];
-          std::memset(cvalue, 0, lcvalue);
-          std::snprintf(cvalue, lcvalue, fmt, *_ldvalue);
-          return static_cast<char*>(cvalue);
+          *_swvalue = std::to_wstring(*_ldvalue);
         }
         else
         {
-          const char *fmt = "%i";
-          auto lcvalue = std::snprintf(nullptr, 0, fmt, *_llivalue)+1;
-          auto cvalue = new char[lcvalue];
-          std::memset(cvalue, 0, lcvalue);
-          std::snprintf(cvalue, lcvalue, fmt, *_llivalue);
-          return static_cast<char*>(cvalue);
+          *_swvalue = std::to_wstring(*_llivalue);
         }
-        return static_cast<char*>(_cvalue);
+      }
+      /**
+       * Create the cosmetic representation of the string.
+       */
+      void CreateString()
+      {
+        //  do we need to do anyting?
+        if (nullptr != _svalue)
+        {
+          return;
+        }
+
+        _svalue = new std::string();
+        if (dynamic::is_type_floating(Type()))
+        {
+          *_svalue = std::to_string(*_ldvalue);
+        }
+        else
+        {
+          *_svalue = std::to_string(*_llivalue);
+        }
       }
 
       /**
@@ -917,10 +999,16 @@ namespace myodd {
         // delete the char if need be
         delete _cvalue;
 
+        // delete the cosmetic strings
+        delete _svalue;
+        delete _swvalue;
+
         // reset the values
         _llivalue = nullptr;
         _ldvalue = nullptr;
         _cvalue = nullptr;
+        _svalue = nullptr;
+        _swvalue = nullptr;
       }
 
       /**
@@ -939,7 +1027,7 @@ namespace myodd {
         if (nullptr != value)
         {
           // default values.
-          _lcvalue = std::strlen((const char*)value) + sizeof T;
+          _lcvalue = std::strlen((const char*)value) + sizeof(T);
           _cvalue = new char[_lcvalue];
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
@@ -953,7 +1041,7 @@ namespace myodd {
           const char c = '\0';
 
           // default values.
-          _lcvalue = sizeof T;
+          _lcvalue = sizeof(T);
           _cvalue = new char[_lcvalue];
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, &c, _lcvalue);
@@ -980,7 +1068,7 @@ namespace myodd {
         if (nullptr != value)
         {
           // default values.
-          _lcvalue = (std::wcslen(value) + 1) * sizeof value;
+          _lcvalue = std::wcslen(value) * sizeof(wchar_t);
           _cvalue = new char[_lcvalue];
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
@@ -992,7 +1080,7 @@ namespace myodd {
         {
           // create a default value for the string.
           const wchar_t wide = L'\0';
-          _lcvalue = sizeof wide;
+          _lcvalue = sizeof(wchar_t);
           _cvalue = new char[_lcvalue];
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, &wide, _lcvalue);
@@ -1017,7 +1105,7 @@ namespace myodd {
         _type = dynamic::get_type<T>::value;
 
         // create the character.
-        _lcvalue = sizeof value;
+        _lcvalue = sizeof(T);
         _cvalue = new char[_lcvalue];
         std::memset(_cvalue, 0, _lcvalue);
         std::memcpy(_cvalue, &value, _lcvalue);
@@ -1049,7 +1137,7 @@ namespace myodd {
         _type = dynamic::get_type<wchar_t>::value;
 
         // create the character.
-        _lcvalue = sizeof value;
+        _lcvalue = sizeof(wchar_t);
         _cvalue = new char[_lcvalue];
         std::memset(_cvalue, 0, _lcvalue);
         std::memcpy(_cvalue, &value, _lcvalue);
@@ -1077,6 +1165,9 @@ namespace myodd {
       // this is the given character value either char/signed char/unsigned char/wide
       char* _cvalue;
       size_t _lcvalue;
+
+      std::string* _svalue;
+      std::wstring* _swvalue;
 
       // the variable type
       dynamic::Type _type;

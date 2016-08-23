@@ -1,7 +1,7 @@
-#include "dynamic/any.h"
 #include <gtest/gtest.h>
-
 #include "../testcommon.h"
+
+#include "dynamic/any.h"
 
 // --gtest_filter=AnyTestCharacter* 
 TEST(AnyTestCharacter, CheckTypeChar)
@@ -365,9 +365,27 @@ TEST(AnyTestCharacter, CompareANumberAndAString)
 
 TEST(AnyTestCharacter, CompareAFloatNumberAndAString)
 {
-  auto x = myodd::dynamic::Any("1234.56789");
-  auto y = myodd::dynamic::Any(1234.56789);
+  auto x = myodd::dynamic::Any("1234.456789");
+  auto y = myodd::dynamic::Any(1234.456789);
   ASSERT_EQ((double)x, y);
   ASSERT_EQ((const char*)y, x);
   ASSERT_EQ((char*)y, x);
+}
+
+TEST(AnyTestCharacter, CompareANumberAndAWideString)
+{
+  auto x = myodd::dynamic::Any(L"1234");
+  auto y = myodd::dynamic::Any(1234);
+  ASSERT_EQ((int)x, y);
+  ASSERT_EQ((const wchar_t*)y, x);
+  ASSERT_EQ((wchar_t*)y, x);
+}
+
+TEST(AnyTestCharacter, CompareAFloatNumberAndAWideString)
+{
+  auto x = myodd::dynamic::Any(L"1234.456789");
+  auto y = myodd::dynamic::Any(1234.456789);
+  ASSERT_DOUBLE_EQ((double)x, y);
+  ASSERT_EQ((const wchar_t*)y, x);
+  ASSERT_EQ((wchar_t*)y, x);
 }
