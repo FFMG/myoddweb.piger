@@ -242,12 +242,28 @@ TEST(AnyTestCharacter, StringNumber)
   ASSERT_EQ("1234", x);
 }
 
+TEST(AnyTestCharacter, WideStringNumber)
+{
+  auto x = myodd::dynamic::Any( L"1234");
+  ASSERT_EQ(1234, (int)x);
+  ASSERT_EQ((double)1234, (double)x);
+  ASSERT_EQ( L"1234", x);
+}
+
 TEST(AnyTestCharacter, StringFloatingNumber)
 {
   auto x = myodd::dynamic::Any("1234.567");
   ASSERT_EQ(1234, (int)x);
   ASSERT_EQ((double)1234.567, (double)x);
   ASSERT_EQ("1234.567", x);
+}
+
+TEST(AnyTestCharacter, WideStringFloatingNumber)
+{
+  auto x = myodd::dynamic::Any(L"1234.567");
+  ASSERT_EQ(1234, (int)x);
+  ASSERT_EQ((double)1234.567, (double)x);
+  ASSERT_EQ(L"1234.567", x);
 }
 
 TEST(AnyTestCharacter, StringNotANumber)
@@ -259,10 +275,26 @@ TEST(AnyTestCharacter, StringNotANumber)
   ASSERT_NE("World", x);
 }
 
+TEST(AnyTestCharacter, WideStringNotANumber)
+{
+  auto x = myodd::dynamic::Any(L"Hello");
+  ASSERT_EQ(0, (int)x);
+  ASSERT_EQ(0, (double)x);
+  ASSERT_EQ(L"Hello", x);
+  ASSERT_NE(L"World", x);
+}
+
 TEST(AnyTestCharacter, Compare2StringsSameValue)
 {
   auto x = myodd::dynamic::Any("Hello");
   auto y = myodd::dynamic::Any("Hello");
+  ASSERT_EQ(x, y);
+}
+
+TEST(AnyTestCharacter, Compare2WideStringsSameValue)
+{
+  auto x = myodd::dynamic::Any(L"Hello");
+  auto y = myodd::dynamic::Any(L"Hello");
   ASSERT_EQ(x, y);
 }
 
@@ -273,10 +305,24 @@ TEST(AnyTestCharacter, Compare2StringsSameValueButNotSameCase)
   ASSERT_NE(x, y);
 }
 
+TEST(AnyTestCharacter, Compare2WideStringsSameValueButNotSameCase)
+{
+  auto x = myodd::dynamic::Any(L"HELLO");
+  auto y = myodd::dynamic::Any(L"hello");
+  ASSERT_NE(x, y);
+}
+
 TEST(AnyTestCharacter, Compare2StringsSameLenghButNotSame)
 {
   auto x = myodd::dynamic::Any("Hello");
   auto y = myodd::dynamic::Any("World");
+  ASSERT_NE(x, y);
+}
+
+TEST(AnyTestCharacter, Compare2WideStringsSameLenghButNotSame)
+{
+  auto x = myodd::dynamic::Any(L"Hello");
+  auto y = myodd::dynamic::Any(L"World");
   ASSERT_NE(x, y);
 }
 
@@ -287,10 +333,24 @@ TEST(AnyTestCharacter, Compare2StringsString2AlmostSameButLonger)
   ASSERT_NE(x, y);
 }
 
+TEST(AnyTestCharacter, Compare2WideStringsString2AlmostSameButLonger)
+{
+  auto x = myodd::dynamic::Any(L"Hello");
+  auto y = myodd::dynamic::Any(L"Hello2");
+  ASSERT_NE(x, y);
+}
+
 TEST(AnyTestCharacter, Compare2StringsString1AlmostSameButLonger)
 {
   auto x = myodd::dynamic::Any("Hello2");
   auto y = myodd::dynamic::Any("Hello");
+  ASSERT_NE(x, y);
+}
+
+TEST(AnyTestCharacter, Compare2StringsWideString1AlmostSameButLonger)
+{
+  auto x = myodd::dynamic::Any(L"Hello2");
+  auto y = myodd::dynamic::Any(L"Hello");
   ASSERT_NE(x, y);
 }
 

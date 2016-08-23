@@ -268,7 +268,7 @@ namespace myodd {
           // long double
           _ldvalue = other._ldvalue ? new long double(*other._ldvalue) : nullptr;
 
-          // the char value
+          // copy the character value
           if (other._lcvalue > 0 && other._cvalue)
           {
             _lcvalue = other._lcvalue;
@@ -444,48 +444,9 @@ namespace myodd {
         case dynamic::Character_char:
         case dynamic::Character_unsigned_char:
         case dynamic::Character_signed_char:
-        {
-          auto c = static_cast<char>(value);
-          _lcvalue = sizeof T;
-          _cvalue = new char[_lcvalue];
-          std::memset(_cvalue, 0, _lcvalue);
-          std::memcpy(_cvalue, &c, _lcvalue);
-
-          if (c >= '0' && c <= '9')
-          {
-            auto number = c - '0';
-            _llivalue = new long long int(number);
-            _ldvalue = new long double(number);
-          }
-          else
-          {
-            _llivalue = new long long int(0);
-            _ldvalue = new long double(0);
-          }
-        }
-        return;
-
         case dynamic::Character_wchar_t:
-        {
-          auto c = static_cast<wchar_t>(value);
-          _lcvalue = sizeof T;
-          _cvalue = new char[_lcvalue];
-          std::memset(_cvalue, 0, _lcvalue);
-          std::memcpy(_cvalue, &c, _lcvalue);
-
-          if (c >= L'0' && c <= L'9')
-          {
-            auto number = c - L'0';
-            _llivalue = new long long int(number);
-            _ldvalue = new long double(number);
-          }
-          else
-          {
-            _llivalue = new long long int(0);
-            _ldvalue = new long double(0);
-          }
-        }
-        return;
+          CreateFromCharacter( value );
+          return;
 
         // int
         case dynamic::Integer_short_int:
@@ -545,24 +506,9 @@ namespace myodd {
           case dynamic::Character_char:
           case dynamic::Character_unsigned_char:
           case dynamic::Character_signed_char:
-          {
-            const char* c = (const char*)value;
-
-            // default values.
-            _lcvalue = std::strlen(c) + sizeof T;
-            _cvalue = new char[_lcvalue];
-            std::memset(_cvalue, 0, _lcvalue);
-            std::memcpy(_cvalue, c, _lcvalue);
-
-            _llivalue = new long long int(std::strtoll(c, nullptr, 0));
-            _ldvalue = new long double(std::strtold(c,nullptr));
-          }
-          break;
-
           case dynamic::Character_wchar_t:
-          {
-          }
-          break;
+            CreateFromCharacters(value);
+            break;
 
           default:
             CastFrom(*value);
@@ -884,13 +830,124 @@ namespace myodd {
         _cvalue = nullptr;
       }
 
+      /**
+      * Create a value from a multiple characters..
+      * @param const T* value the character we are creating from.
+      */
+      template<typename T>
+      void CreateFromCharacters(const T* value)
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<T>::value;
+
+        // default values.
+        _lcvalue = std::strlen((const char*)value) + sizeof T;
+        _cvalue = new char[_lcvalue];
+        std::memset(_cvalue, 0, _lcvalue);
+        std::memcpy(_cvalue, value, _lcvalue);
+
+        _llivalue = new long long int(std::strtoll(_cvalue, nullptr, 0));
+        _ldvalue = new long double(std::strtold(_cvalue, nullptr));
+      }
+
+      /**
+      * Create a value from a multiple characters..
+      * @param const T* value the character we are creating from.
+      */
+      template<>
+      void CreateFromCharacters<wchar_t>( const wchar_t* value)
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<wchar_t>::value;
+
+        // default values.
+        _lcvalue = (std::wcslen(value) + 1) * sizeof value;
+        _cvalue = new char[_lcvalue];
+        std::memset(_cvalue, 0, _lcvalue);
+        std::memcpy(_cvalue, value, _lcvalue);
+
+        _llivalue = new long long int(std::wcstoll(value, nullptr, 0));
+        _ldvalue = new long double(std::wcstold(value, nullptr));
+      }
+
+      /**
+       * Create a value from a single character.
+       * @param const char value the character we are creating from.
+       */
+      template<typename T>
+      void CreateFromCharacter(const T value )
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<T>::value;
+
+        // create the character.
+        _lcvalue = sizeof value;
+        _cvalue = new char[_lcvalue];
+        std::memset(_cvalue, 0, _lcvalue);
+        std::memcpy(_cvalue, &value, _lcvalue);
+
+        if (value >= '0' && value <= '9')
+        {
+          auto number = value - '0';
+          _llivalue = new long long int(number);
+          _ldvalue = new long double(number);
+        }
+        else
+        {
+          _llivalue = new long long int(0);
+          _ldvalue = new long double(0);
+        }
+      }
+
+      /**
+       * Create a value from a single wide character.
+       * @param const wchar_t value the character we are creating from.
+       */
+      template<>
+      void CreateFromCharacter<const wchar_t>( const wchar_t value)
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<wchar_t>::value;
+
+        // create the character.
+        _lcvalue = sizeof value;
+        _cvalue = new char[_lcvalue];
+        std::memset(_cvalue, 0, _lcvalue);
+        std::memcpy(_cvalue, &value, _lcvalue);
+
+        // copy it.
+        if (value >= L'0' && value <= L'9')
+        {
+          auto number = value - L'0';
+          _llivalue = new long long int(number);
+          _ldvalue = new long double(number);
+        }
+        else
+        {
+          _llivalue = new long long int(0);
+          _ldvalue = new long double(0);
+        }
+      }
+
       // the biggest integer value.
       long long int* _llivalue;
 
       // the biggest floating point value
       long double* _ldvalue;
 
-      // the char
+      // this is the given character value either char/signed char/unsigned char/wide
       char* _cvalue;
       size_t _lcvalue;
 
