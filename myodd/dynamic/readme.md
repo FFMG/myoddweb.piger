@@ -2,6 +2,46 @@
 This class tries to introduce dynamic typing to c++, basically we try to remove the 'type' from the variable.
 Rather the type is decided at runtime.
 
+## Installation
+
+`::myodd::dynamic::Any` is a standalone class that consist of 2 files, `types.h` and `any.h` so just copy those 2 files where ever you need them, (in a subfolder might be a good idea).
+
+Include them in your project as you would include any other classes.
+
+The code was written and tested on `c++11`, I *suspect* it will work on older compiler with a couple of macros, but I will cross that bridge if/when someone ask for it.
+
+## Usage
+
+Just include the file where ever you placed it and then use the class.
+
+    #include "location/any.h"
+
+    int main() {
+
+      // declare it
+      ::myodd::dynamic::Any life(42);
+
+      // use it...
+     
+      return 0;
+    }
+
+or you can call `using` if you prefer, (of course).
+
+    #include "location/any.h"
+
+    using ::myodd::dynamic::Any;
+
+    int main() {
+
+      // declare it
+      Any life(42);
+
+      // use it...
+     
+      return 0;
+    }
+
 ### Rules of the game
 
 Like any dynamic types, myodd::dynamic::Any() has to have some sort of [type juggling](http://php.net/manual/en/language.types.type-juggling.php) rules to follow.
