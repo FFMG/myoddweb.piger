@@ -970,6 +970,9 @@ TEST(AnyTestOperators, DivideCharInteger)
 
   auto anyResult = any1 / any2;
   ASSERT_EQ(2, anyResult);
+
+  ASSERT_EQ('4', any1);
+  ASSERT_EQ('2', any2);
 }
 
 TEST(AnyTestOperators, DivideWideCharInteger)
@@ -979,6 +982,9 @@ TEST(AnyTestOperators, DivideWideCharInteger)
 
   auto anyResult = any1 / any2;
   ASSERT_EQ(2, anyResult);
+
+  ASSERT_EQ(L'4', any1);
+  ASSERT_EQ(L'2', any2);
 }
 
 TEST(AnyTestOperators, DivideCharDouble)
@@ -988,6 +994,9 @@ TEST(AnyTestOperators, DivideCharDouble)
 
   auto anyResult = any1 / any2;
   ASSERT_DOUBLE_EQ(2.5, anyResult);
+
+  ASSERT_EQ('5', any1);
+  ASSERT_EQ('2', any2);
 }
 
 TEST(AnyTestOperators, DivideWideCharDouble)
@@ -997,6 +1006,9 @@ TEST(AnyTestOperators, DivideWideCharDouble)
 
   auto anyResult = any1 / any2;
   ASSERT_DOUBLE_EQ(2.5, anyResult);
+
+  ASSERT_EQ(L'5', any1);
+  ASSERT_EQ(L'2', any2);
 }
 
 TEST(AnyTestOperators, DivideWideCharAndCharInteger)
@@ -1006,6 +1018,9 @@ TEST(AnyTestOperators, DivideWideCharAndCharInteger)
 
   auto anyResult = any1 / any2;
   ASSERT_EQ(2, anyResult);
+
+  ASSERT_EQ(L'4', any1);
+  ASSERT_EQ('2', any2);
 }
 
 TEST(AnyTestOperators, DivideWideCharAndCharDouble)
@@ -1015,6 +1030,18 @@ TEST(AnyTestOperators, DivideWideCharAndCharDouble)
 
   auto anyResult = any1 / any2;
   ASSERT_DOUBLE_EQ(2.5, anyResult);
+  ASSERT_EQ(L'5', any1);
+  ASSERT_EQ('2', any2);
+}
+
+TEST(AnyTestOperators, ShortcutDivide)
+{
+  auto any1 = myodd::dynamic::Any(5);
+  auto any2 = myodd::dynamic::Any(2);
+
+  any1 /= any2;
+  ASSERT_DOUBLE_EQ(2.5, any1);
+  ASSERT_EQ(2, any2);
 }
 
 TEST(AnyTestOperators, DivideStringDouble)
