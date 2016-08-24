@@ -146,7 +146,7 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
 - std : `0.003s` | `0.003s`
 - any : `0.391s` | `0.361s`
 
-#### [Addition loop](doc/perfsubtraction.md)
+#### [Subtraction loop](doc/perfsubtraction.md)
 - std : `0.003s` | `0.003s`
 - any : `0.375s` | `0.437s`
 
@@ -155,7 +155,13 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
 - std : `0.003s` | `0.003s`
 - any : `0.416s` | `0.363s`
 
+#### [Division loop](doc/perfdivision.md)
+
+- std : `0.003s` | `0.003s`
+- any : `0.416s` | `0.363s`
+
 ## Todo
 
 - implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.  
 Those objects cannot have arithmetic done to them, (+,-,/,*)
+- Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.

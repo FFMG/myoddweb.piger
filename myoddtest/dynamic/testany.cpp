@@ -308,3 +308,27 @@ TEST_MEM(AnyTest, UseWithVectors)
   ASSERT_EQ(L"World", sampledata[2]);
   ASSERT_DOUBLE_EQ(20.5, sampledata[3]);
 }
+
+TEST_MEM(AnyTest, UpdateVectorValue)
+{
+  // assign a value to the vector.
+  std::vector<myodd::dynamic::Any> sampledata{ 10, "Hello", L"World", 20.5 };
+  ASSERT_EQ(10, sampledata[0]);
+  ASSERT_EQ("Hello", sampledata[1]);
+  ASSERT_EQ(L"World", sampledata[2]);
+  ASSERT_DOUBLE_EQ(20.5, sampledata[3]);
+
+  sampledata[1] = "Whatever";
+
+  ASSERT_EQ("Whatever", sampledata[1]);
+}
+
+TEST_MEM(AnyTest, CopyConstructor)
+{
+  myodd::dynamic::Any foo(10);
+  auto bar = foo;
+  ASSERT_EQ(bar, foo);
+  ASSERT_EQ(bar.Type(), foo.Type() );
+  ASSERT_TRUE(bar == foo);
+  ASSERT_FALSE(bar != foo);
+}

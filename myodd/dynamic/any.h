@@ -441,20 +441,6 @@ namespace myodd {
       */
       Any& operator/=(const Any& rhs)
       {
-        // devide this by the rhs
-        *this = *this / rhs;
-
-        // return the result by reference
-        return *this;
-      }
-
-      /**
-       * Binary arithmetic operators - division
-       * @param const Any& the item we are deviding from this.
-       * @return Any *this/ rhs
-       */
-      Any operator/(const Any& rhs) const
-      {
         // we use the double number as it is more precise
         if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
         {
@@ -464,7 +450,7 @@ namespace myodd {
 
         // if the rhs is null, then we cannot calculate it.
         // or if the value is zero.
-        if (rhs.Type() == dynamic::Misc_null || (rhs._ldvalue && *rhs._ldvalue == 0) )
+        if (rhs.Type() == dynamic::Misc_null || (rhs._ldvalue && *rhs._ldvalue == 0))
         {
           // *this / null = std::overflow_error
           throw std::overflow_error("Division by zero.");
@@ -476,16 +462,37 @@ namespace myodd {
         {
           // it does not matter what the rhs is.
           // but we know it is not zero or null.
-          return Any((int)0);          
+          CastFrom( 0 );
+          return *this;
         }
 
-        // devide the values.
-        Any value = (*_ldvalue / *rhs._ldvalue);
+        // save the current type.
+        dynamic::Type type = Type();
 
-        // update the type for _this_ value.
-        value._type = value.CalculateType(Type(), rhs.Type());
+        // multiply the values.
+        CastFrom(*_ldvalue / *rhs._ldvalue);
+
+        // update the type.
+        _type = CalculateType(type, rhs.Type());
 
         // return the value.
+        return *this;
+      }
+
+      /**
+       * Binary arithmetic operators - division
+       * @param const Any& the item we are deviding from this.
+       * @return Any *this/ rhs
+       */
+      Any operator/(const Any& rhs) const
+      {
+        // copy the value
+        Any value = *this;
+
+        // multiply the rhs
+        value /= rhs;
+
+        // return the result.
         return value;
       }
 
