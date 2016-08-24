@@ -4,45 +4,45 @@
 #include "../testcommon.h"
 
 // --gtest_filter=AnyTestOperators* 
-TEST(AnyTestOperators, LessThan2xAny)
+TEST_MEM(AnyTestOperators, LessThan2xAny)
 {
   auto x = myodd::dynamic::Any( 10 );
   auto y = myodd::dynamic::Any( 20);
   ASSERT_TRUE( x < y );
 }
 
-TEST(AnyTestOperators, LessThanAnyLessOther)
+TEST_MEM(AnyTestOperators, LessThanAnyLessOther)
 {
   auto x = myodd::dynamic::Any(10);
   ASSERT_TRUE(x < 20 );
 }
 
-TEST(AnyTestOperators, LessThanOtherLessThanAny)
+TEST_MEM(AnyTestOperators, LessThanOtherLessThanAny)
 {
   auto x = myodd::dynamic::Any(10);
   ASSERT_TRUE(5 < x );
 }
 
-TEST(AnyTestOperators, LessThanAnyMoreThanOther)
+TEST_MEM(AnyTestOperators, LessThanAnyMoreThanOther)
 {
   auto x = myodd::dynamic::Any(50);
   ASSERT_TRUE(x > 20);
 }
 
-TEST(AnyTestOperators, LessThanOtherMoreThanAny)
+TEST_MEM(AnyTestOperators, LessThanOtherMoreThanAny)
 {
   auto x = myodd::dynamic::Any(10);
   ASSERT_TRUE( 20 > x );
 }
 
-TEST(AnyTestOperators, MoreThan2xAny)
+TEST_MEM(AnyTestOperators, MoreThan2xAny)
 {
   auto x = myodd::dynamic::Any(50);
   auto y = myodd::dynamic::Any(20);
   ASSERT_TRUE(x > y);
 }
 
-TEST(AnyTestOperators, TwoNullValuesAreNotLessThanEachOthers)
+TEST_MEM(AnyTestOperators, TwoNullValuesAreNotLessThanEachOthers)
 {
   auto x = myodd::dynamic::Any( nullptr );
   auto y = myodd::dynamic::Any( nullptr );
@@ -50,7 +50,7 @@ TEST(AnyTestOperators, TwoNullValuesAreNotLessThanEachOthers)
   ASSERT_TRUE(x == y);
 }
 
-TEST(AnyTestOperators, TwoNullValuesAreNotMoreThanEachOthers)
+TEST_MEM(AnyTestOperators, TwoNullValuesAreNotMoreThanEachOthers)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
@@ -58,7 +58,7 @@ TEST(AnyTestOperators, TwoNullValuesAreNotMoreThanEachOthers)
   ASSERT_TRUE(x == y);
 }
 
-TEST(AnyTestOperators, TwoNullValuesCanBeLessOrEqual)
+TEST_MEM(AnyTestOperators, TwoNullValuesCanBeLessOrEqual)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
@@ -66,7 +66,7 @@ TEST(AnyTestOperators, TwoNullValuesCanBeLessOrEqual)
   ASSERT_TRUE(x == y);
 }
 
-TEST(AnyTestOperators, TwoNullValuesCanBeMoreOrEqual)
+TEST_MEM(AnyTestOperators, TwoNullValuesCanBeMoreOrEqual)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
@@ -74,7 +74,7 @@ TEST(AnyTestOperators, TwoNullValuesCanBeMoreOrEqual)
   ASSERT_TRUE(x == y);
 }
 
-TEST(AnyTestOperators, NullLhsIsLessThanBigNumber)
+TEST_MEM(AnyTestOperators, NullLhsIsLessThanBigNumber)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any( IntRandomNumber<unsigned int>( false ) );
@@ -83,7 +83,7 @@ TEST(AnyTestOperators, NullLhsIsLessThanBigNumber)
   ASSERT_FALSE(x >= y);
 }
 
-TEST(AnyTestOperators, NullRhsIsLessThanSmallNegNumber)
+TEST_MEM(AnyTestOperators, NullRhsIsLessThanSmallNegNumber)
 {
   //  -v1 number ...
   auto i = IntRandomNumber<int>(false);
@@ -94,14 +94,14 @@ TEST(AnyTestOperators, NullRhsIsLessThanSmallNegNumber)
   ASSERT_FALSE(x >= y);
 }
 
-TEST(AnyTestOperators, NullEqualsAnyNul )
+TEST_MEM(AnyTestOperators, NullEqualsAnyNul )
 {
   auto x = myodd::dynamic::Any(nullptr);
   ASSERT_TRUE( x == nullptr );
   ASSERT_TRUE(nullptr ==  x);
 }
 
-TEST(AnyTestOperators, NullPlusNullEqualZero)
+TEST_MEM(AnyTestOperators, NullPlusNullEqualZero)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
@@ -114,7 +114,7 @@ TEST(AnyTestOperators, NullPlusNullEqualZero)
   ASSERT_EQ(myodd::dynamic::type_null, y.Type());
 }
 
-TEST(AnyTestOperators, NullMinusNullEqualZero)
+TEST_MEM(AnyTestOperators, NullMinusNullEqualZero)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
@@ -127,7 +127,7 @@ TEST(AnyTestOperators, NullMinusNullEqualZero)
   ASSERT_EQ(myodd::dynamic::type_null, y.Type());
 }
 
-TEST(AnyTestOperators, NullPlusNullEqualZeroShortcut)
+TEST_MEM(AnyTestOperators, NullPlusNullEqualZeroShortcut)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
@@ -142,7 +142,7 @@ TEST(AnyTestOperators, NullPlusNullEqualZeroShortcut)
   ASSERT_EQ(myodd::dynamic::type_null, y.Type());
 }
 
-TEST(AnyTestOperators, NullMinusNullEqualZeroShortcut)
+TEST_MEM(AnyTestOperators, NullMinusNullEqualZeroShortcut)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(nullptr);
@@ -157,7 +157,7 @@ TEST(AnyTestOperators, NullMinusNullEqualZeroShortcut)
   ASSERT_EQ(myodd::dynamic::type_null, y.Type());
 }
 
-TEST(AnyTestOperators, AddNumberToNull)
+TEST_MEM(AnyTestOperators, AddNumberToNull)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(10);
@@ -165,7 +165,7 @@ TEST(AnyTestOperators, AddNumberToNull)
   ASSERT_EQ(10, x);
 }
 
-TEST(AnyTestOperators, SubtractNumberFromNull)
+TEST_MEM(AnyTestOperators, SubtractNumberFromNull)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(10);
@@ -173,7 +173,7 @@ TEST(AnyTestOperators, SubtractNumberFromNull)
   ASSERT_EQ(-10, x);
 }
 
-TEST(AnyTestOperators, MultiplyNumberAndNull)
+TEST_MEM(AnyTestOperators, MultiplyNumberAndNull)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(IntRandomNumber<int>(false));
@@ -181,7 +181,7 @@ TEST(AnyTestOperators, MultiplyNumberAndNull)
   ASSERT_EQ(0, x);
 }
 
-TEST(AnyTestOperators, AddNullToNumber)
+TEST_MEM(AnyTestOperators, AddNullToNumber)
 {
   auto x = myodd::dynamic::Any(10);
   auto y = myodd::dynamic::Any(nullptr);
@@ -189,7 +189,7 @@ TEST(AnyTestOperators, AddNullToNumber)
   ASSERT_EQ(10, x);
 }
 
-TEST(AnyTestOperators, SubstractNullFromNumber)
+TEST_MEM(AnyTestOperators, SubstractNullFromNumber)
 {
   auto x = myodd::dynamic::Any(10);
   auto y = myodd::dynamic::Any(nullptr);
@@ -197,7 +197,7 @@ TEST(AnyTestOperators, SubstractNullFromNumber)
   ASSERT_EQ(10, x);
 }
 
-TEST(AnyTestOperators, MultiplyNullFromNumber)
+TEST_MEM(AnyTestOperators, MultiplyNullFromNumber)
 {
   auto x = myodd::dynamic::Any(IntRandomNumber<int>(false));
   auto y = myodd::dynamic::Any(nullptr);
@@ -205,7 +205,7 @@ TEST(AnyTestOperators, MultiplyNullFromNumber)
   ASSERT_EQ(0, x);
 }
 
-TEST(AnyTestOperators, AddTwoAny)
+TEST_MEM(AnyTestOperators, AddTwoAny)
 {
   auto x = myodd::dynamic::Any(10);
   auto y = myodd::dynamic::Any(20);
@@ -213,7 +213,7 @@ TEST(AnyTestOperators, AddTwoAny)
   ASSERT_EQ(30, x);
 }
 
-TEST(AnyTestOperators, SubstractTwoAny)
+TEST_MEM(AnyTestOperators, SubstractTwoAny)
 {
   auto x = myodd::dynamic::Any(40);
   auto y = myodd::dynamic::Any(10);
@@ -221,7 +221,7 @@ TEST(AnyTestOperators, SubstractTwoAny)
   ASSERT_EQ(30, x);
 }
 
-TEST(AnyTestOperators, MultiplyTwoAny)
+TEST_MEM(AnyTestOperators, MultiplyTwoAny)
 {
   auto x = myodd::dynamic::Any(40);
   auto y = myodd::dynamic::Any(10);
@@ -229,70 +229,70 @@ TEST(AnyTestOperators, MultiplyTwoAny)
   ASSERT_EQ(400, x);
 }
 
-TEST(AnyTestOperators, AddANumberToAny)
+TEST_MEM(AnyTestOperators, AddANumberToAny)
 {
   auto x = myodd::dynamic::Any(10);
   x += 20;
   ASSERT_EQ(30, x);
 }
 
-TEST(AnyTestOperators, MultiplyANumberToAny)
+TEST_MEM(AnyTestOperators, MultiplyANumberToAny)
 {
   auto x = myodd::dynamic::Any(40);
   x -= 10;
   ASSERT_EQ(30, x);
 }
 
-TEST(AnyTestOperators, SubstractANumberToAny)
+TEST_MEM(AnyTestOperators, SubstractANumberToAny)
 {
   auto x = myodd::dynamic::Any(40);
   x *= 10;
   ASSERT_EQ(400, x);
 }
 
-TEST(AnyTestOperators, AddAnyToANumber)
+TEST_MEM(AnyTestOperators, AddAnyToANumber)
 {
   auto x = myodd::dynamic::Any(10);
   x = 20 + x;
   ASSERT_EQ(30, x);
 }
 
-TEST(AnyTestOperators, SubstractAnyToANumber)
+TEST_MEM(AnyTestOperators, SubstractAnyToANumber)
 {
   auto x = myodd::dynamic::Any(10);
   x = 40 - x;
   ASSERT_EQ(30, x);
 }
 
-TEST(AnyTestOperators, MultiplyAnyToANumber)
+TEST_MEM(AnyTestOperators, MultiplyAnyToANumber)
 {
   auto x = myodd::dynamic::Any(10);
   x = 40 * x;
   ASSERT_EQ(400, x);
 }
 
-TEST(AnyTestOperators, AddAnyToANumberAndCreate)
+TEST_MEM(AnyTestOperators, AddAnyToANumberAndCreate)
 {
   auto x = myodd::dynamic::Any(10);
   auto y = 20 + x;
   ASSERT_EQ(30, y);
 }
 
-TEST(AnyTestOperators, SubstractAnyToANumberAndCreate)
+TEST_MEM(AnyTestOperators, SubstractAnyToANumberAndCreate)
 {
   auto x = myodd::dynamic::Any(10);
   auto y = 40 - x;
   ASSERT_EQ(30, y);
 }
 
-TEST(AnyTestOperators, MultiplyAnyToANumberAndCreate)
+TEST_MEM(AnyTestOperators, MultiplyAnyToANumberAndCreate)
 {
   auto x = myodd::dynamic::Any(10);
   auto y = 40 * x;
   ASSERT_EQ(400, y);
 }
 
-TEST(AnyTestOperators, AddTwoDifferentTypes )
+TEST_MEM(AnyTestOperators, AddTwoDifferentTypes )
 {
   auto x = myodd::dynamic::Any( (int)10 );
   auto y = myodd::dynamic::Any( (double)20.5 );
@@ -302,7 +302,7 @@ TEST(AnyTestOperators, AddTwoDifferentTypes )
   ASSERT_EQ(20.5, y);
 }
 
-TEST(AnyTestOperators, SubstractwoDifferentTypes)
+TEST_MEM(AnyTestOperators, SubstractwoDifferentTypes)
 {
   auto x = myodd::dynamic::Any((int)30);
   auto y = myodd::dynamic::Any((double)10.5);
@@ -312,7 +312,7 @@ TEST(AnyTestOperators, SubstractwoDifferentTypes)
   ASSERT_EQ(10.5, y);
 }
 
-TEST(AnyTestOperators, MultiplytwoDifferentTypes)
+TEST_MEM(AnyTestOperators, MultiplytwoDifferentTypes)
 {
   auto x = myodd::dynamic::Any((int)30);
   auto y = myodd::dynamic::Any((double)10.5);
@@ -322,7 +322,7 @@ TEST(AnyTestOperators, MultiplytwoDifferentTypes)
   ASSERT_EQ(10.5, y);
 }
 
-TEST(AnyTestOperators, AddTwoBlooean)
+TEST_MEM(AnyTestOperators, AddTwoBlooean)
 {
   auto x = myodd::dynamic::Any( true );
   auto y = myodd::dynamic::Any( false );
@@ -332,7 +332,7 @@ TEST(AnyTestOperators, AddTwoBlooean)
   ASSERT_EQ(false, y);
 }
 
-TEST(AnyTestOperators, SubstractTwoBlooean)
+TEST_MEM(AnyTestOperators, SubstractTwoBlooean)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(false);
@@ -347,7 +347,7 @@ TEST(AnyTestOperators, SubstractTwoBlooean)
   ASSERT_EQ(false, y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoBlooean)
+TEST_MEM(AnyTestOperators, MultiplyTwoBlooean)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(false);
@@ -362,7 +362,7 @@ TEST(AnyTestOperators, MultiplyTwoBlooean)
   ASSERT_EQ(false, y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoTrueBlooean)
+TEST_MEM(AnyTestOperators, MultiplyTwoTrueBlooean)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(true);
@@ -372,7 +372,7 @@ TEST(AnyTestOperators, MultiplyTwoTrueBlooean)
   ASSERT_EQ(true, y);
 }
 
-TEST(AnyTestOperators, AddANumberToABoolean)
+TEST_MEM(AnyTestOperators, AddANumberToABoolean)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(10);
@@ -382,7 +382,7 @@ TEST(AnyTestOperators, AddANumberToABoolean)
   ASSERT_EQ(10, y);
 }
 
-TEST(AnyTestOperators, SubstractANumberFromABoolean)
+TEST_MEM(AnyTestOperators, SubstractANumberFromABoolean)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(10);
@@ -392,7 +392,7 @@ TEST(AnyTestOperators, SubstractANumberFromABoolean)
   ASSERT_EQ(10, y);
 }
 
-TEST(AnyTestOperators, MultiplyANumberAndABoolean)
+TEST_MEM(AnyTestOperators, MultiplyANumberAndABoolean)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(10);
@@ -402,7 +402,7 @@ TEST(AnyTestOperators, MultiplyANumberAndABoolean)
   ASSERT_EQ(10, y);
 }
 
-TEST(AnyTestOperators, AddNullToABooleanBecomesAnInt)
+TEST_MEM(AnyTestOperators, AddNullToABooleanBecomesAnInt)
 {
   auto x = myodd::dynamic::Any( nullptr );
   auto y = myodd::dynamic::Any( true );
@@ -412,7 +412,7 @@ TEST(AnyTestOperators, AddNullToABooleanBecomesAnInt)
   ASSERT_EQ(true, y);
 }
 
-TEST(AnyTestOperators, SubstractNullFromABooleanBecomesAnInt)
+TEST_MEM(AnyTestOperators, SubstractNullFromABooleanBecomesAnInt)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(true);
@@ -422,7 +422,7 @@ TEST(AnyTestOperators, SubstractNullFromABooleanBecomesAnInt)
   ASSERT_EQ(true, y);
 }
 
-TEST(AnyTestOperators, MultiplyNullAndABooleanBecomesAnInt)
+TEST_MEM(AnyTestOperators, MultiplyNullAndABooleanBecomesAnInt)
 {
   auto x = myodd::dynamic::Any(nullptr);
   auto y = myodd::dynamic::Any(true);
@@ -432,7 +432,7 @@ TEST(AnyTestOperators, MultiplyNullAndABooleanBecomesAnInt)
   ASSERT_EQ(true, y);
 }
 
-TEST(AnyTestOperators, AddBooleanToNullBecomesAnInt)
+TEST_MEM(AnyTestOperators, AddBooleanToNullBecomesAnInt)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(nullptr);
@@ -442,7 +442,7 @@ TEST(AnyTestOperators, AddBooleanToNullBecomesAnInt)
   ASSERT_EQ(nullptr, y);
 }
 
-TEST(AnyTestOperators, SubstractBooleanFromNullBecomesAnInt)
+TEST_MEM(AnyTestOperators, SubstractBooleanFromNullBecomesAnInt)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(nullptr);
@@ -452,7 +452,7 @@ TEST(AnyTestOperators, SubstractBooleanFromNullBecomesAnInt)
   ASSERT_EQ(nullptr, y);
 }
 
-TEST(AnyTestOperators, MultiplyBooleanAndNullBecomesAnInt)
+TEST_MEM(AnyTestOperators, MultiplyBooleanAndNullBecomesAnInt)
 {
   auto x = myodd::dynamic::Any(true);
   auto y = myodd::dynamic::Any(nullptr);
@@ -462,7 +462,7 @@ TEST(AnyTestOperators, MultiplyBooleanAndNullBecomesAnInt)
   ASSERT_EQ(nullptr, y);
 }
 
-TEST(AnyTestOperators, ChainNumberAddition)
+TEST_MEM(AnyTestOperators, ChainNumberAddition)
 {
   auto w = myodd::dynamic::Any((long)10);
   auto x = myodd::dynamic::Any((long)20);
@@ -475,7 +475,7 @@ TEST(AnyTestOperators, ChainNumberAddition)
   ASSERT_EQ((long)30, y);
 }
 
-TEST(AnyTestOperators, ChainNumberSubstraction)
+TEST_MEM(AnyTestOperators, ChainNumberSubstraction)
 {
   auto w = myodd::dynamic::Any((long)40);
   auto x = myodd::dynamic::Any((long)20);
@@ -488,7 +488,7 @@ TEST(AnyTestOperators, ChainNumberSubstraction)
   ASSERT_EQ((long)10, y);
 }
 
-TEST(AnyTestOperators, ChainNumberMultiplication)
+TEST_MEM(AnyTestOperators, ChainNumberMultiplication)
 {
   auto w = myodd::dynamic::Any((long)40);
   auto x = myodd::dynamic::Any((long)20);
@@ -501,7 +501,7 @@ TEST(AnyTestOperators, ChainNumberMultiplication)
   ASSERT_EQ((long)10, y);
 }
 
-TEST(AnyTestOperators, AddTwoCharOnlyIfTheCharIsANumber)
+TEST_MEM(AnyTestOperators, AddTwoCharOnlyIfTheCharIsANumber)
 {
   auto x = myodd::dynamic::Any('1');
   auto y = myodd::dynamic::Any('9' );
@@ -511,7 +511,7 @@ TEST(AnyTestOperators, AddTwoCharOnlyIfTheCharIsANumber)
   ASSERT_EQ('9', y);
 }
 
-TEST(AnyTestOperators, SubstractTwoCharOnlyIfTheCharIsANumber)
+TEST_MEM(AnyTestOperators, SubstractTwoCharOnlyIfTheCharIsANumber)
 {
   auto x = myodd::dynamic::Any('9');
   auto y = myodd::dynamic::Any('1');
@@ -521,7 +521,7 @@ TEST(AnyTestOperators, SubstractTwoCharOnlyIfTheCharIsANumber)
   ASSERT_EQ('1', y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoCharOnlyIfTheCharIsANumber)
+TEST_MEM(AnyTestOperators, MultiplyTwoCharOnlyIfTheCharIsANumber)
 {
   auto x = myodd::dynamic::Any('9');
   auto y = myodd::dynamic::Any('2');
@@ -531,7 +531,7 @@ TEST(AnyTestOperators, MultiplyTwoCharOnlyIfTheCharIsANumber)
   ASSERT_EQ('2', y);
 }
 
-TEST(AnyTestOperators, AddTwoWideCharOnlyIfTheCharIsANumber)
+TEST_MEM(AnyTestOperators, AddTwoWideCharOnlyIfTheCharIsANumber)
 {
   auto x = myodd::dynamic::Any(L'1');
   auto y = myodd::dynamic::Any(L'9');
@@ -541,7 +541,7 @@ TEST(AnyTestOperators, AddTwoWideCharOnlyIfTheCharIsANumber)
   ASSERT_EQ(L'9', y);
 }
 
-TEST(AnyTestOperators, SubstractTwoWideCharOnlyIfTheCharIsANumber)
+TEST_MEM(AnyTestOperators, SubstractTwoWideCharOnlyIfTheCharIsANumber)
 {
   auto x = myodd::dynamic::Any(L'9');
   auto y = myodd::dynamic::Any(L'1');
@@ -551,7 +551,7 @@ TEST(AnyTestOperators, SubstractTwoWideCharOnlyIfTheCharIsANumber)
   ASSERT_EQ(L'1', y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoWideCharOnlyIfTheCharIsANumber)
+TEST_MEM(AnyTestOperators, MultiplyTwoWideCharOnlyIfTheCharIsANumber)
 {
   auto x = myodd::dynamic::Any(L'9');
   auto y = myodd::dynamic::Any(L'2');
@@ -561,7 +561,7 @@ TEST(AnyTestOperators, MultiplyTwoWideCharOnlyIfTheCharIsANumber)
   ASSERT_EQ(L'2', y);
 }
 
-TEST(AnyTestOperators, AddTwoCharZeroIfNoneAreNumbers)
+TEST_MEM(AnyTestOperators, AddTwoCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any('a');
   auto y = myodd::dynamic::Any('&');
@@ -571,7 +571,7 @@ TEST(AnyTestOperators, AddTwoCharZeroIfNoneAreNumbers)
   ASSERT_EQ('&', y);
 }
 
-TEST(AnyTestOperators, SubstractTwoCharZeroIfNoneAreNumbers)
+TEST_MEM(AnyTestOperators, SubstractTwoCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any('a');
   auto y = myodd::dynamic::Any('&');
@@ -581,7 +581,7 @@ TEST(AnyTestOperators, SubstractTwoCharZeroIfNoneAreNumbers)
   ASSERT_EQ('&', y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoCharZeroIfNoneAreNumbers)
+TEST_MEM(AnyTestOperators, MultiplyTwoCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any('a');
   auto y = myodd::dynamic::Any('&');
@@ -591,7 +591,7 @@ TEST(AnyTestOperators, MultiplyTwoCharZeroIfNoneAreNumbers)
   ASSERT_EQ('&', y);
 }
 
-TEST(AnyTestOperators, AddTwoWideCharZeroIfNoneAreNumbers)
+TEST_MEM(AnyTestOperators, AddTwoWideCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any(L'a');
   auto y = myodd::dynamic::Any(L'&');
@@ -601,7 +601,7 @@ TEST(AnyTestOperators, AddTwoWideCharZeroIfNoneAreNumbers)
   ASSERT_EQ(L'&', y);
 }
 
-TEST(AnyTestOperators, SubstractTwoWideCharZeroIfNoneAreNumbers)
+TEST_MEM(AnyTestOperators, SubstractTwoWideCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any(L'a');
   auto y = myodd::dynamic::Any(L'&');
@@ -611,7 +611,7 @@ TEST(AnyTestOperators, SubstractTwoWideCharZeroIfNoneAreNumbers)
   ASSERT_EQ(L'&', y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoWideCharZeroIfNoneAreNumbers)
+TEST_MEM(AnyTestOperators, MultiplyTwoWideCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any(L'a');
   auto y = myodd::dynamic::Any(L'&');
@@ -621,7 +621,7 @@ TEST(AnyTestOperators, MultiplyTwoWideCharZeroIfNoneAreNumbers)
   ASSERT_EQ(L'&', y);
 }
 
-TEST(AnyTestOperators, AddTwoCharIfOneIsANumber)
+TEST_MEM(AnyTestOperators, AddTwoCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any('1');
   auto y = myodd::dynamic::Any('&');
@@ -631,7 +631,7 @@ TEST(AnyTestOperators, AddTwoCharIfOneIsANumber)
   ASSERT_EQ('&', y);
 }
 
-TEST(AnyTestOperators, AddTwoStringIfOneIsANumber)
+TEST_MEM(AnyTestOperators, AddTwoStringIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any("1234");
   auto y = myodd::dynamic::Any("Hello");
@@ -641,7 +641,7 @@ TEST(AnyTestOperators, AddTwoStringIfOneIsANumber)
   ASSERT_EQ("Hello", y);
 }
 
-TEST(AnyTestOperators, SubtractTwoCharIfOneIsANumber)
+TEST_MEM(AnyTestOperators, SubtractTwoCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any('1');
   auto y = myodd::dynamic::Any('&');
@@ -651,7 +651,7 @@ TEST(AnyTestOperators, SubtractTwoCharIfOneIsANumber)
   ASSERT_EQ('&', y);
 }
 
-TEST(AnyTestOperators, SubstractTwoStringIfOneIsANumber)
+TEST_MEM(AnyTestOperators, SubstractTwoStringIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any("1234");
   auto y = myodd::dynamic::Any("Hello");
@@ -661,7 +661,7 @@ TEST(AnyTestOperators, SubstractTwoStringIfOneIsANumber)
   ASSERT_EQ("Hello", y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoCharIfOneIsANumber)
+TEST_MEM(AnyTestOperators, MultiplyTwoCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any('1');
   auto y = myodd::dynamic::Any('&');
@@ -671,7 +671,7 @@ TEST(AnyTestOperators, MultiplyTwoCharIfOneIsANumber)
   ASSERT_EQ('&', y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoStringIfOneIsANumber)
+TEST_MEM(AnyTestOperators, MultiplyTwoStringIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any("1234");
   auto y = myodd::dynamic::Any("Hello");
@@ -681,7 +681,7 @@ TEST(AnyTestOperators, MultiplyTwoStringIfOneIsANumber)
   ASSERT_EQ("Hello", y);
 }
 
-TEST(AnyTestOperators, AddTwoWideCharIfOneIsANumber)
+TEST_MEM(AnyTestOperators, AddTwoWideCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any(L'1');
   auto y = myodd::dynamic::Any(L'&');
@@ -691,7 +691,7 @@ TEST(AnyTestOperators, AddTwoWideCharIfOneIsANumber)
   ASSERT_EQ(L'&', y);
 }
 
-TEST(AnyTestOperators, AddTwoWideStringIfOneIsANumber)
+TEST_MEM(AnyTestOperators, AddTwoWideStringIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any(L"1234");
   auto y = myodd::dynamic::Any(L"Hello");
@@ -701,7 +701,7 @@ TEST(AnyTestOperators, AddTwoWideStringIfOneIsANumber)
   ASSERT_EQ(L"Hello", y);
 }
 
-TEST(AnyTestOperators, SubstractTwoWideStringIfOneIsANumber)
+TEST_MEM(AnyTestOperators, SubstractTwoWideStringIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any(L"1234");
   auto y = myodd::dynamic::Any(L"Hello");
@@ -711,7 +711,7 @@ TEST(AnyTestOperators, SubstractTwoWideStringIfOneIsANumber)
   ASSERT_EQ(L"Hello", y);
 }
 
-TEST(AnyTestOperators, SubstractTwoWideCharIfOneIsANumber)
+TEST_MEM(AnyTestOperators, SubstractTwoWideCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any(L'1');
   auto y = myodd::dynamic::Any(L'&');
@@ -721,7 +721,7 @@ TEST(AnyTestOperators, SubstractTwoWideCharIfOneIsANumber)
   ASSERT_EQ(L'&', y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoWideStringIfOneIsANumber)
+TEST_MEM(AnyTestOperators, MultiplyTwoWideStringIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any(L"1234");
   auto y = myodd::dynamic::Any(L"Hello");
@@ -731,7 +731,7 @@ TEST(AnyTestOperators, MultiplyTwoWideStringIfOneIsANumber)
   ASSERT_EQ(L"Hello", y);
 }
 
-TEST(AnyTestOperators, MultiplyTwoWideCharIfOneIsANumber)
+TEST_MEM(AnyTestOperators, MultiplyTwoWideCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any(L'1');
   auto y = myodd::dynamic::Any(L'&');
@@ -741,7 +741,7 @@ TEST(AnyTestOperators, MultiplyTwoWideCharIfOneIsANumber)
   ASSERT_EQ(L'&', y);
 }
 
-TEST(AnyTestOperators, AddACharAndAWideChar )
+TEST_MEM(AnyTestOperators, AddACharAndAWideChar )
 {
   auto x = myodd::dynamic::Any(L'1');
   auto y = myodd::dynamic::Any('2');
@@ -751,7 +751,7 @@ TEST(AnyTestOperators, AddACharAndAWideChar )
   ASSERT_EQ('2', y);
 }
 
-TEST(AnyTestOperators, SubstractACharAndAWideChar)
+TEST_MEM(AnyTestOperators, SubstractACharAndAWideChar)
 {
   auto x = myodd::dynamic::Any(L'4');
   auto y = myodd::dynamic::Any('1');
@@ -761,7 +761,7 @@ TEST(AnyTestOperators, SubstractACharAndAWideChar)
   ASSERT_EQ('1', y);
 }
 
-TEST(AnyTestOperators, MultiplyACharAndAWideChar)
+TEST_MEM(AnyTestOperators, MultiplyACharAndAWideChar)
 {
   auto x = myodd::dynamic::Any(L'4');
   auto y = myodd::dynamic::Any('2');
@@ -771,7 +771,7 @@ TEST(AnyTestOperators, MultiplyACharAndAWideChar)
   ASSERT_EQ('2', y);
 }
 
-TEST(AnyTestOperators, AdditionAndSubstraction)
+TEST_MEM(AnyTestOperators, AdditionAndSubstraction)
 {
   auto w = myodd::dynamic::Any((long)40);
   auto x = myodd::dynamic::Any((long)20);
@@ -784,7 +784,7 @@ TEST(AnyTestOperators, AdditionAndSubstraction)
   ASSERT_EQ((long)10, y);
 }
 
-TEST(AnyTestOperators, AdditionAndSubstractionReUseNumbers)
+TEST_MEM(AnyTestOperators, AdditionAndSubstractionReUseNumbers)
 {
   auto w = myodd::dynamic::Any((long)40);
   auto x = myodd::dynamic::Any((long)20);
@@ -798,7 +798,7 @@ TEST(AnyTestOperators, AdditionAndSubstractionReUseNumbers)
   ASSERT_EQ((long)10, y);
 }
 
-TEST(AnyTestOperators, MultiplicationAdditionAndSubstractionReUseNumbers)
+TEST_MEM(AnyTestOperators, MultiplicationAdditionAndSubstractionReUseNumbers)
 {
   auto v = myodd::dynamic::Any((long)5);
   auto w = myodd::dynamic::Any((long)40);
@@ -814,7 +814,7 @@ TEST(AnyTestOperators, MultiplicationAdditionAndSubstractionReUseNumbers)
   ASSERT_EQ((long)10, y);
 }
 
-TEST(AnyTestOperators, MultiplicationAdditionAndSubstractionParentheseReUseNumbers)
+TEST_MEM(AnyTestOperators, MultiplicationAdditionAndSubstractionParentheseReUseNumbers)
 {
   auto v = myodd::dynamic::Any((long)5);
   auto w = myodd::dynamic::Any((long)40);
@@ -831,60 +831,60 @@ TEST(AnyTestOperators, MultiplicationAdditionAndSubstractionParentheseReUseNumbe
   ASSERT_EQ((long)10, y);
 }
 
-TEST(AnyTestOperators, DivideANumberByNullWillThrow)
+TEST_MEM(AnyTestOperators, DivideANumberByNullWillThrow)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>());
   EXPECT_THROW(any / nullptr, std::overflow_error);
 }
 
-TEST(AnyTestOperators, DivideZeroByNullWillThrow)
+TEST_MEM(AnyTestOperators, DivideZeroByNullWillThrow)
 {
   auto any = myodd::dynamic::Any(0);
   EXPECT_THROW(any / nullptr, std::overflow_error);
 }
 
-TEST(AnyTestOperators, DivideANumberByNullAnyWillThrow)
+TEST_MEM(AnyTestOperators, DivideANumberByNullAnyWillThrow)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto nullany = myodd::dynamic::Any( nullptr );
   EXPECT_THROW(any / nullany, std::overflow_error);
 }
 
-TEST(AnyTestOperators, DivideANumberByZeroWillThrow)
+TEST_MEM(AnyTestOperators, DivideANumberByZeroWillThrow)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   EXPECT_THROW(any / 0, std::overflow_error);
 }
 
-TEST(AnyTestOperators, DivideANumberByZeroAnyWillThrow)
+TEST_MEM(AnyTestOperators, DivideANumberByZeroAnyWillThrow)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto zeroany = myodd::dynamic::Any(0);
   EXPECT_THROW(any / zeroany, std::overflow_error);
 }
 
-TEST(AnyTestOperators, DivideANumberByZeroAnyDoubleWillThrow)
+TEST_MEM(AnyTestOperators, DivideANumberByZeroAnyDoubleWillThrow)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto nullany = myodd::dynamic::Any( (double)0.0 );
   EXPECT_THROW(any / nullany, std::overflow_error);
 }
 
-TEST(AnyTestOperators, DivideTwoNullAnyWillThrow)
+TEST_MEM(AnyTestOperators, DivideTwoNullAnyWillThrow)
 {
   auto nullany1 = myodd::dynamic::Any(nullptr);
   auto nullany2 = myodd::dynamic::Any(nullptr);
   EXPECT_THROW(nullany1 / nullany2, std::overflow_error);
 }
 
-TEST(AnyTestOperators, ZeroDividedByAnythingIsZero )
+TEST_MEM(AnyTestOperators, ZeroDividedByAnythingIsZero )
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto x = 0 / any;
   ASSERT_EQ(0, x);
 }
 
-TEST(AnyTestOperators, AnyZeroDividedByAnythingIsZero)
+TEST_MEM(AnyTestOperators, AnyZeroDividedByAnythingIsZero)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto zero = myodd::dynamic::Any(0);
@@ -893,7 +893,7 @@ TEST(AnyTestOperators, AnyZeroDividedByAnythingIsZero)
   ASSERT_EQ(zero, x);
 }
 
-TEST(AnyTestOperators, NonNumberStringDividedByAnythingIsZero)
+TEST_MEM(AnyTestOperators, NonNumberStringDividedByAnythingIsZero)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto something = myodd::dynamic::Any("Hello");
@@ -901,7 +901,7 @@ TEST(AnyTestOperators, NonNumberStringDividedByAnythingIsZero)
   ASSERT_EQ(0, x);
 }
 
-TEST(AnyTestOperators, NonNumberWideStringDividedByAnythingIsZero)
+TEST_MEM(AnyTestOperators, NonNumberWideStringDividedByAnythingIsZero)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto something = myodd::dynamic::Any(L"Hello");
@@ -909,7 +909,7 @@ TEST(AnyTestOperators, NonNumberWideStringDividedByAnythingIsZero)
   ASSERT_EQ(0, x);
 }
 
-TEST(AnyTestOperators, NonNumberCharDividedByAnythingIsZero)
+TEST_MEM(AnyTestOperators, NonNumberCharDividedByAnythingIsZero)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto something = myodd::dynamic::Any('&');
@@ -917,7 +917,7 @@ TEST(AnyTestOperators, NonNumberCharDividedByAnythingIsZero)
   ASSERT_EQ(0, x);
 }
 
-TEST(AnyTestOperators, NonNumberWideCharDividedByAnythingIsZero)
+TEST_MEM(AnyTestOperators, NonNumberWideCharDividedByAnythingIsZero)
 {
   auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
   auto something = myodd::dynamic::Any(L'&');
@@ -925,7 +925,7 @@ TEST(AnyTestOperators, NonNumberWideCharDividedByAnythingIsZero)
   ASSERT_EQ(0, x);
 }
 
-TEST(AnyTestOperators, DivideTwoIntegers)
+TEST_MEM(AnyTestOperators, DivideTwoIntegers)
 {
   for (;;)
   {
@@ -954,7 +954,7 @@ TEST(AnyTestOperators, DivideTwoIntegers)
   }
 }
 
-TEST(AnyTestOperators, DivideTwoBoolean)
+TEST_MEM(AnyTestOperators, DivideTwoBoolean)
 {
   auto any1 = myodd::dynamic::Any(true);
   auto any2 = myodd::dynamic::Any(true);
@@ -963,7 +963,7 @@ TEST(AnyTestOperators, DivideTwoBoolean)
   ASSERT_EQ(1, anyResult);
 }
 
-TEST(AnyTestOperators, DivideCharInteger)
+TEST_MEM(AnyTestOperators, DivideCharInteger)
 {
   auto any1 = myodd::dynamic::Any('4');
   auto any2 = myodd::dynamic::Any('2');
@@ -975,7 +975,7 @@ TEST(AnyTestOperators, DivideCharInteger)
   ASSERT_EQ('2', any2);
 }
 
-TEST(AnyTestOperators, DivideWideCharInteger)
+TEST_MEM(AnyTestOperators, DivideWideCharInteger)
 {
   auto any1 = myodd::dynamic::Any(L'4');
   auto any2 = myodd::dynamic::Any(L'2');
@@ -987,7 +987,7 @@ TEST(AnyTestOperators, DivideWideCharInteger)
   ASSERT_EQ(L'2', any2);
 }
 
-TEST(AnyTestOperators, DivideCharDouble)
+TEST_MEM(AnyTestOperators, DivideCharDouble)
 {
   auto any1 = myodd::dynamic::Any('5');
   auto any2 = myodd::dynamic::Any('2');
@@ -999,7 +999,7 @@ TEST(AnyTestOperators, DivideCharDouble)
   ASSERT_EQ('2', any2);
 }
 
-TEST(AnyTestOperators, DivideWideCharDouble)
+TEST_MEM(AnyTestOperators, DivideWideCharDouble)
 {
   auto any1 = myodd::dynamic::Any(L'5');
   auto any2 = myodd::dynamic::Any(L'2');
@@ -1011,7 +1011,7 @@ TEST(AnyTestOperators, DivideWideCharDouble)
   ASSERT_EQ(L'2', any2);
 }
 
-TEST(AnyTestOperators, DivideWideCharAndCharInteger)
+TEST_MEM(AnyTestOperators, DivideWideCharAndCharInteger)
 {
   auto any1 = myodd::dynamic::Any(L'4');
   auto any2 = myodd::dynamic::Any('2');
@@ -1023,7 +1023,7 @@ TEST(AnyTestOperators, DivideWideCharAndCharInteger)
   ASSERT_EQ('2', any2);
 }
 
-TEST(AnyTestOperators, DivideWideCharAndCharDouble)
+TEST_MEM(AnyTestOperators, DivideWideCharAndCharDouble)
 {
   auto any1 = myodd::dynamic::Any(L'5');
   auto any2 = myodd::dynamic::Any('2');
@@ -1034,7 +1034,7 @@ TEST(AnyTestOperators, DivideWideCharAndCharDouble)
   ASSERT_EQ('2', any2);
 }
 
-TEST(AnyTestOperators, ShortcutDivide)
+TEST_MEM(AnyTestOperators, ShortcutDivide)
 {
   auto any1 = myodd::dynamic::Any(5);
   auto any2 = myodd::dynamic::Any(2);
@@ -1044,7 +1044,7 @@ TEST(AnyTestOperators, ShortcutDivide)
   ASSERT_EQ(2, any2);
 }
 
-TEST(AnyTestOperators, DivideStringDouble)
+TEST_MEM(AnyTestOperators, DivideStringDouble)
 {
   auto any1 = myodd::dynamic::Any("11.9");
   auto any2 = myodd::dynamic::Any("7");
@@ -1053,7 +1053,7 @@ TEST(AnyTestOperators, DivideStringDouble)
   ASSERT_DOUBLE_EQ(1.7, anyResult);
 }
 
-TEST(AnyTestOperators, DivideWideStringDouble)
+TEST_MEM(AnyTestOperators, DivideWideStringDouble)
 {
   auto any1 = myodd::dynamic::Any(L"11.9");
   auto any2 = myodd::dynamic::Any(L"7");
@@ -1062,7 +1062,7 @@ TEST(AnyTestOperators, DivideWideStringDouble)
   ASSERT_DOUBLE_EQ(1.7, anyResult);
 }
 
-TEST(AnyTestOperators, DivideWideStringAndLongDouble)
+TEST_MEM(AnyTestOperators, DivideWideStringAndLongDouble)
 {
   auto any1 = myodd::dynamic::Any(L"694.2");
   auto any2 = myodd::dynamic::Any( (long)52 );
@@ -1071,14 +1071,14 @@ TEST(AnyTestOperators, DivideWideStringAndLongDouble)
   ASSERT_DOUBLE_EQ(13.35, anyResult);
 }
 
-TEST(AnyTestOperators, DivideTwoStringsWillThrowAnError)
+TEST_MEM(AnyTestOperators, DivideTwoStringsWillThrowAnError)
 {
   auto any1 = myodd::dynamic::Any("Hello");
   auto any2 = myodd::dynamic::Any("World");
   EXPECT_THROW(any1 / any2, std::overflow_error);
 }
 
-TEST(AnyTestOperators, DivideTwoWideStringsWillThrowAnError)
+TEST_MEM(AnyTestOperators, DivideTwoWideStringsWillThrowAnError)
 {
   auto any1 = myodd::dynamic::Any(L"Hello");
   auto any2 = myodd::dynamic::Any(L"World");

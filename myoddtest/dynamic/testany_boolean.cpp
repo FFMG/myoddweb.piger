@@ -4,21 +4,21 @@
 #include "../testcommon.h"
 
 // --gtest_filter=AnyTestBoolean* 
-TEST(AnyTestBoolean, NullWillReturnFalse)
+TEST_MEM(AnyTestBoolean, NullWillReturnFalse)
 {
   bool value = BoolRandomNumber();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Boolean_bool, x.Type());
 }
 
-TEST(AnyTestBoolean, ValueIsSaved)
+TEST_MEM(AnyTestBoolean, ValueIsSaved)
 {
   bool value = BoolRandomNumber();
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(value, (bool)x );
 }
 
-TEST(AnyTestBoolean, BooleanIsANumberInt)
+TEST_MEM(AnyTestBoolean, BooleanIsANumberInt)
 {
   bool value = BoolRandomNumber();
   auto x = myodd::dynamic::Any(value);
@@ -26,7 +26,7 @@ TEST(AnyTestBoolean, BooleanIsANumberInt)
   ASSERT_EQ(value ? 1 : 0, (long)x);
 }
 
-TEST(AnyTestBoolean, BooleanIsANumberReal)
+TEST_MEM(AnyTestBoolean, BooleanIsANumberReal)
 {
   bool value = BoolRandomNumber();
   auto x = myodd::dynamic::Any(value);
@@ -35,7 +35,7 @@ TEST(AnyTestBoolean, BooleanIsANumberReal)
   ASSERT_EQ(value ? 1 : 0, (long double)x);
 }
 
-TEST(AnyTestBoolean, RealNumberCanBeABool)
+TEST_MEM(AnyTestBoolean, RealNumberCanBeABool)
 {
   bool value = BoolRandomNumber();
   auto x = myodd::dynamic::Any(value);
@@ -44,19 +44,19 @@ TEST(AnyTestBoolean, RealNumberCanBeABool)
   ASSERT_EQ(value ? 1 : 0, (long double)x);
 }
 
-TEST(AnyTestBoolean, ZeroIsFalse)
+TEST_MEM(AnyTestBoolean, ZeroIsFalse)
 {
   auto x = myodd::dynamic::Any(0);
   ASSERT_FALSE( (bool)x );
 }
 
-TEST(AnyTestBoolean, NonZeroIsTrue)
+TEST_MEM(AnyTestBoolean, NonZeroIsTrue)
 {
   auto x = myodd::dynamic::Any(1);
   ASSERT_TRUE( (bool)x);
 }
 
-TEST(AnyTestCharacter, ValueIskept)
+TEST_MEM(AnyTestCharacter, ValueIskept)
 {
   auto b = BoolRandomNumber();
   auto x = myodd::dynamic::Any(b);

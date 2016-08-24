@@ -4,229 +4,229 @@
 #include "../testcommon.h"
 
 // --gtest_filter=AnyTest* 
-TEST(AnyTest, CheckTheDataType)
+TEST_MEM(AnyTest, CheckTheDataType)
 {
   auto x = myodd::dynamic::Any();
   ASSERT_EQ(myodd::dynamic::Type::type_null, x.Type());
 }
 
-TEST(AnyTest, CanCreateTheValueWithNullPointer)
+TEST_MEM(AnyTest, CanCreateTheValueWithNullPointer)
 {
   auto x = myodd::dynamic::Any( nullptr );
   ASSERT_EQ(myodd::dynamic::Type::type_null, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButIntTypeIsRespected)
 {
   int* i = nullptr;
   auto x = myodd::dynamic::Any(i);
   ASSERT_EQ(myodd::dynamic::Type::Integer_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstIntTypeIsRespected)
 {
   const int* i = nullptr;
   auto x = myodd::dynamic::Any(i);
   ASSERT_EQ(myodd::dynamic::Type::Integer_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButDoubleTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButDoubleTypeIsRespected)
 {
   double* d = nullptr;
   auto x = myodd::dynamic::Any(d);
   ASSERT_EQ(myodd::dynamic::Type::Floating_point_double, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstDoubleTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstDoubleTypeIsRespected)
 {
   const double* d = nullptr;
   auto x = myodd::dynamic::Any(d);
   ASSERT_EQ(myodd::dynamic::Type::Floating_point_double, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButLongDoubleTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButLongDoubleTypeIsRespected)
 {
   long double* d = nullptr;
   auto x = myodd::dynamic::Any(d);
   ASSERT_EQ(myodd::dynamic::Type::Floating_point_long_double, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstLongDoubleTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstLongDoubleTypeIsRespected)
 {
   const long double* d = nullptr;
   auto x = myodd::dynamic::Any(d);
   ASSERT_EQ(myodd::dynamic::Type::Floating_point_long_double, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButLongIntTypeIsRespected)
 {
   long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstLongIntTypeIsRespected)
 {
   const long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButLongLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButLongLongIntTypeIsRespected)
 {
   long long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstLongLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstLongLongIntTypeIsRespected)
 {
   const long long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_long_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButShortIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButShortIntTypeIsRespected)
 {
   short int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_short_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstShortIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstShortIntTypeIsRespected)
 {
   const short int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_short_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButUnsignedIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButUnsignedIntTypeIsRespected)
 {
   unsigned int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstUnsignedIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstUnsignedIntTypeIsRespected)
 {
   const unsigned int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButUnsignedLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButUnsignedLongIntTypeIsRespected)
 {
   unsigned long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstUnsignedLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstUnsignedLongIntTypeIsRespected)
 {
   const unsigned long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButUnsignedLongLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButUnsignedLongLongIntTypeIsRespected)
 {
   unsigned long long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstUnsignedLongLongIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstUnsignedLongLongIntTypeIsRespected)
 {
   const unsigned long long int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_long_long_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButUnsignedShortIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButUnsignedShortIntTypeIsRespected)
 {
   unsigned short int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_short_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstUnsignedShortIntTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstUnsignedShortIntTypeIsRespected)
 {
   const unsigned short int* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_short_int, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButUnsignedCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButUnsignedCharTypeIsRespected)
 {
   unsigned char* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Character_unsigned_char, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstUnsignedCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstUnsignedCharTypeIsRespected)
 {
   const unsigned char* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Character_unsigned_char, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButSignedCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButSignedCharTypeIsRespected)
 {
   signed char* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Character_signed_char, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstSignedCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstSignedCharTypeIsRespected)
 {
   const signed char* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Character_signed_char, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButWideCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButWideCharTypeIsRespected)
 {
   wchar_t* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Character_wchar_t, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButWideConstCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButWideConstCharTypeIsRespected)
 {
   const wchar_t* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Character_wchar_t, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButBoolTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButBoolTypeIsRespected)
 {
   bool* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Boolean_bool, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstBoolTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstBoolTypeIsRespected)
 {
   const bool* b = nullptr;
   auto x = myodd::dynamic::Any(b);
   ASSERT_EQ(myodd::dynamic::Type::Boolean_bool, x.Type());
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButCharTypeIsRespected)
 {
   char* c = nullptr;
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ('\0', x);
 }
 
-TEST(AnyTest, AddressOfPointerIsNullButConstCharTypeIsRespected)
+TEST_MEM(AnyTest, AddressOfPointerIsNullButConstCharTypeIsRespected)
 {
   const char* c = nullptr;
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ('\0', x);
 }
 
-TEST(AnyTest, CanCreateWithAPointerValueInt)
+TEST_MEM(AnyTest, CanCreateWithAPointerValueInt)
 {
   auto value = IntRandomNumber<short>();
   auto x = myodd::dynamic::Any( &value );
@@ -234,7 +234,7 @@ TEST(AnyTest, CanCreateWithAPointerValueInt)
   ASSERT_EQ(value, x );
 }
 
-TEST(AnyTest, CanCreateWithAPointerValueRealDouble)
+TEST_MEM(AnyTest, CanCreateWithAPointerValueRealDouble)
 {
   auto value = RealRandomNumber<double>();
   auto x = myodd::dynamic::Any(&value);
@@ -242,7 +242,7 @@ TEST(AnyTest, CanCreateWithAPointerValueRealDouble)
   ASSERT_EQ(value, x);
 }
 
-TEST(AnyTest, CompareTwoAnyThatAreNotTheSameValue)
+TEST_MEM(AnyTest, CompareTwoAnyThatAreNotTheSameValue)
 {
   auto valueX = IntRandomNumber<short>();
   auto valueY = 0;
@@ -257,7 +257,7 @@ TEST(AnyTest, CompareTwoAnyThatAreNotTheSameValue)
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTest, EqualOperatorFromNothing)
+TEST_MEM(AnyTest, EqualOperatorFromNothing)
 {
   auto value = IntRandomNumber<short>();
   auto x = myodd::dynamic::Any( value );
@@ -267,7 +267,7 @@ TEST(AnyTest, EqualOperatorFromNothing)
   ASSERT_EQ(value, y);
 }
 
-TEST(AnyTest, SetAnyNullValueToNewValue)
+TEST_MEM(AnyTest, SetAnyNullValueToNewValue)
 {
   //  all the underlying values are null
   auto x = myodd::dynamic::Any(nullptr);
@@ -279,7 +279,7 @@ TEST(AnyTest, SetAnyNullValueToNewValue)
   ASSERT_EQ(myodd::dynamic::Type::type_null, y.Type());
 }
 
-TEST(AnyTest, SetAnyNullValueToOldValue)
+TEST_MEM(AnyTest, SetAnyNullValueToOldValue)
 {
   //  all the underlying values are null
   auto x = myodd::dynamic::Any(nullptr);

@@ -13,10 +13,63 @@
 #undef max
 #undef min
 
+# define MEMORY_GUARD_START \
+_CrtMemState memState_; \
+_CrtMemCheckpoint(&memState_);\
+{
+
+# define MEMORY_GUARD_END \
+}\
+_CrtMemState stateNow, stateDiff;\
+_CrtMemCheckpoint(&stateNow);\
+int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);\
+if (diffResult)\
+{\
+  FAIL() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";\
+}
+
+#define GTEST_TEST_MEM_(test_case_name, test_name, parent_class, parent_id)\
+class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
+ public:\
+  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() { \
+    _CrtMemCheckpoint(&memState_);\
+  }\
+  \
+  virtual ~GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() { \
+    _CrtMemState stateNow, stateDiff;\
+    _CrtMemCheckpoint(&stateNow);\
+    int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);\
+    if (diffResult)\
+    {\
+      ADD_FAILURE() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";\
+    }\
+  }\
+ private:\
+  _CrtMemState memState_; \
+  virtual void TestBody();\
+  static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;\
+  GTEST_DISALLOW_COPY_AND_ASSIGN_(\
+      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));\
+};\
+\
+::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
+  ::test_info_ =\
+    ::testing::internal::MakeAndRegisterTestInfo(\
+        #test_case_name, #test_name, NULL, NULL, \
+        (parent_id), \
+        parent_class::SetUpTestCase, \
+        parent_class::TearDownTestCase, \
+        new ::testing::internal::TestFactoryImpl<\
+            GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>);\
+void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
+
+# define TEST_MEM(test_case_name, test_name) \
+  GTEST_TEST_MEM_(test_case_name, test_name,\
+    ::testing::Test, ::testing::internal::GetTestTypeId())
+
 template<typename T>
 T RealRandomNumber()
 {
-
   // construct a trivial random generator engine from a time-based seed:
   unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
   std::default_random_engine generator(seed);

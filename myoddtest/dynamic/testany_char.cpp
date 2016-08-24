@@ -4,63 +4,63 @@
 #include "dynamic/any.h"
 
 // --gtest_filter=AnyTestCharacter* 
-TEST(AnyTestCharacter, CheckTypeChar)
+TEST_MEM(AnyTestCharacter, CheckTypeChar)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any( c );
   ASSERT_EQ(myodd::dynamic::Type::Character_char, x.Type());
 }
 
-TEST(AnyTestCharacter, CheckTypeWChar)
+TEST_MEM(AnyTestCharacter, CheckTypeWChar)
 {
   wchar_t c = CharRandom<wchar_t>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ(myodd::dynamic::Type::Character_wchar_t, x.Type());
 }
 
-TEST(AnyTestCharacter, CheckTypeUnsignedChar)
+TEST_MEM(AnyTestCharacter, CheckTypeUnsignedChar)
 {
   unsigned char c = CharRandom<unsigned char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ(myodd::dynamic::Type::Character_unsigned_char, x.Type());
 }
 
-TEST(AnyTestCharacter, CheckTypeSignedChar)
+TEST_MEM(AnyTestCharacter, CheckTypeSignedChar)
 {
   signed char c = CharRandom<signed char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ(myodd::dynamic::Type::Character_signed_char, x.Type());
 }
 
-TEST(AnyTestCharacter, CharToUnsignedChar)
+TEST_MEM(AnyTestCharacter, CharToUnsignedChar)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ((unsigned char)c, (unsigned char)x);
 }
 
-TEST(AnyTestCharacter, UnsignedCharToChar)
+TEST_MEM(AnyTestCharacter, UnsignedCharToChar)
 {
   unsigned char c = CharRandom<unsigned char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ((char)c, (char)x);
 }
 
-TEST(AnyTestCharacter, CharToSignedChar)
+TEST_MEM(AnyTestCharacter, CharToSignedChar)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ((signed char)c, (signed char)x);
 }
 
-TEST(AnyTestCharacter, UnsignedCharToSignedChar)
+TEST_MEM(AnyTestCharacter, UnsignedCharToSignedChar)
 {
   unsigned char c = CharRandom<unsigned char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ((signed char)c, (signed char)x);
 }
 
-TEST(AnyTestCharacter, CharToLong)
+TEST_MEM(AnyTestCharacter, CharToLong)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
@@ -74,7 +74,7 @@ TEST(AnyTestCharacter, CharToLong)
   }
 }
 
-TEST(AnyTestCharacter, UnsignedCharToLong)
+TEST_MEM(AnyTestCharacter, UnsignedCharToLong)
 {
   unsigned char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
@@ -88,7 +88,7 @@ TEST(AnyTestCharacter, UnsignedCharToLong)
   }
 }
 
-TEST(AnyTestCharacter, CharToDouble)
+TEST_MEM(AnyTestCharacter, CharToDouble)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
@@ -102,7 +102,7 @@ TEST(AnyTestCharacter, CharToDouble)
   }
 }
 
-TEST(AnyTestCharacter, UnsignedCharToDouble)
+TEST_MEM(AnyTestCharacter, UnsignedCharToDouble)
 {
   unsigned char c = CharRandom<unsigned char>();
   auto x = myodd::dynamic::Any(c);
@@ -116,59 +116,59 @@ TEST(AnyTestCharacter, UnsignedCharToDouble)
   }
 }
 
-TEST(AnyTestCharacter, CharValueIskept)
+TEST_MEM(AnyTestCharacter, CharValueIskept)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ(c, x);
 }
 
-TEST(AnyTestCharacter, SignedCharValueIskept)
+TEST_MEM(AnyTestCharacter, SignedCharValueIskept)
 {
   signed char c = CharRandom<signed char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ(c, x);
 }
 
-TEST(AnyTestCharacter, UnsignedCharValueIskept)
+TEST_MEM(AnyTestCharacter, UnsignedCharValueIskept)
 {
   unsigned char c = CharRandom<unsigned char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ(c, x);
 }
 
-TEST(AnyTestCharacter, WCharValueIskept)
+TEST_MEM(AnyTestCharacter, WCharValueIskept)
 {
   wchar_t c = CharRandom<wchar_t>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ(c, x);
 }
 
-TEST(AnyTestCharacter, DefaultValueIsZeroChar )
+TEST_MEM(AnyTestCharacter, DefaultValueIsZeroChar )
 {
   auto x = myodd::dynamic::Any();
   ASSERT_EQ( '\0', (char)x);
 }
 
-TEST(AnyTestCharacter, DefaultValueIsZeroUnsignedChar)
+TEST_MEM(AnyTestCharacter, DefaultValueIsZeroUnsignedChar)
 {
   auto x = myodd::dynamic::Any();
   ASSERT_EQ('\0', (unsigned char)x);
 }
 
-TEST(AnyTestCharacter, DefaultValueIsZeroSignedChar)
+TEST_MEM(AnyTestCharacter, DefaultValueIsZeroSignedChar)
 {
   auto x = myodd::dynamic::Any();
   ASSERT_EQ('\0', (signed char)x);
 }
 
-TEST(AnyTestCharacter, DefaultValueIsZeroWChar)
+TEST_MEM(AnyTestCharacter, DefaultValueIsZeroWChar)
 {
   auto x = myodd::dynamic::Any();
   ASSERT_EQ( L'\0', (wchar_t)x );
 }
 
-TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToChar)
+TEST_MEM(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToChar)
 {
   //  get a large number
   unsigned long long int ulli = std::numeric_limits<unsigned long long int>::max();
@@ -182,7 +182,7 @@ TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToChar)
   ASSERT_TRUE(c >= std::numeric_limits<char>::min() && c <= std::numeric_limits<char>::max());
 }
 
-TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToWChar)
+TEST_MEM(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToWChar)
 {
   //  get a large number
   unsigned long long int ulli = std::numeric_limits<unsigned long long int>::max();
@@ -196,7 +196,7 @@ TEST(AnyTestCharacter, VeryLargeNumbersCanStillBeCastBackToWChar)
   ASSERT_TRUE(c >= std::numeric_limits<wchar_t>::min() && c <= std::numeric_limits<wchar_t>::max());
 }
 
-TEST(AnyTestCharacter, CharLetterEqualToZero)
+TEST_MEM(AnyTestCharacter, CharLetterEqualToZero)
 {
   auto c = myodd::dynamic::Any('a');
   ASSERT_EQ(0, (int)c );
@@ -206,7 +206,7 @@ TEST(AnyTestCharacter, CharLetterEqualToZero)
   ASSERT_EQ('a', c);
 }
 
-TEST(AnyTestCharacter, WideCharLetterEqualToZero)
+TEST_MEM(AnyTestCharacter, WideCharLetterEqualToZero)
 {
   auto c = myodd::dynamic::Any(L'a');
   ASSERT_EQ(0, (int)c);
@@ -216,7 +216,7 @@ TEST(AnyTestCharacter, WideCharLetterEqualToZero)
   ASSERT_EQ(L'a', c);
 }
 
-TEST(AnyTestCharacter, UnsignedCharLetterEqualToZero)
+TEST_MEM(AnyTestCharacter, UnsignedCharLetterEqualToZero)
 {
   auto c = myodd::dynamic::Any( unsigned char('a'));
   ASSERT_EQ(0, (int)c);
@@ -226,7 +226,7 @@ TEST(AnyTestCharacter, UnsignedCharLetterEqualToZero)
   ASSERT_EQ(unsigned char('a'), c);
 }
 
-TEST(AnyTestCharacter, CastCharToWideChar)
+TEST_MEM(AnyTestCharacter, CastCharToWideChar)
 {
   auto c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
@@ -234,7 +234,7 @@ TEST(AnyTestCharacter, CastCharToWideChar)
   ASSERT_EQ((wchar_t)c, w);
 }
 
-TEST(AnyTestCharacter, StringNumber)
+TEST_MEM(AnyTestCharacter, StringNumber)
 {
   auto x = myodd::dynamic::Any("1234");
   ASSERT_EQ(1234, (int)x);
@@ -242,7 +242,7 @@ TEST(AnyTestCharacter, StringNumber)
   ASSERT_EQ("1234", x);
 }
 
-TEST(AnyTestCharacter, WideStringNumber)
+TEST_MEM(AnyTestCharacter, WideStringNumber)
 {
   auto x = myodd::dynamic::Any( L"1234");
   ASSERT_EQ(1234, (int)x);
@@ -250,7 +250,7 @@ TEST(AnyTestCharacter, WideStringNumber)
   ASSERT_EQ( L"1234", x);
 }
 
-TEST(AnyTestCharacter, StringFloatingNumber)
+TEST_MEM(AnyTestCharacter, StringFloatingNumber)
 {
   auto x = myodd::dynamic::Any("1234.567");
   ASSERT_EQ(1234, (int)x);
@@ -258,7 +258,7 @@ TEST(AnyTestCharacter, StringFloatingNumber)
   ASSERT_EQ("1234.567", x);
 }
 
-TEST(AnyTestCharacter, WideStringFloatingNumber)
+TEST_MEM(AnyTestCharacter, WideStringFloatingNumber)
 {
   auto x = myodd::dynamic::Any(L"1234.567");
   ASSERT_EQ(1234, (int)x);
@@ -266,7 +266,7 @@ TEST(AnyTestCharacter, WideStringFloatingNumber)
   ASSERT_EQ(L"1234.567", x);
 }
 
-TEST(AnyTestCharacter, StringNotANumber)
+TEST_MEM(AnyTestCharacter, StringNotANumber)
 {
   auto x = myodd::dynamic::Any("Hello");
   ASSERT_EQ(0, (int)x);
@@ -275,7 +275,7 @@ TEST(AnyTestCharacter, StringNotANumber)
   ASSERT_NE("World", x);
 }
 
-TEST(AnyTestCharacter, WideStringNotANumber)
+TEST_MEM(AnyTestCharacter, WideStringNotANumber)
 {
   auto x = myodd::dynamic::Any(L"Hello");
   ASSERT_EQ(0, (int)x);
@@ -284,77 +284,77 @@ TEST(AnyTestCharacter, WideStringNotANumber)
   ASSERT_NE(L"World", x);
 }
 
-TEST(AnyTestCharacter, Compare2StringsSameValue)
+TEST_MEM(AnyTestCharacter, Compare2StringsSameValue)
 {
   auto x = myodd::dynamic::Any("Hello");
   auto y = myodd::dynamic::Any("Hello");
   ASSERT_EQ(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2WideStringsSameValue)
+TEST_MEM(AnyTestCharacter, Compare2WideStringsSameValue)
 {
   auto x = myodd::dynamic::Any(L"Hello");
   auto y = myodd::dynamic::Any(L"Hello");
   ASSERT_EQ(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2StringsSameValueButNotSameCase)
+TEST_MEM(AnyTestCharacter, Compare2StringsSameValueButNotSameCase)
 {
   auto x = myodd::dynamic::Any("HELLO");
   auto y = myodd::dynamic::Any("hello");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2WideStringsSameValueButNotSameCase)
+TEST_MEM(AnyTestCharacter, Compare2WideStringsSameValueButNotSameCase)
 {
   auto x = myodd::dynamic::Any(L"HELLO");
   auto y = myodd::dynamic::Any(L"hello");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2StringsSameLenghButNotSame)
+TEST_MEM(AnyTestCharacter, Compare2StringsSameLenghButNotSame)
 {
   auto x = myodd::dynamic::Any("Hello");
   auto y = myodd::dynamic::Any("World");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2WideStringsSameLenghButNotSame)
+TEST_MEM(AnyTestCharacter, Compare2WideStringsSameLenghButNotSame)
 {
   auto x = myodd::dynamic::Any(L"Hello");
   auto y = myodd::dynamic::Any(L"World");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2StringsString2AlmostSameButLonger)
+TEST_MEM(AnyTestCharacter, Compare2StringsString2AlmostSameButLonger)
 {
   auto x = myodd::dynamic::Any("Hello");
   auto y = myodd::dynamic::Any("Hello2");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2WideStringsString2AlmostSameButLonger)
+TEST_MEM(AnyTestCharacter, Compare2WideStringsString2AlmostSameButLonger)
 {
   auto x = myodd::dynamic::Any(L"Hello");
   auto y = myodd::dynamic::Any(L"Hello2");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2StringsString1AlmostSameButLonger)
+TEST_MEM(AnyTestCharacter, Compare2StringsString1AlmostSameButLonger)
 {
   auto x = myodd::dynamic::Any("Hello2");
   auto y = myodd::dynamic::Any("Hello");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, Compare2StringsWideString1AlmostSameButLonger)
+TEST_MEM(AnyTestCharacter, Compare2StringsWideString1AlmostSameButLonger)
 {
   auto x = myodd::dynamic::Any(L"Hello2");
   auto y = myodd::dynamic::Any(L"Hello");
   ASSERT_NE(x, y);
 }
 
-TEST(AnyTestCharacter, CompareANumberAndAString)
+TEST_MEM(AnyTestCharacter, CompareANumberAndAString)
 {
   auto x = myodd::dynamic::Any("1234");
   auto y = myodd::dynamic::Any(1234);
@@ -363,7 +363,7 @@ TEST(AnyTestCharacter, CompareANumberAndAString)
   ASSERT_EQ((char*)y, x);
 }
 
-TEST(AnyTestCharacter, CompareAFloatNumberAndAString)
+TEST_MEM(AnyTestCharacter, CompareAFloatNumberAndAString)
 {
   auto x = myodd::dynamic::Any("1234.456789");
   auto y = myodd::dynamic::Any(1234.456789);
@@ -372,7 +372,7 @@ TEST(AnyTestCharacter, CompareAFloatNumberAndAString)
   ASSERT_EQ((char*)y, x);
 }
 
-TEST(AnyTestCharacter, CompareANumberAndAWideString)
+TEST_MEM(AnyTestCharacter, CompareANumberAndAWideString)
 {
   auto x = myodd::dynamic::Any(L"1234");
   auto y = myodd::dynamic::Any(1234);
@@ -381,7 +381,7 @@ TEST(AnyTestCharacter, CompareANumberAndAWideString)
   ASSERT_EQ((wchar_t*)y, x);
 }
 
-TEST(AnyTestCharacter, CompareAFloatNumberAndAWideString)
+TEST_MEM(AnyTestCharacter, CompareAFloatNumberAndAWideString)
 {
   auto x = myodd::dynamic::Any(L"1234.456789");
   auto y = myodd::dynamic::Any(1234.456789);
@@ -390,28 +390,28 @@ TEST(AnyTestCharacter, CompareAFloatNumberAndAWideString)
   ASSERT_EQ((wchar_t*)y, x);
 }
 
-TEST(AnyTestCharacter, CastFromWideCharToChar)
+TEST_MEM(AnyTestCharacter, CastFromWideCharToChar)
 {
   auto x = myodd::dynamic::Any(L"1234.456789");
   ASSERT_STREQ((const char*)x, "1234.456789");
   ASSERT_STREQ((char*)x, "1234.456789");
 }
 
-TEST(AnyTestCharacter, CastFromNullWideCharToChar)
+TEST_MEM(AnyTestCharacter, CastFromNullWideCharToChar)
 {
   auto x = myodd::dynamic::Any( (wchar_t*)nullptr );
   ASSERT_STREQ((const char*)x, "");
   ASSERT_STREQ((char*)x, "");
 }
 
-TEST(AnyTestCharacter, CastFromCharToWideChar)
+TEST_MEM(AnyTestCharacter, CastFromCharToWideChar)
 {
   auto x = myodd::dynamic::Any("1234.456789");
   ASSERT_STREQ((wchar_t*)x, L"1234.456789");
   ASSERT_STREQ((wchar_t*)x, L"1234.456789");
 }
 
-TEST(AnyTestCharacter, CastFromNullCharToWideChar)
+TEST_MEM(AnyTestCharacter, CastFromNullCharToWideChar)
 {
   auto x = myodd::dynamic::Any( (char*)nullptr );
   ASSERT_STREQ((wchar_t*)x, L"");
