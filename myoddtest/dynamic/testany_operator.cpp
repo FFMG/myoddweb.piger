@@ -173,6 +173,14 @@ TEST(AnyTestOperators, SubtractNumberFromNull)
   ASSERT_EQ(-10, x);
 }
 
+TEST(AnyTestOperators, MultiplyNumberAndNull)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(IntRandomNumber<int>(false));
+  x *= y;
+  ASSERT_EQ(0, x);
+}
+
 TEST(AnyTestOperators, AddNullToNumber)
 {
   auto x = myodd::dynamic::Any(10);
@@ -187,6 +195,14 @@ TEST(AnyTestOperators, SubstractNullFromNumber)
   auto y = myodd::dynamic::Any(nullptr);
   x -= y;
   ASSERT_EQ(10, x);
+}
+
+TEST(AnyTestOperators, MultiplyNullFromNumber)
+{
+  auto x = myodd::dynamic::Any(IntRandomNumber<int>(false));
+  auto y = myodd::dynamic::Any(nullptr);
+  x *= y;
+  ASSERT_EQ(0, x);
 }
 
 TEST(AnyTestOperators, AddTwoAny)
@@ -205,6 +221,14 @@ TEST(AnyTestOperators, SubstractTwoAny)
   ASSERT_EQ(30, x);
 }
 
+TEST(AnyTestOperators, MultiplyTwoAny)
+{
+  auto x = myodd::dynamic::Any(40);
+  auto y = myodd::dynamic::Any(10);
+  x *= y;
+  ASSERT_EQ(400, x);
+}
+
 TEST(AnyTestOperators, AddANumberToAny)
 {
   auto x = myodd::dynamic::Any(10);
@@ -212,11 +236,18 @@ TEST(AnyTestOperators, AddANumberToAny)
   ASSERT_EQ(30, x);
 }
 
-TEST(AnyTestOperators, SubstractANumberToAny)
+TEST(AnyTestOperators, MultiplyANumberToAny)
 {
   auto x = myodd::dynamic::Any(40);
   x -= 10;
   ASSERT_EQ(30, x);
+}
+
+TEST(AnyTestOperators, SubstractANumberToAny)
+{
+  auto x = myodd::dynamic::Any(40);
+  x *= 10;
+  ASSERT_EQ(400, x);
 }
 
 TEST(AnyTestOperators, AddAnyToANumber)
@@ -233,6 +264,13 @@ TEST(AnyTestOperators, SubstractAnyToANumber)
   ASSERT_EQ(30, x);
 }
 
+TEST(AnyTestOperators, MultiplyAnyToANumber)
+{
+  auto x = myodd::dynamic::Any(10);
+  x = 40 * x;
+  ASSERT_EQ(400, x);
+}
+
 TEST(AnyTestOperators, AddAnyToANumberAndCreate)
 {
   auto x = myodd::dynamic::Any(10);
@@ -245,6 +283,13 @@ TEST(AnyTestOperators, SubstractAnyToANumberAndCreate)
   auto x = myodd::dynamic::Any(10);
   auto y = 40 - x;
   ASSERT_EQ(30, y);
+}
+
+TEST(AnyTestOperators, MultiplyAnyToANumberAndCreate)
+{
+  auto x = myodd::dynamic::Any(10);
+  auto y = 40 * x;
+  ASSERT_EQ(400, y);
 }
 
 TEST(AnyTestOperators, AddTwoDifferentTypes )
@@ -263,6 +308,16 @@ TEST(AnyTestOperators, SubstractwoDifferentTypes)
   auto y = myodd::dynamic::Any((double)10.5);
   auto z = x - y;
   ASSERT_EQ(19.5, z);
+  ASSERT_EQ(30, x);
+  ASSERT_EQ(10.5, y);
+}
+
+TEST(AnyTestOperators, MultiplytwoDifferentTypes)
+{
+  auto x = myodd::dynamic::Any((int)30);
+  auto y = myodd::dynamic::Any((double)10.5);
+  auto z = x * y;
+  ASSERT_EQ((double)315, z);// we multiplied a double * int so z is a double.
   ASSERT_EQ(30, x);
   ASSERT_EQ(10.5, y);
 }
@@ -292,6 +347,31 @@ TEST(AnyTestOperators, SubstractTwoBlooean)
   ASSERT_EQ(false, y);
 }
 
+TEST(AnyTestOperators, MultiplyTwoBlooean)
+{
+  auto x = myodd::dynamic::Any(true);
+  auto y = myodd::dynamic::Any(false);
+  auto z = x * y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(false, y);
+
+  z = y * x;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(false, y);
+}
+
+TEST(AnyTestOperators, MultiplyTwoTrueBlooean)
+{
+  auto x = myodd::dynamic::Any(true);
+  auto y = myodd::dynamic::Any(true);
+  auto z = x * y;
+  ASSERT_EQ(1, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(true, y);
+}
+
 TEST(AnyTestOperators, AddANumberToABoolean)
 {
   auto x = myodd::dynamic::Any(true);
@@ -308,6 +388,16 @@ TEST(AnyTestOperators, SubstractANumberFromABoolean)
   auto y = myodd::dynamic::Any(10);
   auto z = x - y;
   ASSERT_EQ(-9, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(10, y);
+}
+
+TEST(AnyTestOperators, MultiplyANumberAndABoolean)
+{
+  auto x = myodd::dynamic::Any(true);
+  auto y = myodd::dynamic::Any(10);
+  auto z = x * y;
+  ASSERT_EQ(10, z);
   ASSERT_EQ(true, x);
   ASSERT_EQ(10, y);
 }
@@ -332,6 +422,16 @@ TEST(AnyTestOperators, SubstractNullFromABooleanBecomesAnInt)
   ASSERT_EQ(true, y);
 }
 
+TEST(AnyTestOperators, MultiplyNullAndABooleanBecomesAnInt)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(true);
+  auto z = x * y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ(nullptr, x);
+  ASSERT_EQ(true, y);
+}
+
 TEST(AnyTestOperators, AddBooleanToNullBecomesAnInt)
 {
   auto x = myodd::dynamic::Any(true);
@@ -348,6 +448,16 @@ TEST(AnyTestOperators, SubstractBooleanFromNullBecomesAnInt)
   auto y = myodd::dynamic::Any(nullptr);
   auto z = x - y;
   ASSERT_EQ(1, z);
+  ASSERT_EQ(true, x);
+  ASSERT_EQ(nullptr, y);
+}
+
+TEST(AnyTestOperators, MultiplyBooleanAndNullBecomesAnInt)
+{
+  auto x = myodd::dynamic::Any(true);
+  auto y = myodd::dynamic::Any(nullptr);
+  auto z = x * y;
+  ASSERT_EQ(0, z);
   ASSERT_EQ(true, x);
   ASSERT_EQ(nullptr, y);
 }
@@ -378,6 +488,19 @@ TEST(AnyTestOperators, ChainNumberSubstraction)
   ASSERT_EQ((long)10, y);
 }
 
+TEST(AnyTestOperators, ChainNumberMultiplication)
+{
+  auto w = myodd::dynamic::Any((long)40);
+  auto x = myodd::dynamic::Any((long)20);
+  auto y = myodd::dynamic::Any((long)10);
+
+  auto z = w * x * y;
+  ASSERT_EQ((long)8000, z);
+  ASSERT_EQ((long)40, w);
+  ASSERT_EQ((long)20, x);
+  ASSERT_EQ((long)10, y);
+}
+
 TEST(AnyTestOperators, AddTwoCharOnlyIfTheCharIsANumber)
 {
   auto x = myodd::dynamic::Any('1');
@@ -396,6 +519,16 @@ TEST(AnyTestOperators, SubstractTwoCharOnlyIfTheCharIsANumber)
   ASSERT_EQ( 8, z);
   ASSERT_EQ('9', x);
   ASSERT_EQ('1', y);
+}
+
+TEST(AnyTestOperators, MultiplyTwoCharOnlyIfTheCharIsANumber)
+{
+  auto x = myodd::dynamic::Any('9');
+  auto y = myodd::dynamic::Any('2');
+  auto z = x * y;
+  ASSERT_EQ(18, z);
+  ASSERT_EQ('9', x);
+  ASSERT_EQ('2', y);
 }
 
 TEST(AnyTestOperators, AddTwoWideCharOnlyIfTheCharIsANumber)
@@ -418,6 +551,16 @@ TEST(AnyTestOperators, SubstractTwoWideCharOnlyIfTheCharIsANumber)
   ASSERT_EQ(L'1', y);
 }
 
+TEST(AnyTestOperators, MultiplyTwoWideCharOnlyIfTheCharIsANumber)
+{
+  auto x = myodd::dynamic::Any(L'9');
+  auto y = myodd::dynamic::Any(L'2');
+  auto z = x * y;
+  ASSERT_EQ(18, z);
+  ASSERT_EQ(L'9', x);
+  ASSERT_EQ(L'2', y);
+}
+
 TEST(AnyTestOperators, AddTwoCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any('a');
@@ -438,6 +581,16 @@ TEST(AnyTestOperators, SubstractTwoCharZeroIfNoneAreNumbers)
   ASSERT_EQ('&', y);
 }
 
+TEST(AnyTestOperators, MultiplyTwoCharZeroIfNoneAreNumbers)
+{
+  auto x = myodd::dynamic::Any('a');
+  auto y = myodd::dynamic::Any('&');
+  auto z = x * y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ('a', x);
+  ASSERT_EQ('&', y);
+}
+
 TEST(AnyTestOperators, AddTwoWideCharZeroIfNoneAreNumbers)
 {
   auto x = myodd::dynamic::Any(L'a');
@@ -453,6 +606,16 @@ TEST(AnyTestOperators, SubstractTwoWideCharZeroIfNoneAreNumbers)
   auto x = myodd::dynamic::Any(L'a');
   auto y = myodd::dynamic::Any(L'&');
   auto z = x - y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ(L'a', x);
+  ASSERT_EQ(L'&', y);
+}
+
+TEST(AnyTestOperators, MultiplyTwoWideCharZeroIfNoneAreNumbers)
+{
+  auto x = myodd::dynamic::Any(L'a');
+  auto y = myodd::dynamic::Any(L'&');
+  auto z = x * y;
   ASSERT_EQ(0, z);
   ASSERT_EQ(L'a', x);
   ASSERT_EQ(L'&', y);
@@ -498,6 +661,26 @@ TEST(AnyTestOperators, SubstractTwoStringIfOneIsANumber)
   ASSERT_EQ("Hello", y);
 }
 
+TEST(AnyTestOperators, MultiplyTwoCharIfOneIsANumber)
+{
+  auto x = myodd::dynamic::Any('1');
+  auto y = myodd::dynamic::Any('&');
+  auto z = x * y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ('1', x);
+  ASSERT_EQ('&', y);
+}
+
+TEST(AnyTestOperators, MultiplyTwoStringIfOneIsANumber)
+{
+  auto x = myodd::dynamic::Any("1234");
+  auto y = myodd::dynamic::Any("Hello");
+  auto z = x * y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ("1234", x);
+  ASSERT_EQ("Hello", y);
+}
+
 TEST(AnyTestOperators, AddTwoWideCharIfOneIsANumber)
 {
   auto x = myodd::dynamic::Any(L'1');
@@ -538,6 +721,26 @@ TEST(AnyTestOperators, SubstractTwoWideCharIfOneIsANumber)
   ASSERT_EQ(L'&', y);
 }
 
+TEST(AnyTestOperators, MultiplyTwoWideStringIfOneIsANumber)
+{
+  auto x = myodd::dynamic::Any(L"1234");
+  auto y = myodd::dynamic::Any(L"Hello");
+  auto z = x * y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ(L"1234", x);
+  ASSERT_EQ(L"Hello", y);
+}
+
+TEST(AnyTestOperators, MultiplyTwoWideCharIfOneIsANumber)
+{
+  auto x = myodd::dynamic::Any(L'1');
+  auto y = myodd::dynamic::Any(L'&');
+  auto z = x * y;
+  ASSERT_EQ(0, z);
+  ASSERT_EQ(L'1', x);
+  ASSERT_EQ(L'&', y);
+}
+
 TEST(AnyTestOperators, AddACharAndAWideChar )
 {
   auto x = myodd::dynamic::Any(L'1');
@@ -556,6 +759,16 @@ TEST(AnyTestOperators, SubstractACharAndAWideChar)
   ASSERT_EQ(3, z);
   ASSERT_EQ(L'4', x);
   ASSERT_EQ('1', y);
+}
+
+TEST(AnyTestOperators, MultiplyACharAndAWideChar)
+{
+  auto x = myodd::dynamic::Any(L'4');
+  auto y = myodd::dynamic::Any('2');
+  auto z = x * y;
+  ASSERT_EQ(8, z);
+  ASSERT_EQ(L'4', x);
+  ASSERT_EQ('2', y);
 }
 
 TEST(AnyTestOperators, AdditionAndSubstraction)
@@ -580,6 +793,39 @@ TEST(AnyTestOperators, AdditionAndSubstractionReUseNumbers)
   auto z = w + x - y - w + x;
        // 40 + 20 - 10 - 40 + 20 = 30
   ASSERT_EQ((long)30, z);
+  ASSERT_EQ((long)40, w);
+  ASSERT_EQ((long)20, x);
+  ASSERT_EQ((long)10, y);
+}
+
+TEST(AnyTestOperators, MultiplicationAdditionAndSubstractionReUseNumbers)
+{
+  auto v = myodd::dynamic::Any((long)5);
+  auto w = myodd::dynamic::Any((long)40);
+  auto x = myodd::dynamic::Any((long)20);
+  auto y = myodd::dynamic::Any((long)10);
+
+  auto z = w + x - y - w + x * v;
+  // 40 + 20 - 10 - 40 + 20 * 5= 110
+  ASSERT_EQ((long)110, z);
+  ASSERT_EQ((long)5, v);
+  ASSERT_EQ((long)40, w);
+  ASSERT_EQ((long)20, x);
+  ASSERT_EQ((long)10, y);
+}
+
+TEST(AnyTestOperators, MultiplicationAdditionAndSubstractionParentheseReUseNumbers)
+{
+  auto v = myodd::dynamic::Any((long)5);
+  auto w = myodd::dynamic::Any((long)40);
+  auto x = myodd::dynamic::Any((long)20);
+  auto y = myodd::dynamic::Any((long)10);
+
+  auto z = w + x - (y - (w + x) * v);
+  long zz = 40 + 20 - (10 - (40 + 20) * 5);
+  // 40 + 20 - (10 - (40 + 20) * 5)= 350
+  ASSERT_EQ(zz, z);
+  ASSERT_EQ((long)5, v);
   ASSERT_EQ((long)40, w);
   ASSERT_EQ((long)20, x);
   ASSERT_EQ((long)10, y);

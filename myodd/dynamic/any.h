@@ -312,6 +312,66 @@ namespace myodd {
        */
       template<typename T> friend Any operator-(Any lhs, const T& rhs) { lhs -= Any(rhs); return lhs; }
 
+      /**
+       * Binary arithmetic operators - multiplication
+       * @param const Any& the item we are multiplying from this.
+       * @return Any& *this*rhs
+       */
+      Any& operator*=(const Any& rhs)
+      {
+        // add us to the other number and update our value.
+        *this = *this * rhs;
+
+        // return the result by reference
+        return *this;
+      }
+
+      /**
+       * Binary arithmetic operators - multiplication
+       * @param const Any& the item we are multiplying from this.
+       * @return Any *this*rhs
+       */
+      Any operator*(const Any& rhs) const
+      {
+        // we use the double number as it is more precise
+        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        {
+          // null*null = int(0)
+          return Any((int)0);
+        }
+
+        // is the lhs null if it is then we have to set the value?
+        if (Type() == dynamic::type_null)
+        {
+          // *this * null == 0
+          return Any((int)0);
+        }
+
+        // is the rhs null if it is then we have to set the value?
+        if (rhs.Type() == dynamic::type_null)
+        {
+          // *this * null == 0
+          return Any((int)0);
+        }
+
+        // multiply the values.
+        Any value = (*_ldvalue * *rhs._ldvalue);
+
+        // update the type.
+        value._type = CalculateType(Type(), rhs.Type());
+
+        // return the value.
+        return value;
+      }
+
+      /**
+       * Binary arithmetic operators - multiplication
+       * @param Any the item we are multiplying from this.
+       * @param const Any& the item we are multiplying from this.
+       * @return Any *this*rhs
+       */
+      template<typename T> friend Any operator*(Any lhs, const T& rhs) { lhs *= Any(rhs); return lhs; }
+
       /** 
        * The equal operator
        * @param const Any& other the value we are trying to set.
