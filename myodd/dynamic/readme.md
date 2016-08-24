@@ -1,4 +1,92 @@
-## Description
+## Introduction
+This class tries to introduce dynamic typing to c++, basically we try to remove the 'type' from the variable.
+Rather the type is decided at runtime.
+
+### Rules of the game
+
+Like any dynamic types, myodd::dynamic::Any() has to have some sort of [type juggling](http://php.net/manual/en/language.types.type-juggling.php) rules to follow.
+
+    auto foo = myodd::dynamic::Any(); // foo is 'null'
+    foo = "1";  // foo is string... for now
+    foo *= 2;   // foo is now an integer with a value of 2
+    foo = foo * 1.3;  // foo is now a double with a value of 2.6
+    foo = 3 * "Hello"; // foo is now an integer with a value of zero, ('cause 5*"blah" == 0)
+    foo = 5 * "10";    // foo is now an integer with a value of 50, ('cause 5*"10" == 50, we clever like that)
+
+You can also cast to many fundamental types.
+
+    auto foo = myodd::dynamic::Any("Hello"); // foo is 'Hello'
+    auto bar = (int)foo; // bar is an integer with a value of zero, ('cause 'blah' == 0 until math changes its rules).
+
+Equality
+
+    auto foo = myodd::dynamic::Any("10"); // foo is a string "10"
+    auto bar = myodd::dynamic::Any(10); // foo is an integer 10
+    ...
+    foo == bar; // false! because a string is not equal to a integer.
+
+### Who else does dynamic typing?
+
+Many languages use dynamic typing.
+
+- php
+- java
+- C#, (to an extend it does, until the value has been assigned)
+
+Similar apps that use 
+
+### Use cases
+In a vector you could totally remove the data type
+
+    #include "dynamic/any.h"
+    #include <vector>
+    ...
+    std::vector<myodd::dynamic::Any> sampledata{ 10, "Hello", L"World", 20.5 };
+    ...
+    if( sampledata[2] == L"World" )
+    {
+      // do something cool
+    }
+    else
+    if( sampledata[3] == 42 )
+    {
+      // universe == solved!
+    }
+
+Unknown use case at run time, you could for example read some data from the database, and the data could be either a number, a wide string, a double... anything.
+
+
+#### Supported types
+You can query the current data type of the variable as we understand it. Call `Any::Type()` and the return value is the data type.  
+
+##### Fundamental types
+###### Special types
+- null (nullptr_t)
+- unknown (*should* never happen!)
+
+###### Boolean
+- bool
+
+###### Character
+- signed char
+- unsigned char
+- char
+- wchar_t
+
+###### Integer
+- short int
+- unsigned short int
+- int
+- unsigned int
+- long int
+- unsigned long int
+- long long int
+- unsigned long long int
+
+###### Floating point
+- float
+- double
+- long double
 
 #### Example
 
@@ -19,6 +107,24 @@
 - Can be done on char types, (wide and non wide char).
 - Can be done on booleans
 
+### Examples
+
+nullptr_t is treated as 0
+
+    auto any = myodd::dynamic::Any( nullptr_t ) * myodd::dynamic::Any( nullptr_t ); // = 0; nullptr_t*nullptr_t==0
+
+false is treated as 0
+
+    auto any1 = myodd::dynamic::Any( false ) * 17; // = 0; false*17==0
+    auto any2 = myodd::dynamic::Any( false ) + 17; // = 17; false+17==17
+
+You can add wide and non wide strings
+
+    auto string1 = myodd::dynamic::Any("12");
+    auto string2 = myodd::dynamic::Any(L"12");	//	wide
+    auto add = string1 + string2; // = 24
+
+
 ### Division by zero
 
 In the case of divisions by zero, a `std::overflow_error` is thrown.
@@ -28,11 +134,11 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
 - when dividing by a null pointer.
 - when dividing by a string that cannot be converted to a non zero number.
 
-#### Example
+#### Examples
 
     auto bad = myodd::dynamic::Any( 123 ) / 0; // = std::overflow_error
     auto bad = 123 / myodd::dynamic::Any( 0 ); // = std::overflow_error
-    auto bad = 1 / myodd::dynamic::Any( null_ptr );   // = std::overflow_error
+    auto bad = 1 / myodd::dynamic::Any( nullptr_t );   // = std::overflow_error
     auto bad = 1 / myodd::dynamic::Any( "No a number" );   // = std::overflow_error
 
 ## Todo
