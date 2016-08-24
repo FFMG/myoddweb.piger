@@ -124,7 +124,6 @@ You can add wide and non wide strings
     auto string2 = myodd::dynamic::Any(L"12");	//	wide
     auto add = string1 + string2; // = 24
 
-
 ### Division by zero
 
 In the case of divisions by zero, a `std::overflow_error` is thrown.
@@ -140,6 +139,17 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
     auto bad = 123 / myodd::dynamic::Any( 0 ); // = std::overflow_error
     auto bad = 1 / myodd::dynamic::Any( nullptr_t );   // = std::overflow_error
     auto bad = 1 / myodd::dynamic::Any( "No a number" );   // = std::overflow_error
+
+## Performance comparison.
+### Version 0.1
+#### [Addition loop](doc/perfaddition.md)
+- std : `0.003000000s`
+- any : `0.845000029s`
+
+#### [Addition loop](doc/perfmultiplication.md)
+
+- std : `0.002000000s`
+- any : `0.799000025s`
 
 ## Todo
 
