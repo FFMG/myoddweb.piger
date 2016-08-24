@@ -51,6 +51,6 @@ int main(int argc, char** argv)
   // but you can use it every so often, ... just to make sure.
   // @see https://svn.boost.org/trac/boost/ticket/5856
   //
-  testing::UnitTest::GetInstance()->listeners().Append(new testing::MemoryLeakDetector());
+  // testing::UnitTest::GetInstance()->listeners().Append(new testing::MemoryLeakDetector());
   return RUN_ALL_TESTS();
 }
