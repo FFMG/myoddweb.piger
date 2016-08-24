@@ -7,13 +7,13 @@
 TEST_MEM(AnyTest, CheckTheDataType)
 {
   auto x = myodd::dynamic::Any();
-  ASSERT_EQ(myodd::dynamic::Type::type_null, x.Type());
+  ASSERT_EQ(myodd::dynamic::Type::Misc_null, x.Type());
 }
 
 TEST_MEM(AnyTest, CanCreateTheValueWithNullPointer)
 {
   auto x = myodd::dynamic::Any( nullptr );
-  ASSERT_EQ(myodd::dynamic::Type::type_null, x.Type());
+  ASSERT_EQ(myodd::dynamic::Type::Misc_null, x.Type());
 }
 
 TEST_MEM(AnyTest, AddressOfPointerIsNullButIntTypeIsRespected)
@@ -276,7 +276,7 @@ TEST_MEM(AnyTest, SetAnyNullValueToNewValue)
   auto y = x;
 
   // and the type should be valid.
-  ASSERT_EQ(myodd::dynamic::Type::type_null, y.Type());
+  ASSERT_EQ(myodd::dynamic::Type::Misc_null, y.Type());
 }
 
 TEST_MEM(AnyTest, SetAnyNullValueToOldValue)
@@ -291,7 +291,7 @@ TEST_MEM(AnyTest, SetAnyNullValueToOldValue)
   y = x;
 
   // and the type should be valid.
-  ASSERT_EQ(myodd::dynamic::Type::type_null, y.Type());
+  ASSERT_EQ(myodd::dynamic::Type::Misc_null, y.Type());
 
   // and the value should be zero
   // we have to cast to int as we compare types.

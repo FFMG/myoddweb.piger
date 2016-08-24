@@ -7,8 +7,8 @@ namespace myodd {
   namespace dynamic {
     enum Type
     {
-      type_unknown,
-      type_null,
+      Misc_unknown,
+      Misc_null,
 
       // bool
       Boolean_bool,
@@ -19,37 +19,19 @@ namespace myodd {
       Character_char,
       Character_wchar_t,
 
-      // short int
+      // Integer
       Integer_short_int,
-
-      // unsigned short int
       Integer_unsigned_short_int,
-
-      // int
       Integer_int,
-
-      // unsigned
       Integer_unsigned_int,
-
-      // long int
       Integer_long_int,
-
-      // unsigned
       Integer_unsigned_long_int,
-
-      // long long int
       Integer_long_long_int,
-
-      // unsigned
       Integer_unsigned_long_long_int,
 
-      // float
+      // Floating point
       Floating_point_float,
-
-      // double
       Floating_point_double,
-
-      // long double.
       Floating_point_long_double
     };
 
@@ -76,11 +58,11 @@ namespace myodd {
      * @param const Type& type the type we are checking.
      * @return bool if it is or not.
      */
-    inline bool is_type_null(Type type)
+    inline bool is_Misc_null(Type type)
     {
       switch (type)
       {
-      case type_null:
+      case Misc_null:
         return true;
       }
       return false;

@@ -109,9 +109,9 @@ TEST_MEM(AnyTestOperators, NullPlusNullEqualZero)
   ASSERT_EQ( 0, z);
   ASSERT_EQ( myodd::dynamic::Integer_int, z.Type() );
   ASSERT_EQ(nullptr, x);
-  ASSERT_EQ(myodd::dynamic::type_null, x.Type());
+  ASSERT_EQ(myodd::dynamic::Misc_null, x.Type());
   ASSERT_EQ(nullptr, y);
-  ASSERT_EQ(myodd::dynamic::type_null, y.Type());
+  ASSERT_EQ(myodd::dynamic::Misc_null, y.Type());
 }
 
 TEST_MEM(AnyTestOperators, NullMinusNullEqualZero)
@@ -122,9 +122,9 @@ TEST_MEM(AnyTestOperators, NullMinusNullEqualZero)
   ASSERT_EQ(0, z);
   ASSERT_EQ(myodd::dynamic::Integer_int, z.Type());
   ASSERT_EQ(nullptr, x);
-  ASSERT_EQ(myodd::dynamic::type_null, x.Type());
+  ASSERT_EQ(myodd::dynamic::Misc_null, x.Type());
   ASSERT_EQ(nullptr, y);
-  ASSERT_EQ(myodd::dynamic::type_null, y.Type());
+  ASSERT_EQ(myodd::dynamic::Misc_null, y.Type());
 }
 
 TEST_MEM(AnyTestOperators, NullPlusNullEqualZeroShortcut)
@@ -139,7 +139,7 @@ TEST_MEM(AnyTestOperators, NullPlusNullEqualZeroShortcut)
 
   // y has not changed
   ASSERT_EQ(nullptr, y);
-  ASSERT_EQ(myodd::dynamic::type_null, y.Type());
+  ASSERT_EQ(myodd::dynamic::Misc_null, y.Type());
 }
 
 TEST_MEM(AnyTestOperators, NullMinusNullEqualZeroShortcut)
@@ -154,7 +154,7 @@ TEST_MEM(AnyTestOperators, NullMinusNullEqualZeroShortcut)
 
   // y has not changed
   ASSERT_EQ(nullptr, y);
-  ASSERT_EQ(myodd::dynamic::type_null, y.Type());
+  ASSERT_EQ(myodd::dynamic::Misc_null, y.Type());
 }
 
 TEST_MEM(AnyTestOperators, AddNumberToNull)

@@ -23,7 +23,7 @@ namespace myodd {
         _svalue( nullptr ),
         _swvalue( nullptr ),
         _lcvalue(0),
-        _type( Type::type_null )
+        _type( Type::Misc_null )
       {
       }
 
@@ -136,20 +136,20 @@ namespace myodd {
       bool operator< (const Any& rhs) const
       {
         // we use the double number as it is more precise
-        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
         {
           //  null is not smaller than null
           return false;
         }
 
         // is the lhs null?
-        if (Type() == dynamic::type_null )
+        if (Type() == dynamic::Misc_null )
         {
           return 0 < *rhs._ldvalue;
         }
 
         // is the rhs null?
-        if (rhs.Type() == dynamic::type_null)
+        if (rhs.Type() == dynamic::Misc_null)
         {
           return *_ldvalue < 0;
         }
@@ -214,20 +214,20 @@ namespace myodd {
       Any operator+(const Any& rhs) const
       {
         // we use the double number as it is more precise
-        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
         {
           // null+null = int(0)
           return Any((int)0);
         }
 
         // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null)
         {
           return Any(0) + rhs;
         }
 
         // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::type_null)
+        if (rhs.Type() == dynamic::Misc_null)
         {
           // nothing changes...
           // because this + null == this
@@ -274,20 +274,20 @@ namespace myodd {
       Any operator-(const Any& rhs) const
       {
         // we use the double number as it is more precise
-        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
         {
           // null-null = int(0)
           return Any((int)0);
         }
 
         // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null)
         {
           return Any(0) - rhs;
         }
 
         // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::type_null)
+        if (rhs.Type() == dynamic::Misc_null)
         {
           // nothing changes...
           // because this - null == this
@@ -334,21 +334,21 @@ namespace myodd {
       Any operator*(const Any& rhs) const
       {
         // we use the double number as it is more precise
-        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
         {
           // null*null = int(0)
           return Any((int)0);
         }
 
         // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null)
         {
           // *this * null == 0
           return Any((int)0);
         }
 
         // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::type_null)
+        if (rhs.Type() == dynamic::Misc_null)
         {
           // *this * null == 0
           return Any((int)0);
@@ -394,7 +394,7 @@ namespace myodd {
       Any operator/(const Any& rhs) const
       {
         // we use the double number as it is more precise
-        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
         {
           // null / null = std::overflow_error
           throw std::overflow_error("Division by zero.");
@@ -402,7 +402,7 @@ namespace myodd {
 
         // if the rhs is null, then we cannot calculate it.
         // or if the value is zero.
-        if (rhs.Type() == dynamic::type_null || (rhs._ldvalue && *rhs._ldvalue == 0) )
+        if (rhs.Type() == dynamic::Misc_null || (rhs._ldvalue && *rhs._ldvalue == 0) )
         {
           // *this / null = std::overflow_error
           throw std::overflow_error("Division by zero.");
@@ -410,7 +410,7 @@ namespace myodd {
 
         // is the lhs null then the result is zero
         // or if the value is zero
-        if (Type() == dynamic::type_null || (_ldvalue && *_ldvalue == 0))
+        if (Type() == dynamic::Misc_null || (_ldvalue && *_ldvalue == 0))
         {
           // it does not matter what the rhs is.
           // but we know it is not zero or null.
@@ -491,12 +491,12 @@ namespace myodd {
       dynamic::Type CalculateType(const dynamic::Type& lhsOriginal, const dynamic::Type& rhsOriginal) const
       {
         //  null values become ints.
-        if (is_type_null(lhsOriginal))
+        if (is_Misc_null(lhsOriginal))
         {
           return CalculateType(dynamic::Integer_int, rhsOriginal);
         }
 
-        if (is_type_null(rhsOriginal))
+        if (is_Misc_null(rhsOriginal))
         {
           return CalculateType( lhsOriginal, dynamic::Integer_int);
         }
@@ -581,8 +581,8 @@ namespace myodd {
         // special case for null
         switch (lhs.Type())
         {
-        case dynamic::type_unknown:
-        case dynamic::type_null:
+        case dynamic::Misc_unknown:
+        case dynamic::Misc_null:
           //  just compare the llivalue, they should be null anyway.
           return (lhs._llivalue == nullptr && lhs._llivalue == rhs._llivalue) ? 0 : 1;
         }
@@ -645,7 +645,7 @@ namespace myodd {
         _type = dynamic::get_type<T>::value;
         switch ( Type() )
         {
-        case dynamic::type_null:
+        case dynamic::Misc_null:
           _llivalue = nullptr;
           _ldvalue = nullptr;
           return;
@@ -678,7 +678,7 @@ namespace myodd {
           _llivalue = new long long int(static_cast<long long int>(*_ldvalue));
           return;
 
-        case dynamic::type_unknown:
+        case dynamic::Misc_unknown:
           break;
 
         default:
@@ -714,7 +714,7 @@ namespace myodd {
           // if it is null we must still set the type, but default the values to zeros.
           switch ( Type() )
           {
-          case dynamic::type_null:
+          case dynamic::Misc_null:
             _llivalue = nullptr;
             _ldvalue = nullptr;
             return;
@@ -740,7 +740,7 @@ namespace myodd {
             _ldvalue = new long double(0);
             return;
 
-          case dynamic::type_unknown:
+          case dynamic::Misc_unknown:
             break;
 
           default:
@@ -893,7 +893,7 @@ namespace myodd {
       {
         switch ( Type() )
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return 0;
 
         // char
@@ -980,7 +980,7 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return '\0';
 
         case dynamic::Type::Character_wchar_t:
@@ -1013,7 +1013,7 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return '\0';
 
         case dynamic::Type::Character_wchar_t:
@@ -1128,7 +1128,7 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return '\0';
 
         case dynamic::Type::Character_wchar_t:
@@ -1155,7 +1155,7 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return '\0';
 
         case dynamic::Type::Character_wchar_t:
@@ -1182,7 +1182,7 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return '\0';
 
         case dynamic::Type::Character_wchar_t:
@@ -1209,7 +1209,7 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return '\0';
 
         case dynamic::Type::Character_wchar_t:
@@ -1236,7 +1236,7 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::type_null:
+        case dynamic::Type::Misc_null:
           return false;
         }
 
