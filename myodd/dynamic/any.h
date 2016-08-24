@@ -2,7 +2,7 @@
 
 #include <typeinfo>       // std::bad_cast
 #include <algorithm>      // memcpy
-
+#include <math.h>         // modf
 #include <string>
 #include <codecvt>        //  string <-> wstring
 
@@ -397,7 +397,7 @@ namespace myodd {
         if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
         {
           // null / null = std::overflow_error
-          throw std::overflow_error("Divide by zero encountered. ");
+          throw std::overflow_error("Division by zero.");
         }
 
         // if the rhs is null, then we cannot calculate it.
@@ -405,7 +405,7 @@ namespace myodd {
         if (rhs.Type() == dynamic::type_null || (rhs._ldvalue && *rhs._ldvalue == 0) )
         {
           // *this / null = std::overflow_error
-          throw std::overflow_error("Divide by zero encountered. ");
+          throw std::overflow_error("Division by zero.");
         }
 
         // is the lhs null then the result is zero
@@ -420,8 +420,8 @@ namespace myodd {
         // devide the values.
         Any value = (*_ldvalue / *rhs._ldvalue);
 
-        // update the type.
-        value._type = CalculateType(Type(), rhs.Type());
+        // update the type for _this_ value.
+        value._type = value.CalculateType(Type(), rhs.Type());
 
         // return the value.
         return value;
@@ -523,27 +523,45 @@ namespace myodd {
           return CalculateType(lhsOriginal, dynamic::Integer_int);
         }
 
+        //  the possible type
+        dynamic::Type type = lhsOriginal;
+
         // if they are both the same, then use it.
         if (rhsOriginal == lhsOriginal )
         {
-          return lhsOriginal;
+          type = lhsOriginal;
         }
 
         // if lhs is floating and rhs is not, then use floating.
-        if (is_type_floating(lhsOriginal) && !is_type_floating(rhsOriginal))
+        else if (is_type_floating(lhsOriginal) && !is_type_floating(rhsOriginal))
         {
-          return lhsOriginal;
+          type = lhsOriginal;
         }
 
         // same the other way around.
-        if (!is_type_floating(lhsOriginal) && is_type_floating(rhsOriginal) )
+        else if (!is_type_floating(lhsOriginal) && is_type_floating(rhsOriginal) )
         {
-          return rhsOriginal;
+          type = rhsOriginal;
+        }
+
+        // we are getting close to our final choice.
+        // if it is an integer then we need to check if it should be elevated to a floating point value.
+        long double intpart;
+        if (dynamic::is_type_integer(type) && 0 != modf( *_ldvalue, &intpart) )
+        {
+          //  we set it to a double, (not float).
+          type = dynamic::Floating_point_double;
+
+          // check that the value does not fall outside the limit.
+          if (*_ldvalue > std::numeric_limits<double>::max())
+          {
+            type = dynamic::Floating_point_long_double;
+          }
         }
 
         // if we are here, they are both the same type, (floating/integer)
         // so we need to return the greatest of them both.
-        return lhsOriginal;
+        return type;
       }
 
       /**
@@ -576,7 +594,6 @@ namespace myodd {
           return 1;
         }
 
-        // 
         if (*lhs._ldvalue != *rhs._ldvalue)
         {
           return 2;

@@ -924,3 +924,136 @@ TEST(AnyTestOperators, NonNumberWideCharDividedByAnythingIsZero)
   auto x = something / any;
   ASSERT_EQ(0, x);
 }
+
+TEST(AnyTestOperators, DivideTwoIntegers)
+{
+  for (;;)
+  {
+    // get two numbers.
+    auto l1 = IntRandomNumber<long>(false);
+    auto l2 = IntRandomNumber<long>(false);
+
+    // 
+    double d = (double)l1 / (double)l2;
+
+    // the number has to have double with a fraction.
+    long double intpart;
+    if ( 0 == modf(d, &intpart) )
+    {
+      continue;
+    }
+
+    auto any1 = myodd::dynamic::Any(l1);
+    auto any2 = myodd::dynamic::Any(l2);
+
+    auto anyResult = any1 / any2;
+    ASSERT_DOUBLE_EQ( d, anyResult);
+
+    // done
+    break;
+  }
+}
+
+TEST(AnyTestOperators, DivideTwoBoolean)
+{
+  auto any1 = myodd::dynamic::Any(true);
+  auto any2 = myodd::dynamic::Any(true);
+
+  auto anyResult = any1 / any2;
+  ASSERT_EQ(1, anyResult);
+}
+
+TEST(AnyTestOperators, DivideCharInteger)
+{
+  auto any1 = myodd::dynamic::Any('4');
+  auto any2 = myodd::dynamic::Any('2');
+
+  auto anyResult = any1 / any2;
+  ASSERT_EQ(2, anyResult);
+}
+
+TEST(AnyTestOperators, DivideWideCharInteger)
+{
+  auto any1 = myodd::dynamic::Any(L'4');
+  auto any2 = myodd::dynamic::Any(L'2');
+
+  auto anyResult = any1 / any2;
+  ASSERT_EQ(2, anyResult);
+}
+
+TEST(AnyTestOperators, DivideCharDouble)
+{
+  auto any1 = myodd::dynamic::Any('5');
+  auto any2 = myodd::dynamic::Any('2');
+
+  auto anyResult = any1 / any2;
+  ASSERT_DOUBLE_EQ(2.5, anyResult);
+}
+
+TEST(AnyTestOperators, DivideWideCharDouble)
+{
+  auto any1 = myodd::dynamic::Any(L'5');
+  auto any2 = myodd::dynamic::Any(L'2');
+
+  auto anyResult = any1 / any2;
+  ASSERT_DOUBLE_EQ(2.5, anyResult);
+}
+
+TEST(AnyTestOperators, DivideWideCharAndCharInteger)
+{
+  auto any1 = myodd::dynamic::Any(L'4');
+  auto any2 = myodd::dynamic::Any('2');
+
+  auto anyResult = any1 / any2;
+  ASSERT_EQ(2, anyResult);
+}
+
+TEST(AnyTestOperators, DivideWideCharAndCharDouble)
+{
+  auto any1 = myodd::dynamic::Any(L'5');
+  auto any2 = myodd::dynamic::Any('2');
+
+  auto anyResult = any1 / any2;
+  ASSERT_DOUBLE_EQ(2.5, anyResult);
+}
+
+TEST(AnyTestOperators, DivideStringDouble)
+{
+  auto any1 = myodd::dynamic::Any("11.9");
+  auto any2 = myodd::dynamic::Any("7");
+
+  auto anyResult = any1 / any2;
+  ASSERT_DOUBLE_EQ(1.7, anyResult);
+}
+
+TEST(AnyTestOperators, DivideWideStringDouble)
+{
+  auto any1 = myodd::dynamic::Any(L"11.9");
+  auto any2 = myodd::dynamic::Any(L"7");
+
+  auto anyResult = any1 / any2;
+  ASSERT_DOUBLE_EQ(1.7, anyResult);
+}
+
+TEST(AnyTestOperators, DivideWideStringAndLongDouble)
+{
+  auto any1 = myodd::dynamic::Any(L"694.2");
+  auto any2 = myodd::dynamic::Any( (long)52 );
+
+  auto anyResult = any1 / any2;
+  ASSERT_DOUBLE_EQ(13.35, anyResult);
+}
+
+TEST(AnyTestOperators, DivideTwoStringsWillThrowAnError)
+{
+  auto any1 = myodd::dynamic::Any("Hello");
+  auto any2 = myodd::dynamic::Any("World");
+  EXPECT_THROW(any1 / any2, std::overflow_error);
+}
+
+TEST(AnyTestOperators, DivideTwoWideStringsWillThrowAnError)
+{
+  auto any1 = myodd::dynamic::Any(L"Hello");
+  auto any2 = myodd::dynamic::Any(L"World");
+  EXPECT_THROW(any1 / any2, std::overflow_error);
+}
