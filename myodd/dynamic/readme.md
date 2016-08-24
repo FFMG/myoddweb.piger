@@ -143,13 +143,17 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
 ## Performance comparison.
 ### Version 0.1
 #### [Addition loop](doc/perfaddition.md)
-- std : `0.003000000s`
-- any : `0.845000029s`
+- std : `0.003s` | `0.003s`
+- any : `0.391s` | `0.361s`
 
-#### [Addition loop](doc/perfmultiplication.md)
+#### [Addition loop](doc/perfsubtraction.md)
+- std : `0.003s` | `0.003s`
+- any : `0.375s` | `0.437s`
 
-- std : `0.002000000s`
-- any : `0.799000025s`
+#### [Multiplication loop](doc/perfmultiplication.md)
+
+- std : `0.003s` | `0.003s`
+- any : `0.416s` | `0.363s`
 
 ## Todo
 

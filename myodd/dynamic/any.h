@@ -199,10 +199,46 @@ namespace myodd {
        */
       Any& operator+=(const Any& rhs)
       {
-        // add us to the other number and update our value.
-        *this = *this + rhs;
+        // we use the double number as it is more precise
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
+        {
+          // null+null = int(0)
+          CastFrom( 0 );
+          return *this;
+        }
 
-        // return the result by reference
+        // is the lhs null if it is then we have to set the value?
+        if (Type() == dynamic::Misc_null)
+        {
+          //  set the value
+          *this = rhs;
+
+          // update the type
+          _type = CalculateType(dynamic::Misc_null, rhs.Type());
+
+          // return it
+          return *this;
+        }
+
+        // is the rhs null if it is then we have to set the value?
+        if (rhs.Type() == dynamic::Misc_null)
+        {
+          // nothing changes...except the type
+          // because this + null == this
+          _type = CalculateType( Type(), dynamic::Misc_null );
+          return *this;
+        }
+
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(*_ldvalue + *rhs._ldvalue);
+
+        // update the type.
+        _type = CalculateType(type, rhs.Type());
+
+        // return the value.
         return *this;
       }
 
@@ -213,34 +249,13 @@ namespace myodd {
        */
       Any operator+(const Any& rhs) const
       {
-        // we use the double number as it is more precise
-        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
-        {
-          // null+null = int(0)
-          return Any((int)0);
-        }
+        // copy the value
+        Any value = *this;
 
-        // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::Misc_null)
-        {
-          return Any(0) + rhs;
-        }
+        // add the rhs
+        value += rhs;
 
-        // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::Misc_null)
-        {
-          // nothing changes...
-          // because this + null == this
-          return *this + Any(0);
-        }
-
-        // add the values.
-        Any value = (*_ldvalue + *rhs._ldvalue);
-
-        // update the type.
-        value._type = CalculateType(Type(), rhs.Type());
-
-        // return the value.
+        // return the result.
         return value;
       }
 
@@ -253,16 +268,75 @@ namespace myodd {
       template<typename T> friend Any operator+(Any lhs, const T& rhs) { lhs += Any(rhs); return lhs; }
 
       /**
+       * Add one to the current value.
+       * @return Any *this +1
+       */
+      Any& operator++()
+      {
+        *this += 1;
+        return *this;
+      }
+
+      /**
+       * Add one to the current value.
+       * @return Any *this +1
+       */
+      Any operator++(int)
+      {
+        Any tmp(*this);
+        operator++();
+        return tmp;
+      }
+
+      /**
        * Binary arithmetic operators - subtraction
        * @param const Any& the item we are subtraction from this.
        * @return Any& *this-rhs
        */
       Any& operator-=(const Any& rhs)
       {
-        // add us to the other number and update our value.
-        *this = *this - rhs;
+        // we use the double number as it is more precise
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
+        {
+          // null-null = int(0)
+          CastFrom(0);
+          return *this;
+        }
 
-        // return the result by reference
+        // is the lhs null if it is then we have to set the value?
+        if (Type() == dynamic::Misc_null)
+        {
+          // update the value
+          CastFrom( 0 - *rhs._ldvalue );
+
+          // update the type
+          _type = CalculateType(dynamic::Misc_null, rhs.Type());
+
+          // return it
+          return *this;
+        }
+
+        // is the rhs null if it is then we have to set the value?
+        if (rhs.Type() == dynamic::Misc_null)
+        {
+          // nothing changes...except the type
+          // because this - null == this
+          _type = CalculateType( Type(), dynamic::Misc_null );
+
+          // return it.
+          return *this;
+        }
+
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // multiply the values.
+        CastFrom(*_ldvalue - *rhs._ldvalue);
+
+        // update the type.
+        _type = CalculateType(type, rhs.Type());
+
+        // return the value.
         return *this;
       }
 
@@ -273,34 +347,13 @@ namespace myodd {
        */
       Any operator-(const Any& rhs) const
       {
-        // we use the double number as it is more precise
-        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
-        {
-          // null-null = int(0)
-          return Any((int)0);
-        }
+        // copy the value
+        Any value = *this;
 
-        // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::Misc_null)
-        {
-          return Any(0) - rhs;
-        }
+        // subtract the rhs
+        value -= rhs;
 
-        // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::Misc_null)
-        {
-          // nothing changes...
-          // because this - null == this
-          return *this - Any(0);
-        }
-
-        // add the values.
-        Any value = (*_ldvalue - *rhs._ldvalue);
-
-        // update the type.
-        value._type = CalculateType(Type(), rhs.Type());
-
-        // return the value.
+        // return the result.
         return value;
       }
 
@@ -319,10 +372,40 @@ namespace myodd {
        */
       Any& operator*=(const Any& rhs)
       {
-        // add us to the other number and update our value.
-        *this = *this * rhs;
+        // we use the double number as it is more precise
+        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
+        {
+          // null*null = int(0)
+          CastFrom( 0 );
+          return *this;
+        }
 
-        // return the result by reference
+        // is the lhs null if it is then we have to set the value?
+        if (Type() == dynamic::Misc_null)
+        {
+          // *this * null == 0
+          CastFrom( 0 );
+          return *this;
+        }
+
+        // is the rhs null if it is then we have to set the value?
+        if (rhs.Type() == dynamic::Misc_null)
+        {
+          // *this * null == 0
+          CastFrom( 0 );
+          return *this;
+        }
+
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // multiply the values.
+        CastFrom(*_ldvalue * *rhs._ldvalue);
+
+        // update the type.
+        _type = CalculateType(type, rhs.Type());
+
+        // return the value.
         return *this;
       }
 
@@ -333,34 +416,13 @@ namespace myodd {
        */
       Any operator*(const Any& rhs) const
       {
-        // we use the double number as it is more precise
-        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
-        {
-          // null*null = int(0)
-          return Any((int)0);
-        }
+        // copy the value
+        Any value = *this;
 
-        // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::Misc_null)
-        {
-          // *this * null == 0
-          return Any((int)0);
-        }
+        // multiply the rhs
+        value *= rhs;
 
-        // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::Misc_null)
-        {
-          // *this * null == 0
-          return Any((int)0);
-        }
-
-        // multiply the values.
-        Any value = (*_ldvalue * *rhs._ldvalue);
-
-        // update the type.
-        value._type = CalculateType(Type(), rhs.Type());
-
-        // return the value.
+        // return the result.
         return value;
       }
 

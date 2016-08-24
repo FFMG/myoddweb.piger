@@ -442,6 +442,16 @@ TEST_MEM(AnyTestOperators, AddBooleanToNullBecomesAnInt)
   ASSERT_EQ(nullptr, y);
 }
 
+TEST_MEM(AnyTestOperators, AddNullToBooleanBecomesAnInt)
+{
+  auto x = myodd::dynamic::Any(nullptr);
+  auto y = myodd::dynamic::Any(true);
+  auto z = x + y;
+  ASSERT_EQ(1, z);
+  ASSERT_EQ(nullptr, x);
+  ASSERT_EQ(true, y);
+}
+
 TEST_MEM(AnyTestOperators, SubstractBooleanFromNullBecomesAnInt)
 {
   auto x = myodd::dynamic::Any(true);
