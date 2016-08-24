@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include "../testcommon.h"
+#include <vector>
 
 // --gtest_filter=AnyTest* 
 TEST_MEM(AnyTest, CheckTheDataType)
@@ -296,4 +297,14 @@ TEST_MEM(AnyTest, SetAnyNullValueToOldValue)
   // and the value should be zero
   // we have to cast to int as we compare types.
   ASSERT_EQ(0, (int)y );
+}
+
+TEST_MEM(AnyTest, UseWithVectors)
+{
+  // assign a value to the vector.
+  std::vector<myodd::dynamic::Any> sampledata{ 10, "Hello", L"World", 20.5 };
+  ASSERT_EQ(10, sampledata[0]);
+  ASSERT_EQ("Hello", sampledata[1]);
+  ASSERT_EQ(L"World", sampledata[2]);
+  ASSERT_DOUBLE_EQ(20.5, sampledata[3]);
 }
