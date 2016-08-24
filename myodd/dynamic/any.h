@@ -372,6 +372,69 @@ namespace myodd {
        */
       template<typename T> friend Any operator*(Any lhs, const T& rhs) { lhs *= Any(rhs); return lhs; }
 
+      /**
+      * Binary arithmetic operators - division
+      * @param const Any& the item we are deviding this by
+      * @return Any& *this/rhs
+      */
+      Any& operator/=(const Any& rhs)
+      {
+        // devide this by the rhs
+        *this = *this / rhs;
+
+        // return the result by reference
+        return *this;
+      }
+
+      /**
+       * Binary arithmetic operators - division
+       * @param const Any& the item we are deviding from this.
+       * @return Any *this/ rhs
+       */
+      Any operator/(const Any& rhs) const
+      {
+        // we use the double number as it is more precise
+        if (Type() == dynamic::type_null && rhs.Type() == dynamic::type_null)
+        {
+          // null / null = std::overflow_error
+          throw std::overflow_error("Divide by zero encountered. ");
+        }
+
+        // if the rhs is null, then we cannot calculate it.
+        // or if the value is zero.
+        if (rhs.Type() == dynamic::type_null || (rhs._ldvalue && *rhs._ldvalue == 0) )
+        {
+          // *this / null = std::overflow_error
+          throw std::overflow_error("Divide by zero encountered. ");
+        }
+
+        // is the lhs null then the result is zero
+        // or if the value is zero
+        if (Type() == dynamic::type_null || (_ldvalue && *_ldvalue == 0))
+        {
+          // it does not matter what the rhs is.
+          // but we know it is not zero or null.
+          return Any((int)0);          
+        }
+
+        // devide the values.
+        Any value = (*_ldvalue / *rhs._ldvalue);
+
+        // update the type.
+        value._type = CalculateType(Type(), rhs.Type());
+
+        // return the value.
+        return value;
+      }
+
+      /**
+       * Binary arithmetic operators - division
+       * @param Any the item we are dividing from this.
+       * @param const Any& the item we are dividing from this.
+       * @return Any *this / rhs
+       */
+      template<typename T> friend Any operator/(Any lhs, const T& rhs) { lhs /= Any(rhs); return lhs; }
+
       /** 
        * The equal operator
        * @param const Any& other the value we are trying to set.
@@ -1345,6 +1408,8 @@ namespace myodd {
       char* _cvalue;
       size_t _lcvalue;
 
+      // 'cosmetic' representations of the numbers, both wide and non wide strings.
+      // the values are only created if/when the caller call a to string function.
       std::string* _svalue;
       std::wstring* _swvalue;
 

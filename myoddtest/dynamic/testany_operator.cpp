@@ -830,3 +830,97 @@ TEST(AnyTestOperators, MultiplicationAdditionAndSubstractionParentheseReUseNumbe
   ASSERT_EQ((long)20, x);
   ASSERT_EQ((long)10, y);
 }
+
+TEST(AnyTestOperators, DivideANumberByNullWillThrow)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>());
+  EXPECT_THROW(any / nullptr, std::overflow_error);
+}
+
+TEST(AnyTestOperators, DivideZeroByNullWillThrow)
+{
+  auto any = myodd::dynamic::Any(0);
+  EXPECT_THROW(any / nullptr, std::overflow_error);
+}
+
+TEST(AnyTestOperators, DivideANumberByNullAnyWillThrow)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto nullany = myodd::dynamic::Any( nullptr );
+  EXPECT_THROW(any / nullany, std::overflow_error);
+}
+
+TEST(AnyTestOperators, DivideANumberByZeroWillThrow)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  EXPECT_THROW(any / 0, std::overflow_error);
+}
+
+TEST(AnyTestOperators, DivideANumberByZeroAnyWillThrow)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto zeroany = myodd::dynamic::Any(0);
+  EXPECT_THROW(any / zeroany, std::overflow_error);
+}
+
+TEST(AnyTestOperators, DivideANumberByZeroAnyDoubleWillThrow)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto nullany = myodd::dynamic::Any( (double)0.0 );
+  EXPECT_THROW(any / nullany, std::overflow_error);
+}
+
+TEST(AnyTestOperators, DivideTwoNullAnyWillThrow)
+{
+  auto nullany1 = myodd::dynamic::Any(nullptr);
+  auto nullany2 = myodd::dynamic::Any(nullptr);
+  EXPECT_THROW(nullany1 / nullany2, std::overflow_error);
+}
+
+TEST(AnyTestOperators, ZeroDividedByAnythingIsZero )
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto x = 0 / any;
+  ASSERT_EQ(0, x);
+}
+
+TEST(AnyTestOperators, AnyZeroDividedByAnythingIsZero)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto zero = myodd::dynamic::Any(0);
+  auto x = zero / any;
+  ASSERT_EQ(0, x);
+  ASSERT_EQ(zero, x);
+}
+
+TEST(AnyTestOperators, NonNumberStringDividedByAnythingIsZero)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto something = myodd::dynamic::Any("Hello");
+  auto x = something / any;
+  ASSERT_EQ(0, x);
+}
+
+TEST(AnyTestOperators, NonNumberWideStringDividedByAnythingIsZero)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto something = myodd::dynamic::Any(L"Hello");
+  auto x = something / any;
+  ASSERT_EQ(0, x);
+}
+
+TEST(AnyTestOperators, NonNumberCharDividedByAnythingIsZero)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto something = myodd::dynamic::Any('&');
+  auto x = something / any;
+  ASSERT_EQ(0, x);
+}
+
+TEST(AnyTestOperators, NonNumberWideCharDividedByAnythingIsZero)
+{
+  auto any = myodd::dynamic::Any(IntRandomNumber<long>(false));
+  auto something = myodd::dynamic::Any(L'&');
+  auto x = something / any;
+  ASSERT_EQ(0, x);
+}
