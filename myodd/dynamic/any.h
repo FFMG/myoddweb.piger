@@ -415,6 +415,16 @@ namespace myodd {
       }
 
     protected:
+      /**
+       * This function is used to re-calculate the 'best' type after an arithmetic opereation 
+       * For example int*int could give us a long long
+       *          or int / int could give us a double.
+       * NB: this function does not _set_ the type, it only calculates the posible value.
+       *     it is up to the call function to set the new type.
+       * @param const dynamic::Type& lhsOriginal the original type on the lhs of the operation
+       * @param const dynamic::Type& rhsOriginal the original type on the rhs of the operation
+       * @return dynamic::Type the posible new type.
+       */
       dynamic::Type CalculateType(const dynamic::Type& lhsOriginal, const dynamic::Type& rhsOriginal) const
       {
         //  null values become ints.
