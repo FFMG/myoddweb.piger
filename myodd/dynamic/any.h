@@ -17,13 +17,13 @@ namespace myodd {
        * default constructor.
        */
       Any() :
-        _llivalue( 0),
-        _ldvalue( 0 ),
-        _cvalue( nullptr ),
-        _svalue( nullptr ),
-        _swvalue( nullptr ),
+        _llivalue(0),
+        _ldvalue(0),
+        _cvalue(nullptr),
+        _svalue(nullptr),
+        _swvalue(nullptr),
         _lcvalue(0),
-        _type( Type::Misc_null )
+        _type(Type::Misc_null)
       {
       }
 
@@ -32,18 +32,18 @@ namespace myodd {
        * @param const int& the value we want to copy/set
        */
       template<class T>
-      Any( const T& value) :
+      Any(const T& value) :
         Any()
       {
         CastFrom(value);
       }
-      
+
       /**
        * Copy constructor
        * @param const int& the value we want to copy/set
        */
       template<class T>
-      Any( T* value) :
+      Any(T* value) :
         Any()
       {
         CastFrom(value);
@@ -82,7 +82,7 @@ namespace myodd {
        */
       bool operator==(const Any& other) const
       {
-        return (Compare( *this, other ) == 0);
+        return (Compare(*this, other) == 0);
       }
 
       /**
@@ -91,9 +91,9 @@ namespace myodd {
        * @return bool if the values are equal
        */
       template<class T>
-      friend bool operator==(const T& lhs , const Any& rhs)
+      friend bool operator==(const T& lhs, const Any& rhs)
       {
-        return (Compare(Any(lhs), rhs ) == 0);
+        return (Compare(Any(lhs), rhs) == 0);
       }
 
       /**
@@ -102,7 +102,7 @@ namespace myodd {
        * @return bool if the values are equal
        */
       template<class T>
-      friend bool operator==(const Any& lhs, const T& rhs )
+      friend bool operator==(const Any& lhs, const T& rhs)
       {
         return (Compare(lhs, Any(rhs)) == 0);
       }
@@ -123,9 +123,9 @@ namespace myodd {
        * @return bool if the values are equal
        */
       template<class T>
-      friend bool operator!=(const T& lhs , const Any& rhs)
+      friend bool operator!=(const T& lhs, const Any& rhs)
       {
-        return (Compare(Any(lhs), rhs ) != 0);
+        return (Compare(Any(lhs), rhs) != 0);
       }
 
       /**
@@ -143,7 +143,7 @@ namespace myodd {
         }
 
         // is the lhs null?
-        if (Type() == dynamic::Misc_null )
+        if (Type() == dynamic::Misc_null)
         {
           return 0 < rhs._ldvalue;
         }
@@ -195,12 +195,12 @@ namespace myodd {
       //
       // +operators
       //  
-      #pragma region +operator
+      #pragma region
       /**
-       * Binary arithmetic operators - addition
-       * @param const Any& the item we are adding to this.
-       * @return Any& *this+rhs
-       */
+ * Binary arithmetic operators - addition
+ * @param const Any& the item we are adding to this.
+ * @return Any& *this+rhs
+ */
       Any& operator+=(const Any& rhs)
       {
         // save the current type.
@@ -216,7 +216,7 @@ namespace myodd {
         return *this;
       }
 
-      /** 
+      /**
        * Default += function add the rhs to *this.
        * @param const T& rhs the value we are adding to *this
        * @param *this + rhs.
@@ -234,7 +234,7 @@ namespace myodd {
        * @param *this + rhs.
        */
       template<>
-      Any& operator+=(int rhs) 
+      Any& operator+=(int rhs)
       {
         // save the current type.
         dynamic::Type type = Type();
@@ -255,7 +255,7 @@ namespace myodd {
        * @param *this + rhs.
        */
       template<>
-      Any& operator+=(short int rhs) 
+      Any& operator+=(short int rhs)
       {
         // save the current type.
         dynamic::Type type = Type();
@@ -276,7 +276,7 @@ namespace myodd {
        * @param *this + rhs.
        */
       template<>
-      Any& operator+=(unsigned short int rhs) 
+      Any& operator+=(unsigned short int rhs)
       {
         // save the current type.
         dynamic::Type type = Type();
@@ -297,7 +297,7 @@ namespace myodd {
        * @param *this + rhs.
        */
       template<>
-      Any& operator+=(unsigned int rhs) 
+      Any& operator+=(unsigned int rhs)
       {
         // save the current type.
         dynamic::Type type = Type();
@@ -318,7 +318,7 @@ namespace myodd {
        * @param *this + rhs.
        */
       template<>
-      Any& operator+=(long int rhs) 
+      Any& operator+=(long int rhs)
       {
         // save the current type.
         dynamic::Type type = Type();
@@ -497,7 +497,7 @@ namespace myodd {
         CastFrom(_ldvalue + 1);
 
         // update the type.
-        _type = CalculateType(type, dynamic::Integer_int );
+        _type = CalculateType(type, dynamic::Integer_int);
 
         // return this.
         return *this;
@@ -516,9 +516,13 @@ namespace myodd {
 
       //
       // +operators
-      //  
-      #pragma endregion
+      //
+      #pragma endregion +=operators
 
+      //
+      // -operators
+      //  
+      #pragma region
       /**
        * Substract one to the current value.
        * @return Any *this -1
@@ -594,6 +598,15 @@ namespace myodd {
        */
       template<class T> friend Any operator-(Any lhs, const T& rhs) { lhs -= Any(rhs); return lhs; }
 
+      //
+      // -operators
+      //
+      #pragma endregion -=operators
+      
+      //
+      // *operators
+      //  
+      #pragma region
       /**
        * Binary arithmetic operators - multiplication
        * @param const Any& the item we are multiplying from this.
@@ -638,6 +651,16 @@ namespace myodd {
        * @return Any *this*rhs
        */
       template<class T> friend Any operator*(Any lhs, const T& rhs) { lhs *= Any(rhs); return lhs; }
+      
+      //
+      // *operators
+      //
+      #pragma endregion /=operators
+      
+      //
+      // /operators
+      //  
+      #pragma region
 
       /**
       * Binary arithmetic operators - division
@@ -698,6 +721,11 @@ namespace myodd {
        * @return Any *this / rhs
        */
       template<class T> friend Any operator/(Any lhs, const T& rhs) { lhs /= Any(rhs); return lhs; }
+      
+      //
+      // /operators
+      //
+      #pragma endregion /=operators
 
       /** 
        * The equal operator
