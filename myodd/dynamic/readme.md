@@ -65,13 +65,33 @@ Equality
     ...
     foo == bar; // false! because a string is not equal to a integer.
 
+#### Pointer rules.
+- you can pass a null pointer, (Any(nullptr) )
+- you can pass a null pointer to a variable, (Any( (int*)nullptr))
+- 
+
+#### Arithmetic rules.
+
+- Non number strings are equal to zero, (so "Hello"=0 and "Hello" + "World"=0)
+- true=1 and false=0
+	- 2 * false = 0;  // 2*0=0
+	- 3 * true = 3; // 3*1=3
+- Number strings equal the number, (so "1" + "41" = 42)
+	- '0' -> '9' for `char`/`wchar_t`
+	- any valid looking number, "1234.456" = (double)1234.456
+- By default the floating point number is a `double`, if more space is needed is it elevated to a `long double`.
+
 ### Who else does dynamic typing?
 
-Many languages use dynamic typing.
+Many languages use dynamic typing, but some of the popular ones are...
 
 - php
-- java
-- C#, (to an extend it does, until the value has been assigned)
+- javascript
+- Lua
+- Perl
+- Python
+- Ruby
+- C#, (well, to an extend it does)
 
 Similar apps that use 
 
@@ -141,11 +161,13 @@ You can query the current data type of the variable as we understand it. Call `A
 
 ## Arithmetic rules (+,-,*,/)
 
-- can be done on integers.
-- Can be done on floating points.
-- Can be done on strings, (wide and non wide strings).
-- Can be done on char types, (wide and non wide char).
-- Can be done on booleans
+- can be done on integers (1+1=2).
+- Can be done on floating points (1.1+1.1=2.2).
+- Can be done on strings, (wide and non wide strings), "10"+"1"=11".
+- Can be done on char types, (wide and non wide char), '1'+'1'=2.
+- Can be done on booleans, (true+false=1)
+
+See the special cases in the rules of the game.
 
 ### Examples
 

@@ -122,7 +122,7 @@ namespace myodd {
       return false;
     }
 
-    template<typename T>
+    template<class T>
     struct get_type
     {
       static constexpr dynamic::Type value = dynamic::Misc_unknown;
@@ -318,6 +318,30 @@ namespace myodd {
     struct get_type<const wchar_t>
     {
       static constexpr dynamic::Type value = dynamic::Character_wchar_t;
+    };
+
+    template<>
+    struct get_type<const std::wstring>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_wchar_t;
+    };
+
+    template<>
+    struct get_type<std::wstring>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_wchar_t;
+    };
+
+    template<>
+    struct get_type<std::string>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_char;
+    };
+
+    template<>
+    struct get_type<const std::string>
+    {
+      static constexpr dynamic::Type value = dynamic::Character_char;
     };
   }
 }

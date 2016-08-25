@@ -964,7 +964,7 @@ namespace myodd {
       
       /**
        * Create from a const std::string.
-       * @param char* value the value we are trying to create from.
+       * @param std::string& value the value we are trying to create from.
        */
       void CastFrom(std::string& value)
       {
@@ -972,8 +972,26 @@ namespace myodd {
       }
 
       /**
-       * Create from a const std::wstring.
-       * @param char* value the value we are trying to create from.
+       * Create from a const std::string*.
+       * @param std::string* value the value we are trying to create from.
+       */
+      void CastFrom(std::string* value)
+      {
+        CreateFromCharacters(value ? value->c_str() : (const char*)nullptr);
+      }
+
+      /**
+       * Create from a const std::string*.
+       * @param const std::string* value the value we are trying to create from.
+       */
+      void CastFrom( const std::string* value)
+      {
+        CreateFromCharacters(value ? value->c_str() : (const char*)nullptr);
+      }
+
+      /**
+       * Create from a std::wstring.
+       * @param std::wstring& value the value we are trying to create from.
        */
       void CastFrom(std::wstring& value)
       {
@@ -981,8 +999,26 @@ namespace myodd {
       }
 
       /**
+       * Create from a const std::wstring*.
+       * @param std::wstring* value the value we are trying to create from.
+       */
+      void CastFrom(std::wstring* value)
+      {
+        CreateFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
+      }
+
+      /**
+       * Create from a const std::wstring*.
+       * @param const std::wstring* value the value we are trying to create from.
+       */
+      void CastFrom( const std::wstring* value)
+      {
+        CreateFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
+      }
+
+      /**
        * Create from a const std::string.
-       * @param char* value the value we are trying to create from.
+       * @param const std::string& value the value we are trying to create from.
        */
       void CastFrom(const std::string& value)
       {
@@ -991,7 +1027,7 @@ namespace myodd {
 
       /**
       * Create from a const std::wstring.
-      * @param char* value the value we are trying to create from.
+      * @param const std::wstring& value the value we are trying to create from.
       */
       void CastFrom(const std::wstring& value)
       {

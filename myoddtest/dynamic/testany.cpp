@@ -31,6 +31,20 @@ TEST_MEM(AnyTest, AddressOfPointerIsNullButConstIntTypeIsRespected)
   ASSERT_EQ(myodd::dynamic::Type::Integer_int, x.Type());
 }
 
+TEST_MEM(AnyTestCharacter, AddressOfPointerIsNullButWideStringIsRespected)
+{
+  std::wstring* s = nullptr;
+  auto x = myodd::dynamic::Any(s);
+  ASSERT_EQ(myodd::dynamic::Type::Character_wchar_t, x.Type());
+}
+
+TEST_MEM(AnyTestCharacter, AddressOfPointerIsNullButStringIsRespected)
+{
+  std::string* s = nullptr;
+  auto x = myodd::dynamic::Any(s);
+  ASSERT_EQ(myodd::dynamic::Type::Character_char, x.Type());
+}
+
 TEST_MEM(AnyTest, AddressOfPointerIsNullButDoubleTypeIsRespected)
 {
   double* d = nullptr;
