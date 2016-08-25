@@ -31,7 +31,7 @@ namespace myodd {
        * Copy constructor
        * @param const int& the value we want to copy/set
        */
-      template<typename T>
+      template<class T>
       Any( const T& value) :
         Any()
       {
@@ -42,7 +42,7 @@ namespace myodd {
        * Copy constructor
        * @param const int& the value we want to copy/set
        */
-      template<typename T>
+      template<class T>
       Any( T* value) :
         Any()
       {
@@ -70,7 +70,7 @@ namespace myodd {
        * The T operator.
        * @return T the template operator.
        */
-      template<typename T>
+      template<class T>
       operator T() const {
         return CastTo<T>();
       }
@@ -90,7 +90,7 @@ namespace myodd {
        * @param const Any &other the value we are comparing
        * @return bool if the values are equal
        */
-      template<typename T>
+      template<class T>
       friend bool operator==(const T& lhs , const Any& rhs)
       {
         return (Compare(Any(lhs), rhs ) == 0);
@@ -101,7 +101,7 @@ namespace myodd {
        * @param const Any &other the value we are comparing
        * @return bool if the values are equal
        */
-      template<typename T>
+      template<class T>
       friend bool operator==(const Any& lhs, const T& rhs )
       {
         return (Compare(lhs, Any(rhs)) == 0);
@@ -122,7 +122,7 @@ namespace myodd {
        * @param const Any &other the value we are comparing
        * @return bool if the values are equal
        */
-      template<typename T>
+      template<class T>
       friend bool operator!=(const T& lhs , const Any& rhs)
       {
         return (Compare(Any(lhs), rhs ) != 0);
@@ -164,7 +164,7 @@ namespace myodd {
        * @param const Any& rhs
        * @return bool if lhs < rhs
        */
-      template<typename T> friend bool operator< (const T& lhs, const Any& rhs) {
+      template<class T> friend bool operator< (const T& lhs, const Any& rhs) {
         return Any(lhs) < rhs;
       }
 
@@ -174,7 +174,7 @@ namespace myodd {
        * @param const Any& rhs
        * @return bool if lhs > rhs
        */
-      template<typename T>  friend bool operator> (const T& lhs, const Any& rhs) { return rhs < lhs; }
+      template<class T>  friend bool operator> (const T& lhs, const Any& rhs) { return rhs < lhs; }
 
       /**
        * Relational operator less or equal than
@@ -182,7 +182,7 @@ namespace myodd {
        * @param const Any& rhs
        * @return bool if lhs <= rhs
        */
-      template<typename T> friend bool operator<=(const T& lhs, const Any& rhs) { return !(lhs > rhs); }
+      template<class T> friend bool operator<=(const T& lhs, const Any& rhs) { return !(lhs > rhs); }
 
       /**
        * Relational operator more or equal than
@@ -190,7 +190,7 @@ namespace myodd {
        * @param const Any& rhs
        * @return bool if lhs >= rhs
        */
-      template<typename T> friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
+      template<class T> friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
 
       /**
        * Binary arithmetic operators - addition
@@ -265,7 +265,7 @@ namespace myodd {
        * @param const Any& the item we are adding to this.
        * @return Any *this+rhs
        */
-      template<typename T> friend Any operator+(Any lhs, const T& rhs) { lhs += Any(rhs); return lhs; }
+      template<class T> friend Any operator+(Any lhs, const T& rhs) { lhs += Any(rhs); return lhs; }
 
       /**
        * Add one to the current value.
@@ -372,7 +372,7 @@ namespace myodd {
        * @param const Any& the item we are subtracting from this.
        * @return Any *this-rhs
        */
-      template<typename T> friend Any operator-(Any lhs, const T& rhs) { lhs -= Any(rhs); return lhs; }
+      template<class T> friend Any operator-(Any lhs, const T& rhs) { lhs -= Any(rhs); return lhs; }
 
       /**
        * Binary arithmetic operators - multiplication
@@ -441,7 +441,7 @@ namespace myodd {
        * @param const Any& the item we are multiplying from this.
        * @return Any *this*rhs
        */
-      template<typename T> friend Any operator*(Any lhs, const T& rhs) { lhs *= Any(rhs); return lhs; }
+      template<class T> friend Any operator*(Any lhs, const T& rhs) { lhs *= Any(rhs); return lhs; }
 
       /**
       * Binary arithmetic operators - division
@@ -511,7 +511,7 @@ namespace myodd {
        * @param const Any& the item we are dividing from this.
        * @return Any *this / rhs
        */
-      template<typename T> friend Any operator/(Any lhs, const T& rhs) { lhs /= Any(rhs); return lhs; }
+      template<class T> friend Any operator/(Any lhs, const T& rhs) { lhs /= Any(rhs); return lhs; }
 
       /** 
        * The equal operator
@@ -713,7 +713,7 @@ namespace myodd {
        * @throw std::bad_cast() if we are trying to create from an unknwon value.
        * @param const T& value the value we are trying to create from.
        */
-      template<typename T>
+      template<class T>
       void CastFrom(const T& value)
       {
         // clear all the values.
@@ -773,7 +773,7 @@ namespace myodd {
        * @throw std::bad_cast() if we are trying to create from an unknwon value.
        * @param const T& value the value we are trying to create from.
        */
-      template<typename T>
+      template<class T>
       void CastFrom(T* value)
       {
         // clear all the values.
@@ -849,26 +849,6 @@ namespace myodd {
       void CastFrom<const char>(const char* value)
       {
         CreateFromCharacters(value);
-      }
-
-      /**
-       * Create from a std::string.
-       * @param char* value the value we are trying to create from.
-       */
-      template<>
-      void CastFrom<std::string&>(std::string& value)
-      {
-        CreateFromCharacters(value.c_str());
-      }
-
-      /**
-       * Create from a const std::string.
-       * @param char* value the value we are trying to create from.
-       */
-      template<>
-      void CastFrom<const std::string&>(const std::string& value)
-      {
-        CreateFromCharacters(value.c_str());
       }
 
       /**
@@ -983,10 +963,46 @@ namespace myodd {
       }
       
       /**
+       * Create from a const std::string.
+       * @param char* value the value we are trying to create from.
+       */
+      void CastFrom(std::string& value)
+      {
+        CreateFromCharacters(value.c_str());
+      }
+
+      /**
+       * Create from a const std::wstring.
+       * @param char* value the value we are trying to create from.
+       */
+      void CastFrom(std::wstring& value)
+      {
+        CreateFromCharacters(value.c_str());
+      }
+
+      /**
+       * Create from a const std::string.
+       * @param char* value the value we are trying to create from.
+       */
+      void CastFrom(const std::string& value)
+      {
+        CreateFromCharacters(value.c_str());
+      }
+
+      /**
+      * Create from a const std::wstring.
+      * @param char* value the value we are trying to create from.
+      */
+      void CastFrom(const std::wstring& value)
+      {
+        CreateFromCharacters(value.c_str());
+      }
+
+      /**
        * Try and cast this to a posible value.
        * @return T the value we are looking for.
        */
-      template<typename T>
+      template<class T>
       T CastTo() const
       {
         switch ( Type() )
@@ -1073,7 +1089,7 @@ namespace myodd {
        * Return a character
        * @return T* the character we want to return no.
        */
-      template<typename T>
+      template<class T>
       T* ReturnFromCharacters() const
       {
         switch (Type())
@@ -1372,7 +1388,7 @@ namespace myodd {
        * Create a value from a multiple characters..
        * @param const T* value the character we are creating from.
        */
-      template<typename T>
+      template<class T>
       void CreateFromCharacters(const T* value)
       {
         // clean the values.
@@ -1452,7 +1468,7 @@ namespace myodd {
        * Create a value from a single character.
        * @param const char value the character we are creating from.
        */
-      template<typename T>
+      template<class T>
       void CreateFromCharacter(const T value )
       {
         // clean the values.

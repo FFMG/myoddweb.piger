@@ -417,3 +417,25 @@ TEST_MEM(AnyTestCharacter, CastFromNullCharToWideChar)
   ASSERT_STREQ((wchar_t*)x, L"");
   ASSERT_STREQ((wchar_t*)x, L"");
 }
+
+TEST_MEM(AnyTestCharacter, StdStringConstructor )
+{
+  auto s = std::string("Hello");
+  auto x = myodd::dynamic::Any(s);
+  ASSERT_STREQ("Hello", x );
+}
+
+TEST_MEM(AnyTestCharacter, StdWideStringConstructor)
+{
+  auto s = std::wstring( L"Hello");
+  auto x = myodd::dynamic::Any(s);
+  ASSERT_STREQ( L"Hello", x);
+}
+
+TEST_MEM(AnyTestCharacter, AddSomethingToAString)
+{
+  auto s = std::string("Hello");
+  auto x = myodd::dynamic::Any( s );
+  x += " World";
+  ASSERT_STREQ("Hello World", " World");
+}
