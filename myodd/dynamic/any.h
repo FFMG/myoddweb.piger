@@ -18,7 +18,7 @@ namespace myodd {
        */
       Any() :
         _llivalue( nullptr),
-        _ldvalue( nullptr ),
+        _ldvalue( 0 ),
         _cvalue( nullptr ),
         _svalue( nullptr ),
         _swvalue( nullptr ),
@@ -145,17 +145,17 @@ namespace myodd {
         // is the lhs null?
         if (Type() == dynamic::Misc_null )
         {
-          return 0 < *rhs._ldvalue;
+          return 0 < rhs._ldvalue;
         }
 
         // is the rhs null?
         if (rhs.Type() == dynamic::Misc_null)
         {
-          return *_ldvalue < 0;
+          return _ldvalue < 0;
         }
 
         // neither values are null
-        return (*_ldvalue < *rhs._ldvalue);
+        return (_ldvalue < rhs._ldvalue);
       }
 
       /**
@@ -233,7 +233,7 @@ namespace myodd {
         dynamic::Type type = Type();
 
         // add the values.
-        CastFrom(*_ldvalue + *rhs._ldvalue);
+        CastFrom(_ldvalue + rhs._ldvalue);
 
         // update the type.
         _type = CalculateType(type, rhs.Type());
@@ -277,7 +277,7 @@ namespace myodd {
         dynamic::Type type = Type();
 
         // multiply the values.
-        CastFrom(*_ldvalue + 1);
+        CastFrom(_ldvalue + 1);
 
         // update the type.
         _type = CalculateType(type, dynamic::Integer_int );
@@ -316,7 +316,7 @@ namespace myodd {
         if (Type() == dynamic::Misc_null)
         {
           // update the value
-          CastFrom( 0 - *rhs._ldvalue );
+          CastFrom( 0 - rhs._ldvalue );
 
           // update the type
           _type = CalculateType(dynamic::Misc_null, rhs.Type());
@@ -340,7 +340,7 @@ namespace myodd {
         dynamic::Type type = Type();
 
         // multiply the values.
-        CastFrom(*_ldvalue - *rhs._ldvalue);
+        CastFrom(_ldvalue - rhs._ldvalue);
 
         // update the type.
         _type = CalculateType(type, rhs.Type());
@@ -409,7 +409,7 @@ namespace myodd {
         dynamic::Type type = Type();
 
         // multiply the values.
-        CastFrom(*_ldvalue * *rhs._ldvalue);
+        CastFrom(_ldvalue * rhs._ldvalue);
 
         // update the type.
         _type = CalculateType(type, rhs.Type());
@@ -459,7 +459,7 @@ namespace myodd {
 
         // if the rhs is null, then we cannot calculate it.
         // or if the value is zero.
-        if (rhs.Type() == dynamic::Misc_null || (rhs._ldvalue && *rhs._ldvalue == 0))
+        if (rhs.Type() == dynamic::Misc_null || rhs._ldvalue == 0)
         {
           // *this / null = std::overflow_error
           throw std::overflow_error("Division by zero.");
@@ -467,7 +467,7 @@ namespace myodd {
 
         // is the lhs null then the result is zero
         // or if the value is zero
-        if (Type() == dynamic::Misc_null || (_ldvalue && *_ldvalue == 0))
+        if (Type() == dynamic::Misc_null || _ldvalue == 0)
         {
           // it does not matter what the rhs is.
           // but we know it is not zero or null.
@@ -479,7 +479,7 @@ namespace myodd {
         dynamic::Type type = Type();
 
         // multiply the values.
-        CastFrom(*_ldvalue / *rhs._ldvalue);
+        CastFrom(_ldvalue / rhs._ldvalue);
 
         // update the type.
         _type = CalculateType(type, rhs.Type());
@@ -532,7 +532,7 @@ namespace myodd {
           _llivalue = other._llivalue ? new long long int(*other._llivalue) : nullptr;
 
           // long double
-          _ldvalue = other._ldvalue ? new long double(*other._ldvalue) : nullptr;
+          _ldvalue = other._ldvalue;
 
           // copy the character value
           if (other._lcvalue > 0 && other._cvalue)
@@ -625,13 +625,13 @@ namespace myodd {
         // we are getting close to our final choice.
         // if it is an integer then we need to check if it should be elevated to a floating point value.
         long double intpart;
-        if (dynamic::is_type_integer(type) && 0 != modf( *_ldvalue, &intpart) )
+        if (dynamic::is_type_integer(type) && 0 != modf( _ldvalue, &intpart) )
         {
           //  we set it to a double, (not float).
           type = dynamic::Floating_point_double;
 
           // check that the value does not fall outside the limit.
-          if (*_ldvalue > std::numeric_limits<double>::max())
+          if (_ldvalue > std::numeric_limits<double>::max())
           {
             type = dynamic::Floating_point_long_double;
           }
@@ -672,7 +672,7 @@ namespace myodd {
           return 1;
         }
 
-        if (*lhs._ldvalue != *rhs._ldvalue)
+        if (lhs._ldvalue != rhs._ldvalue)
         {
           return 2;
         }
@@ -725,12 +725,12 @@ namespace myodd {
         {
         case dynamic::Misc_null:
           _llivalue = nullptr;
-          _ldvalue = nullptr;
+          _ldvalue = 0;
           return;
 
         case dynamic::Boolean_bool:
           _llivalue = new long long int( value ? 1: 0 );
-          _ldvalue = new long double( value ? 1 : 0 );
+          _ldvalue = ( value ? 1 : 0 );
           return;
 
         // int
@@ -744,7 +744,7 @@ namespace myodd {
         case dynamic::Integer_unsigned_long_long_int:
           // we can cast those into long/long
           _llivalue = new long long int(static_cast<long long int>(value));
-          _ldvalue = new long double(static_cast<long double>(*_llivalue));
+          _ldvalue = static_cast<long double>(*_llivalue);
           return;
 
         // double
@@ -752,8 +752,8 @@ namespace myodd {
         case dynamic::Floating_point_float:
         case dynamic::Floating_point_long_double:
           // we can cast those into long/long
-          _ldvalue = new long double(static_cast<long double>(value));
-          _llivalue = new long long int(static_cast<long long int>(*_ldvalue));
+          _ldvalue = static_cast<long double>(value);
+          _llivalue = new long long int(static_cast<long long int>(_ldvalue));
           return;
 
         case dynamic::Misc_unknown:
@@ -794,7 +794,7 @@ namespace myodd {
           {
           case dynamic::Misc_null:
             _llivalue = nullptr;
-            _ldvalue = nullptr;
+            _ldvalue = 0;
             return;
 
           // boolean
@@ -815,7 +815,7 @@ namespace myodd {
           case dynamic::Floating_point_float:
           case dynamic::Floating_point_long_double:
             _llivalue = new long long int(0);
-            _ldvalue = new long double(0);
+            _ldvalue = 0;
             return;
 
           case dynamic::Misc_unknown:
@@ -1053,7 +1053,7 @@ namespace myodd {
         case dynamic::Type::Character_wchar_t:
           if (dynamic::is_type_floating(dynamic::get_type<T>::value))
           {
-            return static_cast<T>(*_ldvalue);
+            return static_cast<T>(_ldvalue);
           }
           return static_cast<T>(*_llivalue);
 
@@ -1068,10 +1068,10 @@ namespace myodd {
         case dynamic::Type::Floating_point_double:
         case dynamic::Type::Floating_point_float:
         case dynamic::Type::Floating_point_long_double:
-          return static_cast<T>(*_ldvalue);
+          return static_cast<T>(_ldvalue);
 
         case dynamic::Type::Boolean_bool:
-          return static_cast<T>(*_ldvalue);
+          return static_cast<T>(_ldvalue);
 
         default:
           break; 
@@ -1223,7 +1223,7 @@ namespace myodd {
 
         if (dynamic::is_type_floating(Type()))
         {
-          *_swvalue = std::to_wstring(*_ldvalue);
+          *_swvalue = std::to_wstring(_ldvalue);
         }
         else
         {
@@ -1261,7 +1261,7 @@ namespace myodd {
 
         if (dynamic::is_type_floating(Type()))
         {
-          *_svalue = std::to_string(*_ldvalue);
+          *_svalue = std::to_string(_ldvalue);
         }
         else
         {
@@ -1402,9 +1402,6 @@ namespace myodd {
         //  delete long long integer if need be
         delete _llivalue;
 
-        //  delete long double if need be
-        delete _ldvalue;
-
         // delete the char if need be
         delete _cvalue;
 
@@ -1414,7 +1411,7 @@ namespace myodd {
 
         // reset the values
         _llivalue = nullptr;
-        _ldvalue = nullptr;
+        _ldvalue = 0;
         _cvalue = nullptr;
         _svalue = nullptr;
         _swvalue = nullptr;
@@ -1442,7 +1439,7 @@ namespace myodd {
           std::memcpy(_cvalue, value, _lcvalue);
 
           _llivalue = new long long int(std::strtoll(_cvalue, nullptr, 0));
-          _ldvalue = new long double(std::strtold(_cvalue, nullptr));
+          _ldvalue = std::strtold(_cvalue, nullptr);
         }
         else
         {
@@ -1457,7 +1454,7 @@ namespace myodd {
 
           // default values are 0
           _llivalue = new long long int(0);
-          _ldvalue = new long double(0);
+          _ldvalue = 0;
         }
       }
 
@@ -1483,7 +1480,7 @@ namespace myodd {
           std::memcpy(_cvalue, value, _lcvalue);
 
           _llivalue = new long long int(std::wcstoll(value, nullptr, 0));
-          _ldvalue = new long double(std::wcstold(value, nullptr));
+          _ldvalue = std::wcstold(value, nullptr);
         }
         else
         {
@@ -1496,7 +1493,7 @@ namespace myodd {
 
           // default values are 0
           _llivalue = new long long int(0);
-          _ldvalue = new long double(0);
+          _ldvalue = 0;
         }
       }
 
@@ -1523,12 +1520,12 @@ namespace myodd {
         {
           auto number = value - '0';
           _llivalue = new long long int(number);
-          _ldvalue = new long double(number);
+          _ldvalue = number;
         }
         else
         {
           _llivalue = new long long int(0);
-          _ldvalue = new long double(0);
+          _ldvalue = 0;
         }
       }
 
@@ -1556,12 +1553,12 @@ namespace myodd {
         {
           auto number = value - L'0';
           _llivalue = new long long int(number);
-          _ldvalue = new long double(number);
+          _ldvalue = number;
         }
         else
         {
           _llivalue = new long long int(0);
-          _ldvalue = new long double(0);
+          _ldvalue = 0;
         }
       }
 
@@ -1569,7 +1566,7 @@ namespace myodd {
       long long int* _llivalue;
 
       // the biggest floating point value
-      long double* _ldvalue;
+      long double _ldvalue;
 
       // this is the given character value either char/signed char/unsigned char/wide
       char* _cvalue;
