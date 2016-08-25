@@ -192,6 +192,10 @@ namespace myodd {
        */
       template<class T> friend bool operator>=(const T& lhs, const Any& rhs) { return !(lhs < rhs); }
 
+      //
+      // +operators
+      //  
+      #pragma region +operator
       /**
        * Binary arithmetic operators - addition
        * @param const Any& the item we are adding to this.
@@ -393,6 +397,69 @@ namespace myodd {
       }
 
       /**
+       * Specialized += function add the rhs to *this.
+       * @param float rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(float rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Floating_point_float);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param double rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(double rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Floating_point_double);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param float rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(long double rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Floating_point_long_double);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
        * Binary arithmetic operators - addition
        * @param const Any& the item we are adding to this.
        * @return Any *this+rhs
@@ -446,6 +513,11 @@ namespace myodd {
         operator++();
         return tmp;
       }
+
+      //
+      // +operators
+      //  
+      #pragma endregion
 
       /**
        * Substract one to the current value.
