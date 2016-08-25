@@ -106,3 +106,14 @@ TEST_MEM(AnyTestInt, CheckTheDataTypeUnsignedUnsignedInt)
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ(myodd::dynamic::Type::Integer_unsigned_int, x.Type());
 }
+
+TEST_MEM(AnyTestInt, CheckThatWeCanCastAShortIntToAnInt)
+{
+  auto value = IntRandomNumber<short>(false);
+  auto x = myodd::dynamic::Any(value);
+  ASSERT_EQ(myodd::dynamic::Type::Integer_short_int, x.Type());
+
+  auto y = myodd::dynamic::Any( (int)x );
+  ASSERT_EQ(myodd::dynamic::Type::Integer_int, y.Type());
+  ASSERT_EQ((int)value, y);
+}

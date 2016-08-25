@@ -1094,3 +1094,43 @@ TEST_MEM(AnyTestOperators, DivideTwoWideStringsWillThrowAnError)
   auto any2 = myodd::dynamic::Any(L"World");
   EXPECT_THROW(any1 / any2, std::overflow_error);
 }
+
+TEST_MEM(AnyTestOperators, QuickAddPrefix)
+{
+  auto number = IntRandomNumber<short>(false);
+  auto any = number;
+  ASSERT_EQ( any, number);
+
+  ASSERT_EQ(++any, (int)number+1);
+  ASSERT_EQ( any, (int)number+1);
+}
+
+TEST_MEM(AnyTestOperators, QuickSubPrefix)
+{
+  auto number = IntRandomNumber<short>(false);
+  auto any = myodd::dynamic::Any(number);
+  ASSERT_EQ(any, number);
+
+  ASSERT_EQ(--any, (short)(number-1));
+  ASSERT_EQ(any, (short)(number-1));
+}
+
+TEST_MEM(AnyTestOperators, QuickAddPostFix)
+{
+  auto number = IntRandomNumber<short>(false);
+  auto any = myodd::dynamic::Any(number);
+  ASSERT_EQ(any, number);
+
+  ASSERT_EQ(any++, number);
+  ASSERT_EQ(any, (short)(number + 1));
+}
+
+TEST_MEM(AnyTestOperators, QuickSubPostFix)
+{
+  auto number = IntRandomNumber<short>(false);
+  auto any = myodd::dynamic::Any(number);
+  ASSERT_EQ(any, number);
+
+  ASSERT_EQ(any--, number);
+  ASSERT_EQ(any, (short)(number - 1));
+}

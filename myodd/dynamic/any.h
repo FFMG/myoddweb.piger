@@ -211,7 +211,7 @@ namespace myodd {
         if (Type() == dynamic::Misc_null)
         {
           //  set the value
-          *this = rhs;
+          CastFrom( rhs._ldvalue );
 
           // update the type
           _type = CalculateType(dynamic::Misc_null, rhs.Type());
@@ -226,6 +226,8 @@ namespace myodd {
           // nothing changes...except the type
           // because this + null == this
           _type = CalculateType( Type(), dynamic::Misc_null );
+
+          // return it
           return *this;
         }
 
@@ -294,6 +296,36 @@ namespace myodd {
       {
         Any tmp(*this);
         operator++();
+        return tmp;
+      }
+
+      /**
+       * Substract one to the current value.
+       * @return Any *this -1
+       */
+      Any& operator--()
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // multiply the values.
+        CastFrom(_ldvalue - 1);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_int);
+
+        // return this.
+        return *this;
+      }
+
+      /**
+       * Substract one to the current value.
+       * @return Any *this -1
+       */
+      Any operator--(int)
+      {
+        Any tmp(*this);
+        operator--();
         return tmp;
       }
 
@@ -1060,6 +1092,7 @@ namespace myodd {
 
         // Integer
         case dynamic::Type::Integer_int:
+        case dynamic::Type::Integer_short_int:
         case dynamic::Type::Integer_long_int:
         case dynamic::Type::Integer_unsigned_long_int:
         case dynamic::Type::Integer_long_long_int:

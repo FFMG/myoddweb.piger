@@ -203,6 +203,9 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
     auto bad = 1 / myodd::dynamic::Any( "No a number" );   // = std::overflow_error
 
 ## Performance comparison.
+
+While this level of flexibility will never result in an equal performance with the fundamental types, it is always good to see how well this will perform. 
+
 ### Version 0.1
 #### [Addition loop](doc/perfaddition.md)
 - std : `0.003s` | `0.003s`
@@ -226,6 +229,6 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
 
 - implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.  
 Those objects cannot have arithmetic done to them, (+,-,/,*)
-- Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.
-- Assign `std::string` and `std::wstring`  
-myodd::dynamic::And( std::string("Hello") );
+- <strike>Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.</strike> *(done 24/08/2016)*
+- <strike>Assign `std::string` and `std::wstring`  
+myodd::dynamic::And( std::string("Hello") );</strike> *(done 25/08/2016)*
