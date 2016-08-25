@@ -17,7 +17,7 @@ namespace myodd {
        * default constructor.
        */
       Any() :
-        _llivalue( nullptr),
+        _llivalue( 0),
         _ldvalue( 0 ),
         _cvalue( nullptr ),
         _svalue( nullptr ),
@@ -529,7 +529,7 @@ namespace myodd {
           _type = other._type;
 
           // long long int
-          _llivalue = other._llivalue ? new long long int(*other._llivalue) : nullptr;
+          _llivalue = other._llivalue;
 
           // long double
           _ldvalue = other._ldvalue;
@@ -661,13 +661,14 @@ namespace myodd {
         {
         case dynamic::Misc_unknown:
         case dynamic::Misc_null:
-          //  just compare the llivalue, they should be null anyway.
-          return (lhs._llivalue == nullptr && lhs._llivalue == rhs._llivalue) ? 0 : 1;
+          // both are the same, (as per above), so if both null then they are the same.
+          // all the values should be the same but there is no point in checking.
+          return 0;
         }
 
         // compare the values now.
         //
-        if (*lhs._llivalue != *rhs._llivalue)
+        if (lhs._llivalue != rhs._llivalue)
         {
           return 1;
         }
@@ -724,12 +725,12 @@ namespace myodd {
         switch ( Type() )
         {
         case dynamic::Misc_null:
-          _llivalue = nullptr;
+          _llivalue = 0;
           _ldvalue = 0;
           return;
 
         case dynamic::Boolean_bool:
-          _llivalue = new long long int( value ? 1: 0 );
+          _llivalue = ( value ? 1: 0 );
           _ldvalue = ( value ? 1 : 0 );
           return;
 
@@ -743,8 +744,8 @@ namespace myodd {
         case dynamic::Integer_long_long_int:
         case dynamic::Integer_unsigned_long_long_int:
           // we can cast those into long/long
-          _llivalue = new long long int(static_cast<long long int>(value));
-          _ldvalue = static_cast<long double>(*_llivalue);
+          _llivalue = static_cast<long long int>(value);
+          _ldvalue = static_cast<long double>(_llivalue);
           return;
 
         // double
@@ -753,7 +754,7 @@ namespace myodd {
         case dynamic::Floating_point_long_double:
           // we can cast those into long/long
           _ldvalue = static_cast<long double>(value);
-          _llivalue = new long long int(static_cast<long long int>(_ldvalue));
+          _llivalue = static_cast<long long int>(_ldvalue);
           return;
 
         case dynamic::Misc_unknown:
@@ -793,7 +794,7 @@ namespace myodd {
           switch ( Type() )
           {
           case dynamic::Misc_null:
-            _llivalue = nullptr;
+            _llivalue = 0;
             _ldvalue = 0;
             return;
 
@@ -814,7 +815,7 @@ namespace myodd {
           case dynamic::Floating_point_double:
           case dynamic::Floating_point_float:
           case dynamic::Floating_point_long_double:
-            _llivalue = new long long int(0);
+            _llivalue = 0;
             _ldvalue = 0;
             return;
 
@@ -1055,7 +1056,7 @@ namespace myodd {
           {
             return static_cast<T>(_ldvalue);
           }
-          return static_cast<T>(*_llivalue);
+          return static_cast<T>(_llivalue);
 
         // Integer
         case dynamic::Type::Integer_int:
@@ -1063,7 +1064,7 @@ namespace myodd {
         case dynamic::Type::Integer_unsigned_long_int:
         case dynamic::Type::Integer_long_long_int:
         case dynamic::Type::Integer_unsigned_long_long_int:
-          return static_cast<T>(*_llivalue);
+          return static_cast<T>(_llivalue);
 
         case dynamic::Type::Floating_point_double:
         case dynamic::Type::Floating_point_float:
@@ -1227,7 +1228,7 @@ namespace myodd {
         }
         else
         {
-          *_swvalue = std::to_wstring(*_llivalue);
+          *_swvalue = std::to_wstring(_llivalue);
         }
       }
       /**
@@ -1265,7 +1266,7 @@ namespace myodd {
         }
         else
         {
-          *_svalue = std::to_string(*_llivalue);
+          *_svalue = std::to_string(_llivalue);
         }
       }
 
@@ -1293,7 +1294,7 @@ namespace myodd {
         case dynamic::Type::Character_unsigned_char:
           return static_cast<char>(*(unsigned char*)_cvalue);
         }
-        return static_cast<char>(*_llivalue);
+        return static_cast<char>(_llivalue);
       }
 
       /**
@@ -1320,7 +1321,7 @@ namespace myodd {
         case dynamic::Type::Character_unsigned_char:
           return static_cast<wchar_t>(*(unsigned char*)_cvalue);
         }
-        return static_cast<wchar_t>(*_llivalue);
+        return static_cast<wchar_t>(_llivalue);
       }
 
       /**
@@ -1347,7 +1348,7 @@ namespace myodd {
         case dynamic::Type::Character_unsigned_char:
           return static_cast<unsigned char>(*(unsigned char*)_cvalue);
         }
-        return static_cast<unsigned char>(*_llivalue);
+        return static_cast<unsigned char>(_llivalue);
       }
 
       /**
@@ -1374,7 +1375,7 @@ namespace myodd {
         case dynamic::Type::Character_unsigned_char:
           return static_cast<signed char>(*(unsigned char*)_cvalue);
         }
-        return static_cast<signed char>(*_llivalue);
+        return static_cast<signed char>(_llivalue);
       }
 
       /**
@@ -1391,7 +1392,7 @@ namespace myodd {
         }
 
         //  value to true/false
-        return (*_llivalue != 0 ? true : false);
+        return (_llivalue != 0 ? true : false);
       }
 
       /**
@@ -1399,9 +1400,6 @@ namespace myodd {
        */
       void CleanValues()
       {
-        //  delete long long integer if need be
-        delete _llivalue;
-
         // delete the char if need be
         delete _cvalue;
 
@@ -1410,7 +1408,7 @@ namespace myodd {
         delete _swvalue;
 
         // reset the values
-        _llivalue = nullptr;
+        _llivalue = 0;
         _ldvalue = 0;
         _cvalue = nullptr;
         _svalue = nullptr;
@@ -1438,7 +1436,7 @@ namespace myodd {
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
 
-          _llivalue = new long long int(std::strtoll(_cvalue, nullptr, 0));
+          _llivalue = std::strtoll(_cvalue, nullptr, 0);
           _ldvalue = std::strtold(_cvalue, nullptr);
         }
         else
@@ -1453,7 +1451,7 @@ namespace myodd {
           std::memcpy(_cvalue, &c, _lcvalue);
 
           // default values are 0
-          _llivalue = new long long int(0);
+          _llivalue = 0;
           _ldvalue = 0;
         }
       }
@@ -1479,7 +1477,7 @@ namespace myodd {
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
 
-          _llivalue = new long long int(std::wcstoll(value, nullptr, 0));
+          _llivalue = std::wcstoll(value, nullptr, 0);
           _ldvalue = std::wcstold(value, nullptr);
         }
         else
@@ -1492,7 +1490,7 @@ namespace myodd {
           std::memcpy(_cvalue, &wide, _lcvalue);
 
           // default values are 0
-          _llivalue = new long long int(0);
+          _llivalue = 0;
           _ldvalue = 0;
         }
       }
@@ -1519,12 +1517,12 @@ namespace myodd {
         if (value >= '0' && value <= '9')
         {
           auto number = value - '0';
-          _llivalue = new long long int(number);
+          _llivalue = number;
           _ldvalue = number;
         }
         else
         {
-          _llivalue = new long long int(0);
+          _llivalue = 0;
           _ldvalue = 0;
         }
       }
@@ -1552,18 +1550,18 @@ namespace myodd {
         if (value >= L'0' && value <= L'9')
         {
           auto number = value - L'0';
-          _llivalue = new long long int(number);
+          _llivalue = number;
           _ldvalue = number;
         }
         else
         {
-          _llivalue = new long long int(0);
+          _llivalue = 0;
           _ldvalue = 0;
         }
       }
 
       // the biggest integer value.
-      long long int* _llivalue;
+      long long int _llivalue;
 
       // the biggest floating point value
       long double _ldvalue;
