@@ -524,7 +524,295 @@ namespace myodd {
       //  
       #pragma region
       /**
-       * Substract one to the current value.
+       * Binary arithmetic operators - substraction
+       * @param const Any& the item we are subtracting to this.
+       * @return Any& *this-rhs
+       */
+      Any& operator-=(const Any& rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs._ldvalue);
+
+        // update the type.
+        _type = CalculateType(type, rhs.Type());
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Default -= function substract the rhs to *this.
+       * @param const T& rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<class T>
+      Any& operator-=(T rhs)
+      {
+        *this -= Any(rhs);
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param int rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param short rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(short int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_short_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param unsigned short int rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(unsigned short int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_short_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param unsigned int rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(unsigned int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param long int rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(long int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_long_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param unsigned long int rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(unsigned long int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_long_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param long long int rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(long long int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_long_long_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param unsigned long long int rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(unsigned long long int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_long_long_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param float rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(float rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Floating_point_float);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param double rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(double rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Floating_point_double);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized -= function substract the rhs to *this.
+       * @param float rhs the value we are subtracting from *this
+       * @param *this - rhs.
+       */
+      template<>
+      Any& operator-=(long double rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // substract the values.
+        CastFrom(_ldvalue - rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Floating_point_long_double);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Binary arithmetic operators - substraction
+       * @param const Any& the item we are subtracting from *this.
+       * @return Any *this-rhs
+       */
+      Any operator-(const Any& rhs) const
+      {
+        // copy the value
+        Any value = *this;
+
+        // substract the rhs
+        value -= rhs;
+
+        // return the result.
+        return value;
+      }
+
+      /**
+       * Binary arithmetic operators - substraction
+       * @param Any the item we are subtracting from *this.
+       * @param const Any& the item we are subtracting from *this.
+       * @return Any *this-rhs
+       */
+      template<class T> friend Any operator-(Any lhs, const T& rhs) { lhs -= rhs; return lhs; }
+
+      /**
+       * substract one from the current value.
        * @return Any *this -1
        */
       Any& operator--()
@@ -543,7 +831,7 @@ namespace myodd {
       }
 
       /**
-       * Substract one to the current value.
+       * substract one from the current value.
        * @return Any *this -1
        */
       Any operator--(int)
@@ -552,51 +840,6 @@ namespace myodd {
         operator--();
         return tmp;
       }
-
-      /**
-       * Binary arithmetic operators - subtraction
-       * @param const Any& the item we are subtraction from this.
-       * @return Any& *this-rhs
-       */
-      Any& operator-=(const Any& rhs)
-      {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // multiply the values.
-        CastFrom(_ldvalue - rhs._ldvalue);
-
-        // update the type.
-        _type = CalculateType(type, rhs.Type());
-
-        // return the value.
-        return *this;
-      }
-
-      /**
-       * Binary arithmetic operators - subtraction
-       * @param const Any& the item we are subtraction from this.
-       * @return Any *this-rhs
-       */
-      Any operator-(const Any& rhs) const
-      {
-        // copy the value
-        Any value = *this;
-
-        // subtract the rhs
-        value -= rhs;
-
-        // return the result.
-        return value;
-      }
-
-      /**
-       * Binary arithmetic operators - substration
-       * @param Any the item we are subtracting from this.
-       * @param const Any& the item we are subtracting from this.
-       * @return Any *this-rhs
-       */
-      template<class T> friend Any operator-(Any lhs, const T& rhs) { lhs -= Any(rhs); return lhs; }
 
       //
       // -operators
@@ -1273,8 +1516,10 @@ namespace myodd {
           return static_cast<T>(_llivalue);
 
         // Integer
+        case dynamic::Type::Integer_unsigned_int:
         case dynamic::Type::Integer_int:
         case dynamic::Type::Integer_short_int:
+        case dynamic::Type::Integer_unsigned_short_int:
         case dynamic::Type::Integer_long_int:
         case dynamic::Type::Integer_unsigned_long_int:
         case dynamic::Type::Integer_long_long_int:

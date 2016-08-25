@@ -1134,3 +1134,229 @@ TEST_MEM(AnyTestOperators, QuickSubPostFix)
   ASSERT_EQ(any--, number);
   ASSERT_EQ(any, (short)(number - 1));
 }
+
+TEST_MEM(AnyTestOperators, AddShortIntToAny)
+{
+  auto start = IntRandomNumber<short int>(false);
+  auto number = IntRandomNumber<short int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (short int)(start+number));
+
+  any = myodd::dynamic::Any(start);
+  any = any+number;
+  ASSERT_EQ(any, (short int)(start + number));
+}
+
+TEST_MEM(AnyTestOperators, AddUnsignedShortIntToAny)
+{
+  auto start = IntRandomNumber<unsigned short int>(false);
+  auto number = IntRandomNumber<unsigned short int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (unsigned short int)(start + number));
+
+  any = myodd::dynamic::Any(start);
+  any = any + number;
+  ASSERT_EQ(any, (unsigned short int)(start + number));
+}
+
+TEST_MEM(AnyTestOperators, AddIntToAny)
+{
+  auto start = IntRandomNumber<int>(false);
+  auto number = IntRandomNumber<int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (int)(start + number));
+
+  any = myodd::dynamic::Any(start);
+  any = any + number;
+  ASSERT_EQ(any, (int)(start + number));
+}
+
+TEST_MEM(AnyTestOperators, AddUnsignedIntToAny)
+{
+  auto start = IntRandomNumber<unsigned int>(false);
+  auto number = IntRandomNumber<unsigned int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (unsigned int)(start + number));
+
+  any = myodd::dynamic::Any(start);
+  any = any + number;
+  ASSERT_EQ(any, (unsigned int)(start + number));
+}
+
+TEST_MEM(AnyTestOperators, AddLongIntToAny)
+{
+  auto start = IntRandomNumber <long int > (false);
+  auto number = IntRandomNumber<long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (long int)(start + number));
+
+  any = myodd::dynamic::Any(start);
+  any = any + number;
+  ASSERT_EQ(any, (long int)(start + number));
+}
+
+TEST_MEM(AnyTestOperators, AddUnsignedLongIntToAny)
+{
+  auto start = IntRandomNumber <unsigned long int >(false);
+  auto number = IntRandomNumber<unsigned long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (unsigned long int)(start + number));
+
+  any = myodd::dynamic::Any(start);
+  any = any + number;
+  ASSERT_EQ(any, (unsigned long int)(start + number));
+}
+
+TEST_MEM(AnyTestOperators, AddLongLongIntToAny)
+{
+  auto start = IntRandomNumber <long long int >(false);
+  auto number = IntRandomNumber<long long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (long long int)(start + number));
+
+  any = myodd::dynamic::Any(start);
+  any = any + number;
+  ASSERT_EQ(any, (long long int)(start + number));
+}
+
+TEST_MEM(AnyTestOperators, AddUnsignedLongLongIntToAny)
+{
+  auto start = IntRandomNumber <unsigned long long int >(false);
+  auto number = IntRandomNumber<unsigned long long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any += number;
+  ASSERT_EQ(any, (unsigned long long int)(start + number));
+
+  any = myodd::dynamic::Any(start);
+  any = any + number;
+  ASSERT_EQ(any, (unsigned long long int)(start + number));
+}
+
+///////////////////////////////////////////////////////////////
+
+TEST_MEM(AnyTestOperators, SubstractShortIntToAny)
+{
+  auto start = IntRandomNumber<short int>(false);
+  auto number = IntRandomNumber<short int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (short int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (short int)(start - number));
+}
+
+TEST_MEM(AnyTestOperators, SubstractUnsignedShortIntToAny)
+{
+  auto start = IntRandomNumber<unsigned short int>(false);
+  auto number = IntRandomNumber<unsigned short int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (unsigned short int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (unsigned short int)(start - number));
+}
+
+TEST_MEM(AnyTestOperators, SubstractIntToAny)
+{
+  auto start = IntRandomNumber<int>(false);
+  auto number = IntRandomNumber<int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (int)(start - number));
+}
+
+TEST_MEM(AnyTestOperators, SubstractUnsignedIntToAny)
+{
+  auto start = IntRandomNumber<unsigned int>(false);
+  auto number = IntRandomNumber<unsigned int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (unsigned int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (unsigned int)(start - number));
+}
+
+TEST_MEM(AnyTestOperators, SubstractLongIntToAny)
+{
+  auto start = IntRandomNumber <long int >(false);
+  auto number = IntRandomNumber<long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (long int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (long int)(start - number));
+}
+
+TEST_MEM(AnyTestOperators, SubstractUnsignedLongIntToAny)
+{
+  auto start = IntRandomNumber <unsigned long int >(false);
+  auto number = IntRandomNumber<unsigned long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (unsigned long int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (unsigned long int)(start - number));
+}
+
+TEST_MEM(AnyTestOperators, SubstractLongLongIntToAny)
+{
+  auto start = IntRandomNumber <long long int >(false);
+  auto number = IntRandomNumber<long long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (long long int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (long long int)(start - number));
+}
+
+TEST_MEM(AnyTestOperators, SubstractUnsignedLongLongIntToAny)
+{
+  auto start = IntRandomNumber <unsigned long long int >(false);
+  auto number = IntRandomNumber<unsigned long long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any -= number;
+  ASSERT_EQ(any, (unsigned long long int)(start - number));
+
+  any = myodd::dynamic::Any(start);
+  any = any - number;
+  ASSERT_EQ(any, (unsigned long long int)(start - number));
+}

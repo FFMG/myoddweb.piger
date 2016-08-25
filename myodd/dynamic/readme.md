@@ -233,3 +233,4 @@ Those objects cannot have arithmetic done to them, (+,-,/,*)
 - <strike>Assign `std::string` and `std::wstring`  
 myodd::dynamic::And( std::string("Hello") );</strike> *(done 25/08/2016)*
 - Add ternary operator 
+- Manage [arithmetic conversions](http://stackoverflow.com/a/4814901/4584436) properly.
