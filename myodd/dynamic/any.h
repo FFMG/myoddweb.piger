@@ -199,38 +199,6 @@ namespace myodd {
        */
       Any& operator+=(const Any& rhs)
       {
-        // we use the double number as it is more precise
-        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
-        {
-          // null+null = int(0)
-          CastFrom( 0 );
-          return *this;
-        }
-
-        // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::Misc_null)
-        {
-          //  set the value
-          CastFrom( rhs._ldvalue );
-
-          // update the type
-          _type = CalculateType(dynamic::Misc_null, rhs.Type());
-
-          // return it
-          return *this;
-        }
-
-        // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::Misc_null)
-        {
-          // nothing changes...except the type
-          // because this + null == this
-          _type = CalculateType( Type(), dynamic::Misc_null );
-
-          // return it
-          return *this;
-        }
-
         // save the current type.
         dynamic::Type type = Type();
 
@@ -239,6 +207,186 @@ namespace myodd {
 
         // update the type.
         _type = CalculateType(type, rhs.Type());
+
+        // return the value.
+        return *this;
+      }
+
+      /** 
+       * Default += function add the rhs to *this.
+       * @param const T& rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<class T>
+      Any& operator+=(T rhs)
+      {
+        *this += Any(rhs);
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param int rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(int rhs) 
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param short rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(short int rhs) 
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_short_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param unsigned short int rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(unsigned short int rhs) 
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_short_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param unsigned int rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(unsigned int rhs) 
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param long int rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(long int rhs) 
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_long_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param unsigned long int rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(unsigned long int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_long_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param long long int rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(long long int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_long_long_int);
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Specialized += function add the rhs to *this.
+       * @param unsigned long long int rhs the value we are adding to *this
+       * @param *this + rhs.
+       */
+      template<>
+      Any& operator+=(unsigned long long int rhs)
+      {
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // add the values.
+        CastFrom(_ldvalue + rhs);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_unsigned_long_long_int);
 
         // return the value.
         return *this;
@@ -267,7 +415,7 @@ namespace myodd {
        * @param const Any& the item we are adding to this.
        * @return Any *this+rhs
        */
-      template<class T> friend Any operator+(Any lhs, const T& rhs) { lhs += Any(rhs); return lhs; }
+      template<class T> friend Any operator+(Any lhs, const T& rhs) { lhs += rhs; return lhs; }
 
       /**
        * Add one to the current value.
@@ -336,38 +484,6 @@ namespace myodd {
        */
       Any& operator-=(const Any& rhs)
       {
-        // we use the double number as it is more precise
-        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
-        {
-          // null-null = int(0)
-          CastFrom(0);
-          return *this;
-        }
-
-        // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::Misc_null)
-        {
-          // update the value
-          CastFrom( 0 - rhs._ldvalue );
-
-          // update the type
-          _type = CalculateType(dynamic::Misc_null, rhs.Type());
-
-          // return it
-          return *this;
-        }
-
-        // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::Misc_null)
-        {
-          // nothing changes...except the type
-          // because this - null == this
-          _type = CalculateType( Type(), dynamic::Misc_null );
-
-          // return it.
-          return *this;
-        }
-
         // save the current type.
         dynamic::Type type = Type();
 
@@ -413,30 +529,6 @@ namespace myodd {
        */
       Any& operator*=(const Any& rhs)
       {
-        // we use the double number as it is more precise
-        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
-        {
-          // null*null = int(0)
-          CastFrom( 0 );
-          return *this;
-        }
-
-        // is the lhs null if it is then we have to set the value?
-        if (Type() == dynamic::Misc_null)
-        {
-          // *this * null == 0
-          CastFrom( 0 );
-          return *this;
-        }
-
-        // is the rhs null if it is then we have to set the value?
-        if (rhs.Type() == dynamic::Misc_null)
-        {
-          // *this * null == 0
-          CastFrom( 0 );
-          return *this;
-        }
-
         // save the current type.
         dynamic::Type type = Type();
 
@@ -496,17 +588,7 @@ namespace myodd {
           // *this / null = std::overflow_error
           throw std::overflow_error("Division by zero.");
         }
-
-        // is the lhs null then the result is zero
-        // or if the value is zero
-        if (Type() == dynamic::Misc_null || _ldvalue == 0)
-        {
-          // it does not matter what the rhs is.
-          // but we know it is not zero or null.
-          CastFrom( 0 );
-          return *this;
-        }
-
+        
         // save the current type.
         dynamic::Type type = Type();
 

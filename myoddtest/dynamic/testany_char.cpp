@@ -445,3 +445,31 @@ TEST_MEM(AnyTestCharacter, StdStringPointerConstructor)
   auto x = myodd::dynamic::Any(&s);
   ASSERT_STREQ(L"Hello", x);
 }
+
+TEST_MEM(AnyTestCharacter, xxx)
+{
+  const long loop = 1000000;
+  clock_t t1 = clock();
+  {
+    long long int i = 0;
+    long double c = 0;
+    for (i = 0; i < loop; i++)
+    {
+      c = c + 1;
+    }
+    t1 = clock() - t1;
+  }
+  clock_t t2 = clock();
+  {
+    long long int i = 0;
+    myodd::dynamic::Any c = 0;
+    for (i = 0; i < loop; i++)
+    {
+      c = c + 1;
+    }
+    t2 = clock() - t2;
+  }
+
+  auto f1 = ((float)t1) / CLOCKS_PER_SEC;
+  auto f2 = ((float)t2) / CLOCKS_PER_SEC;
+}

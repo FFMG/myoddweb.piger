@@ -191,7 +191,7 @@ You can add wide and non wide strings
 In the case of divisions by zero, a `std::overflow_error` is thrown.
 
 - when dividing by a 'false' boolean
-- when dividing by a zero char, ('0' and '\0')
+- when dividing by a zero char or a zero string, ('0', '\0' or "0")
 - when dividing by a null pointer.
 - when dividing by a string that cannot be converted to a non zero number.
 
@@ -232,3 +232,4 @@ Those objects cannot have arithmetic done to them, (+,-,/,*)
 - <strike>Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.</strike> *(done 24/08/2016)*
 - <strike>Assign `std::string` and `std::wstring`  
 myodd::dynamic::And( std::string("Hello") );</strike> *(done 25/08/2016)*
+- Add ternary operator 
