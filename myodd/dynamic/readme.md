@@ -63,12 +63,18 @@ Equality
     auto foo = myodd::dynamic::Any("10"); // foo is a string "10"
     auto bar = myodd::dynamic::Any(10); // foo is an integer 10
     ...
-    foo == bar; // false! because a string is not equal to a integer.
+    foo == bar; // true because 10 is 10.
+    true == 1234; // anything not zero is true
+
+[Arithmetic Conversions](doc/arithmeticconversions.md)
+
+Arithmetic Conversion is what happens when you add/subtract/divide/etc 2 numbers together.
+
+See the [Arithmetic Conversions](doc/arithmeticconversions.md) document for more details.
 
 #### Pointer rules.
 - you can pass a null pointer, (Any(nullptr) )
 - you can pass a null pointer to a variable, (Any( (int*)nullptr))
-- 
 
 #### Arithmetic rules.
 
@@ -233,4 +239,4 @@ Those objects cannot have arithmetic done to them, (+,-,/,*)
 - <strike>Assign `std::string` and `std::wstring`  
 myodd::dynamic::And( std::string("Hello") );</strike> *(done 25/08/2016)*
 - Add ternary operator 
-- Manage [arithmetic conversions](http://stackoverflow.com/a/4814901/4584436) properly.
+- Manage [arithmetic conversions](http://stackoverflow.com/a/4814901/4584436) properly [[1]](http://en.cppreference.com/w/cpp/language/operator_arithmetic#Conversions)[[2]](https://docs.oracle.com/cd/E19205-01/819-5265/bjabw/index.html).

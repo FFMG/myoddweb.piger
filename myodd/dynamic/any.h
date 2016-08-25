@@ -77,6 +77,39 @@ namespace myodd {
 
       /**
        * The equal operator
+       * @param const Any& other the value we are trying to set.
+       * @return const Any& this value.
+       */
+      const Any& operator = (const Any& other)
+      {
+        if (this != &other)
+        {
+          // clear everything
+          CleanValues();
+
+          // copy the values over.
+          _type = other._type;
+
+          // long long int
+          _llivalue = other._llivalue;
+
+          // long double
+          _ldvalue = other._ldvalue;
+
+          // copy the character value
+          if (other._lcvalue > 0 && other._cvalue)
+          {
+            _lcvalue = other._lcvalue;
+            _cvalue = new char[_lcvalue];
+            std::memset(_cvalue, 0, _lcvalue);
+            std::memcpy(_cvalue, other._cvalue, _lcvalue);
+          }
+        }
+        return *this;
+      }
+
+      /**
+       * The equal operator
        * @param const Any &other the value we are comparing
        * @return bool if the values are equal
        */
@@ -203,17 +236,11 @@ namespace myodd {
  */
       Any& operator+=(const Any& rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs._ldvalue);
-
-        // update the type.
-        _type = CalculateType(type, rhs.Type());
-
-        // return the value.
-        return *this;
+        if (dynamic::is_type_floating(rhs.Type()))
+        {
+          return AddNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+        }
+        return AddNumber(CalculateType(Type(), rhs.Type()), rhs._llivalue);
       }
 
       /**
@@ -236,17 +263,7 @@ namespace myodd {
       template<>
       Any& operator+=(int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_int), rhs);
       }
 
       /**
@@ -257,17 +274,7 @@ namespace myodd {
       template<>
       Any& operator+=(short int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_short_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_short_int), rhs);
       }
 
       /**
@@ -278,17 +285,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned short int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_short_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_short_int), rhs);
       }
 
       /**
@@ -299,17 +296,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_int), rhs);
       }
 
       /**
@@ -320,17 +307,7 @@ namespace myodd {
       template<>
       Any& operator+=(long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_long_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_long_int), rhs);
       }
 
       /**
@@ -341,17 +318,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_long_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_int), rhs);
       }
 
       /**
@@ -362,17 +329,7 @@ namespace myodd {
       template<>
       Any& operator+=(long long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_long_long_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_long_long_int), rhs);
       }
 
       /**
@@ -383,17 +340,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned long long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_long_long_int);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_long_int), rhs);
       }
 
       /**
@@ -404,17 +351,7 @@ namespace myodd {
       template<>
       Any& operator+=(float rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Floating_point_float);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Floating_point_float), rhs);
       }
 
       /**
@@ -425,17 +362,7 @@ namespace myodd {
       template<>
       Any& operator+=(double rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Floating_point_double);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Floating_point_double), rhs);
       }
 
       /**
@@ -446,17 +373,7 @@ namespace myodd {
       template<>
       Any& operator+=(long double rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // add the values.
-        CastFrom(_ldvalue + rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Floating_point_long_double);
-
-        // return the value.
-        return *this;
+        return AddNumber(CalculateType(Type(), dynamic::Floating_point_long_double), rhs);
       }
 
       /**
@@ -530,17 +447,11 @@ namespace myodd {
        */
       Any& operator-=(const Any& rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs._ldvalue);
-
-        // update the type.
-        _type = CalculateType(type, rhs.Type());
-
-        // return the value.
-        return *this;
+        if (dynamic::is_type_floating(rhs.Type()))
+        {
+          return SubtractNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+        }
+        return SubtractNumber(CalculateType(Type(), rhs.Type()), rhs._llivalue);
       }
 
       /**
@@ -563,17 +474,7 @@ namespace myodd {
       template<>
       Any& operator-=(int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_int), rhs);
       }
 
       /**
@@ -584,17 +485,7 @@ namespace myodd {
       template<>
       Any& operator-=(short int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_short_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_short_int), rhs);
       }
 
       /**
@@ -605,17 +496,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned short int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_short_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_short_int), rhs);
       }
 
       /**
@@ -626,17 +507,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_int), rhs);
       }
 
       /**
@@ -647,17 +518,7 @@ namespace myodd {
       template<>
       Any& operator-=(long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_long_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_long_int), rhs);
       }
 
       /**
@@ -668,17 +529,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_long_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_int), rhs);
       }
 
       /**
@@ -689,17 +540,7 @@ namespace myodd {
       template<>
       Any& operator-=(long long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_long_long_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_long_long_int), rhs);
       }
 
       /**
@@ -710,17 +551,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned long long int rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Integer_unsigned_long_long_int);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_long_int), rhs);
       }
 
       /**
@@ -731,17 +562,7 @@ namespace myodd {
       template<>
       Any& operator-=(float rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Floating_point_float);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Floating_point_float), rhs);
       }
 
       /**
@@ -752,17 +573,7 @@ namespace myodd {
       template<>
       Any& operator-=(double rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Floating_point_double);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Floating_point_double), rhs);
       }
 
       /**
@@ -773,17 +584,7 @@ namespace myodd {
       template<>
       Any& operator-=(long double rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // substract the values.
-        CastFrom(_ldvalue - rhs);
-
-        // update the type.
-        _type = CalculateType(type, dynamic::Floating_point_long_double);
-
-        // return the value.
-        return *this;
+        return SubtractNumber(CalculateType(Type(), dynamic::Floating_point_long_double), rhs);
       }
 
       /**
@@ -928,13 +729,33 @@ namespace myodd {
         }
         
         // save the current type.
-        dynamic::Type type = Type();
+        dynamic::Type type = dynamic::Floating_point_double;
+        if (Type() == dynamic::Floating_point_long_double || rhs.Type() == dynamic::Floating_point_long_double)
+        {
+          type = dynamic::Floating_point_long_double;
+        }
+        else if (Type() == dynamic::Integer_long_long_int || rhs.Type() == dynamic::Integer_long_long_int)
+        {
+          type = dynamic::Floating_point_long_double;
+        }
+        else if (Type() == dynamic::Integer_unsigned_long_long_int || rhs.Type() == dynamic::Integer_unsigned_long_long_int)
+        {
+          type = dynamic::Floating_point_long_double;
+        }
+        else if (Type() == dynamic::Integer_long_int || rhs.Type() == dynamic::Integer_long_int)
+        {
+          type = dynamic::Floating_point_long_double;
+        }
+        else if (Type() == dynamic::Integer_unsigned_long_int || rhs.Type() == dynamic::Integer_unsigned_long_int)
+        {
+          type = dynamic::Floating_point_long_double;
+        }
 
         // multiply the values.
         CastFrom(_ldvalue / rhs._ldvalue);
 
         // update the type.
-        _type = CalculateType(type, rhs.Type());
+        _type = CalculateType(type, rhs.Type() );
 
         // return the value.
         return *this;
@@ -970,39 +791,6 @@ namespace myodd {
       //
       #pragma endregion /=operators
 
-      /** 
-       * The equal operator
-       * @param const Any& other the value we are trying to set.
-       * @return const Any& this value.
-       */
-      const Any& operator = (const Any& other)
-      {
-        if (this != &other)
-        {
-          // clear everything
-          CleanValues();
-
-          // copy the values over.
-          _type = other._type;
-
-          // long long int
-          _llivalue = other._llivalue;
-
-          // long double
-          _ldvalue = other._ldvalue;
-
-          // copy the character value
-          if (other._lcvalue > 0 && other._cvalue)
-          {
-            _lcvalue = other._lcvalue;
-            _cvalue = new char[_lcvalue];
-            std::memset(_cvalue, 0, _lcvalue);
-            std::memcpy(_cvalue, other._cvalue, _lcvalue);
-          }
-        }
-        return *this;
-      }
-
       /**
       * Return the data type
       * @return const Type& the data type.
@@ -1023,7 +811,7 @@ namespace myodd {
        * @param const dynamic::Type& rhsOriginal the original type on the rhs of the operation
        * @return dynamic::Type the posible new type.
        */
-      dynamic::Type CalculateType(const dynamic::Type& lhsOriginal, const dynamic::Type& rhsOriginal) const
+      static dynamic::Type CalculateType(const dynamic::Type& lhsOriginal, const dynamic::Type& rhsOriginal)
       {
         //  null values become ints.
         if (is_Misc_null(lhsOriginal))
@@ -1033,7 +821,7 @@ namespace myodd {
 
         if (is_Misc_null(rhsOriginal))
         {
-          return CalculateType( lhsOriginal, dynamic::Integer_int);
+          return CalculateType(lhsOriginal, dynamic::Integer_int);
         }
 
         //  char values become ints.
@@ -1061,37 +849,60 @@ namespace myodd {
         //  the possible type
         dynamic::Type type = lhsOriginal;
 
-        // if they are both the same, then use it.
-        if (rhsOriginal == lhsOriginal )
+        // first we check for floating points.
+        //
+        // if either is long double, they both long double.
+        if (lhsOriginal == dynamic::Floating_point_long_double || rhsOriginal == dynamic::Floating_point_long_double)
         {
-          type = lhsOriginal;
+          type = dynamic::Floating_point_long_double;
         }
-
-        // if lhs is floating and rhs is not, then use floating.
-        else if (is_type_floating(lhsOriginal) && !is_type_floating(rhsOriginal))
+        // if either is a double
+        else if (lhsOriginal == dynamic::Floating_point_double || rhsOriginal == dynamic::Floating_point_double)
         {
-          type = lhsOriginal;
-        }
-
-        // same the other way around.
-        else if (!is_type_floating(lhsOriginal) && is_type_floating(rhsOriginal) )
-        {
-          type = rhsOriginal;
-        }
-
-        // we are getting close to our final choice.
-        // if it is an integer then we need to check if it should be elevated to a floating point value.
-        long double intpart;
-        if (dynamic::is_type_integer(type) && 0 != modf( _ldvalue, &intpart) )
-        {
-          //  we set it to a double, (not float).
           type = dynamic::Floating_point_double;
-
-          // check that the value does not fall outside the limit.
-          if (_ldvalue > std::numeric_limits<double>::max())
-          {
-            type = dynamic::Floating_point_long_double;
-          }
+        }
+        // if either is a float
+        else if (lhsOriginal == dynamic::Floating_point_float || rhsOriginal == dynamic::Floating_point_float)
+        {
+          type = dynamic::Floating_point_float;
+        }
+        // if either is an unsigned long long int
+        else if (lhsOriginal == dynamic::Integer_unsigned_long_long_int || rhsOriginal == dynamic::Integer_unsigned_long_long_int )
+        {
+          type = dynamic::Integer_unsigned_long_long_int;
+        }
+        // if either is an long long int
+        else if (lhsOriginal == dynamic::Integer_long_long_int || rhsOriginal == dynamic::Integer_long_long_int)
+        {
+          type = dynamic::Integer_long_long_int;
+        }
+        else if (lhsOriginal == dynamic::Integer_unsigned_long_int || rhsOriginal == dynamic::Integer_unsigned_long_int)
+        {
+          type = dynamic::Integer_unsigned_long_int;
+        }
+        // if either is an long and other is unsigned int
+        else if ((lhsOriginal == dynamic::Integer_long_int && rhsOriginal == dynamic::Integer_unsigned_int)
+                 ||
+                 (rhsOriginal == dynamic::Integer_long_int && lhsOriginal == dynamic::Integer_unsigned_int)
+                )
+        {
+          type = dynamic::Integer_unsigned_long_int;
+        }
+        // if either is long
+        else if (lhsOriginal == dynamic::Integer_long_int ||
+                 rhsOriginal == dynamic::Integer_long_int)
+        {
+          type = dynamic::Integer_long_int;
+        }
+        // if either is unsigned int
+        else if (lhsOriginal == dynamic::Integer_unsigned_int ||
+                 rhsOriginal == dynamic::Integer_unsigned_int)
+        {
+          type = dynamic::Integer_unsigned_int;
+        }
+        else
+        {
+          type = dynamic::Integer_int;
         }
 
         // if we are here, they are both the same type, (floating/integer)
@@ -1107,12 +918,6 @@ namespace myodd {
        */
       static short Compare(const Any& lhs, const Any& rhs)
       {
-        // if the types are not the same
-        if (lhs.Type() != rhs.Type())
-        {
-          return -1;
-        }
-
         // special case for null
         switch (lhs.Type())
         {
@@ -1122,17 +927,84 @@ namespace myodd {
           // all the values should be the same but there is no point in checking.
           return 0;
         }
-
-        // compare the values now.
-        //
-        if (lhs._llivalue != rhs._llivalue)
+        
+        //  find the 'common' type
+        auto type = CalculateType(lhs.Type(), rhs.Type());
+        switch ( type )
         {
-          return 1;
-        }
+        // bool
+        case Boolean_bool:
+          //  should both be == 1
+          if (lhs._llivalue != rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
 
-        if (lhs._ldvalue != rhs._ldvalue)
-        {
-          return 2;
+        // character
+        case Character_signed_char:
+        case Character_unsigned_char:
+        case Character_char:
+        case Character_wchar_t:
+          break;
+
+        // Integer
+        case Integer_short_int:
+        case Integer_unsigned_short_int:
+          if ((short int)lhs._llivalue != (short int)rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
+
+        case Integer_int:
+        case Integer_unsigned_int:
+          if ((int)lhs._llivalue != (int)rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
+
+        case Integer_long_int:
+        case Integer_unsigned_long_int:
+          if ((long int)lhs._llivalue != (long int)rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
+
+        case Integer_long_long_int:
+        case Integer_unsigned_long_long_int:
+          if (lhs._llivalue != rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
+
+        // Floating point
+        case Floating_point_float:
+          if ((float)lhs._llivalue != (float)rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
+
+        case Floating_point_double:
+          if ((double)lhs._llivalue != (double)rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
+
+        case Floating_point_long_double:
+          if (lhs._llivalue != rhs._llivalue)
+          {
+            return 1;
+          }
+          break;
+
+        default:
+          throw std::bad_cast();
         }
 
         //  null/not null
@@ -2018,6 +1890,46 @@ namespace myodd {
           _llivalue = 0;
           _ldvalue = 0;
         }
+      }
+
+      template<class T>
+      Any& AddNumber(dynamic::Type type, T number)
+      {
+        // add the values.
+        if (dynamic::is_type_floating(type))
+        {
+          CastFrom(_ldvalue + number);
+        }
+        else
+        {
+          CastFrom(_llivalue + number);
+        }
+
+        // update the type.
+        _type = type;
+
+        // done
+        return *this;
+      }
+
+      template<class T>
+      Any& SubtractNumber(dynamic::Type type, T number)
+      {
+        // add the values.
+        if (dynamic::is_type_floating(type))
+        {
+          CastFrom(_ldvalue - number);
+        }
+        else
+        {
+          CastFrom(_llivalue - number);
+        }
+
+        // update the type.
+        _type = type;
+
+        // done
+        return *this;
       }
 
       // the biggest integer value.

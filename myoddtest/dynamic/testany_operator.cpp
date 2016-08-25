@@ -1111,8 +1111,8 @@ TEST_MEM(AnyTestOperators, QuickSubPrefix)
   auto any = myodd::dynamic::Any(number);
   ASSERT_EQ(any, number);
 
-  ASSERT_EQ(--any, (short)(number-1));
-  ASSERT_EQ(any, (short)(number-1));
+  ASSERT_EQ(--any, (number-1));
+  ASSERT_EQ(any, (number-1));
 }
 
 TEST_MEM(AnyTestOperators, QuickAddPostFix)
@@ -1122,7 +1122,7 @@ TEST_MEM(AnyTestOperators, QuickAddPostFix)
   ASSERT_EQ(any, number);
 
   ASSERT_EQ(any++, number);
-  ASSERT_EQ(any, (short)(number + 1));
+  ASSERT_EQ(any, (number + 1));
 }
 
 TEST_MEM(AnyTestOperators, QuickSubPostFix)
@@ -1132,7 +1132,7 @@ TEST_MEM(AnyTestOperators, QuickSubPostFix)
   ASSERT_EQ(any, number);
 
   ASSERT_EQ(any--, number);
-  ASSERT_EQ(any, (short)(number - 1));
+  ASSERT_EQ(any, (number - 1));
 }
 
 TEST_MEM(AnyTestOperators, AddShortIntToAny)
@@ -1142,11 +1142,11 @@ TEST_MEM(AnyTestOperators, AddShortIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (short int)(start+number));
+  ASSERT_EQ(any, (start+number));
 
   any = myodd::dynamic::Any(start);
   any = any+number;
-  ASSERT_EQ(any, (short int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 TEST_MEM(AnyTestOperators, AddUnsignedShortIntToAny)
@@ -1156,11 +1156,11 @@ TEST_MEM(AnyTestOperators, AddUnsignedShortIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (unsigned short int)(start + number));
+  ASSERT_EQ(any, (start + number));
 
   any = myodd::dynamic::Any(start);
   any = any + number;
-  ASSERT_EQ(any, (unsigned short int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 TEST_MEM(AnyTestOperators, AddIntToAny)
@@ -1170,11 +1170,11 @@ TEST_MEM(AnyTestOperators, AddIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (int)(start + number));
+  ASSERT_EQ(any, (start + number));
 
   any = myodd::dynamic::Any(start);
   any = any + number;
-  ASSERT_EQ(any, (int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 TEST_MEM(AnyTestOperators, AddUnsignedIntToAny)
@@ -1184,11 +1184,11 @@ TEST_MEM(AnyTestOperators, AddUnsignedIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (unsigned int)(start + number));
+  ASSERT_EQ(any, (start + number));
 
   any = myodd::dynamic::Any(start);
   any = any + number;
-  ASSERT_EQ(any, (unsigned int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 TEST_MEM(AnyTestOperators, AddLongIntToAny)
@@ -1198,11 +1198,11 @@ TEST_MEM(AnyTestOperators, AddLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 
   any = myodd::dynamic::Any(start);
   any = any + number;
-  ASSERT_EQ(any, (long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 TEST_MEM(AnyTestOperators, AddUnsignedLongIntToAny)
@@ -1212,11 +1212,11 @@ TEST_MEM(AnyTestOperators, AddUnsignedLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (unsigned long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 
   any = myodd::dynamic::Any(start);
   any = any + number;
-  ASSERT_EQ(any, (unsigned long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 TEST_MEM(AnyTestOperators, AddLongLongIntToAny)
@@ -1226,11 +1226,11 @@ TEST_MEM(AnyTestOperators, AddLongLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (long long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 
   any = myodd::dynamic::Any(start);
   any = any + number;
-  ASSERT_EQ(any, (long long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 TEST_MEM(AnyTestOperators, AddUnsignedLongLongIntToAny)
@@ -1240,11 +1240,11 @@ TEST_MEM(AnyTestOperators, AddUnsignedLongLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any += number;
-  ASSERT_EQ(any, (unsigned long long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 
   any = myodd::dynamic::Any(start);
   any = any + number;
-  ASSERT_EQ(any, (unsigned long long int)(start + number));
+  ASSERT_EQ(any, (start + number));
 }
 
 ///////////////////////////////////////////////////////////////
@@ -1256,11 +1256,11 @@ TEST_MEM(AnyTestOperators, SubstractShortIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (short int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (short int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
 
 TEST_MEM(AnyTestOperators, SubstractUnsignedShortIntToAny)
@@ -1270,11 +1270,11 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedShortIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (unsigned short int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (unsigned short int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
 
 TEST_MEM(AnyTestOperators, SubstractIntToAny)
@@ -1284,11 +1284,11 @@ TEST_MEM(AnyTestOperators, SubstractIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
 
 TEST_MEM(AnyTestOperators, SubstractUnsignedIntToAny)
@@ -1298,11 +1298,11 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (unsigned int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (unsigned int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
 
 TEST_MEM(AnyTestOperators, SubstractLongIntToAny)
@@ -1312,11 +1312,11 @@ TEST_MEM(AnyTestOperators, SubstractLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
 
 TEST_MEM(AnyTestOperators, SubstractUnsignedLongIntToAny)
@@ -1326,11 +1326,11 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (unsigned long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (unsigned long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
 
 TEST_MEM(AnyTestOperators, SubstractLongLongIntToAny)
@@ -1340,11 +1340,11 @@ TEST_MEM(AnyTestOperators, SubstractLongLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (long long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (long long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
 
 TEST_MEM(AnyTestOperators, SubstractUnsignedLongLongIntToAny)
@@ -1354,9 +1354,9 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedLongLongIntToAny)
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
   any -= number;
-  ASSERT_EQ(any, (unsigned long long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 
   any = myodd::dynamic::Any(start);
   any = any - number;
-  ASSERT_EQ(any, (unsigned long long int)(start - number));
+  ASSERT_EQ(any, (start - number));
 }
