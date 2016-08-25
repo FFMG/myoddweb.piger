@@ -37,11 +37,11 @@ namespace myodd {
       {
         CastFrom(value);
       }
-
+      
       /**
-      * Copy constructor
-      * @param const int& the value we want to copy/set
-      */
+       * Copy constructor
+       * @param const int& the value we want to copy/set
+       */
       template<typename T>
       Any( T* value) :
         Any()
@@ -273,7 +273,16 @@ namespace myodd {
        */
       Any& operator++()
       {
-        *this += 1;
+        // save the current type.
+        dynamic::Type type = Type();
+
+        // multiply the values.
+        CastFrom(*_ldvalue + 1);
+
+        // update the type.
+        _type = CalculateType(type, dynamic::Integer_int );
+
+        // return this.
         return *this;
       }
 
@@ -840,6 +849,26 @@ namespace myodd {
       void CastFrom<const char>(const char* value)
       {
         CreateFromCharacters(value);
+      }
+
+      /**
+       * Create from a std::string.
+       * @param char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<std::string&>(std::string& value)
+      {
+        CreateFromCharacters(value.c_str());
+      }
+
+      /**
+       * Create from a const std::string.
+       * @param char* value the value we are trying to create from.
+       */
+      template<>
+      void CastFrom<const std::string&>(const std::string& value)
+      {
+        CreateFromCharacters(value.c_str());
       }
 
       /**

@@ -46,7 +46,7 @@ or you can call `using` if you prefer, (of course).
 
 Like any dynamic types, myodd::dynamic::Any() has to have some sort of [type juggling](http://php.net/manual/en/language.types.type-juggling.php) rules to follow.
 
-    auto foo = myodd::dynamic::Any(); // foo is 'null'
+    auto foo = myodd::dynamic::Any(); // foo is 'null', the default
     foo = "1";  // foo is string... for now
     foo *= 2;   // foo is now an integer with a value of 2
     foo = foo * 1.3;  // foo is now a double with a value of 2.6
@@ -205,3 +205,5 @@ In the case of divisions by zero, a `std::overflow_error` is thrown.
 - implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.  
 Those objects cannot have arithmetic done to them, (+,-,/,*)
 - Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.
+- Assign `std::string` and `std::wstring`  
+myodd::dynamic::And( std::string("Hello") );

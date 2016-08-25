@@ -125,7 +125,7 @@ namespace myodd {
     template<typename T>
     struct get_type
     {
-      static constexpr dynamic::Type value = dynamic::type_unknown;
+      static constexpr dynamic::Type value = dynamic::Misc_unknown;
     };
 
     template<>
