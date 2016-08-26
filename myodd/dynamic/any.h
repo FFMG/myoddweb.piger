@@ -865,13 +865,146 @@ namespace myodd {
       Any& operator/=(const Any& rhs)
       {
         // we use the double number as it is more precise
-        if (Type() == dynamic::Misc_null && rhs.Type() == dynamic::Misc_null)
+        if ( rhs.Type() == dynamic::Misc_null)
         {
-          // null / null = std::overflow_error
+          // anything over null is the same as zero
           throw std::overflow_error("Division by zero.");
         }
 
         return DivideNumber(CalculateDivideType(Type(), rhs.Type()), rhs._ldvalue);
+      }
+
+      /**
+       * Default /= function divide *this by rhs.
+       * @param const T& rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<class T>
+      Any& operator/=(T rhs)
+      {
+        *this /= Any(rhs);
+        return *this;
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param short int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( short int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_short_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param unsigned short int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( unsigned short int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_unsigned_short_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=(int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param unsigned int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( unsigned int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_unsigned_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param long int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( long int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_long_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param unsigned long int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( unsigned long int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_unsigned_long_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param long long int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( long long int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_long_long_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param unsigned long long int rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( unsigned long long int rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Integer_unsigned_long_long_int), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param float rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( float rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Floating_point_float), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param double rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( double rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Floating_point_double), rhs);
+      }
+
+      /**
+       * Specialized /= function divide *this by rhs.
+       * @param long double rhs the value we are dividing *this with
+       * @param *this / rhs.
+       */
+      template<>
+      Any& operator/=( long double rhs)
+      {
+        return DivideNumber(CalculateDivideType(Type(), dynamic::Floating_point_long_double), rhs);
       }
 
       /**

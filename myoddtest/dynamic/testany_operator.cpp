@@ -1518,3 +1518,117 @@ TEST_MEM(AnyTestOperators, MultiplyUnsignedLongLongIntToAny)
   any = any * number;
   ASSERT_EQ(any, (start * number));
 }
+
+///////////////////////////////////////////////////////////////
+
+TEST_MEM(AnyTestOperators, DivideShortIntToAny)
+{
+  auto start = IntRandomNumber<short int>(false);
+  auto number = IntRandomNumber<short int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, (start / number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, (start / number));
+}
+
+TEST_MEM(AnyTestOperators, DivideUnsignedShortIntToAny)
+{
+  auto start = IntRandomNumber<unsigned short int>(false);
+  auto number = IntRandomNumber<unsigned short int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, (start / number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, (start / number));
+}
+
+TEST_MEM(AnyTestOperators, DivideIntToAny)
+{
+  auto start = IntRandomNumber<int>(false);
+  auto number = IntRandomNumber<int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, (start / number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, (start / number));
+}
+
+TEST_MEM(AnyTestOperators, DivideUnsignedIntToAny)
+{
+  auto start = IntRandomNumber<unsigned int>(false);
+  auto number = IntRandomNumber<unsigned int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, (start / number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, (start / number));
+}
+
+TEST_MEM(AnyTestOperators, DivideLongIntToAny)
+{
+  auto start = IntRandomNumber <long int >(false);
+  auto number = IntRandomNumber<long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, (start / number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, (start / number));
+}
+
+TEST_MEM(AnyTestOperators, DivideUnsignedLongIntToAny)
+{
+  auto start = IntRandomNumber <unsigned long int >(false);
+  auto number = IntRandomNumber<unsigned long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, (start / number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, (start / number));
+}
+
+TEST_MEM(AnyTestOperators, DivideLongLongIntToAny)
+{
+  auto start = IntRandomNumber <long long int >(false);
+  auto number = IntRandomNumber<long long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, (start / number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, (start / number));
+}
+
+TEST_MEM(AnyTestOperators, DivideUnsignedLongLongIntToAny)
+{
+  auto start = IntRandomNumber <unsigned long long int >(false);
+  auto number = IntRandomNumber<unsigned long long int>(false);
+  auto any = myodd::dynamic::Any(start);
+  ASSERT_EQ(any, start);
+  any /= number;
+  ASSERT_EQ(any, ((long double)start / (long double)number));
+
+  any = myodd::dynamic::Any(start);
+  any = any / number;
+  ASSERT_EQ(any, ((long double)start / (long double)number));
+}
