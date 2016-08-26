@@ -678,6 +678,127 @@ namespace myodd {
       }
 
       /**
+       * Specialized *= function multiply rhs and *this.
+       * @param short int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( short int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_short_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param unsigned short int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( unsigned short int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_short_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=(int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param unsigned int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( unsigned int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param long int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( long int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_long_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param unsigned long int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( unsigned long int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param long long int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( long long int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_long_long_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param unsigned long long int rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( unsigned long long int rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_long_int), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param float rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( float rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Floating_point_float), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param double rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( double rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Floating_point_double), rhs);
+      }
+
+      /**
+       * Specialized *= function multiply rhs and *this.
+       * @param long double rhs the value we are multiplying to *this
+       * @param *this * rhs.
+       */
+      template<>
+      Any& operator*=( long double rhs)
+      {
+        return MultiplyNumber(CalculateType(Type(), dynamic::Floating_point_long_double), rhs);
+      }
+      
+      /**
        * Binary arithmetic operators - multiplication
        * @param const Any& the item we are multiplying from this.
        * @return Any *this*rhs
@@ -705,7 +826,7 @@ namespace myodd {
       //
       // *operators
       //
-      #pragma endregion /=operators
+      #pragma endregion *=operators
       
       //
       // /operators
