@@ -720,45 +720,7 @@ namespace myodd {
           throw std::overflow_error("Division by zero.");
         }
 
-        // if the rhs is null, then we cannot calculate it.
-        // or if the value is zero.
-        if (rhs.Type() == dynamic::Misc_null || rhs._ldvalue == 0)
-        {
-          // *this / null = std::overflow_error
-          throw std::overflow_error("Division by zero.");
-        }
-        
-        // save the current type.
-        dynamic::Type type = dynamic::Floating_point_double;
-        if (Type() == dynamic::Floating_point_long_double || rhs.Type() == dynamic::Floating_point_long_double)
-        {
-          type = dynamic::Floating_point_long_double;
-        }
-        else if (Type() == dynamic::Integer_long_long_int || rhs.Type() == dynamic::Integer_long_long_int)
-        {
-          type = dynamic::Floating_point_long_double;
-        }
-        else if (Type() == dynamic::Integer_unsigned_long_long_int || rhs.Type() == dynamic::Integer_unsigned_long_long_int)
-        {
-          type = dynamic::Floating_point_long_double;
-        }
-        else if (Type() == dynamic::Integer_long_int || rhs.Type() == dynamic::Integer_long_int)
-        {
-          type = dynamic::Floating_point_long_double;
-        }
-        else if (Type() == dynamic::Integer_unsigned_long_int || rhs.Type() == dynamic::Integer_unsigned_long_int)
-        {
-          type = dynamic::Floating_point_long_double;
-        }
-
-        // multiply the values.
-        CastFrom(_ldvalue / rhs._ldvalue);
-
-        // update the type.
-        _type = CalculateType(type, rhs.Type() );
-
-        // return the value.
-        return *this;
+        return DivideNumber(CalculateDivideType(Type(), rhs.Type()), rhs._ldvalue);
       }
 
       /**
@@ -801,6 +763,43 @@ namespace myodd {
       }
 
     protected:
+      /**
+       * Calculate the type for division
+       * @param const dynamic::Type& lhs the lhs type
+       * @param const dynamic::Type& rhs the rhs type
+       * @return dynamic::Type the best type for division
+       */
+      static dynamic::Type CalculateDivideType(const dynamic::Type& lhs, const dynamic::Type& rhs)
+      {
+        if (lhs == dynamic::Floating_point_long_double || rhs == dynamic::Floating_point_long_double)
+        {
+          return dynamic::Floating_point_long_double;
+        }
+        
+        if (lhs == dynamic::Integer_long_long_int || rhs == dynamic::Integer_long_long_int)
+        {
+          return dynamic::Floating_point_long_double;
+        }
+        
+        if (lhs == dynamic::Integer_unsigned_long_long_int || rhs == dynamic::Integer_unsigned_long_long_int)
+        {
+          return dynamic::Floating_point_long_double;
+        }
+
+        else if (lhs == dynamic::Integer_long_int || rhs == dynamic::Integer_long_int)
+        {
+          return dynamic::Floating_point_long_double;
+        }
+        
+        if (lhs == dynamic::Integer_unsigned_long_int || rhs == dynamic::Integer_unsigned_long_int)
+        {
+          return dynamic::Floating_point_long_double;
+        }
+
+        // default value.
+        return dynamic::Floating_point_double;
+      }
+
       /**
        * This function is used to re-calculate the 'best' type after an arithmetic opereation 
        * For example int*int could give us a long long
@@ -1892,6 +1891,39 @@ namespace myodd {
         }
       }
 
+      /**
+       * Divide *this number with T number.
+       * @param dynamic::Type type the type we want to set the value with.
+       * @param T number the number we will be dividing with.
+       * @return *this the divided number.
+       */
+      template<class T>
+      Any& DivideNumber(dynamic::Type type, T number)
+      {
+
+        // check for division by zero.
+        if (number == 0)
+        {
+          // *this / null = std::overflow_error
+          throw std::overflow_error("Division by zero.");
+        }
+
+        // divide the values and set it.
+        CastFrom(_ldvalue / number);
+
+        // update the type.
+        _type = type;
+
+        // return the value.
+        return *this;
+      }
+
+      /**
+       * Add T number to *this number.
+       * @param dynamic::Type type the type we want to set the value with.
+       * @param T number the number we will be adding.
+       * @return *this the added number.
+       */
       template<class T>
       Any& AddNumber(dynamic::Type type, T number)
       {
@@ -1912,6 +1944,12 @@ namespace myodd {
         return *this;
       }
 
+      /**
+       * Subtract T number from *this.
+       * @param dynamic::Type type the type we want to set the value with.
+       * @param T number the number we will be subtracting from this.
+       * @return *this the subtracted number.
+       */
       template<class T>
       Any& SubtractNumber(dynamic::Type type, T number)
       {
