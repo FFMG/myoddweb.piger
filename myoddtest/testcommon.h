@@ -11,6 +11,10 @@
 #include <chrono>
 #include <random>
 
+#ifndef UNUSED_ALWAYS
+# define UNUSED_ALWAYS(x) x
+#endif
+
 #undef max
 #undef min
 
@@ -24,7 +28,7 @@ _CrtMemCheckpoint(&memState_);\
 _CrtMemState stateNow, stateDiff;\
 _CrtMemCheckpoint(&stateNow);\
 int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);\
-UNUSED_ALWAYS(stateNow)\
+UNUSED_ALWAYS(stateNow);\
 if (diffResult)\
 {\
   FAIL() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";\
@@ -41,7 +45,7 @@ class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
     _CrtMemState stateNow, stateDiff;\
     _CrtMemCheckpoint(&stateNow);\
     int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);\
-    UNUSED_ALWAYS(stateNow)\
+    UNUSED_ALWAYS(stateNow);\
     if (diffResult)\
     {\
       ADD_FAILURE() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";\
