@@ -215,21 +215,21 @@ While this level of flexibility will never result in an equal performance with t
 ### Version 0.1
 #### [Addition loop](doc/perfaddition.md)
 - std : `0.003s` | `0.003s`
-- any : `0.391s` | `0.361s`
+- any : `0.108s` | `0.103s`
 
 #### [Subtraction loop](doc/perfsubtraction.md)
 - std : `0.003s` | `0.003s`
-- any : `0.375s` | `0.437s`
+- any : `0.107s` | `0.108s`
 
 #### [Multiplication loop](doc/perfmultiplication.md)
 
 - std : `0.003s` | `0.003s`
-- any : `0.416s` | `0.363s`
+- any : `0.170s` | `0.141s`
 
 #### [Division loop](doc/perfdivision.md)
 
 - std : `0.003s` | `0.003s`
-- any : `0.416s` | `0.363s`
+- any : `0.098s` | `0.082s`
 
 ## Todo
 
