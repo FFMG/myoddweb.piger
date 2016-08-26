@@ -69,7 +69,7 @@ void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
     ::testing::Test, ::testing::internal::GetTestTypeId())
 
 template<typename T>
-T RealRandomNumber()
+T RealRandomNumber(bool canBeZero = true)
 {
   // construct a trivial random generator engine from a time-based seed:
   unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
@@ -79,7 +79,12 @@ T RealRandomNumber()
   T lower_bound = std::numeric_limits<T>::min();
   T upper_bound = std::numeric_limits<T>::max();
   std::uniform_real_distribution<T> unif(lower_bound, upper_bound);
-  return unif(re);
+  auto value = unif(re);
+  if (canBeZero == false && value == 0)
+  {
+    return RealRandomNumber<T>(canBeZero);
+  }
+  return value;
 }
 
 template<typename T>

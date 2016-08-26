@@ -658,17 +658,11 @@ namespace myodd {
        */
       Any& operator*=(const Any& rhs)
       {
-        // save the current type.
-        dynamic::Type type = Type();
-
-        // multiply the values.
-        CastFrom(_ldvalue * rhs._ldvalue);
-
-        // update the type.
-        _type = CalculateType(type, rhs.Type());
-
-        // return the value.
-        return *this;
+        if (dynamic::is_type_floating(rhs.Type()))
+        {
+          return MultiplyNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+        }
+        return MultiplyNumber(CalculateType(Type(), rhs.Type()), rhs._llivalue);
       }
 
       /**
@@ -1915,6 +1909,32 @@ namespace myodd {
         _type = type;
 
         // return the value.
+        return *this;
+      }
+
+      /**
+       * Multiply T number and *this number.
+       * @param dynamic::Type type the type we want to set the value with.
+       * @param T number the number we will be adding.
+       * @return *this the multiplied number.
+       */
+      template<class T>
+      Any& MultiplyNumber(dynamic::Type type, T number)
+      {
+        // add the values.
+        if (dynamic::is_type_floating(type))
+        {
+          CastFrom(_ldvalue * number);
+        }
+        else
+        {
+          CastFrom(_llivalue * number);
+        }
+
+        // update the type.
+        _type = type;
+
+        // done
         return *this;
       }
 
