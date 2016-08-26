@@ -666,6 +666,18 @@ namespace myodd {
       }
 
       /**
+       * Default *= function multiply the rhs and *this.
+       * @param const T& rhs the value we are multiplying with *this
+       * @param *this * rhs.
+       */
+      template<class T>
+      Any& operator*=(T rhs)
+      {
+        *this *= Any(rhs);
+        return *this;
+      }
+
+      /**
        * Binary arithmetic operators - multiplication
        * @param const Any& the item we are multiplying from this.
        * @return Any *this*rhs
@@ -688,8 +700,8 @@ namespace myodd {
        * @param const Any& the item we are multiplying from this.
        * @return Any *this*rhs
        */
-      template<class T> friend Any operator*(Any lhs, const T& rhs) { lhs *= Any(rhs); return lhs; }
-      
+      template<class T> friend Any operator*(Any lhs, const T& rhs) { lhs *= rhs; return lhs; }
+
       //
       // *operators
       //
