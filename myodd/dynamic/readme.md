@@ -76,6 +76,17 @@ See the [Arithmetic Conversions](doc/arithmeticconversions.md) document for more
 - you can pass a null pointer, (Any(nullptr) )
 - you can pass a null pointer to a variable, (Any( (int*)nullptr))
 
+#### String rules
+- If it is a number then it is an `unsigned long long int` or a `long long int` or an `long double`
+- If it is a partial number, and the number is first, then it is also an `unsigned long long int` or a `long long int` or an `long double`
+	- For example `-12asee` will be used as `-12` in an equation.
+	- Or `-0-----` will be used as `0`
+- In the case of comparison, only exact numbers are compared.
+	- `"-9" == "-0009.0000"`
+	- but `"-9" != "-9.a"`
+- Decimal strings are respected, `"-121.000"` will become a `long double`, in real terms this does not really make a difference with most compilers/interpretations, (but it is something to bear in mind).
+
+
 #### Arithmetic rules.
 
 - Non number strings are equal to zero, (so "Hello"=0 and "Hello" + "World"=0)

@@ -28,6 +28,7 @@
 #include <algorithm>      // memcpy
 #include <math.h>         // modf
 #include <string>
+#include <cctype>         //  isdigit
 #include <codecvt>        //  string <-> wstring
 #include <stdlib.h>       //  std::strtoll / std::strtoull
 
@@ -1970,6 +1971,7 @@ namespace myodd {
           *_swvalue = std::to_wstring(_llivalue);
         }
       }
+ 
       /**
        * Create the cosmetic representation of the string.
        */
@@ -2263,9 +2265,6 @@ namespace myodd {
             _llivalue = 0;
             _ldvalue = 0;
           }
-
-          // parse the string to set the string flag
-          ParseStringStatus((const wchar_t*)value);
         }
         else
         {
@@ -2280,6 +2279,9 @@ namespace myodd {
           _llivalue = 0;
           _ldvalue = 0;
         }
+
+        // parse the string to set the string flag
+        ParseStringStatus((const wchar_t*)value);
       }
 
       /**
@@ -2359,10 +2361,14 @@ namespace myodd {
         }
       }
 
+      /**
+       * depending on the type we return if we should use the unsigned integer in a formula
+       * @return bool if we should use the long long int as an unsigned signed integer.
+       */
       bool UseUnsignedInteger() const
       {
         // divide the values and set it.
-        switch (Type())
+        switch (NumberType())
         {
         case dynamic::Integer_unsigned_short_int:
         case dynamic::Integer_unsigned_int:
@@ -2374,10 +2380,14 @@ namespace myodd {
         return false;
       }
 
+      /**
+       * depending on the type we return if we should use the signed integer in a formula
+       * @return bool if we should use the long long int as a signed integer.
+       */
       bool UseSignedInteger() const
       {
         // divide the values and set it.
-        switch (Type())
+        switch (NumberType())
         {
         case dynamic::Integer_short_int:
         case dynamic::Integer_int:
@@ -2563,90 +2573,8 @@ namespace myodd {
        */
       void ParseStringStatus(const char *str)
       {
-        // sanity check
-        if (nullptr == str)
-        {
-          return;
-        }
-
-        short sign = 0;       //  0=unknown, 1=positive, 2=negative.
-        short found = 0;      // the number of ... numbers we found.
-        bool partial = false; // if we found some non characters.
-        bool decimal = false;
-
-        // go around all the characters.
-        for (const char *it = str; *it != '\0'; *it++)
-        {
-          if (*it == '\0')
-          {
-            break;
-          }
-
-          if (isspace(*it))
-          {
-            // ignore it.
-            continue;
-          }
-
-          // minus sign? as long as we have not done it yet...
-          if (*it == '-' && sign == 0)
-          {
-            sign = 2;
-            continue;
-          }
-
-          // + sign? as long as we have not done it yet...
-          if (*it == '+' && sign == 0)
-          {
-            sign = 1;
-            continue;
-          }
-          
-          if (*it == '.' && false == decimal)
-          {
-            decimal = true;
-            continue;
-          }
-
-          if (!isdigit(*it))
-          {
-            // not a number, (anymore)
-            partial = true;
-            break;
-          }
-
-          // this is a number
-          ++found;
-        }
-
-        // if we found anyting and we are here, then it is a number...
-        // if we found nothing, then it is not a number.
-        if (0 == found)
-        {
-          _stringStatus = StringStatus_Not_A_Number;
-        }
-        else if( true == partial )
-        {
-          if (sign == 1 || sign == 0)
-          {
-            _stringStatus = (decimal) ? StringStatus_Floating_Partial_Pos_Number : StringStatus_Partial_Pos_Number;
-          }
-          else if (sign == 2)
-          {
-            _stringStatus = (decimal) ? StringStatus_Floating_Partial_Neg_Number : StringStatus_Partial_Neg_Number;
-          }
-        }
-        else
-        {
-          if (sign == 1 || sign == 0)
-          {
-            _stringStatus = (decimal) ? StringStatus_Floating_Pos_Number : StringStatus_Pos_Number;
-          }
-          else if (sign == 2)
-          {
-            _stringStatus = (decimal) ? StringStatus_Floating_Neg_Number : StringStatus_Neg_Number;
-          }
-        }
+        //  call the const char* equivalent.
+        ParseStringStatus(str, '+', '-', '.', '\0');
       }
 
       /**
@@ -2655,9 +2583,57 @@ namespace myodd {
       */
       void ParseStringStatus(const wchar_t *str)
       {
+        //  call the const wide char* equivalent.
+        ParseStringStatus(str, L'+', L'-', L'.', L'\0');
+      }
+
+      /**
+       * check if this is a digit char, (0-9)
+       * @param const char c the character we are checking.
+       * @return bool if the number is a digit or not.
+       */
+      inline bool _isdigit(const char c) const { return (isdigit(c) != 0);}
+
+      /**
+       * check if this is a space wide char
+       * @param const wchar_t c the character we are checking.
+       * @return bool if the char is a space or not.
+       */
+      inline bool _isspace(const char c) const { return (isspace(c) != 0); }
+
+      /**
+       * check if this is a digit wide char, (0-9)
+       * @param const wchar_t c the character we are checking.
+       * @return bool if the number is a digit or not.
+       */
+      inline bool _isdigit(const wchar_t c)const { return (iswdigit(c) != 0); }
+
+      /**
+       * check if this is a space wide char
+       * @param const wchar_t c the character we are checking.
+       * @return bool if the char is a space or not.
+       */
+      inline bool _isspace(const wchar_t c)const { return (iswspace(c) != 0); }
+
+      /**
+       * Parse a string to check if it is a number or not.
+       * -0 and +0 keep their sign and 12.00 remains a floating point.
+       * because this is how it was pased to us, it is up to the user to make sure they pass
+       * a valid number that makes it posible to investigate.
+       * @param const T* str the string we are checking.
+       * @param const T str_plus the plus sign, ('+')
+       * @param const T str_minus the minus sign, ('-')
+       * @param const T str_decimal how a decimal is represented, , ('.')
+       * @param const T str_eol the eol character, ('\0')
+       */
+      template<typename T>
+      void ParseStringStatus( const T* str, const T str_plus, const T str_minus, const T str_decimal, const T str_eol )
+      {
         // sanity check
         if (nullptr == str)
         {
+          // null is not a number
+          _stringStatus = StringStatus_Not_A_Number;
           return;
         }
 
@@ -2667,35 +2643,37 @@ namespace myodd {
         bool decimal = false;
 
         // go around all the characters.
-        for(const wchar_t *it = str; *it != L'\0'; *it++ )
+        for (const T *it = str; *it != str_eol; *it++)
         {
-          if (iswspace(*it))
+          //  is it a space?
+          if ( _isspace(*it))
           {
-            // ignore it.
             continue;
           }
 
           // minus sign? as long as we have not done it yet...
-          if (*it == L'-' && sign == 0)
+          if (*it == str_minus && sign == 0)
           {
             sign = 2;
             continue;
           }
 
           // + sign? as long as we have not done it yet...
-          if (*it == L'+' && sign == 0)
+          if (*it == str_plus && sign == 0)
           {
             sign = 1;
             continue;
           }
-
-          if (*it == L'.' && false == decimal)
+          
+          // is it a decimal? as long as we have done done it.
+          if (*it == str_decimal && false == decimal)
           {
             decimal = true;
             continue;
           }
 
-          if (!iswdigit(*it))
+          // is it a digit?
+          if (!_isdigit(*it))
           {
             // not a number, (anymore)
             partial = true;
@@ -2706,20 +2684,25 @@ namespace myodd {
           ++found;
         }
 
-        // if we found anyting and we are here, then it is a number...
-        // if we found nothing, then it is not a number.
+        //
+        //  using all the values together we need to check what king of string this is.
+        //
         if (0 == found)
         {
+          // we found no number at all, so it cannot be a string.
+          // of by the time we found a non string, we had no number.
           _stringStatus = StringStatus_Not_A_Number;
         }
-        else if (true == partial)
+        else if( true == partial )
         {
           if (sign == 1 || sign == 0)
           {
+            //  '+' sign or no sign - it is positive.
             _stringStatus = (decimal) ? StringStatus_Floating_Partial_Pos_Number : StringStatus_Partial_Pos_Number;
           }
           else if (sign == 2)
           {
+            // -ve sign.
             _stringStatus = (decimal) ? StringStatus_Floating_Partial_Neg_Number : StringStatus_Partial_Neg_Number;
           }
         }
@@ -2727,10 +2710,12 @@ namespace myodd {
         {
           if (sign == 1 || sign == 0)
           {
+            //  '+' sign or no sign - it is positive.
             _stringStatus = (decimal) ? StringStatus_Floating_Pos_Number : StringStatus_Pos_Number;
           }
           else if (sign == 2)
           {
+            // -ve sign.
             _stringStatus = (decimal) ? StringStatus_Floating_Neg_Number : StringStatus_Neg_Number;
           }
         }
