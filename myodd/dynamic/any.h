@@ -1392,21 +1392,21 @@ namespace myodd {
 
         // Floating point
         case Floating_point_float:
-          if ((float)lhs._llivalue != (float)rhs._llivalue)
+          if ((float)lhs._ldvalue != (float)rhs._ldvalue)
           {
             return 1;
           }
           break;
 
         case Floating_point_double:
-          if ((double)lhs._llivalue != (double)rhs._llivalue)
+          if ((double)lhs._ldvalue != (double)rhs._ldvalue)
           {
             return 1;
           }
           break;
 
         case Floating_point_long_double:
-          if (lhs._llivalue != rhs._llivalue)
+          if (lhs._ldvalue != rhs._ldvalue)
           {
             return 1;
           }
