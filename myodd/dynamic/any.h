@@ -260,11 +260,15 @@ namespace myodd {
  */
       Any& operator+=(const Any& rhs)
       {
-        if (dynamic::is_type_floating(rhs.Type()))
+        if (rhs.UseUnsignedInteger())
         {
-          return AddNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+          return AddNumber(CalculateType(Type(), rhs.Type()), (unsigned long long int)rhs._llivalue);
         }
-        return AddNumber(CalculateType(Type(), rhs.Type()), rhs._llivalue);
+        if (rhs.UseSignedInteger())
+        {
+          return AddNumber(CalculateType(Type(), rhs.Type()), (long long int)rhs._llivalue);
+        }
+        return AddNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
       }
 
       /**
@@ -471,11 +475,16 @@ namespace myodd {
        */
       Any& operator-=(const Any& rhs)
       {
-        if (dynamic::is_type_floating(rhs.Type()))
+        if (rhs.UseUnsignedInteger())
         {
-          return SubtractNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+          return SubtractNumber(CalculateType(Type(), rhs.Type()), (unsigned long long int)rhs._llivalue);
         }
-        return SubtractNumber(CalculateType(Type(), rhs.Type()), rhs._llivalue);
+        
+        if (rhs.UseSignedInteger())
+        {
+          return SubtractNumber(CalculateType(Type(), rhs.Type()), (long long int)rhs._llivalue);
+        }
+        return SubtractNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
       }
 
       /**
@@ -871,6 +880,16 @@ namespace myodd {
           throw std::overflow_error("Division by zero.");
         }
 
+        if (rhs.UseUnsignedInteger())
+        {
+          return DivideNumber(CalculateDivideType(Type(), rhs.Type()), (unsigned long long int)rhs._llivalue);
+        }
+        if (rhs.UseSignedInteger())
+        {
+          return DivideNumber(CalculateDivideType(Type(), rhs.Type()), (long long int)rhs._llivalue);
+        }
+
+        // use long double
         return DivideNumber(CalculateDivideType(Type(), rhs.Type()), rhs._ldvalue);
       }
 
@@ -2175,6 +2194,37 @@ namespace myodd {
         }
       }
 
+
+      bool UseUnsignedInteger() const
+      {
+        // divide the values and set it.
+        switch (Type())
+        {
+        case dynamic::Integer_unsigned_short_int:
+        case dynamic::Integer_unsigned_int:
+        case dynamic::Integer_unsigned_long_int:
+        case dynamic::Integer_unsigned_long_long_int:
+          return true;
+          break;
+        }
+        return false;
+      }
+
+      bool UseSignedInteger() const
+      {
+        // divide the values and set it.
+        switch (Type())
+        {
+        case dynamic::Integer_short_int:
+        case dynamic::Integer_int:
+        case dynamic::Integer_long_int:
+        case dynamic::Integer_long_long_int:
+          return true;
+          break;
+        }
+        return false;
+      }
+
       /**
        * Divide *this number with T number.
        * @param dynamic::Type type the type we want to set the value with.
@@ -2193,7 +2243,18 @@ namespace myodd {
         }
 
         // divide the values and set it.
-        CastFrom(_ldvalue / number);
+        if (UseUnsignedInteger())
+        {
+          CastFrom((unsigned long long int)_llivalue / (long double)number);
+        }
+        else if (UseSignedInteger())
+        {
+          CastFrom(( long long int)_llivalue / (long double)number);
+        }
+        else
+        {
+          CastFrom( _ldvalue / (long double)number);
+        }
 
         // update the type.
         _type = type;
@@ -2237,14 +2298,17 @@ namespace myodd {
       template<class T>
       Any& AddNumber(dynamic::Type type, T number)
       {
-        // add the values.
-        if (dynamic::is_type_floating(type))
+        if (UseUnsignedInteger())
         {
-          CastFrom(_ldvalue + number);
+          CastFrom((unsigned long long int)_llivalue + number);
+        }
+        else if (UseSignedInteger())
+        {
+          CastFrom((long long int)_llivalue + number);
         }
         else
         {
-          CastFrom(_llivalue + number);
+          CastFrom(_ldvalue + number);
         }
 
         // update the type.
@@ -2263,14 +2327,17 @@ namespace myodd {
       template<class T>
       Any& SubtractNumber(dynamic::Type type, T number)
       {
-        // add the values.
-        if (dynamic::is_type_floating(type))
+        if (UseUnsignedInteger())
         {
-          CastFrom(_ldvalue - number);
+          CastFrom((unsigned long long int)_llivalue - number);
+        }
+        else if (UseSignedInteger())
+        {
+          CastFrom((long long int)_llivalue - number);
         }
         else
         {
-          CastFrom(_llivalue - number);
+          CastFrom(_ldvalue - number);
         }
 
         // update the type.

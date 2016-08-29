@@ -3,6 +3,12 @@
 
 #include "../testcommon.h"
 
+#ifdef _DEBUG
+# define NUMBER_OF_TESTS 30
+#else
+# define NUMBER_OF_TESTS 100
+#endif
+
 // --gtest_filter=AnyTestOperators* 
 TEST_MEM(AnyTestOperators, LessThan2xAny)
 {
@@ -1137,7 +1143,7 @@ TEST_MEM(AnyTestOperators, QuickSubPostFix)
 
 ///////////////////////////////////////////////////////////////
 
-TEST_MEM(AnyTestOperators, AddShortIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddShortIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<short int>(false);
   auto number = IntRandomNumber<short int>(false);
@@ -1151,7 +1157,7 @@ TEST_MEM(AnyTestOperators, AddShortIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddUnsignedShortIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddUnsignedShortIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<unsigned short int>(false);
   auto number = IntRandomNumber<unsigned short int>(false);
@@ -1165,7 +1171,7 @@ TEST_MEM(AnyTestOperators, AddUnsignedShortIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<int>(false);
   auto number = IntRandomNumber<int>(false);
@@ -1179,7 +1185,7 @@ TEST_MEM(AnyTestOperators, AddIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddUnsignedIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddUnsignedIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<unsigned int>(false);
   auto number = IntRandomNumber<unsigned int>(false);
@@ -1193,7 +1199,7 @@ TEST_MEM(AnyTestOperators, AddUnsignedIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <long int > (false);
   auto number = IntRandomNumber<long int>(false);
@@ -1207,7 +1213,7 @@ TEST_MEM(AnyTestOperators, AddLongIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddUnsignedLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddUnsignedLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <unsigned long int >(false);
   auto number = IntRandomNumber<unsigned long int>(false);
@@ -1221,7 +1227,7 @@ TEST_MEM(AnyTestOperators, AddUnsignedLongIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddLongLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddLongLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <long long int >(false);
   auto number = IntRandomNumber<long long int>(false);
@@ -1235,7 +1241,7 @@ TEST_MEM(AnyTestOperators, AddLongLongIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddUnsignedLongLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddUnsignedLongLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <unsigned long long int >(false);
   auto number = IntRandomNumber<unsigned long long int>(false);
@@ -1249,7 +1255,7 @@ TEST_MEM(AnyTestOperators, AddUnsignedLongLongIntToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddFloatToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddFloatToAny, NUMBER_OF_TESTS)
 {
   auto start = RealRandomNumber <float>(false);
   auto number = RealRandomNumber<float>(false);
@@ -1263,7 +1269,7 @@ TEST_MEM(AnyTestOperators, AddFloatToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddDoubleToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddDoubleToAny, NUMBER_OF_TESTS)
 {
   auto start = RealRandomNumber <double>(false);
   auto number = RealRandomNumber<double>(false);
@@ -1277,7 +1283,7 @@ TEST_MEM(AnyTestOperators, AddDoubleToAny)
   ASSERT_EQ(any, (start + number));
 }
 
-TEST_MEM(AnyTestOperators, AddLongDoubleToAny)
+TEST_MEM_LOOP(AnyTestOperators, AddLongDoubleToAny, NUMBER_OF_TESTS)
 {
   auto start = RealRandomNumber <long  double>(false);
   auto number = RealRandomNumber<long double>(false);
@@ -1293,7 +1299,7 @@ TEST_MEM(AnyTestOperators, AddLongDoubleToAny)
 
 ///////////////////////////////////////////////////////////////
 
-TEST_MEM(AnyTestOperators, SubstractShortIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractShortIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<short int>(false);
   auto number = IntRandomNumber<short int>(false);
@@ -1307,7 +1313,7 @@ TEST_MEM(AnyTestOperators, SubstractShortIntToAny)
   ASSERT_EQ(any, (start - number));
 }
 
-TEST_MEM(AnyTestOperators, SubstractUnsignedShortIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractUnsignedShortIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<unsigned short int>(false);
   auto number = IntRandomNumber<unsigned short int>(false);
@@ -1321,7 +1327,7 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedShortIntToAny)
   ASSERT_EQ(any, (start - number));
 }
 
-TEST_MEM(AnyTestOperators, SubstractIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<int>(false);
   auto number = IntRandomNumber<int>(false);
@@ -1335,7 +1341,7 @@ TEST_MEM(AnyTestOperators, SubstractIntToAny)
   ASSERT_EQ(any, (start - number));
 }
 
-TEST_MEM(AnyTestOperators, SubstractUnsignedIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractUnsignedIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<unsigned int>(false);
   auto number = IntRandomNumber<unsigned int>(false);
@@ -1349,7 +1355,7 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedIntToAny)
   ASSERT_EQ(any, (start - number));
 }
 
-TEST_MEM(AnyTestOperators, SubstractLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <long int >(false);
   auto number = IntRandomNumber<long int>(false);
@@ -1363,7 +1369,7 @@ TEST_MEM(AnyTestOperators, SubstractLongIntToAny)
   ASSERT_EQ(any, (start - number));
 }
 
-TEST_MEM(AnyTestOperators, SubstractUnsignedLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractUnsignedLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <unsigned long int >(false);
   auto number = IntRandomNumber<unsigned long int>(false);
@@ -1377,7 +1383,7 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedLongIntToAny)
   ASSERT_EQ(any, (start - number));
 }
 
-TEST_MEM(AnyTestOperators, SubstractLongLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractLongLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <long long int >(false);
   auto number = IntRandomNumber<long long int>(false);
@@ -1391,7 +1397,7 @@ TEST_MEM(AnyTestOperators, SubstractLongLongIntToAny)
   ASSERT_EQ(any, (start - number));
 }
 
-TEST_MEM(AnyTestOperators, SubstractUnsignedLongLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, SubstractUnsignedLongLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <unsigned long long int >(false);
   auto number = IntRandomNumber<unsigned long long int>(false);
@@ -1407,7 +1413,7 @@ TEST_MEM(AnyTestOperators, SubstractUnsignedLongLongIntToAny)
 
 ///////////////////////////////////////////////////////////////
 
-TEST_MEM(AnyTestOperators, MultiplyShortIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyShortIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<short int>(false);
   auto number = IntRandomNumber<short int>(false);
@@ -1421,7 +1427,7 @@ TEST_MEM(AnyTestOperators, MultiplyShortIntToAny)
   ASSERT_EQ(any, (start * number));
 }
 
-TEST_MEM(AnyTestOperators, MultiplyUnsignedShortIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyUnsignedShortIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<unsigned short int>(false);
   auto number = IntRandomNumber<unsigned short int>(false);
@@ -1435,7 +1441,7 @@ TEST_MEM(AnyTestOperators, MultiplyUnsignedShortIntToAny)
   ASSERT_EQ(any, (start * number));
 }
 
-TEST_MEM(AnyTestOperators, MultiplyIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<int>(false);
   auto number = IntRandomNumber<int>(false);
@@ -1449,7 +1455,7 @@ TEST_MEM(AnyTestOperators, MultiplyIntToAny)
   ASSERT_EQ(any, (start * number));
 }
 
-TEST_MEM(AnyTestOperators, MultiplyUnsignedIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyUnsignedIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber<unsigned int>(false);
   auto number = IntRandomNumber<unsigned int>(false);
@@ -1463,7 +1469,7 @@ TEST_MEM(AnyTestOperators, MultiplyUnsignedIntToAny)
   ASSERT_EQ(any, (start * number));
 }
 
-TEST_MEM(AnyTestOperators, MultiplyLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <long int >(false);
   auto number = IntRandomNumber<long int>(false);
@@ -1477,7 +1483,7 @@ TEST_MEM(AnyTestOperators, MultiplyLongIntToAny)
   ASSERT_EQ(any, (start * number));
 }
 
-TEST_MEM(AnyTestOperators, MultiplyUnsignedLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyUnsignedLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <unsigned long int >(false);
   auto number = IntRandomNumber<unsigned long int>(false);
@@ -1491,7 +1497,7 @@ TEST_MEM(AnyTestOperators, MultiplyUnsignedLongIntToAny)
   ASSERT_EQ(any, (start * number));
 }
 
-TEST_MEM(AnyTestOperators, MultiplyLongLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyLongLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <long long int >(false);
   auto number = IntRandomNumber<long long int>(false);
@@ -1505,7 +1511,7 @@ TEST_MEM(AnyTestOperators, MultiplyLongLongIntToAny)
   ASSERT_EQ(any, (start * number));
 }
 
-TEST_MEM(AnyTestOperators, MultiplyUnsignedLongLongIntToAny)
+TEST_MEM_LOOP(AnyTestOperators, MultiplyUnsignedLongLongIntToAny, NUMBER_OF_TESTS)
 {
   auto start = IntRandomNumber <unsigned long long int >(false);
   auto number = IntRandomNumber<unsigned long long int>(false);
@@ -1621,7 +1627,7 @@ TEST_MEM(AnyTestOperators, DivideLongLongIntToAny)
 
 TEST_MEM(AnyTestOperators, DivideUnsignedLongLongIntToAny)
 {
-  auto start = IntRandomNumber <unsigned long long int >(false);
+  auto start = IntRandomNumber<unsigned long long int>(false);
   auto number = IntRandomNumber<unsigned long long int>(false);
   auto any = myodd::dynamic::Any(start);
   ASSERT_EQ(any, start);
@@ -1631,4 +1637,116 @@ TEST_MEM(AnyTestOperators, DivideUnsignedLongLongIntToAny)
   any = myodd::dynamic::Any(start);
   any = any / number;
   ASSERT_EQ(any, (long double)((long double)start / (long double)number));
+}
+
+TEST_MEM(AnyTestOperators, DivideLargeUnsignedLongLongIntToAny)
+{
+  {
+    auto start = (unsigned long long int) 15023239872001903631;
+    auto number = (unsigned long long int)1712482809020384196;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any /= number;
+    ASSERT_EQ(any, ((long double)start / (long double)number));
+
+    any = myodd::dynamic::Any(start);
+    any = any / number;
+    ASSERT_EQ(any, (long double)((long double)start / (long double)number));
+  }
+  {
+    auto start = (unsigned long long int) 5006348524501361372;
+    auto number = (unsigned long long int) 17417882237529564029;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any /= number;
+    ASSERT_EQ(any, ((long double)start / (long double)number));
+
+    any = myodd::dynamic::Any(start);
+    any = any / number;
+    ASSERT_EQ(any, (long double)((long double)start / (long double)number));
+  }
+}
+
+TEST_MEM(AnyTestOperators, AddLargeUnsignedLongLongIntToAny)
+{
+  {
+    auto start = (unsigned long long int) 15023239872001903631;
+    auto number = (unsigned long long int)1712482809020384196;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any += number;
+    ASSERT_EQ(any, start + number);
+
+    any = myodd::dynamic::Any(start);
+    any = any + number;
+    ASSERT_EQ(any, start + number);
+  }
+  {
+    auto start = (unsigned long long int) 5006348524501361372;
+    auto number = (unsigned long long int) 17417882237529564029;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any += number;
+    ASSERT_EQ(any, start + number);
+
+    any = myodd::dynamic::Any(start);
+    any = any + number;
+    ASSERT_EQ(any, start + number);
+  }
+}
+
+TEST_MEM(AnyTestOperators, SubstractLargeUnsignedLongLongIntToAny)
+{
+  {
+    auto start = (unsigned long long int) 15023239872001903631;
+    auto number = (unsigned long long int)1712482809020384196;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any -= number;
+    ASSERT_EQ(any, start - number);
+
+    any = myodd::dynamic::Any(start);
+    any = any - number;
+    ASSERT_EQ(any, start - number);
+  }
+  {
+    auto start = (unsigned long long int) 5006348524501361372;
+    auto number = (unsigned long long int) 17417882237529564029;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any -= number;
+    ASSERT_EQ(any, start - number);
+
+    any = myodd::dynamic::Any(start);
+    any = any - number;
+    ASSERT_EQ(any, start - number);
+  }
+}
+
+TEST_MEM(AnyTestOperators, MultiplyLargeUnsignedLongLongIntToAny)
+{
+  {
+    auto start = (unsigned long long int) 15023239872001903631;
+    auto number = (unsigned long long int)1712482809020384196;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any *= number;
+    ASSERT_EQ(any, start * number);
+
+    any = myodd::dynamic::Any(start);
+    any = any * number;
+    ASSERT_EQ(any, start * number);
+  }
+  {
+    auto start = (unsigned long long int) 5006348524501361372;
+    auto number = (unsigned long long int) 17417882237529564029;
+    auto any = myodd::dynamic::Any(start);
+    ASSERT_EQ(any, start);
+    any *= number;
+    ASSERT_EQ(any, start * number);
+
+    any = myodd::dynamic::Any(start);
+    any = any * number;
+    ASSERT_EQ(any, start * number);
+  }
 }
