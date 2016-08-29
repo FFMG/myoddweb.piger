@@ -1141,6 +1141,113 @@ TEST_MEM(AnyTestOperators, QuickSubPostFix)
   ASSERT_EQ(any, (number - 1));
 }
 
+
+TEST_MEM(AnyTestOperators, CompareTwoStringsThatAreTheSame)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any("+12345");
+  auto any2 = myodd::dynamic::Any("12345");
+
+  ASSERT_EQ(any1, any2);
+  ASSERT_EQ(12345, any1);
+  ASSERT_EQ(12345, any2);
+}
+
+TEST_MEM(AnyTestOperators, CompareTwoStringsLooksLikeDoubleThatAreTheSame)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any("+12345.000");
+  auto any2 = myodd::dynamic::Any("12345");
+
+  ASSERT_EQ(any1, any2);
+  ASSERT_EQ(12345, any1);
+  ASSERT_EQ(12345, any2);
+}
+
+TEST_MEM(AnyTestOperators, CompareTwoWideStringsLooksLikeDoubleThatAreTheSame)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any("+12345.000");
+  auto any2 = myodd::dynamic::Any("12345");
+
+  ASSERT_EQ(any1, any2);
+  ASSERT_EQ(12345, any1);
+  ASSERT_EQ(12345, any2);
+}
+
+TEST_MEM(AnyTestOperators, CompareTwoStringsWithDoubleThatAreTheSame)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any("+12345.678");
+  auto any2 = myodd::dynamic::Any("12345.678");
+
+  ASSERT_EQ(any1, any2);
+  ASSERT_EQ(12345.678, any1);
+  ASSERT_EQ(12345.678, any2);
+}
+
+TEST_MEM(AnyTestOperators, CompareTwoWideStringsWithDoubleThatAreTheSame)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any(L"+12345.678");
+  auto any2 = myodd::dynamic::Any(L"12345.678");
+
+  ASSERT_EQ(any1, any2);
+  ASSERT_EQ(12345.678, any1);
+  ASSERT_EQ(12345.678, any2);
+}
+
+TEST_MEM(AnyTestOperators, CompareTwoZeroStringsThatAreTheSame)
+{
+  // the three are the same
+  auto any1 = myodd::dynamic::Any("+0");
+  auto any2 = myodd::dynamic::Any("-0");
+  auto any3 = myodd::dynamic::Any("0");
+
+  ASSERT_EQ(any1, any2);
+  ASSERT_EQ(any2, any3);
+  ASSERT_EQ(any1, any3);
+  ASSERT_EQ(0, any1);
+  ASSERT_EQ(0, any2);
+  ASSERT_EQ(0, any3);
+  ASSERT_EQ(0.f, any1);
+  ASSERT_EQ(0.f, any2);
+}
+
+TEST_MEM(AnyTestOperators, EmptyStringIsNotZero)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any("");
+  auto any2 = myodd::dynamic::Any("0");
+
+  ASSERT_NE(any1, any2);
+}
+
+TEST_MEM(AnyTestOperators, EmptyWideStringIsNotZero)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any(L"");
+  auto any2 = myodd::dynamic::Any(L"0");
+
+  ASSERT_NE(any1, any2);
+}
+
+TEST_MEM(AnyTestOperators, CompareTwoZeroWideStringsThatAreTheSame)
+{
+  // the three are the same
+  auto any1 = myodd::dynamic::Any( L"+0");
+  auto any2 = myodd::dynamic::Any( L"-0");
+  auto any3 = myodd::dynamic::Any( L"0");
+
+  ASSERT_EQ(any1, any2);
+  ASSERT_EQ(any2, any3);
+  ASSERT_EQ(any1, any3);
+  ASSERT_EQ(0, any1);
+  ASSERT_EQ(0, any2);
+  ASSERT_EQ(0, any3);
+  ASSERT_EQ(0.f, any1);
+  ASSERT_EQ(0.f, any2);
+}
 ///////////////////////////////////////////////////////////////
 
 TEST_MEM_LOOP(AnyTestOperators, AddShortIntToAny, NUMBER_OF_TESTS)
@@ -1748,5 +1855,61 @@ TEST_MEM(AnyTestOperators, MultiplyLargeUnsignedLongLongIntToAny)
     any = myodd::dynamic::Any(start);
     any = any * number;
     ASSERT_EQ(any, start * number);
+  }
+}
+
+TEST_MEM(AnyTestOperators, DivideLargeUnsignedLongLongIntAsStringToAny)
+{
+  {
+    auto start = (unsigned long long int) 15023239872001903631;
+    auto number = (unsigned long long int)1712482809020384196;
+    auto any = myodd::dynamic::Any("15023239872001903631");
+    ASSERT_EQ(any, start);
+    any /= "1712482809020384196";
+    ASSERT_EQ(any, ((long double)start / (long double)number));
+
+    any = myodd::dynamic::Any("15023239872001903631");
+    any = any / "1712482809020384196";
+    ASSERT_EQ(any, (long double)((long double)start / (long double)number));
+  }
+  {
+    auto start = (unsigned long long int) 5006348524501361372;
+    auto number = (unsigned long long int) 17417882237529564029;
+    auto any = myodd::dynamic::Any("5006348524501361372");
+    ASSERT_EQ(any, start);
+    any /= "17417882237529564029";
+    ASSERT_EQ(any, ((long double)start / (long double)number));
+
+    any = myodd::dynamic::Any("5006348524501361372");
+    any = any / "17417882237529564029";
+    ASSERT_EQ(any, (long double)((long double)start / (long double)number));
+  }
+}
+
+TEST_MEM(AnyTestOperators, DivideLargeUnsignedLongLongIntAsWideStringToAny)
+{
+  {
+    auto start = (unsigned long long int) 15023239872001903631;
+    auto number = (unsigned long long int)1712482809020384196;
+    auto any = myodd::dynamic::Any(L"15023239872001903631");
+    ASSERT_EQ(any, start);
+    any /= L"1712482809020384196";
+    ASSERT_EQ(any, ((long double)start / (long double)number));
+
+    any = myodd::dynamic::Any(L"15023239872001903631");
+    any = any / L"1712482809020384196";
+    ASSERT_EQ(any, (long double)((long double)start / (long double)number));
+  }
+  {
+    auto start = (unsigned long long int) 5006348524501361372;
+    auto number = (unsigned long long int) 17417882237529564029;
+    auto any = myodd::dynamic::Any(L"5006348524501361372");
+    ASSERT_EQ(any, start);
+    any /= L"17417882237529564029";
+    ASSERT_EQ(any, ((long double)start / (long double)number));
+
+    any = myodd::dynamic::Any(L"5006348524501361372");
+    any = any / L"17417882237529564029";
+    ASSERT_EQ(any, (long double)((long double)start / (long double)number));
   }
 }

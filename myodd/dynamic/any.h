@@ -29,6 +29,7 @@
 #include <math.h>         // modf
 #include <string>
 #include <codecvt>        //  string <-> wstring
+#include <stdlib.h>       //  std::strtoll / std::strtoull
 
 #include "types.h"        // data type
 
@@ -47,7 +48,8 @@ namespace myodd {
         _svalue(nullptr),
         _swvalue(nullptr),
         _lcvalue(0),
-        _type(Type::Misc_null)
+        _type(Type::Misc_null),
+        _stringStatus(StringStatus_Not_A_Number)
       {
       }
 
@@ -125,8 +127,9 @@ namespace myodd {
           {
             _lcvalue = other._lcvalue;
             _cvalue = new char[_lcvalue];
-            std::memset(_cvalue, 0, _lcvalue);
+            std::memset(_cvalue, '\0', _lcvalue);
             std::memcpy(_cvalue, other._cvalue, _lcvalue);
+            _stringStatus = other._stringStatus;
           }
         }
         return *this;
@@ -1231,6 +1234,8 @@ namespace myodd {
         }
         
         //  find the 'common' type
+        // in the case of 2 characters we could end up comparing 2xzeros
+        // but it is fine as we will compare them further later.
         auto type = CalculateType(lhs.Type(), rhs.Type());
         switch ( type )
         {
@@ -1309,30 +1314,29 @@ namespace myodd {
           throw std::bad_cast();
         }
 
-        //  null/not null
-        if (lhs._cvalue && !rhs._cvalue)
+        //  if they are both characters then we need to test further.
+        if (dynamic::is_type_character(lhs.Type()) && dynamic::is_type_character(rhs.Type()) &&
+           (!lhs.IsStringNumber( false ) || !rhs.IsStringNumber(false) ))
         {
-          return 3;
-        }
-
-        //  null/not null
-        if (!lhs._cvalue && rhs._cvalue)
-        {
-          return 3;
-        }
-
-        //  null/not null
-        if (lhs._cvalue && rhs._cvalue)
-        {
-          if (lhs._lcvalue != rhs._lcvalue)
+          //  null/not null
+          if (lhs._cvalue && !rhs._cvalue)
           {
-            return 4;
+            return 3;
           }
 
-          //  the lenght is the same, so we can use the size of lhs
-          if (0 != std::memcmp(lhs._cvalue, rhs._cvalue, lhs._lcvalue))
+          //  null/not null
+          if (lhs._cvalue && rhs._cvalue)
           {
-            return 4;
+            if (lhs._lcvalue != rhs._lcvalue)
+            {
+              return 4;
+            }
+
+            //  the lenght is the same, so we can use the size of lhs
+            if (0 != std::memcmp(lhs._cvalue, rhs._cvalue, lhs._lcvalue))
+            {
+              return 4;
+            }
           }
         }
 
@@ -2064,14 +2068,35 @@ namespace myodd {
 
         if (nullptr != value)
         {
-          // default values.
+          // get the number of characters.
           _lcvalue = (std::strlen((const char*)value)+1) * sizeof(T);
+
+          // create the character, we know it is at least one, even for an empty string.
           _cvalue = new char[_lcvalue];
-          std::memset(_cvalue, 0, _lcvalue);
+
+          // memory clear
+          std::memset(_cvalue, '\0', _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
 
-          _llivalue = std::strtoll(_cvalue, nullptr, 0);
-          _ldvalue = std::strtold(_cvalue, nullptr);
+          if (_lcvalue > 1)
+          {
+            // it does not matter if this is signed or not signed
+            // we are converting it to an unsigned long long and back to a long long
+            // in reality they both take the same amount of space.
+            _llivalue = static_cast<long long int>(std::strtoull((const char*)value, nullptr, 0));
+
+            // try and get the value as a long double.
+            // this is represented in a slightly different way in memory
+            // hence the reason we cannot just cast our long long to long double.
+            _ldvalue = std::strtold((const char*)value, nullptr);
+          }
+          else
+          {
+            // the size is only one, (for our trailling '\0')
+            // so we know that the value has to be zero.
+            _llivalue = 0;
+            _ldvalue = 0;
+          }
         }
         else
         {
@@ -2088,6 +2113,9 @@ namespace myodd {
           _llivalue = 0;
           _ldvalue = 0;
         }
+
+        // parse the string to set the string flag
+        ParseStringStatus((const char*)value);
       }
 
       /**
@@ -2107,12 +2135,36 @@ namespace myodd {
         {
           // default values.
           _lcvalue = (std::wcslen(value)+1) * sizeof(wchar_t);
+
+          // create the character, we know it is at least one, even for an empty string.
           _cvalue = new char[_lcvalue];
-          std::memset(_cvalue, 0, _lcvalue);
+
+          // memory clear
+          std::memset(_cvalue, '\0', _lcvalue);
           std::memcpy(_cvalue, value, _lcvalue);
 
-          _llivalue = std::wcstoll(value, nullptr, 0);
-          _ldvalue = std::wcstold(value, nullptr);
+          if (_lcvalue > 1)
+          {
+            // it does not matter if this is signed or not signed
+            // we are converting it to an unsigned long long and back to a long long
+            // in reality they both take the same amount of space.
+            _llivalue = static_cast<long long int>(std::wcstoull((const wchar_t*)value, nullptr, 0));
+
+            // try and get the value as a long double.
+            // this is represented in a slightly different way in memory
+            // hence the reason we cannot just cast our long long to long double.
+            _ldvalue = std::wcstold((const wchar_t*)value, nullptr);
+          }
+          else
+          {
+            // the size is only one, (for our trailling '\0')
+            // so we know that the value has to be zero.
+            _llivalue = 0;
+            _ldvalue = 0;
+          }
+
+          // parse the string to set the string flag
+          ParseStringStatus((const wchar_t*)value);
         }
         else
         {
@@ -2347,6 +2399,230 @@ namespace myodd {
         return *this;
       }
 
+
+      enum StringStatus{
+        StringStatus_Not_A_Number,                    // 'blah' or 'blah123'
+        StringStatus_Partial_Pos_Number,              // '+123blah'
+        StringStatus_Partial_Neg_Number,              // '-123blah'
+
+        StringStatus_Pos_Number,                      // '+123' or '123' or '0' or '-0'
+        StringStatus_Neg_Number,                      // '-123'
+
+        StringStatus_Floating_Partial_Pos_Number,    // '+123.00blah' or '123.00blah'
+        StringStatus_Floating_Partial_Neg_Number,    // '-123.00blah'
+        StringStatus_Floating_Pos_Number,            // '+123.1' or '123.1' or '0.1' or '-0.1'
+        StringStatus_Floating_Neg_Number,            // '-123.1'
+      };
+
+      /** 
+       * Check if our string is a number or not.
+       * @param bool allowPartial if partial strings are allowed or not.
+       * @return bool if this string represents a number or not.
+       */
+      bool IsStringNumber( bool allowPartial ) const
+      {
+        switch (_stringStatus)
+        {
+        case myodd::dynamic::Any::StringStatus_Partial_Pos_Number:
+        case myodd::dynamic::Any::StringStatus_Partial_Neg_Number:
+        case myodd::dynamic::Any::StringStatus_Floating_Partial_Pos_Number:
+        case myodd::dynamic::Any::StringStatus_Floating_Partial_Neg_Number:
+          return allowPartial; // only true if we allow partials.
+
+        case myodd::dynamic::Any::StringStatus_Floating_Pos_Number:
+        case myodd::dynamic::Any::StringStatus_Floating_Neg_Number:
+        case myodd::dynamic::Any::StringStatus_Pos_Number:
+        case myodd::dynamic::Any::StringStatus_Neg_Number:
+          return true;
+
+        case myodd::dynamic::Any::StringStatus_Not_A_Number:
+        default:
+          break;
+        }
+
+        // not a number
+        return false;
+      }
+
+      /**
+       * Parse a string to see if it is a number, partial or not.
+       * @param const char *str the string we are parsing.
+       */
+      void ParseStringStatus(const char *str)
+      {
+        // sanity check
+        if (nullptr == str)
+        {
+          return;
+        }
+
+        short sign = 0;       //  0=unknown, 1=positive, 2=negative.
+        short found = 0;      // the number of ... numbers we found.
+        bool partial = false; // if we found some non characters.
+        bool decimal = false;
+
+        // go around all the characters.
+        for (const char *it = str; *it != '\0'; *it++)
+        {
+          if (*it == '\0')
+          {
+            break;
+          }
+
+          if (isspace(*it))
+          {
+            // ignore it.
+            continue;
+          }
+
+          // minus sign? as long as we have not done it yet...
+          if (*it == '-' && sign == 0)
+          {
+            sign = 2;
+            continue;
+          }
+
+          // + sign? as long as we have not done it yet...
+          if (*it == '+' && sign == 0)
+          {
+            sign = 1;
+            continue;
+          }
+          
+          if (*it == '.' && false == decimal)
+          {
+            decimal = true;
+            continue;
+          }
+
+          if (!isdigit(*it))
+          {
+            // not a number, (anymore)
+            partial = true;
+            break;
+          }
+
+          // this is a number
+          ++found;
+        }
+
+        // if we found anyting and we are here, then it is a number...
+        // if we found nothing, then it is not a number.
+        if (0 == found)
+        {
+          _stringStatus = StringStatus_Not_A_Number;
+        }
+        else if( true == partial )
+        {
+          if (sign == 1 || sign == 0)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Partial_Pos_Number : StringStatus_Partial_Pos_Number;
+          }
+          else if (sign == 2)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Partial_Neg_Number : StringStatus_Partial_Neg_Number;
+          }
+        }
+        else
+        {
+          if (sign == 1 || sign == 0)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Pos_Number : StringStatus_Pos_Number;
+          }
+          else if (sign == 2)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Neg_Number : StringStatus_Neg_Number;
+          }
+        }
+      }
+
+      /**
+      * Parse a string to see if it is a number, partial or not.
+      * @param const wchar_t *str the string we are parsing.
+      */
+      void ParseStringStatus(const wchar_t *str)
+      {
+        // sanity check
+        if (nullptr == str)
+        {
+          return;
+        }
+
+        short sign = 0;       //  0=unknown, 1=positive, 2=negative.
+        short found = 0;      // the number of ... numbers we found.
+        bool partial = false; // if we found some non characters.
+        bool decimal = false;
+
+        // go around all the characters.
+        for(const wchar_t *it = str; *it != L'\0'; *it++ )
+        {
+          if (iswspace(*it))
+          {
+            // ignore it.
+            continue;
+          }
+
+          // minus sign? as long as we have not done it yet...
+          if (*it == L'-' && sign == 0)
+          {
+            sign = 2;
+            continue;
+          }
+
+          // + sign? as long as we have not done it yet...
+          if (*it == L'+' && sign == 0)
+          {
+            sign = 1;
+            continue;
+          }
+
+          if (*it == L'.' && false == decimal)
+          {
+            decimal = true;
+            continue;
+          }
+
+          if (!iswdigit(*it))
+          {
+            // not a number, (anymore)
+            partial = true;
+            break;
+          }
+
+          // this is a number
+          ++found;
+        }
+
+        // if we found anyting and we are here, then it is a number...
+        // if we found nothing, then it is not a number.
+        if (0 == found)
+        {
+          _stringStatus = StringStatus_Not_A_Number;
+        }
+        else if (true == partial)
+        {
+          if (sign == 1 || sign == 0)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Partial_Pos_Number : StringStatus_Partial_Pos_Number;
+          }
+          else if (sign == 2)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Partial_Neg_Number : StringStatus_Partial_Neg_Number;
+          }
+        }
+        else
+        {
+          if (sign == 1 || sign == 0)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Pos_Number : StringStatus_Pos_Number;
+          }
+          else if (sign == 2)
+          {
+            _stringStatus = (decimal) ? StringStatus_Floating_Neg_Number : StringStatus_Neg_Number;
+          }
+        }
+      }
+
       // the biggest integer value.
       long long int _llivalue;
 
@@ -2356,6 +2632,9 @@ namespace myodd {
       // this is the given character value either char/signed char/unsigned char/wide
       char* _cvalue;
       size_t _lcvalue;
+
+      // the status of the string.
+      StringStatus _stringStatus;
 
       // 'cosmetic' representations of the numbers, both wide and non wide strings.
       // the values are only created if/when the caller call a to string function.
