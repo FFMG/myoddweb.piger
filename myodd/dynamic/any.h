@@ -265,13 +265,13 @@ namespace myodd {
       {
         if (rhs.UseUnsignedInteger())
         {
-          return AddNumber(CalculateType(Type(), rhs.Type()), (unsigned long long int)rhs._llivalue);
+          return AddNumber(CalculateType(*this, rhs), (unsigned long long int)rhs._llivalue);
         }
         if (rhs.UseSignedInteger())
         {
-          return AddNumber(CalculateType(Type(), rhs.Type()), (long long int)rhs._llivalue);
+          return AddNumber(CalculateType(*this, rhs), (long long int)rhs._llivalue);
         }
-        return AddNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+        return AddNumber(CalculateType(*this, rhs), rhs._ldvalue);
       }
 
       /**
@@ -294,7 +294,7 @@ namespace myodd {
       template<>
       Any& operator+=(int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_int), rhs);
       }
 
       /**
@@ -305,7 +305,7 @@ namespace myodd {
       template<>
       Any& operator+=(short int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_short_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_short_int), rhs);
       }
 
       /**
@@ -316,7 +316,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned short int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_short_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_unsigned_short_int), rhs);
       }
 
       /**
@@ -327,7 +327,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_unsigned_int), rhs);
       }
 
       /**
@@ -338,7 +338,7 @@ namespace myodd {
       template<>
       Any& operator+=(long int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_long_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_long_int), rhs);
       }
 
       /**
@@ -349,7 +349,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned long int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_unsigned_long_int), rhs);
       }
 
       /**
@@ -360,7 +360,7 @@ namespace myodd {
       template<>
       Any& operator+=(long long int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_long_long_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_long_long_int), rhs);
       }
 
       /**
@@ -371,7 +371,7 @@ namespace myodd {
       template<>
       Any& operator+=(unsigned long long int rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_long_int), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Integer_unsigned_long_long_int), rhs);
       }
 
       /**
@@ -382,7 +382,7 @@ namespace myodd {
       template<>
       Any& operator+=(float rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Floating_point_float), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Floating_point_float), rhs);
       }
 
       /**
@@ -393,7 +393,7 @@ namespace myodd {
       template<>
       Any& operator+=(double rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Floating_point_double), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Floating_point_double), rhs);
       }
 
       /**
@@ -404,7 +404,7 @@ namespace myodd {
       template<>
       Any& operator+=(long double rhs)
       {
-        return AddNumber(CalculateType(Type(), dynamic::Floating_point_long_double), rhs);
+        return AddNumber(CalculateType(*this, dynamic::Floating_point_long_double), rhs);
       }
 
       /**
@@ -439,10 +439,23 @@ namespace myodd {
       Any& operator++()
       {
         // save the current type.
-        dynamic::Type type = Type();
+        dynamic::Type type = NumberType();
 
-        // multiply the values.
-        CastFrom(_ldvalue + 1);
+        // add an int.
+        if (dynamic::is_type_floating(type))
+        {
+          // we cannot call ++_ldvalue as the value is passed by reference.
+          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // so _ldvalue/_llivalue become 0
+          CastFrom( _ldvalue+1 );
+        }
+        else
+        {
+          // we cannot call ++_ldvalue as the value is passed by reference.
+          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // so _ldvalue/_llivalue become 0
+          CastFrom( _llivalue+1 );
+        }
 
         // update the type.
         _type = CalculateType(type, dynamic::Integer_int);
@@ -480,14 +493,14 @@ namespace myodd {
       {
         if (rhs.UseUnsignedInteger())
         {
-          return SubtractNumber(CalculateType(Type(), rhs.Type()), (unsigned long long int)rhs._llivalue);
+          return SubtractNumber(CalculateType(*this, rhs), (unsigned long long int)rhs._llivalue);
         }
         
         if (rhs.UseSignedInteger())
         {
-          return SubtractNumber(CalculateType(Type(), rhs.Type()), (long long int)rhs._llivalue);
+          return SubtractNumber(CalculateType(*this, rhs), (long long int)rhs._llivalue);
         }
-        return SubtractNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+        return SubtractNumber(CalculateType(*this, rhs), rhs._ldvalue);
       }
 
       /**
@@ -510,7 +523,7 @@ namespace myodd {
       template<>
       Any& operator-=(int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_int), rhs);
       }
 
       /**
@@ -521,7 +534,7 @@ namespace myodd {
       template<>
       Any& operator-=(short int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_short_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_short_int), rhs);
       }
 
       /**
@@ -532,7 +545,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned short int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_short_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_unsigned_short_int), rhs);
       }
 
       /**
@@ -543,7 +556,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_unsigned_int), rhs);
       }
 
       /**
@@ -554,7 +567,7 @@ namespace myodd {
       template<>
       Any& operator-=(long int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_long_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_long_int), rhs);
       }
 
       /**
@@ -565,7 +578,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned long int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_unsigned_long_int), rhs);
       }
 
       /**
@@ -576,7 +589,7 @@ namespace myodd {
       template<>
       Any& operator-=(long long int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_long_long_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_long_long_int), rhs);
       }
 
       /**
@@ -587,7 +600,7 @@ namespace myodd {
       template<>
       Any& operator-=(unsigned long long int rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_long_int), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Integer_unsigned_long_long_int), rhs);
       }
 
       /**
@@ -598,7 +611,7 @@ namespace myodd {
       template<>
       Any& operator-=(float rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Floating_point_float), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Floating_point_float), rhs);
       }
 
       /**
@@ -609,7 +622,7 @@ namespace myodd {
       template<>
       Any& operator-=(double rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Floating_point_double), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Floating_point_double), rhs);
       }
 
       /**
@@ -620,7 +633,7 @@ namespace myodd {
       template<>
       Any& operator-=(long double rhs)
       {
-        return SubtractNumber(CalculateType(Type(), dynamic::Floating_point_long_double), rhs);
+        return SubtractNumber(CalculateType(*this, dynamic::Floating_point_long_double), rhs);
       }
 
       /**
@@ -655,10 +668,24 @@ namespace myodd {
       Any& operator--()
       {
         // save the current type.
-        dynamic::Type type = Type();
+        dynamic::Type type = NumberType();
 
-        // multiply the values.
-        CastFrom(_ldvalue - 1);
+        // substract an int
+        // add an int.
+        if (dynamic::is_type_floating(type))
+        {
+          // we cannot call ++_ldvalue as the value is passed by reference.
+          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // so _ldvalue/_llivalue become 0
+          CastFrom( _ldvalue-1 );
+        }
+        else
+        {
+          // we cannot call ++_ldvalue as the value is passed by reference.
+          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // so _ldvalue/_llivalue become 0
+          CastFrom( _llivalue-1 );
+        }
 
         // update the type.
         _type = CalculateType(type, dynamic::Integer_int);
@@ -694,11 +721,11 @@ namespace myodd {
        */
       Any& operator*=(const Any& rhs)
       {
-        if (dynamic::is_type_floating(rhs.Type()))
+        if (dynamic::is_type_floating(rhs.NumberType()))
         {
-          return MultiplyNumber(CalculateType(Type(), rhs.Type()), rhs._ldvalue);
+          return MultiplyNumber(CalculateType(*this, rhs), rhs._ldvalue);
         }
-        return MultiplyNumber(CalculateType(Type(), rhs.Type()), rhs._llivalue);
+        return MultiplyNumber(CalculateType(*this, rhs), rhs._llivalue);
       }
 
       /**
@@ -721,7 +748,7 @@ namespace myodd {
       template<>
       Any& operator*=( short int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_short_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_short_int), rhs);
       }
 
       /**
@@ -732,7 +759,7 @@ namespace myodd {
       template<>
       Any& operator*=( unsigned short int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_short_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_unsigned_short_int), rhs);
       }
 
       /**
@@ -743,7 +770,7 @@ namespace myodd {
       template<>
       Any& operator*=(int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_int), rhs);
       }
 
       /**
@@ -754,7 +781,7 @@ namespace myodd {
       template<>
       Any& operator*=( unsigned int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_unsigned_int), rhs);
       }
 
       /**
@@ -765,7 +792,7 @@ namespace myodd {
       template<>
       Any& operator*=( long int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_long_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_long_int), rhs);
       }
 
       /**
@@ -776,7 +803,7 @@ namespace myodd {
       template<>
       Any& operator*=( unsigned long int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_unsigned_long_int), rhs);
       }
 
       /**
@@ -787,7 +814,7 @@ namespace myodd {
       template<>
       Any& operator*=( long long int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_long_long_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_long_long_int), rhs);
       }
 
       /**
@@ -798,7 +825,7 @@ namespace myodd {
       template<>
       Any& operator*=( unsigned long long int rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Integer_unsigned_long_long_int), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Integer_unsigned_long_long_int), rhs);
       }
 
       /**
@@ -809,7 +836,7 @@ namespace myodd {
       template<>
       Any& operator*=( float rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Floating_point_float), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Floating_point_float), rhs);
       }
 
       /**
@@ -820,7 +847,7 @@ namespace myodd {
       template<>
       Any& operator*=( double rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Floating_point_double), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Floating_point_double), rhs);
       }
 
       /**
@@ -831,7 +858,7 @@ namespace myodd {
       template<>
       Any& operator*=( long double rhs)
       {
-        return MultiplyNumber(CalculateType(Type(), dynamic::Floating_point_long_double), rhs);
+        return MultiplyNumber(CalculateType(*this, dynamic::Floating_point_long_double), rhs);
       }
       
       /**
@@ -1069,6 +1096,48 @@ namespace myodd {
       }
 
     protected:
+      dynamic::Type NumberType() const
+      {
+        //  if it is not a character then just use whatever we have
+        if (!dynamic::is_type_character(Type()))
+        {
+          return Type();
+        }
+
+        // if the string is not a number, just use an int.
+        if (!IsStringNumber(true))
+        {
+          // this is not a number, so zero will be used.
+          // we might as well use an int.
+          return dynamic::Integer_int;
+        }
+
+        // it seems to be a number, so we need to calculate what type of number it is.
+        switch (_stringStatus)
+        {
+        case myodd::dynamic::Any::StringStatus_Pos_Number:
+        case myodd::dynamic::Any::StringStatus_Partial_Pos_Number:
+          if (_llivalue < 0)
+          {
+            return dynamic::Integer_unsigned_long_long_int;
+          }
+          return dynamic::Integer_long_long_int;
+
+        case myodd::dynamic::Any::StringStatus_Neg_Number:
+        case myodd::dynamic::Any::StringStatus_Partial_Neg_Number:
+          return dynamic::Integer_long_long_int;
+
+        case myodd::dynamic::Any::StringStatus_Floating_Pos_Number:
+        case myodd::dynamic::Any::StringStatus_Floating_Neg_Number:
+        case myodd::dynamic::Any::StringStatus_Floating_Partial_Pos_Number:
+        case myodd::dynamic::Any::StringStatus_Floating_Partial_Neg_Number:
+          return dynamic::Floating_point_long_double;
+
+        default:
+          throw std::exception("Unknown string type!");
+        }
+      }
+
       /**
        * Calculate the type for division
        * @param const dynamic::Type& lhs the lhs type
@@ -1104,6 +1173,38 @@ namespace myodd {
 
         // default value.
         return dynamic::Floating_point_double;
+      }
+
+      /**
+      * This function is used to re-calculate the 'best' type after an arithmetic opereation
+      * For example int*int could give us a long long
+      *          or int / int could give us a double.
+      * NB: this function does not _set_ the type, it only calculates the posible value.
+      *     it is up to the call function to set the new type.
+      * @param const Any& lhs the original number on the lhs of the operation
+      * @param const dynamic::Type& rhsOriginal the original type on the rhs of the operation
+      * @return dynamic::Type the posible new type.
+      */
+      static dynamic::Type CalculateType(const Any& lhs, const Any& rhs)
+      {
+        auto lhsOriginal = lhs.NumberType();
+        auto rhsOriginal = rhs.NumberType();
+        return CalculateType(lhsOriginal, rhsOriginal);
+      }
+
+      /**
+       * This function is used to re-calculate the 'best' type after an arithmetic opereation 
+       * For example int*int could give us a long long
+       *          or int / int could give us a double.
+       * NB: this function does not _set_ the type, it only calculates the posible value.
+       *     it is up to the call function to set the new type.
+       * @param const Any& lhs the original number on the lhs of the operation
+       * @param const dynamic::Type& rhsOriginal the original type on the rhs of the operation
+       * @return dynamic::Type the posible new type.
+       */
+      static dynamic::Type CalculateType(const Any& lhs, const dynamic::Type& rhsOriginal)
+      {
+        return CalculateType(lhs.NumberType(), rhsOriginal);
       }
 
       /**
@@ -1236,7 +1337,7 @@ namespace myodd {
         //  find the 'common' type
         // in the case of 2 characters we could end up comparing 2xzeros
         // but it is fine as we will compare them further later.
-        auto type = CalculateType(lhs.Type(), rhs.Type());
+        auto type = CalculateType(lhs, rhs);
         switch ( type )
         {
         // bool
@@ -1687,7 +1788,7 @@ namespace myodd {
         case dynamic::Type::Character_unsigned_char:
         case dynamic::Type::Character_signed_char:
         case dynamic::Type::Character_wchar_t:
-          if (dynamic::is_type_floating(dynamic::get_type<T>::value))
+          if (dynamic::is_type_floating(NumberType()))
           {
             return static_cast<T>(_ldvalue);
           }
@@ -1860,7 +1961,7 @@ namespace myodd {
           return;
         }
 
-        if (dynamic::is_type_floating(Type()))
+        if (dynamic::is_type_floating(NumberType()))
         {
           *_swvalue = std::to_wstring(_ldvalue);
         }
@@ -1898,7 +1999,7 @@ namespace myodd {
           return;
         }
 
-        if (dynamic::is_type_floating(Type()))
+        if (dynamic::is_type_floating(NumberType()))
         {
           *_svalue = std::to_string(_ldvalue);
         }

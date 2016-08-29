@@ -1101,7 +1101,7 @@ TEST_MEM(AnyTestOperators, DivideTwoWideStringsWillThrowAnError)
   EXPECT_THROW(any1 / any2, std::overflow_error);
 }
 
-TEST_MEM(AnyTestOperators, QuickAddPrefix)
+TEST_MEM_LOOP(AnyTestOperators, QuickAddPrefixToShort, NUMBER_OF_TESTS)
 {
   auto number = IntRandomNumber<short>(false);
   auto any = number;
@@ -1111,7 +1111,17 @@ TEST_MEM(AnyTestOperators, QuickAddPrefix)
   ASSERT_EQ( any, (int)number+1);
 }
 
-TEST_MEM(AnyTestOperators, QuickSubPrefix)
+TEST_MEM_LOOP(AnyTestOperators, QuickAddPrefixToUnsignedLongLong, NUMBER_OF_TESTS)
+{
+  auto number = IntRandomNumber<unsigned long long>(false);
+  auto any = number;
+  ASSERT_EQ(any, number);
+
+  ASSERT_EQ(++any, number + 1);
+  ASSERT_EQ(any, number + 1);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, QuickSubPrefixToShort, NUMBER_OF_TESTS)
 {
   auto number = IntRandomNumber<short>(false);
   auto any = myodd::dynamic::Any(number);
@@ -1121,7 +1131,17 @@ TEST_MEM(AnyTestOperators, QuickSubPrefix)
   ASSERT_EQ(any, (number-1));
 }
 
-TEST_MEM(AnyTestOperators, QuickAddPostFix)
+TEST_MEM_LOOP(AnyTestOperators, QuickSubPrefixToUnsignedLongLong, NUMBER_OF_TESTS)
+{
+  auto number = IntRandomNumber<unsigned long long>(false);
+  auto any = myodd::dynamic::Any(number);
+  ASSERT_EQ(any, number);
+
+  ASSERT_EQ(--any, (number - 1));
+  ASSERT_EQ(any, (number - 1));
+}
+
+TEST_MEM_LOOP(AnyTestOperators, QuickAddPostFixToShort, NUMBER_OF_TESTS)
 {
   auto number = IntRandomNumber<short>(false);
   auto any = myodd::dynamic::Any(number);
@@ -1131,7 +1151,17 @@ TEST_MEM(AnyTestOperators, QuickAddPostFix)
   ASSERT_EQ(any, (number + 1));
 }
 
-TEST_MEM(AnyTestOperators, QuickSubPostFix)
+TEST_MEM_LOOP(AnyTestOperators, QuickAddPostFixToUnsignedLonLong, NUMBER_OF_TESTS)
+{
+  auto number = IntRandomNumber<unsigned long long>(false);
+  auto any = myodd::dynamic::Any(number);
+  ASSERT_EQ(any, number);
+
+  ASSERT_EQ(any++, number);
+  ASSERT_EQ(any, (number + 1));
+}
+
+TEST_MEM_LOOP(AnyTestOperators, QuickSubPostFix, NUMBER_OF_TESTS)
 {
   auto number = IntRandomNumber<short>(false);
   auto any = myodd::dynamic::Any(number);
@@ -1238,7 +1268,7 @@ TEST_MEM(AnyTestOperators, SingleCharIsANumber)
   auto any1 = myodd::dynamic::Any( '1' );
   auto any2 = myodd::dynamic::Any( "+1");
 
-  ASSERT_NE(any1, any2);
+  ASSERT_EQ(any1, any2);
 }
 
 TEST_MEM(AnyTestOperators, SingleWideCharIsANumber)
@@ -1247,7 +1277,7 @@ TEST_MEM(AnyTestOperators, SingleWideCharIsANumber)
   auto any1 = myodd::dynamic::Any( L'1');
   auto any2 = myodd::dynamic::Any( L"+1");
 
-  ASSERT_NE(any1, any2);
+  ASSERT_EQ(any1, any2);
 }
 
 
@@ -1930,5 +1960,21 @@ TEST_MEM(AnyTestOperators, DivideLargeUnsignedLongLongIntAsWideStringToAny)
     any = myodd::dynamic::Any(L"5006348524501361372");
     any = any / L"17417882237529564029";
     ASSERT_EQ(any, (long double)((long double)start / (long double)number));
+  }
+}
+
+TEST_MEM(AnyTestOperators, LongDoubleStringMultiplied)
+{
+  {
+    myodd::dynamic::Any pi = "3.14159265358979323846264338327950288419716939937510";
+    auto pi2 = pi * "2";
+    ASSERT_EQ(pi2, "6.2831853071795864769252867665590057683943387987502");
+    ASSERT_EQ(pi2, 6.2831853071795864769252867665590057683943387987502L);
+  }
+  {
+    myodd::dynamic::Any two = "2";
+    auto pi2 = two * "3.14159265358979323846264338327950288419716939937510";
+    ASSERT_EQ(pi2, "6.2831853071795864769252867665590057683943387987502");
+    ASSERT_EQ(pi2, 6.2831853071795864769252867665590057683943387987502L);
   }
 }
