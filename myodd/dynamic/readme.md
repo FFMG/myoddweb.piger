@@ -240,7 +240,7 @@ While this level of flexibility will never result in an equal performance with t
 #### [Division loop](doc/perfdivision.md)
 
 - std : `0.003s` | `0.003s`
-- any : `0.098s` | `0.082s`
+- any : `0.072s` | `0.079s`
 
 ## Todo
 
