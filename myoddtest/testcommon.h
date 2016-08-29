@@ -18,60 +18,80 @@
 #undef max
 #undef min
 
-# define MEMORY_GUARD_START \
-_CrtMemState memState_; \
-_CrtMemCheckpoint(&memState_);\
+# define MEMORY_GUARD_START                                                     \
+_CrtMemState memState_;                                                         \
+_CrtMemCheckpoint(&memState_);                                                  \
 {
 
-# define MEMORY_GUARD_END \
-}\
-_CrtMemState stateNow, stateDiff;\
-_CrtMemCheckpoint(&stateNow);\
-int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);\
-UNUSED_ALWAYS(stateNow);\
-if (diffResult)\
-{\
-  FAIL() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";\
+# define MEMORY_GUARD_END                                                       \
+}                                                                               \
+_CrtMemState stateNow, stateDiff;                                               \
+_CrtMemCheckpoint(&stateNow);                                                   \
+int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);          \
+UNUSED_ALWAYS(stateNow);                                                        \
+if (diffResult)                                                                 \
+{                                                                               \
+  FAIL() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";   \
 }
 
-#define GTEST_TEST_MEM_(test_case_name, test_name, parent_class, parent_id)\
-class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
- public:\
-  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() { \
-    _CrtMemCheckpoint(&memState_);\
-  }\
-  \
-  virtual ~GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() { \
-    _CrtMemState stateNow, stateDiff;\
-    _CrtMemCheckpoint(&stateNow);\
-    int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);\
-    UNUSED_ALWAYS(stateNow);\
-    if (diffResult)\
-    {\
+#define GTEST_TEST_MEM_LOOP_(test_case_name, test_name, test_number_of,         \
+                             parent_class, parent_id)                           \
+class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class   \
+{                                                                               \
+ public:                                                                        \
+  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)()                           \
+  {                                                                             \
+    _CrtMemCheckpoint(&memState_);                                              \
+  }                                                                             \
+                                                                                \
+  virtual ~GTEST_TEST_CLASS_NAME_(test_case_name, test_name)()                  \
+  {                                                                             \
+    _CrtMemState stateNow, stateDiff;                                           \
+    _CrtMemCheckpoint(&stateNow);                                               \
+    int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);      \
+    UNUSED_ALWAYS(stateNow);                                                    \
+    if (diffResult)                                                             \
+    {                                                                           \
       ADD_FAILURE() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";\
-    }\
-  }\
- private:\
-  _CrtMemState memState_; \
-  virtual void TestBody();\
-  static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;\
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));\
-};\
-\
-::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
-  ::test_info_ =\
-    ::testing::internal::MakeAndRegisterTestInfo(\
-        #test_case_name, #test_name, NULL, NULL, \
-        (parent_id), \
-        parent_class::SetUpTestCase, \
-        parent_class::TearDownTestCase, \
-        new ::testing::internal::TestFactoryImpl<\
-            GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>);\
-void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
+    }                                                                           \
+  }                                                                             \
+ private:                                                                       \
+  _CrtMemState memState_;                                                       \
+  virtual void TestBody();                                                      \
+  void TestBodySingle();                                                        \
+  static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;         \
+  GTEST_DISALLOW_COPY_AND_ASSIGN_(                                              \
+      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));                       \
+};                                                                              \
+                                                                                \
+::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)    \
+  ::test_info_ =                                                                \
+    ::testing::internal::MakeAndRegisterTestInfo(                               \
+        #test_case_name, #test_name, NULL, NULL,                                \
+        (parent_id),                                                            \
+        parent_class::SetUpTestCase,                                            \
+        parent_class::TearDownTestCase,                                         \
+        new ::testing::internal::TestFactoryImpl<                               \
+            GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>);                \
+                                                                                \
+void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()              \
+{                                                                               \
+  for( auto i = 0; i < test_number_of; ++i )                                    \
+  {                                                                             \
+    TestBodySingle();                                                           \
+    if(test_number_of > 1 )                                                     \
+        printf( "    [%s : %d]\n", #test_case_name, i);                         \
+  }                                                                             \
+}                                                                               \
+                                                                                \
+void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBodySingle()
 
-# define TEST_MEM(test_case_name, test_name) \
-  GTEST_TEST_MEM_(test_case_name, test_name,\
+# define TEST_MEM(test_case_name, test_name)                                    \
+  GTEST_TEST_MEM_LOOP_(test_case_name, test_name, 1,                            \
+    ::testing::Test, ::testing::internal::GetTestTypeId())
+
+# define TEST_MEM_LOOP(test_case_name, test_name, test_number_of)               \
+  GTEST_TEST_MEM_LOOP_(test_case_name, test_name, test_number_of,               \
     ::testing::Test, ::testing::internal::GetTestTypeId())
 
 template<typename T>
