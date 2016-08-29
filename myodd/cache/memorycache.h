@@ -31,12 +31,11 @@ namespace myodd {
       /**
        * inserts a cache entry into the cache, specifying information about how the entry will be evicted.
        * @see https://msdn.microsoft.com/en-us/library/hh138343(v=vs.110).aspx
-       * @param const CacheItem<T>& item the item to add.
+       * @param const CacheItem& item the item to add.
        * @param CacheItemPolicy policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      template<class T>
-      bool Add(const CacheItem<T>& item, const CacheItemPolicy& policy)
+      bool Add(const CacheItem& item, const CacheItemPolicy& policy)
       {
         // lock the threads so we don't have a race condition.
         MemoryCache::Lock guard(_mutex);
@@ -48,27 +47,9 @@ namespace myodd {
           return false;
         }
 
-        // copy this item
-        auto copyOfItem = new CacheItem<T>(item);
-
         // we can now add it to our list.
         _cacheItems.emplace(
-          std::make_pair( std::wstring(item.Key()),
-            CacheItemPtr( copyOfItem , 
-              //  lambda delete function
-              [](void *ptr)
-              {
-                delete static_cast<CacheItem<T>*>(ptr); 
-              },
-              // lamdbad get function
-              [](void *ptr, size_t& l)
-              { 
-                l = sizeof T;
-                auto cacheItem = static_cast<CacheItem<T>*>(ptr);
-                return (void*)(new T( cacheItem->Value<T>() ));
-              }
-            ))
-        );
+          std::make_pair( std::wstring(item.Key()), item ));
 
         // success.
         return true;
@@ -83,11 +64,10 @@ namespace myodd {
        * @param const wchar_t* regionName = nullptr Optional. A named region in the cache to which the cache entry can be added, if regions are implemented. The default value for the optional parameter is null.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      template<class T>
-      bool Add(const wchar_t* key, T value, CacheItemPolicy policy, const wchar_t* regionName = nullptr )
+      bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, CacheItemPolicy policy, const wchar_t* regionName = nullptr )
       {
         //  just pass the value to the CacheItem function.
-        return Add( CacheItem<T>(key, value, regionName), policy);
+        return Add( CacheItem(key, value, regionName), policy);
       }
 
       /**
@@ -109,10 +89,9 @@ namespace myodd {
        * @throw std::invalid_argument if the key is null or if regionname is not null.
        * @param A unique identifier for the cache entry to get.
        * @param A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
-       * @return const CacheItem<T>& the cache item, we will throw if the item does not exist.
+       * @return const CacheItem& the cache item, we will throw if the item does not exist.
        */
-      template< class T>
-      CacheItem<T> GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const
+      CacheItem GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const
       {
         //  the region nust be null
         if (nullptr != regionName)
@@ -136,8 +115,8 @@ namespace myodd {
           throw std::out_of_range("Could not locate this key");
         }
 
-        const T& value = it->second.getValue<T>();
-        auto t = CacheItem<T>( key, value, regionName);
+        const ::myodd::dynamic::Any& value = it->second.Value();
+        return CacheItem( key, value, regionName);
       }
 
     private:
@@ -146,7 +125,7 @@ namespace myodd {
       mutable std::mutex _mutex;
 
       // all our items.
-      typedef std::map< std::wstring, CacheItemPtr > CachItems;
+      typedef std::map< std::wstring, CacheItem > CachItems;
       CachItems _cacheItems;
 
       // the name of this collection

@@ -1,7 +1,8 @@
 #pragma once
-#include <typeindex>  //  typeindex
+
 #include <wchar.h>
 #include <memory> // unique_ptr
+#include "../dynamic/any.h"
 
 namespace myodd {
   namespace cache {
@@ -9,7 +10,6 @@ namespace myodd {
      * Implementation of CacheItem
      * https://msdn.microsoft.com/en-us/library/system.runtime.caching.cacheitem(v=vs.110).aspx
      */
-    template <class T>
     class CacheItem
     {
     public:
@@ -29,7 +29,7 @@ namespace myodd {
        * @param const wchar_t* key A unique identifier for a CacheItem entry.
        */
       CacheItem(const wchar_t* key) :
-        CacheItem(key, T(), nullptr)
+        CacheItem(key, ::myodd::dynamic::Any(), nullptr)
       {
       }
 
@@ -39,7 +39,7 @@ namespace myodd {
        * @param T value the value we want to set this item as.
        * @param const wchar_t* regionName the region name.
        */
-      CacheItem(const wchar_t* key, T value, const wchar_t* regionName = nullptr) :
+      CacheItem(const wchar_t* key, const ::myodd::dynamic::Any& value, const wchar_t* regionName = nullptr) :
         _key(nullptr),
         _regionName(nullptr),
         _value(value)
@@ -126,9 +126,9 @@ namespace myodd {
 
       /**
        * Set the value 
-       * @param T value, the value we want to set.
+       * @param const ::myodd::dynamic::Any& value, the value we want to set.
        */
-      void Value( T value)
+      void Value(const ::myodd::dynamic::Any& value)
       {
         // clean the value
         CleanValue();
@@ -140,10 +140,9 @@ namespace myodd {
       /**
        * Get the current value
        */
-      template<class T>
-      T Value() const
+      const ::myodd::dynamic::Any& Value() const
       {
-        return T(_value);
+        return _value;
       }
     private:
       /**
@@ -212,7 +211,7 @@ namespace myodd {
       wchar_t* _key;
       wchar_t* _regionName;
 
-      T _value;
+      ::myodd::dynamic::Any _value;
 
       /**
       * same as wcsncpy but we have to go around the MS warnings...
@@ -232,37 +231,6 @@ namespace myodd {
 #pragma warning( pop )
 #endif
       }
-    };
-
-    class CacheItemPtr : public std::unique_ptr<void, void(*)(void*)>
-    {
-    public:
-      void*(*_Du)(void *ptr, size_t& l);
-
-    public:
-      CacheItemPtr(pointer _Ptr,
-        typename std::remove_reference<void(*)(void*)>::type&& _Dt,
-        void*(*pt2Func)(void *ptr, size_t& l )
-      ) _NOEXCEPT
-        : std::unique_ptr<void, void(*)(void*)>(_Ptr, _Dt),
-        _Du( pt2Func )
-      {
-
-      }
-
-      template< class T>
-      T getValue() const
-      {
-        size_t l;
-        void* x = _Du( get(), l );
-        T xx = 10;
-        size_t lt = sizeof T;
-        memset(&xx, 0, lt );
-        memcpy(&xx, x, l);
-        return xx;
-      }
-    protected:
-
     };
   }
 }
