@@ -1232,6 +1232,25 @@ TEST_MEM(AnyTestOperators, EmptyWideStringIsNotZero)
   ASSERT_NE(any1, any2);
 }
 
+TEST_MEM(AnyTestOperators, SingleCharIsANumber)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any( '1' );
+  auto any2 = myodd::dynamic::Any( "+1");
+
+  ASSERT_NE(any1, any2);
+}
+
+TEST_MEM(AnyTestOperators, SingleWideCharIsANumber)
+{
+  // the two are the same
+  auto any1 = myodd::dynamic::Any( L'1');
+  auto any2 = myodd::dynamic::Any( L"+1");
+
+  ASSERT_NE(any1, any2);
+}
+
+
 TEST_MEM(AnyTestOperators, CompareTwoZeroWideStringsThatAreTheSame)
 {
   // the three are the same

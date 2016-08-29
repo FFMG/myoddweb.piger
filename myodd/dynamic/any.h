@@ -2197,7 +2197,7 @@ namespace myodd {
         // create the character.
         _lcvalue = sizeof(T);
         _cvalue = new char[_lcvalue];
-        std::memset(_cvalue, 0, _lcvalue);
+        std::memset(_cvalue, '\0', _lcvalue);
         std::memcpy(_cvalue, &value, _lcvalue);
 
         if (value >= '0' && value <= '9')
@@ -2205,11 +2205,17 @@ namespace myodd {
           auto number = value - '0';
           _llivalue = number;
           _ldvalue = number;
+
+          //  if has to be a non floating point number.
+          _stringStatus = StringStatus_Pos_Number;
         }
         else
         {
           _llivalue = 0;
           _ldvalue = 0;
+
+          //  this is not a number.
+          _stringStatus = StringStatus_Not_A_Number;
         }
       }
 
@@ -2229,7 +2235,7 @@ namespace myodd {
         // create the character.
         _lcvalue = sizeof(wchar_t);
         _cvalue = new char[_lcvalue];
-        std::memset(_cvalue, 0, _lcvalue);
+        std::memset(_cvalue, '\0', _lcvalue);
         std::memcpy(_cvalue, &value, _lcvalue);
 
         // copy it.
@@ -2238,14 +2244,19 @@ namespace myodd {
           auto number = value - L'0';
           _llivalue = number;
           _ldvalue = number;
+
+          //  if has to be a non floating point number.
+          _stringStatus = StringStatus_Pos_Number;
         }
         else
         {
           _llivalue = 0;
           _ldvalue = 0;
+
+          //  this is not a number.
+          _stringStatus = StringStatus_Not_A_Number;
         }
       }
-
 
       bool UseUnsignedInteger() const
       {
@@ -2399,7 +2410,8 @@ namespace myodd {
         return *this;
       }
 
-
+      // the string status, does it represent a number? a floating number?
+      // is it a partial or non partial number?
       enum StringStatus{
         StringStatus_Not_A_Number,                    // 'blah' or 'blah123'
         StringStatus_Partial_Pos_Number,              // '+123blah'
