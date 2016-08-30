@@ -49,7 +49,15 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, CheckForMemoryLeaks, NUMBER_OF_TESTS)
   
   auto any2 = any;
   ASSERT_EQ(::myodd::dynamic::Misc_trivial, any2.Type());
+
+  // comapare the copied value.
+  ASSERT_NE(ts1, any2);
+  ASSERT_NE(ts2, any2);
   ASSERT_EQ(ts3, any2 );
+
+  // compare the current value
+  ASSERT_NE(ts1, any );
+  ASSERT_NE(ts2, any );
   ASSERT_EQ(ts3, any );
 }
 

@@ -1362,6 +1362,12 @@ namespace myodd {
           // all the values should be the same but there is no point in checking.
           return 0;
         }
+
+        // are we comparing trivial structures
+        if (lhs.Type() == dynamic::Misc_trivial || rhs.Type() == dynamic::Misc_trivial)
+        {
+          return CompareTrivial( lhs, rhs);
+        }
         
         //  find the 'common' type
         // in the case of 2 characters we could end up comparing 2xzeros
@@ -1472,6 +1478,30 @@ namespace myodd {
 
         // looks the same
         return 0;
+      }
+
+      /**
+       * Compare one or more trivial cases.
+       * @throw if we are unable to compare, (not same types, not same sizes etc...)
+       * @return short 0 if they are the same or -1 if not.
+       */
+      static short CompareTrivial(const Any& lhs, const Any& rhs)
+      {
+        // are they both trivial?
+        if (lhs.Type() != dynamic::Misc_trivial && rhs.Type() != dynamic::Misc_trivial)
+        {
+          // We cannot compare non trivials.
+          throw std::bad_cast();
+        }
+
+        // are they the same size
+        if (lhs._ltvalue != rhs._ltvalue)
+        {
+          return 1;
+        }
+
+        // they look the same, so we can now compare them both,
+        return (std::memcmp(lhs._tvalue, rhs._tvalue, lhs._ltvalue) != 0 ? -1 : 0);
       }
 
       /**
