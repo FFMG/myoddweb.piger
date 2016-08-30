@@ -249,6 +249,7 @@ While this level of flexibility will never result in an equal performance with t
 ## Todo
 
 - implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.  
+- [is_copy_constructible](http://en.cppreference.com/w/cpp/types/is_copy_constructible) to allow classes to be added.  
 Those objects cannot have arithmetic done to them, (+,-,/,*)
 - <strike>Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.</strike> *(done 24/08/2016)*
 - <strike>Assign `std::string` and `std::wstring`  
