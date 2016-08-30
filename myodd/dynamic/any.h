@@ -1482,20 +1482,6 @@ namespace myodd {
           _ldvalue = 0;
           return;
 
-        // int
-        case dynamic::Integer_short_int:
-        case dynamic::Integer_unsigned_short_int:
-        case dynamic::Integer_int:
-        case dynamic::Integer_unsigned_int:
-        case dynamic::Integer_long_int:
-        case dynamic::Integer_unsigned_long_int:
-        case dynamic::Integer_long_long_int:
-        case dynamic::Integer_unsigned_long_long_int:
-          // we can cast those into long/long
-          _llivalue = static_cast<long long int>(value);
-          _ldvalue = static_cast<long double>(_llivalue);
-          return;
-
         case dynamic::Misc_unknown:
           break;
 
@@ -1578,6 +1564,7 @@ namespace myodd {
       template<>
       void CastFrom<bool>(const bool& value)
       {
+        _type = dynamic::get_type<bool>::value;
         _llivalue = (value ? 1 : 0);
         _ldvalue = (value ? 1 : 0);
       }
@@ -1612,6 +1599,85 @@ namespace myodd {
         CreateFromDouble(value);
       }
 
+      /**
+       * Create from a short int value.
+       * @param const short int& value the number value.
+       */
+      template<>
+      void CastFrom <short int> (const short int& value)
+      {
+        CreateFromInteger(value);
+      }
+
+      /**
+       * Create from an unsigned short int value.
+       * @param const unsigned short int& value the number value.
+       */
+      template<>
+      void CastFrom <unsigned short int> (const unsigned short int& value)
+      {
+        CreateFromInteger(value);
+      }
+
+      /**
+       * Create from an int value.
+       * @param const int& value the number value.
+       */
+      template<>
+      void CastFrom <int> (const int& value)
+      {
+        CreateFromInteger(value);
+      }
+
+      /**
+       * Create from an unsigned int value.
+       * @param const unsigned int& value the number value.
+       */
+      template<>
+      void CastFrom <unsigned int> (const unsigned int& value)
+      {
+        CreateFromInteger(value);
+      }
+
+      /**
+       * Create from a long int value.
+       * @param const long int& value the number value.
+       */
+      template<>
+      void CastFrom < long int> (const long int& value)
+      {
+        CreateFromInteger(value);
+      }
+
+      /**
+       * Create from a unsigned long int value.
+       * @param const unsigned long int& value the number value.
+       */
+      template<>
+      void CastFrom <unsigned long int> (const unsigned long int& value)
+      {
+        CreateFromInteger(value);
+      }
+
+      /**
+       * Create from a long long int value.
+       * @param const long long int& value the number value.
+       */
+      template<>
+      void CastFrom <long long int> (const long long int& value)
+      {
+        CreateFromInteger(value);
+      }
+
+      /**
+       * Create from a unsigned long int value.
+       * @param const unsigned long long int& value the number value.
+       */
+      template<>
+      void CastFrom <unsigned long long int> (const unsigned long long int& value)
+      {
+        CreateFromInteger(value);
+      }
 
       /**
        * Create from a character pointer.
@@ -2207,8 +2273,21 @@ namespace myodd {
       template<class T>
       void CreateFromDouble(const T& number)
       {
+        _type = dynamic::get_type<T>::value;
         _ldvalue = static_cast<long double>(number);
         _llivalue = static_cast<long long int>(_ldvalue);
+      }
+
+      /**
+       * Create a value from a int/long/long long...
+       * @param const T* number the number we are creating from.
+       */
+      template<class T>
+      void CreateFromInteger(const T& number)
+      {
+        _type = dynamic::get_type<T>::value;
+        _llivalue = static_cast<long long int>(number);
+        _ldvalue = static_cast<long double>(_llivalue);
       }
 
       /**
