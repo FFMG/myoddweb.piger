@@ -3,12 +3,6 @@
 
 #include "../testcommon.h"
 
-#ifdef _DEBUG
-# define NUMBER_OF_TESTS 30
-#else
-# define NUMBER_OF_TESTS 100
-#endif
-
 // --gtest_filter=AnyTestOperators* 
 TEST_MEM(AnyTestOperators, LessThan2xAny)
 {

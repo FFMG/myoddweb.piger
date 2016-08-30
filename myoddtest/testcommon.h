@@ -15,6 +15,13 @@
 # define UNUSED_ALWAYS(x) x
 #endif
 
+// number of time we want to run the loops.
+#ifdef _DEBUG
+# define NUMBER_OF_TESTS 30
+#else
+# define NUMBER_OF_TESTS 100
+#endif
+
 #undef max
 #undef min
 

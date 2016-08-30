@@ -40,6 +40,7 @@
 #include <cctype>         //  isdigit
 #include <codecvt>        //  string <-> wstring
 #include <stdlib.h>       //  std::strtoll / std::strtoull
+#include <type_traits>    //  std::is_trivially_copyable
 
 #include "types.h"        // data type
 
@@ -58,6 +59,8 @@ namespace myodd {
         _svalue(nullptr),
         _swvalue(nullptr),
         _lcvalue(0),
+        _ltvalue(0),
+        _tvalue(nullptr),
         _type(Type::Misc_null),
         _stringStatus(StringStatus_Not_A_Number)
       {
@@ -140,6 +143,15 @@ namespace myodd {
             std::memset(_cvalue, '\0', _lcvalue);
             std::memcpy(_cvalue, other._cvalue, _lcvalue);
             _stringStatus = other._stringStatus;
+          }
+
+          // copy the trivial value
+          if (other._ltvalue > 0 && other._tvalue)
+          {
+            _ltvalue = other._ltvalue;
+            _tvalue = new char[_ltvalue];
+            std::memset(_tvalue, '0', _ltvalue);
+            std::memcpy(_tvalue, other._tvalue, _ltvalue);
           }
         }
         return *this;
@@ -1483,6 +1495,15 @@ namespace myodd {
           return;
 
         case dynamic::Misc_unknown:
+          // Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
+          if (std::is_trivially_copyable<T>::value)
+          {
+            // create from trivial
+            CreateFromTrivial( value );
+
+            // done
+            return;
+          }
           break;
 
         default:
@@ -1897,10 +1918,180 @@ namespace myodd {
       {
         switch ( Type() )
         {
+        case dynamic::Misc_trivial:
+          if (std::is_trivially_copyable<T>::value)
+          {
+            return CastToTrivial<T>();
+          }
+          break;
+
+        // none of the fundamental types are handled here.
+        // each has its own function
+        default:
+          break; 
+        }
+
+        // we cannot cast this.
+        throw std::bad_cast();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return short int the value.
+       */
+      template<class T>
+      T CastToTrivial() const
+      {
+        if (!std::is_trivially_copyable<T>::value)
+        {
+          // we cannot convert this T to a trivial type.
+          throw std::bad_cast();
+        }
+
+        // are _we_ trivial?
+        if (dynamic::Misc_trivial != Type())
+        {
+          // we cannot convert this to a trivial type.
+          throw std::bad_cast();
+        }
+
+        // can we fit our data exactly inside the structure that they are trying to make us use.
+        if (sizeof T != _ltvalue)
+        {
+          throw std::bad_cast();
+        }
+
+        // copy the trival value.
+        T trivial = {};
+        std::memcpy(&trivial, _tvalue, _ltvalue);
+
+        // done
+        return trivial;
+      }
+      
+      /**
+       * Cast this to a fundamental type
+       * @return short int the value.
+       */
+      template<>
+      float CastTo() const
+      {
+        return CastToFundamental<float>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return double the value.
+       */
+      template<>
+      double CastTo() const
+      {
+        return CastToFundamental<double>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return long double the value.
+       */
+      template<>
+      long double CastTo() const
+      {
+        return CastToFundamental<long double>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return short int the value.
+       */
+      template<>
+      short int CastTo() const
+      {
+        return CastToFundamental<short int>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return unsigned short int the value.
+       */
+      template<>
+      unsigned short int CastTo() const
+      {
+        return CastToFundamental<unsigned short int>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return int the value.
+       */
+      template<>
+      int CastTo() const
+      {
+        return CastToFundamental<int>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return unsigned int the value.
+       */
+      template<>
+      unsigned int CastTo() const
+      {
+        return CastToFundamental<unsigned int>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return long the value.
+       */
+      template<>
+      long CastTo() const
+      {
+        return CastToFundamental<long>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return unsigned long the value.
+       */
+      template<>
+      unsigned long CastTo() const
+      {
+        return CastToFundamental<unsigned long> ();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return long long the value.
+       */
+      template<>
+      long long CastTo() const
+      {
+        return CastToFundamental<long long>();
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return unsigned long long the value.
+       */
+      template<>
+      unsigned long long CastTo() const
+      {
+        return CastToFundamental<unsigned long long> ();
+      }
+
+      /**
+       * Do common casting to known fundamental type.
+       * @return T the 'fundamental' cast
+       */
+      template<class T>
+      T CastToFundamental() const
+      {
+        switch (Type())
+        {
         case dynamic::Type::Misc_null:
           return 0;
 
-        // char
+          // char
         case dynamic::Type::Character_char:
         case dynamic::Type::Character_unsigned_char:
         case dynamic::Type::Character_signed_char:
@@ -1911,7 +2102,7 @@ namespace myodd {
           }
           return static_cast<T>(_llivalue);
 
-        // Integer
+          // Integer
         case dynamic::Type::Integer_unsigned_int:
         case dynamic::Type::Integer_int:
         case dynamic::Type::Integer_short_int:
@@ -1931,7 +2122,7 @@ namespace myodd {
           return static_cast<T>(_ldvalue);
 
         default:
-          break; 
+          break;
         }
 
         // we cannot cast this.
@@ -2237,6 +2428,7 @@ namespace myodd {
 
       /**
        * Try and cast this to a posible value.
+       * we have a specialised function as casting to bool can be inefficent.
        * @return bool the value we are looking for.
        */
       template<>
@@ -2245,11 +2437,20 @@ namespace myodd {
         switch (Type())
         {
         case dynamic::Type::Misc_null:
+          // null is false/
           return false;
         }
 
-        //  value to true/false
-        return (_llivalue != 0 ? true : false);
+        // if we are a float we must use it, in case we have 0.0001
+        // if we were using the long long int then we would only have 0
+        if (dynamic::is_type_floating(NumberType()))
+        {
+          return (_ldvalue != 0);
+        }
+
+        // but we use the int if we are told to
+        // in case the long double is not valid.
+        return (_llivalue != 0);
       }
 
       /**
@@ -2257,6 +2458,9 @@ namespace myodd {
        */
       void CleanValues()
       {
+        // delete the trivial value
+        delete _tvalue;
+
         // delete the char if need be
         delete _cvalue;
 
@@ -2267,9 +2471,12 @@ namespace myodd {
         // reset the values
         _llivalue = 0;
         _ldvalue = 0;
+        _lcvalue = 0;
+        _ltvalue = 0;
         _cvalue = nullptr;
         _svalue = nullptr;
         _swvalue = nullptr;
+        _tvalue = nullptr;
       }
 
       /**
@@ -2306,6 +2513,36 @@ namespace myodd {
         // set the values.
         _llivalue = static_cast<long long int>(number);
         _ldvalue = static_cast<long double>(_llivalue);
+      }
+
+      /**
+       * Create from a trivally copyable value.
+       * Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
+       * @param const T& trivial the structure/class we want to copy from.
+       */
+      template<class T>
+      void CreateFromTrivial(const T& trivial)
+      {
+        if (!std::is_trivially_copyable<T>::value)
+        {
+          throw std::bad_cast();
+        }
+
+        // clear all the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::Misc_trivial;
+
+        // set the values.
+        _llivalue = 0;
+        _ldvalue = 0;
+
+        // copy the trival value.
+        _ltvalue = sizeof(T);
+        _tvalue = new char[_ltvalue];
+        std::memset(_tvalue, 0, _ltvalue);
+        std::memcpy(_tvalue, &trivial, _ltvalue);
       }
 
       /**
@@ -2882,6 +3119,9 @@ namespace myodd {
       // this is the given character value either char/signed char/unsigned char/wide
       char* _cvalue;
       size_t _lcvalue;
+
+      char* _tvalue;
+      size_t _ltvalue;
 
       // the status of the string.
       StringStatus _stringStatus;
