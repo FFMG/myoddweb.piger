@@ -1475,11 +1475,6 @@ namespace myodd {
           _ldvalue = 0;
           return;
 
-        case dynamic::Boolean_bool:
-          _llivalue = ( value ? 1: 0 );
-          _ldvalue = ( value ? 1 : 0 );
-          return;
-
         // int
         case dynamic::Integer_short_int:
         case dynamic::Integer_unsigned_short_int:
@@ -1492,15 +1487,6 @@ namespace myodd {
           // we can cast those into long/long
           _llivalue = static_cast<long long int>(value);
           _ldvalue = static_cast<long double>(_llivalue);
-          return;
-
-        // double
-        case dynamic::Floating_point_double:
-        case dynamic::Floating_point_float:
-        case dynamic::Floating_point_long_double:
-          // we can cast those into long/long
-          _ldvalue = static_cast<long double>(value);
-          _llivalue = static_cast<long long int>(_ldvalue);
           return;
 
         case dynamic::Misc_unknown:
@@ -1577,6 +1563,48 @@ namespace myodd {
           throw std::bad_cast();
         }
       }
+
+      /**
+       * Create from a boolean value.
+       * @param const bool& value the bool value.
+       */
+      template<>
+      void CastFrom<bool>(const bool& value)
+      {
+        _llivalue = (value ? 1 : 0);
+        _ldvalue = (value ? 1 : 0);
+      }
+
+      /**
+       * Create from a float value.
+       * @param const float& value the number value.
+       */
+      template<>
+      void CastFrom<float>(const float& value)
+      {
+        CreateFromDouble(value);
+      }
+
+      /**
+       * Create from a double value.
+       * @param const double& value the number value.
+       */
+      template<>
+      void CastFrom<double>(const double& value)
+      {
+        CreateFromDouble(value);
+      }
+
+      /**
+       * Create from a long double value.
+       * @param const long double& value the number value.
+       */
+      template<>
+      void CastFrom <long double> (const long double& value)
+      {
+        CreateFromDouble(value);
+      }
+
 
       /**
        * Create from a character pointer.
@@ -2163,6 +2191,17 @@ namespace myodd {
         _cvalue = nullptr;
         _svalue = nullptr;
         _swvalue = nullptr;
+      }
+
+      /**
+       * Create a value from a double/float/long double number..
+       * @param const T* number the number we are creating from.
+       */
+      template<class T>
+      void CreateFromDouble(const T& number)
+      {
+        _ldvalue = static_cast<long double>(number);
+        _llivalue = static_cast<long long int>(_ldvalue);
       }
 
       /**

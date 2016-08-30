@@ -148,5 +148,8 @@
     <ClCompile Include="dynamic\testany_arithmeticconversion.cpp">
       <Filter>myodd\dynamic</Filter>
     </ClCompile>
+    <ClCompile Include="dynamic\testany_trivialcopy.cpp">
+      <Filter>myodd\dynamic</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

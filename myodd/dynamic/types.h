@@ -34,6 +34,9 @@ namespace myodd {
       Misc_unknown,
       Misc_null,
 
+      // std::is_trivially_copyable == true
+      Misc_trivial,
+
       // bool
       Boolean_bool,
 
