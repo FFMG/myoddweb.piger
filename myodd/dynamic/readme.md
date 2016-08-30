@@ -90,7 +90,6 @@ See the [Arithmetic Conversions](doc/arithmeticconversions.md) document for more
 	- but `"-9" != "-9.a"`
 - Decimal strings are respected, `"-121.000"` will become a `long double`, in real terms this does not really make a difference with most compilers/interpretations, (but it is something to bear in mind).
 
-
 #### Arithmetic rules.
 
 - Non number strings are equal to zero, (so "Hello"=0 and "Hello" + "World"=0)
@@ -117,6 +116,7 @@ Many languages use dynamic typing, but some of the popular ones are...
 Similar apps that use 
 
 ### Use cases
+#### Map and/or Vectors
 In a vector you could totally remove the data type
 
     #include "dynamic/any.h"
@@ -134,8 +134,23 @@ In a vector you could totally remove the data type
       // universe == solved!
     }
 
-Unknown use case at run time, you could for example read some data from the database, and the data could be either a number, a wide string, a double... anything.
+#### Structure/classes.
+You can pass so called, trivial structures and classes.
 
+    struct TrivialStruct
+    {
+      int a;
+      int b;
+    };
+    
+    auto ts = { 10, 20 };
+    
+    ::myodd::dynamic::Any any = ts;
+    
+    TrivialStruct ts2 = any; // ts2.a = 10 && ts2.b = 20;
+
+#### Unknown type
+Unknown use case at run time, you could for example read some data from the database, and the data could be either a number, a wide string, a double... anything.
 
 #### Supported types
 You can query the current data type of the variable as we understand it. Call `Any::Type()` and the return value is the data type.  
@@ -248,8 +263,8 @@ While this level of flexibility will never result in an equal performance with t
 
 ## Todo
 
-- implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.  
-- [is_copy_constructible](http://en.cppreference.com/w/cpp/types/is_copy_constructible) to allow classes to be added.  
+- <strike>implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.</strike>  
+- implement [std::is_copy_constructible](http://en.cppreference.com/w/cpp/types/is_copy_constructible) to allow classes to be added.  
 Those objects cannot have arithmetic done to them, (+,-,/,*)
 - <strike>Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.</strike> *(done 24/08/2016)*
 - <strike>Assign `std::string` and `std::wstring`  

@@ -11,6 +11,27 @@ struct TrivialStruct
   int b;
 };
 
+class TrivialClass
+{
+public:
+  int a;
+  int b;
+};
+
+class TrivialClass2
+{
+public:
+  TrivialClass2(int aa, int bb) : a(aa), b(bb) {}
+  TrivialClass2()  : TrivialClass2(0,0) { }
+
+  int A() { return a; }
+  int B() { return b; }
+
+protected:
+  int a;
+  int b;
+};
+
 TEST_MEM_LOOP(AnyTestTrivialCopy, PassStructureAsToConstructor, NUMBER_OF_TESTS)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
@@ -18,11 +39,41 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, PassStructureAsToConstructor, NUMBER_OF_TESTS)
   ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());  
 }
 
+TEST_MEM_LOOP(AnyTestTrivialCopy, PassClassAsToConstructor, NUMBER_OF_TESTS)
+{
+  TrivialClass tc;
+  tc.a = IntRandomNumber<int>(false);
+  tc.b = IntRandomNumber<int>(false);
+
+  ::myodd::dynamic::Any any(tc);
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+}
+
+TEST_MEM_LOOP(AnyTestTrivialCopy, PassClass2AsToConstructor, NUMBER_OF_TESTS)
+{
+  TrivialClass2 tc( IntRandomNumber<int>(false), IntRandomNumber<int>(false) );
+
+  ::myodd::dynamic::Any any(tc);
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+}
+
 TEST_MEM_LOOP(AnyTestTrivialCopy, AssignmentOperator, NUMBER_OF_TESTS)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any;
   any = ts;
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+}
+
+TEST_MEM_LOOP(AnyTestTrivialCopy, AssignmentOperatorTrivialClass, NUMBER_OF_TESTS)
+{
+  TrivialClass tc;
+  tc.a = IntRandomNumber<int>(false);
+  tc.b = IntRandomNumber<int>(false);
+
+  ::myodd::dynamic::Any any;
+  any = tc;
+
   ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
 }
 
@@ -98,4 +149,56 @@ TEST_MEM(AnyTestTrivialCopy, CannotCompareTrivialAndFloatFundamentals)
   ::myodd::dynamic::Any any(ts);
 
   EXPECT_THROW(any == (float)12, std::bad_cast);
+}
+
+TEST_MEM(AnyTestTrivialCopy, FromTrivialToInt )
+{
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+
+  any = IntRandomNumber<int>(false);
+  ASSERT_EQ(::myodd::dynamic::Integer_int, any.Type());
+}
+
+TEST_MEM(AnyTestTrivialCopy, FromTrivialToDouble)
+{
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+
+  any = RealRandomNumber<double>();
+  ASSERT_EQ(::myodd::dynamic::Floating_point_double, any.Type());
+}
+
+TEST_MEM(AnyTestTrivialCopy, FromTrivialToString)
+{
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+
+  any = "Hello World";
+  ASSERT_EQ(::myodd::dynamic::Character_char, any.Type());
+}
+
+TEST_MEM(AnyTestTrivialCopy, FromTrivialToWideString)
+{
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+
+  any = L"Hello World";
+  ASSERT_EQ(::myodd::dynamic::Character_wchar_t, any.Type());
+}
+
+TEST_MEM_LOOP(AnyTestTrivialCopy, CheckMoreComplextTrivialClassCopiesData, NUMBER_OF_TESTS)
+{
+  TrivialClass2 tc(IntRandomNumber<int>(false), IntRandomNumber<int>(false));
+
+  ::myodd::dynamic::Any any(tc);
+  TrivialClass2 tc2 = any;
+
+  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(tc.A(), tc2.A() );
+  ASSERT_EQ(tc.B(), tc2.B());
 }
