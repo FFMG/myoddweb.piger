@@ -1106,6 +1106,13 @@ namespace myodd {
       }
 
     protected:
+      /**
+       * Regadless the data type, we try and guess that the number type could be.
+       * mainly used for string, so we can guess the string type.
+       * If this is a number we will return the number type, otherwse we will try and work it out.
+       * If we do not know we will return Integer_int
+       * @return dynamic::Type the string type.
+       */ 
       dynamic::Type NumberType() const
       {
         //  if it is not a character then just use whatever we have
