@@ -2009,3 +2009,157 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoDouble, NUMBER_OF_TESTS)
     break;
   }
 }
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignAShortInt)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<short int>();
+  
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignAnUnsignedShortInt)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<unsigned short int>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignInt)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<int>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignAnUnsignedInt)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<unsigned int>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignALong)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<long int>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignAnUnsignedLong)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<unsigned long int>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignALongLong)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<long long int>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignAnUnsignedLongLong)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = IntRandomNumber<unsigned long long int>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignAFloat)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = RealRandomNumber<float>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignADouble)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = RealRandomNumber<double>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignALongDouble)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = RealRandomNumber<long double>();
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignANull)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = nullptr;
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignAnotherString)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = L"World";
+
+  // memory of the string should have been cleared.
+}
+
+TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignABool)
+{
+  // make it a string
+  auto any = ::myodd::dynamic::Any("Hello");
+
+  // give it another value
+  any = true;
+
+  // memory of the string should have been cleared.
+}
