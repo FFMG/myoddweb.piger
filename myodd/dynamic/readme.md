@@ -274,6 +274,6 @@ myodd::dynamic::And( std::string("Hello") );</strike> *(done 25/08/2016)*
 - Create sample projects
 	- vs2015
 	- gcc
-- Implement pointer option so the user can do :   
+- <strike>Implement pointer option so the user can do :   
 `x = new MyClass();`   
-`auto y = ::myodd::dynamic::Any( x );` 
+`auto y = ::myodd::dynamic::Any( x );` </strike>

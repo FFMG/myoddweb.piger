@@ -25,7 +25,7 @@
 #pragma once
 
 // string representation of the version number
-#define MYODD_ANY_VERSION        "0.1.0"
+#define MYODD_ANY_VERSION        "0.1.1"
 
 // the version number is #.###.###
 // first number is major
@@ -62,6 +62,7 @@ namespace myodd {
         _lcvalue(0),
         _ltvalue(0),
         _tvalue(nullptr),
+        _ptvalue(nullptr),
         _type(Type::Misc_null),
         _stringStatus(StringStatus_Not_A_Number)
       {
@@ -145,6 +146,9 @@ namespace myodd {
             std::memcpy(_cvalue, other._cvalue, _lcvalue);
             _stringStatus = other._stringStatus;
           }
+
+          // copy the trivial pointer
+          _ptvalue = other._ptvalue;
 
           // copy the trivial value
           if (other._ltvalue > 0 && other._tvalue)
@@ -1365,7 +1369,7 @@ namespace myodd {
         }
 
         // are we comparing trivial structures
-        if (lhs.Type() == dynamic::Misc_trivial || rhs.Type() == dynamic::Misc_trivial)
+        if (lhs.IsTrivial() || rhs.IsTrivial() )
         {
           return CompareTrivial( lhs, rhs);
         }
@@ -1489,7 +1493,7 @@ namespace myodd {
       static short CompareTrivial(const Any& lhs, const Any& rhs)
       {
         // are they both trivial?
-        if (lhs.Type() != dynamic::Misc_trivial || rhs.Type() != dynamic::Misc_trivial)
+        if (!lhs.IsTrivial() || !rhs.IsTrivial())
         {
           // We cannot compare non trivials.
           throw std::bad_cast();
@@ -1526,16 +1530,12 @@ namespace myodd {
           return;
 
         case dynamic::Misc_unknown:
-          // Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
-          if (std::is_trivially_copyable<T>::value)
-          {
-            // create from trivial
-            CreateFromTrivial( value );
+          // Objects of trivially - copyable types are the only C++ objects that 
+          // may be safely copied with std::memcpy
+          CreateFromTrivial( value );
 
-            // done
-            return;
-          }
-          break;
+          // done
+          return;
 
         default:
           // is this a new type that we are not handling?
@@ -1957,11 +1957,8 @@ namespace myodd {
         switch ( Type() )
         {
         case dynamic::Misc_trivial:
-          if (std::is_trivially_copyable<T>::value)
-          {
-            return CastToTrivial<T>();
-          }
-          break;
+        case dynamic::Misc_trivial_ptr:
+          return CastToTrivial<T>();
 
         // none of the fundamental types are handled here.
         // each has its own function
@@ -2142,22 +2139,23 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           return '\0';
 
-        case dynamic::Type::Character_wchar_t:
+        case dynamic::Character_wchar_t:
           return static_cast<char>(*(wchar_t*)_cvalue);
 
-        case dynamic::Type::Character_char:
+        case dynamic::Character_char:
           return static_cast<char>(*(char*)_cvalue);
 
-        case dynamic::Type::Character_signed_char:
+        case dynamic::Character_signed_char:
           return static_cast<char>(*(signed char*)_cvalue);
 
-        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Character_unsigned_char:
           return static_cast<char>(*(unsigned char*)_cvalue);
         }
         return static_cast<char>(_llivalue);
@@ -2172,22 +2170,23 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           return '\0';
 
-        case dynamic::Type::Character_wchar_t:
+        case dynamic::Character_wchar_t:
           return static_cast<wchar_t>(*(wchar_t*)_cvalue);
 
-        case dynamic::Type::Character_char:
+        case dynamic::Character_char:
           return static_cast<wchar_t>(*(char*)_cvalue);
 
-        case dynamic::Type::Character_signed_char:
+        case dynamic::Character_signed_char:
           return static_cast<wchar_t>(*(signed char*)_cvalue);
 
-        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Character_unsigned_char:
           return static_cast<wchar_t>(*(unsigned char*)_cvalue);
         }
         return static_cast<wchar_t>(_llivalue);
@@ -2202,22 +2201,23 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           return '\0';
 
-        case dynamic::Type::Character_wchar_t:
+        case dynamic::Character_wchar_t:
           return static_cast<unsigned char>(*(wchar_t*)_cvalue);
 
-        case dynamic::Type::Character_char:
+        case dynamic::Character_char:
           return static_cast<unsigned char>(*(char*)_cvalue);
 
-        case dynamic::Type::Character_signed_char:
+        case dynamic::Character_signed_char:
           return static_cast<unsigned char>(*(signed char*)_cvalue);
 
-        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Character_unsigned_char:
           return static_cast<unsigned char>(*(unsigned char*)_cvalue);
         }
         return static_cast<unsigned char>(_llivalue);
@@ -2232,22 +2232,23 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           return '\0';
 
-        case dynamic::Type::Character_wchar_t:
+        case dynamic::Character_wchar_t:
           return static_cast<signed char>(*(wchar_t*)_cvalue);
 
-        case dynamic::Type::Character_char:
+        case dynamic::Character_char:
           return static_cast<signed char>(*(char*)_cvalue);
 
-        case dynamic::Type::Character_signed_char:
+        case dynamic::Character_signed_char:
           return static_cast<signed char>(*(signed char*)_cvalue);
 
-        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Character_unsigned_char:
           return static_cast<signed char>(*(unsigned char*)_cvalue);
         }
         return static_cast<signed char>(_llivalue);
@@ -2263,10 +2264,11 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           // null is false/
           return false;
         }
@@ -2290,14 +2292,17 @@ namespace myodd {
       template<class T>
       std::enable_if_t<!std::is_pointer<T>::value, T> CastToTrivial() const
       {
+        // as it is not a pointer, it has to be trivially copyable.
         if (!std::is_trivially_copyable<T>::value)
         {
           // we cannot convert this T to a trivial type.
           throw std::bad_cast();
         }
 
-        // are _we_ trivial?
-        if (dynamic::Misc_trivial != Type())
+        // As we are looking for the non pointer value we can 
+        // only return the non pointer version of the trivial
+        // we cannot cast our pointer into whatever decltype(T) was passed to us.
+        if (Type() != dynamic::Misc_trivial)
         {
           // we cannot convert this to a trivial type.
           throw std::bad_cast();
@@ -2324,20 +2329,33 @@ namespace myodd {
       template<class T>
       std::enable_if_t<std::is_pointer<T>::value, T> CastToTrivial() const
       {
-        // are _we_ trivial?
-        if (dynamic::Misc_trivial != Type())
+        if (!IsTrivial())
         {
           // we cannot convert this to a trivial type.
           throw std::bad_cast();
         }
 
-        // are we the size of a pointer?
-        // can we fit our data exactly inside the structure that they are trying to make us use.
-        if (sizeof T != _ltvalue)
+        // we konw, that we handle certain pointers, (strings, ints etc)
+        // so there is no way that we can cast a trivial value to something
+        // we know it cannot be, only unknown types are 'trivial'
+        if(dynamic::Misc_unknown != dynamic::get_type<std::remove_pointer<T>::type>::value )
         {
+          // we cannot cast to this T* as we know
+          // that it was not what it was created with, (as we handle known pointers).
           throw std::bad_cast();
         }
-        return (T)_tvalue;
+
+        // are _we_ a non pointer trivial?
+        // in that case we can return our address.
+        // the user should not be allowed to delete
+        //  it as they did not create this value.
+        if (dynamic::Misc_trivial == Type())
+        {
+          return (T)_tvalue;
+        }
+
+        // we are a pointer value so we can return it.
+        return (T)_ptvalue;
       }
 
       /**
@@ -2349,17 +2367,18 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           return 0;
 
           // char
-        case dynamic::Type::Character_char:
-        case dynamic::Type::Character_unsigned_char:
-        case dynamic::Type::Character_signed_char:
-        case dynamic::Type::Character_wchar_t:
+        case dynamic::Character_char:
+        case dynamic::Character_unsigned_char:
+        case dynamic::Character_signed_char:
+        case dynamic::Character_wchar_t:
           if (dynamic::is_type_floating(NumberType()))
           {
             return static_cast<T>(_ldvalue);
@@ -2367,22 +2386,22 @@ namespace myodd {
           return static_cast<T>(_llivalue);
 
           // Integer
-        case dynamic::Type::Integer_unsigned_int:
-        case dynamic::Type::Integer_int:
-        case dynamic::Type::Integer_short_int:
-        case dynamic::Type::Integer_unsigned_short_int:
-        case dynamic::Type::Integer_long_int:
-        case dynamic::Type::Integer_unsigned_long_int:
-        case dynamic::Type::Integer_long_long_int:
-        case dynamic::Type::Integer_unsigned_long_long_int:
+        case dynamic::Integer_unsigned_int:
+        case dynamic::Integer_int:
+        case dynamic::Integer_short_int:
+        case dynamic::Integer_unsigned_short_int:
+        case dynamic::Integer_long_int:
+        case dynamic::Integer_unsigned_long_int:
+        case dynamic::Integer_long_long_int:
+        case dynamic::Integer_unsigned_long_long_int:
           return static_cast<T>(_llivalue);
 
-        case dynamic::Type::Floating_point_double:
-        case dynamic::Type::Floating_point_float:
-        case dynamic::Type::Floating_point_long_double:
+        case dynamic::Floating_point_double:
+        case dynamic::Floating_point_float:
+        case dynamic::Floating_point_long_double:
           return static_cast<T>(_ldvalue);
 
-        case dynamic::Type::Boolean_bool:
+        case dynamic::Boolean_bool:
           return static_cast<T>(_ldvalue);
 
         default:
@@ -2402,22 +2421,23 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           return '\0';
 
-        case dynamic::Type::Character_wchar_t:
+        case dynamic::Character_wchar_t:
           if (nullptr == _svalue)
           {
             const_cast<Any*>(this)->CreateString();
           }
           return (T*)_svalue->c_str();
 
-        case dynamic::Type::Character_char:
-        case dynamic::Type::Character_signed_char:
-        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Character_char:
+        case dynamic::Character_signed_char:
+        case dynamic::Character_unsigned_char:
           return static_cast<char*>(_cvalue);
         }
 
@@ -2438,18 +2458,19 @@ namespace myodd {
       {
         switch (Type())
         {
-        case dynamic::Type::Misc_trivial:
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
           throw std::bad_cast();
 
-        case dynamic::Type::Misc_null:
+        case dynamic::Misc_null:
           return '\0';
 
-        case dynamic::Type::Character_wchar_t:
+        case dynamic::Character_wchar_t:
           return static_cast<wchar_t*>( (void*)_cvalue);
 
-        case dynamic::Type::Character_char:
-        case dynamic::Type::Character_signed_char:
-        case dynamic::Type::Character_unsigned_char:
+        case dynamic::Character_char:
+        case dynamic::Character_signed_char:
+        case dynamic::Character_unsigned_char:
           if (nullptr == _swvalue)
           {
             const_cast<Any*>(this)->CreateWideString();
@@ -2572,6 +2593,7 @@ namespace myodd {
         _svalue = nullptr;
         _swvalue = nullptr;
         _tvalue = nullptr;
+        _ptvalue = nullptr;
       }
 
       /**
@@ -2618,6 +2640,7 @@ namespace myodd {
       template<class T>
       std::enable_if_t<!std::is_pointer<T>::value> CreateFromTrivial( T trivial)
       {
+        // as it is not a pointer value, it has to be trivially copyable.
         if (!std::is_trivially_copyable<T>::value)
         {
           throw std::bad_cast();
@@ -2648,26 +2671,18 @@ namespace myodd {
       template<class T>
       std::enable_if_t<std::is_pointer<T>::value> CreateFromTrivial(const T& trivial)
       {
-        if (!std::is_trivially_copyable<T>::value)
-        {
-          throw std::bad_cast();
-        }
-
         // clear all the values.
         CleanValues();
 
         // set the type
-        _type = dynamic::Misc_trivial;
+        _type = dynamic::Misc_trivial_ptr;
 
         // set the values.
         _llivalue = 0;
         _ldvalue = 0;
 
-        // copy the trival value.
-        _ltvalue = sizeof(T);
-        _tvalue = new char[_ltvalue];
-        std::memset(_tvalue, 0, _ltvalue);
-        std::memcpy(_tvalue, &(*trivial), _ltvalue);
+        // copy the trival pointer value that was given to us.
+        _ptvalue = (void*)trivial;
       }
 
       /**
@@ -3051,6 +3066,27 @@ namespace myodd {
         StringStatus_Floating_Neg_Number,            // '-123.1'
       };
 
+      /**
+       * Check if this is a trivial type or not.
+       * @return boolean if *this is trivial or not.
+       */
+      bool IsTrivial() const
+      {
+        switch (Type())
+        {
+        case dynamic::Misc_trivial:
+        case dynamic::Misc_trivial_ptr:
+          // trivial
+          return true;
+
+        default:
+          break;
+        }
+
+        // no trivial
+        return false;
+      }
+
       /** 
        * Check if our string is a number or not.
        * @param bool allowPartial if partial strings are allowed or not.
@@ -3245,6 +3281,7 @@ namespace myodd {
       char* _cvalue;
       size_t _lcvalue;
 
+      void* _ptvalue;
       char* _tvalue;
       size_t _ltvalue;
 
