@@ -207,35 +207,35 @@ TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToInt )
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW((int)any != (int)any, std::bad_cast);
+  EXPECT_THROW((int)any, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToFloat)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW((float)any != (float)any, std::bad_cast);
+  EXPECT_THROW((float)any, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToChar)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW((char)any != (char)any, std::bad_cast);
+  EXPECT_THROW((char)any, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToWideChar)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW((wchar_t)any != (wchar_t)any, std::bad_cast);
+  EXPECT_THROW((wchar_t)any, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToUnsignedChar)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW((unsigned char)any != (unsigned char)any, std::bad_cast);
+  EXPECT_THROW((unsigned char)any, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToString)
@@ -256,17 +256,23 @@ TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToBoolean)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW((bool)any != (bool)any, std::bad_cast);
+  EXPECT_THROW((bool)any, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToDouble)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW((double)any != (double)any, std::bad_cast);
+  EXPECT_THROW((double)any, std::bad_cast);
 }
 
+TEST_MEM(AnyTestTrivialCopy, PointerAssign )
+{
+  auto ts = new TrivialStruct{ IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
 
+  TrivialStruct* ts2 = any;
 
-
-
+  // clean up
+  delete ts;
+}

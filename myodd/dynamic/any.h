@@ -41,6 +41,7 @@
 #include <codecvt>        //  string <-> wstring
 #include <stdlib.h>       //  std::strtoll / std::strtoull
 #include <type_traits>    //  std::is_trivially_copyable
+                          //  std::is_pointer
 
 #include "types.h"        // data type
 
@@ -1559,6 +1560,13 @@ namespace myodd {
         // set the type
         _type = dynamic::get_type<T>::value;
 
+        // if unknown try and set is as a pointer.
+        if (_type == dynamic::Misc_unknown)
+        {
+          CreateFromTrivial<T*>(value);
+          return;
+        }
+
         // if not null then we can set it.
         if (nullptr != value)
         {
@@ -2280,7 +2288,7 @@ namespace myodd {
       * @return short int the value.
       */
       template<class T>
-      T CastToTrivial() const
+      std::enable_if_t<!std::is_pointer<T>::value, T> CastToTrivial() const
       {
         if (!std::is_trivially_copyable<T>::value)
         {
@@ -2307,6 +2315,29 @@ namespace myodd {
 
         // done
         return trivial;
+      }
+
+      /**
+       * Cast this to a fundamental type
+       * @return short int the value.
+       */
+      template<class T>
+      std::enable_if_t<std::is_pointer<T>::value, T> CastToTrivial() const
+      {
+        // are _we_ trivial?
+        if (dynamic::Misc_trivial != Type())
+        {
+          // we cannot convert this to a trivial type.
+          throw std::bad_cast();
+        }
+
+        // are we the size of a pointer?
+        // can we fit our data exactly inside the structure that they are trying to make us use.
+        if (sizeof T != _ltvalue)
+        {
+          throw std::bad_cast();
+        }
+        return (T)_tvalue;
       }
 
       /**
@@ -2585,7 +2616,7 @@ namespace myodd {
        * @param const T& trivial the structure/class we want to copy from.
        */
       template<class T>
-      void CreateFromTrivial(const T& trivial)
+      std::enable_if_t<!std::is_pointer<T>::value> CreateFromTrivial( T trivial)
       {
         if (!std::is_trivially_copyable<T>::value)
         {
@@ -2607,6 +2638,36 @@ namespace myodd {
         _tvalue = new char[_ltvalue];
         std::memset(_tvalue, 0, _ltvalue);
         std::memcpy(_tvalue, &trivial, _ltvalue);
+      }
+
+      /**
+       * Create from a trivally copyable value.
+       * Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
+       * @param const T& trivial the structure/class we want to copy from.
+       */
+      template<class T>
+      std::enable_if_t<std::is_pointer<T>::value> CreateFromTrivial(const T& trivial)
+      {
+        if (!std::is_trivially_copyable<T>::value)
+        {
+          throw std::bad_cast();
+        }
+
+        // clear all the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::Misc_trivial;
+
+        // set the values.
+        _llivalue = 0;
+        _ldvalue = 0;
+
+        // copy the trival value.
+        _ltvalue = sizeof(T);
+        _tvalue = new char[_ltvalue];
+        std::memset(_tvalue, 0, _ltvalue);
+        std::memcpy(_tvalue, &(*trivial), _ltvalue);
       }
 
       /**
