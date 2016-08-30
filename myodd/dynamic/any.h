@@ -1564,7 +1564,13 @@ namespace myodd {
       template<>
       void CastFrom<bool>(const bool& value)
       {
+        // clear all the values.
+        CleanValues();
+
+        // set the type
         _type = dynamic::get_type<bool>::value;
+
+        // set the values
         _llivalue = (value ? 1 : 0);
         _ldvalue = (value ? 1 : 0);
       }
@@ -2273,7 +2279,13 @@ namespace myodd {
       template<class T>
       void CreateFromDouble(const T& number)
       {
+        // clear all the values.
+        CleanValues();
+
+        // set the type
         _type = dynamic::get_type<T>::value;
+
+        // set the values
         _ldvalue = static_cast<long double>(number);
         _llivalue = static_cast<long long int>(_ldvalue);
       }
@@ -2285,7 +2297,13 @@ namespace myodd {
       template<class T>
       void CreateFromInteger(const T& number)
       {
+        // clear all the values.
+        CleanValues();
+
+        // set the type
         _type = dynamic::get_type<T>::value;
+
+        // set the values.
         _llivalue = static_cast<long long int>(number);
         _ldvalue = static_cast<long double>(_llivalue);
       }
