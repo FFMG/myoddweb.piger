@@ -11,24 +11,24 @@ struct TrivialStruct
   int b;
 };
 
-TEST_MEM(AnyTestTrivialCopy, PassStructureAsToConstructor)
+TEST_MEM_LOOP(AnyTestTrivialCopy, PassStructureAsToConstructor, NUMBER_OF_TESTS)
 {
-  TrivialStruct ts = { 10, 20 };
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
   ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());  
 }
 
-TEST_MEM(AnyTestTrivialCopy, AssignmentOperator)
+TEST_MEM_LOOP(AnyTestTrivialCopy, AssignmentOperator, NUMBER_OF_TESTS)
 {
-  TrivialStruct ts = { 10, 20 };
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any;
   any = ts;
   ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
 }
 
-TEST_MEM(AnyTestTrivialCopy, CopyConstructor)
+TEST_MEM_LOOP(AnyTestTrivialCopy, CopyConstructor, NUMBER_OF_TESTS)
 {
-  TrivialStruct ts = { 10, 20 };
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
 
   auto any2 = any;
@@ -84,3 +84,18 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, GetValueDerivedStruct, NUMBER_OF_TESTS)
   ASSERT_EQ(ts2.b, ts.b);
 }
 
+TEST_MEM(AnyTestTrivialCopy, CannotCompareTrivialAndIntFundamentals )
+{
+  TrivialStruct ts = { IntRandomNumber<int>(), IntRandomNumber<int>() };
+  ::myodd::dynamic::Any any(ts);
+
+  EXPECT_THROW( any == (int)12, std::bad_cast );
+}
+
+TEST_MEM(AnyTestTrivialCopy, CannotCompareTrivialAndFloatFundamentals)
+{
+  TrivialStruct ts = { IntRandomNumber<int>(), IntRandomNumber<int>() };
+  ::myodd::dynamic::Any any(ts);
+
+  EXPECT_THROW(any == (float)12, std::bad_cast);
+}

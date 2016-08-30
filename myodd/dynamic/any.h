@@ -1488,7 +1488,7 @@ namespace myodd {
       static short CompareTrivial(const Any& lhs, const Any& rhs)
       {
         // are they both trivial?
-        if (lhs.Type() != dynamic::Misc_trivial && rhs.Type() != dynamic::Misc_trivial)
+        if (lhs.Type() != dynamic::Misc_trivial || rhs.Type() != dynamic::Misc_trivial)
         {
           // We cannot compare non trivials.
           throw std::bad_cast();
