@@ -31,12 +31,12 @@
 // first number is major
 // then 3 numbers for minor
 // and 3 numbers for tiny
-#define MYODD_ANY_VERSION_NUMBER 0001000 
+#define MYODD_ANY_VERSION_NUMBER 0001001 
 
 #include <typeinfo>       // std::bad_cast
 #include <algorithm>      // memcpy
 #include <math.h>         // modf
-#include <string>
+#include <cstring>
 #include <cctype>         //  isdigit
 #include <codecvt>        //  string <-> wstring
 #include <stdlib.h>       //  std::strtoll / std::strtoull

@@ -263,17 +263,17 @@ While this level of flexibility will never result in an equal performance with t
 
 ## Todo
 
-- <strike>implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.</strike>  
+- <strike>implement [std::is_trivially_copyable](http://en.cppreference.com/w/cpp/types/is_trivially_copyable) to allow structures to be held in memory.</strike> *(done 30/08/2016)*  
 - implement [std::is_copy_constructible](http://en.cppreference.com/w/cpp/types/is_copy_constructible) to allow classes to be added.  
 Those objects cannot have arithmetic done to them, (+,-,/,*)
 - <strike>Removed new/delete of `long long int` and `long double` as it is slow(er) and been on the stack is often better.</strike> *(done 24/08/2016)*
 - <strike>Assign `std::string` and `std::wstring`  
 myodd::dynamic::And( std::string("Hello") );</strike> *(done 25/08/2016)*
-- Add ternary operator 
+- Add the ! operator, (the logical negation operator).
 - Manage [arithmetic conversions](http://stackoverflow.com/a/4814901/4584436) properly [[1]](http://en.cppreference.com/w/cpp/language/operator_arithmetic#Conversions)[[2]](https://docs.oracle.com/cd/E19205-01/819-5265/bjabw/index.html).
 - Create sample projects
 	- vs2015
 	- gcc
 - <strike>Implement pointer option so the user can do :   
 `x = new MyClass();`   
-`auto y = ::myodd::dynamic::Any( x );` </strike>
+`auto y = ::myodd::dynamic::Any( x );` </strike> *(done 30/08/2016)*
