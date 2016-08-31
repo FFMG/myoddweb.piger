@@ -58,14 +58,14 @@ namespace myodd {
         _llivalue(0),
         _ldvalue(0),
         _cvalue(nullptr),
+        _lcvalue(0),
+        _ptvalue(nullptr),
+        _tvalue(nullptr),
+        _ltvalue(0),
+        _stringStatus(StringStatus_Not_A_Number),
         _svalue(nullptr),
         _swvalue(nullptr),
-        _lcvalue(0),
-        _ltvalue(0),
-        _tvalue(nullptr),
-        _ptvalue(nullptr),
-        _type(Type::Misc_null),
-        _stringStatus(StringStatus_Not_A_Number)
+        _type(Type::Misc_null)
       {
       }
 
@@ -114,7 +114,9 @@ namespace myodd {
        */
       template<class T>
       operator T() const {
-        return CastTo<T>();
+        T value;
+        CastTo( value );
+        return value;
       }
 
       /**
@@ -1034,7 +1036,7 @@ namespace myodd {
           return ::myodd::dynamic::Floating_point_long_double;
 
         default:
-          throw std::exception("Unknown string type!");
+          throw std::runtime_error("Unknown string type!");
         }
       }
 
@@ -1405,7 +1407,7 @@ namespace myodd {
 
         default:
           // is this a new type that we are not handling?
-          throw std::exception("Dynamic type is not handled.");
+          throw std::runtime_error("Dynamic type is not handled.");
         }
 
         // we could not deduce the value from this.
@@ -1474,7 +1476,7 @@ namespace myodd {
 
           default:
             // is this a new type that we are not handling?
-            throw std::exception("Dynamic type is not handled.");
+            throw std::runtime_error("Dynamic type is not handled.");
           }
 
           // we could not deduce the value from this.
@@ -1794,190 +1796,177 @@ namespace myodd {
        * @return T the value we are looking for.
        */
       template<class T>
-      T CastTo() const
+      void CastTo( T& value ) const
       {
         switch ( Type() )
         {
         case ::myodd::dynamic::Misc_trivial:
         case ::myodd::dynamic::Misc_trivial_ptr:
-          return CastToTrivial<T>();
+          CastToTrivial( value );
+          break;
 
         // none of the fundamental types are handled here.
         // each has its own function
-        default:
-          break; 
+        default:        
+          // we cannot cast this.
+          throw std::bad_cast();
         }
-
-        // we cannot cast this.
-        throw std::bad_cast();
       }
 
       /**
        * Cast this to a fundamental type
        * @return short int the value.
        */
-      template<>
-      float CastTo() const
+      void CastTo( float& value ) const
       {
-        return CastToFundamental<float>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return double the value.
        */
-      template<>
-      double CastTo() const
+      void CastTo( double& value ) const
       {
-        return CastToFundamental<double>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return long double the value.
        */
-      template<>
-      long double CastTo() const
+      void CastTo( long double& value ) const
       {
-        return CastToFundamental<long double>();
+        CastToFundamental(value);
       }
 
       /**
        * Cast this to a fundamental type
        * @return short int the value.
        */
-      template<>
-      short int CastTo() const
+      void CastTo( short int& value) const
       {
-        return CastToFundamental<short int>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return unsigned short int the value.
        */
-      template<>
-      unsigned short int CastTo() const
+      void CastTo( unsigned short int& value ) const
       {
-        return CastToFundamental<unsigned short int>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return int the value.
        */
-      template<>
-      int CastTo() const
+      void CastTo( int& value ) const
       {
-        return CastToFundamental<int>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return unsigned int the value.
        */
-      template<>
-      unsigned int CastTo() const
+      void CastTo( unsigned int& value ) const
       {
-        return CastToFundamental<unsigned int>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return long the value.
        */
-      template<>
-      long CastTo() const
+      void CastTo( long int& value ) const
       {
-        return CastToFundamental<long>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return unsigned long the value.
        */
-      template<>
-      unsigned long CastTo() const
+      void CastTo( unsigned long int& value ) const
       {
-        return CastToFundamental<unsigned long> ();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return long long the value.
        */
-      template<>
-      long long CastTo() const
+      void CastTo( long long int& value ) const
       {
-        return CastToFundamental<long long>();
+        CastToFundamental( value );
       }
 
       /**
        * Cast this to a fundamental type
        * @return unsigned long long the value.
        */
-      template<>
-      unsigned long long CastTo() const
+      void CastTo( unsigned long long int& value ) const
       {
-        return CastToFundamental<unsigned long long> ();
+        CastToFundamental( value );
       }
 
       /**
        * Try and cast this to a posible value.
        * @return char* the value we are looking for.
        */
-      template<>
-      const char* CastTo() const
+      void CastTo( char*& value) const
       {
-        return ReturnFromCharacters<const char>();
+        ReturnFromCharacters( value );
       }
 
       /**
-       * Try and cast this to a posible value.
-       * @return char* the value we are looking for.
-       */
-      template<>
-      char* CastTo() const
+      * Try and cast this to a posible value.
+      * @param const char* value the value we are looking for.
+      */
+      void CastTo( const char*& value) const
       {
-        return ReturnFromCharacters<char>();
-      }
-
-      /**
-       * Try and cast this to a posible value.
-       * @return wchar_t* the value we are looking for.
-       */
-      template<>
-      wchar_t* CastTo() const
-      {
-        return (wchar_t*)ReturnFromCharacters<const wchar_t>();
+        char* c = nullptr;
+        ReturnFromCharacters(c);
+        value = c;
       }
 
       /**
        * Try and cast this to a posible value.
        * @return wchar_t* the value we are looking for.
        */
-      template<>
-      std::wstring CastTo() const
+      void CastTo( wchar_t*& value ) const
       {
-        return std::wstring( (wchar_t*)ReturnFromCharacters<const wchar_t>());
+        ReturnFromCharacters( value );
       }
 
       /**
        * Try and cast this to a posible value.
-       * @return const wchar_t* the value we are looking for.
+       * @param wchar_t* value the value we are looking for.
        */
-      template<>
-      const wchar_t* CastTo() const
+      void CastTo( const wchar_t*& value) const
       {
-        return ReturnFromCharacters<const wchar_t>();
+        wchar_t* wc = nullptr;
+        ReturnFromCharacters(wc);
+        value = wc;
+      }
+
+
+      /**
+       * Try and cast this to a posible value.
+       * @return wchar_t* the value we are looking for.
+       */
+      void CastTo( std::wstring& value ) const
+      {
+        ReturnFromCharacters( value );
       }
 
       /**
       * Try and cast this to a posible value.
       * @return char the value we are looking for.
       */
-      template<>
-      char CastTo() const
+      void CastTo( char& value ) const
       {
         switch (Type())
         {
@@ -1986,29 +1975,36 @@ namespace myodd {
           throw std::bad_cast();
 
         case ::myodd::dynamic::Misc_null:
-          return '\0';
+          value = '\0';
+          break;
 
         case ::myodd::dynamic::Character_wchar_t:
-          return static_cast<char>(*(wchar_t*)_cvalue);
+          value = static_cast<char>(*(wchar_t*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_char:
-          return static_cast<char>(*(char*)_cvalue);
+          value = static_cast<char>(*(char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_signed_char:
-          return static_cast<char>(*(signed char*)_cvalue);
+          value = static_cast<char>(*(signed char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_unsigned_char:
-          return static_cast<char>(*(unsigned char*)_cvalue);
+          value = static_cast<char>(*(unsigned char*)_cvalue);
+          break;
+
+        default:
+          value = static_cast<char>(_llivalue);
+          break;
         }
-        return static_cast<char>(_llivalue);
       }
 
       /**
       * Try and cast this to a posible value.
       * @return wchar_t the value we are looking for.
       */
-      template<>
-      wchar_t CastTo() const
+      void CastTo( wchar_t& value ) const
       {
         switch (Type())
         {
@@ -2017,29 +2013,36 @@ namespace myodd {
           throw std::bad_cast();
 
         case ::myodd::dynamic::Misc_null:
-          return '\0';
+          value = '\0';
+          break;
 
         case ::myodd::dynamic::Character_wchar_t:
-          return static_cast<wchar_t>(*(wchar_t*)_cvalue);
+          value = static_cast<wchar_t>(*(wchar_t*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_char:
-          return static_cast<wchar_t>(*(char*)_cvalue);
+          value = static_cast<wchar_t>(*(char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_signed_char:
-          return static_cast<wchar_t>(*(signed char*)_cvalue);
+          value = static_cast<wchar_t>(*(signed char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_unsigned_char:
-          return static_cast<wchar_t>(*(unsigned char*)_cvalue);
+          value = static_cast<wchar_t>(*(unsigned char*)_cvalue);
+          break;
+
+        default:
+          value = static_cast<wchar_t>(_llivalue);
+          break;
         }
-        return static_cast<wchar_t>(_llivalue);
       }
 
       /**
       * Try and cast this to a posible value.
       * @return unsigned char the value we are looking for.
       */
-      template<>
-      unsigned char CastTo() const
+      void CastTo( unsigned char& value ) const
       {
         switch (Type())
         {
@@ -2048,29 +2051,36 @@ namespace myodd {
           throw std::bad_cast();
 
         case ::myodd::dynamic::Misc_null:
-          return '\0';
+          value = '\0';
+          break;
 
         case ::myodd::dynamic::Character_wchar_t:
-          return static_cast<unsigned char>(*(wchar_t*)_cvalue);
+          value = static_cast<unsigned char>(*(wchar_t*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_char:
-          return static_cast<unsigned char>(*(char*)_cvalue);
+          value = static_cast<unsigned char>(*(char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_signed_char:
-          return static_cast<unsigned char>(*(signed char*)_cvalue);
+          value = static_cast<unsigned char>(*(signed char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_unsigned_char:
-          return static_cast<unsigned char>(*(unsigned char*)_cvalue);
+          value = static_cast<unsigned char>(*(unsigned char*)_cvalue);
+          break;
+
+        default:
+          value = static_cast<unsigned char>(_llivalue);
+          break;
         }
-        return static_cast<unsigned char>(_llivalue);
       }
 
       /**
        * Try and cast this to a posible value.
        * @return unsigned char the value we are looking for.
        */
-      template<>
-      signed char CastTo() const
+      void CastTo( signed char& value ) const
       {
         switch (Type())
         {
@@ -2079,21 +2089,29 @@ namespace myodd {
           throw std::bad_cast();
 
         case ::myodd::dynamic::Misc_null:
-          return '\0';
+          value = '\0';
+          break;
 
         case ::myodd::dynamic::Character_wchar_t:
-          return static_cast<signed char>(*(wchar_t*)_cvalue);
+          value = static_cast<signed char>(*(wchar_t*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_char:
-          return static_cast<signed char>(*(char*)_cvalue);
+          value = static_cast<signed char>(*(char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_signed_char:
-          return static_cast<signed char>(*(signed char*)_cvalue);
+          value = static_cast<signed char>(*(signed char*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_unsigned_char:
-          return static_cast<signed char>(*(unsigned char*)_cvalue);
+          value = static_cast<signed char>(*(unsigned char*)_cvalue);
+          break;
+
+        default:
+          value = static_cast<signed char>(_llivalue);
+          break;
         }
-        return static_cast<signed char>(_llivalue);
       }
 
       /**
@@ -2101,8 +2119,7 @@ namespace myodd {
       * we have a specialised function as casting to bool can be inefficent.
       * @return bool the value we are looking for.
       */
-      template<>
-      bool CastTo() const
+      void CastTo( bool& value ) const
       {
         switch (Type())
         {
@@ -2112,19 +2129,22 @@ namespace myodd {
 
         case ::myodd::dynamic::Misc_null:
           // null is false/
-          return false;
+          value = false;
+          return;
         }
 
         // if we are a float we must use it, in case we have 0.0001
         // if we were using the long long int then we would only have 0
         if (::myodd::dynamic::is_type_floating(NumberType()))
         {
-          return (_ldvalue != 0);
+          value = (_ldvalue != 0);
         }
-
-        // but we use the int if we are told to
-        // in case the long double is not valid.
-        return (_llivalue != 0);
+        else
+        {
+          // but we use the int if we are told to
+          // in case the long double is not valid.
+          value = (_llivalue != 0);
+        }
       }
 
       /**
@@ -2132,7 +2152,7 @@ namespace myodd {
       * @return short int the value.
       */
       template<class T>
-      std::enable_if_t<!std::is_pointer<T>::value, T> CastToTrivial() const
+      std::enable_if_t<!std::is_pointer<T>::value> CastToTrivial( T& value ) const
       {
         // as it is not a pointer, it has to be trivially copyable.
         if (!std::is_trivially_copyable<T>::value)
@@ -2151,17 +2171,13 @@ namespace myodd {
         }
 
         // can we fit our data exactly inside the structure that they are trying to make us use.
-        if (sizeof T != _ltvalue)
+        if (sizeof(T) != _ltvalue)
         {
           throw std::bad_cast();
         }
 
         // copy the trival value.
-        T trivial = {};
-        std::memcpy(&trivial, _tvalue, _ltvalue);
-
-        // done
-        return trivial;
+        std::memcpy(&value, _tvalue, _ltvalue);
       }
 
       /**
@@ -2169,7 +2185,7 @@ namespace myodd {
        * @return short int the value.
        */
       template<class T>
-      std::enable_if_t<std::is_pointer<T>::value, T> CastToTrivial() const
+      std::enable_if_t<std::is_pointer<T>::value> CastToTrivial( T& value ) const
       {
         if (!IsTrivial())
         {
@@ -2180,7 +2196,7 @@ namespace myodd {
         // we konw, that we handle certain pointers, (strings, ints etc)
         // so there is no way that we can cast a trivial value to something
         // we know it cannot be, only unknown types are 'trivial'
-        if(::myodd::dynamic::Misc_unknown != ::myodd::dynamic::get_type<std::remove_pointer<T>::type>::value )
+        if(::myodd::dynamic::Misc_unknown != ::myodd::dynamic::get_type<std::remove_pointer<T>>::value )
         {
           // we cannot cast to this T* as we know
           // that it was not what it was created with, (as we handle known pointers).
@@ -2193,19 +2209,21 @@ namespace myodd {
         //  it as they did not create this value.
         if (::myodd::dynamic::Misc_trivial == Type())
         {
-          return (T)_tvalue;
+          value = (T)_tvalue;
         }
-
-        // we are a pointer value so we can return it.
-        return (T)_ptvalue;
+        else
+        {
+          // we are a pointer value so we can return it.
+          value = (T)_ptvalue;
+        }
       }
 
       /**
       * Do common casting to known fundamental type.
-      * @return T the 'fundamental' cast
+      * T the 'fundamental' cast
       */
       template<class T>
-      T CastToFundamental() const
+      std::enable_if_t<!std::is_pointer<T>::value> CastToFundamental( T& value ) const
       {
         switch (Type())
         {
@@ -2214,7 +2232,8 @@ namespace myodd {
           throw std::bad_cast();
 
         case ::myodd::dynamic::Misc_null:
-          return 0;
+          value = 0;
+          break;
 
           // char
         case ::myodd::dynamic::Character_char:
@@ -2223,9 +2242,13 @@ namespace myodd {
         case ::myodd::dynamic::Character_wchar_t:
           if (::myodd::dynamic::is_type_floating(NumberType()))
           {
-            return static_cast<T>(_ldvalue);
+            value = static_cast<T>(_ldvalue);
           }
-          return static_cast<T>(_llivalue);
+          else
+          {
+            value = static_cast<T>(_llivalue);
+          }
+          break;
 
           // Integer
         case ::myodd::dynamic::Integer_unsigned_int:
@@ -2236,22 +2259,23 @@ namespace myodd {
         case ::myodd::dynamic::Integer_unsigned_long_int:
         case ::myodd::dynamic::Integer_long_long_int:
         case ::myodd::dynamic::Integer_unsigned_long_long_int:
-          return static_cast<T>(_llivalue);
+          value = static_cast<T>(_llivalue);
+          break;
 
         case ::myodd::dynamic::Floating_point_double:
         case ::myodd::dynamic::Floating_point_float:
         case ::myodd::dynamic::Floating_point_long_double:
-          return static_cast<T>(_ldvalue);
+          value = static_cast<T>(_ldvalue);
+          break;
 
         case ::myodd::dynamic::Boolean_bool:
-          return static_cast<T>(_ldvalue);
+          value = static_cast<T>(_ldvalue);
+          break;
 
         default:
-          break;
+          // we cannot cast this.
+          throw std::bad_cast();
         }
-
-        // we cannot cast this.
-        throw std::bad_cast();
       }
 
       /**
@@ -2259,7 +2283,7 @@ namespace myodd {
        * @return T* the character we want to return no.
        */
       template<class T>
-      T* ReturnFromCharacters() const
+      std::enable_if_t<std::is_pointer<T>::value> ReturnFromCharacters(T& value ) const
       {
         switch (Type())
         {
@@ -2268,35 +2292,61 @@ namespace myodd {
           throw std::bad_cast();
 
         case ::myodd::dynamic::Misc_null:
-          return '\0';
+          value = '\0';
+          break;
 
         case ::myodd::dynamic::Character_wchar_t:
           if (nullptr == _svalue)
           {
             const_cast<Any*>(this)->CreateString();
           }
-          return (T*)_svalue->c_str();
+          value = (T)_svalue->c_str();
+          break;
 
         case ::myodd::dynamic::Character_char:
         case ::myodd::dynamic::Character_signed_char:
         case ::myodd::dynamic::Character_unsigned_char:
-          return static_cast<char*>(_cvalue);
-        }
+          value = static_cast<char*>(_cvalue);
+          break;
 
-        // do we need to create the string representation?
-        if (nullptr == _svalue)
-        {
-          const_cast<Any*>(this)->CreateString();
+        default:
+          // do we need to create the string representation?
+          if (nullptr == _svalue)
+          {
+            const_cast<Any*>(this)->CreateString();
+          }
+          value = (T)_svalue->c_str();
+          break;
         }
-        return (T*)_svalue->c_str();
       }
 
       /**
-      * Return a character
-      * @return T* the character we want to return no.
-      */
-      template<>
-      const wchar_t* ReturnFromCharacters() const
+       * Return a character
+       * std::wstring& value the character we want to return no.
+       */
+      void ReturnFromCharacters(std::wstring& value) const
+      {
+        wchar_t* wc = nullptr;
+        ReturnFromCharacters(wc);
+        value = std::wstring(wc);
+      }
+
+      /**
+       * Return a character
+       * std::string& value the character we want to return no.
+       */
+      void ReturnFromCharacters(std::string& value) const
+      {
+        char* c = nullptr;
+        ReturnFromCharacters(c);
+        value = std::string(c);
+      }
+
+      /**
+       * Return a character
+       * @return T* the character we want to return no.
+       */
+      void ReturnFromCharacters(wchar_t*& value ) const
       {
         switch (Type())
         {
@@ -2305,10 +2355,12 @@ namespace myodd {
           throw std::bad_cast();
 
         case ::myodd::dynamic::Misc_null:
-          return '\0';
+          value = '\0';
+          break;
 
         case ::myodd::dynamic::Character_wchar_t:
-          return static_cast<wchar_t*>( (void*)_cvalue);
+          value = static_cast<wchar_t*>((void*)_cvalue);
+          break;
 
         case ::myodd::dynamic::Character_char:
         case ::myodd::dynamic::Character_signed_char:
@@ -2317,17 +2369,31 @@ namespace myodd {
           {
             const_cast<Any*>(this)->CreateWideString();
           }
-          return _swvalue->c_str();
-        }
+          value = const_cast<wchar_t*>( _swvalue->c_str() );
+          break;
 
-        // do we need to create the string representation?
-        if (nullptr == _swvalue)
-        {
-          const_cast<Any*>(this)->CreateWideString();
+        default:
+          // do we need to create the string representation?
+          if (nullptr == _swvalue)
+          {
+            const_cast<Any*>(this)->CreateWideString();
+          }
+          value = const_cast<wchar_t*>( _swvalue->c_str() );
+          break;
         }
-        return _swvalue->c_str();
       }
 
+      /**
+       * Return a character
+       * @return T* the character we want to return no.
+       */
+      void ReturnFromCharacters(char& value) const
+      {
+        char* c;
+        ReturnFromCharacters(c);
+        value = (c != nullptr && strlen(c) > 0) ? c[0] : '\0';
+      }
+    
       /**
        * Create the cosmetic representation of the string.
        */
