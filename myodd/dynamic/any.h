@@ -117,6 +117,14 @@ namespace myodd {
       }
 
       /**
+       * The logical negation operator.
+       */
+      bool operator !() const
+      {
+        return !((bool)*this);
+      }
+
+      /**
        * The equal operator
        * @param const Any& other the value we are trying to set.
        * @return const Any& this value.

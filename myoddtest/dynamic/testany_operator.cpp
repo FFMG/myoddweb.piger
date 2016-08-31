@@ -2163,3 +2163,19 @@ TEST_MEM(AnyTestOperators, CheckMemoryLeakAsignABool)
 
   // memory of the string should have been cleared.
 }
+
+TEST_MEM(AnyTestOperators, CheckLogicalNegationOperatorWithTrue)
+{
+  // this is true
+  auto any = ::myodd::dynamic::Any(true);
+  ASSERT_FALSE(!any);
+  //ASSERT_TRUE(any);
+}
+
+TEST_MEM(AnyTestOperators, CheckLogicalNegationOperatorWithFalse)
+{
+  // this is true
+  auto any = ::myodd::dynamic::Any(false);
+  ASSERT_TRUE(!any);
+  //ASSERT_FALSE(any );
+}
