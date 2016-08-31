@@ -2169,7 +2169,11 @@ TEST_MEM(AnyTestOperators, CheckLogicalNegationOperatorWithTrue)
   // this is true
   auto any = ::myodd::dynamic::Any(true);
   ASSERT_FALSE(!any);
-  //ASSERT_TRUE(any);
+  
+  // we can't just use ASSERT_TRUE() as Google needs to know 
+  // what to cast any to, by default it will try and cast it
+  // to const AssertionResult&
+  ASSERT_EQ(true, any);
 }
 
 TEST_MEM(AnyTestOperators, CheckLogicalNegationOperatorWithFalse)
@@ -2177,5 +2181,8 @@ TEST_MEM(AnyTestOperators, CheckLogicalNegationOperatorWithFalse)
   // this is true
   auto any = ::myodd::dynamic::Any(false);
   ASSERT_TRUE(!any);
-  //ASSERT_FALSE(any );
+  ASSERT_TRUE(!(any));
+
+  // we can't just use ASSERT_FALSE() as it translates to !(any)
+  ASSERT_EQ( false, any );
 }
