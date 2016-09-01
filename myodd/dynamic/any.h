@@ -81,6 +81,13 @@ namespace myodd {
         CreateFrom(value);
       }
 
+      template<class T>
+      Any(T source, size_t num ) :
+        Any()
+      {
+        CreateFromCharacters(source, num );
+      }
+
       /**
       * Copy constructor
       * @param const Any& any the value we are copying.
@@ -1936,11 +1943,11 @@ namespace myodd {
 
       /**
        * Create this with a signed/unsigned char*
-       * @param const T* value the char value we are creating from.
-       * @param const size_t the lenght we are working with.
+       * @param const T source the char value we are creating from.
+       * @param size_t the lenght we are working with.
        */
       template<class T>
-      std::enable_if_t<std::is_pointer<T>::value> CreateFromCharacters(const T value, const size_t givenLen )
+      std::enable_if_t<std::is_pointer<T>::value> CreateFromCharacters(const T source, size_t sourceLen )
       {
         // clean the values.
         CleanValues();
@@ -1948,29 +1955,29 @@ namespace myodd {
         // set the type
         _type = dynamic::get_type< typename std::remove_pointer<T>::type >::value;
 
-        if (nullptr != value)
+        if (nullptr != source)
         {
           // get the number of characters.
-          _lcvalue = givenLen;
+          _lcvalue = sourceLen;
 
           // create the character, we know it is at least one, even for an empty string.
           _cvalue = new char[_lcvalue];
 
           // memory clear
           std::memset(_cvalue, '\0', _lcvalue);
-          std::memcpy(_cvalue, value, _lcvalue);
+          std::memcpy(_cvalue, source, _lcvalue);
 
           if (_lcvalue > 1)
           {
             // it does not matter if this is signed or not signed
             // we are converting it to an unsigned long long and back to a long long
             // in reality they both take the same amount of space.
-            _llivalue = static_cast<long long int>(std::strtoull((const char*)value, nullptr, 0));
+            _llivalue = static_cast<long long int>(std::strtoull((const char*)source, nullptr, 0));
 
             // try and get the value as a long double.
             // this is represented in a slightly different way in memory
             // hence the reason we cannot just cast our long long to long double.
-            _ldvalue = std::strtold((const char*)value, nullptr);
+            _ldvalue = std::strtold((const char*)source, nullptr);
           }
           else
           {
@@ -1997,7 +2004,7 @@ namespace myodd {
         }
 
         // parse the string to set the string flag
-        ParseStringStatus((const char*)value);
+        ParseStringStatus((const char*)source, sourceLen );
       }
 
       /**
@@ -2006,35 +2013,50 @@ namespace myodd {
       */
       void CreateFromCharacters(const wchar_t* value)
       {
+        // get the len of the given pointer, as we have no lenght give
+        // we are usuming that this is a null terminated string.
+        size_t givenLen = value ? ((std::wcslen((const wchar_t*)value) + 1) * sizeof(wchar_t)) : 0;
+
+        // we can now try and create it with the given len.
+        CreateFromCharacters(value, givenLen);
+      }
+
+      /**
+      * Create this with a wchar_t*
+      * @param const T* source the char value we are creating from.
+      * @param size_t the lenght we are working with.
+      */
+      void CreateFromCharacters(const wchar_t* source, size_t sourceLen)
+      {
         // clean the values.
         CleanValues();
 
         // set the type
         _type = dynamic::get_type<wchar_t>::value;
 
-        if (nullptr != value)
+        if (nullptr != source)
         {
           // default values.
-          _lcvalue = (std::wcslen(value) + 1) * sizeof(wchar_t);
+          _lcvalue = sourceLen;
 
           // create the character, we know it is at least one, even for an empty string.
           _cvalue = new char[_lcvalue];
 
           // memory clear
           std::memset(_cvalue, '\0', _lcvalue);
-          std::memcpy(_cvalue, value, _lcvalue);
+          std::memcpy(_cvalue, source, _lcvalue);
 
           if (_lcvalue > 1)
           {
             // it does not matter if this is signed or not signed
             // we are converting it to an unsigned long long and back to a long long
             // in reality they both take the same amount of space.
-            _llivalue = static_cast<long long int>(std::wcstoull((const wchar_t*)value, nullptr, 0));
+            _llivalue = static_cast<long long int>(std::wcstoull((const wchar_t*)source, nullptr, 0));
 
             // try and get the value as a long double.
             // this is represented in a slightly different way in memory
             // hence the reason we cannot just cast our long long to long double.
-            _ldvalue = std::wcstold((const wchar_t*)value, nullptr);
+            _ldvalue = std::wcstold((const wchar_t*)source, nullptr);
           }
           else
           {
@@ -2059,7 +2081,7 @@ namespace myodd {
         }
 
         // parse the string to set the string flag
-        ParseStringStatus((const wchar_t*)value);
+        ParseStringStatus((const wchar_t*)source, sourceLen);
       }
 
       /**
@@ -3217,21 +3239,23 @@ namespace myodd {
       /**
       * Parse a string to see if it is a number, partial or not.
       * @param const char *str the string we are parsing.
+      * @param size_t sourceLen the source len
       */
-      void ParseStringStatus(const char *str)
+      void ParseStringStatus(const char *source, size_t sourceLen)
       {
         //  call the const char* equivalent.
-        ParseStringStatus(str, '+', '-', '.', '\0');
+        ParseStringStatus(source, sourceLen, '+', '-', '.', '\0' );
       }
 
       /**
       * Parse a string to see if it is a number, partial or not.
       * @param const wchar_t *str the string we are parsing.
+      * @param size_t sourceLen the source len
       */
-      void ParseStringStatus(const wchar_t *str)
+      void ParseStringStatus(const wchar_t *source, size_t sourceLen)
       {
         //  call the const wide char* equivalent.
-        ParseStringStatus(str, L'+', L'-', L'.', L'\0');
+        ParseStringStatus(source, sourceLen, L'+', L'-', L'.', L'\0');
       }
 
       /**
@@ -3267,17 +3291,18 @@ namespace myodd {
       * -0 and +0 keep their sign and 12.00 remains a floating point.
       * because this is how it was pased to us, it is up to the user to make sure they pass
       * a valid number that makes it posible to investigate.
-      * @param const T* str the string we are checking.
+      * @param const T* source the string we are checking.
+      * @param size_t sourceLen the len of the 'string' we are checking.
       * @param const T str_plus the plus sign, ('+')
       * @param const T str_minus the minus sign, ('-')
       * @param const T str_decimal how a decimal is represented, , ('.')
       * @param const T str_eol the eol character, ('\0')
       */
       template<typename T>
-      void ParseStringStatus(const T* str, const T str_plus, const T str_minus, const T str_decimal, const T str_eol)
+      void ParseStringStatus(const T* source, size_t sourceLen, const T str_plus, const T str_minus, const T str_decimal, const T str_eol)
       {
         // sanity check
-        if (nullptr == str)
+        if (nullptr == source)
         {
           // null is not a number
           _stringStatus = StringStatus_Not_A_Number;
@@ -3290,8 +3315,12 @@ namespace myodd {
         bool decimal = false;
 
         // go around all the characters.
-        for (const T *it = str; *it != str_eol; it++)
+        auto loopLen = size_t(sourceLen / sizeof(T));
+        for ( size_t i = 0; i < loopLen; i+=1 )
         {
+          // get the  character.
+          const T *it = (source + i);
+
           //  is it a space?
           if (_isspace(*it))
           {
@@ -3317,6 +3346,17 @@ namespace myodd {
           {
             decimal = true;
             continue;
+          }
+
+          // we are done? 
+          if (*it == str_eol)
+          {
+            // this might not be the end of the string, 
+            // but it cannot be a number any more
+            // if i == sourceLen then it is the end of the string, (and not partial)
+            // otherwise it is the end, (and partial)
+            partial = (i+1 != loopLen );
+            break;
           }
 
           // is it a digit?
