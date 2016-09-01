@@ -71,10 +71,11 @@ namespace myodd {
 
       /**
       * Copy constructor
-      * @param const int& the value we want to copy/set
+      * @see CastFrom(T)
+      * @param T value the value we want to copy/set
       */
       template<class T>
-      Any(const T& value) :
+      Any(T value) :
         Any()
       {
         CastFrom(value);
@@ -82,17 +83,7 @@ namespace myodd {
 
       /**
       * Copy constructor
-      * @param const int& the value we want to copy/set
-      */
-      template<class T>
-      Any(T* value) :
-        Any()
-      {
-        CastFrom(value);
-      }
-
-      /**
-      * Copy constructor
+      * @param const Any& any the value we are copying.
       */
       Any(const Any& any) :
         Any()
@@ -109,13 +100,19 @@ namespace myodd {
       }
 
       /**
-      * The T operator.
+      * The T operator, cast a value to T
+      * @see CastTo
       * @return T the template operator.
       */
       template<class T>
       operator T() const {
+        // the return value
         T value;
+
+        // cast *this to value
         CastTo(value);
+
+        // return it.
         return value;
       }
 
@@ -1416,6 +1413,9 @@ namespace myodd {
         return (std::memcmp(lhs._tvalue, rhs._tvalue, lhs._ltvalue) != 0 ? -1 : 0);
       }
 
+#ifdef _MSC_VER
+# pragma region
+#endif
       /**
       * Try and create from a given value.
       * @throw std::bad_cast() if we are trying to create from an unknwon value.
@@ -1439,7 +1439,7 @@ namespace myodd {
         case dynamic::Misc_unknown:
           // Objects of trivially - copyable types are the only C++ objects that 
           // may be safely copied with std::memcpy
-          CreateFromTrivial(value);
+          CastFromTrivial(value);
 
           // done
           return;
@@ -1470,7 +1470,7 @@ namespace myodd {
         // if unknown try and set is as a pointer.
         if (_type == dynamic::Misc_unknown)
         {
-          CreateFromTrivial<T*>(value);
+          CastFromTrivial<T*>(value);
           return;
         }
 
@@ -1546,7 +1546,7 @@ namespace myodd {
       */
       void CastFrom(const float& value)
       {
-        CreateFromDouble(value);
+        CastFromDouble(value);
       }
 
       /**
@@ -1555,7 +1555,7 @@ namespace myodd {
       */
       void CastFrom(const double& value)
       {
-        CreateFromDouble(value);
+        CastFromDouble(value);
       }
 
       /**
@@ -1564,7 +1564,7 @@ namespace myodd {
       */
       void CastFrom(const long double& value)
       {
-        CreateFromDouble(value);
+        CastFromDouble(value);
       }
 
       /**
@@ -1573,7 +1573,7 @@ namespace myodd {
       */
       void CastFrom(const short int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1582,7 +1582,7 @@ namespace myodd {
       */
       void CastFrom(const unsigned short int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1591,7 +1591,7 @@ namespace myodd {
       */
       void CastFrom(const int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1600,7 +1600,7 @@ namespace myodd {
       */
       void CastFrom(const unsigned int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1609,7 +1609,7 @@ namespace myodd {
       */
       void CastFrom(const long int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1618,7 +1618,7 @@ namespace myodd {
       */
       void CastFrom(const unsigned long int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1627,7 +1627,7 @@ namespace myodd {
       */
       void CastFrom(const long long int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1636,7 +1636,7 @@ namespace myodd {
       */
       void CastFrom(const unsigned long long int& value)
       {
-        CreateFromInteger(value);
+        CastFromInteger(value);
       }
 
       /**
@@ -1645,7 +1645,7 @@ namespace myodd {
       */
       void CastFrom(char* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1654,7 +1654,7 @@ namespace myodd {
       */
       void CastFrom(const char* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1663,7 +1663,7 @@ namespace myodd {
       */
       void CastFrom(signed char* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1672,7 +1672,7 @@ namespace myodd {
       */
       void CastFrom(const signed char* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1681,7 +1681,7 @@ namespace myodd {
       */
       void CastFrom(unsigned char* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1690,7 +1690,7 @@ namespace myodd {
       */
       void CastFrom(const unsigned char* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1699,7 +1699,7 @@ namespace myodd {
       */
       void CastFrom(wchar_t* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1708,7 +1708,7 @@ namespace myodd {
       */
       void CastFrom(const wchar_t* value)
       {
-        CreateFromCharacters(value);
+        CastFromCharacters(value);
       }
 
       /**
@@ -1728,7 +1728,7 @@ namespace myodd {
       */
       void CastFrom(const char& value)
       {
-        CreateFromCharacter(value);
+        CastFromCharacter(value);
       }
 
       /**
@@ -1737,7 +1737,7 @@ namespace myodd {
       */
       void CastFrom(const signed char& value)
       {
-        CreateFromCharacter(value);
+        CastFromCharacter(value);
       }
 
       /**
@@ -1746,7 +1746,7 @@ namespace myodd {
       */
       void CastFrom(const unsigned char& value)
       {
-        CreateFromCharacter(value);
+        CastFromCharacter(value);
       }
 
       /**
@@ -1755,7 +1755,7 @@ namespace myodd {
       */
       void CastFrom(const wchar_t& value)
       {
-        CreateFromCharacter(value);
+        CastFromCharacter(value);
       }
 
       /**
@@ -1764,7 +1764,7 @@ namespace myodd {
       */
       void CastFrom(std::string& value)
       {
-        CreateFromCharacters(value.c_str());
+        CastFromCharacters(value.c_str());
       }
 
       /**
@@ -1773,7 +1773,7 @@ namespace myodd {
       */
       void CastFrom(std::string* value)
       {
-        CreateFromCharacters(value ? value->c_str() : (const char*)nullptr);
+        CastFromCharacters(value ? value->c_str() : (const char*)nullptr);
       }
 
       /**
@@ -1782,7 +1782,7 @@ namespace myodd {
       */
       void CastFrom(const std::string* value)
       {
-        CreateFromCharacters(value ? value->c_str() : (const char*)nullptr);
+        CastFromCharacters(value ? value->c_str() : (const char*)nullptr);
       }
 
       /**
@@ -1791,7 +1791,7 @@ namespace myodd {
       */
       void CastFrom(std::wstring& value)
       {
-        CreateFromCharacters(value.c_str());
+        CastFromCharacters(value.c_str());
       }
 
       /**
@@ -1800,7 +1800,7 @@ namespace myodd {
       */
       void CastFrom(std::wstring* value)
       {
-        CreateFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
+        CastFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
       }
 
       /**
@@ -1809,7 +1809,7 @@ namespace myodd {
       */
       void CastFrom(const std::wstring* value)
       {
-        CreateFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
+        CastFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
       }
 
       /**
@@ -1818,7 +1818,7 @@ namespace myodd {
       */
       void CastFrom(const std::string& value)
       {
-        CreateFromCharacters(value.c_str());
+        CastFromCharacters(value.c_str());
       }
 
       /**
@@ -1827,9 +1827,307 @@ namespace myodd {
       */
       void CastFrom(const std::wstring& value)
       {
-        CreateFromCharacters(value.c_str());
+        CastFromCharacters(value.c_str());
       }
 
+      /**
+      * Create a value from a double/float/long double number..
+      * @param const T* number the number we are creating from.
+      */
+      template<class T>
+      void CastFromDouble(const T& number)
+      {
+        // clear all the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<T>::value;
+
+        // set the values
+        _ldvalue = static_cast<long double>(number);
+        _llivalue = static_cast<long long int>(_ldvalue);
+      }
+
+      /**
+      * Create a value from a int/long/long long...
+      * @param const T* number the number we are creating from.
+      */
+      template<class T>
+      void CastFromInteger(const T& number)
+      {
+        // clear all the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<T>::value;
+
+        // set the values.
+        _llivalue = static_cast<long long int>(number);
+        _ldvalue = static_cast<long double>(_llivalue);
+      }
+
+      /**
+      * Create from a trivally copyable value.
+      * Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
+      * @param const T& trivial the structure/class we want to copy from.
+      */
+      template<class T>
+      std::enable_if_t<!std::is_pointer<T>::value> CastFromTrivial(T trivial)
+      {
+        // as it is not a pointer value, it has to be trivially copyable.
+        if (!std::is_trivially_copyable<T>::value)
+        {
+          throw std::bad_cast();
+        }
+
+        // clear all the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::Misc_trivial;
+
+        // set the values.
+        _llivalue = 0;
+        _ldvalue = 0;
+
+        // copy the trival value.
+        _ltvalue = sizeof(T);
+        _tvalue = new char[_ltvalue];
+        std::memset(_tvalue, 0, _ltvalue);
+        std::memcpy(_tvalue, &trivial, _ltvalue);
+      }
+
+      /**
+      * Create from a trivally copyable value.
+      * Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
+      * @param const T& trivial the structure/class we want to copy from.
+      */
+      template<class T>
+      std::enable_if_t<std::is_pointer<T>::value> CastFromTrivial(const T& trivial)
+      {
+        // clear all the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::Misc_trivial_ptr;
+
+        // set the values.
+        _llivalue = 0;
+        _ldvalue = 0;
+
+        // copy the trival pointer value that was given to us.
+        _ptvalue = (void*)trivial;
+      }
+
+      /**
+      * Create a value from a multiple characters..
+      * @param const T* value the character we are creating from.
+      */
+      template<class T>
+      void CastFromCharacters(const T* value)
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<T>::value;
+
+        if (nullptr != value)
+        {
+          // get the number of characters.
+          _lcvalue = (std::strlen((const char*)value) + 1) * sizeof(T);
+
+          // create the character, we know it is at least one, even for an empty string.
+          _cvalue = new char[_lcvalue];
+
+          // memory clear
+          std::memset(_cvalue, '\0', _lcvalue);
+          std::memcpy(_cvalue, value, _lcvalue);
+
+          if (_lcvalue > 1)
+          {
+            // it does not matter if this is signed or not signed
+            // we are converting it to an unsigned long long and back to a long long
+            // in reality they both take the same amount of space.
+            _llivalue = static_cast<long long int>(std::strtoull((const char*)value, nullptr, 0));
+
+            // try and get the value as a long double.
+            // this is represented in a slightly different way in memory
+            // hence the reason we cannot just cast our long long to long double.
+            _ldvalue = std::strtold((const char*)value, nullptr);
+          }
+          else
+          {
+            // the size is only one, (for our trailling '\0')
+            // so we know that the value has to be zero.
+            _llivalue = 0;
+            _ldvalue = 0;
+          }
+        }
+        else
+        {
+          // create a default value for the string.
+          const char c = '\0';
+
+          // default values.
+          _lcvalue = sizeof(T);
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, &c, _lcvalue);
+
+          // default values are 0
+          _llivalue = 0;
+          _ldvalue = 0;
+        }
+
+        // parse the string to set the string flag
+        ParseStringStatus((const char*)value);
+      }
+
+      /**
+      * Create a value from a multiple characters..
+      * @param const T* value the character we are creating from.
+      */
+      void CastFromCharacters(const wchar_t* value)
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<wchar_t>::value;
+
+        if (nullptr != value)
+        {
+          // default values.
+          _lcvalue = (std::wcslen(value) + 1) * sizeof(wchar_t);
+
+          // create the character, we know it is at least one, even for an empty string.
+          _cvalue = new char[_lcvalue];
+
+          // memory clear
+          std::memset(_cvalue, '\0', _lcvalue);
+          std::memcpy(_cvalue, value, _lcvalue);
+
+          if (_lcvalue > 1)
+          {
+            // it does not matter if this is signed or not signed
+            // we are converting it to an unsigned long long and back to a long long
+            // in reality they both take the same amount of space.
+            _llivalue = static_cast<long long int>(std::wcstoull((const wchar_t*)value, nullptr, 0));
+
+            // try and get the value as a long double.
+            // this is represented in a slightly different way in memory
+            // hence the reason we cannot just cast our long long to long double.
+            _ldvalue = std::wcstold((const wchar_t*)value, nullptr);
+          }
+          else
+          {
+            // the size is only one, (for our trailling '\0')
+            // so we know that the value has to be zero.
+            _llivalue = 0;
+            _ldvalue = 0;
+          }
+        }
+        else
+        {
+          // create a default value for the string.
+          const wchar_t wide = L'\0';
+          _lcvalue = sizeof(wchar_t);
+          _cvalue = new char[_lcvalue];
+          std::memset(_cvalue, 0, _lcvalue);
+          std::memcpy(_cvalue, &wide, _lcvalue);
+
+          // default values are 0
+          _llivalue = 0;
+          _ldvalue = 0;
+        }
+
+        // parse the string to set the string flag
+        ParseStringStatus((const wchar_t*)value);
+      }
+
+      /**
+      * Create a value from a single character.
+      * @param const char value the character we are creating from.
+      */
+      template<class T>
+      void CastFromCharacter(const T value)
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<T>::value;
+
+        // create the character.
+        _lcvalue = sizeof(T);
+        _cvalue = new char[_lcvalue];
+        std::memset(_cvalue, '\0', _lcvalue);
+        std::memcpy(_cvalue, &value, _lcvalue);
+
+        if (value >= '0' && value <= '9')
+        {
+          auto number = value - '0';
+          _llivalue = number;
+          _ldvalue = number;
+
+          //  if has to be a non floating point number.
+          _stringStatus = StringStatus_Pos_Number;
+        }
+        else
+        {
+          _llivalue = 0;
+          _ldvalue = 0;
+
+          //  this is not a number.
+          _stringStatus = StringStatus_Not_A_Number;
+        }
+      }
+
+      /**
+      * Create a value from a single wide character.
+      * @param const wchar_t value the character we are creating from.
+      */
+      void CastFromCharacter(const wchar_t value)
+      {
+        // clean the values.
+        CleanValues();
+
+        // set the type
+        _type = dynamic::get_type<wchar_t>::value;
+
+        // create the character.
+        _lcvalue = sizeof(wchar_t);
+        _cvalue = new char[_lcvalue];
+        std::memset(_cvalue, '\0', _lcvalue);
+        std::memcpy(_cvalue, &value, _lcvalue);
+
+        // copy it.
+        if (value >= L'0' && value <= L'9')
+        {
+          auto number = value - L'0';
+          _llivalue = number;
+          _ldvalue = number;
+
+          //  if has to be a non floating point number.
+          _stringStatus = StringStatus_Pos_Number;
+        }
+        else
+        {
+          _llivalue = 0;
+          _ldvalue = 0;
+
+          //  this is not a number.
+          _stringStatus = StringStatus_Not_A_Number;
+        }
+      }
+#ifdef _MSC_VER
+# pragma endregion CastFrom - Cast *this from T
+#endif
+
+#ifdef _MSC_VER
+# pragma region
+#endif
       /**
       * Try and cast this to a posible value.
       * @return T the value we are looking for.
@@ -1957,7 +2255,7 @@ namespace myodd {
       */
       void CastTo(char*& value) const
       {
-        ReturnFromCharacters(value);
+        CastToCharacters(value);
       }
 
       /**
@@ -1967,7 +2265,7 @@ namespace myodd {
       void CastTo(const signed char*& value) const
       {
         char* c = nullptr;
-        ReturnFromCharacters(c);
+        CastToCharacters(c);
         value = const_cast<const signed char*>((signed char*)c);
       }
 
@@ -1978,7 +2276,7 @@ namespace myodd {
       void CastTo(signed char*& value) const
       {
         char* c = nullptr;
-        ReturnFromCharacters(c);
+        CastToCharacters(c);
         value = (signed char*)c;
       }
 
@@ -1989,7 +2287,7 @@ namespace myodd {
       void CastTo(const char*& value) const
       {
         char* c = nullptr;
-        ReturnFromCharacters(c);
+        CastToCharacters(c);
         value = c;
       }
 
@@ -1999,7 +2297,7 @@ namespace myodd {
       */
       void CastTo(wchar_t*& value) const
       {
-        ReturnFromCharacters(value);
+        CastToCharacters(value);
       }
 
       /**
@@ -2009,10 +2307,9 @@ namespace myodd {
       void CastTo(const wchar_t*& value) const
       {
         wchar_t* wc = nullptr;
-        ReturnFromCharacters(wc);
+        CastToCharacters(wc);
         value = wc;
       }
-
 
       /**
       * Try and cast this to a posible value.
@@ -2020,7 +2317,7 @@ namespace myodd {
       */
       void CastTo(std::wstring& value) const
       {
-        ReturnFromCharacters(value);
+        CastToCharacters(value);
       }
 
       /**
@@ -2366,7 +2663,7 @@ namespace myodd {
       * @return T* the character we want to return no.
       */
       template<class T>
-      std::enable_if_t<std::is_pointer<T>::value> ReturnFromCharacters(T& value) const
+      std::enable_if_t<std::is_pointer<T>::value> CastToCharacters(T& value) const
       {
         switch (Type())
         {
@@ -2407,10 +2704,10 @@ namespace myodd {
       * Return a character
       * std::wstring& value the character we want to return no.
       */
-      void ReturnFromCharacters(std::wstring& value) const
+      void CastToCharacters(std::wstring& value) const
       {
         wchar_t* wc = nullptr;
-        ReturnFromCharacters(wc);
+        CastToCharacters(wc);
         value = std::wstring(wc);
       }
 
@@ -2418,10 +2715,10 @@ namespace myodd {
       * Return a character
       * std::string& value the character we want to return no.
       */
-      void ReturnFromCharacters(std::string& value) const
+      void CastToCharacters(std::string& value) const
       {
         char* c = nullptr;
-        ReturnFromCharacters(c);
+        CastToCharacters(c);
         value = std::string(c);
       }
 
@@ -2429,7 +2726,7 @@ namespace myodd {
       * Return a character
       * @return T* the character we want to return no.
       */
-      void ReturnFromCharacters(wchar_t*& value) const
+      void CastToCharacters(wchar_t*& value) const
       {
         switch (Type())
         {
@@ -2470,12 +2767,15 @@ namespace myodd {
       * Return a character
       * @return T* the character we want to return no.
       */
-      void ReturnFromCharacters(char& value) const
+      void CastToCharacters(char& value) const
       {
         char* c;
-        ReturnFromCharacters(c);
+        CastToCharacters(c);
         value = (c != nullptr && strlen(c) > 0) ? c[0] : '\0';
       }
+#ifdef _MSC_VER
+# pragma endregion  CastTo - Cast *this to T&
+#endif
 
       /**
       * Create the cosmetic representation of the string.
@@ -2608,298 +2908,6 @@ namespace myodd {
         _swvalue = nullptr;
         _tvalue = nullptr;
         _ptvalue = nullptr;
-      }
-
-      /**
-      * Create a value from a double/float/long double number..
-      * @param const T* number the number we are creating from.
-      */
-      template<class T>
-      void CreateFromDouble(const T& number)
-      {
-        // clear all the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::get_type<T>::value;
-
-        // set the values
-        _ldvalue = static_cast<long double>(number);
-        _llivalue = static_cast<long long int>(_ldvalue);
-      }
-
-      /**
-      * Create a value from a int/long/long long...
-      * @param const T* number the number we are creating from.
-      */
-      template<class T>
-      void CreateFromInteger(const T& number)
-      {
-        // clear all the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::get_type<T>::value;
-
-        // set the values.
-        _llivalue = static_cast<long long int>(number);
-        _ldvalue = static_cast<long double>(_llivalue);
-      }
-
-      /**
-      * Create from a trivally copyable value.
-      * Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
-      * @param const T& trivial the structure/class we want to copy from.
-      */
-      template<class T>
-      std::enable_if_t<!std::is_pointer<T>::value> CreateFromTrivial(T trivial)
-      {
-        // as it is not a pointer value, it has to be trivially copyable.
-        if (!std::is_trivially_copyable<T>::value)
-        {
-          throw std::bad_cast();
-        }
-
-        // clear all the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::Misc_trivial;
-
-        // set the values.
-        _llivalue = 0;
-        _ldvalue = 0;
-
-        // copy the trival value.
-        _ltvalue = sizeof(T);
-        _tvalue = new char[_ltvalue];
-        std::memset(_tvalue, 0, _ltvalue);
-        std::memcpy(_tvalue, &trivial, _ltvalue);
-      }
-
-      /**
-      * Create from a trivally copyable value.
-      * Objects of trivially - copyable types are the only C++ objects that may be safely copied with std::memcpy
-      * @param const T& trivial the structure/class we want to copy from.
-      */
-      template<class T>
-      std::enable_if_t<std::is_pointer<T>::value> CreateFromTrivial(const T& trivial)
-      {
-        // clear all the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::Misc_trivial_ptr;
-
-        // set the values.
-        _llivalue = 0;
-        _ldvalue = 0;
-
-        // copy the trival pointer value that was given to us.
-        _ptvalue = (void*)trivial;
-      }
-
-      /**
-      * Create a value from a multiple characters..
-      * @param const T* value the character we are creating from.
-      */
-      template<class T>
-      void CreateFromCharacters(const T* value)
-      {
-        // clean the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::get_type<T>::value;
-
-        if (nullptr != value)
-        {
-          // get the number of characters.
-          _lcvalue = (std::strlen((const char*)value) + 1) * sizeof(T);
-
-          // create the character, we know it is at least one, even for an empty string.
-          _cvalue = new char[_lcvalue];
-
-          // memory clear
-          std::memset(_cvalue, '\0', _lcvalue);
-          std::memcpy(_cvalue, value, _lcvalue);
-
-          if (_lcvalue > 1)
-          {
-            // it does not matter if this is signed or not signed
-            // we are converting it to an unsigned long long and back to a long long
-            // in reality they both take the same amount of space.
-            _llivalue = static_cast<long long int>(std::strtoull((const char*)value, nullptr, 0));
-
-            // try and get the value as a long double.
-            // this is represented in a slightly different way in memory
-            // hence the reason we cannot just cast our long long to long double.
-            _ldvalue = std::strtold((const char*)value, nullptr);
-          }
-          else
-          {
-            // the size is only one, (for our trailling '\0')
-            // so we know that the value has to be zero.
-            _llivalue = 0;
-            _ldvalue = 0;
-          }
-        }
-        else
-        {
-          // create a default value for the string.
-          const char c = '\0';
-
-          // default values.
-          _lcvalue = sizeof(T);
-          _cvalue = new char[_lcvalue];
-          std::memset(_cvalue, 0, _lcvalue);
-          std::memcpy(_cvalue, &c, _lcvalue);
-
-          // default values are 0
-          _llivalue = 0;
-          _ldvalue = 0;
-        }
-
-        // parse the string to set the string flag
-        ParseStringStatus((const char*)value);
-      }
-
-      /**
-      * Create a value from a multiple characters..
-      * @param const T* value the character we are creating from.
-      */
-      void CreateFromCharacters(const wchar_t* value)
-      {
-        // clean the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::get_type<wchar_t>::value;
-
-        if (nullptr != value)
-        {
-          // default values.
-          _lcvalue = (std::wcslen(value) + 1) * sizeof(wchar_t);
-
-          // create the character, we know it is at least one, even for an empty string.
-          _cvalue = new char[_lcvalue];
-
-          // memory clear
-          std::memset(_cvalue, '\0', _lcvalue);
-          std::memcpy(_cvalue, value, _lcvalue);
-
-          if (_lcvalue > 1)
-          {
-            // it does not matter if this is signed or not signed
-            // we are converting it to an unsigned long long and back to a long long
-            // in reality they both take the same amount of space.
-            _llivalue = static_cast<long long int>(std::wcstoull((const wchar_t*)value, nullptr, 0));
-
-            // try and get the value as a long double.
-            // this is represented in a slightly different way in memory
-            // hence the reason we cannot just cast our long long to long double.
-            _ldvalue = std::wcstold((const wchar_t*)value, nullptr);
-          }
-          else
-          {
-            // the size is only one, (for our trailling '\0')
-            // so we know that the value has to be zero.
-            _llivalue = 0;
-            _ldvalue = 0;
-          }
-        }
-        else
-        {
-          // create a default value for the string.
-          const wchar_t wide = L'\0';
-          _lcvalue = sizeof(wchar_t);
-          _cvalue = new char[_lcvalue];
-          std::memset(_cvalue, 0, _lcvalue);
-          std::memcpy(_cvalue, &wide, _lcvalue);
-
-          // default values are 0
-          _llivalue = 0;
-          _ldvalue = 0;
-        }
-
-        // parse the string to set the string flag
-        ParseStringStatus((const wchar_t*)value);
-      }
-
-      /**
-      * Create a value from a single character.
-      * @param const char value the character we are creating from.
-      */
-      template<class T>
-      void CreateFromCharacter(const T value)
-      {
-        // clean the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::get_type<T>::value;
-
-        // create the character.
-        _lcvalue = sizeof(T);
-        _cvalue = new char[_lcvalue];
-        std::memset(_cvalue, '\0', _lcvalue);
-        std::memcpy(_cvalue, &value, _lcvalue);
-
-        if (value >= '0' && value <= '9')
-        {
-          auto number = value - '0';
-          _llivalue = number;
-          _ldvalue = number;
-
-          //  if has to be a non floating point number.
-          _stringStatus = StringStatus_Pos_Number;
-        }
-        else
-        {
-          _llivalue = 0;
-          _ldvalue = 0;
-
-          //  this is not a number.
-          _stringStatus = StringStatus_Not_A_Number;
-        }
-      }
-
-      /**
-      * Create a value from a single wide character.
-      * @param const wchar_t value the character we are creating from.
-      */
-      void CreateFromCharacter(const wchar_t value)
-      {
-        // clean the values.
-        CleanValues();
-
-        // set the type
-        _type = dynamic::get_type<wchar_t>::value;
-
-        // create the character.
-        _lcvalue = sizeof(wchar_t);
-        _cvalue = new char[_lcvalue];
-        std::memset(_cvalue, '\0', _lcvalue);
-        std::memcpy(_cvalue, &value, _lcvalue);
-
-        // copy it.
-        if (value >= L'0' && value <= L'9')
-        {
-          auto number = value - L'0';
-          _llivalue = number;
-          _ldvalue = number;
-
-          //  if has to be a non floating point number.
-          _stringStatus = StringStatus_Pos_Number;
-        }
-        else
-        {
-          _llivalue = 0;
-          _ldvalue = 0;
-
-          //  this is not a number.
-          _stringStatus = StringStatus_Not_A_Number;
-        }
       }
 
       /**
