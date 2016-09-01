@@ -238,11 +238,25 @@ TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToSignedCharPtr)
   EXPECT_THROW((signed char*)any, std::bad_cast);
 }
 
+TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToConstSignedCharPtr)
+{
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
+  EXPECT_THROW((const signed char*)any, std::bad_cast);
+}
+
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToUnsignedCharPtr)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
   EXPECT_THROW((unsigned char*)any, std::bad_cast);
+}
+
+TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToConstUnsignedCharPtr)
+{
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
+  EXPECT_THROW((const unsigned char*)any, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToWideChar)
@@ -383,7 +397,7 @@ TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToChar)
   EXPECT_THROW((const char*)any, std::bad_cast);;
 }
 
-TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToSignedChar)
+TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToConstSignedChar)
 {
   ASSERT_FALSE(std::is_trivially_copyable<NonTrivialStruct>::value);
   auto ts = NonTrivialStruct(IntRandomNumber<int>(false), "Hello");
@@ -392,12 +406,30 @@ TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToSignedChar)
   EXPECT_THROW((const signed char*)any, std::bad_cast);
 }
 
-TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToUnsignedChar)
+TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToSignedChar)
+{
+  ASSERT_FALSE(std::is_trivially_copyable<NonTrivialStruct>::value);
+  auto ts = NonTrivialStruct(IntRandomNumber<int>(false), "Hello");
+  ::myodd::dynamic::Any any(&ts);
+
+  EXPECT_THROW((signed char*)any, std::bad_cast);
+}
+
+TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToConstUnsignedChar)
 {
   ASSERT_FALSE(std::is_trivially_copyable<NonTrivialStruct>::value);
   auto ts = NonTrivialStruct(IntRandomNumber<int>(false), "Hello");
   ::myodd::dynamic::Any any(&ts);
 
   EXPECT_THROW((const unsigned char*)any, std::bad_cast);;
+}
+
+TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToUnsignedChar)
+{
+  ASSERT_FALSE(std::is_trivially_copyable<NonTrivialStruct>::value);
+  auto ts = NonTrivialStruct(IntRandomNumber<int>(false), "Hello");
+  ::myodd::dynamic::Any any(&ts);
+
+  EXPECT_THROW((unsigned char*)any, std::bad_cast);;
 }
 

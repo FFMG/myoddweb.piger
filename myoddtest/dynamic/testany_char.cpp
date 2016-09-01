@@ -445,3 +445,116 @@ TEST_MEM(AnyTestCharacter, StdStringPointerConstructor)
   auto x = myodd::dynamic::Any(&s);
   ASSERT_STREQ(L"Hello", x);
 }
+
+TEST_MEM_LOOP(AnyTestCharacter, GetUnsignedCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
+{
+  const size_t len = (size_t)CharRandom<unsigned char>();
+  unsigned char* c = new unsigned char[len];
+  memset(c, 0, len);
+  for (auto i = 0; i < len-1; ++i)
+  {
+    auto x = CharRandom<unsigned char>();
+    while (x == L'\0')
+    {
+      // we do not want a '\0'
+      x = CharRandom<unsigned char>();
+    }
+    c[i] = x;
+  }
+  c[len - 1] = L'\0';
+  
+  auto any = myodd::dynamic::Any(c);
+  auto cc = (unsigned char*)any;
+
+  // we use expect so the memory is cleared
+  // assert will kill the test right here.
+  EXPECT_EQ( 0, memcmp(cc, c, len) );
+
+  // clean up
+  delete c;
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, GetSignedCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
+{
+  const size_t len = (size_t)CharRandom<unsigned char>();
+  signed char* c = new signed char[len];
+  memset(c, 0, len);
+  for (auto i = 0; i < len; ++i)
+  {
+    auto x = CharRandom<signed char>();
+    while (x == L'\0')
+    {
+      // we do not want a '\0'
+      x = CharRandom<signed char>();
+    }
+    c[i] = x;
+  }
+  c[len - 1] = L'\0';
+
+  auto any = myodd::dynamic::Any(c);
+  auto cc = (signed char*)any;
+
+  // we use expect so the memory is cleared
+  // assert will kill the test right here.
+  EXPECT_EQ(0, memcmp(cc, c, len));
+
+  // clean up
+  delete c;
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, GetCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
+{
+  const size_t len = (size_t)CharRandom<unsigned char>();
+  char* c = new char[len];
+  memset(c, 0, len);
+  for (auto i = 0; i < len-1; ++i)
+  {
+    auto x = CharRandom<char>();
+    while (x == '\0')
+    {
+      // we do not want a '\0'
+      x = CharRandom<char>();
+    }
+    c[i] = x;
+  }
+  c[len-1] = '\0';
+
+  auto any = myodd::dynamic::Any(c);
+  auto cc = (char*)any;
+
+  // we use expect so the memory is cleared
+  // assert will kill the test right here.
+  EXPECT_EQ(0, memcmp(cc, c, len));
+
+  // clean up
+  delete c;
+}
+
+
+TEST_MEM_LOOP(AnyTestCharacter, GetWideCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
+{
+  const size_t len = (size_t)CharRandom<unsigned char>();
+  wchar_t* c = new wchar_t[len];
+  memset(c, 0, len);
+  for (auto i = 0; i < len - 1; ++i)
+  {
+    auto x = CharRandom<wchar_t>();
+    while (x == L'\0')
+    {
+      // we do not want a '\0'
+      x = CharRandom<wchar_t>();
+    }
+    c[i] = x;
+  }
+  c[len - 1] = L'\0';
+
+  auto any = myodd::dynamic::Any(c);
+  auto cc = (wchar_t*)any;
+
+  // we use expect so the memory is cleared
+  // assert will kill the test right here.
+  EXPECT_EQ(0, memcmp(cc, c, len*sizeof(wchar_t)));
+
+  // clean up
+  delete c;
+}

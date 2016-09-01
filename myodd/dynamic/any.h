@@ -71,14 +71,14 @@ namespace myodd {
 
       /**
       * Copy constructor
-      * @see CastFrom(T)
+      * @see CreateFrom(T)
       * @param T value the value we want to copy/set
       */
       template<class T>
       Any(T value) :
         Any()
       {
-        CastFrom(value);
+        CreateFrom(value);
       }
 
       /**
@@ -372,16 +372,16 @@ namespace myodd {
         if (dynamic::is_type_floating(type))
         {
           // we cannot call ++_ldvalue as the value is passed by reference.
-          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // to CreateFrom( cons T& ) and the first thing we do is clear the value
           // so _ldvalue/_llivalue become 0
-          CastFrom(_ldvalue + 1);
+          CreateFrom(_ldvalue + 1);
         }
         else
         {
           // we cannot call ++_ldvalue as the value is passed by reference.
-          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // to CreateFrom( cons T& ) and the first thing we do is clear the value
           // so _ldvalue/_llivalue become 0
-          CastFrom(_llivalue + 1);
+          CreateFrom(_llivalue + 1);
         }
 
         // update the type.
@@ -595,16 +595,16 @@ namespace myodd {
         if (dynamic::is_type_floating(type))
         {
           // we cannot call ++_ldvalue as the value is passed by reference.
-          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // to CreateFrom( cons T& ) and the first thing we do is clear the value
           // so _ldvalue/_llivalue become 0
-          CastFrom(_ldvalue - 1);
+          CreateFrom(_ldvalue - 1);
         }
         else
         {
           // we cannot call ++_ldvalue as the value is passed by reference.
-          // to CastFrom( cons T& ) and the first thing we do is clear the value
+          // to CreateFrom( cons T& ) and the first thing we do is clear the value
           // so _ldvalue/_llivalue become 0
-          CastFrom(_llivalue - 1);
+          CreateFrom(_llivalue - 1);
         }
 
         // update the type.
@@ -1422,7 +1422,7 @@ namespace myodd {
       * @param const T& value the value we are trying to create from.
       */
       template<class T>
-      void CastFrom(const T& value)
+      void CreateFrom(const T& value)
       {
         // clear all the values.
         CleanValues();
@@ -1439,7 +1439,7 @@ namespace myodd {
         case dynamic::Misc_unknown:
           // Objects of trivially - copyable types are the only C++ objects that 
           // may be safely copied with std::memcpy
-          CastFromTrivial(value);
+          CreateFromTrivial(value);
 
           // done
           return;
@@ -1459,7 +1459,7 @@ namespace myodd {
       * @param const T& value the value we are trying to create from.
       */
       template<class T>
-      void CastFrom(T* value)
+      void CreateFrom(T* value)
       {
         // clear all the values.
         CleanValues();
@@ -1470,14 +1470,14 @@ namespace myodd {
         // if unknown try and set is as a pointer.
         if (_type == dynamic::Misc_unknown)
         {
-          CastFromTrivial<T*>(value);
+          CreateFromTrivial<T*>(value);
           return;
         }
 
         // if not null then we can set it.
         if (nullptr != value)
         {
-          CastFrom(*value);
+          CreateFrom(*value);
         }
         else
         {
@@ -1527,7 +1527,7 @@ namespace myodd {
       * Create from a boolean value.
       * @param const bool& value the bool value.
       */
-      void CastFrom(const bool& value)
+      void CreateFrom(const bool& value)
       {
         // clear all the values.
         CleanValues();
@@ -1544,171 +1544,171 @@ namespace myodd {
       * Create from a float value.
       * @param const float& value the number value.
       */
-      void CastFrom(const float& value)
+      void CreateFrom(const float& value)
       {
-        CastFromDouble(value);
+        CreateFromDouble(value);
       }
 
       /**
       * Create from a double value.
       * @param const double& value the number value.
       */
-      void CastFrom(const double& value)
+      void CreateFrom(const double& value)
       {
-        CastFromDouble(value);
+        CreateFromDouble(value);
       }
 
       /**
       * Create from a long double value.
       * @param const long double& value the number value.
       */
-      void CastFrom(const long double& value)
+      void CreateFrom(const long double& value)
       {
-        CastFromDouble(value);
+        CreateFromDouble(value);
       }
 
       /**
       * Create from a short int value.
       * @param const short int& value the number value.
       */
-      void CastFrom(const short int& value)
+      void CreateFrom(const short int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from an unsigned short int value.
       * @param const unsigned short int& value the number value.
       */
-      void CastFrom(const unsigned short int& value)
+      void CreateFrom(const unsigned short int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from an int value.
       * @param const int& value the number value.
       */
-      void CastFrom(const int& value)
+      void CreateFrom(const int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from an unsigned int value.
       * @param const unsigned int& value the number value.
       */
-      void CastFrom(const unsigned int& value)
+      void CreateFrom(const unsigned int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from a long int value.
       * @param const long int& value the number value.
       */
-      void CastFrom(const long int& value)
+      void CreateFrom(const long int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from a unsigned long int value.
       * @param const unsigned long int& value the number value.
       */
-      void CastFrom(const unsigned long int& value)
+      void CreateFrom(const unsigned long int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from a long long int value.
       * @param const long long int& value the number value.
       */
-      void CastFrom(const long long int& value)
+      void CreateFrom(const long long int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from a unsigned long int value.
       * @param const unsigned long long int& value the number value.
       */
-      void CastFrom(const unsigned long long int& value)
+      void CreateFrom(const unsigned long long int& value)
       {
-        CastFromInteger(value);
+        CreateFromInteger(value);
       }
 
       /**
       * Create from a character pointer.
       * @param char* value the value we are trying to create from.
       */
-      void CastFrom(char* value)
+      void CreateFrom(char* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
       * Create from a character pointer.
       * @param char* value the value we are trying to create from.
       */
-      void CastFrom(const char* value)
+      void CreateFrom(const char* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
       * Create from a character pointer.
       * @param signed char* value the value we are trying to create from.
       */
-      void CastFrom(signed char* value)
+      void CreateFrom(signed char* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
       * Create from a character pointer.
       * @param signed char* value the value we are trying to create from.
       */
-      void CastFrom(const signed char* value)
+      void CreateFrom(const signed char* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
       * Create from a character pointer.
       * @param unsigned char* value the value we are trying to create from.
       */
-      void CastFrom(unsigned char* value)
+      void CreateFrom(unsigned char* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
       * Create from a character pointer.
       * @param unsigned char* value the value we are trying to create from.
       */
-      void CastFrom(const unsigned char* value)
+      void CreateFrom(const unsigned char* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
       * Create from a character pointer.
       * @param wchar_t* value the value we are trying to create from.
       */
-      void CastFrom(wchar_t* value)
+      void CreateFrom(wchar_t* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
       * Create from a character pointer.
       * @param wchar_t* value the value we are trying to create from.
       */
-      void CastFrom(const wchar_t* value)
+      void CreateFrom(const wchar_t* value)
       {
-        CastFromCharacters(value);
+        CreateFromCharacters(value);
       }
 
       /**
@@ -1716,7 +1716,7 @@ namespace myodd {
       * @throw std::bad_cast() if we are trying to create from an unknwon value.
       * @param const T& value the value we are trying to create from.
       */
-      void CastFrom(nullptr_t)
+      void CreateFrom(nullptr_t)
       {
         // clear all the values.
         CleanValues();
@@ -1726,108 +1726,108 @@ namespace myodd {
       * Create from a given value.
       * @param const char& value the value we are trying to create from.
       */
-      void CastFrom(const char& value)
+      void CreateFrom(const char& value)
       {
-        CastFromCharacter(value);
+        CreateFromCharacter(value);
       }
 
       /**
       * Create from a given value.
       * @param const signed char& value the value we are trying to create from.
       */
-      void CastFrom(const signed char& value)
+      void CreateFrom(const signed char& value)
       {
-        CastFromCharacter(value);
+        CreateFromCharacter(value);
       }
 
       /**
       * Create from a given value.
       * @param const unsigned char& value the value we are trying to create from.
       */
-      void CastFrom(const unsigned char& value)
+      void CreateFrom(const unsigned char& value)
       {
-        CastFromCharacter(value);
+        CreateFromCharacter(value);
       }
 
       /**
       * Create from a given value.
       * @param const wchar_t& value the value we are trying to create from.
       */
-      void CastFrom(const wchar_t& value)
+      void CreateFrom(const wchar_t& value)
       {
-        CastFromCharacter(value);
+        CreateFromCharacter(value);
       }
 
       /**
       * Create from a const std::string.
       * @param std::string& value the value we are trying to create from.
       */
-      void CastFrom(std::string& value)
+      void CreateFrom(std::string& value)
       {
-        CastFromCharacters(value.c_str());
+        CreateFromCharacters(value.c_str());
       }
 
       /**
       * Create from a const std::string*.
       * @param std::string* value the value we are trying to create from.
       */
-      void CastFrom(std::string* value)
+      void CreateFrom(std::string* value)
       {
-        CastFromCharacters(value ? value->c_str() : (const char*)nullptr);
+        CreateFromCharacters(value ? value->c_str() : (const char*)nullptr);
       }
 
       /**
       * Create from a const std::string*.
       * @param const std::string* value the value we are trying to create from.
       */
-      void CastFrom(const std::string* value)
+      void CreateFrom(const std::string* value)
       {
-        CastFromCharacters(value ? value->c_str() : (const char*)nullptr);
+        CreateFromCharacters(value ? value->c_str() : (const char*)nullptr);
       }
 
       /**
       * Create from a std::wstring.
       * @param std::wstring& value the value we are trying to create from.
       */
-      void CastFrom(std::wstring& value)
+      void CreateFrom(std::wstring& value)
       {
-        CastFromCharacters(value.c_str());
+        CreateFromCharacters(value.c_str());
       }
 
       /**
       * Create from a const std::wstring*.
       * @param std::wstring* value the value we are trying to create from.
       */
-      void CastFrom(std::wstring* value)
+      void CreateFrom(std::wstring* value)
       {
-        CastFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
+        CreateFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
       }
 
       /**
       * Create from a const std::wstring*.
       * @param const std::wstring* value the value we are trying to create from.
       */
-      void CastFrom(const std::wstring* value)
+      void CreateFrom(const std::wstring* value)
       {
-        CastFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
+        CreateFromCharacters(value ? value->c_str() : (wchar_t*)nullptr);
       }
 
       /**
       * Create from a const std::string.
       * @param const std::string& value the value we are trying to create from.
       */
-      void CastFrom(const std::string& value)
+      void CreateFrom(const std::string& value)
       {
-        CastFromCharacters(value.c_str());
+        CreateFromCharacters(value.c_str());
       }
 
       /**
       * Create from a const std::wstring.
       * @param const std::wstring& value the value we are trying to create from.
       */
-      void CastFrom(const std::wstring& value)
+      void CreateFrom(const std::wstring& value)
       {
-        CastFromCharacters(value.c_str());
+        CreateFromCharacters(value.c_str());
       }
 
       /**
@@ -1835,7 +1835,7 @@ namespace myodd {
       * @param const T* number the number we are creating from.
       */
       template<class T>
-      void CastFromDouble(const T& number)
+      void CreateFromDouble(const T& number)
       {
         // clear all the values.
         CleanValues();
@@ -1853,7 +1853,7 @@ namespace myodd {
       * @param const T* number the number we are creating from.
       */
       template<class T>
-      void CastFromInteger(const T& number)
+      void CreateFromInteger(const T& number)
       {
         // clear all the values.
         CleanValues();
@@ -1872,7 +1872,7 @@ namespace myodd {
       * @param const T& trivial the structure/class we want to copy from.
       */
       template<class T>
-      std::enable_if_t<!std::is_pointer<T>::value> CastFromTrivial(T trivial)
+      std::enable_if_t<!std::is_pointer<T>::value> CreateFromTrivial(T trivial)
       {
         // as it is not a pointer value, it has to be trivially copyable.
         if (!std::is_trivially_copyable<T>::value)
@@ -1903,7 +1903,7 @@ namespace myodd {
       * @param const T& trivial the structure/class we want to copy from.
       */
       template<class T>
-      std::enable_if_t<std::is_pointer<T>::value> CastFromTrivial(const T& trivial)
+      std::enable_if_t<std::is_pointer<T>::value> CreateFromTrivial(const T& trivial)
       {
         // clear all the values.
         CleanValues();
@@ -1924,7 +1924,7 @@ namespace myodd {
       * @param const T* value the character we are creating from.
       */
       template<class T>
-      void CastFromCharacters(const T* value)
+      void CreateFromCharacters(const T* value)
       {
         // clean the values.
         CleanValues();
@@ -1988,7 +1988,7 @@ namespace myodd {
       * Create a value from a multiple characters..
       * @param const T* value the character we are creating from.
       */
-      void CastFromCharacters(const wchar_t* value)
+      void CreateFromCharacters(const wchar_t* value)
       {
         // clean the values.
         CleanValues();
@@ -2051,7 +2051,7 @@ namespace myodd {
       * @param const char value the character we are creating from.
       */
       template<class T>
-      void CastFromCharacter(const T value)
+      void CreateFromCharacter(const T value)
       {
         // clean the values.
         CleanValues();
@@ -2088,7 +2088,7 @@ namespace myodd {
       * Create a value from a single wide character.
       * @param const wchar_t value the character we are creating from.
       */
-      void CastFromCharacter(const wchar_t value)
+      void CreateFromCharacter(const wchar_t value)
       {
         // clean the values.
         CleanValues();
@@ -2122,7 +2122,7 @@ namespace myodd {
         }
       }
 #ifdef _MSC_VER
-# pragma endregion CastFrom - Cast *this from T
+# pragma endregion CreateFrom - Create *this from T
 #endif
 
 #ifdef _MSC_VER
@@ -2271,13 +2271,35 @@ namespace myodd {
 
       /**
       * Try and cast this to a posible value.
-      * @param const char* value the value we are looking for.
+      * @param signed char* value the value we are looking for.
       */
       void CastTo(signed char*& value) const
       {
         char* c = nullptr;
         CastToCharacters(c);
         value = (signed char*)c;
+      }
+
+      /**
+      * Try and cast this to a posible value.
+      * @param const unsigned char* value the value we are looking for.
+      */
+      void CastTo(const unsigned char*& value) const
+      {
+        char* c = nullptr;
+        CastToCharacters(c);
+        value = const_cast<const unsigned char*>((unsigned char*)c);
+      }
+
+      /**
+      * Try and cast this to a posible value.
+      * @param unsigned char* value the value we are looking for.
+      */
+      void CastTo(unsigned char*& value) const
+      {
+        char* c = nullptr;
+        CastToCharacters(c);
+        value = (unsigned char*)c;
       }
 
       /**
@@ -3006,15 +3028,15 @@ namespace myodd {
         // divide the values and set it.
         if (UseUnsignedInteger())
         {
-          CastFrom((unsigned long long int)_llivalue / (long double)number);
+          CreateFrom((unsigned long long int)_llivalue / (long double)number);
         }
         else if (UseSignedInteger())
         {
-          CastFrom((long long int)_llivalue / (long double)number);
+          CreateFrom((long long int)_llivalue / (long double)number);
         }
         else
         {
-          CastFrom(_ldvalue / (long double)number);
+          CreateFrom(_ldvalue / (long double)number);
         }
 
         // update the type.
@@ -3036,11 +3058,11 @@ namespace myodd {
         // add the values.
         if (dynamic::is_type_floating(type))
         {
-          CastFrom(_ldvalue * number);
+          CreateFrom(_ldvalue * number);
         }
         else
         {
-          CastFrom(_llivalue * number);
+          CreateFrom(_llivalue * number);
         }
 
         // update the type.
@@ -3061,15 +3083,15 @@ namespace myodd {
       {
         if (UseUnsignedInteger())
         {
-          CastFrom((unsigned long long int)_llivalue + number);
+          CreateFrom((unsigned long long int)_llivalue + number);
         }
         else if (UseSignedInteger())
         {
-          CastFrom((long long int)_llivalue + number);
+          CreateFrom((long long int)_llivalue + number);
         }
         else
         {
-          CastFrom(_ldvalue + number);
+          CreateFrom(_ldvalue + number);
         }
 
         // update the type.
@@ -3090,15 +3112,15 @@ namespace myodd {
       {
         if (UseUnsignedInteger())
         {
-          CastFrom((unsigned long long int)_llivalue - number);
+          CreateFrom((unsigned long long int)_llivalue - number);
         }
         else if (UseSignedInteger())
         {
-          CastFrom((long long int)_llivalue - number);
+          CreateFrom((long long int)_llivalue - number);
         }
         else
         {
-          CastFrom(_ldvalue - number);
+          CreateFrom(_ldvalue - number);
         }
 
         // update the type.
@@ -3200,28 +3222,28 @@ namespace myodd {
       * @param const char c the character we are checking.
       * @return bool if the number is a digit or not.
       */
-      inline bool _isdigit(const char c) const { return (isdigit(c) != 0); }
+      inline bool _isdigit(const char c) const { return (c >= -1 && c <= 255) && (isdigit(c) != 0); }
 
       /**
       * check if this is a space wide char
       * @param const wchar_t c the character we are checking.
       * @return bool if the char is a space or not.
       */
-      inline bool _isspace(const char c) const { return (isspace(c) != 0); }
+      inline bool _isspace(const char c) const { return (c >= -1 && c <= 255) && (isspace(c) != 0); }
 
       /**
       * check if this is a digit wide char, (0-9)
       * @param const wchar_t c the character we are checking.
       * @return bool if the number is a digit or not.
       */
-      inline bool _isdigit(const wchar_t c)const { return (iswdigit(c) != 0); }
+      inline bool _isdigit(const wchar_t c)const { return (c >= -1 && c <= 255) && (iswdigit(c) != 0); }
 
       /**
       * check if this is a space wide char
       * @param const wchar_t c the character we are checking.
       * @return bool if the char is a space or not.
       */
-      inline bool _isspace(const wchar_t c)const { return (iswspace(c) != 0); }
+      inline bool _isspace(const wchar_t c)const { return (c >= -1 && c <= 255) && (iswspace(c) != 0); }
 
       /**
       * Parse a string to check if it is a number or not.
