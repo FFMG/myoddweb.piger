@@ -1926,16 +1926,32 @@ namespace myodd {
       template<class T>
       void CreateFromCharacters(const T* value)
       {
+        // get the len of the given pointer, as we have no lenght give
+        // we are usuming that this is a null terminated string.
+        size_t givenLen = value ? ((std::strlen((const char*)value) + 1) * sizeof(T)) : 0;
+
+        // we can now try and create it with the given len.
+        CreateFromCharacters(value, givenLen);
+      }
+
+      /**
+       * Create this with a signed/unsigned char*
+       * @param const T* value the char value we are creating from.
+       * @param const size_t the lenght we are working with.
+       */
+      template<class T>
+      std::enable_if_t<std::is_pointer<T>::value> CreateFromCharacters(const T value, const size_t givenLen )
+      {
         // clean the values.
         CleanValues();
 
         // set the type
-        _type = dynamic::get_type<T>::value;
+        _type = dynamic::get_type< typename std::remove_pointer<T>::type >::value;
 
         if (nullptr != value)
         {
           // get the number of characters.
-          _lcvalue = (std::strlen((const char*)value) + 1) * sizeof(T);
+          _lcvalue = givenLen;
 
           // create the character, we know it is at least one, even for an empty string.
           _cvalue = new char[_lcvalue];
@@ -1970,7 +1986,7 @@ namespace myodd {
           const char c = '\0';
 
           // default values.
-          _lcvalue = sizeof(T);
+          _lcvalue = sizeof( typename std::remove_pointer<T>::type );
           _cvalue = new char[_lcvalue];
           std::memset(_cvalue, 0, _lcvalue);
           std::memcpy(_cvalue, &c, _lcvalue);
@@ -2598,7 +2614,7 @@ namespace myodd {
         // we konw, that we handle certain pointers, (strings, ints etc)
         // so there is no way that we can cast a trivial value to something
         // we know it cannot be, only unknown types are 'trivial'
-        if (dynamic::Misc_unknown != dynamic::get_type<std::remove_pointer<T>>::value)
+        if (dynamic::Misc_unknown != dynamic::get_type< typename std::remove_pointer<T>::type >::value)
         {
           // we cannot cast to this T* as we know
           // that it was not what it was created with, (as we handle known pointers).
@@ -2793,8 +2809,9 @@ namespace myodd {
       {
         char* c;
         CastToCharacters(c);
-        value = (c != nullptr && strlen(c) > 0) ? c[0] : '\0';
+        value = (c != nullptr && _lcvalue > 0) ? c[0] : '\0';
       }
+
 #ifdef _MSC_VER
 # pragma endregion  CastTo - Cast *this to T&
 #endif
