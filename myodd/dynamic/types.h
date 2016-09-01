@@ -77,8 +77,28 @@ namespace myodd {
       case Character_char:
       case Character_wchar_t:
         return true;
+
+      case Misc_unknown:
+      case Misc_null:
+      case Misc_trivial:
+      case Misc_trivial_ptr:
+      case Boolean_bool:
+      case Integer_short_int:
+      case Integer_unsigned_short_int:
+      case Integer_int:
+      case Integer_unsigned_int:
+      case Integer_long_int:
+      case Integer_unsigned_long_int:
+      case Integer_long_long_int:
+      case Integer_unsigned_long_long_int:
+      case Floating_point_float:
+      case Floating_point_double:
+      case Floating_point_long_double:
+        return false;
       }
-      return false;
+
+      // unknown
+      throw std::runtime_error("Unknown data Type");
     }
     
     /**
@@ -92,8 +112,31 @@ namespace myodd {
       {
       case Misc_null:
         return true;
+
+      case Misc_unknown:
+      case Misc_trivial:
+      case Misc_trivial_ptr:
+      case Boolean_bool:
+      case Character_signed_char:
+      case Character_unsigned_char:
+      case Character_char:
+      case Character_wchar_t:
+      case Integer_short_int:
+      case Integer_unsigned_short_int:
+      case Integer_int:
+      case Integer_unsigned_int:
+      case Integer_long_int:
+      case Integer_unsigned_long_int:
+      case Integer_long_long_int:
+      case Integer_unsigned_long_long_int:
+      case Floating_point_float:
+      case Floating_point_double:
+      case Floating_point_long_double:
+        return false;
       }
-      return false;
+
+      // unknown
+      throw std::runtime_error("Unknown data Type");
     }
 
     /**
@@ -107,8 +150,31 @@ namespace myodd {
       {
       case Boolean_bool:
         return true;
+
+      case Misc_unknown:
+      case Misc_null:
+      case Misc_trivial:
+      case Misc_trivial_ptr:
+      case Character_signed_char:
+      case Character_unsigned_char:
+      case Character_char:
+      case Character_wchar_t:
+      case Integer_short_int:
+      case Integer_unsigned_short_int:
+      case Integer_int:
+      case Integer_unsigned_int:
+      case Integer_long_int:
+      case Integer_unsigned_long_int:
+      case Integer_long_long_int:
+      case Integer_unsigned_long_long_int:
+      case Floating_point_float:
+      case Floating_point_double:
+      case Floating_point_long_double:
+        return false;
       }
-      return false;
+
+      // unknown
+      throw std::runtime_error("Unknown data Type");
     }
 
     /**
@@ -124,8 +190,29 @@ namespace myodd {
       case Floating_point_double:
       case Floating_point_long_double:
         return true;
+
+      case Misc_unknown:
+      case Misc_null:
+      case Misc_trivial:
+      case Misc_trivial_ptr:
+      case Boolean_bool:
+      case Character_signed_char:
+      case Character_unsigned_char:
+      case Character_char:
+      case Character_wchar_t:
+      case Integer_short_int:
+      case Integer_unsigned_short_int:
+      case Integer_int:
+      case Integer_unsigned_int:
+      case Integer_long_int:
+      case Integer_unsigned_long_int:
+      case Integer_long_long_int:
+      case Integer_unsigned_long_long_int:
+        return false;
       }
-      return false;
+
+      // unknown
+      throw std::runtime_error("Unknown data Type");
     }
 
     /**
@@ -146,8 +233,24 @@ namespace myodd {
       case Integer_long_long_int:
       case Integer_unsigned_long_long_int:
         return true;
+
+      case Misc_unknown:
+      case Misc_null:
+      case Misc_trivial:
+      case Misc_trivial_ptr:
+      case Boolean_bool:
+      case Character_signed_char:
+      case Character_unsigned_char:
+      case Character_char:
+      case Character_wchar_t:
+      case Floating_point_float:
+      case Floating_point_double:
+      case Floating_point_long_double:
+        return false;
       }
-      return false;
+
+      // unknown
+      throw std::runtime_error("Unknown data Type");
     }
 
     template<class T>
