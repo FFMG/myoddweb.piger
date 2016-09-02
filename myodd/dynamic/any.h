@@ -25,7 +25,7 @@
 #pragma once
 
 // string representation of the version number
-#define MYODD_ANY_VERSION        "0.1.2"
+#define MYODD_ANY_VERSION        "0.1.3"
 
 // the version number is #.###.###
 // first number is major
