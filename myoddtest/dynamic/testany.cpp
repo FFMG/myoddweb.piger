@@ -3,6 +3,7 @@
 
 #include "../testcommon.h"
 #include <vector>
+#include <map>
 
 // --gtest_filter=AnyTest* 
 TEST_MEM(AnyTest, CheckTheDataType)

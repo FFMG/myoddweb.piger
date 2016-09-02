@@ -87,7 +87,8 @@ TEST_MEM(AnyTestOperators, NullRhsIsLessThanSmallNegNumber)
 {
   //  -v1 number ...
   auto i = IntRandomNumber<int>(false);
-  auto x = myodd::dynamic::Any(i > 0 ? -1 * i : i);
+  i = i > 0 ? -1 * i : i;
+  auto x = myodd::dynamic::Any( i );
   auto y = myodd::dynamic::Any(nullptr);
   ASSERT_TRUE(x < y);
   ASSERT_FALSE(x > y);
