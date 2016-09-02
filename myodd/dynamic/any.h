@@ -25,13 +25,13 @@
 #pragma once
 
 // string representation of the version number
-#define MYODD_ANY_VERSION        "0.1.3"
+#define MYODD_ANY_VERSION        "0.1.4"
 
 // the version number is #.###.###
 // first number is major
 // then 3 numbers for minor
 // and 3 numbers for tiny
-#define MYODD_ANY_VERSION_NUMBER 0001002 
+#define MYODD_ANY_VERSION_NUMBER 0001004 
 
 #include <typeinfo>       // std::bad_cast
 #include <algorithm>      // memcpy
@@ -1955,6 +1955,14 @@ namespace myodd {
         // set the type
         _type = dynamic::get_type< typename std::remove_pointer<T>::type >::value;
 
+        // if this is a wide char item, we need to handle it slightly differently.
+        // this is because our numbers are not quite the same.
+        if (_type == dynamic::Character_wchar_t)
+        {
+          CreateFromWideCharacters((wchar_t*)source, sourceLen);
+          return;
+        }
+        
         if (nullptr != source)
         {
           // get the number of characters.
@@ -1972,7 +1980,7 @@ namespace myodd {
             // it does not matter if this is signed or not signed
             // we are converting it to an unsigned long long and back to a long long
             // in reality they both take the same amount of space.
-            _llivalue = static_cast<long long int>(std::strtoull((const char*)source, nullptr, 0));
+            _llivalue = static_cast<long long int>(std::strtoull((const char*)source, nullptr, 10));
 
             // try and get the value as a long double.
             // this is represented in a slightly different way in memory
@@ -2018,7 +2026,7 @@ namespace myodd {
         size_t givenLen = value ? ((std::wcslen((const wchar_t*)value) + 1) * sizeof(wchar_t)) : 0;
 
         // we can now try and create it with the given len.
-        CreateFromCharacters(value, givenLen);
+        CreateFromWideCharacters(value, givenLen);
       }
 
       /**
@@ -2026,7 +2034,7 @@ namespace myodd {
       * @param const T* source the char value we are creating from.
       * @param size_t the lenght we are working with.
       */
-      void CreateFromCharacters(const wchar_t* source, size_t sourceLen)
+      void CreateFromWideCharacters(const wchar_t* source, size_t sourceLen)
       {
         // clean the values.
         CleanValues();
@@ -2051,7 +2059,7 @@ namespace myodd {
             // it does not matter if this is signed or not signed
             // we are converting it to an unsigned long long and back to a long long
             // in reality they both take the same amount of space.
-            _llivalue = static_cast<long long int>(std::wcstoull((const wchar_t*)source, nullptr, 0));
+            _llivalue = static_cast<long long int>(std::wcstoull((const wchar_t*)source, nullptr, 10));
 
             // try and get the value as a long double.
             // this is represented in a slightly different way in memory

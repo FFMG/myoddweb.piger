@@ -142,6 +142,28 @@ T IntRandomNumber( bool canBeZero = true )
 }
 
 template<typename T>
+T IntRandomNumber( T lower_bound, T upper_bound, bool canBeZero = true)
+{
+  if (lower_bound >= upper_bound)
+  {
+    throw std::runtime_error("Nonsensical values passed");
+  }
+
+  // construct a trivial random generator engine from a time-based seed:
+  unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
+  std::default_random_engine generator(seed);
+  std::default_random_engine re(seed);
+
+  std::uniform_int_distribution<T> unif(lower_bound, upper_bound);
+  auto value = unif(re);
+  if (canBeZero == false && value == 0)
+  {
+    return IntRandomNumber<T>(lower_bound, upper_bound, canBeZero);
+  }
+  return value;
+}
+
+template<typename T>
 T CharRandom()
 {
 

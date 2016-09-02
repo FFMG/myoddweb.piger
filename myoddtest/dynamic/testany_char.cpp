@@ -601,3 +601,229 @@ TEST_MEM_LOOP(AnyTestCharacter, GetCharPtrWithLength, NUMBER_OF_TESTS)
   // clean up
   delete c;
 }
+
+TEST_MEM_LOOP(AnyTestCharacter, CharANumberButNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  char c[len];
+  unsigned long long int bignum = 0;
+  for (auto i = 0; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    c[i] = '0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  auto any = myodd::dynamic::Any(c, len);
+  ASSERT_EQ(bignum, any );
+  ASSERT_EQ(0, memcmp(c, (char*)any, len));
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, WideCharANumberButNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  wchar_t wc[len];
+  unsigned long long int bignum = 0;
+  for (auto i = 0; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    wc[i] = L'0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  auto any = myodd::dynamic::Any(wc, len * sizeof(wchar_t));
+  ASSERT_EQ(bignum, any);
+  ASSERT_EQ(0, memcmp(wc, (wchar_t*)any, len * sizeof(wchar_t)));
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, CharANumberWithLeadingZeroButNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  char c[len];
+  unsigned long long int bignum = 0;
+
+  c[0] = '0';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    c[i] = '0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  auto any = myodd::dynamic::Any(c, len);
+  ASSERT_EQ(bignum, any);
+  ASSERT_EQ(0, memcmp(c, (char*)any, len));
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, WideCharANumberWithLeadingZeroButNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  wchar_t wc[len];
+  unsigned long long int bignum = 0;
+
+  wc[0] = L'0';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    wc[i] = L'0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  auto any = myodd::dynamic::Any(wc, len * sizeof(wchar_t));
+  ASSERT_EQ(bignum, any);
+  ASSERT_EQ(0, memcmp(wc, (wchar_t*)any, len * sizeof(wchar_t)));
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, CharANumberWithLeadingZeroNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  char c[len+1];
+  unsigned long long int bignum = 0;
+
+  c[0] = '0';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    c[i] = '0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  c[len] = '\0';
+  auto any = myodd::dynamic::Any(c );
+  ASSERT_EQ(bignum, any);
+  ASSERT_STREQ(c, (char*)any);
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, WideCharANumberWithLeadingZeroNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  wchar_t wc[len+1];
+  unsigned long long int bignum = 0;
+
+  wc[0] = L'0';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    wc[i] = L'0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  wc[len] = L'\0';
+  auto any = myodd::dynamic::Any(wc );
+  ASSERT_EQ(bignum, any);
+  ASSERT_STREQ(wc, (wchar_t*)any );
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, CharANegativeNumberWithLeadingZeroNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  char c[len + 2];
+  long long int bignum = 0;
+
+  c[0] = '-';
+  c[1] = '0';
+  for (auto i = 2; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    c[i] = '0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  bignum = -1 * bignum; //  we know it is negative
+  c[len] = '\0';
+  auto any = myodd::dynamic::Any(c);
+  ASSERT_EQ(bignum, any);
+  ASSERT_STREQ(c, (char*)any);
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, WideCharANegativeNumberWithLeadingZeroNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  wchar_t wc[len + 2];
+  long long int bignum = 0;
+
+  wc[0] = L'-';
+  wc[1] = L'0';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    wc[i] = L'0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  bignum = -1 * bignum; //  we know it is negative
+  wc[len] = L'\0';
+  auto any = myodd::dynamic::Any(wc);
+  ASSERT_EQ(bignum, any);
+  ASSERT_STREQ(wc, (wchar_t*)any);
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, CharANegativeNumberWithLeadingZeroNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  char c[len + 1];
+  long long int bignum = 0;
+
+  c[0] = '-';
+  c[1] = '0';
+  for (auto i = 2; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    c[i] = '0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  bignum = -1 * bignum; //  we know it is negative
+  auto any = myodd::dynamic::Any(c, len+1);
+  ASSERT_EQ(bignum, any);
+  ASSERT_EQ(0, memcmp(c, (char*)any, len+1));
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, WideCharANegativeNumberWithLeadingZeroNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  wchar_t wc[len + 1];
+  long long int bignum = 0;
+
+  wc[0] = L'-';
+  wc[1] = L'0';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9);
+    wc[i] = L'0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  bignum = -1 * bignum; //  we know it is negative
+  auto any = myodd::dynamic::Any(wc, (len+1) * sizeof(wchar_t));
+  ASSERT_EQ(bignum, any);
+  ASSERT_EQ(0, memcmp(wc, (wchar_t*)any, (len+1) * sizeof(wchar_t)));
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, CharANegativeNumberNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  char c[len];
+  long long int bignum = 0;
+
+  c[0] = '-';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9, false );
+    c[i] = '0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  bignum = -1 * bignum; //  we know it is negative
+  auto any = myodd::dynamic::Any(c, len );
+  ASSERT_EQ(bignum, any);
+  ASSERT_EQ(0, memcmp(c, (char*)any, len ));
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, WideCharANegativeNumberNotNullTerminated, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  wchar_t wc[len];
+  long long int bignum = 0;
+
+  wc[0] = L'-';
+  for (auto i = 1; i < len; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9, false );
+    wc[i] = L'0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  bignum = -1 * bignum; //  we know it is negative
+  auto any = myodd::dynamic::Any(wc, len * sizeof(wchar_t));
+  ASSERT_EQ(bignum, any);
+  ASSERT_EQ(0, memcmp(wc, (wchar_t*)any, len * sizeof(wchar_t)));
+}
