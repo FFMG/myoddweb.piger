@@ -1,3 +1,4 @@
 [submodule "myodd/dynamic"]
 	path = myodd/dynamic
 	url = https://github.com/FFMG/myoddweb.any.git
+	branch = master
