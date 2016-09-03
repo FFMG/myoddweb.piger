@@ -2653,3 +2653,59 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedShortIntAndDoubleNumbersRandom
     ASSERT_FALSE(anyx > y);
   }
 }
+
+TEST_MEM_LOOP(AnyTestOperators, CompareWideStringsToNumber, NUMBER_OF_TESTS )
+{
+  const size_t len = 10;
+  wchar_t wc[len];
+  long long int bignum = 0;
+
+  for (auto i = 0; i < len-1; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9, false);
+    wc[i] = L'0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  wc[len-1] = L'\0';
+
+  auto any = ::myodd::dynamic::Any(wc);
+  ASSERT_TRUE(any == bignum);
+  ASSERT_TRUE(any >= bignum);
+  ASSERT_TRUE(any <= bignum);
+  ASSERT_TRUE(any > bignum-1);
+  ASSERT_TRUE(any < bignum+1);
+
+  ASSERT_TRUE(bignum == any);
+  ASSERT_TRUE(bignum >= any);
+  ASSERT_TRUE(bignum <= any);
+  ASSERT_TRUE(bignum+1 > any);
+  ASSERT_TRUE(bignum-1 < any);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, CompareStringsToNumber, NUMBER_OF_TESTS)
+{
+  const size_t len = 10;
+  char c[len];
+  long long int bignum = 0;
+
+  for (auto i = 0; i < len - 1; ++i)
+  {
+    auto num = IntRandomNumber<unsigned short>(0, 9, false);
+    c[i] = '0' + num;
+    bignum = (bignum * 10) + num;
+  }
+  c[len - 1] = '\0';
+
+  auto any = ::myodd::dynamic::Any(c);
+  ASSERT_TRUE(any == bignum);
+  ASSERT_TRUE(any >= bignum);
+  ASSERT_TRUE(any <= bignum);
+  ASSERT_TRUE(any > bignum - 1);
+  ASSERT_TRUE(any < bignum + 1);
+
+  ASSERT_TRUE(bignum == any);
+  ASSERT_TRUE(bignum >= any);
+  ASSERT_TRUE(bignum <= any);
+  ASSERT_TRUE(bignum + 1 > any);
+  ASSERT_TRUE(bignum - 1 < any);
+}
