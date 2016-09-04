@@ -12,6 +12,13 @@ struct NonTrivialStruct {
   std::string _b;
 };
 
+struct NonTrivialStruct2 : NonTrivialStruct {
+public:
+  NonTrivialStruct2(int a, std::string b) :NonTrivialStruct( a, b){};
+private:
+  NonTrivialStruct2(const NonTrivialStruct2& rhs) : NonTrivialStruct( _a, _b ) {}
+};
+
 struct TrivialStruct
 {
   int a;
@@ -306,7 +313,7 @@ TEST_MEM(AnyTestTrivialCopy, PointerAssign )
   auto ts = new TrivialStruct{ IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
 
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial_ptr, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_unknown_ptr, any.Type());
 
   TrivialStruct* ts2 = any;
   ASSERT_EQ(ts, ts2);
@@ -334,8 +341,8 @@ TEST_MEM(AnyTestTrivialCopy, ATrivialStructCanBeCastToAPointer)
 
 TEST_MEM(AnyTestTrivialCopy, NonTrivialStrucCannotBeSaved)
 {
-  ASSERT_FALSE(std::is_trivially_copyable<NonTrivialStruct>::value);
-  auto ts = NonTrivialStruct(IntRandomNumber<int>(false), "Hello");
+  ASSERT_FALSE(std::is_trivially_copyable<NonTrivialStruct2>::value);
+  NonTrivialStruct2 ts(IntRandomNumber<int>(false), "Hello");
   EXPECT_THROW( ::myodd::dynamic::Any any(ts), std::bad_cast );
 }
 
@@ -345,7 +352,7 @@ TEST_MEM(AnyTestTrivialCopy, NonTrivialStrucPointerCanBeSaved )
   auto ts = NonTrivialStruct(IntRandomNumber<int>(false), "Hello") ;
   ::myodd::dynamic::Any any(&ts);
 
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial_ptr, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_unknown_ptr, any.Type());
 
   NonTrivialStruct* ts2 = any;
   ASSERT_EQ(ts._a, ts2->_a);
