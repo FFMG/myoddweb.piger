@@ -50,7 +50,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, PassStructureAsToConstructor, NUMBER_OF_TESTS)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());  
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());  
 }
 
 TEST_MEM_LOOP(AnyTestTrivialCopy, PassClassAsToConstructor, NUMBER_OF_TESTS)
@@ -60,7 +60,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, PassClassAsToConstructor, NUMBER_OF_TESTS)
   tc.b = IntRandomNumber<int>(false);
 
   ::myodd::dynamic::Any any(tc);
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 }
 
 TEST_MEM_LOOP(AnyTestTrivialCopy, PassClass2AsToConstructor, NUMBER_OF_TESTS)
@@ -68,7 +68,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, PassClass2AsToConstructor, NUMBER_OF_TESTS)
   TrivialClass2 tc( IntRandomNumber<int>(false), IntRandomNumber<int>(false) );
 
   ::myodd::dynamic::Any any(tc);
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 }
 
 TEST_MEM_LOOP(AnyTestTrivialCopy, AssignmentOperator, NUMBER_OF_TESTS)
@@ -76,7 +76,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, AssignmentOperator, NUMBER_OF_TESTS)
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any;
   any = ts;
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 }
 
 TEST_MEM_LOOP(AnyTestTrivialCopy, AssignmentOperatorTrivialClass, NUMBER_OF_TESTS)
@@ -88,7 +88,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, AssignmentOperatorTrivialClass, NUMBER_OF_TEST
   ::myodd::dynamic::Any any;
   any = tc;
 
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 }
 
 TEST_MEM_LOOP(AnyTestTrivialCopy, CopyConstructor, NUMBER_OF_TESTS)
@@ -97,7 +97,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, CopyConstructor, NUMBER_OF_TESTS)
   ::myodd::dynamic::Any any(ts);
 
   auto any2 = any;
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any2.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any2.Type());
 }
 
 TEST_MEM_LOOP(AnyTestTrivialCopy, CheckForMemoryLeaks, NUMBER_OF_TESTS)
@@ -113,7 +113,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, CheckForMemoryLeaks, NUMBER_OF_TESTS)
   any = ts3;
   
   auto any2 = any;
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any2.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any2.Type());
 
   // comapare the copied value.
   ASSERT_NE(ts1, any2);
@@ -169,7 +169,7 @@ TEST_MEM(AnyTestTrivialCopy, FromTrivialToInt )
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 
   any = IntRandomNumber<int>(false);
   ASSERT_EQ(::myodd::dynamic::Integer_int, any.Type());
@@ -179,7 +179,7 @@ TEST_MEM(AnyTestTrivialCopy, FromTrivialToDouble)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 
   any = RealRandomNumber<double>();
   ASSERT_EQ(::myodd::dynamic::Floating_point_double, any.Type());
@@ -189,7 +189,7 @@ TEST_MEM(AnyTestTrivialCopy, FromTrivialToString)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 
   any = "Hello World";
   ASSERT_EQ(::myodd::dynamic::Character_char, any.Type());
@@ -199,7 +199,7 @@ TEST_MEM(AnyTestTrivialCopy, FromTrivialToWideString)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 
   any = L"Hello World";
   ASSERT_EQ(::myodd::dynamic::Character_wchar_t, any.Type());
@@ -212,7 +212,7 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, CheckMoreComplextTrivialClassCopiesData, NUMBE
   ::myodd::dynamic::Any any(tc);
   TrivialClass2 tc2 = any;
 
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
   ASSERT_EQ(tc.A(), tc2.A() );
   ASSERT_EQ(tc.B(), tc2.B());
 }
@@ -313,7 +313,7 @@ TEST_MEM(AnyTestTrivialCopy, PointerAssign )
   auto ts = new TrivialStruct{ IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
 
-  ASSERT_EQ(::myodd::dynamic::Misc_unknown_ptr, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy_ptr, any.Type());
 
   TrivialStruct* ts2 = any;
   ASSERT_EQ(ts, ts2);
@@ -331,7 +331,7 @@ TEST_MEM(AnyTestTrivialCopy, ATrivialStructCanBeCastToAPointer)
   ::myodd::dynamic::Any any(ts);
 
   // not a pointer.
-  ASSERT_EQ(::myodd::dynamic::Misc_trivial, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());
 
   // get it as a pointer
   const TrivialStruct* ts2 = any;
@@ -352,7 +352,7 @@ TEST_MEM(AnyTestTrivialCopy, NonTrivialStrucPointerCanBeSaved )
   auto ts = NonTrivialStruct(IntRandomNumber<int>(false), "Hello") ;
   ::myodd::dynamic::Any any(&ts);
 
-  ASSERT_EQ(::myodd::dynamic::Misc_unknown_ptr, any.Type());
+  ASSERT_EQ(::myodd::dynamic::Misc_copy_ptr, any.Type());
 
   NonTrivialStruct* ts2 = any;
   ASSERT_EQ(ts._a, ts2->_a);
