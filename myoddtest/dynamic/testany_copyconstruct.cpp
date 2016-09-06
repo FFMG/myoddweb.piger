@@ -17,12 +17,22 @@ public:
     }
     return *this;
   }
-  int A() { return a; }
-  const std::string& B() { return b; }
+  int A() const { return a; }
+  const std::string& B() const { return b; }
 
 protected:
   int a;
   std::string b;
+};
+
+class CopyClassWithEqualOperator : CopyClass
+{
+public:
+  CopyClassWithEqualOperator(int aa, const std::string& bb) : CopyClass(aa, bb){}
+
+  friend bool operator==(const CopyClassWithEqualOperator& what1, const CopyClassWithEqualOperator& what2) {
+    return what1.A() == what2.A() && what1.B() == what2.B();
+  }
 };
 
 TEST_MEM(AnyTestCopyClass, SimpleClassCopyCheckType )
@@ -33,11 +43,20 @@ TEST_MEM(AnyTestCopyClass, SimpleClassCopyCheckType )
   ASSERT_EQ(::myodd::dynamic::Misc_copy, any.Type());  
 }
 
-TEST_MEM(AnyTestCopyClass, SimpleClassCopyCheckValues)
+TEST_MEM(AnyTestCopyClass, SimpleClassCopyCheckValuesWithoutEqualOperator)
 {
   CopyClass cc(IntRandomNumber<int>(), "Hello");
   ::myodd::dynamic::Any any(cc);
 
   CopyClass cc1 = any;
+  EXPECT_THROW(cc1 == any, std::runtime_error);
+}
+
+TEST_MEM(AnyTestCopyClass, SimpleClassCopyCheckValues)
+{
+  CopyClassWithEqualOperator cc(IntRandomNumber<int>(), "Hello");
+  ::myodd::dynamic::Any any(cc);
+
+  CopyClassWithEqualOperator cc1 = any;
   ASSERT_EQ(cc1, any);
 }
