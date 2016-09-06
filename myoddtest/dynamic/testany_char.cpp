@@ -827,3 +827,11 @@ TEST_MEM_LOOP(AnyTestCharacter, WideCharANegativeNumberNotNullTerminated, NUMBER
   ASSERT_EQ(bignum, any);
   ASSERT_EQ(0, memcmp(wc, (wchar_t*)any, len * sizeof(wchar_t)));
 }
+
+TEST_MEM(AnyTestCharacter, WideAsciiAreNotTheSame)
+{
+  // both strings are not the same, one is wide, the other is not.
+  auto any1 = ::myodd::dynamic::Any( "Hello" ); // Not wide
+  auto any2 = ::myodd::dynamic::Any( L"Hello" ); // Wide
+  ASSERT_NE(any1, any2);
+}
