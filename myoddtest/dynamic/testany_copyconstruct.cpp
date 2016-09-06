@@ -38,5 +38,6 @@ TEST_MEM(AnyTestCopyClass, SimpleClassCopyCheckValues)
   CopyClass cc(IntRandomNumber<int>(), "Hello");
   ::myodd::dynamic::Any any(cc);
 
-//  CopyClass cc1 = any;
+  CopyClass cc1 = any;
+  ASSERT_EQ(cc1, any);
 }
