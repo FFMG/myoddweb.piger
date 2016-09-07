@@ -891,3 +891,71 @@ TEST_MEM(AnyTestCharacter, LessThanCompareWideChar)
   ASSERT_FALSE(any1 == any2);
   ASSERT_FALSE(any1 > any2);
 }
+
+TEST_MEM(AnyTestCharacter, LessThanAStringAndANumber)
+{
+  auto any1 = ::myodd::dynamic::Any( "Hello" );
+  auto any2 = ::myodd::dynamic::Any(IntRandomNumber<unsigned int>(false));
+
+  // we know the number is not zero
+  // and we know that "Hello" is =0
+  // so we can safetly say that "num < 0"
+  ASSERT_TRUE(any1 < any2);
+  ASSERT_FALSE(any1 > any2);
+
+  ASSERT_TRUE(any2 > any1);
+  ASSERT_FALSE(any2 < any1);
+}
+
+TEST_MEM(AnyTestCharacter, LessThanAWideStringAndANumber)
+{
+  auto any1 = ::myodd::dynamic::Any(L"Hello");
+  auto any2 = ::myodd::dynamic::Any(IntRandomNumber<unsigned int>(false));
+
+  // we know the number is not zero
+  // and we know that "Hello" is =0
+  // so we can safetly say that "num < 0"
+  ASSERT_TRUE(any1 < any2);
+  ASSERT_FALSE(any1 > any2);
+
+  ASSERT_TRUE(any2 > any1);
+  ASSERT_FALSE(any2 < any1);
+}
+
+TEST_MEM(AnyTestCharacter, PartialStringsAreNotEqual)
+{
+  auto any1 = ::myodd::dynamic::Any("12 hellos");
+  auto any2 = ::myodd::dynamic::Any("12 not hellos");
+
+  // the 2 strings are not the same
+  // even if they have a partial number.
+  ASSERT_NE(any1, any2);
+
+  // but when it comes to comparing them, 
+  // we use the partial value.
+  ASSERT_TRUE(any1 >= any2);
+  ASSERT_TRUE(any1 <= any2);
+}
+
+TEST_MEM(AnyTestCharacter, PartialStringCanEqualANumber)
+{
+  auto any1 = ::myodd::dynamic::Any("12 hellos");
+  auto any2 = ::myodd::dynamic::Any("12 not hellos");
+
+  // number 12 is used.
+  ASSERT_EQ(any1 , 12);
+  ASSERT_EQ(12, any2);
+
+  ASSERT_TRUE(any1 >= any2);
+  ASSERT_TRUE(any1 <= any2);
+
+  ASSERT_TRUE(any1 >= 12);
+  ASSERT_TRUE(any1 <= 12);
+  ASSERT_TRUE(any1 >= 12.0);
+  ASSERT_TRUE(any1 <= 12.0);
+
+  ASSERT_TRUE(12 >= any2);
+  ASSERT_TRUE(12 <= any2);
+  ASSERT_TRUE(12.0 >= any2);
+  ASSERT_TRUE(12.0 <= any2);
+}
