@@ -835,3 +835,59 @@ TEST_MEM(AnyTestCharacter, WideAsciiAreNotTheSame)
   auto any2 = ::myodd::dynamic::Any( L"Hello" ); // Wide
   ASSERT_NE(any1, any2);
 }
+
+TEST_MEM(AnyTestCharacter, LessThanCompareString )
+{
+  // 
+  auto any1 = ::myodd::dynamic::Any("a");
+  auto any2 = ::myodd::dynamic::Any("b");
+
+  // 'a' is smaller than 'b'
+  ASSERT_TRUE(any1 < any2);
+
+  // opposite
+  ASSERT_FALSE(any1 == any2);
+  ASSERT_FALSE(any1 > any2);
+}
+
+TEST_MEM(AnyTestCharacter, LessThanCompareWideString)
+{
+  // 
+  auto any1 = ::myodd::dynamic::Any(L"a");
+  auto any2 = ::myodd::dynamic::Any(L"b");
+
+  // 'a' is smaller than 'b'
+  ASSERT_TRUE(any1 < any2);
+
+  // opposite
+  ASSERT_FALSE(any1 == any2);
+  ASSERT_FALSE(any1 > any2);
+}
+
+TEST_MEM(AnyTestCharacter, LessThanCompareChar)
+{
+  // 
+  auto any1 = ::myodd::dynamic::Any('a');
+  auto any2 = ::myodd::dynamic::Any('b');
+
+  // 'a' is smaller than 'b'
+  ASSERT_TRUE(any1 < any2);
+
+  // opposite
+  ASSERT_FALSE(any1 == any2);
+  ASSERT_FALSE(any1 > any2);
+}
+
+TEST_MEM(AnyTestCharacter, LessThanCompareWideChar)
+{
+  // 
+  auto any1 = ::myodd::dynamic::Any(L'a');
+  auto any2 = ::myodd::dynamic::Any(L'b');
+
+  // 'a' is smaller than 'b'
+  ASSERT_TRUE(any1 < any2);
+
+  // opposite
+  ASSERT_FALSE(any1 == any2);
+  ASSERT_FALSE(any1 > any2);
+}

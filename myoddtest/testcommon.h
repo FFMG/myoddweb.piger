@@ -53,15 +53,19 @@ class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class   
                                                                                 \
   virtual ~GTEST_TEST_CLASS_NAME_(test_case_name, test_name)()                  \
   {                                                                             \
-    _CrtMemState stateNow, stateDiff;                                           \
-    _CrtMemCheckpoint(&stateNow);                                               \
-    int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);      \
-    UNUSED_ALWAYS(stateNow);                                                    \
-    if (diffResult)                                                             \
+    if( !::testing::Test::HasFailure() )                                        \
     {                                                                           \
-      ADD_FAILURE() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";\
+      _CrtMemState stateNow, stateDiff;                                         \
+      _CrtMemCheckpoint(&stateNow);                                             \
+      int diffResult = _CrtMemDifference(&stateDiff, &memState_, &stateNow);    \
+      UNUSED_ALWAYS(stateNow);                                                  \
+      if (diffResult)                                                           \
+      {                                                                         \
+        ADD_FAILURE() << "Memory leak of " << stateDiff.lSizes[1] << " byte(s) detected.";  \
+      }                                                                         \
     }                                                                           \
   }                                                                             \
+                                                                                \
  private:                                                                       \
   _CrtMemState memState_;                                                       \
   virtual void TestBody();                                                      \
@@ -88,6 +92,10 @@ void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()              
     TestBodySingle();                                                           \
     if(test_number_of > 1 )                                                     \
         printf( "    [%s : %d]\n", #test_case_name, i);                         \
+    if( ::testing::Test::HasFailure() )                                         \
+    {                                                                           \
+      break;                                                                    \
+    }                                                                           \
   }                                                                             \
 }                                                                               \
                                                                                 \
