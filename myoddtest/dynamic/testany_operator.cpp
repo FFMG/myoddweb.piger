@@ -2709,3 +2709,35 @@ TEST_MEM_LOOP(AnyTestOperators, CompareStringsToNumber, NUMBER_OF_TESTS)
   ASSERT_TRUE(bignum + 1 > any);
   ASSERT_TRUE(bignum - 1 < any);
 }
+
+TEST_MEM_LOOP(AnyTestOperators, NumberDoesNotEqualString, NUMBER_OF_TESTS)
+{
+  auto x = myodd::dynamic::Any(IntRandomNumber<int>(false) );
+  auto y = myodd::dynamic::Any("Hello");
+  ASSERT_FALSE(x == y );
+  ASSERT_TRUE(x != y);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, NumberDoesNotEqualWideString, NUMBER_OF_TESTS )
+{
+  auto x = myodd::dynamic::Any(IntRandomNumber<int>(false));
+  auto y = myodd::dynamic::Any(L"Hello");
+  ASSERT_FALSE(x == y);
+  ASSERT_TRUE(x != y);
+}
+
+TEST_MEM(AnyTestOperators, ZeroDoesEqualString)
+{
+  auto x = myodd::dynamic::Any(0);
+  auto y = myodd::dynamic::Any("Hello");
+  ASSERT_FALSE(x != y);
+  ASSERT_TRUE(x == y);
+}
+
+TEST_MEM(AnyTestOperators, ZeroDoesEqualWideString)
+{
+  auto x = myodd::dynamic::Any(0);
+  auto y = myodd::dynamic::Any(L"Hello");
+  ASSERT_FALSE(x != y);
+  ASSERT_TRUE(x == y);
+}
