@@ -2857,7 +2857,7 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedShortAndSignedShortNumbersRand
   auto anyx = ::myodd::dynamic::Any(x);
   auto anyy = ::myodd::dynamic::Any(y);
 
-  if (y > 0 && x > (unsigned short)y)
+  if (y < 0 || x >(unsigned short)y)
   {
     ASSERT_TRUE(anyx > anyy);
     ASSERT_TRUE(anyx > y);
@@ -2875,7 +2875,7 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedShortAndSignedShortNumbersRand
     ASSERT_FALSE(anyx < y);
   }
 
-  if (y < 0 || x < (unsigned short)y)
+  if (y > 0 && x < (unsigned short)y)
   {
     ASSERT_TRUE(anyx < anyy);
     ASSERT_TRUE(anyx < y);
@@ -2910,7 +2910,7 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedIntAndSignedIntNumbersRandom, 
   auto anyx = ::myodd::dynamic::Any(x);
   auto anyy = ::myodd::dynamic::Any(y);
 
-  if (y > 0 && x > (unsigned int)y)
+  if (y < 0 || x > (unsigned int)y)
   {
     ASSERT_TRUE(anyx > anyy);
     ASSERT_TRUE(anyx > y);
@@ -2928,7 +2928,7 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedIntAndSignedIntNumbersRandom, 
     ASSERT_FALSE(anyx < y);
   }
 
-  if (y < 0 || x < (unsigned int)y)
+  if (y > 0 && x < (unsigned int)y)
   {
     ASSERT_TRUE(anyx < anyy);
     ASSERT_TRUE(anyx < y);
@@ -2963,7 +2963,7 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedLongIntAndSignedLongIntNumbers
   auto anyx = ::myodd::dynamic::Any(x);
   auto anyy = ::myodd::dynamic::Any(y);
 
-  if (y > 0 && x > (unsigned long int)y)
+  if (y < 0 || x >(unsigned long)y)
   {
     ASSERT_TRUE(anyx > anyy);
     ASSERT_TRUE(anyx > y);
@@ -2981,7 +2981,7 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedLongIntAndSignedLongIntNumbers
     ASSERT_FALSE(anyx < y);
   }
 
-  if (y < 0 || x < (unsigned long int)y)
+  if (y > 0 && x < (unsigned long)y)
   {
     ASSERT_TRUE(anyx < anyy);
     ASSERT_TRUE(anyx < y);
