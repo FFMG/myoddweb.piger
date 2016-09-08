@@ -3054,3 +3054,202 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoUnsignedLongIntAndSignedLongIntNumbers
     ASSERT_FALSE(anyx > y);
   }
 }
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorSignedShort, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<short int>();
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(x);
+
+  ASSERT_TRUE(anyx == anyy);
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyx >= anyy);
+
+  ASSERT_FALSE(anyx < x);
+  ASSERT_FALSE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > x);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorSignedAndUnSignedShort, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<short int>();
+  while (x < 0)
+  {
+    x = IntRandomNumber<short int>();
+  }
+  auto y = (unsigned short int)x;
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(y);
+
+  ASSERT_TRUE(anyx == anyy);
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyx >= anyy);
+
+  ASSERT_FALSE(anyx < y);
+  ASSERT_FALSE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > y);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorUnSignedShort, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<unsigned short int>();
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(x);
+
+  ASSERT_TRUE(anyx == anyy);
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyx >= anyy);
+
+  ASSERT_FALSE(anyx < x);
+  ASSERT_FALSE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > x);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorLongInt, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<long int>();
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(x);
+
+  ASSERT_TRUE(anyx == anyy);
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyx >= anyy);
+
+  ASSERT_FALSE(anyx < x);
+  ASSERT_FALSE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > x);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorSignedAndLongInt, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<long int>();
+  while (x < 0)
+  {
+    x = IntRandomNumber<long int>();
+  }
+  auto y = (unsigned long int)x;
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(y);
+
+  ASSERT_TRUE(anyx == anyy);
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyx >= anyy);
+
+  ASSERT_FALSE(anyx < y);
+  ASSERT_FALSE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > y);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorUnSignedLongInt, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<unsigned long int>();
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(x);
+
+  ASSERT_TRUE(anyx == anyy);
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyx >= anyy);
+
+  ASSERT_FALSE(anyx < x);
+  ASSERT_FALSE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > x);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorUnSignedLongLongInt, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<unsigned long long int>();
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(x);
+
+  ASSERT_TRUE(anyx == anyy);
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyx >= anyy);
+
+  ASSERT_FALSE(anyx < x);
+  ASSERT_FALSE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > x);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorNegativeSignedLongIntAndUnsignedLongInt, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<long int>();
+  while (x >= 0)
+  {
+    x = IntRandomNumber<long int>();
+  }
+  auto y = IntRandomNumber<unsigned long int>();
+
+  // x is negative, it is always smaller
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(y);
+
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyy >= anyx);
+
+  ASSERT_FALSE(anyx == anyy);
+  ASSERT_TRUE(anyx < y);
+  ASSERT_TRUE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > y);
+}
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorNegativeSignedIntAndUnsignedInt, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<int>();
+  while (x >= 0)
+  {
+    x = IntRandomNumber<int>();
+  }
+  auto y = IntRandomNumber<unsigned int>();
+
+  // x is negative, it is always smaller
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(y);
+
+  ASSERT_TRUE(anyx <= anyy);
+  ASSERT_TRUE(anyy >= anyx);
+
+  ASSERT_FALSE(anyx == anyy);
+  ASSERT_TRUE(anyx < y);
+  ASSERT_TRUE(x < anyy);
+  ASSERT_FALSE(anyx > anyy);
+  ASSERT_FALSE(anyx > y);
+}
+
+
+TEST_MEM_LOOP(AnyTestOperators, EqualOperatorUnsignedIntAndNegativeSignedInt, NUMBER_OF_TESTS)
+{
+  auto x = IntRandomNumber<unsigned int>();
+  auto y = IntRandomNumber<int>();
+  while (y >= 0)
+  {
+    y = IntRandomNumber<int>();
+  }
+
+  // x is negative, it is always smaller
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(y);
+
+  ASSERT_TRUE(anyx >= anyy);
+  ASSERT_TRUE(anyy <= anyx);
+
+  ASSERT_FALSE(anyx == anyy);
+  ASSERT_TRUE(anyx > y);
+  ASSERT_TRUE(x > anyy);
+  ASSERT_FALSE(anyx < anyy);
+  ASSERT_FALSE(anyx < y);
+}

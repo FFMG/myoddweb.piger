@@ -63,3 +63,14 @@ TEST_MEM(AnyTestFloatingPoint, AnIntNumberCanBeAFloat)
   auto x = myodd::dynamic::Any(value);
   ASSERT_EQ((float)value, (float)x);
 }
+
+TEST_MEM_LOOP(AnyTestFloatingPoint, DivideLongDouble, NUMBER_OF_TESTS )
+{
+  auto x = RealRandomNumber<long double>();
+  auto y = RealRandomNumber<long double>();
+  auto anyx = myodd::dynamic::Any(x);
+  auto anyy = myodd::dynamic::Any(y);
+
+  auto anyz = anyx / anyy;
+  ASSERT_NEAR(x / y, anyz, 0.00001);
+}
