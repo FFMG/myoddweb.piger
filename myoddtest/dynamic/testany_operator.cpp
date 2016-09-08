@@ -2452,6 +2452,54 @@ TEST_MEM_LOOP(AnyTestOperators, CompareTwoShortNumbersRandom, NUMBER_OF_TESTS)
   }
 }
 
+TEST_MEM_LOOP(AnyTestOperators, CompareTwoLongDoubleNumbersRandom, NUMBER_OF_TESTS)
+{
+  // get 2 numbers
+  auto x = RealRandomNumber<long double>();
+  auto y = RealRandomNumber<long double>();
+
+  auto anyx = ::myodd::dynamic::Any(x);
+  auto anyy = ::myodd::dynamic::Any(y);
+
+  if (x > y)
+  {
+    ASSERT_TRUE(anyx > anyy);
+    ASSERT_TRUE(anyx > y);
+    ASSERT_TRUE(x > anyy);
+    ASSERT_TRUE(anyx >= anyy);
+
+    ASSERT_FALSE(anyx <= anyy);
+    ASSERT_FALSE(anyx == anyy);
+    ASSERT_FALSE(anyx < anyy);
+    ASSERT_FALSE(anyx < y);
+  }
+
+  if (x < y)
+  {
+    ASSERT_TRUE(anyx < anyy);
+    ASSERT_TRUE(anyx < y);
+    ASSERT_TRUE(x < anyy);
+    ASSERT_TRUE(anyx <= anyy);
+
+    ASSERT_FALSE(anyx >= anyy);
+    ASSERT_FALSE(anyx == anyy);
+    ASSERT_FALSE(anyx > anyy);
+    ASSERT_FALSE(anyx > y);
+  }
+
+  if (x == y)
+  {
+    ASSERT_TRUE(anyx == anyy);
+    ASSERT_TRUE(anyx <= anyy);
+    ASSERT_TRUE(anyx >= anyy);
+
+    ASSERT_FALSE(anyx < y);
+    ASSERT_FALSE(x < anyy);
+    ASSERT_FALSE(anyx > anyy);
+    ASSERT_FALSE(anyx > y);
+  }
+}
+
 TEST_MEM_LOOP(AnyTestOperators, CompareTwoDoubleNumbersRandom, NUMBER_OF_TESTS)
 {
   // get 2 numbers
