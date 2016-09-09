@@ -46,11 +46,53 @@ TEST_MEM(AnyTestCharacter, UnsignedCharToChar)
   ASSERT_EQ((char)c, (char)x);
 }
 
+TEST_MEM(AnyTestCharacter, SignedCharToChar)
+{
+  signed char c = CharRandom<signed char>();
+  auto x = myodd::dynamic::Any(c);
+  ASSERT_EQ((char)c, (char)x);
+}
+
+TEST_MEM_LOOP(AnyTestCharacter, CharToChar, NUMBER_OF_TESTS )
+{
+  char c = CharRandom<char>();
+  auto x = myodd::dynamic::Any(c);
+  ASSERT_EQ((char)c, (char)x);
+}
+
 TEST_MEM(AnyTestCharacter, CharToSignedChar)
 {
   char c = CharRandom<char>();
   auto x = myodd::dynamic::Any(c);
   ASSERT_EQ((signed char)c, (signed char)x);
+}
+
+TEST_MEM(AnyTestCharacter, WideCharToSignedChar)
+{
+  wchar_t wc = CharRandom<wchar_t>();
+  auto x = myodd::dynamic::Any(wc);
+  ASSERT_EQ((signed char)wc, (signed char)x);
+}
+
+TEST_MEM(AnyTestCharacter, SignedCharToSignedChar)
+{
+  signed char sc = CharRandom<signed char>();
+  auto x = myodd::dynamic::Any(sc);
+  ASSERT_EQ(sc, (signed char)x);
+}
+
+TEST_MEM(AnyTestCharacter, WideCharToChar)
+{
+  wchar_t wc = CharRandom<wchar_t>();
+  auto x = myodd::dynamic::Any(wc);
+  ASSERT_EQ((char)wc, (char)x);
+}
+
+TEST_MEM(AnyTestCharacter, WideCharToWideChar)
+{
+  wchar_t wc = CharRandom<wchar_t>();
+  auto x = myodd::dynamic::Any(wc);
+  ASSERT_EQ(wc, (wchar_t)x);
 }
 
 TEST_MEM(AnyTestCharacter, UnsignedCharToSignedChar)
