@@ -79,6 +79,7 @@ class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class   
   ::test_info_ =                                                                \
     ::testing::internal::MakeAndRegisterTestInfo(                               \
         #test_case_name, #test_name, NULL, NULL,                                \
+        ::testing::internal::CodeLocation(__FILE__, __LINE__),                  \
         (parent_id),                                                            \
         parent_class::SetUpTestCase,                                            \
         parent_class::TearDownTestCase,                                         \
@@ -103,11 +104,11 @@ void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBodySingle()
 
 # define TEST_MEM(test_case_name, test_name)                                    \
   GTEST_TEST_MEM_LOOP_(test_case_name, test_name, 1,                            \
-    ::testing::Test, ::testing::internal::GetTestTypeId())
+                       ::testing::Test, ::testing::internal::GetTestTypeId())
 
 # define TEST_MEM_LOOP(test_case_name, test_name, test_number_of)               \
   GTEST_TEST_MEM_LOOP_(test_case_name, test_name, test_number_of,               \
-    ::testing::Test, ::testing::internal::GetTestTypeId())
+                       ::testing::Test, ::testing::internal::GetTestTypeId())
 
 template<typename T>
 T RealRandomNumber(bool canBeZero = true)
