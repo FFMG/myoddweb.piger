@@ -34,6 +34,14 @@ namespace myodd {
     {
     public:
       CacheItemPolicy();
+      CacheItemPolicy(__int64 absoluteExpiration);
+
+      void SetAbsoluteExpiration(__int64 absoluteExpiration );
+      __int64 GetAbsoluteExpiration() const;
+
+    private:
+      // The period of time that must pass before a cache entry is evicted. The default value is InfiniteAbsoluteExpiration, meaning that the entry does not expire
+      __int64 _absoluteExpiration;
     };
   }
 }

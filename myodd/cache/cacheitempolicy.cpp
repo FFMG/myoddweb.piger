@@ -23,11 +23,41 @@
 // @see https://opensource.org/licenses/MIT
 // ***********************************************************************
 #include "cacheitempolicy.h"
+#include <stdexcept>
+#include <limits.h>
 
 namespace myodd {
   namespace cache {
-    CacheItemPolicy::CacheItemPolicy()
+    CacheItemPolicy::CacheItemPolicy() : _absoluteExpiration(std::numeric_limits<__int64>::max() )
     {
+    }
+
+    CacheItemPolicy::CacheItemPolicy(__int64 absoluteExpiration) : _absoluteExpiration(std::numeric_limits<__int64>::max())
+    {
+      // set the expoiration
+      SetAbsoluteExpiration(absoluteExpiration);
+    }
+
+    /**
+     * Set the absolute expiration time.
+     * @param _int64 absoluteExpiration when this will be expiring.
+     */
+    void CacheItemPolicy::SetAbsoluteExpiration(__int64 absoluteExpiration)
+    {
+      if (absoluteExpiration < 0)
+      {
+        throw std::runtime_error("The absolute time cannot be negative.");
+      }
+      _absoluteExpiration = absoluteExpiration;
+    }
+
+    /**
+     * Get the absolute expiration time.
+     * @return __int64 the absolute expiration time.
+     */
+    __int64 CacheItemPolicy::GetAbsoluteExpiration() const
+    {
+      return _absoluteExpiration;
     }
   }
 }

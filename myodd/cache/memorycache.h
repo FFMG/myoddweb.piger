@@ -59,40 +59,18 @@ namespace myodd {
        * @param CacheItemPolicy policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      virtual bool Add(const CacheItem& item, const CacheItemPolicy& policy)
-      {
-        // lock the threads so we don't have a race condition.
-        MemoryCache::Lock guard(_mutex);
-
-        // if we already have it, then we cannot add it.
-        if (Contains(item.Key()))
-        {
-          // we cannot add it again, release the lock on the way out.
-          return false;
-        }
-
-        // we can now add it to our list.
-        _cacheItems.emplace(
-          std::make_pair( std::wstring(item.Key()), item ));
-
-        // success.
-        return true;
-      }
+      virtual bool Add(const CacheItem& item, const CacheItemPolicy& policy);
 
       /**
        * inserts a cache entry into the cache, specifying information about how the entry will be evicted.
        * @see https://msdn.microsoft.com/en-us/library/ee395902(v=vs.110).aspx
        * @param const wchar_t* key A unique identifier for the cache entry.
        * @param const ::myodd::dynamic::Any& value the value we want to add
-       * @param CacheItemPolicy policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
+       * @param const CacheItemPolicy& policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
        * @param const wchar_t* regionName = nullptr Optional. A named region in the cache to which the cache entry can be added, if regions are implemented. The default value for the optional parameter is null.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      virtual bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, CacheItemPolicy policy, const wchar_t* regionName = nullptr )
-      {
-        //  just pass the value to the CacheItem function.
-        return Add( CacheItem(key, value, regionName), policy);
-      }
+      virtual bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName = nullptr);
 
       /**
        * Adds a cache entry into the cache using the specified key and a value and an absolute expiration value
@@ -104,6 +82,33 @@ namespace myodd {
        * @return boolean true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as key. 
        */
       virtual bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName = nullptr );
+
+      /**
+       * @param const CacheItem& item the object to add
+       * @param const CacheItemPolicy& policy
+       * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
+       */
+      virtual CacheItem* AddOrGetExisting( const CacheItem& item, const CacheItemPolicy& policy);
+
+      /**
+       * Inserts a cache entry into the cache using the specified key and value and the specified details for how it is to be evicted.
+       * @param const wchar_t* key A unique identifier for the cache entry to add or get. 
+       * @param const ::myodd::dynamic::Any& value The data for the cache entry.
+       * @param const CacheItemPolicy& policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
+       * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
+       * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
+       */
+      virtual CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName = nullptr);
+
+      /**
+       * Adds a cache entry into the cache using the specified key and a value and an absolute expiration value.
+       * @param const wchar_t* key A unique identifier for the cache entry to add or get.
+       * @param const ::myodd::dynamic::Any& value The data for the cache entry.
+       * @param __int64 absoluteExpiration The fixed date and time at which the cache entry will expire
+       * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
+       * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
+       */
+      virtual CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName = nullptr);
 
       /**
        * Determines whether a cache entry exists in the cache.
@@ -126,33 +131,7 @@ namespace myodd {
        * @param A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
        * @return const CacheItem& the cache item, we will throw if the item does not exist.
        */
-      CacheItem GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const
-      {
-        //  the region nust be null
-        if (nullptr != regionName)
-        {
-          throw std::invalid_argument("The regionName must be null!");
-        }
-
-        // the key cannot be null
-        if (nullptr == key)
-        {
-          throw std::invalid_argument("The key name cannot be null!");
-        }
-
-        // we now need to lock as this might/could change.
-        MemoryCache::Lock guard(_mutex);
-
-        // now look for the value.
-        const auto it = _cacheItems.find(std::wstring(key));
-        if (it == _cacheItems.end())
-        {
-          throw std::out_of_range("Could not locate this key");
-        }
-
-        const ::myodd::dynamic::Any& value = it->second.Value();
-        return CacheItem( key, value, regionName);
-      }
+      CacheItem GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const;
 
     private:
       // the mutex to protect this data
