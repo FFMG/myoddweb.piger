@@ -68,6 +68,9 @@ namespace myodd {
       ValidateName();
     }
 
+    /**
+     * The destructor.
+     */
     MemoryCache::~MemoryCache()
     {
     }

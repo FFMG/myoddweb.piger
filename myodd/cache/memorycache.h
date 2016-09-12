@@ -59,7 +59,7 @@ namespace myodd {
        * @param CacheItemPolicy policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      bool Add(const CacheItem& item, const CacheItemPolicy& policy)
+      virtual bool Add(const CacheItem& item, const CacheItemPolicy& policy)
       {
         // lock the threads so we don't have a race condition.
         MemoryCache::Lock guard(_mutex);
@@ -83,16 +83,27 @@ namespace myodd {
        * inserts a cache entry into the cache, specifying information about how the entry will be evicted.
        * @see https://msdn.microsoft.com/en-us/library/ee395902(v=vs.110).aspx
        * @param const wchar_t* key A unique identifier for the cache entry.
-       * @param T value the value we want to add
+       * @param const ::myodd::dynamic::Any& value the value we want to add
        * @param CacheItemPolicy policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
        * @param const wchar_t* regionName = nullptr Optional. A named region in the cache to which the cache entry can be added, if regions are implemented. The default value for the optional parameter is null.
        * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
        */
-      bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, CacheItemPolicy policy, const wchar_t* regionName = nullptr )
+      virtual bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, CacheItemPolicy policy, const wchar_t* regionName = nullptr )
       {
         //  just pass the value to the CacheItem function.
         return Add( CacheItem(key, value, regionName), policy);
       }
+
+      /**
+       * Adds a cache entry into the cache using the specified key and a value and an absolute expiration value
+       * @see https://msdn.microsoft.com/en-us/library/dd780614(v=vs.110).aspx
+       * @param const wchar_t* key A unique identifier for the cache entry.
+       * @param const ::myodd::dynamic::Any& value the object to insert
+       * @param __int64 absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
+       * @param const wchar_t* regionName A named region in the cache to which the cache entry can be added,
+       * @return boolean true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as key. 
+       */
+      virtual bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName = nullptr );
 
       /**
        * Determines whether a cache entry exists in the cache.
