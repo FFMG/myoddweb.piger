@@ -154,5 +154,8 @@
     <ClCompile Include="dynamic\testany_copyconstruct.cpp">
       <Filter>myodd\dynamic</Filter>
     </ClCompile>
+    <ClCompile Include="cache\testcacheitempolicy.cpp">
+      <Filter>myodd\cache</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

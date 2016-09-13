@@ -158,7 +158,7 @@ namespace myodd {
      * @param A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
      * @return const CacheItem& the cache item, we will throw if the item does not exist.
      */
-    CacheItem MemoryCache::GetCacheItem(const wchar_t* key, const wchar_t* regionName ) const
+    const CacheItem* MemoryCache::GetCacheItem(const wchar_t* key, const wchar_t* regionName ) const
     {
       //  the region nust be null
       if (nullptr != regionName)
@@ -179,11 +179,10 @@ namespace myodd {
       const auto it = _cacheItems.find(std::wstring(key));
       if (it == _cacheItems.end())
       {
-        throw std::out_of_range("Could not locate this key");
+        return nullptr;
       }
 
-      const ::myodd::dynamic::Any& value = it->second.Value();
-      return CacheItem(key, value, regionName);
+      return &it->second;
     }
 
     /**
@@ -236,7 +235,7 @@ namespace myodd {
      * @param const CacheItemPolicy& policy
      * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
      */
-    CacheItem* MemoryCache::AddOrGetExisting(const CacheItem& item, const CacheItemPolicy& policy)
+    const CacheItem* MemoryCache::AddOrGetExisting(const CacheItem& item, const CacheItemPolicy& policy)
     {
       // todo.
       // lock the threads so we don't have a race condition.
@@ -266,7 +265,7 @@ namespace myodd {
     * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
     * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
     */
-    CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName)
+    const CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName)
     {
       //  just pass the value to the CacheItem function.
       return AddOrGetExisting(CacheItem(key, value, regionName), policy);
@@ -280,7 +279,7 @@ namespace myodd {
     * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
     * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
     */
-    CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName)
+    const CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName)
     {
       return AddOrGetExisting(CacheItem(key, value, regionName), CacheItemPolicy(absoluteExpiration) );
     }

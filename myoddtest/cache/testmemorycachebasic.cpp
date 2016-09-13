@@ -185,7 +185,7 @@ TEST(BasicMemoryTests, GetACacheItemThatDoesNotExist)
   auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
 
   auto anotherKeyCacheItem = Uuid();
-  EXPECT_THROW(mc.GetCacheItem(anotherKeyCacheItem.c_str() ), std::out_of_range );
+  ASSERT_EQ( nullptr, mc.GetCacheItem(anotherKeyCacheItem.c_str() ) );
 }
 
 TEST(BasicMemoryTests, GetGetCacheItemAndCheckValues)
@@ -199,7 +199,7 @@ TEST(BasicMemoryTests, GetGetCacheItemAndCheckValues)
   auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
   mc.Add(ci, policy);
 
-  auto& cacheitem = mc.GetCacheItem(keyCacheItem.c_str());
-  ASSERT_EQ( 10, cacheitem.Value() );
-  ASSERT_EQ( 10.f, cacheitem.Value() );
+  auto cacheitem = mc.GetCacheItem(keyCacheItem.c_str());
+  ASSERT_EQ( 10, cacheitem->Value() );
+  ASSERT_EQ( 10.f, cacheitem->Value() );
 }

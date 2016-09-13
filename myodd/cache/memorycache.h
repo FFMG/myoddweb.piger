@@ -88,7 +88,7 @@ namespace myodd {
        * @param const CacheItemPolicy& policy
        * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
        */
-      virtual CacheItem* AddOrGetExisting( const CacheItem& item, const CacheItemPolicy& policy);
+      virtual const CacheItem* AddOrGetExisting( const CacheItem& item, const CacheItemPolicy& policy);
 
       /**
        * Inserts a cache entry into the cache using the specified key and value and the specified details for how it is to be evicted.
@@ -98,7 +98,7 @@ namespace myodd {
        * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
        * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
        */
-      virtual CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName = nullptr);
+      virtual const CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName = nullptr);
 
       /**
        * Adds a cache entry into the cache using the specified key and a value and an absolute expiration value.
@@ -108,7 +108,7 @@ namespace myodd {
        * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
        * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
        */
-      virtual CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName = nullptr);
+      virtual const CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName = nullptr);
 
       /**
        * Determines whether a cache entry exists in the cache.
@@ -131,7 +131,7 @@ namespace myodd {
        * @param A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
        * @return const CacheItem& the cache item, we will throw if the item does not exist.
        */
-      CacheItem GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const;
+      const CacheItem* GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const;
 
     private:
       // the mutex to protect this data
