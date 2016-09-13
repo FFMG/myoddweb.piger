@@ -188,6 +188,7 @@ namespace myodd {
     /**
      * Adds a cache entry into the cache using the specified key and a value and an absolute expiration value
      * @see https://msdn.microsoft.com/en-us/library/dd780614(v=vs.110).aspx
+     * @see AddOrGetExisting( ... )
      * @param const wchar_t* key A unique identifier for the cache entry.
      * @param const ::myodd::dynamic::Any& value the object to insert
      * @param __int64 absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
@@ -196,13 +197,14 @@ namespace myodd {
      */
     bool MemoryCache::Add(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName )
     {
-      // add the item.
-      return Add(CacheItem(key, value, regionName), CacheItemPolicy(absoluteExpiration));
+      // try and add the item or get existing, if it exists, then we return false, (as it exists already).
+      return (AddOrGetExisting( key, value, absoluteExpiration, regionName) == nullptr);
     }
 
     /**
      * inserts a cache entry into the cache, specifying information about how the entry will be evicted.
      * @see https://msdn.microsoft.com/en-us/library/ee395902(v=vs.110).aspx
+     * @see AddOrGetExisting( ... )
      * @param const wchar_t* key A unique identifier for the cache entry.
      * @param const ::myodd::dynamic::Any& value the value we want to add
      * @param const CacheItemPolicy& policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
@@ -211,13 +213,14 @@ namespace myodd {
      */
     bool MemoryCache::Add(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName )
     {
-      //  just pass the value to the CacheItem function.
-      return Add( CacheItem(key, value, regionName), policy);
+      // try and add the item or get existing, if it exists, then we return false, (as it exists already).
+      return (AddOrGetExisting(key, value, policy, regionName) == nullptr);
     }
 
     /**
      * inserts a cache entry into the cache, specifying information about how the entry will be evicted.
      * @see https://msdn.microsoft.com/en-us/library/hh138343(v=vs.110).aspx
+     * @see AddOrGetExisting( ... )
      * @param const CacheItem& item the item to add.
      * @param const CacheItemPolicy& policy policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
      * @return bool  if the insertion try succeeds, or false if there is an already an entry in the cache with the same key as key.
@@ -237,7 +240,6 @@ namespace myodd {
      */
     const CacheItem* MemoryCache::AddOrGetExisting(const CacheItem& item, const CacheItemPolicy& policy)
     {
-      // todo.
       // lock the threads so we don't have a race condition.
       MemoryCache::Lock guard(_mutex);
 
@@ -267,6 +269,18 @@ namespace myodd {
     */
     const CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName)
     {
+      // the key cannot be null
+      if (nullptr == key)
+      {
+        throw std::invalid_argument("The key name cannot be null!");
+      }
+
+      // check that the value is not null
+      if (nullptr == value)
+      {
+        throw std::invalid_argument("The value cannot be null!");
+      }
+
       //  just pass the value to the CacheItem function.
       return AddOrGetExisting(CacheItem(key, value, regionName), policy);
     }
@@ -281,6 +295,18 @@ namespace myodd {
     */
     const CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName)
     {
+      // the key cannot be null
+      if (nullptr == key)
+      {
+        throw std::invalid_argument("The key name cannot be null!");
+      }
+
+      // check that the value is not null
+      if (nullptr == value)
+      {
+        throw std::invalid_argument("The value cannot be null!");
+      }
+
       return AddOrGetExisting(CacheItem(key, value, regionName), CacheItemPolicy(absoluteExpiration) );
     }
   }

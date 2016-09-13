@@ -99,16 +99,24 @@ namespace myodd {
        */
       void Key(const wchar_t* key)
       {
+        if (nullptr == key)
+        {
+          // for ease of use, we are changing
+          // the null values to an actual value.
+          // this makes it easier to cast to std::wstring for example.
+          Key(L"");
+
+          // we are done here.
+          return;
+        }
+
         // clean the key
         CleanKey();
 
-        if (nullptr != key)
-        {
-          auto l = wcslen(key);
-          _key = new wchar_t[l + 1];
-          wmemset(_key, 0, l + 1);
-          _valid_wcsncpy(_key, key, l);
-        }
+        auto l = wcslen(key);
+        _key = new wchar_t[l + 1];
+        wmemset(_key, 0, l + 1);
+        _valid_wcsncpy(_key, key, l);
       }
 
       /**

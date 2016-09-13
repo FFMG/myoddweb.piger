@@ -50,15 +50,15 @@ TEST(BasicCacheItem, RegionNameCanBeSetToNull)
 TEST(BasicCacheItem, KeyCanBeNullInConstructor)
 {
   myodd::cache::CacheItem ci(nullptr);
-  ASSERT_EQ(nullptr, ci.Key());
+  ASSERT_STREQ(L"", ci.Key());
 
   auto newKey = Uuid();
   ci.Key(newKey.c_str());
 
-  ASSERT_EQ(newKey, ci.Key());
+  ASSERT_STREQ(newKey.c_str(), ci.Key());
 }
 
-TEST(BasicCacheItem, KeyCanBeSetToNull)
+TEST(BasicCacheItem, KeyCanBeSetToNullButIsConvertedToEmptyString)
 {
   auto key = Uuid();
   myodd::cache::CacheItem ci(key.c_str());
@@ -67,7 +67,7 @@ TEST(BasicCacheItem, KeyCanBeSetToNull)
   auto newKey = nullptr;
   ci.Key(newKey);
 
-  ASSERT_EQ(newKey, ci.Key());
+  ASSERT_STREQ(L"", ci.Key());
 }
 
 TEST(BasicCacheItem, DefaultValueIsNull)

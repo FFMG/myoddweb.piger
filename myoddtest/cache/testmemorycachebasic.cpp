@@ -18,12 +18,12 @@ TEST(BasicMemoryTests, InvalidNameAnyCase)
   EXPECT_THROW(new myodd::cache::MemoryCache(L"DefAuLt"), std::exception);
 }
 
-TEST(BasicMemoryTests, CannotBeEmpty)
+TEST(BasicMemoryTests, NameCannotBeEmpty)
 {
   EXPECT_THROW(new myodd::cache::MemoryCache(L""), std::exception);
 }
 
-TEST(BasicMemoryTests, CannotBeNull)
+TEST(BasicMemoryTests, NameCannotBeNull)
 {
   EXPECT_THROW(new myodd::cache::MemoryCache( nullptr ), std::exception);
 }
@@ -92,10 +92,10 @@ TEST(BasicMemoryTests, AddingTwiceDoesNotRemoveIt)
   ASSERT_TRUE(mc.Contains(keyCacheItem.c_str()));
 }
 
-TEST(BasicMemoryTests, JustAddOne)
+TEST_MEM_LOOP(BasicMemoryTests, JustAddOne, NUMBER_OF_TESTS)
 {
   auto keyCacheItem = Uuid();
-  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10 );
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), IntRandomNumber<int>() );
   myodd::cache::CacheItemPolicy policy;
 
   auto key = Uuid();
@@ -103,13 +103,13 @@ TEST(BasicMemoryTests, JustAddOne)
   ASSERT_TRUE(mc.Add(ci, policy ));
 }
 
-TEST(BasicMemoryTests, JustAddItemMoreThanOnce)
+TEST_MEM_LOOP(BasicMemoryTests, JustAddItemMoreThanOnce, NUMBER_OF_TESTS)
 {
   myodd::cache::CacheItemPolicy policy;
 
   auto keyCacheItem = Uuid();
-  auto ci1 = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
-  auto ci2 = myodd::cache::CacheItem(keyCacheItem.c_str(), 20);
+  auto ci1 = myodd::cache::CacheItem(keyCacheItem.c_str(), IntRandomNumber<int>());
+  auto ci2 = myodd::cache::CacheItem(keyCacheItem.c_str(), IntRandomNumber<int>());
 
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
@@ -119,7 +119,7 @@ TEST(BasicMemoryTests, JustAddItemMoreThanOnce)
   ASSERT_FALSE(mc.Add(ci2, policy));
 }
 
-TEST(BasicMemoryTests, JustAddItemMoreThanOnceUsingKeyName)
+TEST_MEM_LOOP(BasicMemoryTests, JustAddItemMoreThanOnceUsingKeyName, NUMBER_OF_TESTS)
 {
   myodd::cache::CacheItemPolicy policy;
 
@@ -127,13 +127,32 @@ TEST(BasicMemoryTests, JustAddItemMoreThanOnceUsingKeyName)
 
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
-  ASSERT_TRUE(mc.Add(keyCacheItem.c_str(), 10, policy));
+  ASSERT_TRUE(mc.Add(keyCacheItem.c_str(), IntRandomNumber<int>(), policy));
 
   // we cannot add another item with the same key name
-  ASSERT_FALSE(mc.Add(keyCacheItem.c_str(), 40, policy));
+  ASSERT_FALSE(mc.Add(keyCacheItem.c_str(), IntRandomNumber<int>(), policy));
 }
 
-TEST(BasicMemoryTests, AddItemsAndCheckNumbers )
+TEST_MEM(BasicMemoryTests, CannotAddWithNullKey )
+{
+  myodd::cache::CacheItemPolicy policy;
+
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  ASSERT_THROW(mc.Add(nullptr, IntRandomNumber<int>(), policy), std::invalid_argument );
+}
+
+TEST_MEM(BasicMemoryTests, CannotAddWithNullValue )
+{
+  myodd::cache::CacheItemPolicy policy;
+
+  auto key = Uuid();
+  auto keyCacheItem = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), nullptr, policy), std::invalid_argument);
+}
+
+TEST_MEM(BasicMemoryTests, AddItemsAndCheckNumbers )
 {
   myodd::cache::CacheItemPolicy policy;
 
@@ -147,7 +166,8 @@ TEST(BasicMemoryTests, AddItemsAndCheckNumbers )
     ASSERT_EQ(i, mc.GetCount());
 
     auto keyCacheItem = Uuid();
-    auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
+    auto value = IntRandomNumber<int>();
+    auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), value);
 
     //  add it and check the numbers.
     ASSERT_TRUE(mc.Add(ci, policy));
@@ -202,4 +222,128 @@ TEST(BasicMemoryTests, GetGetCacheItemAndCheckValues)
   auto cacheitem = mc.GetCacheItem(keyCacheItem.c_str());
   ASSERT_EQ( 10, cacheitem->Value() );
   ASSERT_EQ( 10.f, cacheitem->Value() );
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiry, NUMBER_OF_TESTS )
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = IntRandomNumber<__int64>();
+  while (absoluteExpiration < 0)
+  {
+    absoluteExpiration = IntRandomNumber<__int64>();
+  }
+
+  auto keyCacheItem = Uuid();
+  ASSERT_TRUE( mc.Add(keyCacheItem.c_str(), value, absoluteExpiration) );
+
+  auto cacheitem = mc.GetCacheItem(keyCacheItem.c_str());
+  ASSERT_EQ(value, cacheitem->Value());
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndNullRegion, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = IntRandomNumber<__int64>();
+  while (absoluteExpiration < 0)
+  {
+    absoluteExpiration = IntRandomNumber<__int64>();
+  }
+
+  auto keyCacheItem = Uuid();
+  ASSERT_TRUE(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration, nullptr ));
+
+  auto cacheitem = mc.GetCacheItem(keyCacheItem.c_str());
+  ASSERT_EQ(value, cacheitem->Value());
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndNonNullRegion, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = IntRandomNumber<__int64>();
+  while (absoluteExpiration < 0)
+  {
+    absoluteExpiration = IntRandomNumber<__int64>();
+  }
+
+  auto keyCacheItem = Uuid();
+  auto regionCacheItem = Uuid();
+  ASSERT_TRUE(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration, regionCacheItem.c_str()));
+
+  auto cacheitem = mc.GetCacheItem(keyCacheItem.c_str());
+  ASSERT_EQ(regionCacheItem, cacheitem->RegionName());
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddWithNegativeAbsoluteExpiry, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = IntRandomNumber<__int64>();
+  while (absoluteExpiration >= 0)
+  {
+    absoluteExpiration = IntRandomNumber<__int64>();
+  }
+
+  auto keyCacheItem = Uuid();
+  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration), std::runtime_error);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndCheckValue, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = IntRandomNumber<__int64>();
+  while (absoluteExpiration < 0)
+  {
+    absoluteExpiration = IntRandomNumber<__int64>();
+  }
+
+  auto keyCacheItem = Uuid();
+  ASSERT_TRUE( mc.Add(keyCacheItem.c_str(), value, absoluteExpiration) );
+  
+  auto item = mc.GetCacheItem(keyCacheItem.c_str() );
+  ASSERT_EQ(value, item->Value());
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryButNullKey, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = IntRandomNumber<__int64>();
+  while (absoluteExpiration < 0)
+  {
+    absoluteExpiration = IntRandomNumber<__int64>();
+  }
+
+  ASSERT_THROW(mc.Add(nullptr, value, absoluteExpiration), std::invalid_argument);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryButNullValue, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = IntRandomNumber<__int64>();
+  while (absoluteExpiration < 0)
+  {
+    absoluteExpiration = IntRandomNumber<__int64>();
+  }
+
+  auto keyCacheItem = Uuid();
+  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), nullptr, absoluteExpiration), std::invalid_argument);
 }
