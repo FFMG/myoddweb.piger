@@ -29,7 +29,7 @@ TEST_MEM_LOOP(CacheItemPolicy, NegativeAbsoluteExpirationThrowsError, NUMBER_OF_
   {
     absoluteExipration = IntRandomNumber<__int64>();
   }
-  EXPECT_THROW( ::myodd::cache::CacheItemPolicy(absoluteExipration), std::runtime_error );
+  ASSERT_THROW(auto policy = ::myodd::cache::CacheItemPolicy(absoluteExipration), std::runtime_error );
 }
 
 TEST_MEM_LOOP(CacheItemPolicy, CannotSetNegativeAbsoluteExpirationThrowsError, NUMBER_OF_TESTS)
@@ -40,7 +40,7 @@ TEST_MEM_LOOP(CacheItemPolicy, CannotSetNegativeAbsoluteExpirationThrowsError, N
     absoluteExipration = IntRandomNumber<__int64>();
   }
   auto policy = ::myodd::cache::CacheItemPolicy();
-  EXPECT_THROW(policy.SetAbsoluteExpiration(absoluteExipration), std::runtime_error);
+  ASSERT_THROW(policy.SetAbsoluteExpiration(absoluteExipration), std::runtime_error);
 }
 
 TEST_MEM_LOOP(CacheItemPolicy, ChangeAbsoluteExpiration, NUMBER_OF_TESTS)
@@ -53,4 +53,43 @@ TEST_MEM_LOOP(CacheItemPolicy, ChangeAbsoluteExpiration, NUMBER_OF_TESTS)
   auto policy = ::myodd::cache::CacheItemPolicy();
   policy.SetAbsoluteExpiration(absoluteExipration);
   ASSERT_EQ(absoluteExipration, policy.GetAbsoluteExpiration());
+}
+
+TEST_MEM_LOOP(CacheItemPolicy, CreateThenChangeAbsoluteExipration, NUMBER_OF_TESTS)
+{
+  auto absoluteExipration = IntRandomNumber<__int64>();
+  while (absoluteExipration < 0)
+  {
+    absoluteExipration = IntRandomNumber<__int64>();
+  }
+  auto policy = ::myodd::cache::CacheItemPolicy(absoluteExipration);
+  ASSERT_EQ(absoluteExipration, policy.GetAbsoluteExpiration());
+
+  // change it now
+  absoluteExipration = IntRandomNumber<__int64>();
+  while (absoluteExipration < 0)
+  {
+    absoluteExipration = IntRandomNumber<__int64>();
+  }
+  policy.SetAbsoluteExpiration(absoluteExipration);
+  ASSERT_EQ(absoluteExipration, policy.GetAbsoluteExpiration());
+}
+
+TEST_MEM_LOOP(CacheItemPolicy, CreateThenChangeToNegativeAbsoluteExipration, NUMBER_OF_TESTS)
+{
+  auto absoluteExipration = IntRandomNumber<__int64>();
+  while (absoluteExipration < 0)
+  {
+    absoluteExipration = IntRandomNumber<__int64>();
+  }
+  auto policy = ::myodd::cache::CacheItemPolicy(absoluteExipration);
+  ASSERT_EQ(absoluteExipration, policy.GetAbsoluteExpiration());
+
+  // change it now
+  absoluteExipration = IntRandomNumber<__int64>();
+  while (absoluteExipration >= 0)
+  {
+    absoluteExipration = IntRandomNumber<__int64>();
+  }
+  ASSERT_THROW(policy.SetAbsoluteExpiration(absoluteExipration), std::runtime_error);
 }

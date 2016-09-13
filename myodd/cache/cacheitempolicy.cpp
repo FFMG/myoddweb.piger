@@ -28,11 +28,13 @@
 
 namespace myodd {
   namespace cache {
-    CacheItemPolicy::CacheItemPolicy() : _absoluteExpiration(std::numeric_limits<__int64>::max() )
+    CacheItemPolicy::CacheItemPolicy() : 
+      _absoluteExpiration(std::numeric_limits<__int64>::max() )
     {
     }
 
-    CacheItemPolicy::CacheItemPolicy(__int64 absoluteExpiration) : _absoluteExpiration(std::numeric_limits<__int64>::max())
+    CacheItemPolicy::CacheItemPolicy(__int64 absoluteExpiration) : 
+      _absoluteExpiration(std::numeric_limits<__int64>::max())
     {
       // set the expoiration
       SetAbsoluteExpiration(absoluteExpiration);

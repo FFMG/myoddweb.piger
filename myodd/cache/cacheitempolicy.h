@@ -34,7 +34,7 @@ namespace myodd {
     {
     public:
       CacheItemPolicy();
-      CacheItemPolicy(__int64 absoluteExpiration);
+      CacheItemPolicy( __int64 absoluteExpiration );
 
       void SetAbsoluteExpiration(__int64 absoluteExpiration );
       __int64 GetAbsoluteExpiration() const;
