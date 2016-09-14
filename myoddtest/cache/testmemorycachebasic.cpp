@@ -285,10 +285,7 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndNonNullRegion, NUMBER_OF
 
   auto keyCacheItem = Uuid();
   auto regionCacheItem = Uuid();
-  ASSERT_TRUE(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration, regionCacheItem.c_str()));
-
-  auto cacheitem = mc.GetCacheItem(keyCacheItem.c_str());
-  ASSERT_EQ(regionCacheItem, cacheitem->RegionName());
+  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration, regionCacheItem.c_str()), std::invalid_argument );
 }
 
 TEST_MEM_LOOP(BasicMemoryTests, AddWithNegativeAbsoluteExpiry, NUMBER_OF_TESTS)
