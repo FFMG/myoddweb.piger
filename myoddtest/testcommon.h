@@ -10,6 +10,7 @@
 
 #include <chrono>
 #include <random>
+#include <time.h>
 
 #ifndef UNUSED_ALWAYS
 # define UNUSED_ALWAYS(x) x
@@ -170,6 +171,40 @@ T IntRandomNumber( T lower_bound, T upper_bound, bool canBeZero = true)
     return IntRandomNumber<T>(lower_bound, upper_bound, canBeZero);
   }
   return value;
+}
+
+inline time_t RandomAbsoluteExpiry( time_t min = -1, bool moreThanAYear = false )
+{
+  // One astronomical year of a single rotation around the sun, has 365.25 days:
+  // (365.25 days/year) × (24 hours/day) × (3600 seconds/hour) = 31557600 seconds/year
+  static const unsigned int oneAstronomicalYear = 31557600;
+
+  time_t now;
+  time(&now);
+
+#pragma warning(push)
+#pragma warning( disable : 4996)
+  auto newyear = *localtime(&now);
+#pragma warning( pop )  
+
+  newyear.tm_year += 1;
+  auto oneYear = mktime(&newyear);
+
+  for (;;)
+  {
+    auto absoluteExpiration = IntRandomNumber<time_t>( min, oneYear );
+
+    // is the time more than one year?
+    auto seconds = difftime(absoluteExpiration, now);
+    if (seconds > oneAstronomicalYear && moreThanAYear)
+    {
+      return absoluteExpiration;
+    }
+    if (seconds <= oneAstronomicalYear && !moreThanAYear)
+    {
+      return absoluteExpiration;
+    }
+  }
 }
 
 template<typename T>

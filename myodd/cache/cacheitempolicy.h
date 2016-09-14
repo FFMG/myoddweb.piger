@@ -24,6 +24,8 @@
 // ***********************************************************************
 #pragma once
 
+#include <time.h>
+
 namespace myodd {
   namespace cache {
     /**
@@ -34,14 +36,14 @@ namespace myodd {
     {
     public:
       CacheItemPolicy();
-      CacheItemPolicy( __int64 absoluteExpiration );
+      CacheItemPolicy(time_t absoluteExpiration );
 
-      void SetAbsoluteExpiration(__int64 absoluteExpiration );
-      __int64 GetAbsoluteExpiration() const;
+      void SetAbsoluteExpiration(time_t absoluteExpiration );
+      time_t GetAbsoluteExpiration() const;
 
     private:
       // The period of time that must pass before a cache entry is evicted. The default value is InfiniteAbsoluteExpiration, meaning that the entry does not expire
-      __int64 _absoluteExpiration;
+      time_t _absoluteExpiration;
     };
   }
 }

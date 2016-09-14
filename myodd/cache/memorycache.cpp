@@ -76,6 +76,70 @@ namespace myodd {
     }
 
     /**
+     * Make sure that the key value is valid.
+     * @param const wchar_t* givenKey the key we want to validate.
+     */
+    void MemoryCache::ValidateKey(const wchar_t* givenKey) const
+    {
+      //  the key cannot be null
+      if (nullptr == givenKey)
+      {
+        throw std::invalid_argument("The key name cannot be null!");
+      }
+    }
+
+    /**
+     * Make sure that the date is not in the past and more than 12 month in the future.
+     * @param time_t absoluteExpirationthe date we are checking.
+     */
+    void MemoryCache::ValidateAbsoluteExpiration(time_t absoluteExpiration) const
+    {
+      // get the current time
+      time_t now;
+      time(&now);
+
+      // is the time more than one year?
+      auto seconds = difftime(absoluteExpiration, now);
+      if (seconds < 0)
+      {
+        throw std::invalid_argument( "The expiration time cannot be in the past." );
+      }
+
+      // One astronomical year of a single rotation around the sun, has 365.25 days:
+      // (365.25 days/year) × (24 hours/day) × (3600 seconds/hour) = 31557600 seconds/year
+      static const unsigned int oneAstronomicalYear = 31557600;
+      if (seconds > oneAstronomicalYear )
+      {
+        throw std::invalid_argument("The expiration cannot be set to a value greater than one year.");
+      }
+    }
+
+    /**
+     * Make sure that the region name is null.
+     * @param const wchar_t* givenRegionName the given region name.
+     */
+    void MemoryCache::ValidateRegionName(const wchar_t* givenRegionName) const
+    {
+      if (nullptr != givenRegionName )
+      {
+        throw std::invalid_argument("The regionName must be null!");
+      }
+    }
+
+    /**
+     * Make sure that the value is not null
+     * const ::myodd::dynamic::Any& givenValue the value to check
+     */
+    void MemoryCache::ValidateValue(const ::myodd::dynamic::Any& givenValue) const
+    {
+      // check that the value is not null
+      if (nullptr == givenValue )
+      {
+        throw std::invalid_argument("The value cannot be null!");
+      }
+    }
+
+    /**
      * Make sure that the given name is valid.
      * It cannot be empty + null. Spaces are alowed, (and should be retained).
      */
@@ -107,16 +171,10 @@ namespace myodd {
     bool MemoryCache::Contains(const wchar_t* key, const wchar_t* regionName /*= nullptr*/) const
     {
       // the key cannot be null
-      if (nullptr == key)
-      {
-        throw std::invalid_argument("The key name cannot be null!");
-      }
+      ValidateKey(key);
 
       //  the region nust be null
-      if (nullptr != regionName)
-      {
-        throw std::invalid_argument("The regionName must be null!");
-      }
+      ValidateRegionName(regionName);
 
       // lock us in so we don't find data while deleting it, (or something like that).
       MemoryCache::Lock guard(_mutex);
@@ -137,10 +195,7 @@ namespace myodd {
     size_t MemoryCache::GetCount(const wchar_t* regionName) const
     {
       //  the region nust be null
-      if (nullptr != regionName)
-      {
-        throw std::invalid_argument("The regionName must be null!");
-      }
+      ValidateRegionName(regionName);
 
       // we must lock so it does not change mid-flight.
       MemoryCache::Lock guard(_mutex);
@@ -160,17 +215,11 @@ namespace myodd {
      */
     const CacheItem* MemoryCache::GetCacheItem(const wchar_t* key, const wchar_t* regionName ) const
     {
-      //  the region nust be null
-      if (nullptr != regionName)
-      {
-        throw std::invalid_argument("The regionName must be null!");
-      }
-
       // the key cannot be null
-      if (nullptr == key)
-      {
-        throw std::invalid_argument("The key name cannot be null!");
-      }
+      ValidateKey(key);
+
+      //  the region nust be null
+      ValidateRegionName(regionName);
 
       // we now need to lock as this might/could change.
       MemoryCache::Lock guard(_mutex);
@@ -191,11 +240,11 @@ namespace myodd {
      * @see AddOrGetExisting( ... )
      * @param const wchar_t* key A unique identifier for the cache entry.
      * @param const ::myodd::dynamic::Any& value the object to insert
-     * @param __int64 absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
+     * @param time_t absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
      * @param const wchar_t* regionName A named region in the cache to which the cache entry can be added,
      * @return boolean true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as key. 
      */
-    bool MemoryCache::Add(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName )
+    bool MemoryCache::Add(const wchar_t* key, const ::myodd::dynamic::Any& value, time_t absoluteExpiration, const wchar_t* regionName )
     {
       // try and add the item or get existing, if it exists, then we return false, (as it exists already).
       return (AddOrGetExisting( key, value, absoluteExpiration, regionName) == nullptr);
@@ -260,26 +309,26 @@ namespace myodd {
     }
 
     /**
-    * Inserts a cache entry into the cache using the specified key and value and the specified details for how it is to be evicted.
-    * @param const wchar_t* key A unique identifier for the cache entry to add or get.
-    * @param const ::myodd::dynamic::Any& value The data for the cache entry.
-    * @param const CacheItemPolicy& policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
-    * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
-    * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
-    */
+     * Inserts a cache entry into the cache using the specified key and value and the specified details for how it is to be evicted.
+     * @param const wchar_t* key A unique identifier for the cache entry to add or get.
+     * @param const ::myodd::dynamic::Any& value The data for the cache entry.
+     * @param const CacheItemPolicy& policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
+     * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
+     * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
+     */
     const CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName)
     {
       // the key cannot be null
-      if (nullptr == key)
-      {
-        throw std::invalid_argument("The key name cannot be null!");
-      }
+      ValidateKey(key);
+
+      // make sure that the region name is null
+      ValidateRegionName(regionName);
 
       // check that the value is not null
-      if (nullptr == value)
-      {
-        throw std::invalid_argument("The value cannot be null!");
-      }
+      ValidateValue(value);
+
+      // validate the time
+      ValidateAbsoluteExpiration(policy.GetAbsoluteExpiration());
 
       //  just pass the value to the CacheItem function.
       return AddOrGetExisting(CacheItem(key, value, regionName), policy);
@@ -289,23 +338,23 @@ namespace myodd {
     * Adds a cache entry into the cache using the specified key and a value and an absolute expiration value.
     * @param const wchar_t* key A unique identifier for the cache entry to add or get.
     * @param const ::myodd::dynamic::Any& value The data for the cache entry.
-    * @param __int64 absoluteExpiration The fixed date and time at which the cache entry will expire
+    * @param time_t absoluteExpiration The fixed date and time at which the cache entry will expire
     * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
     * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
     */
-    const CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName)
+    const CacheItem* MemoryCache::AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, time_t absoluteExpiration, const wchar_t* regionName)
     {
       // the key cannot be null
-      if (nullptr == key)
-      {
-        throw std::invalid_argument("The key name cannot be null!");
-      }
+      ValidateKey(key);
 
       // check that the value is not null
-      if (nullptr == value)
-      {
-        throw std::invalid_argument("The value cannot be null!");
-      }
+      ValidateValue(value);
+
+      // make sure that the date is valid
+      ValidateAbsoluteExpiration(absoluteExpiration);
+
+      // the region mame must be null
+      ValidateRegionName(regionName);
 
       return AddOrGetExisting(CacheItem(key, value, regionName), CacheItemPolicy(absoluteExpiration) );
     }

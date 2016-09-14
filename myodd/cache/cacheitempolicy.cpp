@@ -29,12 +29,12 @@
 namespace myodd {
   namespace cache {
     CacheItemPolicy::CacheItemPolicy() : 
-      _absoluteExpiration(std::numeric_limits<__int64>::max() )
+      _absoluteExpiration(std::numeric_limits<time_t>::max() )
     {
     }
 
-    CacheItemPolicy::CacheItemPolicy(__int64 absoluteExpiration) : 
-      _absoluteExpiration(std::numeric_limits<__int64>::max())
+    CacheItemPolicy::CacheItemPolicy(time_t absoluteExpiration) :
+      _absoluteExpiration(std::numeric_limits<time_t>::max())
     {
       // set the expoiration
       SetAbsoluteExpiration(absoluteExpiration);
@@ -44,7 +44,7 @@ namespace myodd {
      * Set the absolute expiration time.
      * @param _int64 absoluteExpiration when this will be expiring.
      */
-    void CacheItemPolicy::SetAbsoluteExpiration(__int64 absoluteExpiration)
+    void CacheItemPolicy::SetAbsoluteExpiration(time_t absoluteExpiration)
     {
       if (absoluteExpiration < 0)
       {
@@ -55,9 +55,9 @@ namespace myodd {
 
     /**
      * Get the absolute expiration time.
-     * @return __int64 the absolute expiration time.
+     * @return time_t the absolute expiration time.
      */
-    __int64 CacheItemPolicy::GetAbsoluteExpiration() const
+    time_t CacheItemPolicy::GetAbsoluteExpiration() const
     {
       return _absoluteExpiration;
     }

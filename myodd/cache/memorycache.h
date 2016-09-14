@@ -28,9 +28,10 @@
 #include "cacheitem.h"
 #include "cacheitempolicy.h"
 
-#include <mutex>  //  locks
-#include <map>    //  all the items.
+#include <mutex>  // locks
+#include <map>    // all the items.
 #include <memory> // unique_ptr
+#include <time.h> // time_t
 
 namespace myodd {
   namespace cache {
@@ -77,11 +78,11 @@ namespace myodd {
        * @see https://msdn.microsoft.com/en-us/library/dd780614(v=vs.110).aspx
        * @param const wchar_t* key A unique identifier for the cache entry.
        * @param const ::myodd::dynamic::Any& value the object to insert
-       * @param __int64 absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
+       * @param time_t absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
        * @param const wchar_t* regionName A named region in the cache to which the cache entry can be added,
        * @return boolean true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as key. 
        */
-      virtual bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName = nullptr );
+      virtual bool Add(const wchar_t* key, const ::myodd::dynamic::Any& value, time_t absoluteExpiration, const wchar_t* regionName = nullptr );
 
       /**
        * @param const CacheItem& item the object to add
@@ -104,11 +105,11 @@ namespace myodd {
        * Adds a cache entry into the cache using the specified key and a value and an absolute expiration value.
        * @param const wchar_t* key A unique identifier for the cache entry to add or get.
        * @param const ::myodd::dynamic::Any& value The data for the cache entry.
-       * @param __int64 absoluteExpiration The fixed date and time at which the cache entry will expire
+       * @param time_t absoluteExpiration The fixed date and time at which the cache entry will expire
        * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. By default, this parameter is null
        * @return CacheItem If a cache entry with the same key exists, the existing cache entry; otherwise, null.
        */
-      virtual const CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, __int64 absoluteExpiration, const wchar_t* regionName = nullptr);
+      virtual const CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, time_t absoluteExpiration, const wchar_t* regionName = nullptr);
 
       /**
        * Determines whether a cache entry exists in the cache.
@@ -148,6 +149,18 @@ namespace myodd {
       // nake sure that the name is valid
       // we throw if there is an error.
       void ValidateName() const;
+
+      // make sure that the given key is valid
+      void ValidateKey(const wchar_t* givenKey) const;
+
+      // make sure that the region name is valid
+      void ValidateRegionName(const wchar_t* givenRegionName) const;
+
+      // make sure that the given key is valid
+      void ValidateValue( const ::myodd::dynamic::Any& givenValue) const;
+
+      // make sure that the validation is not in the past and more than 12 months in the future.
+      void ValidateAbsoluteExpiration(time_t absoluteExpiration) const;
 
       // Lock that we use all the time to guard our data.
       class Lock

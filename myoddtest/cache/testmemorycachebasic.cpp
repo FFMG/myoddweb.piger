@@ -229,11 +229,14 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiry, NUMBER_OF_TESTS )
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
 
+  time_t now;
+  time(&now);
+
   auto value = IntRandomNumber<int>();
-  auto absoluteExpiration = IntRandomNumber<__int64>();
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
   while (absoluteExpiration < 0)
   {
-    absoluteExpiration = IntRandomNumber<__int64>();
+    absoluteExpiration = RandomAbsoluteExpiry(false);
   }
 
   auto keyCacheItem = Uuid();
@@ -248,11 +251,14 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndNullRegion, NUMBER_OF_TE
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
 
+  time_t now;
+  time(&now);
+
   auto value = IntRandomNumber<int>();
-  auto absoluteExpiration = IntRandomNumber<__int64>();
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
   while (absoluteExpiration < 0)
   {
-    absoluteExpiration = IntRandomNumber<__int64>();
+    absoluteExpiration = RandomAbsoluteExpiry(false);
   }
 
   auto keyCacheItem = Uuid();
@@ -267,11 +273,14 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndNonNullRegion, NUMBER_OF
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
 
+  time_t now;
+  time(&now);
+
   auto value = IntRandomNumber<int>();
-  auto absoluteExpiration = IntRandomNumber<__int64>();
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
   while (absoluteExpiration < 0)
   {
-    absoluteExpiration = IntRandomNumber<__int64>();
+    absoluteExpiration = RandomAbsoluteExpiry(now, false);
   }
 
   auto keyCacheItem = Uuid();
@@ -303,11 +312,14 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndCheckValue, NUMBER_OF_TE
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
 
+  time_t now;
+  time(&now);
+
   auto value = IntRandomNumber<int>();
-  auto absoluteExpiration = IntRandomNumber<__int64>();
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
   while (absoluteExpiration < 0)
   {
-    absoluteExpiration = IntRandomNumber<__int64>();
+    absoluteExpiration = RandomAbsoluteExpiry(now, false);
   }
 
   auto keyCacheItem = Uuid();
