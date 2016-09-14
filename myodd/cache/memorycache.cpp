@@ -94,6 +94,12 @@ namespace myodd {
      */
     void MemoryCache::ValidateAbsoluteExpiration(time_t absoluteExpiration) const
     {
+      //  default time means never expires.
+      if (absoluteExpiration == std::numeric_limits<time_t>::max())
+      {
+        return;
+      }
+
       // get the current time
       time_t now;
       time(&now);
