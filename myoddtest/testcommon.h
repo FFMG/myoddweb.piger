@@ -173,7 +173,7 @@ T IntRandomNumber( T lower_bound, T upper_bound, bool canBeZero = true)
   return value;
 }
 
-inline time_t RandomAbsoluteExpiry( time_t min = -1, bool moreThanAYear = false )
+inline time_t RandomAbsoluteExpiry( time_t min = 0, bool moreThanAYear = false )
 {
   // One astronomical year of a single rotation around the sun, has 365.25 days:
   // (365.25 days/year) × (24 hours/day) × (3600 seconds/hour) = 31557600 seconds/year

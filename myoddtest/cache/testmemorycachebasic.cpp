@@ -234,10 +234,7 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiry, NUMBER_OF_TESTS )
 
   auto value = IntRandomNumber<int>();
   auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
-  while (absoluteExpiration < 0)
-  {
-    absoluteExpiration = RandomAbsoluteExpiry(false);
-  }
+  ASSERT_TRUE(absoluteExpiration >= 0);
 
   auto keyCacheItem = Uuid();
   ASSERT_TRUE( mc.Add(keyCacheItem.c_str(), value, absoluteExpiration) );
@@ -256,10 +253,7 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndNullRegion, NUMBER_OF_TE
 
   auto value = IntRandomNumber<int>();
   auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
-  while (absoluteExpiration < 0)
-  {
-    absoluteExpiration = RandomAbsoluteExpiry(false);
-  }
+  ASSERT_TRUE(absoluteExpiration >= 0);
 
   auto keyCacheItem = Uuid();
   ASSERT_TRUE(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration, nullptr ));
@@ -278,10 +272,7 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndNonNullRegion, NUMBER_OF
 
   auto value = IntRandomNumber<int>();
   auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
-  while (absoluteExpiration < 0)
-  {
-    absoluteExpiration = RandomAbsoluteExpiry(now, false);
-  }
+  ASSERT_TRUE(absoluteExpiration >= 0);
 
   auto keyCacheItem = Uuid();
   auto regionCacheItem = Uuid();
@@ -301,7 +292,7 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithNegativeAbsoluteExpiry, NUMBER_OF_TESTS)
   }
 
   auto keyCacheItem = Uuid();
-  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration), std::runtime_error);
+  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), value, absoluteExpiration), std::invalid_argument);
 }
 
 TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndCheckValue, NUMBER_OF_TESTS)
@@ -314,10 +305,7 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryAndCheckValue, NUMBER_OF_TE
 
   auto value = IntRandomNumber<int>();
   auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
-  while (absoluteExpiration < 0)
-  {
-    absoluteExpiration = RandomAbsoluteExpiry(now, false);
-  }
+  ASSERT_TRUE(absoluteExpiration >= 0);
 
   auto keyCacheItem = Uuid();
   ASSERT_TRUE( mc.Add(keyCacheItem.c_str(), value, absoluteExpiration) );
@@ -355,4 +343,53 @@ TEST_MEM_LOOP(BasicMemoryTests, AddWithAbsoluteExpiryButNullValue, NUMBER_OF_TES
 
   auto keyCacheItem = Uuid();
   ASSERT_THROW(mc.Add(keyCacheItem.c_str(), nullptr, absoluteExpiration), std::invalid_argument);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddAbsoluteExpiryIsInThePast, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+
+  time_t now;
+  time(&now);
+#pragma warning(push)
+#pragma warning( disable : 4996)
+  auto inThePast = *localtime(&now);
+#pragma warning( pop )  
+
+  auto days = IntRandomNumber<int>(1, 365);
+  inThePast.tm_mday -= days;
+  auto thePast = mktime(&inThePast);
+
+  auto keyCacheItem = Uuid();
+  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), value, thePast), std::invalid_argument);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddAbsoluteExpiryIsMoreThanOneYear, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto value = IntRandomNumber<int>();
+
+  time_t now;
+  time(&now);
+#pragma warning(push)
+#pragma warning( disable : 4996)
+  auto inTheFuture = *localtime(&now);
+#pragma warning( pop )  
+
+  auto days = IntRandomNumber<int>(366, 500);
+  inTheFuture.tm_mday += days;
+  auto theFuture = mktime(&inTheFuture);
+
+#pragma warning(push)
+#pragma warning( disable : 4996)
+  inTheFuture = *localtime(&theFuture);
+#pragma warning( pop ) 
+
+  auto keyCacheItem = Uuid();
+  ASSERT_THROW(mc.Add(keyCacheItem.c_str(), value, theFuture), std::invalid_argument);
 }

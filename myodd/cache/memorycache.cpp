@@ -100,6 +100,12 @@ namespace myodd {
         return;
       }
 
+      // absolute expiration cannot be negative.
+      if (absoluteExpiration < 0)
+      {
+        throw std::invalid_argument("The absolute time cannot be negative.");
+      }
+
       // get the current time
       time_t now;
       time(&now);
