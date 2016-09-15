@@ -451,5 +451,5 @@ TEST_MEM_LOOP(BasicMemoryTests, GetAndCheckValues, NUMBER_OF_TESTS )
 
   auto cache = mc.Get(keyCacheItem.c_str());
   ASSERT_EQ(value, cache);
-  ASSERT_DOUBLE_EQ((float)value, cache );
+  ASSERT_DOUBLE_EQ((double)value, cache );
 }
