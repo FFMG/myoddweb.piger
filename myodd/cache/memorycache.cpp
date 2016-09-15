@@ -73,6 +73,21 @@ namespace myodd {
      */
     MemoryCache::~MemoryCache()
     {
+      //  reset/clean everthing
+      Dispose();
+    }
+
+    /**
+     * Releases all resources that are used by the current instance of the MemoryCache class.
+     * @see https://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.dispose(v=vs.110).aspx
+     */
+    void MemoryCache::Dispose()
+    {
+      // lock us in in case another thread tries to access that data.
+      MemoryCache::Lock guard(_mutex);
+
+      // clear all the cache itmes.
+      _cacheItems.clear();
     }
 
     /**
@@ -212,8 +227,19 @@ namespace myodd {
       // we must lock so it does not change mid-flight.
       MemoryCache::Lock guard(_mutex);
 
+      // count the number of items that are not expired.
+      size_t count = 0;
+      for (auto it = _cacheItems.begin(); it != _cacheItems.end(); ++it)
+      {
+        if (!it->second._policy.HasExpired())
+        {
+          // not expired.
+          ++count;
+        }
+      }
+
       //  return the size
-      return _cacheItems.size();
+      return count;
     }
 
     /**
@@ -266,7 +292,7 @@ namespace myodd {
         return nullptr;
       }
 
-      return &it->second;
+      return it->second._policy.HasExpired() ? nullptr : &it->second._item;
     }
 
     /**
@@ -333,11 +359,11 @@ namespace myodd {
       if ( _cacheItems.end() != it )
       {
         // we cannot add it again, release the lock on the way out.
-        return &it->second;
+        return &it->second._item;
       }
 
       // we can now add it to our list.
-      _cacheItems.emplace(std::make_pair(std::wstring(item.Key()), item));
+      _cacheItems.emplace(std::make_pair(std::wstring(item.Key()), CacheItemAndPolicy{ item, policy }));
 
       // success, as we added the item, we return 'null'
       return nullptr;

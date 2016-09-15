@@ -38,8 +38,14 @@ namespace myodd {
       CacheItemPolicy();
       CacheItemPolicy(time_t absoluteExpiration );
 
+      // set the expiration time.
       void SetAbsoluteExpiration(time_t absoluteExpiration );
+
+      // get the expiration time
       time_t GetAbsoluteExpiration() const;
+
+      // check if the item has expired or not.
+      bool HasExpired() const;
 
     private:
       // The period of time that must pass before a cache entry is evicted. The default value is InfiniteAbsoluteExpiration, meaning that the entry does not expire

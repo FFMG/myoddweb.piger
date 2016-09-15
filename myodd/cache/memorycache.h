@@ -142,14 +142,33 @@ namespace myodd {
        */
       virtual const CacheItem* GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const;
 
+      /**
+       * Releases all resources that are used by the current instance of the MemoryCache class.
+       * @see https://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.dispose(v=vs.110).aspx
+       */
+      void Dispose();
+
+    protected:
+      struct CacheItemAndPolicy
+      {
+        CacheItem _item;
+        CacheItemPolicy _policy;
+      };
+
+      // all our items and policies.
+      typedef std::map< std::wstring, CacheItemAndPolicy > CacheItemsAndPolicies;
+
+      /** 
+       * Get all the cache items and policies. 
+       */
+      CacheItemsAndPolicies& GetCacheItemAndPolicy() { return _cacheItems; }
+
     private:
+      CacheItemsAndPolicies _cacheItems;
+
       // the mutex to protect this data
       // it is mutable so we can use it inside const functions.
       mutable std::mutex _mutex;
-
-      // all our items.
-      typedef std::map< std::wstring, CacheItem > CachItems;
-      CachItems _cacheItems;
 
       // the name of this collection
       const std::wstring _name;

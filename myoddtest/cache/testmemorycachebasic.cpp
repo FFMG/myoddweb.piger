@@ -453,3 +453,73 @@ TEST_MEM_LOOP(BasicMemoryTests, GetAndCheckValues, NUMBER_OF_TESTS )
   ASSERT_EQ(value, cache);
   ASSERT_DOUBLE_EQ((double)value, cache );
 }
+
+TEST_MEM_LOOP(BasicMemoryTests, CheckMultipleValuesBeenAdded, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  //  add a few items.
+  typedef std::map< std::wstring, int > Values;
+  Values values;
+  int count = IntRandomNumber<int>( 5, 15 );
+  for (int i = 0; i < count; ++i)
+  {
+    auto keyCacheItem = Uuid();
+    auto value = IntRandomNumber<int>();
+    values[keyCacheItem] = value;
+    mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+  }
+
+  ASSERT_EQ(count, mc.GetCount());
+
+  // check the values.
+  for ( Values::const_iterator it = values.begin(); it != values.end(); ++it )
+  {
+    auto cache = mc.Get( it->first.c_str() );
+    ASSERT_EQ(it->second, cache);
+    ASSERT_DOUBLE_EQ((double)it->second, cache);
+  }
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, CheckDisposeOfMultipleValues, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  //  add a few items.
+  typedef std::map< std::wstring, int > Values;
+  Values values;
+  int count = IntRandomNumber<int>(15, 30);
+  for (int i = 0; i < count; ++i)
+  {
+    auto keyCacheItem = Uuid();
+    auto value = IntRandomNumber<int>();
+    values[keyCacheItem] = value;
+    mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+  }
+
+  // the size is valid.
+  ASSERT_EQ(count, mc.GetCount());
+
+  // dispose
+  mc.Dispose();
+
+  // we should have nothing
+  ASSERT_EQ(0, mc.GetCount());
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, CheckDisposeWhenEmpty, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  // the size is valid.
+  ASSERT_EQ(0, mc.GetCount());
+
+  // dispose
+  mc.Dispose();
+
+  // we should still have nothing
+  ASSERT_EQ(0, mc.GetCount());
+}

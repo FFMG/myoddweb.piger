@@ -61,5 +61,20 @@ namespace myodd {
     {
       return _absoluteExpiration;
     }
+
+    /**
+     * Check if this item has expired or not.
+     * i.e. if it is in the past.
+     * @return bool in the past or not.
+     */
+    bool CacheItemPolicy::HasExpired() const
+    {
+      time_t now;
+      time(&now);
+
+      // is the time more than one year?
+      auto seconds = difftime(GetAbsoluteExpiration(), now);
+      return (seconds < 0);
+    }
   }
 }
