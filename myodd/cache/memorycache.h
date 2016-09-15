@@ -161,7 +161,8 @@ namespace myodd {
       /** 
        * Get all the cache items and policies. 
        */
-      CacheItemsAndPolicies& GetCacheItemAndPolicy() { return _cacheItems; }
+      inline CacheItemsAndPolicies& GetCacheItemAndPolicy() { return _cacheItems; }
+      inline const CacheItemsAndPolicies& GetCacheItemAndPolicy() const { return _cacheItems; }
 
     private:
       CacheItemsAndPolicies _cacheItems;
@@ -188,6 +189,9 @@ namespace myodd {
 
       // make sure that the validation is not in the past and more than 12 months in the future.
       void ValidateAbsoluteExpiration(time_t absoluteExpiration) const;
+
+      // remove all the expired items.
+      void RemoveExpired();
 
       // Lock that we use all the time to guard our data.
       class Lock

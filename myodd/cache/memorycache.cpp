@@ -91,6 +91,31 @@ namespace myodd {
     }
 
     /**
+     * Remove all the expired items.
+     */
+    void MemoryCache::RemoveExpired()
+    {
+      // lock us in in case another thread tries to access that data.
+      MemoryCache::Lock guard(_mutex);
+
+      // start the look
+      auto it = _cacheItems.begin();
+
+      // go around and remove all the expired items.
+      while( it != _cacheItems.end() ) 
+      {
+        if (it->second._policy.HasExpired())
+        {
+          it = _cacheItems.erase( it );
+        }
+        else 
+        {
+          ++it;
+        }
+      }
+    }
+
+    /**
      * Make sure that the key value is valid.
      * @param const wchar_t* givenKey the key we want to validate.
      */
@@ -353,6 +378,10 @@ namespace myodd {
       // lock the threads so we don't have a race condition.
       MemoryCache::Lock guard(_mutex);
 
+      // remove all the expired 
+      RemoveExpired();
+
+      // look to see if it exists already
       auto it = _cacheItems.find(std::wstring(item.Key()));
 
       // if we already have it, then we cannot add it.

@@ -8,6 +8,11 @@ class MyCache : public myodd::cache::MemoryCache
 public:
   MyCache(const wchar_t* name) : myodd::cache::MemoryCache(name) {}
 
+  size_t GetTotalCount() const {
+    const CacheItemsAndPolicies& ci = GetCacheItemAndPolicy();
+    return ci.size();
+  }
+
   void Expire(const wchar_t* key) {
     CacheItemsAndPolicies& ci = GetCacheItemAndPolicy();
     auto it = ci.find(key);
@@ -83,4 +88,51 @@ TEST_MEM_LOOP(BasicMemoryTests, GetCountOfExpiredItems, NUMBER_OF_TESTS)
 
   // the size must be coun - expired items.
   ASSERT_EQ((count - expired), mc.GetCount());
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddItemWillRemoveExpiredItems, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  MyCache mc(key.c_str());
+
+  //  add a few items.
+  typedef std::map< std::wstring, int > Values;
+  Values values;
+  int count = IntRandomNumber<int>(50, 100);
+  for (int i = 0; i < count; ++i)
+  {
+    auto keyCacheItem = Uuid();
+    auto value = IntRandomNumber<int>();
+    values[keyCacheItem] = value;
+    mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+  }
+
+  // none of them has expired, (yet)
+  ASSERT_EQ(count, mc.GetCount());
+
+  // expire some of them
+  unsigned int expired = 0;
+  for (auto it = values.begin(); it != values.end(); ++it)
+  {
+    if (BoolRandomNumber() == true)
+    {
+      mc.Expire(it->first.c_str());
+      ++expired;
+    }
+  }
+
+  // add one more item
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  values[keyCacheItem] = value;
+  mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+
+  // it is not expired.
+  ++count;
+
+  // the size must be count - expired items.
+  ASSERT_EQ((count - expired), mc.GetCount());
+
+  // the total size should be of no expired items.
+  ASSERT_EQ((count - expired), mc.GetTotalCount());
 }
