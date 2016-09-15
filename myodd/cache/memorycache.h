@@ -124,6 +124,14 @@ namespace myodd {
       size_t GetCount(const wchar_t* regionName = nullptr) const;
 
       /**
+       * Returns an entry from the cache or null. 
+       * @param const wchar_t* key
+       * @param const wchar_t* regionName
+       * @return ::myodd::dynamic::Any* the value or null.
+       */
+      virtual const ::myodd::dynamic::Any Get(const wchar_t* key, const wchar_t* regionName = nullptr) const;
+
+      /**
        * Returns the specified entry from the cache as a CacheItem instance.
        * @see https://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.getcacheitem(v=vs.110).aspx
        * @throw std::out_of_range if the item is not found.
@@ -132,7 +140,7 @@ namespace myodd {
        * @param A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
        * @return const CacheItem& the cache item, we will throw if the item does not exist.
        */
-      const CacheItem* GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const;
+      virtual const CacheItem* GetCacheItem(const wchar_t* key, const wchar_t* regionName = nullptr) const;
 
     private:
       // the mutex to protect this data

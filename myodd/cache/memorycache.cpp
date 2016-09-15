@@ -217,6 +217,29 @@ namespace myodd {
     }
 
     /**
+    * Returns an entry from the cache or null.
+    * @param const wchar_t* key
+    * @param const wchar_t* regionName
+    * @return ::myodd::dynamic::Any* the value or null.
+    */
+    const ::myodd::dynamic::Any MemoryCache::Get(const wchar_t* key, const wchar_t* regionName ) const
+    {
+      // get the lock now so we can hold it until we return the value.
+      MemoryCache::Lock guard(_mutex);
+
+      // look for the complete cache item value
+      auto cacheItem = GetCacheItem(key, regionName);
+      if (nullptr == cacheItem )
+      {
+        // could not find it.
+        return nullptr;
+      }
+
+      // return the value.
+      return cacheItem->Value();
+    }
+
+    /**
      * Returns the specified entry from the cache as a CacheItem instance.
      * @see https://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.getcacheitem(v=vs.110).aspx
      * @throw std::out_of_range if the item is not found.

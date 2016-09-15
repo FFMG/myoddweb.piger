@@ -5,34 +5,34 @@
 
 TEST(BasicMemoryTests, InvalidNameLowerCase)
 {
-  EXPECT_THROW( new myodd::cache::MemoryCache( L"default"), std::exception);
+  ASSERT_THROW( new myodd::cache::MemoryCache( L"default"), std::exception);
 }
 
 TEST(BasicMemoryTests, InvalidNameUpperCase)
 {
-  EXPECT_THROW(new myodd::cache::MemoryCache(L"default"), std::exception);
+  ASSERT_THROW(new myodd::cache::MemoryCache(L"default"), std::exception);
 }
 
 TEST(BasicMemoryTests, InvalidNameAnyCase)
 {
-  EXPECT_THROW(new myodd::cache::MemoryCache(L"DefAuLt"), std::exception);
+  ASSERT_THROW(new myodd::cache::MemoryCache(L"DefAuLt"), std::exception);
 }
 
 TEST(BasicMemoryTests, NameCannotBeEmpty)
 {
-  EXPECT_THROW(new myodd::cache::MemoryCache(L""), std::exception);
+  ASSERT_THROW(new myodd::cache::MemoryCache(L""), std::exception);
 }
 
 TEST(BasicMemoryTests, NameCannotBeNull)
 {
-  EXPECT_THROW(new myodd::cache::MemoryCache( nullptr ), std::exception);
+  ASSERT_THROW(new myodd::cache::MemoryCache( nullptr ), std::exception);
 }
 
 TEST(BasicMemoryTests, ContainsKeyCannotBeNull)
 {
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
-  EXPECT_THROW(mc.Contains( nullptr ), std::invalid_argument);
+  ASSERT_THROW(mc.Contains( nullptr ), std::invalid_argument);
 }
 
 TEST(BasicMemoryTests, ContainsRegionNameMustBeNull)
@@ -41,7 +41,7 @@ TEST(BasicMemoryTests, ContainsRegionNameMustBeNull)
   auto regionName = Uuid();
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
-  EXPECT_THROW(mc.Contains(keyCacheItem.c_str(), regionName.c_str() ), std::invalid_argument);
+  ASSERT_THROW(mc.Contains(keyCacheItem.c_str(), regionName.c_str() ), std::invalid_argument);
 }
 
 TEST(BasicMemoryTests, CannotPassARegionWithGetCount)
@@ -49,7 +49,7 @@ TEST(BasicMemoryTests, CannotPassARegionWithGetCount)
   auto regionName = Uuid();
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
-  EXPECT_THROW(mc.GetCount( regionName.c_str()), std::invalid_argument);
+  ASSERT_THROW(mc.GetCount( regionName.c_str()), std::invalid_argument);
 }
 
 TEST(BasicMemoryTests, DoesNotContain )
@@ -183,7 +183,7 @@ TEST(BasicMemoryTests, GetCacheItemKeyCannotBeNull)
 {
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
-  EXPECT_THROW(mc.GetCacheItem(nullptr), std::invalid_argument);
+  ASSERT_THROW(mc.GetCacheItem(nullptr), std::invalid_argument);
 }
 
 TEST(BasicMemoryTests, GetCacheItemRegionNameMustBeNull)
@@ -192,7 +192,7 @@ TEST(BasicMemoryTests, GetCacheItemRegionNameMustBeNull)
   auto regionName = Uuid();
   auto key = Uuid();
   myodd::cache::MemoryCache mc(key.c_str());
-  EXPECT_THROW(mc.GetCacheItem(keyCacheItem.c_str(), regionName.c_str()), std::invalid_argument);
+  ASSERT_THROW(mc.GetCacheItem(keyCacheItem.c_str(), regionName.c_str()), std::invalid_argument);
 }
 
 TEST(BasicMemoryTests, GetACacheItemThatDoesNotExist)
@@ -392,4 +392,64 @@ TEST_MEM_LOOP(BasicMemoryTests, AddAbsoluteExpiryIsMoreThanOneYear, NUMBER_OF_TE
 
   auto keyCacheItem = Uuid();
   ASSERT_THROW(mc.Add(keyCacheItem.c_str(), value, theFuture), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, GetKeyCannotBeNull)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  ASSERT_THROW(mc.GetCacheItem(nullptr), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, GetCacheItemKeyRegionMustBeNullNull)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto regionName = Uuid();
+  ASSERT_THROW(mc.GetCacheItem(keyCacheItem.c_str(), regionName.c_str() ), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, GetItemThatDoesNotExist)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  //  add an item
+  auto keyCacheItem = Uuid();
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), 10);
+
+  auto anotherKeyCacheItem = Uuid();
+  ASSERT_EQ(nullptr, mc.Get(anotherKeyCacheItem.c_str()));
+}
+
+TEST_MEM(BasicMemoryTests, GetItemThatDoesNotExistWithNullRegion)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  //  add an item
+  auto keyCacheItem = Uuid();
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), IntRandomNumber<int>());
+
+  auto anotherKeyCacheItem = Uuid();
+  ASSERT_EQ(nullptr, mc.Get(anotherKeyCacheItem.c_str(), nullptr));
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, GetAndCheckValues, NUMBER_OF_TESTS )
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  //  add an item
+  myodd::cache::CacheItemPolicy policy;
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  auto ci = myodd::cache::CacheItem(keyCacheItem.c_str(), value );
+  mc.Add(ci, policy);
+
+  auto cache = mc.Get(keyCacheItem.c_str());
+  ASSERT_EQ(value, cache);
+  ASSERT_DOUBLE_EQ((float)value, cache );
 }
