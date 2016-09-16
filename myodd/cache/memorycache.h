@@ -191,7 +191,7 @@ namespace myodd {
       void ValidateAbsoluteExpiration(time_t absoluteExpiration) const;
 
       // remove all the expired items.
-      void RemoveExpired();
+      void RemoveExpired(const wchar_t* key);
 
       // Lock that we use all the time to guard our data.
       class Lock
@@ -206,6 +206,9 @@ namespace myodd {
         std::mutex& _mutex;
         std::lock_guard<std::mutex>* _guard;
       };
+
+      // call the timer
+      void AbsoluteExpirationTimer(time_t absoluteExpiration, const wchar_t* key);
     };
   }
 }

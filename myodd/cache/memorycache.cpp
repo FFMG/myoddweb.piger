@@ -26,6 +26,10 @@
 #include <algorithm>  //  std::transform
 #include <cwctype>    //  std::towlower
 
+#include <functional>
+#include <chrono>
+#include <future>
+
 namespace myodd {
   namespace cache {
     MemoryCache::Lock::Lock(std::mutex &mutex) :
@@ -92,26 +96,27 @@ namespace myodd {
 
     /**
      * Remove all the expired items.
+     * @param const wchar_t* key the key we want to remove.
      */
-    void MemoryCache::RemoveExpired()
+    void MemoryCache::RemoveExpired(const wchar_t* key)
     {
       // lock us in in case another thread tries to access that data.
       MemoryCache::Lock guard(_mutex);
 
       // start the look
-      auto it = _cacheItems.begin();
+      auto it = _cacheItems.find( key );
 
-      // go around and remove all the expired items.
-      while( it != _cacheItems.end() ) 
+      // look for that key
+      if (it == _cacheItems.end())
       {
-        if (it->second._policy.HasExpired())
-        {
-          it = _cacheItems.erase( it );
-        }
-        else 
-        {
-          ++it;
-        }
+        // maybe it has expired or something.
+        return;
+      }
+
+      // maybe it has not expired, (it was updated or something).
+      if (it->second._policy.HasExpired())
+      {
+        it = _cacheItems.erase( it );
       }
     }
 
@@ -129,8 +134,36 @@ namespace myodd {
     }
 
     /**
+     * Start a thread to check for the expired key.
+     * @param time_t absoluteExpiration when the key will expire.
+     * @param const wchar_t* key the key that might expire.
+     */
+    void MemoryCache::AbsoluteExpirationTimer(time_t absoluteExpiration, const wchar_t* key)
+    {
+      // if we have max time, then it will never expire.
+      if (absoluteExpiration == std::numeric_limits<time_t>::max())
+      {
+        return;
+      }
+
+      time_t now;
+      time(&now);
+
+      // is the time more than one year?
+      auto seconds = difftime(absoluteExpiration, now);
+
+      auto _this = this;
+      std::thread([seconds, _this, key]()
+      {
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(seconds + 1)));
+        _this->RemoveExpired(key);
+      }).detach();
+    }
+
+    /**
      * Make sure that the date is not in the past and more than 12 month in the future.
      * @param time_t absoluteExpirationthe date we are checking.
+     * @return double after how many seconds will this expire.
      */
     void MemoryCache::ValidateAbsoluteExpiration(time_t absoluteExpiration) const
     {
@@ -378,9 +411,6 @@ namespace myodd {
       // lock the threads so we don't have a race condition.
       MemoryCache::Lock guard(_mutex);
 
-      // remove all the expired 
-      RemoveExpired();
-
       // look to see if it exists already
       auto it = _cacheItems.find(std::wstring(item.Key()));
 
@@ -393,6 +423,9 @@ namespace myodd {
 
       // we can now add it to our list.
       _cacheItems.emplace(std::make_pair(std::wstring(item.Key()), CacheItemAndPolicy{ item, policy }));
+
+      // call the timer.
+      AbsoluteExpirationTimer(policy.GetAbsoluteExpiration(), item.Key() );
 
       // success, as we added the item, we return 'null'
       return nullptr;
