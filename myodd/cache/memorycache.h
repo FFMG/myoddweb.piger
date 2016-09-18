@@ -32,6 +32,7 @@
 #include <map>    // all the items.
 #include <memory> // unique_ptr
 #include <time.h> // time_t
+#include <future>
 
 namespace myodd {
   namespace cache {
@@ -191,7 +192,7 @@ namespace myodd {
       void ValidateAbsoluteExpiration(time_t absoluteExpiration) const;
 
       // remove all the expired items.
-      void RemoveExpired(const wchar_t* key);
+      void RemoveExpired();
 
       // Lock that we use all the time to guard our data.
       class Lock
@@ -207,8 +208,11 @@ namespace myodd {
         std::lock_guard<std::mutex>* _guard;
       };
 
+      // the timer thread
+      std::future<void> _absoluteExpirationTimerThread;
+
       // call the timer
-      void AbsoluteExpirationTimer(time_t absoluteExpiration, const wchar_t* key);
+      void AbsoluteExpirationTimer();
     };
   }
 }

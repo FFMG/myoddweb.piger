@@ -28,7 +28,8 @@
 
 #include <functional>
 #include <chrono>
-#include <future>
+
+#define MEMORYCACHE_EXPIRED_CHECK_SEC 1
 
 namespace myodd {
   namespace cache {
@@ -88,35 +89,52 @@ namespace myodd {
     void MemoryCache::Dispose()
     {
       // lock us in in case another thread tries to access that data.
-      MemoryCache::Lock guard(_mutex);
+      {
+        MemoryCache::Lock guard(_mutex);
 
-      // clear all the cache itmes.
-      _cacheItems.clear();
+        // clear all the cache itmes.
+        _cacheItems.clear();
+      }// remove the lock
+
+      // wait for the dispose thread to end.
+      //  check if the thread is still running.
+      for (;;)
+      {
+        // is the thread running still or is it even valid?
+        // if the thread was never started then it will never be valid.
+        auto status = _absoluteExpirationTimerThread.valid() ? _absoluteExpirationTimerThread.wait_for(std::chrono::milliseconds(0)) : std::future_status::ready;
+        if (status == std::future_status::ready)
+        {
+          break;
+        }
+        
+        // wait a little for the thread to end.
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
+      }
     }
 
     /**
      * Remove all the expired items.
-     * @param const wchar_t* key the key we want to remove.
      */
-    void MemoryCache::RemoveExpired(const wchar_t* key)
+    void MemoryCache::RemoveExpired()
     {
       // lock us in in case another thread tries to access that data.
       MemoryCache::Lock guard(_mutex);
 
       // start the look
-      auto it = _cacheItems.find( key );
+      auto it = _cacheItems.begin();
 
-      // look for that key
-      if (it == _cacheItems.end())
+      // go around and remove all the expired items. 
+      while (it != _cacheItems.end())
       {
-        // maybe it has expired or something.
-        return;
-      }
-
-      // maybe it has not expired, (it was updated or something).
-      if (it->second._policy.HasExpired())
-      {
-        it = _cacheItems.erase( it );
+        if (it->second._policy.HasExpired())
+        {
+          it = _cacheItems.erase(it);
+        }
+        else
+        {
+          ++it;
+        }
       }
     }
 
@@ -134,14 +152,14 @@ namespace myodd {
     }
 
     /**
-     * Start a thread to check for the expired key.
-     * @param time_t absoluteExpiration when the key will expire.
-     * @param const wchar_t* key the key that might expire.
+     * Start a thread to check for the expired keys.
      */
-    void MemoryCache::AbsoluteExpirationTimer(time_t absoluteExpiration, const wchar_t* key)
+    void MemoryCache::AbsoluteExpirationTimer()
     {
-      // if we have max time, then it will never expire.
-      if (absoluteExpiration == std::numeric_limits<time_t>::max())
+      // check if the thread is still running.
+      // the default is 'std::future_status::ready' so we can create the thread.
+      auto status = _absoluteExpirationTimerThread.valid() ? _absoluteExpirationTimerThread.wait_for(std::chrono::milliseconds(0)) : std::future_status::ready;
+      if (status != std::future_status::ready)
       {
         return;
       }
@@ -149,15 +167,42 @@ namespace myodd {
       time_t now;
       time(&now);
 
-      // is the time more than one year?
-      auto seconds = difftime(absoluteExpiration, now);
-
       auto _this = this;
-      std::thread([seconds, _this, key]()
+      _absoluteExpirationTimerThread = std::async(std::launch::async, [_this]
       {
-        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(seconds + 1)));
-        _this->RemoveExpired(key);
-      }).detach();
+        std::chrono::time_point<std::chrono::system_clock> start, end;
+        start = std::chrono::system_clock::now();
+        for (;;)
+        {
+          // wait a little.
+          std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+          {
+            // lock us in in case another thread tries to access that data.
+            MemoryCache::Lock guard(_this->_mutex);
+
+            // if we have nothing left in the thread, then we can bail out.
+            // another thread will be started if need be.
+            if (_this->_cacheItems.size() == 0)
+            {
+              break;
+            }
+          }
+
+          end = std::chrono::system_clock::now();
+          std::chrono::duration<double> elapsed_seconds = end - start;
+          if (elapsed_seconds.count() < MEMORYCACHE_EXPIRED_CHECK_SEC)
+          {
+            continue;
+          }
+
+          // remove the exipred items
+          _this->RemoveExpired();
+
+          // this is the new start time
+          start = std::chrono::system_clock::now();
+        }
+      });
     }
 
     /**
@@ -424,8 +469,12 @@ namespace myodd {
       // we can now add it to our list.
       _cacheItems.emplace(std::make_pair(std::wstring(item.Key()), CacheItemAndPolicy{ item, policy }));
 
-      // call the timer.
-      AbsoluteExpirationTimer(policy.GetAbsoluteExpiration(), item.Key() );
+      // if we have max time, then it will never expire.
+      if (policy.GetAbsoluteExpiration() != std::numeric_limits<time_t>::max())
+      {
+        // start the timer if it has not yet started.
+        AbsoluteExpirationTimer();
+      }
 
       // success, as we added the item, we return 'null'
       return nullptr;

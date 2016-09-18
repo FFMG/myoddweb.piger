@@ -90,10 +90,13 @@ TEST_MEM_LOOP(BasicMemoryTests, GetCountOfExpiredItems, NUMBER_OF_TESTS)
   ASSERT_EQ((count - expired), mc.GetCount());
 }
 
-TEST_MEM_LOOP(BasicMemoryTests, AddItemWillRemoveExpiredItems, NUMBER_OF_TESTS)
+TEST_MEM(BasicMemoryTests, AddItemWillRemoveExpiredItems )
 {
   auto key = Uuid();
   MyCache mc(key.c_str());
+
+  time_t now;
+  time(&now);
 
   //  add a few items.
   typedef std::map< std::wstring, int > Values;
@@ -104,7 +107,7 @@ TEST_MEM_LOOP(BasicMemoryTests, AddItemWillRemoveExpiredItems, NUMBER_OF_TESTS)
     auto keyCacheItem = Uuid();
     auto value = IntRandomNumber<int>();
     values[keyCacheItem] = value;
-    mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+    mc.Add(keyCacheItem.c_str(), value, RandomAbsoluteExpiry(now));
   }
 
   // none of them has expired, (yet)
@@ -121,14 +124,8 @@ TEST_MEM_LOOP(BasicMemoryTests, AddItemWillRemoveExpiredItems, NUMBER_OF_TESTS)
     }
   }
 
-  // add one more item
-  auto keyCacheItem = Uuid();
-  auto value = IntRandomNumber<int>();
-  values[keyCacheItem] = value;
-  mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
-
-  // it is not expired.
-  ++count;
+  // wait a little for the cleanup to happen as they have expired.
+  std::this_thread::sleep_for(std::chrono::milliseconds( 1000 ));
 
   // the size must be count - expired items.
   ASSERT_EQ((count - expired), mc.GetCount());
