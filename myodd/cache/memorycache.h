@@ -113,6 +113,14 @@ namespace myodd {
       virtual const CacheItem* AddOrGetExisting(const wchar_t* key, const ::myodd::dynamic::Any& value, time_t absoluteExpiration, const wchar_t* regionName = nullptr);
 
       /**
+       * Removes a cache entry from the cache. 
+       * @param const wchar_t* key A unique identifier for the cache entry to add or get.
+       * @param const wchar_t* regionName A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
+       * @return ::myodd::dynamic::Any If the entry is found in the cache, the removed cache entry; otherwise, null. 
+       */
+      virtual const ::myodd::dynamic::Any Remove(const wchar_t* key, const wchar_t* regionName = nullptr);
+
+      /**
        * Determines whether a cache entry exists in the cache.
        * @see https://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.contains(v=vs.110).aspx
        */

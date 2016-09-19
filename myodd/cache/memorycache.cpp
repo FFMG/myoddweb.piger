@@ -530,5 +530,46 @@ namespace myodd {
 
       return AddOrGetExisting(CacheItem(key, value, regionName), CacheItemPolicy(absoluteExpiration) );
     }
+
+    /**
+    * Removes a cache entry from the cache.
+    * @param const wchar_t* key A unique identifier for the cache entry to add or get.
+    * @param const wchar_t* regionName A named region in the cache to which a cache entry was added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
+    * @return ::myodd::dynamic::Any If the entry is found in the cache, the removed cache entry; otherwise, null.
+    */
+    const ::myodd::dynamic::Any MemoryCache::Remove(const wchar_t* key, const wchar_t* regionName )
+    {
+      // the key cannot be null
+      ValidateKey(key);
+
+      // the region mame must be null
+      ValidateRegionName(regionName);
+
+      // get the lock now so we can hold it until we return the value.
+      MemoryCache::Lock guard(_mutex);
+
+      // look for the complete cache item value
+      const auto it = _cacheItems.find(std::wstring(key));
+      if (it == _cacheItems.end())
+      {
+        return nullptr;
+      }
+
+      // get the value
+      auto value = it->second._item.Value();
+
+      // did the value expire?
+      // if it has then we have to return null.
+      if (it->second._policy.HasExpired())
+      {
+        value = nullptr;
+      }
+
+      // remove it.
+      _cacheItems.erase(it);
+
+      // return the value.
+      return value;
+    }
   }
 }

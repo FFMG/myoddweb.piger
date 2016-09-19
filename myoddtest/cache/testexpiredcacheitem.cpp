@@ -1,6 +1,9 @@
 #include "cache/memorycache.h"
 #include <gtest/gtest.h>
 
+#include <chrono>
+#include <thread>
+
 #include "../testcommon.h"
 
 class MyCache : public myodd::cache::MemoryCache
@@ -132,4 +135,46 @@ TEST_MEM(BasicMemoryTests, AddItemWillRemoveExpiredItems )
 
   // the total size should be of no expired items.
   ASSERT_EQ((count - expired), mc.GetTotalCount());
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, RemoveExpiredItems, NUMBER_OF_TESTS )
+{
+  auto key = Uuid();
+  MyCache mc(key.c_str());
+
+  time_t now;
+  time(&now);
+
+  //  add a few items.
+  typedef std::map< std::wstring, int > Values;
+  Values values;
+  int count = IntRandomNumber<int>(50, 100);
+  for (int i = 0; i < count; ++i)
+  {
+    auto keyCacheItem = Uuid();
+    auto value = IntRandomNumber<int>();
+    values[keyCacheItem] = value;
+    mc.Add(keyCacheItem.c_str(), value, RandomAbsoluteExpiry(now));
+  }
+
+  // none of them has expired, (yet)
+  ASSERT_EQ(count, mc.GetCount());
+
+  // expire some of them
+  Values expiredValues;
+  for (auto it = values.begin(); it != values.end(); ++it)
+  {
+    if (BoolRandomNumber() == true)
+    {
+      mc.Expire(it->first.c_str());
+      expiredValues[it->first.c_str()] = it->second;
+    }
+  }
+
+  // try and get all the expired values.
+  for (auto it = expiredValues.begin(); it != expiredValues.end(); ++it)
+  {
+    auto value = mc.Remove(it->first.c_str());
+    ASSERT_EQ(nullptr, value);
+  }
 }

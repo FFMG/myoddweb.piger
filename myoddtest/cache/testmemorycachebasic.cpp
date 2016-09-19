@@ -523,3 +523,68 @@ TEST_MEM_LOOP(BasicMemoryTests, CheckDisposeWhenEmpty, NUMBER_OF_TESTS)
   // we should still have nothing
   ASSERT_EQ(0, mc.GetCount());
 }
+
+TEST(BasicMemoryTests, RemoveWithInvalidKey)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  ASSERT_THROW(mc.Remove(nullptr), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, RemoveWithNonNull )
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+
+  auto regionItem = Uuid();
+
+  ASSERT_THROW(mc.Remove(keyCacheItem.c_str(), regionItem.c_str()), std::invalid_argument);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, RemoveWithNullPassedAsRegion, NUMBER_OF_TESTS )
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+
+  auto valueCopy = mc.Remove(keyCacheItem.c_str(), nullptr);
+
+  ASSERT_EQ(value, valueCopy);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, RemoveWithNullNotPassedAsRegion, NUMBER_OF_TESTS)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+
+  auto valueCopy = mc.Remove(keyCacheItem.c_str() );
+
+  ASSERT_EQ(value, valueCopy);
+}
+
+TEST(BasicMemoryTests, RemoveNonExistentKey)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  mc.Add(keyCacheItem.c_str(), value, myodd::cache::CacheItemPolicy());
+
+  auto keyCacheItem2 = Uuid();
+
+  auto valueCopy = mc.Remove(keyCacheItem2.c_str(), nullptr);
+  ASSERT_EQ(nullptr, valueCopy);
+}
