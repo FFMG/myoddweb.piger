@@ -16,20 +16,20 @@ if thisFolder == false  then
   local sizeOf = am_getCommandCount();
   if sizeOf == 0  then
     -- no arguments.
-    am_execute( "cmd.exe", "/k \"title Piger Rules!!&&@cd %HOMEDRIVE%&&%HOMEDRIVE%\"", true );
+    am_execute( "cmd.exe", "/k \"title Piger Rules!! & @cd %HOMEDRIVE% & %HOMEDRIVE%\"", true );
   else
     local thisWord = am_getCommand( 1 );
     if thisWord == "home" or thisWord == "h" then
       am_say( "<i>Going to <b>home</b> drive</i>.", 400, 10  )
-      am_execute( "cmd.exe", "/k \"title Piger Rules!!&&@cd %HOMEDRIVE%\\&&%HOMEDRIVE%\"", true );
+      am_execute( "cmd.exe", "/k \"title Piger Rules!! & @cd %HOMEDRIVE%\\ & %HOMEDRIVE%\"", true );
     elseif thisWord == "system" or thisWord == "s" then
       am_say( "<i>Going to <b>system</b> drive</i>.", 400, 10  )
-      am_execute( "cmd.exe", "/k \"title Piger Rules!!&&@cd %SYSTEMDRIVE%\\&&%SYSTEMDRIVE%\"", true );
+      am_execute( "cmd.exe", "/k \"title Piger Rules!! & @cd %SYSTEMDRIVE%\\ & %SYSTEMDRIVE%\"", true );
     else
-      am_execute( "cmd.exe", "/k \"title Piger Rules!!&&echo Unknown command:" .. thisWord .. "\"", true );
+      am_execute( "cmd.exe", "/k \"title Piger Rules!! & echo Unknown command:" .. thisWord .. "\"", true );
     end
   end
 else
   -- go to the selected folder and in case of multiple drives, change the drive letter.
-  am_execute( "cmd.exe", "/k \"title Piger Rules!!&&cd \"" .. thisFolder .. "\"\"&&" .. getdrive(thisFolder), true);
+  am_execute( "cmd.exe", "/k \"title Piger Rules!! & cd \"\"" .. thisFolder .. "\"\" & " .. getdrive(thisFolder) .. "\"", true);
 end
