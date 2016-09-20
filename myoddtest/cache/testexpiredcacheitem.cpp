@@ -128,7 +128,8 @@ TEST_MEM(BasicMemoryTests, AddItemWillRemoveExpiredItems )
   }
 
   // wait a little for the cleanup to happen as they have expired.
-  std::this_thread::sleep_for(std::chrono::milliseconds( 1000 ));
+  //std::this_thread::sleep_for(std::chrono::milliseconds( 1000 ));
+  ::Sleep(1000);
 
   // the size must be count - expired items.
   ASSERT_EQ((count - expired), mc.GetCount());

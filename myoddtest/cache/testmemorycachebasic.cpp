@@ -669,3 +669,101 @@ TEST(BasicMemoryTests, SetValueWithNonNullRegionAndAbsoluteTime)
 
   ASSERT_THROW(mc.Set(keyCacheItem.c_str(), value, absoluteExpiration, regionName.c_str()), std::invalid_argument);
 }
+
+TEST(BasicMemoryTests, SetValueWithTimeInThePast )
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  time_t now;
+  time(&now);
+#pragma warning(push)
+#pragma warning( disable : 4996)
+  auto inThePast = *localtime(&now);
+#pragma warning( pop )  
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+
+  auto days = IntRandomNumber<int>(1, 365);
+  inThePast.tm_mday -= days;
+  auto thePast = mktime(&inThePast);
+
+  ASSERT_THROW(mc.Set(keyCacheItem.c_str(), value, thePast), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, SetValueWithTimeInThePastInThePolicy)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  time_t now;
+  time(&now);
+#pragma warning(push)
+#pragma warning( disable : 4996)
+  auto inThePast = *localtime(&now);
+#pragma warning( pop )  
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+
+  auto days = IntRandomNumber<int>(1, 365);
+  inThePast.tm_mday -= days;
+  auto thePast = mktime(&inThePast);
+
+  auto policy = ::myodd::cache::CacheItemPolicy(thePast);
+
+  ASSERT_THROW(mc.Set(keyCacheItem.c_str(), value, policy), std::invalid_argument);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddThenSetValue, NUMBER_OF_TESTS )
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+
+  // add the value
+  mc.Add(keyCacheItem.c_str(), value, ::myodd::cache::CacheItemPolicy() );
+
+  // get the value and check
+  auto cache = mc.Get(keyCacheItem.c_str());
+  ASSERT_EQ(value, cache);
+
+  // set it
+  auto valueNew = IntRandomNumber<int>();
+  mc.Set(keyCacheItem.c_str(), valueNew, ::myodd::cache::CacheItemPolicy());
+
+  // check it
+  cache = mc.Get(keyCacheItem.c_str());
+  ASSERT_EQ(valueNew, cache);
+}
+
+TEST_MEM_LOOP(BasicMemoryTests, AddThenSetValueWithAbsoluteExpiration, NUMBER_OF_TESTS)
+{
+  time_t now;
+  time(&now);
+
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
+
+  // add the value
+  mc.Add(keyCacheItem.c_str(), value, absoluteExpiration );
+
+  // get the value and check
+  auto cache = mc.Get(keyCacheItem.c_str());
+  ASSERT_EQ(value, cache);
+
+  // set it
+  auto valueNew = IntRandomNumber<int>();
+  mc.Set(keyCacheItem.c_str(), valueNew, absoluteExpiration );
+
+  // check it
+  cache = mc.Get(keyCacheItem.c_str());
+  ASSERT_EQ(valueNew, cache);
+}
