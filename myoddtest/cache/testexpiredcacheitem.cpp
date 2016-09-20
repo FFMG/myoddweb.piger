@@ -1,8 +1,8 @@
 #include "cache/memorycache.h"
 #include <gtest/gtest.h>
 
-#include <chrono>
-#include <thread>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 
 #include "../testcommon.h"
 

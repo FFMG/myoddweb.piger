@@ -588,3 +588,84 @@ TEST(BasicMemoryTests, RemoveNonExistentKey)
   auto valueCopy = mc.Remove(keyCacheItem2.c_str(), nullptr);
   ASSERT_EQ(nullptr, valueCopy);
 }
+
+TEST(BasicMemoryTests, SetValueWithNullKeyAndPolicy )
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  auto value = IntRandomNumber<int>();
+  auto policy = myodd::cache::CacheItemPolicy();
+
+  ASSERT_THROW( mc.Set(nullptr, value, policy), std::invalid_argument );
+}
+
+TEST(BasicMemoryTests, SetValueWithNullKeyAndAbsoluteTime)
+{
+  time_t now;
+  time(&now);
+
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
+  ASSERT_TRUE(absoluteExpiration >= 0);
+
+  ASSERT_THROW(mc.Set(nullptr, value, absoluteExpiration), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, SetValueWithNullValueAndPolicy)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = nullptr;
+  auto policy = myodd::cache::CacheItemPolicy();
+
+  ASSERT_THROW(mc.Set(keyCacheItem.c_str(), value, policy), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, SetValueWithNullValueAndAbsoluteTime)
+{
+  time_t now;
+  time(&now);
+
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = nullptr;
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
+  ASSERT_TRUE(absoluteExpiration >= 0);
+
+  ASSERT_THROW(mc.Set(keyCacheItem.c_str(), value, absoluteExpiration), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, SetValueWithNonNullRegionAndPolicy)
+{
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  auto policy = myodd::cache::CacheItemPolicy();
+  auto regionName = Uuid();
+  ASSERT_THROW(mc.Set(keyCacheItem.c_str(), value, policy, regionName.c_str()), std::invalid_argument);
+}
+
+TEST(BasicMemoryTests, SetValueWithNonNullRegionAndAbsoluteTime)
+{
+  time_t now;
+  time(&now);
+
+  auto key = Uuid();
+  myodd::cache::MemoryCache mc(key.c_str());
+
+  auto keyCacheItem = Uuid();
+  auto value = IntRandomNumber<int>();
+  auto absoluteExpiration = RandomAbsoluteExpiry(now, false);
+  auto regionName = Uuid();
+  ASSERT_TRUE(absoluteExpiration >= 0);
+
+  ASSERT_THROW(mc.Set(keyCacheItem.c_str(), value, absoluteExpiration, regionName.c_str()), std::invalid_argument);
+}

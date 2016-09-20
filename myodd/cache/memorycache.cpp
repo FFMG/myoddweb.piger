@@ -23,11 +23,10 @@
 // @see https://opensource.org/licenses/MIT
 // ***********************************************************************
 #include "memorycache.h"
-#include <algorithm>  //  std::transform
-#include <cwctype>    //  std::towlower
-
-#include <functional>
-#include <chrono>
+#include <algorithm>      //  std::transform
+#include <cwctype>        //  std::towlower
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 
 #define MEMORYCACHE_EXPIRED_CHECK_SEC 1
 
@@ -404,11 +403,11 @@ namespace myodd {
      * @see AddOrGetExisting( ... )
      * @param const wchar_t* key A unique identifier for the cache entry.
      * @param const ::myodd::dynamic::Any& value the object to insert
-     * @param time_t absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
+     * @param const time_t& absoluteExpiration The fixed date and time at which the cache entry will expire. This parameter is required when the Add method is called.
      * @param const wchar_t* regionName A named region in the cache to which the cache entry can be added,
      * @return boolean true if insertion succeeded, or false if there is an already an entry in the cache that has the same key as key. 
      */
-    bool MemoryCache::Add(const wchar_t* key, const ::myodd::dynamic::Any& value, time_t absoluteExpiration, const wchar_t* regionName )
+    bool MemoryCache::Add(const wchar_t* key, const ::myodd::dynamic::Any& value, const time_t& absoluteExpiration, const wchar_t* regionName )
     {
       // try and add the item or get existing, if it exists, then we return false, (as it exists already).
       return (AddOrGetExisting( key, value, absoluteExpiration, regionName) == nullptr);
@@ -570,6 +569,89 @@ namespace myodd {
 
       // return the value.
       return value;
+    }
+
+    /**
+     * Inserts a cache entry into the cache by using a CacheItem instance to supply the key and value for the cache entry.
+     * (Overrides ObjectCache.Set(CacheItem, CacheItemPolicy).)
+     * @param const CacheItem& item An object that represents a cache entry to insert.
+     * @param const CacheItemPolicy& policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
+     */
+    void MemoryCache::Set(const CacheItem& item, const CacheItemPolicy& policy)
+    {
+      // lock the threads so we don't have a race condition.
+      MemoryCache::Lock guard(_mutex);
+
+      // look to see if it exists already
+      auto it = _cacheItems.find(std::wstring(item.Key()));
+
+      // if the item already exists, remove it.
+      if (_cacheItems.end() != it)
+      {
+        _cacheItems.erase(it);
+      }
+
+      // we can now add it to our list.
+      _cacheItems.emplace(std::make_pair(std::wstring(item.Key()), CacheItemAndPolicy{ item, policy }));
+
+      // if we have max time, then it will never expire.
+      if (policy.GetAbsoluteExpiration() != std::numeric_limits<time_t>::max())
+      {
+        // start the timer if it has not yet started.
+        AbsoluteExpirationTimer();
+      }
+    }
+
+    /**
+     * Inserts a cache entry into the cache by using a key and a value and eviction.
+     * (Overrides ObjectCache.Set(String, Object, CacheItemPolicy, String).)
+     * @param const wchar_t* key A unique identifier for the cache entry to insert.
+     * @param const ::myodd::dynamic::Any& value The data for the cache entry.
+     * @param const CacheItemPolicy& policy An object that contains eviction details for the cache entry. This object provides more options for eviction than a simple absolute expiration.
+     * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
+     */
+    void MemoryCache::Set(const wchar_t* key, const ::myodd::dynamic::Any& value, const CacheItemPolicy& policy, const wchar_t* regionName )
+    {
+      // the key cannot be null
+      ValidateKey(key);
+
+      // make sure that the region name is null
+      ValidateRegionName(regionName);
+
+      // check that the value is not null
+      ValidateValue(value);
+
+      // validate the time
+      ValidateAbsoluteExpiration(policy.GetAbsoluteExpiration());
+
+      //  just pass the value to the CacheItem function.
+      Set(CacheItem(key, value, regionName), policy);
+    }
+
+    /**
+     * Inserts a cache entry into the cache by using a key and a value and specifies time-based expiration details.
+     * (Overrides ObjectCache.Set(String, Object, DateTimeOffset, String).)
+     * @param const wchar_t* key A unique identifier for the cache entry to insert.
+     * @param const ::myodd::dynamic::Any& value The data for the cache entry.
+     * @param const time_t& absoluteExpiration The fixed date and time at which the cache entry will expire.
+     * @param const wchar_t* regionName A named region in the cache to which a cache entry can be added. Do not pass a value for this parameter. This parameter is null by default, because the MemoryCache class does not implement regions.
+     */
+    void MemoryCache::Set(const wchar_t* key, const ::myodd::dynamic::Any& value, const time_t& absoluteExpiration, const wchar_t* regionName )
+    {
+      // the key cannot be null
+      ValidateKey(key);
+
+      // check that the value is not null
+      ValidateValue(value);
+
+      // make sure that the date is valid
+      ValidateAbsoluteExpiration(absoluteExpiration);
+
+      // the region mame must be null
+      ValidateRegionName(regionName);
+
+      // set the value now.
+      Set(CacheItem(key, value, regionName), CacheItemPolicy(absoluteExpiration));
     }
   }
 }
