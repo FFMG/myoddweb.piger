@@ -284,9 +284,6 @@
     <ClCompile Include="pcre2\src\pcre2_auto_possess.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_chartables.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
     <ClCompile Include="pcre2\src\pcre2_compile.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
@@ -303,9 +300,6 @@
       <Filter>pcre2\src</Filter>
     </ClCompile>
     <ClCompile Include="pcre2\src\pcre2_find_bracket.c">
-      <Filter>pcre2\src</Filter>
-    </ClCompile>
-    <ClCompile Include="pcre2\src\pcre2_jit_compile.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
     <ClCompile Include="pcre2\src\pcre2_maketables.c">
@@ -358,6 +352,12 @@
     </ClCompile>
     <ClCompile Include="cache\cacheitempolicy.cpp">
       <Filter>cache</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_jit_compile.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_chartables.c">
+      <Filter>pcre2\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
