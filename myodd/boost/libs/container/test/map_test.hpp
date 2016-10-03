@@ -68,7 +68,7 @@ int map_test_copyable(boost::container::container_detail::true_type)
    typedef container_detail::pair<IntType, IntType>         IntPairType;
    typedef typename MyStdMap::value_type  StdPairType;
 
-   const int max = 50;
+   const int MaxElem = 50;
 
    ::boost::movelib::unique_ptr<MyBoostMap> const pboostmap = ::boost::movelib::make_unique<MyBoostMap>();
    ::boost::movelib::unique_ptr<MyStdMap> const pstdmap = ::boost::movelib::make_unique<MyStdMap>();
@@ -86,7 +86,7 @@ int map_test_copyable(boost::container::container_detail::true_type)
    boostmultimap.insert(boostmultimap.begin(), boostmultimap.end());
 
    int i;
-   for(i = 0; i < max; ++i){
+   for(i = 0; i < MaxElem; ++i){
       {
       IntType i1(i), i2(i);
       IntPairType intpair1(boost::move(i1), boost::move(i2));
@@ -138,7 +138,7 @@ int map_test()
    typedef typename MyBoostMap::key_type    IntType;
    typedef container_detail::pair<IntType, IntType>         IntPairType;
    typedef typename MyStdMap::value_type  StdPairType;
-   const int max = 50;
+   const int MaxElem = 50;
    typedef typename MyStdMap::value_type StdValueType;
    typedef typename MyStdMap::key_type StdKeyType;
    typedef typename MyStdMap::mapped_type StdMappedType;
@@ -146,20 +146,20 @@ int map_test()
 
    //Test construction from a range
    {
-      IntPairType aux_vect[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i/2);
          IntType i2(i/2);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      StdValueType aux_vect2[50];
-      for(int i = 0; i < 50; ++i){
+      StdValueType aux_vect2[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          new(&aux_vect2[i])StdValueType(StdKeyType(i/2), StdMappedType(i/2));
       }
 
-      IntPairType aux_vect3[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect3[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i/2);
          IntType i2(i/2);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
@@ -167,33 +167,33 @@ int map_test()
 
       ::boost::movelib::unique_ptr<MyBoostMap> const pboostmap = ::boost::movelib::make_unique<MyBoostMap>
                ( boost::make_move_iterator(&aux_vect[0])
-               , boost::make_move_iterator(&aux_vect[0] + 50), typename MyBoostMap::key_compare());
+               , boost::make_move_iterator(&aux_vect[0] + MaxElem), typename MyBoostMap::key_compare());
       ::boost::movelib::unique_ptr<MyStdMap> const pstdmap = ::boost::movelib::make_unique<MyStdMap>
-         (&aux_vect2[0], &aux_vect2[0] + 50, typename MyStdMap::key_compare());
+         (&aux_vect2[0], &aux_vect2[0] + MaxElem, typename MyStdMap::key_compare());
       if(!CheckEqualContainers(*pboostmap, *pstdmap)) return 1;
 
       ::boost::movelib::unique_ptr<MyBoostMultiMap> const pboostmultimap = ::boost::movelib::make_unique<MyBoostMultiMap>
                ( boost::make_move_iterator(&aux_vect3[0])
-               , boost::make_move_iterator(&aux_vect3[0] + 50), typename MyBoostMap::key_compare());
+               , boost::make_move_iterator(&aux_vect3[0] + MaxElem), typename MyBoostMap::key_compare());
       ::boost::movelib::unique_ptr<MyStdMultiMap> const pstdmultimap = ::boost::movelib::make_unique<MyStdMultiMap>
-         (&aux_vect2[0], &aux_vect2[0] + 50, typename MyStdMap::key_compare());
+         (&aux_vect2[0], &aux_vect2[0] + MaxElem, typename MyStdMap::key_compare());
       if(!CheckEqualContainers(*pboostmultimap, *pstdmultimap)) return 1;
    }
    {
-      IntPairType aux_vect[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i/2);
          IntType i2(i/2);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      StdValueType aux_vect2[50];
-      for(int i = 0; i < 50; ++i){
+      StdValueType aux_vect2[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          new(&aux_vect2[i])StdValueType(StdKeyType(i/2), StdMappedType(i/2));
       }
 
-      IntPairType aux_vect3[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect3[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i/2);
          IntType i2(i/2);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
@@ -201,16 +201,16 @@ int map_test()
 
       ::boost::movelib::unique_ptr<MyBoostMap> const pboostmap = ::boost::movelib::make_unique<MyBoostMap>
                ( boost::make_move_iterator(&aux_vect[0])
-               , boost::make_move_iterator(&aux_vect[0] + 50), typename MyBoostMap::allocator_type());
+               , boost::make_move_iterator(&aux_vect[0] + MaxElem), typename MyBoostMap::allocator_type());
       ::boost::movelib::unique_ptr<MyStdMap> const pstdmap = ::boost::movelib::make_unique<MyStdMap>
-         (&aux_vect2[0], &aux_vect2[0] + 50, typename MyStdMap::key_compare());
+         (&aux_vect2[0], &aux_vect2[0] + MaxElem, typename MyStdMap::key_compare());
       if(!CheckEqualContainers(*pboostmap, *pstdmap)) return 1;
 
       ::boost::movelib::unique_ptr<MyBoostMultiMap> const pboostmultimap = ::boost::movelib::make_unique<MyBoostMultiMap>
                ( boost::make_move_iterator(&aux_vect3[0])
-               , boost::make_move_iterator(&aux_vect3[0] + 50), typename MyBoostMap::allocator_type());
+               , boost::make_move_iterator(&aux_vect3[0] + MaxElem), typename MyBoostMap::allocator_type());
       ::boost::movelib::unique_ptr<MyStdMultiMap> const pstdmultimap = ::boost::movelib::make_unique<MyStdMultiMap>
-         (&aux_vect2[0], &aux_vect2[0] + 50, typename MyStdMap::key_compare());
+         (&aux_vect2[0], &aux_vect2[0] + MaxElem, typename MyStdMap::key_compare());
       if(!CheckEqualContainers(*pboostmultimap, *pstdmultimap)) return 1;
    }
 
@@ -225,8 +225,8 @@ int map_test()
 
    {
       //This is really nasty, but we have no other simple choice
-      IntPairType aux_vect[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i/2);
          IntType i2(i/2);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
@@ -235,13 +235,13 @@ int map_test()
       typedef typename MyStdMap::value_type StdValueType;
       typedef typename MyStdMap::key_type StdKeyType;
       typedef typename MyStdMap::mapped_type StdMappedType;
-      StdValueType aux_vect2[50];
-      for(int i = 0; i < 50; ++i){
+      StdValueType aux_vect2[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          new(&aux_vect2[i])StdValueType(StdKeyType(i/2), StdMappedType(i/2));
       }
 
-      IntPairType aux_vect3[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect3[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i/2);
          IntType i2(i/2);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
@@ -249,14 +249,14 @@ int map_test()
 
       ::boost::movelib::unique_ptr<MyBoostMap> const pboostmap2 = ::boost::movelib::make_unique<MyBoostMap>
                ( boost::make_move_iterator(&aux_vect[0])
-               , boost::make_move_iterator(&aux_vect[0] + 50));
+               , boost::make_move_iterator(&aux_vect[0] + MaxElem));
       ::boost::movelib::unique_ptr<MyStdMap> const pstdmap2 = ::boost::movelib::make_unique<MyStdMap>
-         (&aux_vect2[0], &aux_vect2[0] + 50);
+         (&aux_vect2[0], &aux_vect2[0] + MaxElem);
       ::boost::movelib::unique_ptr<MyBoostMultiMap> const pboostmultimap2 = ::boost::movelib::make_unique<MyBoostMultiMap>
                ( boost::make_move_iterator(&aux_vect3[0])
-               , boost::make_move_iterator(&aux_vect3[0] + 50));
+               , boost::make_move_iterator(&aux_vect3[0] + MaxElem));
       ::boost::movelib::unique_ptr<MyStdMultiMap> const pstdmultimap2 = ::boost::movelib::make_unique<MyStdMultiMap>
-         (&aux_vect2[0], &aux_vect2[0] + 50);
+         (&aux_vect2[0], &aux_vect2[0] + MaxElem);
       MyBoostMap &boostmap2 = *pboostmap2;
       MyStdMap   &stdmap2   = *pstdmap2;
       MyBoostMultiMap &boostmultimap2 = *pboostmultimap2;
@@ -267,17 +267,17 @@ int map_test()
 
       //ordered range insertion
       //This is really nasty, but we have no other simple choice
-      for(int i = 0; i < 50; ++i){
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i);
          IntType i2(i);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      for(int i = 0; i < 50; ++i){
+      for(int i = 0; i < MaxElem; ++i){
          new(&aux_vect2[i])StdValueType(StdKeyType(i), StdMappedType(i));
       }
 
-      for(int i = 0; i < 50; ++i){
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i);
          IntType i2(i);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
@@ -301,14 +301,14 @@ int map_test()
 
       ::boost::movelib::unique_ptr<MyBoostMap> const pboostmap3 = ::boost::movelib::make_unique<MyBoostMap>
                ( boost::make_move_iterator(&aux_vect[0])
-               , boost::make_move_iterator(&aux_vect[0] + 50));
+               , boost::make_move_iterator(&aux_vect[0] + MaxElem));
       ::boost::movelib::unique_ptr<MyStdMap> const pstdmap3 = ::boost::movelib::make_unique<MyStdMap>
-               (&aux_vect2[0], &aux_vect2[0] + 50);
+               (&aux_vect2[0], &aux_vect2[0] + MaxElem);
       ::boost::movelib::unique_ptr<MyBoostMultiMap> const pboostmultimap3 = ::boost::movelib::make_unique<MyBoostMultiMap>
                ( boost::make_move_iterator(&aux_vect3[0])
-               , boost::make_move_iterator(&aux_vect3[0] + 50));
+               , boost::make_move_iterator(&aux_vect3[0] + MaxElem));
       ::boost::movelib::unique_ptr<MyStdMultiMap> const pstdmultimap3 = ::boost::movelib::make_unique<MyStdMultiMap>
-               (&aux_vect2[0], &aux_vect2[0] + 50);
+               (&aux_vect2[0], &aux_vect2[0] + MaxElem);
       MyBoostMap &boostmap3 = *pboostmap3;
       MyStdMap   &stdmap3   = *pstdmap3;
       MyBoostMultiMap &boostmultimap3 = *pboostmultimap3;
@@ -344,20 +344,20 @@ int map_test()
    }
    {
       //This is really nasty, but we have no other simple choice
-      IntPairType aux_vect[max];
-      for(int i = 0; i < max; ++i){
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i);
          IntType i2(i);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
       }
-      IntPairType aux_vect3[max];
-      for(int i = 0; i < max; ++i){
+      IntPairType aux_vect3[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i);
          IntType i2(i);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      for(int i = 0; i < max; ++i){
+      for(int i = 0; i < MaxElem; ++i){
          boostmap.insert(boost::move(aux_vect[i]));
          stdmap.insert(StdPairType(i, i));
          boostmultimap.insert(boost::move(aux_vect3[i]));
@@ -405,22 +405,22 @@ int map_test()
    //Initialize values
    {
       //This is really nasty, but we have no other simple choice
-      IntPairType aux_vect[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(-1);
          IntType i2(-1);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
       }
-      IntPairType aux_vect3[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect3[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(-1);
          IntType i2(-1);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      boostmap.insert(boost::make_move_iterator(&aux_vect[0]), boost::make_move_iterator(&aux_vect[0] + 50));
-      boostmultimap.insert(boost::make_move_iterator(&aux_vect3[0]), boost::make_move_iterator(&aux_vect3[0] + 50));
-      for(std::size_t i = 0; i != 50; ++i){
+      boostmap.insert(boost::make_move_iterator(&aux_vect[0]), boost::make_move_iterator(&aux_vect[0] + MaxElem));
+      boostmultimap.insert(boost::make_move_iterator(&aux_vect3[0]), boost::make_move_iterator(&aux_vect3[0] + MaxElem));
+      for(int i = 0; i != MaxElem; ++i){
          StdPairType stdpairtype(-1, -1);
          stdmap.insert(stdpairtype);
          stdmultimap.insert(stdpairtype);
@@ -429,49 +429,50 @@ int map_test()
       if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
 
       for(int i = 0, j = static_cast<int>(boostmap.size()); i < j; ++i){
-         boostmap.erase(IntType(i));
+         IntType k(i);
+         boostmap.erase(k);
          stdmap.erase(i);
-         boostmultimap.erase(IntType(i));
+         boostmultimap.erase(k);
          stdmultimap.erase(i);
       }
       if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
       if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
    }
    {
-      IntPairType aux_vect[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(-1);
          IntType i2(-1);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      IntPairType aux_vect3[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect3[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(-1);
          IntType i2(-1);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      IntPairType aux_vect4[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect4[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(-1);
          IntType i2(-1);
          new(&aux_vect4[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      IntPairType aux_vect5[50];
-      for(int i = 0; i < 50; ++i){
+      IntPairType aux_vect5[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(-1);
          IntType i2(-1);
          new(&aux_vect5[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      boostmap.insert(boost::make_move_iterator(&aux_vect[0]), boost::make_move_iterator(&aux_vect[0] + 50));
-      boostmap.insert(boost::make_move_iterator(&aux_vect3[0]), boost::make_move_iterator(&aux_vect3[0] + 50));
-      boostmultimap.insert(boost::make_move_iterator(&aux_vect4[0]), boost::make_move_iterator(aux_vect4 + 50));
-      boostmultimap.insert(boost::make_move_iterator(&aux_vect5[0]), boost::make_move_iterator(aux_vect5 + 50));
+      boostmap.insert(boost::make_move_iterator(&aux_vect[0]), boost::make_move_iterator(&aux_vect[0] + MaxElem));
+      boostmap.insert(boost::make_move_iterator(&aux_vect3[0]), boost::make_move_iterator(&aux_vect3[0] + MaxElem));
+      boostmultimap.insert(boost::make_move_iterator(&aux_vect4[0]), boost::make_move_iterator(aux_vect4 + MaxElem));
+      boostmultimap.insert(boost::make_move_iterator(&aux_vect5[0]), boost::make_move_iterator(aux_vect5 + MaxElem));
 
-      for(std::size_t i = 0; i != 50; ++i){
+      for(int i = 0; i != MaxElem; ++i){
          StdPairType stdpairtype(-1, -1);
          stdmap.insert(stdpairtype);
          stdmultimap.insert(stdpairtype);
@@ -491,20 +492,20 @@ int map_test()
 
    {
       //This is really nasty, but we have no other simple choice
-      IntPairType aux_vect[max];
-      for(int i = 0; i < max; ++i){
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i);
          IntType i2(i);
          new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
       }
-      IntPairType aux_vect3[max];
-      for(int i = 0; i < max; ++i){
+      IntPairType aux_vect3[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
          IntType i1(i);
          IntType i2(i);
          new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
       }
 
-      for(int i = 0; i < max; ++i){
+      for(int i = 0; i < MaxElem; ++i){
          boostmap.insert(boost::move(aux_vect[i]));
          stdmap.insert(StdPairType(i, i));
          boostmultimap.insert(boost::move(aux_vect3[i]));
@@ -514,7 +515,7 @@ int map_test()
       if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
       if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
 
-      for(int i = 0; i < max; ++i){
+      for(int i = 0; i < MaxElem; ++i){
          IntPairType intpair;
          {
             IntType i1(i);
@@ -559,7 +560,8 @@ int map_test()
             IntType i2(i);
             new(&intpair)IntPairType(boost::move(i1), boost::move(i2));
          }
-         boostmap.insert(boostmap.lower_bound(IntType(i)), boost::move(intpair));
+         IntType k(i);
+         boostmap.insert(boostmap.lower_bound(k), boost::move(intpair));
          stdmap.insert(stdmap.lower_bound(i), StdPairType(i, i));
          //PrintContainers(boostmap, stdmap);
          {
@@ -627,12 +629,13 @@ int map_test()
       }
 
       //Compare count with std containers
-      for(int i = 0; i < max; ++i){
-         if(boostmap.count(IntType(i)) != stdmap.count(i)){
+      for(int i = 0; i < MaxElem; ++i){
+         IntType k(i);
+         if(boostmap.count(k) != stdmap.count(i)){
             return -1;
          }
 
-         if(boostmultimap.count(IntType(i)) != stdmultimap.count(i)){
+         if(boostmultimap.count(k) != stdmultimap.count(i)){
             return -1;
          }
       }
@@ -656,11 +659,242 @@ int map_test()
             new(&intpair)IntPairType(boost::move(i1), boost::move(i2));
          }
          boostmultimap.insert(boost::move(intpair));
-         if(boostmap.count(IntType(i)) != typename MyBoostMultiMap::size_type(1))
+         IntType k(i);
+         if(boostmap.count(k) != typename MyBoostMultiMap::size_type(1))
             return 1;
-         if(boostmultimap.count(IntType(i)) != typename MyBoostMultiMap::size_type(j+1))
+         if(boostmultimap.count(k) != typename MyBoostMultiMap::size_type(j+1))
             return 1;
       }
+   }
+
+   {  //operator[] test
+      boostmap.clear();
+      boostmultimap.clear();
+      stdmap.clear();
+      stdmultimap.clear();
+
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
+         IntType i1(i);
+         IntType i2(i);
+         new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
+      }
+
+      for(int i = 0; i < MaxElem; ++i){
+         boostmap[boost::move(aux_vect[i].first)] = boost::move(aux_vect[i].second);
+         stdmap[i] = i;
+      }
+
+      if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
+      if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
+   }
+
+   {  //insert_or_assign test
+      boostmap.clear();
+      boostmultimap.clear();
+      stdmap.clear();
+      stdmultimap.clear();
+
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
+         IntType i1(i);
+         IntType i2(i);
+         new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
+      }
+
+      IntPairType aux_vect2[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
+         IntType i1(i);
+         IntType i2(MaxElem-i);
+         new(&aux_vect2[i])IntPairType(boost::move(i1), boost::move(i2));
+      }
+
+      for(int i = 0; i < MaxElem; ++i){
+         boostmap.insert_or_assign(boost::move(aux_vect[i].first), boost::move(aux_vect[i].second));
+         stdmap[i] = i;
+      }
+
+      if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
+      if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
+
+      for(int i = 0; i < MaxElem; ++i){
+         boostmap.insert_or_assign(boost::move(aux_vect2[i].first), boost::move(aux_vect2[i].second));
+         stdmap[i] = MaxElem-i;
+      }
+
+      if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
+      if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
+   }
+
+   {  //try_emplace
+      boostmap.clear();
+      boostmultimap.clear();
+      stdmap.clear();
+      stdmultimap.clear();
+
+      IntPairType aux_vect[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
+         IntType i1(i);
+         IntType i2(i);
+         new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
+      }
+
+      IntPairType aux_vect2[MaxElem];
+      for(int i = 0; i < MaxElem; ++i){
+         IntType i1(i);
+         IntType i2(MaxElem-i);
+         new(&aux_vect2[i])IntPairType(boost::move(i1), boost::move(i2));
+      }
+
+      typedef typename MyBoostMap::iterator iterator;
+      for(int i = 0; i < MaxElem; ++i){
+         iterator it;
+         if(i&1){
+            std::pair<typename MyBoostMap::iterator, bool> ret =
+               boostmap.try_emplace(boost::move(aux_vect[i].first), boost::move(aux_vect[i].second));
+            if(!ret.second)
+               return 1;
+            it = ret.first;
+         }
+         else{
+            it = boostmap.try_emplace
+               (boostmap.upper_bound(aux_vect[i].first), boost::move(aux_vect[i].first), boost::move(aux_vect[i].second));
+         }
+         if(boostmap.end() == it || it->first != aux_vect2[i].first || it->second != aux_vect2[i].first){
+            return 1;
+         }
+         stdmap[i] = i;
+      }
+
+      if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
+      if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
+
+      for(int i = 0; i < MaxElem; ++i){
+         iterator it;
+         iterator itex = boostmap.find(aux_vect2[i].first);
+         if(itex == boostmap.end())
+            return 1;
+         if(i&1){
+            std::pair<typename MyBoostMap::iterator, bool> ret =
+               boostmap.try_emplace(boost::move(aux_vect2[i].first), boost::move(aux_vect2[i].second));
+            if(ret.second)
+               return 1;
+            it = ret.first;
+         }
+         else{
+            it = boostmap.try_emplace
+               (boostmap.upper_bound(aux_vect2[i].first), boost::move(aux_vect2[i].first), boost::move(aux_vect2[i].second));
+         }
+         const IntType test_int(i);
+         if(boostmap.end() == it || it != itex || it->second != test_int){
+            return 1;
+         }
+      }
+
+      if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
+      if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
+   }
+
+   {  //merge
+      ::boost::movelib::unique_ptr<MyBoostMap> const pboostmap2 = ::boost::movelib::make_unique<MyBoostMap>();
+      ::boost::movelib::unique_ptr<MyBoostMultiMap> const pboostmultimap2 = ::boost::movelib::make_unique<MyBoostMultiMap>();
+
+      MyBoostMap &boostmap2 = *pboostmap2;
+      MyBoostMultiMap &boostmultimap2 = *pboostmultimap2;
+
+      boostmap.clear();
+      boostmap2.clear();
+      boostmultimap.clear();
+      boostmultimap2.clear();
+      stdmap.clear();
+      stdmultimap.clear();
+
+      {
+         IntPairType aux_vect[MaxElem];
+         for(int i = 0; i < MaxElem; ++i){
+            IntType i1(i);
+            IntType i2(i);
+            new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
+         }
+
+         IntPairType aux_vect2[MaxElem];
+         for(int i = 0; i < MaxElem; ++i){
+            IntType i1(MaxElem/2+i);
+            IntType i2(MaxElem-i);
+            new(&aux_vect2[i])IntPairType(boost::move(i1), boost::move(i2));
+         }
+         IntPairType aux_vect3[MaxElem];
+         for(int i = 0; i < MaxElem; ++i){
+            IntType i1(MaxElem*2/2+i);
+            IntType i2(MaxElem*2+i);
+            new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
+         }
+         boostmap.insert(boost::make_move_iterator(&aux_vect[0]), boost::make_move_iterator(&aux_vect[0] + MaxElem));
+         boostmap2.insert(boost::make_move_iterator(&aux_vect2[0]), boost::make_move_iterator(&aux_vect2[0] + MaxElem));
+         boostmultimap2.insert(boost::make_move_iterator(&aux_vect3[0]), boost::make_move_iterator(&aux_vect3[0] + MaxElem));
+      }
+      for(int i = 0; i < MaxElem; ++i){
+         stdmap.insert(StdPairType(i, i));
+      }
+      for(int i = 0; i < MaxElem; ++i){
+         stdmap.insert(StdPairType(MaxElem/2+i, MaxElem-i));
+      }
+
+      boostmap.merge(boost::move(boostmap2));
+      if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
+
+      for(int i = 0; i < MaxElem; ++i){
+         stdmap.insert(StdPairType(MaxElem*2/2+i, MaxElem*2+i));
+      }
+
+      boostmap.merge(boost::move(boostmultimap2));
+      if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
+
+      boostmap.clear();
+      boostmap2.clear();
+      boostmultimap.clear();
+      boostmultimap2.clear();
+      stdmap.clear();
+      stdmultimap.clear();
+      {
+         IntPairType aux_vect[MaxElem];
+         for(int i = 0; i < MaxElem; ++i){
+            IntType i1(i);
+            IntType i2(i);
+            new(&aux_vect[i])IntPairType(boost::move(i1), boost::move(i2));
+         }
+
+         IntPairType aux_vect2[MaxElem];
+         for(int i = 0; i < MaxElem; ++i){
+            IntType i1(MaxElem/2+i);
+            IntType i2(MaxElem-i);
+            new(&aux_vect2[i])IntPairType(boost::move(i1), boost::move(i2));
+         }
+         IntPairType aux_vect3[MaxElem];
+         for(int i = 0; i < MaxElem; ++i){
+            IntType i1(MaxElem*2/2+i);
+            IntType i2(MaxElem*2+i);
+            new(&aux_vect3[i])IntPairType(boost::move(i1), boost::move(i2));
+         }
+         boostmultimap.insert(boost::make_move_iterator(&aux_vect[0]), boost::make_move_iterator(&aux_vect[0] + MaxElem));
+         boostmultimap2.insert(boost::make_move_iterator(&aux_vect2[0]), boost::make_move_iterator(&aux_vect2[0] + MaxElem));
+         boostmap2.insert(boost::make_move_iterator(&aux_vect3[0]), boost::make_move_iterator(&aux_vect3[0] + MaxElem));
+      }
+      for(int i = 0; i < MaxElem; ++i){
+         stdmultimap.insert(StdPairType(i, i));
+      }
+      for(int i = 0; i < MaxElem; ++i){
+         stdmultimap.insert(StdPairType(MaxElem/2+i, MaxElem-i));
+      }
+      boostmultimap.merge(boost::move(boostmultimap2));
+      if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
+
+      for(int i = 0; i < MaxElem; ++i){
+         stdmultimap.insert(StdPairType(MaxElem*2/2+i, MaxElem*2+i));
+      }
+
+      boostmultimap.merge(boost::move(boostmap2));
+      if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
    }
 
    if(map_test_copyable<MyBoostMap, MyStdMap, MyBoostMultiMap, MyStdMultiMap>
@@ -677,33 +911,33 @@ bool test_map_support_for_initialization_list_for()
    const std::initializer_list<std::pair<typename MapType::value_type::first_type, typename MapType::mapped_type>> il
       = { std::make_pair(1, 2), std::make_pair(3, 4) };
 
-   const MapType expected(il.begin(), il.end());
+   const MapType expected_map(il.begin(), il.end());
    {
       const MapType sil = il;
-      if (sil != expected)
+      if (sil != expected_map)
          return false;
 
       MapType sila(il, typename MapType::allocator_type());
-      if (sila != expected)
+      if (sila != expected_map)
          return false;
 
       MapType silca(il, typename MapType::key_compare(), typename MapType::allocator_type());
-      if (silca != expected)
+      if (silca != expected_map)
          return false;
 
       const MapType sil_ordered(ordered_unique_range, il);
-      if (sil_ordered != expected)
+      if (sil_ordered != expected_map)
          return false;
 
       MapType sil_assign = { std::make_pair(99, 100) };
       sil_assign = il;
-      if (sil_assign != expected)
+      if (sil_assign != expected_map)
          return false;
    }
    {
       MapType sil;
       sil.insert(il);
-      if (sil != expected)
+      if (sil != expected_map)
          return false;
    }
    return true;

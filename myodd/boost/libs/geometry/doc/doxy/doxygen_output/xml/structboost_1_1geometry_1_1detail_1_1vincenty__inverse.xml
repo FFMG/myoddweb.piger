@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1detail_1_1vincenty__inverse" kind="struct" prot="public">
     <compoundname>boost::geometry::detail::vincenty_inverse</compoundname>
     <includes local="no">vincenty_inverse.hpp</includes>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" line="52" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" bodystart="52" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" line="52" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" line="61" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" bodystart="56" bodyend="192"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" line="56" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" bodystart="56" bodyend="192"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -88,7 +88,7 @@
 <listitem><para><ulink url="http://www.movable-type.co.uk/scripts/LatLongVincenty.html">http://www.movable-type.co.uk/scripts/LatLongVincenty.html</ulink></para></listitem><listitem><para><ulink url="http://exogen.case.edu/projects/geopy/source/geopy.distance.html">http://exogen.case.edu/projects/geopy/source/geopy.distance.html</ulink></para></listitem><listitem><para><ulink url="http://futureboy.homeip.net/fsp/colorize.fsp?fileName=navigation.frink">http://futureboy.homeip.net/fsp/colorize.fsp?fileName=navigation.frink</ulink> </para></listitem></itemizedlist>
 </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" bodystart="50" bodyend="199"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" line="51" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/vincenty_inverse.hpp" bodystart="50" bodyend="199"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1detail_1_1vincenty__inverse_1a1e863a0019983d50616ec06e27b5c234" prot="public" virt="non-virtual"><scope>boost::geometry::detail::vincenty_inverse</scope><name>apply</name></member>
       <member refid="structboost_1_1geometry_1_1detail_1_1vincenty__inverse_1a6377bc93e07ec81d8f711a3412b59781" prot="public" virt="non-virtual"><scope>boost::geometry::detail::vincenty_inverse</scope><name>result_type</name></member>

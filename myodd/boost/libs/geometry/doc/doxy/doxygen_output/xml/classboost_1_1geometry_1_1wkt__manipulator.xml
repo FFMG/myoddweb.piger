@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1wkt__manipulator" kind="class" prot="public">
     <compoundname>boost::geometry::wkt_manipulator</compoundname>
     <includes local="no">write.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="491" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="491" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="491" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="491" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -39,7 +39,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="478" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="476" bodyend="478"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="476" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="476" bodyend="478"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
@@ -70,7 +70,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="484" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="481" bodyend="488"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="481" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="481" bodyend="488"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -86,11 +86,11 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/>boost::geometry::dsv(p)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>or<sp/>(with<sp/>extension)<sp/>like<sp/>this:</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" kindref="member" tooltip="Main WKT-streaming function.">boost::geometry::wkt</ref>(p)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" kindref="member">boost::geometry::wkt</ref>(p)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal">}</highlight></codeline>
 </programlisting> </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="473" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="472" bodyend="492"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="473" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="472" bodyend="492"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1wkt__manipulator_1a6458837a1e63c3f98c13cc085db99042" prot="private" virt="non-virtual"><scope>boost::geometry::wkt_manipulator</scope><name>m_geometry</name></member>
       <member refid="classboost_1_1geometry_1_1wkt__manipulator_1af79aafa1cf45c2e48b99032be002ef37" prot="public" virt="non-virtual"><scope>boost::geometry::wkt_manipulator</scope><name>operator&lt;&lt;</name></member>

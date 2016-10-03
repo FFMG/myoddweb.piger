@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1side__straight" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::buffer::side_straight</compoundname>
     <includes local="no">buffer_side_straight.hpp</includes>
@@ -13,7 +13,7 @@ See the examples for other buffer strategies, for example
 [heading See also]
 \* [link geometry.reference.algorithms.buffer.buffer_7_with_strategies buffer (with strategies)]
 </qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_side_straight.hpp" line="47" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_side_straight.hpp" bodystart="46" bodyend="129"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_side_straight.hpp" line="47" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_side_straight.hpp" bodystart="46" bodyend="129"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

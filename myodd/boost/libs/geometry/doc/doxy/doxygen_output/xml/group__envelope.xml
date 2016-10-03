@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__envelope" kind="group">
     <compoundname>envelope</compoundname>
     <title>envelope: calculate envelope (minimum bounding rectangle) of a geometry</title>
@@ -55,7 +55,7 @@
 <parametername>mbr</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>A model of the specified Box Concept which is set to the \1</para></parameterdescription>
+<para>A model of the specified Box Concept which is set to the envelope</para></parameterdescription>
 </parameteritem>
 </parameterlist>
  <qbk>[include reference/algorithms/envelope.qbk]</qbk>   <qbk>
@@ -64,7 +64,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" line="96" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" bodystart="95" bodyend="98"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" line="95" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" bodystart="95" bodyend="98"/>
       </memberdef>
       <memberdef kind="function" id="group__envelope_1ga4afb45ba6fb41e732a008a9e1e104347" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -109,14 +109,14 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated envelope</para></simplesect>
  <qbk>[include reference/algorithms/envelope.qbk]</qbk>   <qbk>
 [heading Example]
 [return_envelope] [return_envelope_output]
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" line="118" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" bodystart="117" bodyend="122"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" line="117" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/interface.hpp" bodystart="117" bodyend="122"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

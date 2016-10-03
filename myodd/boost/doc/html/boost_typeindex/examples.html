@@ -4,9 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Examples</title>
 <link rel="stylesheet" href="../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
-<link rel="up" href="../boost_typeindex.html" title="Chapter&#160;37.&#160;Boost.TypeIndex 4.0">
+<link rel="up" href="../boost_typeindex.html" title="Chapter&#160;38.&#160;Boost.TypeIndex 4.1">
 <link rel="prev" href="how_it_works.html" title="How it works">
 <link rel="next" href="../boost_typeindex_header_reference.html" title="Boost.TypeIndex Header Reference">
 </head>
@@ -27,7 +27,7 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_typeindex.examples"></a><a class="link" href="examples.html" title="Examples">Examples</a>
 </h2></div></div></div>
-<div class="toc"><dl>
+<div class="toc"><dl class="toc">
 <dt><span class="section"><a href="examples.html#boost_typeindex.examples.getting_human_readable_and_mangl">Getting
       human readable and mangled type names</a></span></dt>
 <dt><span class="section"><a href="examples.html#boost_typeindex.examples.storing_information_about_a_type">Storing
@@ -38,6 +38,10 @@
       type matching: storing type with const, volatile and reference qualifiers</a></span></dt>
 <dt><span class="section"><a href="examples.html#boost_typeindex.examples.table_of_raw_name_and_pretty_nam">Table
       of raw_name() and pretty_name() outputs with and without RTTI </a></span></dt>
+<dt><span class="section"><a href="examples.html#boost_typeindex.examples.c_14_checking_namespace_at_compi">C++14:
+      Checking namespace at compile time </a></span></dt>
+<dt><span class="section"><a href="examples.html#boost_typeindex.examples.c_14_checking_lexigraphical_orde">C++14:
+      Checking lexigraphical order of provided types </a></span></dt>
 </dl></div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -320,7 +324,7 @@
         Code from the example will produce the following table:
       </p>
 <div class="table">
-<a name="boost_typeindex.examples.table_of_raw_name_and_pretty_nam.id"></a><p class="title"><b>Table&#160;37.2.&#160;Table of names</b></p>
+<a name="boost_typeindex.examples.table_of_raw_name_and_pretty_nam.id"></a><p class="title"><b>Table&#160;38.2.&#160;Table of names</b></p>
 <div class="table-contents"><table class="table" summary="Table of names">
 <colgroup>
 <col>
@@ -505,10 +509,149 @@
         </p></td></tr>
 </table></div>
 </div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_typeindex.examples.c_14_checking_namespace_at_compi"></a><a class="link" href="examples.html#boost_typeindex.examples.c_14_checking_namespace_at_compi" title="C++14: Checking namespace at compile time">C++14:
+      Checking namespace at compile time </a>
+</h3></div></div></div>
+<p>
+        The following example shows that <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">typeindex</span><span class="special">::</span><span class="identifier">ctti_type_index</span></code>
+        is usable at compile time on a C++14 compatible compilers.
+      </p>
+<p>
+        In this example we'll create and use a constexpr function that checks namespace
+        of the provided type.
+      </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_index</span><span class="special">/</span><span class="identifier">ctti_type_index</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="comment">// Helper function that returns true if `name` starts with `substr`</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">&gt;</span>
+<span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">starts_with</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">name</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">(&amp;</span><span class="identifier">substr</span><span class="special">)[</span><span class="identifier">N</span><span class="special">])</span> <span class="keyword">noexcept</span><span class="special">;</span>
+
+
+<span class="comment">// Function that returns true if `T` declared in namespace `ns`</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">N</span><span class="special">&gt;</span>
+<span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">in_namespace</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">(&amp;</span><span class="identifier">ns</span><span class="special">)[</span><span class="identifier">N</span><span class="special">])</span> <span class="keyword">noexcept</span> <span class="special">{</span>
+    <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">name</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">typeindex</span><span class="special">::</span><span class="identifier">ctti_type_index</span><span class="special">::</span><span class="identifier">type_id</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;().</span><span class="identifier">raw_name</span><span class="special">();</span>
+
+    <span class="comment">// Some compilers add `class ` or `struct ` before the namespace, so we need to skip those words first</span>
+    <span class="keyword">if</span> <span class="special">(</span><span class="identifier">starts_with</span><span class="special">(</span><span class="identifier">name</span><span class="special">,</span> <span class="string">"class "</span><span class="special">))</span> <span class="special">{</span>
+        <span class="identifier">name</span> <span class="special">+=</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="string">"class "</span><span class="special">)</span> <span class="special">-</span> <span class="number">1</span><span class="special">;</span>
+    <span class="special">}</span> <span class="keyword">else</span> <span class="keyword">if</span> <span class="special">(</span><span class="identifier">starts_with</span><span class="special">(</span><span class="identifier">name</span><span class="special">,</span> <span class="string">"struct "</span><span class="special">))</span> <span class="special">{</span>
+        <span class="identifier">name</span> <span class="special">+=</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="string">"struct "</span><span class="special">)</span> <span class="special">-</span> <span class="number">1</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="keyword">return</span> <span class="identifier">starts_with</span><span class="special">(</span><span class="identifier">name</span><span class="special">,</span> <span class="identifier">ns</span><span class="special">)</span> <span class="special">&amp;&amp;</span> <span class="identifier">starts_with</span><span class="special">(</span><span class="identifier">name</span> <span class="special">+</span> <span class="identifier">N</span> <span class="special">-</span> <span class="number">1</span><span class="special">,</span> <span class="string">"::"</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        Now when we have that wonderfull function, we can do static assertions and
+        other compile-time validations:
+      </p>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">my_project</span> <span class="special">{</span>
+    <span class="keyword">struct</span> <span class="identifier">serializer</span> <span class="special">{</span>
+        <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+        <span class="keyword">void</span> <span class="identifier">serialize</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">value</span><span class="special">)</span> <span class="special">{</span>
+            <span class="keyword">static_assert</span><span class="special">(</span>
+                <span class="identifier">in_namespace</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="string">"my_project::types"</span><span class="special">)</span> <span class="special">||</span> <span class="identifier">in_namespace</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="string">"my_project::types_ext"</span><span class="special">),</span>
+                <span class="string">"Only types from namespaces `my_project::types` and `my_project::types_ext` are allowed to be serialized using `my_project::serializer`"</span>
+            <span class="special">);</span>
+
+            <span class="comment">// Actual implementation of the serialization goes below</span>
+            <span class="comment">// ...</span>
+        <span class="special">}</span>
+    <span class="special">};</span>
+
+    <span class="keyword">namespace</span> <span class="identifier">types</span> <span class="special">{</span>
+        <span class="keyword">struct</span> <span class="identifier">foo</span><span class="special">{};</span>
+        <span class="keyword">struct</span> <span class="identifier">bar</span><span class="special">{};</span>
+    <span class="special">}</span>
+<span class="special">}</span> <span class="comment">// namespace my_project</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span>
+    <span class="identifier">my_project</span><span class="special">::</span><span class="identifier">serializer</span> <span class="identifier">s</span><span class="special">;</span>
+    <span class="identifier">my_project</span><span class="special">::</span><span class="identifier">types</span><span class="special">::</span><span class="identifier">foo</span> <span class="identifier">f</span><span class="special">;</span>
+    <span class="identifier">my_project</span><span class="special">::</span><span class="identifier">types</span><span class="special">::</span><span class="identifier">bar</span> <span class="identifier">b</span><span class="special">;</span>
+
+    <span class="identifier">s</span><span class="special">.</span><span class="identifier">serialize</span><span class="special">(</span><span class="identifier">f</span><span class="special">);</span>
+    <span class="identifier">s</span><span class="special">.</span><span class="identifier">serialize</span><span class="special">(</span><span class="identifier">b</span><span class="special">);</span>
+
+    <span class="comment">// short sh = 0;</span>
+    <span class="comment">// s.serialize(sh); // Fails the static_assert!</span>
+<span class="special">}</span>
+</pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_typeindex.examples.c_14_checking_lexigraphical_orde"></a><a class="link" href="examples.html#boost_typeindex.examples.c_14_checking_lexigraphical_orde" title="C++14: Checking lexigraphical order of provided types">C++14:
+      Checking lexigraphical order of provided types </a>
+</h3></div></div></div>
+<p>
+        The following example shows that <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">typeindex</span><span class="special">::</span><span class="identifier">ctti_type_index</span></code>
+        is usable at compile time on a C++14 compatible compilers to check order
+        of template parameters.
+      </p>
+<p>
+        Consider the situation when we have a function that accepts std::tuple, boost::variant
+        or some other class that uses variadic templates:
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span><span class="special">...</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">class</span> <span class="identifier">types</span><span class="special">{};</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span><span class="special">...</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">void</span> <span class="identifier">do_something</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">types</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">...&gt;&amp;</span> <span class="identifier">t</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
+</pre>
+<p>
+        Such functions may be very usefull, however they may significantly increase
+        the size of the resulting program. Each instantionation of such function
+        with different templates order consumes space in the resulting program:
+      </p>
+<pre class="programlisting"><span class="comment">// Types are same, but different order leads to new instantionation of do_something function.</span>
+<span class="identifier">types</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span>
+<span class="identifier">types</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span>
+<span class="identifier">types</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span>
+<span class="identifier">types</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">&gt;</span>
+<span class="identifier">types</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">&gt;</span>
+<span class="identifier">types</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;</span>
+</pre>
+<p>
+        One of the ways to reduce instantinations count is to force the types to
+        have some order:
+      </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">type_index</span><span class="special">/</span><span class="identifier">ctti_type_index</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="comment">// Implementing type trait that returns true if the types are sorted lexographicaly</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span><span class="special">...</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">is_asc_sorted</span><span class="special">(</span><span class="identifier">types</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">...&gt;)</span> <span class="keyword">noexcept</span> <span class="special">{</span>
+    <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Lhs</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Rhs</span><span class="special">,</span> <span class="keyword">class</span><span class="special">...</span> <span class="identifier">TN</span><span class="special">&gt;</span>
+<span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">is_asc_sorted</span><span class="special">(</span><span class="identifier">types</span><span class="special">&lt;</span><span class="identifier">Lhs</span><span class="special">,</span> <span class="identifier">Rhs</span><span class="special">,</span> <span class="identifier">TN</span><span class="special">...&gt;)</span> <span class="keyword">noexcept</span> <span class="special">{</span>
+    <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">typeindex</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">ctti_type_index</span><span class="special">::</span><span class="identifier">type_id</span><span class="special">&lt;</span><span class="identifier">Lhs</span><span class="special">&gt;()</span> <span class="special">&lt;=</span> <span class="identifier">ctti_type_index</span><span class="special">::</span><span class="identifier">type_id</span><span class="special">&lt;</span><span class="identifier">Rhs</span><span class="special">&gt;()</span>
+        <span class="special">&amp;&amp;</span> <span class="identifier">is_asc_sorted</span><span class="special">(</span><span class="identifier">types</span><span class="special">&lt;</span><span class="identifier">Rhs</span><span class="special">,</span> <span class="identifier">TN</span><span class="special">...&gt;());</span>
+<span class="special">}</span>
+
+
+<span class="comment">// Using the newly created `is_asc_sorted` trait:</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span><span class="special">...</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">void</span> <span class="identifier">do_something</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">types</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">...&gt;&amp;</span> <span class="identifier">t</span><span class="special">)</span> <span class="keyword">noexcept</span> <span class="special">{</span>
+    <span class="keyword">static_assert</span><span class="special">(</span>
+        <span class="identifier">is_asc_sorted</span><span class="special">(</span> <span class="identifier">types</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">...&gt;()</span> <span class="special">),</span>
+        <span class="string">"T... for do_something(const types&lt;T...&gt;&amp; t) must be sorted ascending"</span>
+    <span class="special">);</span>
+<span class="special">}</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span>
+    <span class="identifier">do_something</span><span class="special">(</span> <span class="identifier">types</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;()</span> <span class="special">);</span>
+    <span class="comment">// do_something( types&lt;bool, int, double&gt;() ); // Fails the static_assert!</span>
+<span class="special">}</span>
+</pre>
+</div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2012-2014 Antony Polukhin<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2012-2016 Antony Polukhin<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

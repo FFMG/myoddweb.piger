@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points" kind="struct" prot="public">
     <compoundname>boost::geometry::policies::relate::segments_intersection_points</compoundname>
     <includes local="no">intersection_points.hpp</includes>
@@ -20,57 +20,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="44" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="44" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="41" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1ad47f64ac130a7e7575b90278b1ec2dd1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <templateparamlist>
-          <param>
-            <type>typename Point</type>
-          </param>
-          <param>
-            <type>typename Segment</type>
-          </param>
-          <param>
-            <type>typename SegmentRatio</type>
-          </param>
-          <param>
-            <type>typename T</type>
-          </param>
-        </templateparamlist>
-        <type>void</type>
-        <definition>static void boost::geometry::policies::relate::segments_intersection_points&lt; ReturnType &gt;::assign</definition>
-        <argsstring>(Point &amp;point, Segment const &amp;segment, SegmentRatio const &amp;ratio, T const &amp;dx, T const &amp;dy)</argsstring>
-        <name>assign</name>
-        <param>
-          <type>Point &amp;</type>
-          <declname>point</declname>
-        </param>
-        <param>
-          <type>Segment const &amp;</type>
-          <declname>segment</declname>
-        </param>
-        <param>
-          <type>SegmentRatio const &amp;</type>
-          <declname>ratio</declname>
-        </param>
-        <param>
-          <type>T const &amp;</type>
-          <declname>dx</declname>
-        </param>
-        <param>
-          <type>T const &amp;</type>
-          <declname>dy</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="53" bodyend="83"/>
-      </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a09e20a365d1ef3a7668b54f1d14b9229" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
           <param>
@@ -94,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="235" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="234" bodyend="241"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="190" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="190" bodyend="197"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a30a6b91438ef4970e15f601f2647f8b5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a68d3638332c4e8118a762a5c6d28d5f2" kindref="member">return_type</ref></type>
@@ -107,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="224" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="223" bodyend="226"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="179" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="179" bodyend="182"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1ade4481075291ac25410adbba1b63c078" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a68d3638332c4e8118a762a5c6d28d5f2" kindref="member">return_type</ref></type>
@@ -123,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="228" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="227" bodyend="230"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="183" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="183" bodyend="186"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1abfde89014f34ddbcca61f6edad5b1cbf" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -156,7 +109,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="247" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="245" bodyend="262"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="201" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="201" bodyend="218"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a0898596f1da93d7f953bf4974dee1a9c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -223,7 +176,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="146" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="141" bodyend="221"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="97" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="97" bodyend="177"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a259eb9f2ce34bcbf31d7191e4020f4a2" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -262,16 +215,15 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="94" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="91" bodyend="138"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="49" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="49" bodyend="94"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
 <para>Policy calculating the intersection points themselves. </para>    </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="43" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="42" bodyend="263"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" line="40" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_points.hpp" bodystart="39" bodyend="219"/>
     <listofallmembers>
-      <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1ad47f64ac130a7e7575b90278b1ec2dd1" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::segments_intersection_points</scope><name>assign</name></member>
       <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a09e20a365d1ef3a7668b54f1d14b9229" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::segments_intersection_points</scope><name>degenerate</name></member>
       <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a30a6b91438ef4970e15f601f2647f8b5" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::segments_intersection_points</scope><name>disjoint</name></member>
       <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1ade4481075291ac25410adbba1b63c078" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::segments_intersection_points</scope><name>error</name></member>

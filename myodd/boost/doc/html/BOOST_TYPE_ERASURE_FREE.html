@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Macro BOOST_TYPE_ERASURE_FREE</title>
 <link rel="stylesheet" href="../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="boost_typeerasure/reference.html#header.boost.type_erasure.free_hpp" title="Header &lt;boost/type_erasure/free.hpp&gt;">
 <link rel="prev" href="boost/type_erasure/bad_any_cast.html" title="Class bad_any_cast">
@@ -34,24 +34,30 @@
 
 </span>BOOST_TYPE_ERASURE_FREE(qualified_name, function_name, N)</pre></div>
 <div class="refsect1">
-<a name="idp506673264"></a><h2>Description</h2>
+<a name="idm45946298978912"></a><h2>Description</h2>
 <p>
 The declaration of the concept is </p>
-<pre class="programlisting"> <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Sig</span><span class="special">&gt;</span>
- <span class="keyword">struct</span> <span class="special">::</span><span class="identifier">namespace1</span><span class="special">::</span><span class="identifier">namespace2</span><span class="special">::</span><span class="special">...</span><span class="special">::</span><span class="identifier">concept_name</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Sig</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="special">::</span><span class="identifier">namespace1</span><span class="special">::</span><span class="identifier">namespace2</span><span class="special">::</span><span class="special">...</span><span class="special">::</span><span class="identifier">concept_name</span><span class="special">;</span>
 </pre>
 <p> where Sig is a function type giving the signature of the function.</p>
 <p>This macro can only be used in the global namespace.</p>
 <p>Example:</p>
-<pre class="programlisting"> <span class="identifier">BOOST_TYPE_ERASURE_FREE</span><span class="special">(</span><span class="special">(</span><span class="identifier">boost</span><span class="special">)</span><span class="special">(</span><span class="identifier">has_to_string</span><span class="special">)</span><span class="special">,</span> <span class="identifier">to_string</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_TYPE_ERASURE_FREE</span><span class="special">(</span><span class="special">(</span><span class="identifier">boost</span><span class="special">)</span><span class="special">(</span><span class="identifier">has_to_string</span><span class="special">)</span><span class="special">,</span> <span class="identifier">to_string</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span>
 </pre>
 <p> </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><code class="computeroutput">N</code></span></p></td>

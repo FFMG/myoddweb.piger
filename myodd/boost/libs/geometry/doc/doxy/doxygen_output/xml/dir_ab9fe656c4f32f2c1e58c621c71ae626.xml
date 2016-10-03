@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_ab9fe656c4f32f2c1e58c621c71ae626" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian</compoundname>
     <innerfile refid="area__surveyor_8hpp">area_surveyor.hpp</innerfile>
     <innerfile refid="box__in__box_8hpp">box_in_box.hpp</innerfile>
     <innerfile refid="buffer__end__flat_8hpp">buffer_end_flat.hpp</innerfile>

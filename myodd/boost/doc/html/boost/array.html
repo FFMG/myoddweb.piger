@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class template array</title>
 <link rel="stylesheet" href="../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="../array/reference.html#header.boost.array_hpp" title="Header &lt;boost/array.hpp&gt;">
 <link rel="prev" href="../array/reference.html" title="Reference">
@@ -50,88 +50,94 @@
   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">size_type</span> <span class="identifier">static_size</span> = <span class="identifier">N</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="array.html#boost.arrayconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> U<span class="special">&gt;</span> array&amp; <a class="link" href="array.html#idp16645984-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">U</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> U<span class="special">&gt;</span> array&amp; <a class="link" href="array.html#idm45443623437824-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">U</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="array.html#idp16651104-bb">iterator support</a></span>
-  <span class="identifier">iterator</span> <a class="link" href="array.html#idp16652224-bb"><span class="identifier">begin</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_iterator</span> <a class="link" href="array.html#idp16653120-bb"><span class="identifier">begin</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">iterator</span> <a class="link" href="array.html#idp16656176-bb"><span class="identifier">end</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_iterator</span> <a class="link" href="array.html#idp16657072-bb"><span class="identifier">end</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="array.html#idm45443623433376-bb">iterator support</a></span>
+  <span class="identifier">iterator</span> <a class="link" href="array.html#idm45443623432384-bb"><span class="identifier">begin</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_iterator</span> <a class="link" href="array.html#idm45443623431616-bb"><span class="identifier">begin</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">iterator</span> <a class="link" href="array.html#idm45443623428960-bb"><span class="identifier">end</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_iterator</span> <a class="link" href="array.html#idm45443623428192-bb"><span class="identifier">end</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="array.html#idp16659680-bb">reverse iterator support</a></span>
-  <span class="identifier">reverse_iterator</span> <a class="link" href="array.html#idp16660816-bb"><span class="identifier">rbegin</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_reverse_iterator</span> <a class="link" href="array.html#idp16661712-bb"><span class="identifier">rbegin</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">reverse_iterator</span> <a class="link" href="array.html#idp16664144-bb"><span class="identifier">rend</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_reverse_iterator</span> <a class="link" href="array.html#idp16665040-bb"><span class="identifier">rend</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="array.html#idm45443623425904-bb">reverse iterator support</a></span>
+  <span class="identifier">reverse_iterator</span> <a class="link" href="array.html#idm45443623424912-bb"><span class="identifier">rbegin</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_reverse_iterator</span> <a class="link" href="array.html#idm45443623424144-bb"><span class="identifier">rbegin</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">reverse_iterator</span> <a class="link" href="array.html#idm45443623422000-bb"><span class="identifier">rend</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_reverse_iterator</span> <a class="link" href="array.html#idm45443623421232-bb"><span class="identifier">rend</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="array.html#idp16667072-bb">capacity</a></span>
-  <span class="identifier">size_type</span> <a class="link" href="array.html#idp16667632-bb"><span class="identifier">size</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="array.html#idp16048208-bb"><span class="identifier">empty</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">size_type</span> <a class="link" href="array.html#idp16050656-bb"><span class="identifier">max_size</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="array.html#idm45443623419456-bb">capacity</a></span>
+  <span class="identifier">size_type</span> <a class="link" href="array.html#idm45443623418960-bb"><span class="identifier">size</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="array.html#idm45443623417312-bb"><span class="identifier">empty</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">size_type</span> <a class="link" href="array.html#idm45443623415152-bb"><span class="identifier">max_size</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="array.html#idp16053264-bb">element access</a></span>
-  <span class="identifier">reference</span> <a class="link" href="array.html#idp16054384-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_reference</span> <a class="link" href="array.html#idp16056448-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">reference</span> <a class="link" href="array.html#idp16061648-bb"><span class="identifier">at</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_reference</span> <a class="link" href="array.html#idp16063712-bb"><span class="identifier">at</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">reference</span> <a class="link" href="array.html#idp16068912-bb"><span class="identifier">front</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_reference</span> <a class="link" href="array.html#idp16069808-bb"><span class="identifier">front</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">reference</span> <a class="link" href="array.html#idp16073552-bb"><span class="identifier">back</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">const_reference</span> <a class="link" href="array.html#idp16074448-bb"><span class="identifier">back</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <a class="link" href="array.html#idp16077632-bb"><span class="identifier">data</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">T</span><span class="special">*</span> <a class="link" href="array.html#idp16080352-bb"><span class="identifier">c_array</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="array.html#idm45443623412864-bb">element access</a></span>
+  <span class="identifier">reference</span> <a class="link" href="array.html#idm45443623411872-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_reference</span> <a class="link" href="array.html#idm45443623410096-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">reference</span> <a class="link" href="array.html#idm45443623405536-bb"><span class="identifier">at</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_reference</span> <a class="link" href="array.html#idm45443623403760-bb"><span class="identifier">at</span></a><span class="special">(</span><span class="identifier">size_type</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">reference</span> <a class="link" href="array.html#idm45443623399200-bb"><span class="identifier">front</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_reference</span> <a class="link" href="array.html#idm45443623398432-bb"><span class="identifier">front</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">reference</span> <a class="link" href="array.html#idm45443623395136-bb"><span class="identifier">back</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_reference</span> <a class="link" href="array.html#idm45443623394368-bb"><span class="identifier">back</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <a class="link" href="array.html#idm45443623391568-bb"><span class="identifier">data</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">T</span><span class="special">*</span> <a class="link" href="array.html#idm45443623389168-bb"><span class="identifier">c_array</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="array.html#idp12311808-bb">modifiers</a></span>
-  <span class="keyword">void</span> <a class="link" href="array.html#idp12312368-bb"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="array.html#idp12317904-bb"><span class="identifier">assign</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="array.html#idm45443623386880-bb">modifiers</a></span>
+  <span class="keyword">void</span> <a class="link" href="array.html#idm45443623386384-bb"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="array.html#idm45443623381552-bb"><span class="identifier">assign</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 
   <span class="comment">// public data members</span>
   <span class="identifier">T</span> <span class="identifier">elems[N]</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span>
 
-<span class="comment">// <a class="link" href="array.html#idp12323040-bb">specialized algorithms</a></span>
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="array.html#boost.array.swap_idp12323600"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+<span class="comment">// <a class="link" href="array.html#idm45443623377120-bb">specialized algorithms</a></span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> <span class="keyword">void</span> <a class="link" href="array.html#boost.array.swap_idm45443623376624"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 
-<span class="comment">// <a class="link" href="array.html#idp12331760-bb">comparisons</a></span>
+<span class="comment">// <a class="link" href="array.html#idm45443623369536-bb">comparisons</a></span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator==_idp12332320"><span class="keyword">operator</span><span class="special">==</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idm45443623369040"><span class="keyword">operator</span><span class="special">==</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator!=_idp12341120"><span class="keyword">operator</span><span class="special">!=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idm45443623361440"><span class="keyword">operator</span><span class="special">!=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idp9784544"><span class="keyword">operator</span><span class="special">&lt;</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idm45443623354992"><span class="keyword">operator</span><span class="special">&lt;</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idp9793808"><span class="keyword">operator</span><span class="special">&gt;</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idm45443623347008"><span class="keyword">operator</span><span class="special">&gt;</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_=_idp9801104"><span class="keyword">operator</span><span class="special">&lt;=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idm45443623340688"><span class="keyword">operator</span><span class="special">&lt;=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_=_idp9808400"><span class="keyword">operator</span><span class="special">&gt;=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span></pre></div>
+  <span class="keyword">bool</span> <a class="link" href="array.html#boost.array.operator_idm45443623334368"><span class="keyword">operator</span><span class="special">&gt;=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span><span class="special">)</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp97551424"></a><h2>Description</h2>
+<a name="idm45946710607712"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp97551840"></a><h3>
+<a name="idm45946710607296"></a><h3>
 <a name="boost.arrayconstruct-copy-destruct"></a><code class="computeroutput">array</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> U<span class="special">&gt;</span> array&amp; <a name="idp16645984-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">U</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> U<span class="special">&gt;</span> array&amp; <a name="idm45443623437824-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">U</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Effects:</span></p></td>
-<td><code class="computeroutput">std::copy(rhs.<a class="link" href="array.html#idp16651664-bb">begin</a>(),rhs.<a class="link" href="array.html#idp16655616-bb">end</a>(), <a class="link" href="array.html#idp16651664-bb">begin</a>())</code></td>
+<td><code class="computeroutput">std::copy(rhs.<a class="link" href="array.html#idm45443623432880-bb">begin</a>(),rhs.<a class="link" href="array.html#idm45443623429456-bb">end</a>(), <a class="link" href="array.html#idm45443623432880-bb">begin</a>())</code></td>
 </tr></tbody>
 </table></div>
 </li></ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97570128"></a><h3>
-<a name="idp16651104-bb"></a><code class="computeroutput">array</code> iterator support</h3>
+<a name="idm45946710588960"></a><h3>
+<a name="idm45443623433376-bb"></a><code class="computeroutput">array</code> iterator support</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp16651664-bb"></a><span class="identifier">iterator</span> <a name="idp16652224-bb"></a><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_iterator</span> <a name="idp16653120-bb"></a><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623432880-bb"></a><span class="identifier">iterator</span> <a name="idm45443623432384-bb"></a><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_iterator</span> <a name="idm45443623431616-bb"></a><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -145,10 +151,13 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp16655616-bb"></a><span class="identifier">iterator</span> <a name="idp16656176-bb"></a><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_iterator</span> <a name="idp16657072-bb"></a><span class="identifier">end</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623429456-bb"></a><span class="identifier">iterator</span> <a name="idm45443623428960-bb"></a><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_iterator</span> <a name="idm45443623428192-bb"></a><span class="identifier">end</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -164,14 +173,17 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97594896"></a><h3>
-<a name="idp16659680-bb"></a><code class="computeroutput">array</code> reverse iterator support</h3>
+<a name="idm45946710564128"></a><h3>
+<a name="idm45443623425904-bb"></a><code class="computeroutput">array</code> reverse iterator support</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp16660256-bb"></a><span class="identifier">reverse_iterator</span> <a name="idp16660816-bb"></a><span class="identifier">rbegin</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_reverse_iterator</span> <a name="idp16661712-bb"></a><span class="identifier">rbegin</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623425408-bb"></a><span class="identifier">reverse_iterator</span> <a name="idm45443623424912-bb"></a><span class="identifier">rbegin</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_reverse_iterator</span> <a name="idm45443623424144-bb"></a><span class="identifier">rbegin</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td>reverse iterator for the first element of reverse iteration</td>
@@ -179,10 +191,13 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp16663584-bb"></a><span class="identifier">reverse_iterator</span> <a name="idp16664144-bb"></a><span class="identifier">rend</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_reverse_iterator</span> <a name="idp16665040-bb"></a><span class="identifier">rend</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623422496-bb"></a><span class="identifier">reverse_iterator</span> <a name="idm45443623422000-bb"></a><span class="identifier">rend</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_reverse_iterator</span> <a name="idm45443623421232-bb"></a><span class="identifier">rend</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td>reverse iterator for position after the last element in reverse iteration</td>
@@ -192,13 +207,16 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97618080"></a><h3>
-<a name="idp16667072-bb"></a><code class="computeroutput">array</code> capacity</h3>
+<a name="idm45946710540816"></a><h3>
+<a name="idm45443623419456-bb"></a><code class="computeroutput">array</code> capacity</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">size_type</span> <a name="idp16667632-bb"></a><span class="identifier">size</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="identifier">size_type</span> <a name="idm45443623418960-bb"></a><span class="identifier">size</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><code class="computeroutput">N</code></td>
@@ -206,9 +224,12 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp16048208-bb"></a><span class="identifier">empty</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idm45443623417312-bb"></a><span class="identifier">empty</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -222,9 +243,12 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">size_type</span> <a name="idp16050656-bb"></a><span class="identifier">max_size</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="identifier">size_type</span> <a name="idm45443623415152-bb"></a><span class="identifier">max_size</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -240,14 +264,17 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97639968"></a><h3>
-<a name="idp16053264-bb"></a><code class="computeroutput">array</code> element access</h3>
+<a name="idm45946710518736"></a><h3>
+<a name="idm45443623412864-bb"></a><code class="computeroutput">array</code> element access</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp16053824-bb"></a><span class="identifier">reference</span> <a name="idp16054384-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_reference</span> <a name="idp16056448-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623412368-bb"></a><span class="identifier">reference</span> <a name="idm45443623411872-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_reference</span> <a name="idm45443623410096-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Requires:</span></p></td>
@@ -266,10 +293,13 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp16061088-bb"></a><span class="identifier">reference</span> <a name="idp16061648-bb"></a><span class="identifier">at</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_reference</span> <a name="idp16063712-bb"></a><span class="identifier">at</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623406032-bb"></a><span class="identifier">reference</span> <a name="idm45443623405536-bb"></a><span class="identifier">at</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_reference</span> <a name="idm45443623403760-bb"></a><span class="identifier">at</span><span class="special">(</span><span class="identifier">size_type</span> i<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -286,10 +316,13 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp16068352-bb"></a><span class="identifier">reference</span> <a name="idp16068912-bb"></a><span class="identifier">front</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_reference</span> <a name="idp16069808-bb"></a><span class="identifier">front</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623399696-bb"></a><span class="identifier">reference</span> <a name="idm45443623399200-bb"></a><span class="identifier">front</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_reference</span> <a name="idm45443623398432-bb"></a><span class="identifier">front</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Requires:</span></p></td>
@@ -307,10 +340,13 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp16072992-bb"></a><span class="identifier">reference</span> <a name="idp16073552-bb"></a><span class="identifier">back</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-<span class="identifier">const_reference</span> <a name="idp16074448-bb"></a><span class="identifier">back</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><a name="idm45443623395632-bb"></a><span class="identifier">reference</span> <a name="idm45443623395136-bb"></a><span class="identifier">back</span><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">const_reference</span> <a name="idm45443623394368-bb"></a><span class="identifier">back</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Requires:</span></p></td>
@@ -328,9 +364,12 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <a name="idp16077632-bb"></a><span class="identifier">data</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="keyword">const</span> <span class="identifier">T</span><span class="special">*</span> <a name="idm45443623391568-bb"></a><span class="identifier">data</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -344,9 +383,12 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">T</span><span class="special">*</span> <a name="idp16080352-bb"></a><span class="identifier">c_array</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="identifier">T</span><span class="special">*</span> <a name="idm45443623389168-bb"></a><span class="identifier">c_array</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -362,17 +404,20 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97714048"></a><h3>
-<a name="idp12311808-bb"></a><code class="computeroutput">array</code> modifiers</h3>
+<a name="idm45946710444656"></a><h3>
+<a name="idm45443623386880-bb"></a><code class="computeroutput">array</code> modifiers</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp12312368-bb"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idm45443623386384-bb"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Effects:</span></p></td>
-<td><code class="computeroutput">std::swap_ranges(<a class="link" href="array.html#idp16651664-bb">begin</a>(), <a class="link" href="array.html#idp16655616-bb">end</a>(), other.<a class="link" href="array.html#idp16651664-bb">begin</a>())</code></td>
+<td><code class="computeroutput">std::swap_ranges(<a class="link" href="array.html#idm45443623432880-bb">begin</a>(), <a class="link" href="array.html#idm45443623429456-bb">end</a>(), other.<a class="link" href="array.html#idm45443623432880-bb">begin</a>())</code></td>
 </tr>
 <tr>
 <td><p><span class="term">Complexity:</span></p></td>
@@ -383,28 +428,34 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp12317904-bb"></a><span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> value<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idm45443623381552-bb"></a><span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> value<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Effects:</span></p></td>
-<td><code class="computeroutput">std::fill_n(<a class="link" href="array.html#idp16651664-bb">begin</a>(), N, value)</code></td>
+<td><code class="computeroutput">std::fill_n(<a class="link" href="array.html#idm45443623432880-bb">begin</a>(), N, value)</code></td>
 </tr></tbody>
 </table></div>
 </li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97739232"></a><h3>
-<a name="idp12323040-bb"></a><code class="computeroutput">array</code> specialized algorithms</h3>
+<a name="idm45946710419472"></a><h3>
+<a name="idm45443623377120-bb"></a><code class="computeroutput">array</code> specialized algorithms</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> <span class="keyword">void</span> <a name="boost.array.swap_idp12323600"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> <span class="keyword">void</span> <a name="boost.array.swap_idm45443623376624"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Effects:</span></p></td>
-<td><code class="computeroutput">x.<a class="link" href="array.html#idp12312368-bb">swap</a>(y)</code></td>
+<td><code class="computeroutput">x.<a class="link" href="array.html#idm45443623386384-bb">swap</a>(y)</code></td>
 </tr>
 <tr>
 <td><p><span class="term">Throws:</span></p></td>
@@ -415,25 +466,31 @@
 </li></ol></div>
 </div>
 <div class="refsect2">
-<a name="idp97763328"></a><h3>
-<a name="idp12331760-bb"></a><code class="computeroutput">array</code> comparisons</h3>
+<a name="idm45946710395584"></a><h3>
+<a name="idm45443623369536-bb"></a><code class="computeroutput">array</code> comparisons</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a name="boost.array.operator==_idp12332320"></a><span class="keyword">operator</span><span class="special">==</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+  <span class="keyword">bool</span> <a name="boost.array.operator_idm45443623369040"></a><span class="keyword">operator</span><span class="special">==</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
-<td><code class="computeroutput">std::equal(x.<a class="link" href="array.html#idp16651664-bb">begin</a>(), x.<a class="link" href="array.html#idp16655616-bb">end</a>(), y.<a class="link" href="array.html#idp16651664-bb">begin</a>())</code></td>
+<td><code class="computeroutput">std::equal(x.<a class="link" href="array.html#idm45443623432880-bb">begin</a>(), x.<a class="link" href="array.html#idm45443623429456-bb">end</a>(), y.<a class="link" href="array.html#idm45443623432880-bb">begin</a>())</code></td>
 </tr></tbody>
 </table></div>
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a name="boost.array.operator!=_idp12341120"></a><span class="keyword">operator</span><span class="special">!=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+  <span class="keyword">bool</span> <a name="boost.array.operator_idm45443623361440"></a><span class="keyword">operator</span><span class="special">!=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><code class="computeroutput">!(x == y)</code></td>
@@ -442,20 +499,26 @@
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a name="boost.array.operator_idp9784544"></a><span class="keyword">operator</span><span class="special">&lt;</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+  <span class="keyword">bool</span> <a name="boost.array.operator_idm45443623354992"></a><span class="keyword">operator</span><span class="special">&lt;</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
-<td><code class="computeroutput">std::lexicographical_compare(x.<a class="link" href="array.html#idp16651664-bb">begin</a>(), x.<a class="link" href="array.html#idp16655616-bb">end</a>(), y.<a class="link" href="array.html#idp16651664-bb">begin</a>(), y.<a class="link" href="array.html#idp16655616-bb">end</a>())</code></td>
+<td><code class="computeroutput">std::lexicographical_compare(x.<a class="link" href="array.html#idm45443623432880-bb">begin</a>(), x.<a class="link" href="array.html#idm45443623429456-bb">end</a>(), y.<a class="link" href="array.html#idm45443623432880-bb">begin</a>(), y.<a class="link" href="array.html#idm45443623429456-bb">end</a>())</code></td>
 </tr></tbody>
 </table></div>
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a name="boost.array.operator_idp9793808"></a><span class="keyword">operator</span><span class="special">&gt;</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+  <span class="keyword">bool</span> <a name="boost.array.operator_idm45443623347008"></a><span class="keyword">operator</span><span class="special">&gt;</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><code class="computeroutput">y &lt; x</code></td>
@@ -464,9 +527,12 @@
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a name="boost.array.operator_=_idp9801104"></a><span class="keyword">operator</span><span class="special">&lt;=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+  <span class="keyword">bool</span> <a name="boost.array.operator_idm45443623340688"></a><span class="keyword">operator</span><span class="special">&lt;=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><code class="computeroutput">!(y &lt; x)</code></td>
@@ -475,9 +541,12 @@
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> N<span class="special">&gt;</span> 
-  <span class="keyword">bool</span> <a name="boost.array.operator_=_idp9808400"></a><span class="keyword">operator</span><span class="special">&gt;=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+  <span class="keyword">bool</span> <a name="boost.array.operator_idm45443623334368"></a><span class="keyword">operator</span><span class="special">&gt;=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> x<span class="special">,</span> <span class="keyword">const</span> <a class="link" href="array.html" title="Class template array">array</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">&amp;</span> y<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><code class="computeroutput">!(x &lt; y)</code></td>

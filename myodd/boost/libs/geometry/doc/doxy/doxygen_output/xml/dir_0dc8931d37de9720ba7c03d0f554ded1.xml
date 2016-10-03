@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_0dc8931d37de9720ba7c03d0f554ded1" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/</compoundname>
-    <innerdir refid="dir_3ef17d421db005a49eeea1db0210e908">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/</innerdir>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms</compoundname>
+    <innerdir refid="dir_3ef17d421db005a49eeea1db0210e908">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail</innerdir>
     <innerfile refid="append_8hpp">append.hpp</innerfile>
     <innerfile refid="algorithms_2area_8hpp">area.hpp</innerfile>
     <innerfile refid="assign_8hpp">assign.hpp</innerfile>

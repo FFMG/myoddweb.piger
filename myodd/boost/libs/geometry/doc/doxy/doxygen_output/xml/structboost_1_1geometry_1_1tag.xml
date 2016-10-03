@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1tag" kind="struct" prot="public">
     <compoundname>boost::geometry::tag</compoundname>
     <includes local="no">tag.hpp</includes>
@@ -20,11 +20,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" line="64" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" bodystart="64" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" line="64" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Metafunction defining [*type] as the tag of the \3. </para>    </briefdescription>
+<para>Metafunction defining [*type] as the tag of the specified geometry type. </para>    </briefdescription>
     <detaileddescription>
 <para>With Boost.Geometry, tags are the driving force of the tag dispatching mechanism. The tag metafunction is therefore used in every free function. <parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -35,7 +35,7 @@
 </parameteritem>
 </parameterlist>
  <qbk>[include reference/core/tag.qbk]</qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" line="60" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" bodystart="59" bodyend="65"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" line="60" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tag.hpp" bodystart="59" bodyend="65"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1tag_1aa1ff579fa1a6a331da23a5d722538b14" prot="public" virt="non-virtual"><scope>boost::geometry::tag</scope><name>type</name></member>
     </listofallmembers>

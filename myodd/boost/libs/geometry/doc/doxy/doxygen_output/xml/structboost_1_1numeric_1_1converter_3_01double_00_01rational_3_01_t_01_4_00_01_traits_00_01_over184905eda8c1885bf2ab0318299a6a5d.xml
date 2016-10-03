@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1numeric_1_1converter_3_01double_00_01rational_3_01_t_01_4_00_01_traits_00_01_over184905eda8c1885bf2ab0318299a6a5d" kind="struct" prot="public">
     <compoundname>boost::numeric::converter&lt; double, rational&lt; T &gt;, Traits, OverflowHandler, Float2IntRounder, RawConverter, UserRangeChecker &gt;</compoundname>
     <includes local="no">rational.hpp</includes>
@@ -39,14 +39,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" line="170" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" bodystart="169" bodyend="172"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" line="169" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" bodystart="169" bodyend="172"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" line="168" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" bodystart="167" bodyend="173"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" line="168" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp" bodystart="167" bodyend="173"/>
     <listofallmembers>
       <member refid="structboost_1_1numeric_1_1converter_3_01double_00_01rational_3_01_t_01_4_00_01_traits_00_01_over184905eda8c1885bf2ab0318299a6a5d_1ae1063642d2c2d223d954378762ce8332" prot="public" virt="non-virtual"><scope>boost::numeric::converter&lt; double, rational&lt; T &gt;, Traits, OverflowHandler, Float2IntRounder, RawConverter, UserRangeChecker &gt;</scope><name>convert</name></member>
     </listofallmembers>

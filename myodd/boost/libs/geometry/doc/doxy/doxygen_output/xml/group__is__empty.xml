@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__is__empty" kind="group">
     <compoundname>is_empty</compoundname>
     <title>is_empty: detect if a geometry is the empty set</title>
@@ -19,7 +19,7 @@
           <declname>geometry</declname>
         </param>
         <briefdescription>
-<para>Checks if a geometry \1. </para>        </briefdescription>
+<para>Checks if a geometry is the empty set. </para>        </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -37,11 +37,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>Returns true if the geometry \1</para></simplesect>
+<simplesect kind="return"><para>Returns true if the geometry is the empty set</para></simplesect>
  <qbk>[include reference/algorithms/is_empty.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/is_empty.hpp" line="199" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/is_empty.hpp" bodystart="198" bodyend="201"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/is_empty.hpp" line="198" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/is_empty.hpp" bodystart="198" bodyend="201"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

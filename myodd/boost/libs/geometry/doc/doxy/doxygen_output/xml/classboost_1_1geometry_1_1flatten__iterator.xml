@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1flatten__iterator" kind="class" prot="public">
     <compoundname>boost::geometry::flatten_iterator</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::iterator_facade&lt; flatten_iterator&lt; OuterIterator, InnerIterator, Value, AccessInnerBegin, AccessInnerEnd, Reference &gt;, Value, boost::bidirectional_traversal_tag, Reference &gt;</basecompoundref>
     <includes local="no">flatten_iterator.hpp</includes>
     <templateparamlist>
       <param>
@@ -36,7 +37,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="58" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="58" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="58" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="58" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1flatten__iterator_1ac93bdeabf91aac91d838b6720b1fe7ea" prot="public" static="no">
         <type>OuterIterator</type>
@@ -49,7 +50,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="57" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="57" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="57" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -64,7 +65,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="54" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="54" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="54" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1flatten__iterator_1a56b63747110393e7d70f88871bce5a1f" prot="private" static="no" mutable="no">
         <type>OuterIterator</type>
@@ -77,7 +78,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="53" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="53" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="53" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1flatten__iterator_1a4403d41055fc9596163888a188f9c45b" prot="private" static="no" mutable="no">
         <type>OuterIterator</type>
@@ -90,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="53" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="53" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="53" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
@@ -105,9 +106,29 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="123" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="123" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="123" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="123" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="friend" id="classboost_1_1geometry_1_1flatten__iterator_1a7bb24f448492531e39daa5ac7d23eb59" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="friend" id="classboost_1_1geometry_1_1flatten__iterator_1ad49371b1a77b7bb4fdc33b6c1edbea9c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Outer</type>
+          </param>
+          <param>
+            <type>typename Inner</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+          <param>
+            <type>typename InnerBegin</type>
+          </param>
+          <param>
+            <type>typename InnerEnd</type>
+          </param>
+          <param>
+            <type>typename R</type>
+          </param>
+        </templateparamlist>
         <type>friend class</type>
         <definition>friend class flatten_iterator</definition>
         <argsstring></argsstring>
@@ -118,7 +139,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="134" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="134" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="134" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="134" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -133,7 +154,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="61" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="61" bodyend="61"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="61" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="61" bodyend="61"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1a41c4d652304eb785084fb99ea58950d5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -154,7 +175,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="66" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="64" bodyend="68"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="64" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="64" bodyend="68"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1a3e01c4670d469c5ca44510c1083669e1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -171,7 +192,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="73" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="71" bodyend="73"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="71" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="71" bodyend="73"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1aeea66ca1b000d2f635b664dc55e17d2f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -208,7 +229,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="94" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="82" bodyend="108"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="82" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="82" bodyend="108"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1aa40dfa7c410f2ec1104c4b0fdb744d84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1flatten__iterator" kindref="compound">flatten_iterator</ref> &amp;</type>
@@ -225,7 +246,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="111" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="110" bodyend="120"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="110" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="110" bodyend="120"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-static-func">
@@ -244,7 +265,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="137" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="136" bodyend="140"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="136" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="136" bodyend="140"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -259,7 +280,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="143" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="142" bodyend="153"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="142" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="142" bodyend="153"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1a91790eb77a76492324d82373f6693e3a" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -272,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="209" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="208" bodyend="221"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="208" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="208" bodyend="221"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1a666e46e3c233454fb062936ad7393c0b" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Reference</type>
@@ -285,7 +306,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="156" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="155" bodyend="160"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="155" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="155" bodyend="160"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1a2535da649e179ff06a6f61dfe14fac7e" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -322,7 +343,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="181" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="172" bodyend="193"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="172" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="172" bodyend="193"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1flatten__iterator_1ad12907f96e2a83a89d2579617261052e" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -335,14 +356,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="196" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="195" bodyend="206"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="195" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="195" bodyend="206"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="35" bodyend="222"/>
+    <inheritancegraph>
+      <node id="384">
+        <label>boost::geometry::flatten_iterator&lt; OuterIterator, InnerIterator, Value, AccessInnerBegin, AccessInnerEnd, Reference &gt;</label>
+        <link refid="classboost_1_1geometry_1_1flatten__iterator"/>
+        <childnode refid="385" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="385">
+        <label>boost::iterator_facade&lt; flatten_iterator&lt; OuterIterator, InnerIterator, Value, AccessInnerBegin, AccessInnerEnd, Reference &gt;, Value, boost::bidirectional_traversal_tag, Reference &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="386">
+        <label>boost::geometry::flatten_iterator&lt; OuterIterator, InnerIterator, Value, AccessInnerBegin, AccessInnerEnd, Reference &gt;</label>
+        <link refid="classboost_1_1geometry_1_1flatten__iterator"/>
+        <childnode refid="387" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="387">
+        <label>boost::iterator_facade&lt; flatten_iterator&lt; OuterIterator, InnerIterator, Value, AccessInnerBegin, AccessInnerEnd, Reference &gt;, Value, boost::bidirectional_traversal_tag, Reference &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" line="51" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/flatten_iterator.hpp" bodystart="35" bodyend="222"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1a7eb8db48c258185bac65c97f2e216324" prot="private" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>advance_through_empty</name></member>
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1ac09f73e325921cc50ebcd96bed0f8096" prot="public" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>boost::iterator_core_access</name></member>
@@ -350,7 +393,7 @@
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1a666e46e3c233454fb062936ad7393c0b" prot="private" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>dereference</name></member>
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1a11c9b6c59e10d84342fa43c70decf362" prot="private" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>empty</name></member>
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1a2535da649e179ff06a6f61dfe14fac7e" prot="private" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>equal</name></member>
-      <member refid="classboost_1_1geometry_1_1flatten__iterator_1a7bb24f448492531e39daa5ac7d23eb59" prot="private" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>flatten_iterator</name></member>
+      <member refid="classboost_1_1geometry_1_1flatten__iterator_1ad49371b1a77b7bb4fdc33b6c1edbea9c" prot="private" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>flatten_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1af4d5ab2c60cdb6d22e71f767138b0f72" prot="public" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>flatten_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1a41c4d652304eb785084fb99ea58950d5" prot="public" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>flatten_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1flatten__iterator_1a3e01c4670d469c5ca44510c1083669e1" prot="public" virt="non-virtual"><scope>boost::geometry::flatten_iterator</scope><name>flatten_iterator</name></member>

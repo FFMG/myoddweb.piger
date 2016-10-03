@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1transform_1_1degree__radian__vv" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::transform::degree_radian_vv</compoundname>
     <includes local="no">strategy_transform.hpp</includes>
@@ -36,7 +36,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="132" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="131" bodyend="149"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="131" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="131" bodyend="149"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -65,7 +65,7 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="130" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="129" bodyend="150"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="130" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="129" bodyend="150"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1transform_1_1degree__radian__vv_1a243b2d6ef17983dfc89d6a034a9fb156" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::transform::degree_radian_vv</scope><name>apply</name></member>
     </listofallmembers>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range" kind="class" prot="public">
     <compoundname>boost::geometry::index::adaptors::detail::query_range</compoundname>
     <templateparamlist>
@@ -19,7 +19,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="32" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="32" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="32" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1a93d63a42f939505b746f8248e39896e8" prot="private" static="no">
         <type>const int *</type>
@@ -32,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="33" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="33" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="33" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -56,7 +56,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="30"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="27" column="1"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1a1b66699c911e6ed588f08be24a093941" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -80,7 +80,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="39" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="36" bodyend="39"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="36" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="36" bodyend="39"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1a256889ea4df8406bbaf6e109917f6cc1" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>iterator</type>
@@ -93,7 +93,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="41" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="41" bodyend="41"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="41" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="41" bodyend="41"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1a78a04d2df33e70135ff84c58be339086" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>iterator</type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="42" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="42" bodyend="42"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="42" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="42" bodyend="42"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1ad3fddae943b6a196f4edf30c481cb406" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>const_iterator</type>
@@ -119,7 +119,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="43" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="43" bodyend="43"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="43" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="43" bodyend="43"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1ab1931e9cefb6c4357da677b4bed4ba51" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>const_iterator</type>
@@ -132,14 +132,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="44" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="44" bodyend="44"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="44" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="44" bodyend="44"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="26" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="25" bodyend="45"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" line="26" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/query.hpp" bodystart="25" bodyend="45"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1a256889ea4df8406bbaf6e109917f6cc1" prot="private" virt="non-virtual"><scope>boost::geometry::index::adaptors::detail::query_range</scope><name>begin</name></member>
       <member refid="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1ad3fddae943b6a196f4edf30c481cb406" prot="private" virt="non-virtual"><scope>boost::geometry::index::adaptors::detail::query_range</scope><name>begin</name></member>

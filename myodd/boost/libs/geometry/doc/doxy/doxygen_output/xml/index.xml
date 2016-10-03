@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.7.6.1">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.6">
   <compound refid="structboost_1_1geometry_1_1add__const__if__c" kind="struct"><name>boost::geometry::add_const_if_c</name>
     <member refid="structboost_1_1geometry_1_1add__const__if__c_1a7adfc69ab7628a0884a19166a3c681a9" kind="typedef"><name>type</name></member>
   </compound>
@@ -55,18 +55,47 @@
     <member refid="structboost_1_1geometry_1_1closure__as__bool_3_01open_01_4_1abf7a4c0fa38383c72c539b560d4e195f" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1collected__vector" kind="struct"><name>boost::geometry::collected_vector</name>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1ae411925eb0da8f34bb042cd6fc5bd4e9" kind="typedef"><name>type</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a5a2269ec9ede9d23377fe3ff1cff9540" kind="variable"><name>dx</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1aca25530390f802714a0ffd2bb748a0e2" kind="variable"><name>dx_0</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a4b12f0a2a5613329d1f67a922efe1b23" kind="variable"><name>dy</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a0c090b369a329cfc13262926704a40c6" kind="variable"><name>dy_0</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1aacb9efaa2a72a6a9f3b07e2b9125c141" kind="variable"><name>x</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a1625bf249f16b566e9d901dfb189ead2" kind="variable"><name>y</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a48bfca08a313d232a3185fe3dc077bd0" kind="function"><name>collected_vector</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1aebd33e2ef827062eeffd8c5ac131c5a9" kind="function"><name>collected_vector</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a972d535a380e18ac1a4a58d547a6f57c" kind="function"><name>operator&lt;</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a8c96e7869c63138de8e8a77e9aeffc08" kind="function"><name>operator==</name></member>
-    <member refid="structboost_1_1geometry_1_1collected__vector_1a883518370d75bcb2ca43fec9148ecc38" kind="function"><name>same_direction</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1a13528c67ca2c2ce974f822673930177a" kind="typedef"><name>type</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1a4e7d2a3fc2c66492d234a1e0e98e7197" kind="variable"><name>dx</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1aec27afa4b10a3a8c332edabbe5bfa15b" kind="variable"><name>dy</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1ae513ad403fcf7c03bbab922dfe748bd4" kind="variable"><name>x</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1a62675608e980b8e1f819c77eafc72753" kind="variable"><name>y</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1a4dbcda65f8de8a5a1e8888fd6e2349f8" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1a96e0255a6683fbbe6147d46daa21dffb" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1ac43c444237a219043e305366085f5876" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1a0268b5a8819cb04356446b0756088560" kind="function"><name>next_is_collinear</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1a705caca7edd6392e3ed570ebe3f87518" kind="function"><name>normalize</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1aa9f2030ac11e66d3c9644859d415b1b6" kind="function"><name>operator&lt;</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1af0e511efe41b11120d53c3cb04946d80" kind="function"><name>operator==</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_1ad55f9f8d409ea5588971d9b8f74cb6c1" kind="function"><name>same_direction</name></member>
+  </compound>
+  <compound refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01geographic__tag_01_4" kind="struct"><name>boost::geometry::collected_vector&lt; T, Geometry, geographic_tag &gt;</name>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01geographic__tag_01_4_1a0303b83684b0664431235733a488829a" kind="typedef"><name>base_type</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01geographic__tag_01_4_1a4ef2a9637d77b5e27ddda6b7ef34da7a" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01geographic__tag_01_4_1ac30bc59a44fe0c666da0e9c850a53e55" kind="function"><name>collected_vector</name></member>
+  </compound>
+  <compound refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4" kind="struct"><name>boost::geometry::collected_vector&lt; T, Geometry, spherical_equatorial_tag &gt;</name>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1aad17741710bc6763d8d09aedb41ab4e8" kind="typedef"><name>cs_type</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1ab0491c05abb46a232c31e56a65bd70a4" kind="typedef"><name>point_type</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1ac5a39995714bbd39aafbddab699148fe" kind="typedef"><name>type</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1a55ad809434c5e1fea8ca31d7f0261250" kind="typedef"><name>vector_type</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1abde2cc2095ff85a6a8a39927960149aa" kind="variable"><name>direction</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1af7ecc7a07b0b50d008c39b04d2c0753b" kind="variable"><name>next</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1aedd2ccf74fa5a60209f8263442c05cb1" kind="variable"><name>origin</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1a1443cc86ad5ed5c62fb84e0db7fbf90c" kind="variable"><name>prev</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1aaba1ae31580d0065d44662d92fec577b" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1a3c577337828af49ad0de443cbc05fee9" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1acd4ce58ea8b70ad0b23a8c1f0bf4b75b" kind="function"><name>next_is_collinear</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1acfb6b03ec7c276050c8b35717df6b014" kind="function"><name>normalize</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1a9230fd471bfeea9139a3ac1c38968e5a" kind="function"><name>operator&lt;</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1a5e773d3c3a8ef035dcaa5169ae680a43" kind="function"><name>operator==</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__equatorial__tag_01_4_1a68f49dfb60abb38f33b1b7f706b60ffd" kind="function"><name>is_collinear</name></member>
+  </compound>
+  <compound refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__polar__tag_01_4" kind="struct"><name>boost::geometry::collected_vector&lt; T, Geometry, spherical_polar_tag &gt;</name>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__polar__tag_01_4_1a6fd334d326ec78ee5612b8955c48d488" kind="typedef"><name>base_type</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__polar__tag_01_4_1a658a8dc21f8780f9e0a8df5c37390e51" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__polar__tag_01_4_1a7c7ce2fad9d05a55b39f61d674a94953" kind="function"><name>collected_vector</name></member>
+    <member refid="structboost_1_1geometry_1_1collected__vector_3_01_t_00_01_geometry_00_01spherical__polar__tag_01_4_1a629f2a9efbb0131903aedae3d957befd" kind="function"><name>polar_to_equatorial</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1comparable__distance__result" kind="struct"><name>boost::geometry::comparable_distance_result</name>
   </compound>
@@ -82,7 +111,7 @@
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a7b0bdfa1fb1c0ad3f30d4baea9d9cc99" kind="variable"><name>m_it1</name></member>
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a4c9a1995de818e99285b25f7d01d4bc2" kind="variable"><name>m_it2</name></member>
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1ac09f73e325921cc50ebcd96bed0f8096" kind="friend"><name>boost::iterator_core_access</name></member>
-    <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a3358b3ecf1a87df22c0d363cd95a2b7c" kind="friend"><name>concatenate_iterator</name></member>
+    <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a21e525d10eea7c9537f38d102ac09242" kind="friend"><name>concatenate_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1ada42401137480fdc824d0a5065799107" kind="function"><name>concatenate_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1acb437c4a9b91dcd42632ed13f736ff5b" kind="function"><name>concatenate_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a7d9e67c7a5380dc07a5c6788861577eb" kind="function"><name>concatenate_iterator</name></member>
@@ -92,67 +121,70 @@
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1ac8aeef4dab45ac3e1592c837e492f97c" kind="function"><name>equal</name></member>
     <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a9c5b9792394b263b1ad914e3ca71639d" kind="function"><name>increment</name></member>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_area_strategy" kind="class"><name>boost::geometry::concept::AreaStrategy</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_area_strategy" kind="class"><name>boost::geometry::concepts::AreaStrategy</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_box" kind="class"><name>boost::geometry::concept::Box</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_box" kind="class"><name>boost::geometry::concepts::Box</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_centroid_strategy" kind="class"><name>boost::geometry::concept::CentroidStrategy</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_centroid_strategy" kind="class"><name>boost::geometry::concepts::CentroidStrategy</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_box" kind="class"><name>boost::geometry::concept::ConstBox</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_box" kind="class"><name>boost::geometry::concepts::ConstBox</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_linestring" kind="class"><name>boost::geometry::concept::ConstLinestring</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_linestring" kind="class"><name>boost::geometry::concepts::ConstLinestring</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_multi_linestring" kind="class"><name>boost::geometry::concept::ConstMultiLinestring</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_multi_linestring" kind="class"><name>boost::geometry::concepts::ConstMultiLinestring</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_multi_point" kind="class"><name>boost::geometry::concept::ConstMultiPoint</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_multi_point" kind="class"><name>boost::geometry::concepts::ConstMultiPoint</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_multi_polygon" kind="class"><name>boost::geometry::concept::ConstMultiPolygon</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_multi_polygon" kind="class"><name>boost::geometry::concepts::ConstMultiPolygon</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_point" kind="class"><name>boost::geometry::concept::ConstPoint</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_point" kind="class"><name>boost::geometry::concepts::ConstPoint</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_polygon" kind="class"><name>boost::geometry::concept::ConstPolygon</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_polygon" kind="class"><name>boost::geometry::concepts::ConstPolygon</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_ring" kind="class"><name>boost::geometry::concept::ConstRing</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_ring" kind="class"><name>boost::geometry::concepts::ConstRing</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_const_segment" kind="class"><name>boost::geometry::concept::ConstSegment</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_const_segment" kind="class"><name>boost::geometry::concepts::ConstSegment</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_convex_hull_strategy" kind="class"><name>boost::geometry::concept::ConvexHullStrategy</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_convex_hull_strategy" kind="class"><name>boost::geometry::concepts::ConvexHullStrategy</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_linestring" kind="class"><name>boost::geometry::concept::Linestring</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_linestring" kind="class"><name>boost::geometry::concepts::Linestring</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_multi_linestring" kind="class"><name>boost::geometry::concept::MultiLinestring</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_multi_linestring" kind="class"><name>boost::geometry::concepts::MultiLinestring</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_multi_point" kind="class"><name>boost::geometry::concept::MultiPoint</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_multi_point" kind="class"><name>boost::geometry::concepts::MultiPoint</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_multi_polygon" kind="class"><name>boost::geometry::concept::MultiPolygon</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_multi_polygon" kind="class"><name>boost::geometry::concepts::MultiPolygon</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_point" kind="class"><name>boost::geometry::concept::Point</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_point" kind="class"><name>boost::geometry::concepts::Point</name>
   </compound>
-  <compound refid="structboost_1_1geometry_1_1concept_1_1_point_distance_strategy" kind="struct"><name>boost::geometry::concept::PointDistanceStrategy</name>
+  <compound refid="structboost_1_1geometry_1_1concepts_1_1_point_distance_strategy" kind="struct"><name>boost::geometry::concepts::PointDistanceStrategy</name>
   </compound>
-  <compound refid="structboost_1_1geometry_1_1concept_1_1_point_segment_distance_strategy" kind="struct"><name>boost::geometry::concept::PointSegmentDistanceStrategy</name>
+  <compound refid="structboost_1_1geometry_1_1concepts_1_1_point_segment_distance_strategy" kind="struct"><name>boost::geometry::concepts::PointSegmentDistanceStrategy</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_polygon" kind="class"><name>boost::geometry::concept::Polygon</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_polygon" kind="class"><name>boost::geometry::concepts::Polygon</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_ring" kind="class"><name>boost::geometry::concept::Ring</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_ring" kind="class"><name>boost::geometry::concepts::Ring</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_segment" kind="class"><name>boost::geometry::concept::Segment</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_segment" kind="class"><name>boost::geometry::concepts::Segment</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_segment_intersect_strategy" kind="class"><name>boost::geometry::concept::SegmentIntersectStrategy</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_segment_intersect_strategy" kind="class"><name>boost::geometry::concepts::SegmentIntersectStrategy</name>
   </compound>
-  <compound refid="structboost_1_1geometry_1_1concept_1_1_simplify_strategy" kind="struct"><name>boost::geometry::concept::SimplifyStrategy</name>
+  <compound refid="structboost_1_1geometry_1_1concepts_1_1_simplify_strategy" kind="struct"><name>boost::geometry::concepts::SimplifyStrategy</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_within_strategy_box_box" kind="class"><name>boost::geometry::concept::WithinStrategyBoxBox</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_within_strategy_box_box" kind="class"><name>boost::geometry::concepts::WithinStrategyBoxBox</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_within_strategy_point_box" kind="class"><name>boost::geometry::concept::WithinStrategyPointBox</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_within_strategy_point_box" kind="class"><name>boost::geometry::concepts::WithinStrategyPointBox</name>
   </compound>
-  <compound refid="classboost_1_1geometry_1_1concept_1_1_within_strategy_polygonal" kind="class"><name>boost::geometry::concept::WithinStrategyPolygonal</name>
+  <compound refid="classboost_1_1geometry_1_1concepts_1_1_within_strategy_polygonal" kind="class"><name>boost::geometry::concepts::WithinStrategyPolygonal</name>
   </compound>
   <compound refid="structboost_1_1geometry_1_1coordinate__system" kind="struct"><name>boost::geometry::coordinate_system</name>
     <member refid="structboost_1_1geometry_1_1coordinate__system_1ae18064b76656fd7a8554c8a6adb05512" kind="typedef"><name>type</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1coordinate__type" kind="struct"><name>boost::geometry::coordinate_type</name>
     <member refid="structboost_1_1geometry_1_1coordinate__type_1a426b2210908d022e151055d1fed4ac75" kind="typedef"><name>type</name></member>
+  </compound>
+  <compound refid="structboost_1_1geometry_1_1core__dispatch_1_1point__order_3_01detail_1_1buffer_1_1buffered__ring052062d5cc13656a59cdf56b1a8996f9" kind="struct"><name>boost::geometry::core_dispatch::point_order&lt; detail::buffer::buffered_ring_collection_tag, geometry::detail::buffer::buffered_ring_collection&lt; geometry::detail::buffer::buffered_ring&lt; Ring &gt; &gt; &gt;</name>
+    <member refid="structboost_1_1geometry_1_1core__dispatch_1_1point__order_3_01detail_1_1buffer_1_1buffered__ring052062d5cc13656a59cdf56b1a8996f9_1a4dc12eb8c6ddfb37d7573a96321825b9" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1core__dispatch_1_1ring__type_3_01detail_1_1buffer_1_1buffered__ring__023aa1ac442b9bd7853f152f96b9eb7d" kind="struct"><name>boost::geometry::core_dispatch::ring_type&lt; detail::buffer::buffered_ring_collection_tag, detail::buffer::buffered_ring_collection&lt; Ring &gt;&gt;</name>
     <member refid="structboost_1_1geometry_1_1core__dispatch_1_1ring__type_3_01detail_1_1buffer_1_1buffered__ring__023aa1ac442b9bd7853f152f96b9eb7d_1a9e5cee8a3c9462f4b05357a4075ca955" kind="typedef"><name>type</name></member>
@@ -434,7 +466,7 @@
     <member refid="classboost_1_1geometry_1_1flatten__iterator_1a56b63747110393e7d70f88871bce5a1f" kind="variable"><name>m_outer_end</name></member>
     <member refid="classboost_1_1geometry_1_1flatten__iterator_1a4403d41055fc9596163888a188f9c45b" kind="variable"><name>m_outer_it</name></member>
     <member refid="classboost_1_1geometry_1_1flatten__iterator_1ac09f73e325921cc50ebcd96bed0f8096" kind="friend"><name>boost::iterator_core_access</name></member>
-    <member refid="classboost_1_1geometry_1_1flatten__iterator_1a7bb24f448492531e39daa5ac7d23eb59" kind="friend"><name>flatten_iterator</name></member>
+    <member refid="classboost_1_1geometry_1_1flatten__iterator_1ad49371b1a77b7bb4fdc33b6c1edbea9c" kind="friend"><name>flatten_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1flatten__iterator_1af4d5ab2c60cdb6d22e71f767138b0f72" kind="function"><name>flatten_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1flatten__iterator_1a41c4d652304eb785084fb99ea58950d5" kind="function"><name>flatten_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1flatten__iterator_1a3e01c4670d469c5ca44510c1083669e1" kind="function"><name>flatten_iterator</name></member>
@@ -522,6 +554,16 @@
   <compound refid="structboost_1_1geometry_1_1interior__type" kind="struct"><name>boost::geometry::interior_type</name>
     <member refid="structboost_1_1geometry_1_1interior__type_1a28215ebe3657036188f6c765250bec86" kind="typedef"><name>type</name></member>
   </compound>
+  <compound refid="structboost_1_1geometry_1_1intersection__strategies" kind="struct"><name>boost::geometry::intersection_strategies</name>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1a04b19c5f14da54554c00ee8c54e76dfd" kind="typedef"><name>ip_type</name></member>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1a6f597f3c1bfc2a3a4989f61c5986201f" kind="typedef"><name>point1_type</name></member>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1aa6cdc6b42a62fdcf8f56445daf9241d1" kind="typedef"><name>point2_type</name></member>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1acd48856c1769149e4393b990fd79ff37" kind="typedef"><name>segment1_type</name></member>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1a53026f792ec4a12fad7077e334675ceb" kind="typedef"><name>segment2_type</name></member>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1a3429f408d59654fc5efb0ea3e86d878a" kind="typedef"><name>rescale_policy_type</name></member>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1a6aa7bbaf644af28cf5eea74d642148d9" kind="typedef"><name>segment_intersection_strategy_type</name></member>
+    <member refid="structboost_1_1geometry_1_1intersection__strategies_1a032cc29e495da3226e3bac03e4b7d20d" kind="typedef"><name>side_strategy_type</name></member>
+  </compound>
   <compound refid="classboost_1_1geometry_1_1invalid__input__exception" kind="class"><name>boost::geometry::invalid_input_exception</name>
     <member refid="classboost_1_1geometry_1_1invalid__input__exception_1ac12de04bce791576ca6c52fd32f2c357" kind="function"><name>invalid_input_exception</name></member>
     <member refid="classboost_1_1geometry_1_1invalid__input__exception_1aa10e3d6dfbfb93ee4c62900ae7c4d9c9" kind="function"><name>what</name></member>
@@ -542,8 +584,8 @@
   <compound refid="classboost_1_1geometry_1_1model_1_1box" kind="class"><name>boost::geometry::model::box</name>
     <member refid="classboost_1_1geometry_1_1model_1_1box_1a9d9e63fcc5754901fac4915ac48754fe" kind="variable"><name>m_max_corner</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1box_1a0b37bc39a36817db651ea6ae528674f2" kind="variable"><name>m_min_corner</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1box_1a467032b2a1a7b0649a6b3a88ed5f38e1" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1box_1a69b40a9a03a2cc3f4737af6f6d229a6e" kind="function"><name>box</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1box_1a0df136ed354ce634835cb3118913a32b" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1box_1abc7fbd3ef09e4fde188f8ad4179015a1" kind="function"><name>box</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1box_1ad13d0a268701c33627f6e5a4c3ae20d0" kind="function"><name>box</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1box_1abb5bd8205c3530d22fd9449bdb0477fc" kind="function"><name>max_corner</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1box_1a62014bea25cbad5583136e6fc2665ad3" kind="function"><name>max_corner</name></member>
@@ -551,7 +593,7 @@
     <member refid="classboost_1_1geometry_1_1model_1_1box_1aaaedfffca974e18df1a7337d8eeb9bc3" kind="function"><name>min_corner</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kind="class"><name>boost::geometry::model::d2::point_xy</name>
-    <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a9feeb8e17d7ee287c177d50ed459ec7d" kind="function"><name>point_xy</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a69609f33908550b343e653291b836d78" kind="function"><name>point_xy</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1afc05f085ae9675c83aadbd7026a1be0a" kind="function"><name>point_xy</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1aa023762716f30c1887fe062e06572238" kind="function"><name>x</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a89ca091e60b57bc097c0292763a52a59" kind="function"><name>x</name></member>
@@ -572,27 +614,27 @@
   </compound>
   <compound refid="classboost_1_1geometry_1_1model_1_1linestring" kind="class"><name>boost::geometry::model::linestring</name>
     <member refid="classboost_1_1geometry_1_1model_1_1linestring_1ad166000688c7d99f2f76b39c7fa22524" kind="typedef"><name>base_type</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1linestring_1a6ff14c63d09a805cdf9322ca84edb549" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1linestring_1a0fe9e5bb972f7f3f448391dc6dca81c9" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1linestring_1a0325e90346e333317da380691007aa66" kind="function"><name>linestring</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1linestring_1a09b2523065ccd5bc9df6a04e77c40a5a" kind="function"><name>linestring</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1linestring_1aa964ac0f6bae17c8f1cf7b458c934f7f" kind="function"><name>linestring</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1model_1_1multi__linestring" kind="class"><name>boost::geometry::model::multi_linestring</name>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__linestring_1a12bcd28fa7393480249a84a23568d19c" kind="typedef"><name>base_type</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1multi__linestring_1ac2d0298f0a180f071b9a324a0bf4bfe9" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1multi__linestring_1a53d14b189112cb84455f2e0171a6ce25" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__linestring_1a360efb5978f38ea069e66550839e7825" kind="function"><name>multi_linestring</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__linestring_1ae1afbaf7e59a9eb9c2c39a39dca56701" kind="function"><name>multi_linestring</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1model_1_1multi__point" kind="class"><name>boost::geometry::model::multi_point</name>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__point_1a9a096eb72a510dc0373937557652dd5e" kind="typedef"><name>base_type</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1multi__point_1a94108448020d2209864cbfee8e5080c7" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1multi__point_1aaa60521babc62f517d0b1245d1d0448b" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__point_1abae1e4f6c1338a8393af93e338a5556d" kind="function"><name>multi_point</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__point_1ab51375b0136afafeb08adfac0817fbf8" kind="function"><name>multi_point</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__point_1a0052f6896ee5cb0d9c6a06f0b90c5392" kind="function"><name>multi_point</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1model_1_1multi__polygon" kind="class"><name>boost::geometry::model::multi_polygon</name>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1ab1696fd7e5e66c4e8deb1f3466299b74" kind="typedef"><name>base_type</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1a9feddbc7a9075d7c1ef8ff40f7c14b1c" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1a72287f2cf31374b97f6ba4fbff2daecb" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1ac1410fc60a6af27d5956aa60d57b71f5" kind="function"><name>multi_polygon</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1a90758f0fd28644a647efb91092ad811a" kind="function"><name>multi_polygon</name></member>
   </compound>
@@ -602,7 +644,7 @@
     <member refid="classboost_1_1geometry_1_1model_1_1point_1afb10d8b769a47d3d64adfedf85bcdb2a" kind="variable"><name>m_values</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1point_1ad437571e4f1cdc271385701fb3447b10" kind="function"><name>BOOST_MPL_ASSERT_MSG</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1point_1a5042d74b21e525743168c56563ddf015" kind="function"><name>get</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1point_1a071cc303b39a170bf875550844198eab" kind="function"><name>point</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1point_1a768fcbb0028e80ee4579a47f5d058370" kind="function"><name>point</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1point_1a0236fd6973659285b15292d9370e9136" kind="function"><name>point</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1point_1abe00d79aa3ed9be100f1a34b7d09249b" kind="function"><name>point</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1point_1a2d74ab12275dd09e47b50ab941f71e58" kind="function"><name>point</name></member>
@@ -612,7 +654,7 @@
     <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1abcf86cdb4bf632e9aebe723cb21afc30" kind="typedef"><name>point_type</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1a1f9454874be628c97599476c70b4ace7" kind="variable"><name>first</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1a8bc1050731083acc4e2716d12f147d91" kind="variable"><name>second</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1a4321aa7d0987d6e510690488bb3d5168" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1af1320761e3d826d2d11e87ff5d08953f" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1ad61a350c66bd6ab5b8e08be19dbe3733" kind="function"><name>pointing_segment</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1afe26ebf6994c53b12bc328b129e2f01b" kind="function"><name>pointing_segment</name></member>
   </compound>
@@ -622,7 +664,7 @@
     <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a570d62b2dd33ac4269a0b559cb3b18fb" kind="typedef"><name>ring_type</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a7ff03febfd9163687b5693a74cef028a" kind="variable"><name>m_inners</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a92c39346305aa94c89627f771b38fce0" kind="variable"><name>m_outer</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1polygon_1aa9566e0601305b7e162215c7a6d6dfe9" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a4fa0d51f003e50aed24e8dea20418b13" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1polygon_1aa1c33952047f12bed22862b634f885d8" kind="function"><name>clear</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a06c92c4750c01e9f1ca8994bd4b476ad" kind="function"><name>inners</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a9920acd7487ef19f594dabc8cbb575ed" kind="function"><name>inners</name></member>
@@ -635,19 +677,19 @@
     <member refid="classboost_1_1geometry_1_1model_1_1referring__segment_1a18a6655dd1d6a169a7731b59b172dfae" kind="typedef"><name>point_type</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1referring__segment_1a3d7474ad6f9d9222abd61e906c6ed63c" kind="variable"><name>first</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1referring__segment_1aa93b6ffc58a5d66abcd3e0fc7a4e2b75" kind="variable"><name>second</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1referring__segment_1a608ce57abf703ee80bae0ef5be7f01b3" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1referring__segment_1ac7a3e1d9bef125f1eb2aa56b311aff07" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1referring__segment_1a40a61dea9784f2086edf88ce6d609b55" kind="function"><name>referring_segment</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1model_1_1ring" kind="class"><name>boost::geometry::model::ring</name>
     <member refid="classboost_1_1geometry_1_1model_1_1ring_1a5c956a692c473c18ed09f8b7e6c991f8" kind="typedef"><name>base_type</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1ring_1a4699652b7d188d4f56d0edd8ef8b0a93" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1ring_1a1f5a179d33e86c1570870eba668f72a7" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1ring_1a7de828a9c7ea1061e9790b827c1d39e9" kind="function"><name>ring</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1ring_1a514bb0991233b1663ac64c4c3cab940b" kind="function"><name>ring</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1ring_1a2511ffcecb9c6f89f91eb34ec2d74f9b" kind="function"><name>ring</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1model_1_1segment" kind="class"><name>boost::geometry::model::segment</name>
-    <member refid="classboost_1_1geometry_1_1model_1_1segment_1a7b62765825b9e5c2deb2fcabd7da2287" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
-    <member refid="classboost_1_1geometry_1_1model_1_1segment_1ace4d4cdfce0f1b2963e47ab888f8ff64" kind="function"><name>segment</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1segment_1a6b41e74361b1716332112523cf701677" kind="function"><name>BOOST_CONCEPT_ASSERT</name></member>
+    <member refid="classboost_1_1geometry_1_1model_1_1segment_1af86a06e6b474682f4d8e15ccbb53bfb1" kind="function"><name>segment</name></member>
     <member refid="classboost_1_1geometry_1_1model_1_1segment_1aa2ab56ba75b691034266480fe721217b" kind="function"><name>segment</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1multi__linestring__tag" kind="struct"><name>boost::geometry::multi_linestring_tag</name>
@@ -728,7 +770,7 @@
     <member refid="classboost_1_1geometry_1_1partition_1adfaabe8f058bcf4c14bb61367ab524c2" kind="function"><name>apply</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1point__iterator" kind="class"><name>boost::geometry::point_iterator</name>
-    <member refid="classboost_1_1geometry_1_1point__iterator_1ac183fab1d545f266ec8b984a29899008" kind="friend"><name>point_iterator</name></member>
+    <member refid="classboost_1_1geometry_1_1point__iterator_1a9478f56046dd8fb708f495fa41fa0246" kind="friend"><name>point_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1point__iterator_1a9d0f9405161b39035b72c29b9df23877" kind="friend"><name>points_begin</name></member>
     <member refid="classboost_1_1geometry_1_1point__iterator_1a30f1f6bf67225d39f60058a8f18d26ce" kind="friend"><name>points_end</name></member>
     <member refid="classboost_1_1geometry_1_1point__iterator_1a1c503df8b4973a9ce7d067cb69668fb9" kind="function"><name>point_iterator</name></member>
@@ -740,7 +782,7 @@
   </compound>
   <compound refid="classboost_1_1geometry_1_1point__reverse__iterator" kind="class"><name>boost::geometry::point_reverse_iterator</name>
     <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1ae85dbaa9bb6db1247f027474078cd1ee" kind="typedef"><name>base_type</name></member>
-    <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a1b7e6ecf7498a21ae4d22d9dbaf6310d" kind="friend"><name>point_reverse_iterator</name></member>
+    <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a4e08988ca0d371a6744b733edefc6252" kind="friend"><name>point_reverse_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1adb151d7175f4abad1dcc2a8bb1ea9e61" kind="friend"><name>points_rbegin</name></member>
     <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a708e29613c2ec41de05df21a905ee928" kind="friend"><name>points_rend</name></member>
     <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a84db7052af89d51fa7c098422c43851a" kind="function"><name>point_reverse_iterator</name></member>
@@ -788,7 +830,6 @@
   </compound>
   <compound refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points" kind="struct"><name>boost::geometry::policies::relate::segments_intersection_points</name>
     <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a68d3638332c4e8118a762a5c6d28d5f2" kind="typedef"><name>return_type</name></member>
-    <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1ad47f64ac130a7e7575b90278b1ec2dd1" kind="function"><name>assign</name></member>
     <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a09e20a365d1ef3a7668b54f1d14b9229" kind="function"><name>degenerate</name></member>
     <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1a30a6b91438ef4970e15f601f2647f8b5" kind="function"><name>disjoint</name></member>
     <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__points_1ade4481075291ac25410adbba1b63c078" kind="function"><name>error</name></member>
@@ -824,7 +865,7 @@
   <compound refid="classboost_1_1geometry_1_1promote__integral" kind="class"><name>boost::geometry::promote_integral</name>
     <member refid="classboost_1_1geometry_1_1promote__integral_1a63a687d80e8c9f5b9167361edfdf38b7" kind="typedef"><name>bit_size_type</name></member>
     <member refid="classboost_1_1geometry_1_1promote__integral_1a32a9600fa03bbd313d3a3174e7ba2fd7" kind="typedef"><name>integral_types</name></member>
-    <member refid="classboost_1_1geometry_1_1promote__integral_1a3717061a0e84c75868eb6d48c0bf4f1f" kind="typedef"><name>min_bit_size_type</name></member>
+    <member refid="classboost_1_1geometry_1_1promote__integral_1a7f5356ffa11a2e5e723ae12d089e2636" kind="typedef"><name>min_bit_size_type</name></member>
     <member refid="classboost_1_1geometry_1_1promote__integral_1aed04f656ccafd0e1aa93ee007063e800" kind="typedef"><name>signed_integral_types</name></member>
     <member refid="classboost_1_1geometry_1_1promote__integral_1a5380bee7fe1342f0944eaa5ba1ef8bbe" kind="typedef"><name>unsigned_integral_types</name></member>
     <member refid="classboost_1_1geometry_1_1promote__integral_1a0a9ae762a12d2f9126c45036243c7156" kind="typedef"><name>type</name></member>
@@ -1551,6 +1592,7 @@
     <member refid="structboost_1_1geometry_1_1ring__identifier_1a9567b835d295b1ce66df61d1839a11b1" kind="variable"><name>multi_index</name></member>
     <member refid="structboost_1_1geometry_1_1ring__identifier_1adf676322f42b8329d565b4d25f8ad378" kind="variable"><name>ring_index</name></member>
     <member refid="structboost_1_1geometry_1_1ring__identifier_1a83eaf859d384d118c442da4e4fc75079" kind="variable"><name>source_index</name></member>
+    <member refid="structboost_1_1geometry_1_1ring__identifier_1a2d39855c70043ff4ab4d79ca2f6db577" kind="function"><name>operator!=</name></member>
     <member refid="structboost_1_1geometry_1_1ring__identifier_1a28d9cc14aea09d762a8400e071934fa8" kind="function"><name>operator&lt;</name></member>
     <member refid="structboost_1_1geometry_1_1ring__identifier_1a8b60e380b19164ede6ddcd27d1f8e4a3" kind="function"><name>operator==</name></member>
     <member refid="structboost_1_1geometry_1_1ring__identifier_1a442e201b463a4c93e349c8622d981dde" kind="function"><name>ring_identifier</name></member>
@@ -1595,15 +1637,6 @@
     <member refid="structboost_1_1geometry_1_1segment__identifier_1af82cf357779f99dab135193474068ba7" kind="function"><name>segment_identifier</name></member>
     <member refid="structboost_1_1geometry_1_1segment__identifier_1a24986efea0ecf3b02863cc183cee27f0" kind="function"><name>segment_identifier</name></member>
   </compound>
-  <compound refid="structboost_1_1geometry_1_1segment__intersection__info" kind="struct"><name>boost::geometry::segment_intersection_info</name>
-    <member refid="structboost_1_1geometry_1_1segment__intersection__info_1a5b0999dd69213cc5ca3344e78955302f" kind="typedef"><name>promoted_type</name></member>
-    <member refid="structboost_1_1geometry_1_1segment__intersection__info_1afb56306d43d051624de5b7dea6eb9cbf" kind="variable"><name>dx_a</name></member>
-    <member refid="structboost_1_1geometry_1_1segment__intersection__info_1abe848650aaed0ba8a6568b7c356181be" kind="variable"><name>dx_b</name></member>
-    <member refid="structboost_1_1geometry_1_1segment__intersection__info_1a9e67a78002a81a4986e3be369b9b51c4" kind="variable"><name>dy_a</name></member>
-    <member refid="structboost_1_1geometry_1_1segment__intersection__info_1acded4fdef43107aa9d9f9e0873f536f7" kind="variable"><name>dy_b</name></member>
-    <member refid="structboost_1_1geometry_1_1segment__intersection__info_1aaf81fd7b3daa4e35ab3a94c81c0e5c36" kind="variable"><name>robust_ra</name></member>
-    <member refid="structboost_1_1geometry_1_1segment__intersection__info_1a76a308e4c6c0e09c48970347012f8c9c" kind="variable"><name>robust_rb</name></member>
-  </compound>
   <compound refid="structboost_1_1geometry_1_1segment__intersection__points" kind="struct"><name>boost::geometry::segment_intersection_points</name>
     <member refid="structboost_1_1geometry_1_1segment__intersection__points_1adfcdebeced02c7c3c431ea3193223802" kind="typedef"><name>point_type</name></member>
     <member refid="structboost_1_1geometry_1_1segment__intersection__points_1a01de8a7bae6f84897c8bad7fcbe2912a" kind="variable"><name>count</name></member>
@@ -1614,7 +1647,7 @@
   <compound refid="classboost_1_1geometry_1_1segment__iterator" kind="class"><name>boost::geometry::segment_iterator</name>
     <member refid="classboost_1_1geometry_1_1segment__iterator_1adb7140f93d63783a81c00f5df0d92bca" kind="typedef"><name>base</name></member>
     <member refid="classboost_1_1geometry_1_1segment__iterator_1aef7647c5b989361cd047499331b60a45" kind="typedef"><name>iterator_category</name></member>
-    <member refid="classboost_1_1geometry_1_1segment__iterator_1ad2b2c28f715a9ff056c4e14ff3b4523a" kind="friend"><name>segment_iterator</name></member>
+    <member refid="classboost_1_1geometry_1_1segment__iterator_1afc891591a669b3934ec734d263120399" kind="friend"><name>segment_iterator</name></member>
     <member refid="classboost_1_1geometry_1_1segment__iterator_1ac6a4722b1d18044752d3f72589a717b2" kind="friend"><name>segments_begin</name></member>
     <member refid="classboost_1_1geometry_1_1segment__iterator_1a1747951ef36f7b208f8fb86c40bb76fc" kind="friend"><name>segments_end</name></member>
     <member refid="classboost_1_1geometry_1_1segment__iterator_1acd76ba6de506a08aca1d4ec45558b4b0" kind="function"><name>base_ptr</name></member>
@@ -1986,6 +2019,42 @@
     <member refid="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky_1a6cb1453a0fb148bc24c5a09a9546b46e" kind="function"><name>apply</name></member>
     <member refid="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky_1afd243e747b01ae06229935f7dc1f7099" kind="function"><name>clip_segment</name></member>
   </compound>
+  <compound refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments" kind="struct"><name>boost::geometry::strategy::intersection::relate_spherical_segments</name>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a8f1ec4833942cf9f261d6c4cb2f49a16" kind="enum"><name>intersection_point_flag</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a8f1ec4833942cf9f261d6c4cb2f49a16a17c6cb464bc227d48541ba761fcb9ad8" kind="enumvalue"><name>ipi_inters</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a8f1ec4833942cf9f261d6c4cb2f49a16a9edb4569e692fa11b044a5db7d545772" kind="enumvalue"><name>ipi_at_a1</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a8f1ec4833942cf9f261d6c4cb2f49a16af5b6b224d7f5fc4aba8501b2d7683923" kind="enumvalue"><name>ipi_at_a2</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a8f1ec4833942cf9f261d6c4cb2f49a16a5f392f52557fc8be0941bb2c35c0e31b" kind="enumvalue"><name>ipi_at_b1</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a8f1ec4833942cf9f261d6c4cb2f49a16a0b6f4aad95c014f093ae1d17e0194a58" kind="enumvalue"><name>ipi_at_b2</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1ac16c97632efa47cbd1f06d7095aa9d10" kind="typedef"><name>return_type</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a7f0c0ac696f40c6f2fc1ea43ce809be0" kind="function"><name>apply</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a93d0d5bbd05041082038f32820f370e2" kind="function"><name>apply</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a791aaf56cb7c78cb589ee9aa287a1d89" kind="function"><name>abs_distance</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a4c3f5af2823ad033cb37b233ed8b778f" kind="function"><name>calculate_collinear_data</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1ace9214c767133f9adb3146e3f877f7cc" kind="function"><name>calculate_dists</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1ac0b2d1d14f8a8c48017c130d24eb443f" kind="function"><name>calculate_ip_data</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1afdbb7ec6f0e5ba13834f24da0754c5d0" kind="function"><name>collinear_one_degenerted</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1ac78ff0f5eeac9555e42278b7e49ffdad" kind="function"><name>dist_of_i2</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1a887379c0cc0fb6c45614f82c90252f82" kind="function"><name>is_endpoint_equal</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1ad20bcdf023c4e7ab189d498b000c99ae" kind="function"><name>is_near</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1ad2c4c00e082278ede03228bb4c49aecf" kind="function"><name>is_potentially_crossing</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1ab45134beea7baec0105c700ce72ab466" kind="function"><name>position_value</name></member>
+  </compound>
+  <compound refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info" kind="struct"><name>boost::geometry::strategy::intersection::relate_spherical_segments::segment_intersection_info</name>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a3b378c68fbffc578e158e80c0504f095" kind="typedef"><name>promoted_type</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a7ecff22ff3da3eebe7d2beaa14b84b37" kind="variable"><name>intersection_point</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1af6af1f3b489dddb045247cb24917cefb" kind="variable"><name>ip_flag</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a4ffd058285cf940ed636d70414d4844b" kind="variable"><name>robust_ra</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a823e2301405aea46fb0e2a9ac10d1f9c" kind="variable"><name>robust_rb</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a3588b501512f7695651f763136836e77" kind="function"><name>assign</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a54199c753262f223a35b95b70fed3751" kind="function"><name>assign_a</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a5c07d8f1aec3a047729fcdbd89b15fed" kind="function"><name>assign_b</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1a0e461bd55aafbcb90a975ebae3dbb62e" kind="function"><name>comparable_length_a</name></member>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1relate__spherical__segments_1_1segment__intersection__info_1abec522fd701d633e61c61392fabc7d16" kind="function"><name>comparable_length_b</name></member>
+  </compound>
+  <compound refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1services_1_1default__strategy" kind="struct"><name>boost::geometry::strategy::intersection::services::default_strategy</name>
+    <member refid="structboost_1_1geometry_1_1strategy_1_1intersection_1_1services_1_1default__strategy_1abbbd2da994337978d54825b2048bf493" kind="function"><name>BOOST_MPL_ASSERT_MSG</name></member>
+  </compound>
   <compound refid="structboost_1_1geometry_1_1strategy_1_1not__implemented" kind="struct"><name>boost::geometry::strategy::not_implemented</name>
   </compound>
   <compound refid="structboost_1_1geometry_1_1strategy_1_1relate_1_1relate" kind="struct"><name>boost::geometry::strategy::relate::relate</name>
@@ -2272,7 +2341,7 @@
     <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1winding_1_1counter_1ab26c5bf731fa3e3146b1b8aaf67744ec" kind="variable"><name>m_count</name></member>
     <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1winding_1_1counter_1ae03bc3c5b6aa19b92ee07ff94cc0270e" kind="variable"><name>m_touches</name></member>
     <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1winding_1_1counter_1ac2a2dbae5822c82c94b7c32df9090f90" kind="friend"><name>winding</name></member>
-    <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1winding_1_1counter_1a748dd1b15da3c8a2f3c70d5723300e99" kind="friend"><name>winding_check_touch</name></member>
+    <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1winding_1_1counter_1a2921b0da3a1c4360682475dc218ca4f9" kind="friend"><name>winding_check_touch</name></member>
     <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1winding_1_1counter_1a46cfbcbd4e1bd02a1fb6a125d6de7a58" kind="function"><name>code</name></member>
     <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1winding_1_1counter_1a2df3f1fdcf1b85d3a6134504a58acdf8" kind="function"><name>counter</name></member>
   </compound>
@@ -2322,18 +2391,6 @@
   <compound refid="structboost_1_1geometry_1_1strategy__convex__hull" kind="struct"><name>boost::geometry::strategy_convex_hull</name>
     <member refid="structboost_1_1geometry_1_1strategy__convex__hull_1ac3230dff3944a89dfc6b9b9691fd983b" kind="typedef"><name>type</name></member>
   </compound>
-  <compound refid="structboost_1_1geometry_1_1strategy__intersection" kind="struct"><name>boost::geometry::strategy_intersection</name>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1ad018007d4d91d47f1c435a4bfd0ba408" kind="typedef"><name>ip_type</name></member>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1a4252db0d07140d5efdceb28421e629cc" kind="typedef"><name>point1_type</name></member>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1a13b17efd877aa22c91986bbdcf95387e" kind="typedef"><name>point2_type</name></member>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1a6025660d3415a5f906e2c4c60fd812a6" kind="typedef"><name>segment1_type</name></member>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1af678c96bac4a59125988ed1bb0df4c96" kind="typedef"><name>segment2_type</name></member>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1ac52a15e7186a1b07dbe60388b3f5a6a7" kind="typedef"><name>rescale_policy_type</name></member>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1a0fab9b7fe7b9dd7ccac6a052d99a5b70" kind="typedef"><name>segment_intersection_strategy_type</name></member>
-    <member refid="structboost_1_1geometry_1_1strategy__intersection_1ab56bf40d32db5e22f12ca44b7220e907" kind="typedef"><name>side_strategy_type</name></member>
-  </compound>
-  <compound refid="structboost_1_1geometry_1_1strategy__intersection__empty" kind="struct"><name>boost::geometry::strategy_intersection_empty</name>
-  </compound>
   <compound refid="structboost_1_1geometry_1_1strategy__tag__distance__box__box" kind="struct"><name>boost::geometry::strategy_tag_distance_box_box</name>
   </compound>
   <compound refid="structboost_1_1geometry_1_1strategy__tag__distance__point__box" kind="struct"><name>boost::geometry::strategy_tag_distance_point_box</name>
@@ -2343,27 +2400,28 @@
   <compound refid="structboost_1_1geometry_1_1strategy__tag__distance__point__segment" kind="struct"><name>boost::geometry::strategy_tag_distance_point_segment</name>
   </compound>
   <compound refid="classboost_1_1geometry_1_1svg__manipulator" kind="class"><name>boost::geometry::svg_manipulator</name>
-    <member refid="classboost_1_1geometry_1_1svg__manipulator_1ac1b74f3fb43135848415018117e174ad" kind="variable"><name>m_geometry</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__manipulator_1a07b3005811e30ff269229df3dc66acd9" kind="variable"><name>m_size</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__manipulator_1a18d78447daf9f3ddb904cf82b7f87740" kind="variable"><name>m_style</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__manipulator_1a9bbbcc4e7d4e9eab445eeb3347445a6d" kind="function"><name>svg_manipulator</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__manipulator_1a2e86fa26f1c0bcf72804560a7313f374" kind="variable"><name>m_geometry</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__manipulator_1a3a9ade3d8c3603f0f4a9b98bfdf29c27" kind="variable"><name>m_size</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__manipulator_1a7ae751235dfb7249643981ccc1298e3f" kind="variable"><name>m_style</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__manipulator_1a99fa922dee93fccd2b55055a5fe65bcd" kind="function"><name>svg_manipulator</name></member>
     <member refid="classboost_1_1geometry_1_1svg__manipulator_1a444ed37cc5bbc18eaa6528ad329c83c4" kind="friend"><name>operator&lt;&lt;</name></member>
   </compound>
   <compound refid="classboost_1_1geometry_1_1svg__mapper" kind="class"><name>boost::geometry::svg_mapper</name>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a5719d8f80905c517a64d21d480fd1865" kind="typedef"><name>calculation_type</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1ac7d480fb03f3df63baa268c2a5c88d40" kind="typedef"><name>transformer_type</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a24e20a0421bc8cce2619a326e66f3dc9" kind="variable"><name>m_bounding_box</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1ac328db109a364f77cadec5e53a35ae08" kind="variable"><name>m_height</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1ad5661b7c29056aeaa449e0e5787c77e6" kind="variable"><name>m_matrix</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1ab06a1c6d4b2b8f01c461e3575062da7b" kind="variable"><name>m_stream</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a267599519487172c1f334b8854df3403" kind="variable"><name>m_width</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a06741077c3fd3f658e54144617983882" kind="variable"><name>m_width_height</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a526b1731204b605505516a60f34fedd7" kind="function"><name>init_matrix</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a9a13440addb74e26c93836a68c19c0e5" kind="function"><name>add</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a535a0b5ff10e3f0d31d0e34caf83d368" kind="function"><name>map</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a72c7f08c7d6a03479758c12810a8fc53" kind="function"><name>svg_mapper</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a20890c91dcb47bef38356d81b8abcef9" kind="function"><name>text</name></member>
-    <member refid="classboost_1_1geometry_1_1svg__mapper_1a64268b19bdbeda5f55a83af7e355a4c3" kind="function"><name>~svg_mapper</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a7089f4c9e3b3e34221c03c2b21464f1c" kind="typedef"><name>calculation_type</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1afa455a84bf1140e4265705845e27b6d4" kind="typedef"><name>svg_point_type</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a2433227d6c15d121c002507b62ef6bc3" kind="typedef"><name>transformer_type</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a51204a1a97635d35a6c62982ca27d436" kind="variable"><name>m_bounding_box</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a0a7be4f12329b910b850bafd5a256b09" kind="variable"><name>m_height</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a6ee55394bfe7620b43c8f7f704b7a7c3" kind="variable"><name>m_matrix</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a20eff16f1ed9e25621d5b1f7610ffc9f" kind="variable"><name>m_stream</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a3bac9d3e0fe5d96295f426bb9e09b832" kind="variable"><name>m_width</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a9bccfd56cdd4dff2a3d4f41c75c08728" kind="variable"><name>m_width_height</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a6ccdcb0df25c6df812f660a3110e00c7" kind="function"><name>init_matrix</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1af2732c88df588aee0fd9539616d4e6b3" kind="function"><name>add</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1acd0e35eb96b15f426a5b113df53044a9" kind="function"><name>map</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a9bde4b39494e074fa7f4a1c5637ba446" kind="function"><name>svg_mapper</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1a6b860b4cc7f5d4a637ad7787cf309c0f" kind="function"><name>text</name></member>
+    <member refid="classboost_1_1geometry_1_1svg__mapper_1ac0543fa378854571a4c5479ea345eb98" kind="function"><name>~svg_mapper</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1tag" kind="struct"><name>boost::geometry::tag</name>
     <member refid="structboost_1_1geometry_1_1tag_1aa1ff579fa1a6a331da23a5d722538b14" kind="typedef"><name>type</name></member>
@@ -2499,8 +2557,6 @@
     <member refid="classboost_1_1geometry_1_1wkt__manipulator_1a2ce76ba81b90bdf251680d860f864ef2" kind="function"><name>wkt_manipulator</name></member>
     <member refid="classboost_1_1geometry_1_1wkt__manipulator_1af79aafa1cf45c2e48b99032be002ef37" kind="friend"><name>operator&lt;&lt;</name></member>
   </compound>
-  <compound refid="classboost_1_1mpl_1_1if__" kind="class"><name>boost::mpl::if_</name>
-  </compound>
   <compound refid="structboost_1_1numeric_1_1bounds_3_01rational_3_01_t_01_4_01_4" kind="struct"><name>boost::numeric::bounds&lt; rational&lt; T &gt; &gt;</name>
     <member refid="structboost_1_1numeric_1_1bounds_3_01rational_3_01_t_01_4_01_4_1a779b8a4d8e4a268c1c66a0c35bedfd95" kind="function"><name>highest</name></member>
     <member refid="structboost_1_1numeric_1_1bounds_3_01rational_3_01_t_01_4_01_4_1aceccccc260aa07f8cbe37d35ee519719" kind="function"><name>lowest</name></member>
@@ -2510,240 +2566,6 @@
   </compound>
   <compound refid="structboost_1_1numeric_1_1converter_3_01int_00_01rational_3_01_t_01_4_00_01_traits_00_01_overfloe44c09400be6e25b3249702afde2cc35" kind="struct"><name>boost::numeric::converter&lt; int, rational&lt; T &gt;, Traits, OverflowHandler, Float2IntRounder, RawConverter, UserRangeChecker &gt;</name>
     <member refid="structboost_1_1numeric_1_1converter_3_01int_00_01rational_3_01_t_01_4_00_01_traits_00_01_overfloe44c09400be6e25b3249702afde2cc35_1a602e5b90e045da857c779a92fb91f410" kind="function"><name>convert</name></member>
-  </compound>
-  <compound refid="class_point_list" kind="class"><name>PointList</name>
-  </compound>
-  <compound refid="classstd_1_1allocator" kind="class"><name>std::allocator</name>
-    <member refid="classstd_1_1allocator_1a55f88dab1194d6b8a34e46017c4dfd79" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1auto__ptr" kind="class"><name>std::auto_ptr</name>
-    <member refid="classstd_1_1auto__ptr_1a076c936287003dc557981f9ccec1d841" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1auto__ptr_1aa16b96ffd607af4bb6ba4738d77124f8" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1bad__alloc" kind="class"><name>std::bad_alloc</name>
-  </compound>
-  <compound refid="classstd_1_1bad__cast" kind="class"><name>std::bad_cast</name>
-  </compound>
-  <compound refid="classstd_1_1bad__exception" kind="class"><name>std::bad_exception</name>
-  </compound>
-  <compound refid="classstd_1_1bad__typeid" kind="class"><name>std::bad_typeid</name>
-  </compound>
-  <compound refid="classstd_1_1basic__fstream" kind="class"><name>std::basic_fstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ifstream" kind="class"><name>std::basic_ifstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ios" kind="class"><name>std::basic_ios</name>
-  </compound>
-  <compound refid="classstd_1_1basic__iostream" kind="class"><name>std::basic_iostream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__istream" kind="class"><name>std::basic_istream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__istringstream" kind="class"><name>std::basic_istringstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ofstream" kind="class"><name>std::basic_ofstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ostream" kind="class"><name>std::basic_ostream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ostringstream" kind="class"><name>std::basic_ostringstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string" kind="class"><name>std::basic_string</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1const__iterator" kind="class"><name>std::basic_string::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1const__reverse__iterator" kind="class"><name>std::basic_string::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1iterator" kind="class"><name>std::basic_string::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1reverse__iterator" kind="class"><name>std::basic_string::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__stringstream" kind="class"><name>std::basic_stringstream</name>
-  </compound>
-  <compound refid="classstd_1_1bitset" kind="class"><name>std::bitset</name>
-  </compound>
-  <compound refid="classstd_1_1complex" kind="class"><name>std::complex</name>
-  </compound>
-  <compound refid="classstd_1_1deque" kind="class"><name>std::deque</name>
-    <member refid="classstd_1_1deque_1a090b92581de438d2e14bedc190f0b0f9" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1const__iterator" kind="class"><name>std::deque::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1const__reverse__iterator" kind="class"><name>std::deque::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1iterator" kind="class"><name>std::deque::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1reverse__iterator" kind="class"><name>std::deque::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1domain__error" kind="class"><name>std::domain_error</name>
-  </compound>
-  <compound refid="classstd_1_1exception" kind="class"><name>std::exception</name>
-  </compound>
-  <compound refid="classstd_1_1fstream" kind="class"><name>std::fstream</name>
-  </compound>
-  <compound refid="classstd_1_1ifstream" kind="class"><name>std::ifstream</name>
-  </compound>
-  <compound refid="classstd_1_1invalid__argument" kind="class"><name>std::invalid_argument</name>
-  </compound>
-  <compound refid="classstd_1_1ios" kind="class"><name>std::ios</name>
-  </compound>
-  <compound refid="classstd_1_1ios__base" kind="class"><name>std::ios_base</name>
-  </compound>
-  <compound refid="classstd_1_1ios__base_1_1failure" kind="class"><name>std::ios_base::failure</name>
-  </compound>
-  <compound refid="classstd_1_1istream" kind="class"><name>std::istream</name>
-  </compound>
-  <compound refid="classstd_1_1istringstream" kind="class"><name>std::istringstream</name>
-  </compound>
-  <compound refid="classstd_1_1length__error" kind="class"><name>std::length_error</name>
-  </compound>
-  <compound refid="classstd_1_1list" kind="class"><name>std::list</name>
-    <member refid="classstd_1_1list_1a682e5c7c91eb377d0cb4f019b2b81a5d" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1list_1_1const__iterator" kind="class"><name>std::list::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1list_1_1const__reverse__iterator" kind="class"><name>std::list::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1list_1_1iterator" kind="class"><name>std::list::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1list_1_1reverse__iterator" kind="class"><name>std::list::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1logic__error" kind="class"><name>std::logic_error</name>
-  </compound>
-  <compound refid="classstd_1_1map" kind="class"><name>std::map</name>
-    <member refid="classstd_1_1map_1ac69fe575e214b796b8d9457b0c22469a" kind="variable"><name>elements</name></member>
-    <member refid="classstd_1_1map_1a8dc2b3ed44acf51fb2bd3eb30b237269" kind="variable"><name>keys</name></member>
-  </compound>
-  <compound refid="classstd_1_1map_1_1const__iterator" kind="class"><name>std::map::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1map_1_1const__reverse__iterator" kind="class"><name>std::map::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1map_1_1iterator" kind="class"><name>std::map::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1map_1_1reverse__iterator" kind="class"><name>std::map::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap" kind="class"><name>std::multimap</name>
-    <member refid="classstd_1_1multimap_1abb7a4781b562bae0a54baeb5726ac28d" kind="variable"><name>elements</name></member>
-    <member refid="classstd_1_1multimap_1a4e7d19eda5925ebfcf1e3dcba085cce5" kind="variable"><name>keys</name></member>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1const__iterator" kind="class"><name>std::multimap::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1const__reverse__iterator" kind="class"><name>std::multimap::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1iterator" kind="class"><name>std::multimap::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1reverse__iterator" kind="class"><name>std::multimap::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset" kind="class"><name>std::multiset</name>
-    <member refid="classstd_1_1multiset_1a93eb79091066c87f6dfb9d07c6c7cbcd" kind="variable"><name>keys</name></member>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1const__iterator" kind="class"><name>std::multiset::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1const__reverse__iterator" kind="class"><name>std::multiset::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1iterator" kind="class"><name>std::multiset::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1reverse__iterator" kind="class"><name>std::multiset::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1ofstream" kind="class"><name>std::ofstream</name>
-  </compound>
-  <compound refid="classstd_1_1ostream" kind="class"><name>std::ostream</name>
-  </compound>
-  <compound refid="classstd_1_1ostringstream" kind="class"><name>std::ostringstream</name>
-  </compound>
-  <compound refid="classstd_1_1out__of__range" kind="class"><name>std::out_of_range</name>
-  </compound>
-  <compound refid="classstd_1_1overflow__error" kind="class"><name>std::overflow_error</name>
-  </compound>
-  <compound refid="classstd_1_1priority__queue" kind="class"><name>std::priority_queue</name>
-    <member refid="classstd_1_1priority__queue_1a4df2ae826d2b2caf4a6755adbd34a836" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1queue" kind="class"><name>std::queue</name>
-    <member refid="classstd_1_1queue_1aebacc4dcb935c5e54144e881eb41e356" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1range__error" kind="class"><name>std::range_error</name>
-  </compound>
-  <compound refid="classstd_1_1runtime__error" kind="class"><name>std::runtime_error</name>
-  </compound>
-  <compound refid="classstd_1_1set" kind="class"><name>std::set</name>
-    <member refid="classstd_1_1set_1a7f92ca6d6e5216b9c4be631bd87f1df4" kind="variable"><name>keys</name></member>
-  </compound>
-  <compound refid="classstd_1_1set_1_1const__iterator" kind="class"><name>std::set::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1set_1_1const__reverse__iterator" kind="class"><name>std::set::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1set_1_1iterator" kind="class"><name>std::set::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1set_1_1reverse__iterator" kind="class"><name>std::set::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1smart__ptr" kind="class"><name>std::smart_ptr</name>
-    <member refid="classstd_1_1smart__ptr_1a28b08019309e26ad374ef88cd2641ea3" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1smart__ptr_1a34adc9f82172f037139e4b916c275e90" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1stack" kind="class"><name>std::stack</name>
-    <member refid="classstd_1_1stack_1a020dde37186e898d2aacda2c136aef0f" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1string" kind="class"><name>std::string</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1const__iterator" kind="class"><name>std::string::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1const__reverse__iterator" kind="class"><name>std::string::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1iterator" kind="class"><name>std::string::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1reverse__iterator" kind="class"><name>std::string::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1stringstream" kind="class"><name>std::stringstream</name>
-  </compound>
-  <compound refid="classstd_1_1underflow__error" kind="class"><name>std::underflow_error</name>
-  </compound>
-  <compound refid="classstd_1_1unique__ptr" kind="class"><name>std::unique_ptr</name>
-    <member refid="classstd_1_1unique__ptr_1adae741234450c126c1260d389e1720b9" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1unique__ptr_1a94e5fed358ff2ef440499ac836dd68f2" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1valarray" kind="class"><name>std::valarray</name>
-    <member refid="classstd_1_1valarray_1adce3a23af4e9d36342f49f58300d8568" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1vector" kind="class"><name>std::vector</name>
-    <member refid="classstd_1_1vector_1a2396209900e8f592db1f0b2467f7d899" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1const__iterator" kind="class"><name>std::vector::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1const__reverse__iterator" kind="class"><name>std::vector::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1iterator" kind="class"><name>std::vector::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1reverse__iterator" kind="class"><name>std::vector::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1weak__ptr" kind="class"><name>std::weak_ptr</name>
-    <member refid="classstd_1_1weak__ptr_1a2346c22e2352ad88a4973f2c8aab91a5" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1weak__ptr_1a3385d327d4804d675b2a052265651a7b" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1wfstream" kind="class"><name>std::wfstream</name>
-  </compound>
-  <compound refid="classstd_1_1wifstream" kind="class"><name>std::wifstream</name>
-  </compound>
-  <compound refid="classstd_1_1wios" kind="class"><name>std::wios</name>
-  </compound>
-  <compound refid="classstd_1_1wistream" kind="class"><name>std::wistream</name>
-  </compound>
-  <compound refid="classstd_1_1wistringstream" kind="class"><name>std::wistringstream</name>
-  </compound>
-  <compound refid="classstd_1_1wofstream" kind="class"><name>std::wofstream</name>
-  </compound>
-  <compound refid="classstd_1_1wostream" kind="class"><name>std::wostream</name>
-  </compound>
-  <compound refid="classstd_1_1wostringstream" kind="class"><name>std::wostringstream</name>
-  </compound>
-  <compound refid="classstd_1_1wstring" kind="class"><name>std::wstring</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1const__iterator" kind="class"><name>std::wstring::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1const__reverse__iterator" kind="class"><name>std::wstring::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1iterator" kind="class"><name>std::wstring::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1reverse__iterator" kind="class"><name>std::wstring::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstringstream" kind="class"><name>std::wstringstream</name>
   </compound>
   <compound refid="namespaceboost" kind="namespace"><name>boost</name>
   </compound>
@@ -2763,6 +2585,7 @@
     <member refid="namespaceboost_1_1geometry_1a6b49ba0dbb14c37e57127f78a74e4921a3742a61a84923702bd74f7a9461e2811" kind="enumvalue"><name>overlay_union</name></member>
     <member refid="namespaceboost_1_1geometry_1a6b49ba0dbb14c37e57127f78a74e4921a12c38cf5208fc177a356826347ce494b" kind="enumvalue"><name>overlay_intersection</name></member>
     <member refid="namespaceboost_1_1geometry_1a6b49ba0dbb14c37e57127f78a74e4921a08b4b940b7639685de488dd45589f020" kind="enumvalue"><name>overlay_difference</name></member>
+    <member refid="namespaceboost_1_1geometry_1a6b49ba0dbb14c37e57127f78a74e4921a4794fdd935108fef9002b5e38c9b6d81" kind="enumvalue"><name>overlay_buffer</name></member>
     <member refid="namespaceboost_1_1geometry_1a6b49ba0dbb14c37e57127f78a74e4921aef2f937a8d3cc99675b292b3508334ec" kind="enumvalue"><name>overlay_dissolve</name></member>
     <member refid="group__enum_1ga8f93f0b6945c2ebb9f8a4bb53019a0d8" kind="enum"><name>validity_failure_type</name></member>
     <member refid="group__enum_1gga8f93f0b6945c2ebb9f8a4bb53019a0d8ad799abcd8ac589c3e2500b7bbd1e6334" kind="enumvalue"><name>no_failure</name></member>
@@ -2819,6 +2642,8 @@
     <member refid="group__correct_1gaf14641937f187af33fec6bd99c8202d9" kind="function"><name>correct</name></member>
     <member refid="group__covered__by_1ga83cfa260c6a4f3bcba5a99da6113d19c" kind="function"><name>covered_by</name></member>
     <member refid="group__covered__by_1ga4db6801730953629ec9eb040a5ccc1ad" kind="function"><name>covered_by</name></member>
+    <member refid="group__arithmetic_1gac1db64902c8bb77241db98a1805d941e" kind="function"><name>cross_product</name></member>
+    <member refid="group__arithmetic_1gaac070750570068100488f1411025a083" kind="function"><name>cross_product</name></member>
     <member refid="group__crosses_1gab50efa33876edf806597ea27a9d77989" kind="function"><name>crosses</name></member>
     <member refid="group__difference_1gae23e000e550abb271baac3679fae7640" kind="function"><name>difference</name></member>
     <member refid="group__disjoint_1ga980fdae7d8c1840c1362f09bb0dcf04e" kind="function"><name>disjoint</name></member>
@@ -2827,7 +2652,7 @@
     <member refid="group__arithmetic_1ga8141e616132d8d614da3428863336dc9" kind="function"><name>divide_point</name></member>
     <member refid="group__arithmetic_1ga98645f15cfba3e9e9e9e83c72e0f98e3" kind="function"><name>divide_value</name></member>
     <member refid="group__arithmetic_1gaf962409b64cd5023d9e439c4468db1d2" kind="function"><name>dot_product</name></member>
-    <member refid="namespaceboost_1_1geometry_1adfcf6eedaf9497f45d057cccd4875588" kind="function"><name>enrich_intersection_points</name></member>
+    <member refid="namespaceboost_1_1geometry_1a23c4763c107490e95ea33c714cbf5ec4" kind="function"><name>enrich_intersection_points</name></member>
     <member refid="group__envelope_1gac1f1865a7b36047d44949e17266d8f5a" kind="function"><name>envelope</name></member>
     <member refid="group__equals_1gaf75334fd455c4d01a57a2f2d590d068c" kind="function"><name>equals</name></member>
     <member refid="group__expand_1ga2f189378ab0aa90c5b98bd7f3ed3cc93" kind="function"><name>expand</name></member>
@@ -2910,8 +2735,8 @@
     <member refid="group__simplify_1ga7f1ed83b2a595dc644205374eddf0057" kind="function"><name>simplify</name></member>
     <member refid="group__arithmetic_1ga2aaca98906e1978d00ea55b40a1a39ea" kind="function"><name>subtract_point</name></member>
     <member refid="group__arithmetic_1gaf0ffb395ff5f6359d8da055decddd385" kind="function"><name>subtract_value</name></member>
-    <member refid="group__svg_1gaf2dffff92f8bbb5ddb246560b324988a" kind="function"><name>svg</name></member>
-    <member refid="namespaceboost_1_1geometry_1ad17275bdcc3409e08b6efeac43ceed98" kind="function"><name>svg_map</name></member>
+    <member refid="group__svg_1ga0d9c53eb308ab2276aec264c1404e5a2" kind="function"><name>svg</name></member>
+    <member refid="namespaceboost_1_1geometry_1a6321845dae26edb2471193fef0c6a04e" kind="function"><name>svg_map</name></member>
     <member refid="namespaceboost_1_1geometry_1a85ba136cb1836c9107108597ad3ae909" kind="function"><name>sweep</name></member>
     <member refid="namespaceboost_1_1geometry_1a0d1ffc8d5508af3bb4fa044b38ea282e" kind="function"><name>sweep</name></member>
     <member refid="group__sym__difference_1gab9e6f8b5e8d14cd699f54e79f60b1871" kind="function"><name>sym_difference</name></member>
@@ -2926,12 +2751,12 @@
     <member refid="group__within_1ga4e277994f726a9e5076429e99a6cd3b8" kind="function"><name>within</name></member>
     <member refid="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" kind="function"><name>wkt</name></member>
   </compound>
-  <compound refid="namespaceboost_1_1geometry_1_1concept" kind="namespace"><name>boost::geometry::concept</name>
-    <member refid="group__concepts_1gafe2c2fe2b2fcdabd1c2b860d529e08b5" kind="function"><name>check</name></member>
-    <member refid="group__concepts_1ga72a1211ac80fc47bb5aa8b7f85e5c1d1" kind="function"><name>check_concepts_and_equal_dimensions</name></member>
+  <compound refid="namespaceboost_1_1geometry_1_1concepts" kind="namespace"><name>boost::geometry::concepts</name>
+    <member refid="group__concepts_1ga0fe62edc014ab85800a5ddb86f6ab992" kind="function"><name>check</name></member>
+    <member refid="group__concepts_1gaa20d019dd49155b7f008e93d389d9d19" kind="function"><name>check_concepts_and_equal_dimensions</name></member>
   </compound>
-  <compound refid="namespaceboost_1_1geometry_1_1concept_1_1within" kind="namespace"><name>boost::geometry::concept::within</name>
-    <member refid="group__concepts_1ga2e54c5b71d715ff2cd2a58e15a23800f" kind="function"><name>check</name></member>
+  <compound refid="namespaceboost_1_1geometry_1_1concepts_1_1within" kind="namespace"><name>boost::geometry::concepts::within</name>
+    <member refid="group__concepts_1ga46606d335730a9de3d3be21dba3fe83f" kind="function"><name>check</name></member>
   </compound>
   <compound refid="namespaceboost_1_1geometry_1_1core__dispatch" kind="namespace"><name>boost::geometry::core_dispatch</name>
   </compound>
@@ -3102,6 +2927,8 @@
   <compound refid="namespaceboost_1_1geometry_1_1strategy_1_1distance_1_1services" kind="namespace"><name>boost::geometry::strategy::distance::services</name>
   </compound>
   <compound refid="namespaceboost_1_1geometry_1_1strategy_1_1intersection" kind="namespace"><name>boost::geometry::strategy::intersection</name>
+  </compound>
+  <compound refid="namespaceboost_1_1geometry_1_1strategy_1_1intersection_1_1services" kind="namespace"><name>boost::geometry::strategy::intersection::services</name>
   </compound>
   <compound refid="namespaceboost_1_1geometry_1_1strategy_1_1relate" kind="namespace"><name>boost::geometry::strategy::relate</name>
   </compound>
@@ -3476,6 +3303,8 @@
   </compound>
   <compound refid="clip__linestring_8hpp" kind="file"><name>clip_linestring.hpp</name>
   </compound>
+  <compound refid="cluster__info_8hpp" kind="file"><name>cluster_info.hpp</name>
+  </compound>
   <compound refid="convert__ring_8hpp" kind="file"><name>convert_ring.hpp</name>
   </compound>
   <compound refid="copy__segment__point_8hpp" kind="file"><name>copy_segment_point.hpp</name>
@@ -3514,8 +3343,6 @@
   </compound>
   <compound refid="handle__colocations_8hpp" kind="file"><name>handle_colocations.hpp</name>
   </compound>
-  <compound refid="handle__touch_8hpp" kind="file"><name>handle_touch.hpp</name>
-  </compound>
   <compound refid="inconsistent__turns__exception_8hpp" kind="file"><name>inconsistent_turns_exception.hpp</name>
   </compound>
   <compound refid="intersection__box__box_8hpp" kind="file"><name>intersection_box_box.hpp</name>
@@ -3544,7 +3371,13 @@
   </compound>
   <compound refid="stream__info_8hpp" kind="file"><name>stream_info.hpp</name>
   </compound>
+  <compound refid="traversal_8hpp" kind="file"><name>traversal.hpp</name>
+  </compound>
   <compound refid="traversal__info_8hpp" kind="file"><name>traversal_info.hpp</name>
+  </compound>
+  <compound refid="traversal__ring__creator_8hpp" kind="file"><name>traversal_ring_creator.hpp</name>
+  </compound>
+  <compound refid="traversal__switch__detector_8hpp" kind="file"><name>traversal_switch_detector.hpp</name>
   </compound>
   <compound refid="traverse_8hpp" kind="file"><name>traverse.hpp</name>
   </compound>
@@ -3640,6 +3473,8 @@
   </compound>
   <compound refid="strategies_2intersection_8hpp" kind="file"><name>intersection.hpp</name>
   </compound>
+  <compound refid="strategies_2spherical_2intersection_8hpp" kind="file"><name>intersection.hpp</name>
+  </compound>
   <compound refid="intersects_8hpp" kind="file"><name>intersects.hpp</name>
   </compound>
   <compound refid="is__convex_8hpp" kind="file"><name>is_convex.hpp</name>
@@ -3702,6 +3537,8 @@
   <compound refid="strategies_2within_8hpp" kind="file"><name>within.hpp</name>
   </compound>
   <compound refid="arithmetic_8hpp" kind="file"><name>arithmetic.hpp</name>
+  </compound>
+  <compound refid="cross__product_8hpp" kind="file"><name>cross_product.hpp</name>
   </compound>
   <compound refid="determinant_8hpp" kind="file"><name>determinant.hpp</name>
   </compound>
@@ -3846,7 +3683,9 @@
   </compound>
   <compound refid="wkt_8hpp" kind="file"><name>wkt.hpp</name>
   </compound>
-  <compound refid="write_8hpp" kind="file"><name>write.hpp</name>
+  <compound refid="wkt_2write_8hpp" kind="file"><name>write.hpp</name>
+  </compound>
+  <compound refid="svg_2write_8hpp" kind="file"><name>write.hpp</name>
   </compound>
   <compound refid="base_8hpp" kind="file"><name>base.hpp</name>
   </compound>
@@ -3974,6 +3813,8 @@
   </compound>
   <compound refid="intersection__result_8hpp" kind="file"><name>intersection_result.hpp</name>
   </compound>
+  <compound refid="intersection__strategies_8hpp" kind="file"><name>intersection_strategies.hpp</name>
+  </compound>
   <compound refid="side_8hpp" kind="file"><name>side.hpp</name>
   </compound>
   <compound refid="side__info_8hpp" kind="file"><name>side_info.hpp</name>
@@ -4096,6 +3937,8 @@
     <member refid="group__arithmetic_1ga9c6f97e8be0aea5a989b10282cfdfcd1" kind="function"><name>add_value</name></member>
     <member refid="group__arithmetic_1gaa595e4f32e834533b6299e08449afc6c" kind="function"><name>assign_point</name></member>
     <member refid="group__arithmetic_1gaa6e3bfda2aa04de193ee936a93663c7d" kind="function"><name>assign_value</name></member>
+    <member refid="group__arithmetic_1gac1db64902c8bb77241db98a1805d941e" kind="function"><name>cross_product</name></member>
+    <member refid="group__arithmetic_1gaac070750570068100488f1411025a083" kind="function"><name>cross_product</name></member>
     <member refid="group__arithmetic_1ga8141e616132d8d614da3428863336dc9" kind="function"><name>divide_point</name></member>
     <member refid="group__arithmetic_1ga98645f15cfba3e9e9e9e83c72e0f98e3" kind="function"><name>divide_value</name></member>
     <member refid="group__arithmetic_1gaf962409b64cd5023d9e439c4468db1d2" kind="function"><name>dot_product</name></member>
@@ -4227,9 +4070,9 @@
   <compound refid="group__geometries" kind="group"><name>geometries</name>
   </compound>
   <compound refid="group__concepts" kind="group"><name>concepts</name>
-    <member refid="group__concepts_1gafe2c2fe2b2fcdabd1c2b860d529e08b5" kind="function"><name>check</name></member>
-    <member refid="group__concepts_1ga2e54c5b71d715ff2cd2a58e15a23800f" kind="function"><name>check</name></member>
-    <member refid="group__concepts_1ga72a1211ac80fc47bb5aa8b7f85e5c1d1" kind="function"><name>check_concepts_and_equal_dimensions</name></member>
+    <member refid="group__concepts_1ga0fe62edc014ab85800a5ddb86f6ab992" kind="function"><name>check</name></member>
+    <member refid="group__concepts_1ga46606d335730a9de3d3be21dba3fe83f" kind="function"><name>check</name></member>
+    <member refid="group__concepts_1gaa20d019dd49155b7f008e93d389d9d19" kind="function"><name>check_concepts_and_equal_dimensions</name></member>
   </compound>
   <compound refid="group__get" kind="group"><name>get</name>
     <member refid="group__get_1ga6f2549aa15489bdfa2e0ee28c620ab07" kind="function"><name>get</name></member>
@@ -4339,7 +4182,7 @@
   <compound refid="group__strategies" kind="group"><name>strategies</name>
   </compound>
   <compound refid="group__svg" kind="group"><name>svg</name>
-    <member refid="group__svg_1gaf2dffff92f8bbb5ddb246560b324988a" kind="function"><name>svg</name></member>
+    <member refid="group__svg_1ga0d9c53eb308ab2276aec264c1404e5a2" kind="function"><name>svg</name></member>
   </compound>
   <compound refid="group__sym__difference" kind="group"><name>sym_difference</name>
     <member refid="group__sym__difference_1gab9e6f8b5e8d14cd699f54e79f60b1871" kind="function"><name>sym_difference</name></member>
@@ -4392,109 +4235,109 @@
   </compound>
   <compound refid="art09" kind="page"><name>art09</name>
   </compound>
-  <compound refid="dir_b1c3408d39074b319f4645aed5bb8b63" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries/adapted/</name>
+  <compound refid="dir_b1c3408d39074b319f4645aed5bb8b63" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries/adapted</name>
   </compound>
-  <compound refid="dir_19144ff23f2feaf79e9fd0085ce60eac" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/</name>
+  <compound refid="dir_19144ff23f2feaf79e9fd0085ce60eac" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic</name>
   </compound>
-  <compound refid="dir_0dc8931d37de9720ba7c03d0f554ded1" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/</name>
+  <compound refid="dir_0dc8931d37de9720ba7c03d0f554ded1" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms</name>
   </compound>
-  <compound refid="dir_fb95e015b0511ec55c8d28ef36c37b2d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/arithmetic/</name>
+  <compound refid="dir_fb95e015b0511ec55c8d28ef36c37b2d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/arithmetic</name>
   </compound>
-  <compound refid="dir_a3f3934fe93618c2e6f3527095116c07" kind="dir"><name>/home/travis/build/boostorg/boost/boost/</name>
+  <compound refid="dir_a3f3934fe93618c2e6f3527095116c07" kind="dir"><name>/home/travis/build/boostorg/boost/boost</name>
   </compound>
-  <compound refid="dir_b82d0a402713c1965e63885170196de6" kind="dir"><name>/home/travis/build/boostorg/boost/</name>
+  <compound refid="dir_b82d0a402713c1965e63885170196de6" kind="dir"><name>/home/travis/build/boostorg/boost</name>
   </compound>
-  <compound refid="dir_025ae08e78d6f4efebb0a56ce250a736" kind="dir"><name>/home/travis/build/boostorg/</name>
+  <compound refid="dir_025ae08e78d6f4efebb0a56ce250a736" kind="dir"><name>/home/travis/build/boostorg</name>
   </compound>
-  <compound refid="dir_a3ea32c32e4892434ec17811730eee3c" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/</name>
+  <compound refid="dir_a3ea32c32e4892434ec17811730eee3c" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer</name>
   </compound>
-  <compound refid="dir_658dffd2684749c363737148727fc8b1" kind="dir"><name>/home/travis/build/</name>
+  <compound refid="dir_658dffd2684749c363737148727fc8b1" kind="dir"><name>/home/travis/build</name>
   </compound>
-  <compound refid="dir_ab9fe656c4f32f2c1e58c621c71ae626" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/</name>
+  <compound refid="dir_ab9fe656c4f32f2c1e58c621c71ae626" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian</name>
   </compound>
-  <compound refid="dir_3031b9e2f12f859ebfbf5ccda127064a" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/</name>
+  <compound refid="dir_3031b9e2f12f859ebfbf5ccda127064a" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance</name>
   </compound>
-  <compound refid="dir_c4bc4d645eeb285867583fc13529c41a" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/concepts/</name>
+  <compound refid="dir_c4bc4d645eeb285867583fc13529c41a" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/concepts</name>
   </compound>
-  <compound refid="dir_fe0d79349011638387ca7fc00c80eb51" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries/concepts/</name>
+  <compound refid="dir_fe0d79349011638387ca7fc00c80eb51" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries/concepts</name>
   </compound>
-  <compound refid="dir_a72d5363979ef62232485f75f2f4db90" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/core/</name>
+  <compound refid="dir_a72d5363979ef62232485f75f2f4db90" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/core</name>
   </compound>
-  <compound refid="dir_3ef17d421db005a49eeea1db0210e908" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/</name>
+  <compound refid="dir_3ef17d421db005a49eeea1db0210e908" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail</name>
   </compound>
-  <compound refid="dir_937a3bd4d0081552ae9b68f27650b616" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/</name>
+  <compound refid="dir_937a3bd4d0081552ae9b68f27650b616" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint</name>
   </compound>
-  <compound refid="dir_42d5bc1cdd9bb87e7c1e23fe50079caa" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/</name>
+  <compound refid="dir_42d5bc1cdd9bb87e7c1e23fe50079caa" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance</name>
   </compound>
-  <compound refid="dir_e4909e460444ce8794795414bf3e2f88" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/</name>
+  <compound refid="dir_e4909e460444ce8794795414bf3e2f88" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc</name>
   </compound>
-  <compound refid="dir_0be6f8cb898b13eaf58e615d63893d56" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy/</name>
+  <compound refid="dir_0be6f8cb898b13eaf58e615d63893d56" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy</name>
   </compound>
-  <compound refid="dir_04d45d6267fb6c25282d58ad810b7bdc" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy/doxygen_input/</name>
+  <compound refid="dir_04d45d6267fb6c25282d58ad810b7bdc" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy/doxygen_input</name>
   </compound>
-  <compound refid="dir_f9d010407669c283f84388388d11766b" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/</name>
+  <compound refid="dir_f9d010407669c283f84388388d11766b" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope</name>
   </compound>
-  <compound refid="dir_a389a9de0dc4da0f87ab463cc63bf11d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/equals/</name>
+  <compound refid="dir_a389a9de0dc4da0f87ab463cc63bf11d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/equals</name>
   </compound>
-  <compound refid="dir_fb0871cff28874276e9df77a5e7224a3" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/expand/</name>
+  <compound refid="dir_fb0871cff28874276e9df77a5e7224a3" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/expand</name>
   </compound>
-  <compound refid="dir_5070b4beede81efd2daa508f8025de96" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries/</name>
+  <compound refid="dir_5070b4beede81efd2daa508f8025de96" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries</name>
   </compound>
-  <compound refid="dir_98dc608304ece04b1029fa67c309ea05" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/</name>
+  <compound refid="dir_98dc608304ece04b1029fa67c309ea05" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry</name>
   </compound>
-  <compound refid="dir_1db53b2a0b4206971f8a07039331107d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/</name>
+  <compound refid="dir_1db53b2a0b4206971f8a07039331107d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry</name>
   </compound>
-  <compound refid="dir_57e22e5373b72052d85c921f2583ae85" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy/doxygen_input/groups/</name>
+  <compound refid="dir_57e22e5373b72052d85c921f2583ae85" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy/doxygen_input/groups</name>
   </compound>
-  <compound refid="dir_75b82e7e4a5feb05200b9ad7adf06257" kind="dir"><name>/home/</name>
+  <compound refid="dir_75b82e7e4a5feb05200b9ad7adf06257" kind="dir"><name>/home</name>
   </compound>
-  <compound refid="dir_e2a6022e9b6b893585e6efd32eb28246" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/</name>
+  <compound refid="dir_e2a6022e9b6b893585e6efd32eb28246" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection</name>
   </compound>
-  <compound refid="dir_372b3be2c08e4e1d39166612525793e2" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/io/</name>
+  <compound refid="dir_372b3be2c08e4e1d39166612525793e2" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/io</name>
   </compound>
-  <compound refid="dir_dbb29707c3aec431150ec3f92a4a5d27" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple/</name>
+  <compound refid="dir_dbb29707c3aec431150ec3f92a4a5d27" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple</name>
   </compound>
-  <compound refid="dir_fd10a9410dc95d5be6a5c599ac3244eb" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/</name>
+  <compound refid="dir_fd10a9410dc95d5be6a5c599ac3244eb" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid</name>
   </compound>
-  <compound refid="dir_054af7bbe036a67261726b73e573b3ce" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/iterators/</name>
+  <compound refid="dir_054af7bbe036a67261726b73e573b3ce" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/iterators</name>
   </compound>
-  <compound refid="dir_0e80b72aef6627e684aa225d13561273" kind="dir"><name>/home/travis/build/boostorg/boost/libs/</name>
+  <compound refid="dir_0e80b72aef6627e684aa225d13561273" kind="dir"><name>/home/travis/build/boostorg/boost/libs</name>
   </compound>
-  <compound refid="dir_b67f73bc9fc64a4bd2753eadf8cac3b3" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/</name>
+  <compound refid="dir_b67f73bc9fc64a4bd2753eadf8cac3b3" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay</name>
   </compound>
-  <compound refid="dir_c7a013051d1ea4062c18161fc553a050" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy/doxygen_input/pages/</name>
+  <compound refid="dir_c7a013051d1ea4062c18161fc553a050" kind="dir"><name>/home/travis/build/boostorg/boost/libs/geometry/doc/doxy/doxygen_input/pages</name>
   </compound>
-  <compound refid="dir_f136d2905b0cfceed5fa550ffb4c4588" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/policies/</name>
+  <compound refid="dir_f136d2905b0cfceed5fa550ffb4c4588" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/policies</name>
   </compound>
-  <compound refid="dir_c19d9ca7c7931af5390b4815bac35861" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries/register/</name>
+  <compound refid="dir_c19d9ca7c7931af5390b4815bac35861" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/geometries/register</name>
   </compound>
-  <compound refid="dir_70223ecaef5d80d63353dbb0510f117c" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/policies/relate/</name>
+  <compound refid="dir_70223ecaef5d80d63353dbb0510f117c" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/policies/relate</name>
   </compound>
-  <compound refid="dir_75e122e08cf075e5a1adee2d1bc7049c" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/</name>
+  <compound refid="dir_75e122e08cf075e5a1adee2d1bc7049c" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate</name>
   </compound>
-  <compound refid="dir_647565eec0d94dc3299c955b84302d28" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relation/</name>
+  <compound refid="dir_647565eec0d94dc3299c955b84302d28" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relation</name>
   </compound>
-  <compound refid="dir_8adfea765970617810d1a83b2c339557" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/sections/</name>
+  <compound refid="dir_8adfea765970617810d1a83b2c339557" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/sections</name>
   </compound>
-  <compound refid="dir_8bb675351ffaa252a69261671389e2c0" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/</name>
+  <compound refid="dir_8bb675351ffaa252a69261671389e2c0" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical</name>
   </compound>
-  <compound refid="dir_5d74177c508066817a1255a92dc8f2a4" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/</name>
+  <compound refid="dir_5d74177c508066817a1255a92dc8f2a4" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies</name>
   </compound>
-  <compound refid="dir_6264b039324fcd610a179f376cbde94b" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/io/svg/</name>
+  <compound refid="dir_6264b039324fcd610a179f376cbde94b" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/io/svg</name>
   </compound>
-  <compound refid="dir_1402c78cfe4b3a8f8b61b0acdd44b6a4" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/</name>
+  <compound refid="dir_1402c78cfe4b3a8f8b61b0acdd44b6a4" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/strategies/transform</name>
   </compound>
-  <compound refid="dir_bacb04149764cbf6394e26ac332ca39a" kind="dir"><name>/home/travis/</name>
+  <compound refid="dir_bacb04149764cbf6394e26ac332ca39a" kind="dir"><name>/home/travis</name>
   </compound>
-  <compound refid="dir_1ebdbb358340eb3b0364c9d3ed6c8a4f" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/</name>
+  <compound refid="dir_1ebdbb358340eb3b0364c9d3ed6c8a4f" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns</name>
   </compound>
-  <compound refid="dir_f55ac20fb3e3255e57c57139f4ea1870" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/util/</name>
+  <compound refid="dir_f55ac20fb3e3255e57c57139f4ea1870" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/util</name>
   </compound>
-  <compound refid="dir_66dc2cdcd61111ce2045ba19a27cf177" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/views/</name>
+  <compound refid="dir_66dc2cdcd61111ce2045ba19a27cf177" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/views</name>
   </compound>
-  <compound refid="dir_7ce704194c15a3c97d5827509e8deb1f" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/within/</name>
+  <compound refid="dir_7ce704194c15a3c97d5827509e8deb1f" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/within</name>
   </compound>
-  <compound refid="dir_9e6ee61a7858f08ee1131a2e8d211359" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/io/wkt/</name>
+  <compound refid="dir_9e6ee61a7858f08ee1131a2e8d211359" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/io/wkt</name>
   </compound>
   <compound refid="01_point_example_8cpp-example" kind="example"><name>01_point_example.cpp</name>
   </compound>

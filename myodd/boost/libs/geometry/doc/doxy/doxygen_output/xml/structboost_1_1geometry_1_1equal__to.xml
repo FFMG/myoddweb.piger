@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1equal__to" kind="struct" prot="public">
     <compoundname>boost::geometry::equal_to</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">dispatch::compare_geometries&lt; 0, Point, Strategy, Dimension &gt;</basecompoundref>
     <includes local="no">compare.hpp</includes>
     <templateparamlist>
       <param>
@@ -44,7 +45,29 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/compare.hpp" line="236" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/compare.hpp" bodystart="228" bodyend="236"/>
+    <inheritancegraph>
+      <node id="362">
+        <label>dispatch::compare_geometries&lt; 0, Point, Strategy, Dimension &gt;</label>
+      </node>
+      <node id="361">
+        <label>boost::geometry::equal_to&lt; Point, Dimension, Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1equal__to"/>
+        <childnode refid="362" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="364">
+        <label>dispatch::compare_geometries&lt; 0, Point, Strategy, Dimension &gt;</label>
+      </node>
+      <node id="363">
+        <label>boost::geometry::equal_to&lt; Point, Dimension, Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1equal__to"/>
+        <childnode refid="364" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/compare.hpp" line="236" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/compare.hpp" bodystart="228" bodyend="236"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

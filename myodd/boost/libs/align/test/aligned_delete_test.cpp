@@ -38,7 +38,7 @@ T* aligned_new()
     if (p) {
         return ::new(p) T();
     } else {
-        throw std::bad_alloc();
+        return 0;
     }
 }
 

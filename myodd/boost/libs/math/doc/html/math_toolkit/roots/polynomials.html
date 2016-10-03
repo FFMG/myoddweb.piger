@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Polynomials</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.4.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.5.0">
 <link rel="up" href="../roots.html" title="Root finding">
 <link rel="prev" href="root_comparison/elliptic_comparison.html" title="Comparison of Elliptic Integral Root Finding Algoritghms">
 <link rel="next" href="rational.html" title="Polynomial and Rational Function Evaluation">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.roots.polynomials.h0"></a>
-        <span><a name="math_toolkit.roots.polynomials.synopsis"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.synopsis">Synopsis</a>
+        <span class="phrase"><a name="math_toolkit.roots.polynomials.synopsis"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">polynomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -60,6 +60,10 @@
    <span class="keyword">const</span> <span class="identifier">value_type</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">[](</span><span class="identifier">size_type</span> <span class="identifier">i</span><span class="special">)</span><span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">data</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">data</span><span class="special">();</span>
+   <span class="keyword">explicit</span> <span class="keyword">operator</span> <span class="keyword">bool</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+
+   <span class="comment">// modify:</span>
+   <span class="keyword">void</span> <span class="identifier">set_zero</span><span class="special">();</span>
 
    <span class="comment">// operators:</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
@@ -117,9 +121,21 @@
 <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span> <span class="special">-</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">a</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span> <span class="special">&gt;&gt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span> <span class="special">&gt;&gt;</span> <span class="special">(</span><span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span> <span class="special">&lt;&lt;=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">a</span><span class="special">);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span> <span class="special">&lt;&lt;</span> <span class="special">(</span><span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">==</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">b</span><span class="special">);</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">bool</span> <span class="keyword">operator</span> <span class="special">!=</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">b</span><span class="special">);</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">base</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">exp</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">traits</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_ostream</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">,</span> <span class="identifier">traits</span><span class="special">&gt;&amp;</span> <span class="keyword">operator</span> <span class="special">&lt;&lt;</span>
@@ -134,7 +150,7 @@
 </pre>
 <h5>
 <a name="math_toolkit.roots.polynomials.h1"></a>
-        <span><a name="math_toolkit.roots.polynomials.description"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.description">Description</a>
+        <span class="phrase"><a name="math_toolkit.roots.polynomials.description"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.description">Description</a>
       </h5>
 <p>
         This is a somewhat trivial class for polynomial manipulation.
@@ -142,7 +158,7 @@
 <p>
         See
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             <a href="https://en.wikipedia.org/wiki/Polynomial" target="_top">Polynomial</a>
             and
@@ -169,7 +185,7 @@
       </p>
 <h5>
 <a name="math_toolkit.roots.polynomials.h2"></a>
-        <span><a name="math_toolkit.roots.polynomials.polynomial_examples"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.polynomial_examples">Polynomial
+        <span class="phrase"><a name="math_toolkit.roots.polynomials.polynomial_examples"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.polynomial_examples">Polynomial
         Arithmetic Examples</a>
       </h5>
 <p>
@@ -248,7 +264,7 @@
 </pre>
 <h6>
 <a name="math_toolkit.roots.polynomials.h3"></a>
-        <span><a name="math_toolkit.roots.polynomials.division_quotient_and_remainder"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.division_quotient_and_remainder">Division,
+        <span class="phrase"><a name="math_toolkit.roots.polynomials.division_quotient_and_remainder"></a></span><a class="link" href="polynomials.html#math_toolkit.roots.polynomials.division_quotient_and_remainder">Division,
         Quotient and Remainder</a>
       </h6>
 <p>

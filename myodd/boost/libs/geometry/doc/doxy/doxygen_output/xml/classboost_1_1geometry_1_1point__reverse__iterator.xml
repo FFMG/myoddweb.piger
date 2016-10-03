@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1point__reverse__iterator" kind="class" prot="public">
     <compoundname>boost::geometry::point_reverse_iterator</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::reverse_iterator&lt; point_iterator&lt; Geometry &gt; &gt;</basecompoundref>
     <includes local="no">point_reverse_iterator.hpp</includes>
     <templateparamlist>
       <param>
@@ -20,11 +21,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="30" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="30" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="30" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
-      <memberdef kind="friend" id="classboost_1_1geometry_1_1point__reverse__iterator_1a1b7e6ecf7498a21ae4d22d9dbaf6310d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="friend" id="classboost_1_1geometry_1_1point__reverse__iterator_1a4e08988ca0d371a6744b733edefc6252" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename OtherGeometry</type>
+          </param>
+        </templateparamlist>
         <type>friend class</type>
         <definition>friend class point_reverse_iterator</definition>
         <argsstring></argsstring>
@@ -35,7 +41,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="32" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="32" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="32" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
       <memberdef kind="friend" id="classboost_1_1geometry_1_1point__reverse__iterator_1adb151d7175f4abad1dcc2a8bb1ea9e61" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -56,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="34"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="34" column="1"/>
       </memberdef>
       <memberdef kind="friend" id="classboost_1_1geometry_1_1point__reverse__iterator_1a708e29613c2ec41de05df21a905ee928" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -77,7 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="37"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="37" column="1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -96,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="40" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="39" bodyend="40"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="39" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="39" bodyend="40"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -111,7 +117,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="43" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="43" bodyend="43"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="43" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="43" bodyend="43"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1point__reverse__iterator_1a2de654b5cf0a8ca26e360fac3c841886" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -133,17 +139,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="49" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="47" bodyend="59"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="47" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="47" bodyend="59"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="28" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="26" bodyend="60"/>
+    <inheritancegraph>
+      <node id="625">
+        <label>boost::geometry::point_reverse_iterator&lt; Geometry &gt;</label>
+        <link refid="classboost_1_1geometry_1_1point__reverse__iterator"/>
+        <childnode refid="626" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="626">
+        <label>std::reverse_iterator&lt; point_iterator&lt; Geometry &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="627">
+        <label>boost::geometry::point_reverse_iterator&lt; Geometry &gt;</label>
+        <link refid="classboost_1_1geometry_1_1point__reverse__iterator"/>
+        <childnode refid="628" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="628">
+        <label>std::reverse_iterator&lt; point_iterator&lt; Geometry &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" line="28" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/point_reverse_iterator.hpp" bodystart="26" bodyend="60"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1ae85dbaa9bb6db1247f027474078cd1ee" prot="private" virt="non-virtual"><scope>boost::geometry::point_reverse_iterator</scope><name>base_type</name></member>
-      <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a1b7e6ecf7498a21ae4d22d9dbaf6310d" prot="private" virt="non-virtual"><scope>boost::geometry::point_reverse_iterator</scope><name>point_reverse_iterator</name></member>
+      <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a4e08988ca0d371a6744b733edefc6252" prot="private" virt="non-virtual"><scope>boost::geometry::point_reverse_iterator</scope><name>point_reverse_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a84db7052af89d51fa7c098422c43851a" prot="private" virt="non-virtual"><scope>boost::geometry::point_reverse_iterator</scope><name>point_reverse_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1aa94870d1d7eac8b6f2a88d06b8491887" prot="public" virt="non-virtual"><scope>boost::geometry::point_reverse_iterator</scope><name>point_reverse_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1point__reverse__iterator_1a2de654b5cf0a8ca26e360fac3c841886" prot="public" virt="non-virtual"><scope>boost::geometry::point_reverse_iterator</scope><name>point_reverse_iterator</name></member>

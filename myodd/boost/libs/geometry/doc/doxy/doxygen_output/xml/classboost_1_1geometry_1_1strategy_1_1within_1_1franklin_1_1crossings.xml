@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1within_1_1franklin_1_1crossings" kind="class" prot="private">
     <compoundname>boost::geometry::strategy::within::franklin::crossings</compoundname>
       <sectiondef kind="private-attrib">
@@ -14,7 +14,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="64" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="64" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="64" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
@@ -29,7 +29,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="68" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="68" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="68" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="68" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -44,14 +44,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="71" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="69" bodyend="71"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="69" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="69" bodyend="71"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
 <para>subclass to keep state </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="63" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="62" bodyend="72"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" line="63" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_franklin.hpp" bodystart="62" bodyend="72"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1franklin_1_1crossings_1aa3d56ae0201ada1b4bb188857e2e3b3c" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::within::franklin::crossings</scope><name>crosses</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1franklin_1_1crossings_1a50c965ab7c686b54a252d52e42a9d040" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::within::franklin::crossings</scope><name>crossings</name></member>

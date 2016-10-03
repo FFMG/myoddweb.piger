@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1transform_1_1from__spherical__polar__3__to__cartesian__3" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::transform::from_spherical_polar_3_to_cartesian_3</compoundname>
     <includes local="no">strategy_transform.hpp</includes>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="340" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="339" bodyend="345"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="339" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="339" bodyend="345"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -53,7 +53,7 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="338" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="337" bodyend="346"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" line="338" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/strategy_transform.hpp" bodystart="337" bodyend="346"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1transform_1_1from__spherical__polar__3__to__cartesian__3_1a3db1306a438b106c531a7b6907711e38" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::transform::from_spherical_polar_3_to_cartesian_3</scope><name>apply</name></member>
     </listofallmembers>

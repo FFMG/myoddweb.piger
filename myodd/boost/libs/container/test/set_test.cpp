@@ -58,7 +58,6 @@ namespace container_detail {
 //Instantiate base class as previous instantiations don't instantiate inherited members
 template class tree
    < test::movable_and_copyable_int
-   , test::movable_and_copyable_int
    , identity<test::movable_and_copyable_int>
    , std::less<test::movable_and_copyable_int>
    , test::simple_allocator<test::movable_and_copyable_int>
@@ -67,7 +66,6 @@ template class tree
 
 template class tree
    < test::movable_and_copyable_int
-   , test::movable_and_copyable_int
    , identity<test::movable_and_copyable_int>
    , std::less<test::movable_and_copyable_int>
    , std::allocator<test::movable_and_copyable_int>
@@ -76,7 +74,6 @@ template class tree
 
 template class tree
    < test::movable_and_copyable_int
-   , test::movable_and_copyable_int
    , identity<test::movable_and_copyable_int>
    , std::less<test::movable_and_copyable_int>
    , adaptive_pool<test::movable_and_copyable_int>
@@ -134,6 +131,114 @@ void test_move()
    move_assign.emplace();
    move_assign = boost::move(move_ctor);
    move_assign.swap(original);
+}
+
+bool node_type_test()
+{
+   using namespace boost::container;
+   {
+      typedef set<test::movable_int> set_type;
+      set_type src;
+      {
+         test::movable_int mv_1(1), mv_2(2), mv_3(3);
+         src.emplace(boost::move(mv_1)); 
+         src.emplace(boost::move(mv_2)); 
+         src.emplace(boost::move(mv_3)); 
+      }
+      if(src.size() != 3)
+         return false;
+
+      set_type dst;
+      {
+         test::movable_int mv_3(3);
+         dst.emplace(boost::move(mv_3)); 
+      }
+
+      if(dst.size() != 1)
+         return false;
+
+      const test::movable_int mv_1(1);
+      const test::movable_int mv_2(2);
+      const test::movable_int mv_3(3);
+      const test::movable_int mv_33(33);
+      set_type::insert_return_type r;
+
+      r = dst.insert(src.extract(mv_33)); // Key version, try to insert empty node
+      if(! (r.position == dst.end() && r.inserted == false && r.node.empty()) )
+         return false;
+      r = dst.insert(src.extract(src.find(mv_1))); // Iterator version, successful
+      if(! (r.position == dst.find(mv_1) && r.inserted == true && r.node.empty()) )
+         return false;
+      r = dst.insert(dst.begin(), src.extract(mv_2)); // Key type version, successful
+      if(! (r.position == dst.find(mv_2) && r.inserted == true && r.node.empty()) )
+         return false;
+      r = dst.insert(src.extract(mv_3)); // Key type version, unsuccessful
+
+      if(!src.empty())
+         return false;
+      if(dst.size() != 3)
+         return false;
+      if(! (r.position == dst.find(mv_3) && r.inserted == false && r.node.value() == mv_3) )
+         return false;
+   }
+
+   {
+      typedef multiset<test::movable_int> multiset_type;
+      multiset_type src;
+      {
+         test::movable_int mv_1(1), mv_2(2), mv_3(3), mv_3bis(3);
+         src.emplace(boost::move(mv_1));
+         src.emplace(boost::move(mv_2));
+         src.emplace(boost::move(mv_3));
+         src.emplace_hint(src.begin(), boost::move(mv_3bis));
+      }
+      if(src.size() != 4)
+         return false;
+
+      multiset_type dst;
+      {
+         test::movable_int mv_3(3);
+         dst.emplace(boost::move(mv_3)); 
+      }
+
+      if(dst.size() != 1)
+         return false;
+
+      const test::movable_int mv_1(1);
+      const test::movable_int mv_2(2);
+      const test::movable_int mv_3(3);
+      const test::movable_int mv_4(4);
+      multiset_type::iterator r;
+
+      multiset_type::node_type nt(src.extract(mv_3));
+      r = dst.insert(dst.begin(), boost::move(nt));
+      if(! (*r == mv_3 && dst.find(mv_3) == r && nt.empty()) )
+         return false;
+
+      nt = src.extract(src.find(mv_1));
+      r = dst.insert(boost::move(nt)); // Iterator version, successful
+      if(! (*r == mv_1 && nt.empty()) )
+         return false;
+
+      nt = src.extract(mv_2);
+      r = dst.insert(boost::move(nt)); // Key type version, successful
+      if(! (*r == mv_2 && nt.empty()) )
+         return false;
+
+      r = dst.insert(src.extract(mv_3)); // Key type version, successful
+      if(! (*r == mv_3 && r == --multiset_type::iterator(dst.upper_bound(mv_3)) && nt.empty()) )
+         return false;
+
+      r = dst.insert(src.extract(mv_4)); // Key type version, unsuccessful
+      if(! (r == dst.end()) )
+         return false;
+
+      if(!src.empty())
+         return false;
+      if(dst.size() != 5)
+         return false;
+   }
+   return true;
 }
 
 struct boost_container_set;
@@ -246,6 +351,13 @@ int test_set_variants()
    return 0;
 }
 
+void test_merge_from_different_comparison()
+{
+   set<int> set1;
+   set<int, std::greater<int> > set2;
+   set1.merge(set2);
+}
+
 
 int main ()
 {
@@ -264,6 +376,16 @@ int main ()
       test_move<set<recursive_set> >();
       test_move<multiset<recursive_multiset> >();
    }
+   //Test std::pair value type as tree has workarounds to make old std::pair
+   //implementations movable that can break things
+   {
+	   boost::container::set<std::pair<int,int> > s;
+	   std::pair<int,int> p(0, 0);
+	   s.insert(p);
+	   s.emplace(p);
+   }
+
+   test_merge_from_different_comparison();
 
    ////////////////////////////////////
    //    Testing allocator implementations
@@ -373,6 +495,13 @@ int main ()
          return 1;
       }
    }
+
+   ////////////////////////////////////
+   //    Node extraction/insertion testing functions
+   ////////////////////////////////////
+   if(!node_type_test())
+      return 1;
+
    return 0;
 }
 

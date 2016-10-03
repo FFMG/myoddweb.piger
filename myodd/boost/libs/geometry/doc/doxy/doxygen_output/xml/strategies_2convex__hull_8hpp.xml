@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="strategies_2convex__hull_8hpp" kind="file">
     <compoundname>convex_hull.hpp</compoundname>
     <includes refid="strategies_2tags_8hpp" local="no">boost/geometry/strategies/tags.hpp</includes>
@@ -7,39 +7,39 @@
     <includedby refid="strategies_8hpp" local="no">/home/travis/build/boostorg/boost/boost/geometry/strategies/strategies.hpp</includedby>
     <includedby refid="hull__graham__andrew_8hpp" local="no">/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/hull_graham_andrew.hpp</includedby>
     <incdepgraph>
-      <node id="2155">
+      <node id="2186">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/convex_hull.hpp</label>
         <link refid="strategies/convex_hull.hpp"/>
-        <childnode refid="2156" relation="include">
+        <childnode refid="2187" relation="include">
         </childnode>
       </node>
-      <node id="2156">
+      <node id="2187">
         <label>boost/geometry/strategies/tags.hpp</label>
         <link refid="strategies_2tags_8hpp"/>
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="2159">
+      <node id="2190">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/strategies.hpp</label>
         <link refid="strategies_8hpp"/>
       </node>
-      <node id="2160">
+      <node id="2191">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/hull_graham_andrew.hpp</label>
         <link refid="hull__graham__andrew_8hpp"/>
-        <childnode refid="2159" relation="include">
+        <childnode refid="2190" relation="include">
         </childnode>
       </node>
-      <node id="2157">
+      <node id="2188">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/convex_hull.hpp</label>
         <link refid="strategies/convex_hull.hpp"/>
-        <childnode refid="2158" relation="include">
+        <childnode refid="2189" relation="include">
         </childnode>
-        <childnode refid="2159" relation="include">
+        <childnode refid="2190" relation="include">
         </childnode>
-        <childnode refid="2160" relation="include">
+        <childnode refid="2191" relation="include">
         </childnode>
       </node>
-      <node id="2158">
+      <node id="2189">
         <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/convex_hull.hpp</label>
         <link refid="algorithms_2convex__hull_8hpp"/>
       </node>

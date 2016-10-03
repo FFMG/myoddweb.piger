@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios" kind="struct" prot="public">
     <compoundname>boost::geometry::policies::relate::segments_intersection_ratios</compoundname>
     <includes local="no">intersection_ratios.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="41" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="41" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="41" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="99" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="98" bodyend="101"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="98" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="98" bodyend="101"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1abda731e012dd3b6e2e89b828f93930c2" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1aada2fd86e379c7a17cf56c229705effb" kindref="member">return_type</ref></type>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="89" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="88" bodyend="91"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="88" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="88" bodyend="91"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1abcc0066d5a6b0d20c25bb6eb853ca200" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1aada2fd86e379c7a17cf56c229705effb" kindref="member">return_type</ref></type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="93" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="92" bodyend="95"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="92" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="92" bodyend="95"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1ae7bbfffa0cb3f996e8f554a6aef5bb25" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -108,7 +108,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="106" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="104" bodyend="118"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="104" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="104" bodyend="118"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1afa55cf8dec6e24570b7fb87ebeb0e927" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -154,7 +154,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="63" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="59" bodyend="86"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="59" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="59" bodyend="86"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1ae2ad45064320d9282931760fb105e2d2" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -191,7 +191,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="52" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="49" bodyend="56"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="49" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="49" bodyend="56"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -199,7 +199,7 @@
     <detaileddescription>
 <para><simplesect kind="note"><para>Template argument FractionType should be a fraction_type&lt;SegmentRatio&gt; </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="40" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="39" bodyend="120"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" line="40" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/intersection_ratios.hpp" bodystart="39" bodyend="120"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1a1c3cec4779370c5964b0e6e39e69ee73" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::segments_intersection_ratios</scope><name>degenerate</name></member>
       <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1segments__intersection__ratios_1abda731e012dd3b6e2e89b828f93930c2" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::segments_intersection_ratios</scope><name>disjoint</name></member>

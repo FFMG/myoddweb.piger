@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class template null_dst_rules</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="../../date_time/doxy.html#header.boost.date_time.dst_rules_hpp" title="Header &lt;boost/date_time/dst_rules.hpp&gt;">
 <link rel="prev" href="us_dst_rules.html" title="Class template us_dst_rules">
@@ -39,30 +39,30 @@
   <span class="keyword">typedef</span> <span class="identifier">time_duration_type_</span> <a name="boost.date_time.null_dst_rules.time_duration_type"></a><span class="identifier">time_duration_type</span><span class="special">;</span>
   <span class="keyword">typedef</span> <span class="identifier">date_type_</span>          <a name="boost.date_time.null_dst_rules.date_type"></a><span class="identifier">date_type</span><span class="special">;</span>         
 
-  <span class="comment">// <a class="link" href="null_dst_rules.html#idp66414224-bb">public static functions</a></span>
+  <span class="comment">// <a class="link" href="null_dst_rules.html#idm45443553653760-bb">public static functions</a></span>
   <span class="keyword">static</span> <span class="identifier">time_is_dst_result</span> 
-  <a class="link" href="null_dst_rules.html#idp66414784-bb"><span class="identifier">local_is_dst</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="null_dst_rules.html#idm45443553653200-bb"><span class="identifier">local_is_dst</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
   <span class="keyword">static</span> <span class="identifier">time_is_dst_result</span> 
-  <a class="link" href="null_dst_rules.html#idp75317328-bb"><span class="identifier">utc_is_dst</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="keyword">bool</span> <a class="link" href="null_dst_rules.html#idp79636368-bb"><span class="identifier">is_dst_boundary_day</span></a><span class="special">(</span><span class="identifier">date_type</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">time_duration_type</span> <a class="link" href="null_dst_rules.html#idp69349904-bb"><span class="identifier">dst_offset</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="null_dst_rules.html#idm45443553649952-bb"><span class="identifier">utc_is_dst</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="keyword">bool</span> <a class="link" href="null_dst_rules.html#idm45443553647120-bb"><span class="identifier">is_dst_boundary_day</span></a><span class="special">(</span><span class="identifier">date_type</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">time_duration_type</span> <a class="link" href="null_dst_rules.html#idm45443553645312-bb"><span class="identifier">dst_offset</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp171287040"></a><h2>Description</h2>
+<a name="idm45946633304432"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp171287456"></a><h3>
-<a name="idp66414224-bb"></a><code class="computeroutput">null_dst_rules</code> public static functions</h3>
+<a name="idm45946633304016"></a><h3>
+<a name="idm45443553653760-bb"></a><code class="computeroutput">null_dst_rules</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">static</span> <span class="identifier">time_is_dst_result</span> 
-<a name="idp66414784-bb"></a><span class="identifier">local_is_dst</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span></pre>Calculates if the given local time is dst or not. <p>
+<a name="idm45443553653200-bb"></a><span class="identifier">local_is_dst</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span></pre>Calculates if the given local time is dst or not. <p>
 </p>
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">static</span> <span class="identifier">time_is_dst_result</span> 
-<a name="idp75317328-bb"></a><span class="identifier">utc_is_dst</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span></pre>Calculates if the given utc time is in dst. </li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="keyword">bool</span> <a name="idp79636368-bb"></a><span class="identifier">is_dst_boundary_day</span><span class="special">(</span><span class="identifier">date_type</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="identifier">time_duration_type</span> <a name="idp69349904-bb"></a><span class="identifier">dst_offset</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<a name="idm45443553649952-bb"></a><span class="identifier">utc_is_dst</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">date_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">time_duration_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span></pre>Calculates if the given utc time is in dst. </li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="keyword">bool</span> <a name="idm45443553647120-bb"></a><span class="identifier">is_dst_boundary_day</span><span class="special">(</span><span class="identifier">date_type</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="identifier">time_duration_type</span> <a name="idm45443553645312-bb"></a><span class="identifier">dst_offset</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>

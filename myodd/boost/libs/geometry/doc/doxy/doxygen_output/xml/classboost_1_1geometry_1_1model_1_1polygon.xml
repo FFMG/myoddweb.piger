@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1model_1_1polygon" kind="class" prot="public">
     <compoundname>boost::geometry::model::polygon</compoundname>
     <includes local="no">polygon.hpp</includes>
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="85" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="85" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="85" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="85" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1model_1_1polygon_1a2967e76f11d21ce2b51d5e7ba661ec98" prot="public" static="no">
         <type>Point</type>
@@ -71,10 +71,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="83" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="83" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="83" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1model_1_1polygon_1a570d62b2dd33ac4269a0b559cb3b18fb" prot="public" static="no">
-        <type><ref refid="classboost_1_1geometry_1_1model_1_1ring" kindref="compound">ring</ref>&lt; Point, ClockWise, Closed, <ref refid="class_point_list" kindref="compound">PointList</ref>, PointAlloc &gt;</type>
+        <type><ref refid="classboost_1_1geometry_1_1model_1_1ring" kindref="compound">ring</ref>&lt; Point, ClockWise, Closed, PointList, PointAlloc &gt;</type>
         <definition>typedef ring&lt;Point, ClockWise, Closed, PointList, PointAlloc&gt; boost::geometry::model::polygon&lt; Point, ClockWise, Closed, PointList, RingList, PointAlloc, RingAlloc &gt;::ring_type</definition>
         <argsstring></argsstring>
         <name>ring_type</name>
@@ -84,7 +84,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="84" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="84" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="84" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="84" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -99,7 +99,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="144" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="144" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="144" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="144" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1model_1_1polygon_1a92c39346305aa94c89627f771b38fce0" prot="private" static="no" mutable="no">
         <type><ref refid="classboost_1_1geometry_1_1model_1_1polygon_1a570d62b2dd33ac4269a0b559cb3b18fb" kindref="member">ring_type</ref></type>
@@ -112,17 +112,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="143" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="143" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="143" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="143" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1aa9566e0601305b7e162215c7a6d6dfe9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1a4fa0d51f003e50aed24e8dea20418b13" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>boost::geometry::model::polygon&lt; Point, ClockWise, Closed, PointList, RingList, PointAlloc, RingAlloc &gt;::BOOST_CONCEPT_ASSERT</definition>
-        <argsstring>((concept::Point&lt; Point &gt;))</argsstring>
+        <argsstring>((concepts::Point&lt; Point &gt;))</argsstring>
         <name>BOOST_CONCEPT_ASSERT</name>
         <param>
-          <type>(<ref refid="classboost_1_1geometry_1_1concept_1_1_point" kindref="compound">concept::Point</ref>&lt; Point &gt;)</type>
+          <type>(<ref refid="classboost_1_1geometry_1_1concepts_1_1_point" kindref="compound">concepts::Point</ref>&lt; Point &gt;)</type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -130,7 +130,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="78"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="78" column="1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -145,7 +145,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="136" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="135" bodyend="139"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="135" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="135" bodyend="139"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1a06c92c4750c01e9f1ca8994bd4b476ad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1model_1_1polygon_1a3333b0b9de742667d84f94706a853ae7" kindref="member">inner_container_type</ref> const &amp;</type>
@@ -158,7 +158,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="88" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="88" bodyend="88"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="88" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="88" bodyend="88"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1a9920acd7487ef19f594dabc8cbb575ed" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1model_1_1polygon_1a3333b0b9de742667d84f94706a853ae7" kindref="member">inner_container_type</ref> &amp;</type>
@@ -171,7 +171,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="91" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="91" bodyend="91"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="91" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="91" bodyend="91"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1a277ecfada807f6fc82883ffd6e52c920" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1model_1_1polygon_1a570d62b2dd33ac4269a0b559cb3b18fb" kindref="member">ring_type</ref> const &amp;</type>
@@ -184,7 +184,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="87" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="87" bodyend="87"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="87" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="87" bodyend="87"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1a85574defd31e3480021cb35dd8546dc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1model_1_1polygon_1a570d62b2dd33ac4269a0b559cb3b18fb" kindref="member">ring_type</ref> &amp;</type>
@@ -197,7 +197,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="90" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="90" bodyend="90"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="90" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="90" bodyend="90"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1a089990a65e206011b56b8b8e2bad9fa1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -205,12 +205,12 @@
         <argsstring>()</argsstring>
         <name>polygon</name>
         <briefdescription>
-<para>Default constructor, creating an empty \1. </para>        </briefdescription>
+<para>Default constructor, creating an empty polygon. </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="102" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="99" bodyend="102"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="99" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="99" bodyend="102"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1polygon_1a9835cc906e4819930a9ae1ef55af3df1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -222,12 +222,12 @@
           <declname>l</declname>
         </param>
         <briefdescription>
-<para>Constructor taking std::initializer_list, filling the \1. </para>        </briefdescription>
+<para>Constructor taking std::initializer_list, filling the polygon. </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="108" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="105" bodyend="108"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="105" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="105" bodyend="108"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -288,9 +288,9 @@
 [heading Model of]
 [link geometry.reference.concepts.concept_polygon Polygon Concept]
 </qbk.before.synopsis>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="77" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="76" bodyend="145"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" line="77" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/polygon.hpp" bodystart="76" bodyend="145"/>
     <listofallmembers>
-      <member refid="classboost_1_1geometry_1_1model_1_1polygon_1aa9566e0601305b7e162215c7a6d6dfe9" prot="private" virt="non-virtual"><scope>boost::geometry::model::polygon</scope><name>BOOST_CONCEPT_ASSERT</name></member>
+      <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a4fa0d51f003e50aed24e8dea20418b13" prot="private" virt="non-virtual"><scope>boost::geometry::model::polygon</scope><name>BOOST_CONCEPT_ASSERT</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1polygon_1aa1c33952047f12bed22862b634f885d8" prot="public" virt="non-virtual"><scope>boost::geometry::model::polygon</scope><name>clear</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a3333b0b9de742667d84f94706a853ae7" prot="public" virt="non-virtual"><scope>boost::geometry::model::polygon</scope><name>inner_container_type</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1polygon_1a06c92c4750c01e9f1ca8994bd4b476ad" prot="public" virt="non-virtual"><scope>boost::geometry::model::polygon</scope><name>inners</name></member>

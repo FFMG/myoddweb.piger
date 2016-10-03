@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1segment__iterator" kind="class" prot="public">
     <compoundname>boost::geometry::segment_iterator</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">detail::segment_iterator::iterator_type::type&lt; Geometry &gt;</basecompoundref>
     <includes local="no">segment_iterator.hpp</includes>
     <templateparamlist>
       <param>
@@ -20,7 +21,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="257" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="257" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="257" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="257" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-type">
@@ -35,11 +36,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="283" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="283" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="283" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="283" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
-      <memberdef kind="friend" id="classboost_1_1geometry_1_1segment__iterator_1ad2b2c28f715a9ff056c4e14ff3b4523a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="friend" id="classboost_1_1geometry_1_1segment__iterator_1afc891591a669b3934ec734d263120399" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename OtherGeometry</type>
+          </param>
+        </templateparamlist>
         <type>friend class</type>
         <definition>friend class segment_iterator</definition>
         <argsstring></argsstring>
@@ -50,7 +56,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="264" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="264" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="264" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="264" bodyend="-1"/>
       </memberdef>
       <memberdef kind="friend" id="classboost_1_1geometry_1_1segment__iterator_1ac6a4722b1d18044752d3f72589a717b2" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -71,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="267"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="267" column="1"/>
       </memberdef>
       <memberdef kind="friend" id="classboost_1_1geometry_1_1segment__iterator_1a1747951ef36f7b208f8fb86c40bb76fc" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -92,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="270"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="270" column="1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -107,7 +113,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="260" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="259" bodyend="262"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="259" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="259" bodyend="262"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1segment__iterator_1a2c99f289ccd921aa74022735f03097a6" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -124,7 +130,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="272" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="272" bodyend="272"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="272" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="272" bodyend="272"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -139,7 +145,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="306" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="305" bodyend="309"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="305" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="305" bodyend="309"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1segment__iterator_1abcc052cc09f1c1a30591117e89db1fcf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1segment__iterator" kindref="compound">segment_iterator</ref></type>
@@ -155,7 +161,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="318" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="317" bodyend="322"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="317" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="317" bodyend="322"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1segment__iterator_1a5a1175b8d0a80c4c6eb3f937981006f0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1segment__iterator" kindref="compound">segment_iterator</ref> &amp;</type>
@@ -168,7 +174,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="312" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="311" bodyend="315"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="311" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="311" bodyend="315"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1segment__iterator_1a8f900574dab7c022f9e4e26337b27eda" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1segment__iterator" kindref="compound">segment_iterator</ref></type>
@@ -184,7 +190,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="325" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="324" bodyend="329"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="324" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="324" bodyend="329"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1segment__iterator_1a06681676a82bd4ebbbf35065239b5c71" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -197,7 +203,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="285" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="285" bodyend="285"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="285" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="285" bodyend="285"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1segment__iterator_1a3246db7884a1cea1ade3d2423d86a754" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -219,14 +225,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="290" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="288" bodyend="303"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="288" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="288" bodyend="303"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="252" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="250" bodyend="330"/>
+    <inheritancegraph>
+      <node id="1274">
+        <label>boost::geometry::segment_iterator&lt; Geometry &gt;</label>
+        <link refid="classboost_1_1geometry_1_1segment__iterator"/>
+        <childnode refid="1275" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1275">
+        <label>detail::segment_iterator::iterator_type&lt; Geometry &gt;::type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1276">
+        <label>boost::geometry::segment_iterator&lt; Geometry &gt;</label>
+        <link refid="classboost_1_1geometry_1_1segment__iterator"/>
+        <childnode refid="1277" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1277">
+        <label>detail::segment_iterator::iterator_type&lt; Geometry &gt;::type</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" line="252" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/segment_iterator.hpp" bodystart="250" bodyend="330"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1segment__iterator_1adb7140f93d63783a81c00f5df0d92bca" prot="private" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>base</name></member>
       <member refid="classboost_1_1geometry_1_1segment__iterator_1acd76ba6de506a08aca1d4ec45558b4b0" prot="private" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>base_ptr</name></member>
@@ -235,7 +263,7 @@
       <member refid="classboost_1_1geometry_1_1segment__iterator_1abcc052cc09f1c1a30591117e89db1fcf" prot="public" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>operator++</name></member>
       <member refid="classboost_1_1geometry_1_1segment__iterator_1a5a1175b8d0a80c4c6eb3f937981006f0" prot="public" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>operator--</name></member>
       <member refid="classboost_1_1geometry_1_1segment__iterator_1a8f900574dab7c022f9e4e26337b27eda" prot="public" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>operator--</name></member>
-      <member refid="classboost_1_1geometry_1_1segment__iterator_1ad2b2c28f715a9ff056c4e14ff3b4523a" prot="private" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>segment_iterator</name></member>
+      <member refid="classboost_1_1geometry_1_1segment__iterator_1afc891591a669b3934ec734d263120399" prot="private" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>segment_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1segment__iterator_1a2c99f289ccd921aa74022735f03097a6" prot="private" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>segment_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1segment__iterator_1a06681676a82bd4ebbbf35065239b5c71" prot="public" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>segment_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1segment__iterator_1a3246db7884a1cea1ade3d2423d86a754" prot="public" virt="non-virtual"><scope>boost::geometry::segment_iterator</scope><name>segment_iterator</name></member>

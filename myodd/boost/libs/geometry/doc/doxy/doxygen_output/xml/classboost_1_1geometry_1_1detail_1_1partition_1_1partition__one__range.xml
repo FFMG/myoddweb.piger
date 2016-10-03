@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1detail_1_1partition_1_1partition__one__range" kind="class" prot="public">
     <compoundname>boost::geometry::detail::partition::partition_one_range</compoundname>
     <includes local="no">partition.hpp</includes>
@@ -43,7 +43,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="222" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="221" bodyend="227"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="221" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="221" bodyend="227"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1detail_1_1partition_1_1partition__one__range_1a1be5796e3e8d7b1739c114cf59456e91" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -88,7 +88,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="234" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="230" bodyend="250"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="230" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="230" bodyend="250"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1detail_1_1partition_1_1partition__one__range_1a6f7ae07cf13994670546b1987d444dce" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -137,7 +137,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="260" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="255" bodyend="277"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="255" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="255" bodyend="277"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -184,14 +184,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="286" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="281" bodyend="317"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="281" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="281" bodyend="317"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="219" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="218" bodyend="318"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" line="219" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/partition.hpp" bodystart="218" bodyend="318"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1detail_1_1partition_1_1partition__one__range_1a08fa4c668f3feb1b798cc38b910267e5" prot="public" virt="non-virtual"><scope>boost::geometry::detail::partition::partition_one_range</scope><name>apply</name></member>
       <member refid="classboost_1_1geometry_1_1detail_1_1partition_1_1partition__one__range_1a591ab4605d0ad647e236d41aa43552f2" prot="private" virt="non-virtual"><scope>boost::geometry::detail::partition::partition_one_range</scope><name>get_new_box</name></member>

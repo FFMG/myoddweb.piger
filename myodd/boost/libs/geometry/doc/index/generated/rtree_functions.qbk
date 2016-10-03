@@ -259,7 +259,6 @@ The number of values found.
 [heading Example]
 
 ``
-
 // return elements intersecting box
 bgi::query(tree, bgi::intersects(box), std::back_inserter(result));
 // return elements intersecting poly but not within box
@@ -310,7 +309,6 @@ The iterator pointing at the begin of the query range.
 [heading Example]
 
 ``
-
 std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_something());
 ``
 
@@ -346,7 +344,6 @@ The iterator pointing at the end of the query range.
 [heading Example]
 
 ``
-
 std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_something());
 ``
 
@@ -382,7 +379,6 @@ The iterator pointing at the begin of the range.
 [heading Example]
 
 ``
-
 std::for_each(bgi::begin(tree), bgi::end(tree), do_something());
 // the same as
 std::for_each(boost::begin(tree), boost::end(tree), do_something());
@@ -420,7 +416,6 @@ The iterator pointing at the end of the range.
 [heading Example]
 
 ``
-
 std::for_each(bgi::begin(tree), bgi::end(tree), do_something());
 // the same as
 std::for_each(boost::begin(tree), boost::end(tree), do_something());

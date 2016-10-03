@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph_1_1vertex__handle__less" kind="struct" prot="private">
     <compoundname>boost::geometry::detail::is_valid::complement_graph::vertex_handle_less</compoundname>
       <sectiondef kind="public-func">
@@ -22,14 +22,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="92" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="91" bodyend="94"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="91" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="91" bodyend="94"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="90" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="89" bodyend="95"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="90" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="89" bodyend="95"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph_1_1vertex__handle__less_1ac93d6a377c4e76324fd30b3779e5cd61" prot="public" virt="non-virtual"><scope>boost::geometry::detail::is_valid::complement_graph::vertex_handle_less</scope><name>operator()</name></member>
     </listofallmembers>

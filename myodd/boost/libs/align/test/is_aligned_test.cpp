@@ -12,28 +12,17 @@ http://boost.org/LICENSE_1_0.txt
 #include <boost/config.hpp>
 
 template<std::size_t N>
-struct A {
-};
+struct A { };
 
-template<class T>
-struct P {
-    P()
-        : p(new T) {
-    }
-    ~P() {
-        delete p;
-    }
-    T* p;
-};
-
-template<std::size_t N>
-void test(char* p, A<N>)
+template<class T, std::size_t N>
+void test(T* p, A<N>)
 {
     BOOST_TEST(boost::alignment::is_aligned(p, N));
-    BOOST_TEST(!boost::alignment::is_aligned(&p[1], N));
+    BOOST_TEST(!boost::alignment::is_aligned((char*)p + 1, N));
 }
 
-void test(char* p, A<1>)
+template<class T>
+void test(T* p, A<1>)
 {
     BOOST_TEST(boost::alignment::is_aligned(p, 1));
 }
@@ -41,9 +30,8 @@ void test(char* p, A<1>)
 template<class T>
 void test()
 {
-    P<T> o;
-    test(reinterpret_cast<char*>(o.p),
-        A<boost::alignment::alignment_of<T>::value>());
+    T o;
+    test(&o, A<boost::alignment::alignment_of<T>::value>());
 }
 
 class X;
@@ -62,19 +50,23 @@ int main()
     test<short>();
     test<int>();
     test<long>();
-#if !defined(BOOST_NO_LONG_LONG)
+#if !defined(BOOST_NO_LONG_LONG) && !defined(_MSC_VER)
     test<long long>();
 #endif
     test<float>();
+#if !defined(_MSC_VER)
     test<double>();
     test<long double>();
+#endif
     test<void*>();
     test<char*>();
     test<int*>();
     test<X*>();
     test<void(*)()>();
+#if !defined(_MSC_VER)
     test<int X::*>();
     test<int(X::*)()>();
+#endif
 
     return boost::report_errors();
 }

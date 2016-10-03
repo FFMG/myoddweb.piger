@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1side__info" kind="class" prot="public">
     <compoundname>boost::geometry::side_info</compoundname>
     <includes local="no">side_info.hpp</includes>
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="166" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="166" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="166" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="166" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="84" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="83" bodyend="89"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="83" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="83" bodyend="89"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a8d696e4f72ea4d2b519f775b5ed6b208" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -55,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="56" bodyend="66"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="56" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="56" bodyend="66"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1aac64aae77faa84e7e4b0dfe45b37c864" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -68,7 +68,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="92" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="91" bodyend="95"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="91" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="91" bodyend="95"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a8bb209ab35df6b765bf758f78667b009" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -93,7 +93,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="70" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="69" bodyend="72"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="69" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="69" bodyend="72"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a751a28e7b218cb229b3cb76462ebdadc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="115" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="114" bodyend="118"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="114" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="114" bodyend="118"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a4216e6a8d026549fe9a434ba4b8a948b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -119,7 +119,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="134" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="133" bodyend="140"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="133" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="133" bodyend="140"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a6343f1e6ac223c409f567eaf04b8d305" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -139,7 +139,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="107" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="106" bodyend="112"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="106" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="106" bodyend="112"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a40b02d344eb55a2ed0595b18a9a02a85" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -159,7 +159,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="128" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="127" bodyend="131"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="127" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="127" bodyend="131"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1ac35fc700fabf86acc653a0b91e3de2b8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -172,7 +172,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="161" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="160" bodyend="163"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="160" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="160" bodyend="163"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1aa45b556d006986d3895eef8fe68d8f29" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -192,7 +192,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="79" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="78" bodyend="81"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="78" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="78" bodyend="81"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a71013b833c4bb35997a810957a490c93" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -220,7 +220,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="50" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="49" bodyend="53"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="49" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="49" bodyend="53"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a8bdd284ac2b979894dbef1a673a9f969" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -253,7 +253,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="41" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="39" bodyend="46"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="39" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="39" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a63d69eefab159b0911e322758f259506" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -266,7 +266,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="98" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="97" bodyend="103"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="97" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="97" bodyend="103"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a98692676549525179f6adff4fdde7c45" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -286,7 +286,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="122" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="121" bodyend="124"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="121" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="121" bodyend="124"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1side__info_1a091358b204c811933a29d3d2771e9287" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -306,14 +306,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="145" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="144" bodyend="147"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="144" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="144" bodyend="147"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
 <para>Class <ref refid="classboost_1_1geometry_1_1side__info" kindref="compound">side_info</ref>: small class wrapping for sides (-1,0,1) </para>    </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="37" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="36" bodyend="168"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" line="37" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side_info.hpp" bodystart="36" bodyend="168"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1side__info_1af0a794a8ab908b3a38ed230ca49267fe" prot="public" virt="non-virtual"><scope>boost::geometry::side_info</scope><name>collinear</name></member>
       <member refid="classboost_1_1geometry_1_1side__info_1a8d696e4f72ea4d2b519f775b5ed6b208" prot="public" virt="non-virtual"><scope>boost::geometry::side_info</scope><name>correct_to_zero</name></member>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_3_01boost_1_1tuple_3_01_indexable_00_01_14b3825c25bf3c35358f568ca3f4ddd2" kind="struct" prot="public">
     <compoundname>boost::geometry::index::detail::indexable&lt; boost::tuple&lt; Indexable, T1, T2, T3, T4, T5, T6, T7, T8, T9 &gt;, false &gt;</compoundname>
     <includes refid="indexable_8hpp" local="no">indexable.hpp</includes>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="95" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="95" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="95" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="95" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_3_01boost_1_1tuple_3_01_indexable_00_01_14b3825c25bf3c35358f568ca3f4ddd2_1a00a74fa272af854d27e185a8285126d1" prot="public" static="no">
         <type>Indexable const &amp;</type>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="104" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="104" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="104" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="104" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -84,7 +84,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="101"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="97" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_3_01boost_1_1tuple_3_01_indexable_00_01_14b3825c25bf3c35358f568ca3f4ddd2_1ac424c58009c72e14a1b271550a583b8b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_3_01boost_1_1tuple_3_01_indexable_00_01_14b3825c25bf3c35358f568ca3f4ddd2_1a00a74fa272af854d27e185a8285126d1" kindref="member">result_type</ref></type>
@@ -110,7 +110,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="113" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="112" bodyend="115"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="112" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="112" bodyend="115"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -125,7 +125,7 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="94" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="93" bodyend="116"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" line="94" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/indexable.hpp" bodystart="93" bodyend="116"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_3_01boost_1_1tuple_3_01_indexable_00_01_14b3825c25bf3c35358f568ca3f4ddd2_1aad812673c1ac27cec7811bf448b0ebc3" prot="public" virt="non-virtual"><scope>boost::geometry::index::detail::indexable&lt; boost::tuple&lt; Indexable, T1, T2, T3, T4, T5, T6, T7, T8, T9 &gt;, false &gt;</scope><name>BOOST_MPL_ASSERT_MSG</name></member>
       <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_3_01boost_1_1tuple_3_01_indexable_00_01_14b3825c25bf3c35358f568ca3f4ddd2_1ac424c58009c72e14a1b271550a583b8b" prot="public" virt="non-virtual"><scope>boost::geometry::index::detail::indexable&lt; boost::tuple&lt; Indexable, T1, T2, T3, T4, T5, T6, T7, T8, T9 &gt;, false &gt;</scope><name>operator()</name></member>

@@ -199,7 +199,7 @@
 <namespace name="boost">
 <namespace name="units">
 <namespace name="us">
-<struct name="pint_base_unit"><method-group name="public static functions">
+<struct name="pint_base_unit"><inherit access="public">boost::units::base_unit&lt; pint_base_unit, si::volume::dimension_type,-503 &gt;</inherit><method-group name="public static functions">
 <method name="name" specifiers="static"><type>const char *</type></method>
 <method name="symbol" specifiers="static"><type>const char *</type></method>
 </method-group>
@@ -211,7 +211,7 @@
 <namespace name="boost">
 <namespace name="units">
 <namespace name="us">
-<struct name="pound_base_unit"><method-group name="public static functions">
+<struct name="pound_base_unit"><inherit access="public">boost::units::base_unit&lt; pound_base_unit, cgs::gram_base_unit::dimension_type,-502 &gt;</inherit><method-group name="public static functions">
 <method name="name" specifiers="static"><type>const char *</type></method>
 <method name="symbol" specifiers="static"><type>const char *</type></method>
 </method-group>
@@ -223,7 +223,7 @@
 <namespace name="boost">
 <namespace name="units">
 <namespace name="us">
-<struct name="pound_force_base_unit"><method-group name="public static functions">
+<struct name="pound_force_base_unit"><inherit access="public">boost::units::base_unit&lt; pound_force_base_unit, si::force::dimension_type,-600 &gt;</inherit><method-group name="public static functions">
 <method name="name" specifiers="static"><type>const char *</type></method>
 <method name="symbol" specifiers="static"><type>const char *</type></method>
 </method-group>
@@ -291,7 +291,7 @@
 <namespace name="boost">
 <namespace name="units">
 <namespace name="us">
-<struct name="yard_base_unit"><method-group name="public static functions">
+<struct name="yard_base_unit"><inherit access="public">boost::units::base_unit&lt; yard_base_unit, si::meter_base_unit::dimension_type,-501 &gt;</inherit><method-group name="public static functions">
 <method name="name" specifiers="static"><type>const char *</type></method>
 <method name="symbol" specifiers="static"><type>const char *</type></method>
 </method-group>

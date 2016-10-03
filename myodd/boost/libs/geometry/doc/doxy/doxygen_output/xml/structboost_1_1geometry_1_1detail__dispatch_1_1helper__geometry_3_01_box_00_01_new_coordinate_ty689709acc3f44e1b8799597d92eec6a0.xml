@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1detail__dispatch_1_1helper__geometry_3_01_box_00_01_new_coordinate_ty689709acc3f44e1b8799597d92eec6a0" kind="struct" prot="public">
     <compoundname>boost::geometry::detail_dispatch::helper_geometry&lt; Box, NewCoordinateType, NewUnits, box_tag &gt;</compoundname>
     <includes local="no">helper_geometry.hpp</includes>
@@ -26,14 +26,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="132" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="132" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="132" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="132" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="125" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="124" bodyend="133"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="125" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="124" bodyend="133"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1detail__dispatch_1_1helper__geometry_3_01_box_00_01_new_coordinate_ty689709acc3f44e1b8799597d92eec6a0_1ac3966b77ac09e6df78c5d1788bf8253c" prot="public" virt="non-virtual"><scope>boost::geometry::detail_dispatch::helper_geometry&lt; Box, NewCoordinateType, NewUnits, box_tag &gt;</scope><name>type</name></member>
     </listofallmembers>

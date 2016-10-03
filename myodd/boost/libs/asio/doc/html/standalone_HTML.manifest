@@ -2498,6 +2498,10 @@ boost_asio/reference/ssl__context_base/options.html
 boost_asio/reference/ssl__context_base/password_purpose.html
 boost_asio/reference/ssl__context_base/single_dh_use.html
 boost_asio/reference/ssl__context_base/_context_base.html
+boost_asio/reference/ssl__error__get_stream_category.html
+boost_asio/reference/ssl__error__make_error_code.html
+boost_asio/reference/ssl__error__stream_category.html
+boost_asio/reference/ssl__error__stream_errors.html
 boost_asio/reference/ssl__rfc2818_verification.html
 boost_asio/reference/ssl__rfc2818_verification/operator_lp__rp_.html
 boost_asio/reference/ssl__rfc2818_verification/result_type.html
@@ -2916,5 +2920,7 @@ boost_asio/reference/is_error_code_enum_lt__netdb_errors__gt_.html
 boost_asio/reference/is_error_code_enum_lt__netdb_errors__gt_/value.html
 boost_asio/reference/is_error_code_enum_lt__ssl_errors__gt_.html
 boost_asio/reference/is_error_code_enum_lt__ssl_errors__gt_/value.html
+boost_asio/reference/is_error_code_enum_lt__boost__asio__ssl__error__stream_errors__gt_.html
+boost_asio/reference/is_error_code_enum_lt__boost__asio__ssl__error__stream_errors__gt_/value.html
 boost_asio/history.html
 boost_asio/index.html

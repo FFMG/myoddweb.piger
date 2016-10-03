@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class template small_vector_base</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="../../boost_container_header_reference.html#header.boost.container.small_vector_hpp" title="Header &lt;boost/container/small_vector.hpp&gt;">
 <link rel="prev" href="small_vector_allocator/rebind.html" title="Struct template rebind">
@@ -37,47 +37,46 @@
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
   <span class="comment">// <a class="link" href="small_vector_base.html#boost.container.small_vector_baseconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a class="link" href="small_vector_base.html#idp20259152-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a class="link" href="small_vector_base.html#idp20261152-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a class="link" href="small_vector_base.html#idm45359208303520-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a class="link" href="small_vector_base.html#idm45359208301520-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;&amp;</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="small_vector_base.html#idp20256608-bb">public member functions</a></span>
-  <span class="keyword">void</span> <a class="link" href="small_vector_base.html#idp20257168-bb"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="small_vector_base.html#idm45359208306064-bb">public member functions</a></span>
+  <span class="keyword">void</span> <a class="link" href="small_vector_base.html#idm45359208305504-bb"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp150439120"></a><h2>Description</h2>
-<pre class="programlisting">
+<a name="idm45946654416592"></a><h2>Description</h2>
+<p>This class consists of common code from all small_vector&lt;T, N&gt; types that don't depend on the "N" template parameter. This class is non-copyable and non-destructible, so this class typically used as reference argument to functions that read or write small vectors. Since <code class="computeroutput"><a class="link" href="small_vector.html" title="Class template small_vector">small_vector</a>&lt;T, N&gt;</code> derives from <code class="computeroutput"><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a>&lt;T&gt;</code>, the conversion to <code class="computeroutput"><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a></code> is implicit </p>
+<pre class="programlisting"><span class="comment">//Clients can pass any small_vector&lt;Foo, N&gt;.</span>
+<span class="keyword">void</span> <span class="identifier">read_any_small_vector_of_foo</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">small_vector_base</span><span class="special">&lt;</span><span class="identifier">Foo</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">in_parameter</span><span class="special">)</span><span class="special">;</span>
 
-<span class="identifier">Clients</span> <span class="identifier">can</span> <span class="identifier">pass</span> <span class="identifier">any</span> <span class="identifier">small_vector</span><span class="special">&lt;</span><span class="identifier">Foo</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span><span class="special">.</span>
-    <span class="keyword">void</span> <span class="identifier">read_any_small_vector_of_foo</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">small_vector_base</span><span class="special">&lt;</span><span class="identifier">Foo</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">in_parameter</span><span class="special">)</span><span class="special">;</span>
+<span class="keyword">void</span> <span class="identifier">modify_any_small_vector_of_foo</span><span class="special">(</span><span class="identifier">small_vector_base</span><span class="special">&lt;</span><span class="identifier">Foo</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">in_out_parameter</span><span class="special">)</span><span class="special">;</span>
 
-    <span class="keyword">void</span> <span class="identifier">modify_any_small_vector_of_foo</span><span class="special">(</span><span class="identifier">small_vector_base</span><span class="special">&lt;</span><span class="identifier">Foo</span><span class="special">&gt;</span> <span class="special">&amp;</span><span class="identifier">in_out_parameter</span><span class="special">)</span><span class="special">;</span>
+<span class="keyword">void</span> <span class="identifier">some_function</span><span class="special">(</span><span class="special">)</span>
+<span class="special">{</span>
 
-    <span class="keyword">void</span> <span class="identifier">some_function</span><span class="special">(</span><span class="special">)</span>
-    <span class="special">{</span>
+   <span class="identifier">small_vector</span><span class="special">&lt;</span><span class="identifier">Foo</span><span class="special">,</span> <span class="number">8</span><span class="special">&gt;</span> <span class="identifier">myvector</span><span class="special">;</span>
 
-       <span class="identifier">small_vector</span><span class="special">&lt;</span><span class="identifier">Foo</span><span class="special">,</span> <span class="number">8</span><span class="special">&gt;</span> <span class="identifier">myvector</span><span class="special">;</span>
+   <span class="identifier">read_any_small_vector_of_foo</span><span class="special">(</span><span class="identifier">myvector</span><span class="special">)</span><span class="special">;</span>   <span class="comment">// Reads myvector</span>
 
-       <span class="identifier">read_any_small_vector_of_foo</span><span class="special">(</span><span class="identifier">myvector</span><span class="special">)</span><span class="special">;</span>   <span class="comment">// Reads myvector</span>
+   <span class="identifier">modify_any_small_vector_of_foo</span><span class="special">(</span><span class="identifier">myvector</span><span class="special">)</span><span class="special">;</span> <span class="comment">// Modifies myvector</span>
 
-       <span class="identifier">modify_any_small_vector_of_foo</span><span class="special">(</span><span class="identifier">myvector</span><span class="special">)</span><span class="special">;</span> <span class="comment">// Modifies myvector</span>
-
-    <span class="special">}</span>
-    </pre>
-<p>All `boost::container:vector` member functions are inherited. See `vector` documentation for details. </p>
+<span class="special">}</span>
+</pre>
+<p>All <code class="computeroutput">boost::container:vector</code> member functions are inherited. See <code class="computeroutput">vector</code> documentation for details. </p>
 <div class="refsect2">
-<a name="idp150476320"></a><h3>
+<a name="idm45946654379120"></a><h3>
 <a name="boost.container.small_vector_baseconstruct-copy-destruct"></a><code class="computeroutput">small_vector_base</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a name="idp20259152-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a name="idp20261152-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a name="idm45359208303520-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> <a name="idm45359208301520-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp150493792"></a><h3>
-<a name="idp20256608-bb"></a><code class="computeroutput">small_vector_base</code> public member functions</h3>
-<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp20257168-bb"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
+<a name="idm45946654361648"></a><h3>
+<a name="idm45359208306064-bb"></a><code class="computeroutput">small_vector_base</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idm45359208305504-bb"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="small_vector_base.html" title="Class template small_vector_base">small_vector_base</a> <span class="special">&amp;</span> other<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
 </div>
 </div>
 </div>

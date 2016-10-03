@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1resolve__variant_1_1disjoint_3_01boost_1_1variant_3_01_b_o_o_s_t___v_2438e17a27c8d9b32e42b27edf34e26a" kind="struct" prot="public">
     <compoundname>boost::geometry::resolve_variant::disjoint&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt;, Geometry2 &gt;::visitor</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::static_visitor&lt; bool &gt;</basecompoundref>
     <includes local="no">interface.hpp</includes>
       <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="structboost_1_1geometry_1_1resolve__variant_1_1disjoint_3_01boost_1_1variant_3_01_b_o_o_s_t___v_2438e17a27c8d9b32e42b27edf34e26a_1a1a236e2aee862cf8f4bc71dc6419a4bd" prot="public" static="no" mutable="no">
@@ -15,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="91" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="91" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="91" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="91" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -39,7 +40,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="97" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="96" bodyend="99"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="96" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="96" bodyend="99"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1resolve__variant_1_1disjoint_3_01boost_1_1variant_3_01_b_o_o_s_t___v_2438e17a27c8d9b32e42b27edf34e26a_1a913fcc2afc88cafd264fd67f7edd3bbb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -56,14 +57,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="93" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="93" bodyend="93"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="93" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="93" bodyend="93"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="90" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="89" bodyend="100"/>
+    <inheritancegraph>
+      <node id="938">
+        <label>boost::static_visitor&lt; bool &gt;</label>
+      </node>
+      <node id="937">
+        <label>boost::geometry::resolve_variant::disjoint&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt;, Geometry2 &gt;::visitor</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1disjoint_3_01boost_1_1variant_3_01_b_o_o_s_t___v_2438e17a27c8d9b32e42b27edf34e26a"/>
+        <childnode refid="938" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="940">
+        <label>boost::static_visitor&lt; bool &gt;</label>
+      </node>
+      <node id="939">
+        <label>boost::geometry::resolve_variant::disjoint&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt;, Geometry2 &gt;::visitor</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1disjoint_3_01boost_1_1variant_3_01_b_o_o_s_t___v_2438e17a27c8d9b32e42b27edf34e26a"/>
+        <childnode refid="940" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" line="90" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/interface.hpp" bodystart="89" bodyend="100"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1disjoint_3_01boost_1_1variant_3_01_b_o_o_s_t___v_2438e17a27c8d9b32e42b27edf34e26a_1a1a236e2aee862cf8f4bc71dc6419a4bd" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::disjoint&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt;, Geometry2 &gt;::visitor</scope><name>m_geometry2</name></member>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1disjoint_3_01boost_1_1variant_3_01_b_o_o_s_t___v_2438e17a27c8d9b32e42b27edf34e26a_1af276cfd17b21ad375d34e030ac699299" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::disjoint&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt;, Geometry2 &gt;::visitor</scope><name>operator()</name></member>

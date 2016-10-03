@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1within_1_1crossings__multiply" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::within::crossings_multiply</compoundname>
     <includes local="no">point_in_poly_crossings_multiply.hpp</includes>
@@ -29,7 +29,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="55" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="55" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-type">
@@ -44,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="76" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="76" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="76" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="76" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1strategy_1_1within_1_1crossings__multiply_1aad3a9f46a956991dec6838f2c2151cc6" prot="public" static="no">
         <type>PointOfSegment</type>
@@ -57,7 +57,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="77" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="77" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="77" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="77" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1strategy_1_1within_1_1crossings__multiply_1ade2c3b8b8743c319723572e33552bc37" prot="public" static="no">
         <type>flags</type>
@@ -70,7 +70,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="78" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="78" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="78" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="78" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -101,7 +101,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="83" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="80" bodyend="108"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="80" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="80" bodyend="108"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1within_1_1crossings__multiply_1a3ca68274d48b1312b37dd88ad7e3b4b8" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>int</type>
@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="111" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="110" bodyend="113"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="110" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="110" bodyend="113"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -152,7 +152,7 @@
 [link geometry.reference.algorithms.within.within_3_with_strategy within (with strategy)]
 </qbk>  </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="49" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="48" bodyend="114"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" line="49" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_poly_crossings_multiply.hpp" bodystart="48" bodyend="114"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1crossings__multiply_1a562e8ff2b4ce23220d6f3f8c6be221e5" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::within::crossings_multiply</scope><name>apply</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1within_1_1crossings__multiply_1a5397ca98b1a14dbcf8afef0f598d19e7" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::within::crossings_multiply</scope><name>calculation_type</name></member>

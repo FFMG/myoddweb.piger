@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__convex__hull" kind="group">
     <compoundname>convex_hull</compoundname>
     <title>convex hull: calculate the convex hull of a geometry</title>
-    <innerclass refid="classboost_1_1geometry_1_1concept_1_1_convex_hull_strategy" prot="public">boost::geometry::concept::ConvexHullStrategy</innerclass>
+    <innerclass refid="classboost_1_1geometry_1_1concepts_1_1_convex_hull_strategy" prot="public">boost::geometry::concepts::ConvexHullStrategy</innerclass>
     <innerclass refid="structboost_1_1geometry_1_1strategy__convex__hull" prot="public">boost::geometry::strategy_convex_hull</innerclass>
       <sectiondef kind="func">
       <memberdef kind="function" id="group__convex__hull_1gadce5f964b027cc193af16673ad8ff4e9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
@@ -57,13 +57,13 @@
 <parametername>hull</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>A model of the specified concept which is set to the \1</para></parameterdescription>
+<para>A model of the specified concept which is set to the convex hull</para></parameterdescription>
 </parameteritem>
 </parameterlist>
  <qbk>[include reference/algorithms/convex_hull.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/convex_hull.hpp" line="329" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/convex_hull.hpp" bodystart="327" bodyend="331"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/convex_hull.hpp" line="327" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/convex_hull.hpp" bodystart="327" bodyend="331"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

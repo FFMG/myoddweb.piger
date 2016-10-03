@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1area_1_1surveyor" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::area::surveyor</compoundname>
     <includes local="no">area_surveyor.hpp</includes>
@@ -25,7 +25,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="72" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="72" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="72" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1strategy_1_1area_1_1surveyor_1a2d82a0d2d35f3698dfdaec292a14b9b6" prot="public" static="no">
         <type>PointOfSegment</type>
@@ -38,7 +38,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="100" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="100" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="100" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="100" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1strategy_1_1area_1_1surveyor_1a385f75bd15900d66d86086de96c827b0" prot="public" static="no">
         <type>summation</type>
@@ -51,7 +51,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="99" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="99" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="99" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="99" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -78,7 +78,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="105" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="102" bodyend="120"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="102" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="102" bodyend="120"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1area_1_1surveyor_1a30fdd023d05b836a0fa6a0dbce83c6f3" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1strategy_1_1area_1_1surveyor_1a8c0751c7917a00c0b9008f3ba948712e" kindref="member">return_type</ref></type>
@@ -95,7 +95,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="123" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="122" bodyend="125"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="122" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="122" bodyend="125"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -120,7 +120,7 @@
 [heading See also]
 [link geometry.reference.algorithms.area.area_2_with_strategy area (with strategy)]
 </qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="56" bodyend="127"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" line="57" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/area_surveyor.hpp" bodystart="56" bodyend="127"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1area_1_1surveyor_1af6713ab2d1f075d2303dfd297a0af856" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::area::surveyor</scope><name>apply</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1area_1_1surveyor_1a30fdd023d05b836a0fa6a0dbce83c6f3" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::area::surveyor</scope><name>result</name></member>

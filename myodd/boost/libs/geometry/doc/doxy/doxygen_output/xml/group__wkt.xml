@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__wkt" kind="group">
     <compoundname>wkt</compoundname>
     <title>wkt: parse and stream WKT (Well-Known Text)</title>
@@ -53,7 +53,7 @@
  <qbk>[include reference/io/read_wkt.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/read.hpp" line="896" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/read.hpp" bodystart="895" bodyend="899"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/read.hpp" line="895" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/read.hpp" bodystart="895" bodyend="899"/>
       </memberdef>
       <memberdef kind="function" id="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -91,7 +91,7 @@
  <qbk>[include reference/io/wkt.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="503" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="502" bodyend="507"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" line="502" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/wkt/write.hpp" bodystart="502" bodyend="507"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

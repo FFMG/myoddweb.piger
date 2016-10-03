@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="namespaceboost_1_1geometry_1_1math" kind="namespace">
     <compoundname>boost::geometry::math</compoundname>
       <sectiondef kind="func">
@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="732" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="731" bodyend="734"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="731" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="731" bodyend="734"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a424ff6fb28c45c2ef9efe69d37417122" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="654" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="653" bodyend="656"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="653" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="653" bodyend="656"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a5918e366fa038f972973d8c2a11cdf5d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -66,7 +66,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="593" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="592" bodyend="596"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="592" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="592" bodyend="596"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a0ef8f8d4839a1eb21d496f6e2a2fe218" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -112,7 +112,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="538" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="537" bodyend="543"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="537" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="537" bodyend="543"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1acb3d77c27ffcec5c25756532580b5214" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -141,7 +141,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="547" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="546" bodyend="552"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="546" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="546" bodyend="552"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1aa3a09408a776f89964386d65b5c3c5e5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -166,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="660" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="659" bodyend="662"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="659" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="659" bodyend="662"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a21699893f254f35ca1d07d74294ace93" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -184,7 +184,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="506" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="506" bodyend="506"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="506" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="506" bodyend="506"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a3e5b88abd56e4edb732c5f2ebd01671f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -207,7 +207,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="673" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="672" bodyend="677"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="672" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="672" bodyend="677"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1ae8855788de4b521d3387bfbc115795f6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -236,7 +236,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="565" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="564" bodyend="570"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="564" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="564" bodyend="570"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1ae532ea90cdfbd4212e8978cf155dd7b5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -265,7 +265,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="583" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="582" bodyend="588"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="582" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="582" bodyend="588"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a9d91147d64ca68045bca9ff04d9ad1b1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -324,7 +324,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="251" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="249" bodyend="255"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="249" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="249" bodyend="255"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1aec917cf38a9c90c00206e21ad23b5dfb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -383,7 +383,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="270" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="268" bodyend="283"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="268" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="268" bodyend="283"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a69f85567fc9e5a5cf6e1fd2069305130" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -425,7 +425,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="718" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="717" bodyend="723"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="717" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="717" bodyend="723"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a72104dcaa7e56e1a859ce5216e58a132" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -473,7 +473,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="231" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="230" bodyend="236"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="230" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="230" bodyend="236"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a7c0eae011cc2ef53ea2dce1b3e86f375" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -554,7 +554,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" line="122" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" bodystart="118" bodyend="127"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" line="118" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" bodystart="118" bodyend="127"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1aa75647c17f8c94299f95c965831c19d1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -646,7 +646,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" line="147" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" bodystart="142" bodyend="152"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" line="142" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_box_coordinates.hpp" bodystart="142" bodyend="152"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a2ee4804e2c2559ba78a8f95bb81fc71e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -705,7 +705,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="212" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="210" bodyend="217"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" line="210" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/normalize_spheroidal_coordinates.hpp" bodystart="210" bodyend="217"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a8e747ae1fe84655e4235f2f47c4aac99" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -723,7 +723,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="500" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="500" bodyend="500"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="500" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="500" bodyend="500"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1ae5f6e1d78c4914a741b9413b937eae65" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -741,7 +741,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="600" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="599" bodyend="603"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="599" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="599" bodyend="603"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a51acf023bf8065ec861e01f4c4cc805f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -763,7 +763,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="510" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="509" bodyend="512"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="509" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="509" bodyend="512"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a9ee0eff484a0f70bc80f0c1a26aef4ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -789,7 +789,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="757" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="756" bodyend="759"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="756" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="756" bodyend="759"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a39f35b486fe993efe243015b3bfcb12b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -811,7 +811,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="516" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="515" bodyend="518"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="515" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="515" bodyend="518"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a90d4a8c844454f90a014a6a506f30b2f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -833,7 +833,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="742" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="741" bodyend="745"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="741" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="741" bodyend="745"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a1fcb14beeef88ba80fc81536339b8a9c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -862,7 +862,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="556" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="555" bodyend="561"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="555" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="555" bodyend="561"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a1e8c7d337146a145aa98eac9cf49a65d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -891,7 +891,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="574" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="573" bodyend="579"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="573" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="573" bodyend="579"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a9831a2a89659dff736070d80ed20738f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -922,7 +922,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="687" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="686" bodyend="689"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="686" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="686" bodyend="689"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a7f2abcc0afdf9ec19890bd6debdf8e87" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -953,7 +953,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="700" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="699" bodyend="705"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="699" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="699" bodyend="705"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1math_1a4e378b7874bd19dcb42710747a24d675" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -971,13 +971,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="503" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="503" bodyend="503"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="503" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" bodystart="503" bodyend="503"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="43"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/math.hpp" line="43" column="1"/>
   </compounddef>
 </doxygen>

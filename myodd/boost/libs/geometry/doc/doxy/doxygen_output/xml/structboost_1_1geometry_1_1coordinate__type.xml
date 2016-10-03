@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1coordinate__type" kind="struct" prot="public">
     <compoundname>boost::geometry::coordinate_type</compoundname>
     <includes local="no">coordinate_type.hpp</includes>
@@ -22,11 +22,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" line="92" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" bodystart="92" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" line="92" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" bodystart="92" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Metafunction defining [*type] as the coordinate type (int, float, double, etc) of the \3. </para>    </briefdescription>
+<para>Metafunction defining [*type] as the coordinate type (int, float, double, etc) of the point type making up the specified geometry type. </para>    </briefdescription>
     <detaileddescription>
 <para><parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -37,7 +37,7 @@
 </parameteritem>
 </parameterlist>
  <qbk>[include reference/core/coordinate_type.qbk]</qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" line="87" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" bodystart="86" bodyend="93"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" line="87" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/coordinate_type.hpp" bodystart="86" bodyend="93"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1coordinate__type_1a426b2210908d022e151055d1fed4ac75" prot="public" virt="non-virtual"><scope>boost::geometry::coordinate_type</scope><name>type</name></member>
     </listofallmembers>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="x01_qt_example_8cpp-example" kind="example">
     <compoundname>x01_qt_example.cpp</compoundname>
     <detaileddescription>
@@ -29,11 +29,11 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Adapt<sp/>a<sp/>QPointF<sp/>such<sp/>that<sp/>it<sp/>can<sp/>be<sp/>handled<sp/>by<sp/>Boost.Geometry</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><ref refid="group__register_1gaf174f265da534d30be10c2f5a4a2c75e" kindref="member" tooltip="Macro to register a \1 (having separate get/set methods)">BOOST_GEOMETRY_REGISTER_POINT_2D_GET_SET</ref>(QPointF,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/>cs::cartesian,<sp/>x,<sp/>y,<sp/>setX,<sp/>setY)</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="group__register_1gaf174f265da534d30be10c2f5a4a2c75e" kindref="member">BOOST_GEOMETRY_REGISTER_POINT_2D_GET_SET</ref>(QPointF,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/>cs::cartesian,<sp/>x,<sp/>y,<sp/>setX,<sp/>setY)</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Adapt<sp/>a<sp/>QPolygonF<sp/>as<sp/>well.</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>A<sp/>QPolygonF<sp/>has<sp/>no<sp/>holes<sp/>(interiors)<sp/>so<sp/>it<sp/>is<sp/>similar<sp/>to<sp/>a<sp/>Boost.Geometry<sp/>ring</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><ref refid="group__register_1ga742491bcf6ece3b0c9d21d5f6a991ac1" kindref="member" tooltip="Macro to register a \1.">BOOST_GEOMETRY_REGISTER_RING</ref>(QPolygonF)</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="group__register_1ga742491bcf6ece3b0c9d21d5f6a991ac1" kindref="member">BOOST_GEOMETRY_REGISTER_RING</ref>(QPolygonF)</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>main(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*argv[])</highlight></codeline>
@@ -54,7 +54,7 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Use<sp/>Boost.Geometry<sp/>e.g.<sp/>to<sp/>calculate<sp/>area</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::ostringstream<sp/>out;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>out<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Boost.Geometry<sp/>area:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member" tooltip="Calculates the area of a geometry.">boost::geometry::area</ref>(polygon)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>out<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Boost.Geometry<sp/>area:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member">boost::geometry::area</ref>(polygon)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Some<sp/>functionality<sp/>is<sp/>defined<sp/>in<sp/>both<sp/>Qt<sp/>and<sp/>Boost.Geometry</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>QPointF<sp/>p(20,20);</highlight></codeline>
@@ -62,7 +62,7 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>(polygon.containsPoint(p,<sp/>Qt::WindingFill)<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;yes&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;no&quot;</highlight><highlight class="normal">)</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>std::endl</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Boost.Geometry<sp/>within:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>(<ref refid="group__within_1gaf8f597c0a7352f0a6808944db2a549b7" kindref="member" tooltip="Checks if the first geometry is completely inside the second geometry.">boost::geometry::within</ref>(p,<sp/>polygon)<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;yes&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;no&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>(<ref refid="group__within_1gaf8f597c0a7352f0a6808944db2a549b7" kindref="member">boost::geometry::within</ref>(p,<sp/>polygon)<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;yes&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;no&quot;</highlight><highlight class="normal">)</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Detail:<sp/>if<sp/>point<sp/>is<sp/>ON<sp/>boundary,<sp/>Qt<sp/>says<sp/>yes,<sp/>Boost.Geometry<sp/>says<sp/>no.</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>

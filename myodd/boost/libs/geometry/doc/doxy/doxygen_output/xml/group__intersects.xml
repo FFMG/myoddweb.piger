@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__intersects" kind="group">
     <compoundname>intersects</compoundname>
     <title>intersects: detect if a geometry self-intersects or if two geometries intersect</title>
@@ -19,7 +19,7 @@
           <declname>geometry</declname>
         </param>
         <briefdescription>
-<para>Checks if a geometry \1. </para>        </briefdescription>
+<para>Checks if a geometry has at least one intersection (crossing or self-tangency) </para>        </briefdescription>
         <detaileddescription>
 <para><simplesect kind="note"><para>This function can be called for one geometry (self-intersection) and also for two geometries (intersection)</para></simplesect>
 <parameterlist kind="templateparam"><parameteritem>
@@ -38,11 +38,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>Returns true if the geometry \1</para></simplesect>
+<simplesect kind="return"><para>Returns true if the geometry is self-intersecting</para></simplesect>
  <qbk.distinguish>one geometry</qbk.distinguish>   <qbk>[def __one_parameter__]</qbk>   <qbk>[include reference/algorithms/intersects.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" bodystart="50" bodyend="78"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" line="50" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" bodystart="50" bodyend="78"/>
       </memberdef>
       <memberdef kind="function" id="group__intersects_1ga3d8bd9a2b73bb493d66cbcb37426a7be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -66,7 +66,7 @@
           <declname>geometry2</declname>
         </param>
         <briefdescription>
-<para>Checks if two geometries \1. </para>        </briefdescription>
+<para>Checks if two geometries have at least one intersection. </para>        </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -98,11 +98,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>Returns true if two geometries \1</para></simplesect>
+<simplesect kind="return"><para>Returns true if two geometries intersect each other</para></simplesect>
  <qbk.distinguish>two geometries</qbk.distinguish>   <qbk>[include reference/algorithms/intersects.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" line="95" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" bodystart="94" bodyend="100"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" line="94" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/intersects.hpp" bodystart="94" bodyend="100"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

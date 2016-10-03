@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1ever__circling__range__iterator" kind="struct" prot="public">
     <compoundname>boost::geometry::ever_circling_range_iterator</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::iterator_facade&lt; ever_circling_range_iterator&lt; Range &gt;, boost::range_value&lt; Range &gt;::type const, boost::random_access_traversal_tag &gt;</basecompoundref>
     <includes local="no">ever_circling_iterator.hpp</includes>
     <templateparamlist>
       <param>
@@ -20,7 +21,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="122" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="122" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="122" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="122" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
@@ -35,7 +36,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="125" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="125" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="125" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="125" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -50,7 +51,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="197" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="197" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="197" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="197" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1a76a23948859395039aba3b0ec44dbf5b" prot="private" static="no" mutable="no">
         <type>boost::range_iterator&lt; Range &gt;::type</type>
@@ -63,7 +64,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="195" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="195" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="195" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="195" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1abeb976f04ed2d060141ed93be1808210" prot="private" static="no" mutable="no">
         <type>Range *</type>
@@ -76,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="194" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="194" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="194" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="194" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1a61a4befa7b792c370a8b98292b8ee396" prot="private" static="no" mutable="no">
         <type><ref refid="structboost_1_1geometry_1_1ever__circling__range__iterator_1a82d2ca373c02492ce0cfbaaf211395d2" kindref="member">difference_type</ref></type>
@@ -89,7 +90,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="196" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="196" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="196" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="196" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -108,7 +109,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="113" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="108" bodyend="113"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="108" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="108" bodyend="113"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1ad0458fea280e5903b7f733961a5b7664" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
         <type></type>
@@ -121,7 +122,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="120" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="116" bodyend="120"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="116" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="116" bodyend="120"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -140,7 +141,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="170" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="169" bodyend="182"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="169" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="169" bodyend="182"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1aa741c21b7642994a2b8e38462d5d2cf6" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -153,7 +154,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="157" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="156" bodyend="167"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="156" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="156" bodyend="167"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1a6f6565421dc3fe38c8c8e321d74cdbcb" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>boost::range_value&lt; Range &gt;::type const &amp;</type>
@@ -166,7 +167,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="128" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="127" bodyend="130"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="127" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="127" bodyend="130"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1aa3f2baadd0bd0642ae58767d7837b047" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1ever__circling__range__iterator_1a82d2ca373c02492ce0cfbaaf211395d2" kindref="member">difference_type</ref></type>
@@ -183,7 +184,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="133" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="132" bodyend="135"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="132" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="132" bodyend="135"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1af90f510fd42ac0391e06dfeaae2a83b5" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -200,7 +201,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="138" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="137" bodyend="141"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="137" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="137" bodyend="141"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1aae680df8d0682c6b50eb7fa02c61236c" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -213,7 +214,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="144" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="143" bodyend="154"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="143" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="143" bodyend="154"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1ever__circling__range__iterator_1a9bbe6e4c0f8b403f43925ff868de0239" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -226,14 +227,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="185" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="184" bodyend="192"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="184" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="184" bodyend="192"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="106" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="99" bodyend="198"/>
+    <inheritancegraph>
+      <node id="369">
+        <label>boost::geometry::ever_circling_range_iterator&lt; Range &gt;</label>
+        <link refid="structboost_1_1geometry_1_1ever__circling__range__iterator"/>
+        <childnode refid="370" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="370">
+        <label>boost::iterator_facade&lt; ever_circling_range_iterator&lt; Range &gt;, boost::range_value&lt; Range &gt;::type const, boost::random_access_traversal_tag &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="371">
+        <label>boost::geometry::ever_circling_range_iterator&lt; Range &gt;</label>
+        <link refid="structboost_1_1geometry_1_1ever__circling__range__iterator"/>
+        <childnode refid="372" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="372">
+        <label>boost::iterator_facade&lt; ever_circling_range_iterator&lt; Range &gt;, boost::range_value&lt; Range &gt;::type const, boost::random_access_traversal_tag &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" line="106" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/ever_circling_iterator.hpp" bodystart="99" bodyend="198"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1ever__circling__range__iterator_1a0ac146b5445ac6119a13c2a2ca1bbd9c" prot="private" virt="non-virtual"><scope>boost::geometry::ever_circling_range_iterator</scope><name>advance</name></member>
       <member refid="structboost_1_1geometry_1_1ever__circling__range__iterator_1ac09f73e325921cc50ebcd96bed0f8096" prot="public" virt="non-virtual"><scope>boost::geometry::ever_circling_range_iterator</scope><name>boost::iterator_core_access</name></member>

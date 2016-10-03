@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_937a3bd4d0081552ae9b68f27650b616" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint</compoundname>
     <innerfile refid="disjoint_2areal__areal_8hpp">areal_areal.hpp</innerfile>
     <innerfile refid="disjoint_2box__box_8hpp">box_box.hpp</innerfile>
     <innerfile refid="disjoint_2implementation_8hpp">implementation.hpp</innerfile>

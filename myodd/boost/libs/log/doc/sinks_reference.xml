@@ -8,21 +8,21 @@ The header contains implementation of asynchronous sink frontend. </para><namesp
 <class name="asynchronous_sink"><template>
       <template-type-parameter name="SinkBackendT"/>
       <template-type-parameter name="QueueingStrategyT"><default><classname alt="boost::log::sinks::unbounded_fifo_queue">unbounded_fifo_queue</classname></default></template-type-parameter>
-    </template><inherit access="public">basic_sink_frontend</inherit><purpose>Asynchronous logging sink frontend. </purpose><description><para>The frontend starts a separate thread on construction. All logging records are passed to the backend in this dedicated thread only. </para></description><class name="scoped_flag"><purpose>A scope guard that resets a flag on destructor. </purpose><method-group name="public member functions">
+    </template><inherit access="public">basic_sink_frontend</inherit><inherit access="public">QueueingStrategyT</inherit><purpose>Asynchronous logging sink frontend. </purpose><description><para>The frontend starts a separate thread on construction. All logging records are passed to the backend in this dedicated thread only. </para></description><class name="scoped_flag"><purpose>A scope guard that resets a flag on destructor. </purpose><method-group name="public member functions">
 </method-group>
 <constructor specifiers="explicit"><parameter name="mut"><paramtype>frontend_mutex_type &amp;</paramtype></parameter><parameter name="cond"><paramtype>condition_variable_any &amp;</paramtype></parameter><parameter name="f"><paramtype>boost::atomic&lt; bool &gt; &amp;</paramtype></parameter></constructor>
 <destructor/>
-<constructor><parameter name=""><paramtype>scoped_flag const &amp;</paramtype></parameter></constructor>
-<copy-assignment><type>scoped_flag &amp;</type><parameter name=""><paramtype>scoped_flag const &amp;</paramtype></parameter></copy-assignment>
+<constructor cv="= delete"><parameter name=""><paramtype>scoped_flag const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type>scoped_flag &amp;</type><parameter name=""><paramtype>scoped_flag const &amp;</paramtype></parameter></copy-assignment>
 </class><class name="scoped_thread_id"><purpose>A scope guard that implements thread ID management. </purpose><method-group name="public member functions">
 </method-group>
 <constructor><parameter name="mut"><paramtype>frontend_mutex_type &amp;</paramtype></parameter><parameter name="cond"><paramtype>condition_variable_any &amp;</paramtype></parameter><parameter name="tid"><paramtype>thread::id &amp;</paramtype></parameter><parameter name="sr"><paramtype>boost::atomic&lt; bool &gt; &amp;</paramtype></parameter><purpose>Initializing constructor. </purpose></constructor>
 <constructor><parameter name="l"><paramtype>unique_lock&lt; frontend_mutex_type &gt; &amp;</paramtype></parameter><parameter name="cond"><paramtype>condition_variable_any &amp;</paramtype></parameter><parameter name="tid"><paramtype>thread::id &amp;</paramtype></parameter><parameter name="sr"><paramtype>boost::atomic&lt; bool &gt; &amp;</paramtype></parameter><purpose>Initializing constructor. </purpose></constructor>
 <destructor><purpose>Destructor. </purpose></destructor>
-<constructor><parameter name=""><paramtype>scoped_thread_id const &amp;</paramtype></parameter></constructor>
-<copy-assignment><type>scoped_thread_id &amp;</type><parameter name=""><paramtype>scoped_thread_id const &amp;</paramtype></parameter></copy-assignment>
+<constructor cv="= delete"><parameter name=""><paramtype>scoped_thread_id const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type>scoped_thread_id &amp;</type><parameter name=""><paramtype>scoped_thread_id const &amp;</paramtype></parameter></copy-assignment>
 </class><typedef name="sink_backend_type"><purpose>Sink implementation type. </purpose><type>SinkBackendT</type></typedef>
-<typedef name="locked_backend_ptr"><description><para>A pointer type that locks the backend until it's destroyed </para></description><type>implementation_defined</type></typedef>
+<typedef name="locked_backend_ptr"><purpose>A pointer type that locks the backend until it's destroyed. </purpose><type>implementation_defined</type></typedef>
 <method-group name="public member functions">
 <method name="locked_backend"><type>locked_backend_ptr</type><description><para>Locking accessor to the attached backend </para></description></method>
 <method name="consume" specifiers="virtual"><type>void</type><parameter name="rec"><paramtype>record_view const &amp;</paramtype></parameter><description><para>Enqueues the log record to the backend </para></description></method>
@@ -44,6 +44,12 @@ The header contains implementation of asynchronous sink frontend. </para><namesp
 <constructor specifiers="explicit"><parameter name="backend"><paramtype>shared_ptr&lt; sink_backend_type &gt; const &amp;</paramtype><description><para>Pointer to the backend instance. </para></description></parameter><parameter name="start_thread"><paramtype>bool</paramtype><default>true</default><description><para>If <computeroutput>true</computeroutput>, the frontend creates a thread to feed log records to the backend. Otherwise no thread is started and it is assumed that the user will call either <computeroutput>run</computeroutput> or <computeroutput>feed_records</computeroutput> himself.</para></description></parameter><description><para>Constructor attaches user-constructed backend instance</para><para>
 
 </para></description><requires><para><emphasis>backend</emphasis> is not <computeroutput>NULL</computeroutput>. </para></requires></constructor>
+<constructor specifiers="explicit"><template>
+          <template-nontype-parameter name="Args"><type>typename...</type></template-nontype-parameter>
+        </template><parameter name="args"><paramtype>Args &amp;&amp;...</paramtype></parameter><description><para>Constructor that passes arbitrary named parameters to the interprocess sink backend constructor. Refer to the backend documentation for the list of supported parameters.</para><para>The frontend uses the following named parameters:</para><para><itemizedlist>
+<listitem><para>start_thread - If <computeroutput>true</computeroutput>, the frontend creates a thread to feed log records to the backend. Otherwise no thread is started and it is assumed that the user will call either <computeroutput>run</computeroutput> or <computeroutput>feed_records</computeroutput> himself. </para></listitem>
+</itemizedlist>
+</para></description></constructor>
 <destructor><description><para>Destructor. Implicitly stops the dedicated feeding thread, if one is running. </para></description></destructor>
 </class></namespace>
 </namespace>
@@ -102,9 +108,9 @@ The header contains implementation of base classes for sink backends. </para><na
     </template><purpose>Base class for a logging sink backend. </purpose><description><para>The <computeroutput><classname alt="boost::log::sinks::basic_sink_backend">basic_sink_backend</classname></computeroutput> class template defines a number of types that all sink backends are required to define. All sink backends have to derive from the class. </para></description><typedef name="frontend_requirements"><purpose>Frontend requirements tag. </purpose><type>FrontendRequirementsT</type></typedef>
 <method-group name="public member functions">
 </method-group>
-<constructor/>
-<constructor><parameter name=""><paramtype><classname>basic_sink_backend</classname> const &amp;</paramtype></parameter></constructor>
-<copy-assignment><type><classname>basic_sink_backend</classname> &amp;</type><parameter name=""><paramtype><classname>basic_sink_backend</classname> const &amp;</paramtype></parameter></copy-assignment>
+<constructor cv="= default"/>
+<constructor cv="= delete"><parameter name=""><paramtype><classname>basic_sink_backend</classname> const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type><classname>basic_sink_backend</classname> &amp;</type><parameter name=""><paramtype><classname>basic_sink_backend</classname> const &amp;</paramtype></parameter></copy-assignment>
 </struct><struct name="basic_formatted_sink_backend"><template>
       <template-type-parameter name="CharT"/>
       <template-type-parameter name="FrontendRequirementsT"><default><classname alt="boost::log::sinks::synchronized_feeding">synchronized_feeding</classname></default></template-type-parameter>
@@ -165,7 +171,13 @@ The header contains implementation of a base class for sink frontends. </para><n
 </method-group>
 </class><class name="basic_formatting_sink_frontend"><template>
       <template-type-parameter name="CharT"/>
-    </template><inherit access="public">basic_sink_frontend</inherit><purpose>A base class for a logging sink frontend with formatting support. </purpose><struct name="formatting_context"><data-member name="m_Version"><type>const unsigned int</type><purpose>Object version. </purpose></data-member>
+    </template><inherit access="public">basic_sink_frontend</inherit><purpose>A base class for a logging sink frontend with formatting support. </purpose><struct name="formatting_context"><class name="cleanup_guard"><method-group name="public member functions">
+</method-group>
+<constructor specifiers="explicit" cv="noexcept"><parameter name="ctx"><paramtype>formatting_context &amp;</paramtype></parameter></constructor>
+<destructor/>
+<constructor cv="= delete"><parameter name=""><paramtype>cleanup_guard const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type>cleanup_guard &amp;</type><parameter name=""><paramtype>cleanup_guard const &amp;</paramtype></parameter></copy-assignment>
+</class><data-member name="m_Version"><type>const unsigned int</type><purpose>Object version. </purpose></data-member>
 <data-member name="m_FormattedRecord"><type>string_type</type><purpose>Formatted log record storage. </purpose></data-member>
 <data-member name="m_FormattingStream"><type>stream_type</type><purpose>Formatting stream. </purpose></data-member>
 <data-member name="m_Formatter"><type>formatter_type</type><purpose>Formatter functor. </purpose></data-member>
@@ -221,7 +233,7 @@ The header contains implementation of bounded FIFO queueing strategy for the asy
 <class name="bounded_fifo_queue"><template>
       <template-nontype-parameter name="MaxQueueSizeV"><type>std::size_t</type></template-nontype-parameter>
       <template-type-parameter name="OverflowStrategyT"/>
-    </template><purpose>Bounded FIFO log record queueing strategy. </purpose><description><para>The <computeroutput><classname alt="boost::log::sinks::bounded_fifo_queue">bounded_fifo_queue</classname></computeroutput> class is intended to be used with the <computeroutput><classname alt="boost::log::sinks::asynchronous_sink">asynchronous_sink</classname></computeroutput> frontend as a log record queueing strategy.</para><para>This strategy describes log record queueing logic. The queue has a limited capacity, upon reaching which the enqueue operation will invoke the overflow handling strategy specified in the <computeroutput>OverflowStrategyT</computeroutput> template parameter to handle the situation. The library provides overflow handling strategies for most common cases: <computeroutput><classname alt="boost::log::sinks::drop_on_overflow">drop_on_overflow</classname></computeroutput> will silently discard the log record, and <computeroutput><classname alt="boost::log::sinks::block_on_overflow">block_on_overflow</classname></computeroutput> will put the enqueueing thread to wait until there is space in the queue.</para><para>The log record queue imposes no ordering over the queued elements aside from the order in which they are enqueued. </para></description><method-group name="protected member functions">
+    </template><inherit access="private">OverflowStrategyT</inherit><purpose>Bounded FIFO log record queueing strategy. </purpose><description><para>The <computeroutput><classname alt="boost::log::sinks::bounded_fifo_queue">bounded_fifo_queue</classname></computeroutput> class is intended to be used with the <computeroutput><classname alt="boost::log::sinks::asynchronous_sink">asynchronous_sink</classname></computeroutput> frontend as a log record queueing strategy.</para><para>This strategy describes log record queueing logic. The queue has a limited capacity, upon reaching which the enqueue operation will invoke the overflow handling strategy specified in the <computeroutput>OverflowStrategyT</computeroutput> template parameter to handle the situation. The library provides overflow handling strategies for most common cases: <computeroutput><classname alt="boost::log::sinks::drop_on_overflow">drop_on_overflow</classname></computeroutput> will silently discard the log record, and <computeroutput><classname alt="boost::log::sinks::block_on_overflow">block_on_overflow</classname></computeroutput> will put the enqueueing thread to wait until there is space in the queue.</para><para>The log record queue imposes no ordering over the queued elements aside from the order in which they are enqueued. </para></description><method-group name="protected member functions">
 <method name="enqueue"><type>void</type><parameter name="rec"><paramtype>record_view const &amp;</paramtype></parameter><purpose>Enqueues log record to the queue. </purpose></method>
 <method name="try_enqueue"><type>bool</type><parameter name="rec"><paramtype>record_view const &amp;</paramtype></parameter><purpose>Attempts to enqueue log record to the queue. </purpose></method>
 <method name="try_dequeue_ready"><type>bool</type><parameter name="rec"><paramtype>record_view &amp;</paramtype></parameter><purpose>Attempts to dequeue a log record ready for processing from the queue, does not block if the queue is empty. </purpose></method>
@@ -247,7 +259,7 @@ The header contains implementation of bounded ordering queueing strategy for the
       <template-type-parameter name="OrderT"/>
       <template-nontype-parameter name="MaxQueueSizeV"><type>std::size_t</type></template-nontype-parameter>
       <template-type-parameter name="OverflowStrategyT"/>
-    </template><purpose>Bounded ordering log record queueing strategy. </purpose><description><para>The <computeroutput><classname alt="boost::log::sinks::bounded_ordering_queue">bounded_ordering_queue</classname></computeroutput> class is intended to be used with the <computeroutput><classname alt="boost::log::sinks::asynchronous_sink">asynchronous_sink</classname></computeroutput> frontend as a log record queueing strategy.</para><para>This strategy provides the following properties to the record queueing mechanism:</para><para><itemizedlist>
+    </template><inherit access="private">OverflowStrategyT</inherit><purpose>Bounded ordering log record queueing strategy. </purpose><description><para>The <computeroutput><classname alt="boost::log::sinks::bounded_ordering_queue">bounded_ordering_queue</classname></computeroutput> class is intended to be used with the <computeroutput><classname alt="boost::log::sinks::asynchronous_sink">asynchronous_sink</classname></computeroutput> frontend as a log record queueing strategy.</para><para>This strategy provides the following properties to the record queueing mechanism:</para><para><itemizedlist>
 <listitem><para>The queue has limited capacity specified by the <computeroutput>MaxQueueSizeV</computeroutput> template parameter. </para></listitem>
 <listitem><para>Upon reaching the size limit, the queue invokes the overflow handling strategy specified in the <computeroutput>OverflowStrategyT</computeroutput> template parameter to handle the situation. The library provides overflow handling strategies for most common cases: <computeroutput><classname alt="boost::log::sinks::drop_on_overflow">drop_on_overflow</classname></computeroutput> will silently discard the log record, and <computeroutput><classname alt="boost::log::sinks::block_on_overflow">block_on_overflow</classname></computeroutput> will put the enqueueing thread to wait until there is space in the queue. </para></listitem>
 <listitem><para>The queue has a fixed latency window. This means that each log record put into the queue will normally not be dequeued for a certain period of time. </para></listitem>
@@ -424,10 +436,10 @@ The header contains a logging sink backend that uses Windows NT event log API fo
 <listitem><para>Event identifier extraction logic. One can use <computeroutput>basic_direct_event_id_mapping</computeroutput> or <computeroutput>basic_custom_event_id_mapping</computeroutput> classes in order to create such extractor and pass it to the composer constructor. </para></listitem>
 <listitem><para>Event identifiers and insertion string formatters. The composer provides the following syntax to provide this information:</para></listitem>
 </itemizedlist>
-<programlisting language="c++">     event_composer comp;
-     comp[MY_EVENT_ID1] % formatter1 % ... % formatterN;
-     comp[MY_EVENT_ID2] % formatter1 % ... % formatterN;
-     ...
+<programlisting language="c++">event_composer comp;
+comp[MY_EVENT_ID1] % formatter1 % ... % formatterN;
+comp[MY_EVENT_ID2] % formatter1 % ... % formatterN;
+...
 </programlisting></para><para>The event identifiers in square brackets are provided by the message compiler generated header (the actual names are specified in the .mc file). The formatters represent the insertion strings that will be used to replace placeholders in event messages, thus the number and the order of the formatters must correspond to the message definition. </para></description><typedef name="char_type"><purpose>Character type. </purpose><type>CharT</type></typedef>
 <typedef name="string_type"><purpose>String type to be used as a message text holder. </purpose><type>std::basic_string&lt; char_type &gt;</type></typedef>
 <typedef name="event_id_mapper_type"><purpose>Event identifier mapper type. </purpose><type><emphasis>unspecified</emphasis></type></typedef>
@@ -470,7 +482,7 @@ The header contains definition of constants related to Windows NT Event Log API.
 <namespace name="log">
 <namespace name="sinks">
 <namespace name="event_log">
-<enum name="event_type"><enumvalue name="success"><default> 0</default><purpose>Equivalent to EVENTLOG_SUCCESS. </purpose></enumvalue><enumvalue name="info"><default> 4</default><purpose>Equivalent to EVENTLOG_INFORMATION_TYPE. </purpose></enumvalue><enumvalue name="warning"><default> 2</default><purpose>Equivalent to EVENTLOG_WARNING_TYPE. </purpose></enumvalue><enumvalue name="error"><default> 1</default><purpose>Equivalent to EVENTLOG_ERROR_TYPE. </purpose></enumvalue><purpose>Windows event types. </purpose></enum>
+<enum name="event_type"><enumvalue name="success"><default>= 0</default><purpose>Equivalent to EVENTLOG_SUCCESS. </purpose></enumvalue><enumvalue name="info"><default>= 4</default><purpose>Equivalent to EVENTLOG_INFORMATION_TYPE. </purpose></enumvalue><enumvalue name="warning"><default>= 2</default><purpose>Equivalent to EVENTLOG_WARNING_TYPE. </purpose></enumvalue><enumvalue name="error"><default>= 1</default><purpose>Equivalent to EVENTLOG_ERROR_TYPE. </purpose></enumvalue><purpose>Windows event types. </purpose></enum>
 <typedef name="event_id"><purpose>A tagged integral type that represents event identifier for the Windows API. </purpose><type><emphasis>unspecified</emphasis></type></typedef>
 <typedef name="event_category"><purpose>A tagged integral type that represents event category for the Windows API. </purpose><type><emphasis>unspecified</emphasis></type></typedef>
 <function name="make_event_id"><type>event_id</type><parameter name="id"><paramtype>unsigned int</paramtype></parameter><description><para>The function constructs event identifier from an integer </para></description></function>
@@ -487,10 +499,12 @@ The header contains definition of constants related to Windows NT Event Log API.
 The header contains definition of requirement tags that sink backend may declare with regard to frontends. These requirements ensure that a backend will not be used with an incompatible frontend. </para><namespace name="boost">
 <namespace name="log">
 <namespace name="sinks">
-<struct name="synchronized_feeding"><description><para>The sink backend expects pre-synchronized calls, all needed synchronization is implemented in the frontend (IOW, only one thread is feeding records to the backend concurrently, but it is possible for several threads to write sequentially). Note that if a frontend supports synchronized record feeding, it will also report capable of concurrent record feeding. </para></description></struct><struct name="concurrent_feeding"><inherit access="public">synchronized_feeding</inherit><description><para>The sink backend ensures all needed synchronization, it is capable to handle multithreaded calls </para></description></struct><struct name="formatted_records"><description><para>The sink backend requires the frontend to perform log record formatting before feeding </para></description></struct><struct name="flushing"><description><para>The sink backend supports flushing </para></description></struct><struct name="has_requirement"><template>
+<struct name="synchronized_feeding"><description><para>The sink backend expects pre-synchronized calls, all needed synchronization is implemented in the frontend (IOW, only one thread is feeding records to the backend concurrently, but it is possible for several threads to write sequentially). Note that if a frontend supports synchronized record feeding, it will also report capable of concurrent record feeding. </para></description></struct><struct name="concurrent_feeding"><inherit access="public">synchronized_feeding</inherit><description><para>The sink backend ensures all needed synchronization, it is capable to handle multithreaded calls </para></description></struct><struct name="formatted_records"><description><para>The sink backend requires the frontend to perform log record formatting before feeding </para></description></struct><struct name="flushing"><description><para>The sink backend supports flushing </para></description></struct><struct name="combine_requirements"><template>
+      <template-nontype-parameter name="RequirementsT"><type>typename...</type></template-nontype-parameter>
+    </template><description><para>The metafunction combines multiple requirement tags into one type. The resulting type will satisfy all specified requirements (i.e. <computeroutput><classname alt="boost::log::sinks::has_requirement">has_requirement</classname></computeroutput> metafunction will return positive result). </para></description></struct><struct name="has_requirement"><template>
       <template-type-parameter name="TestedT"/>
       <template-type-parameter name="RequiredT"/>
-    </template><description><para>A helper metafunction to check if a requirement is satisfied. The <computeroutput>TestedT</computeroutput> template argument should be the type combining one or several requirements and <computeroutput>RequiredT</computeroutput> is the requirement to test against. The metafunction will yield a positive result if <computeroutput>TestedT</computeroutput> supports <computeroutput>RequiredT</computeroutput>. </para></description></struct></namespace>
+    </template><inherit access="public">is_base_of&lt; RequiredT, TestedT &gt;</inherit><description><para>A helper metafunction to check if a requirement is satisfied. The <computeroutput>TestedT</computeroutput> template argument should be the type combining one or several requirements and <computeroutput>RequiredT</computeroutput> is the requirement to test against. The metafunction will yield a positive result if <computeroutput>TestedT</computeroutput> supports <computeroutput>RequiredT</computeroutput>. </para></description></struct></namespace>
 </namespace>
 </namespace>
 <macro name="BOOST_LOG_COMBINE_REQUIREMENTS_LIMIT"><purpose>The macro specifies the maximum number of requirements that can be combined with the <computeroutput>combine_requirements</computeroutput> metafunction. </purpose></macro>
@@ -515,8 +529,8 @@ The header contains an interface declaration for all sinks. This interface is us
 </method-group>
 <constructor specifiers="explicit"><parameter name="cross_thread"><paramtype>bool</paramtype></parameter><description><para>Default constructor </para></description></constructor>
 <destructor><description><para>Virtual destructor </para></description></destructor>
-<constructor><parameter name=""><paramtype><classname>sink</classname> const &amp;</paramtype></parameter></constructor>
-<copy-assignment><type><classname>sink</classname> &amp;</type><parameter name=""><paramtype><classname>sink</classname> const &amp;</paramtype></parameter></copy-assignment>
+<constructor cv="= delete"><parameter name=""><paramtype><classname>sink</classname> const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type><classname>sink</classname> &amp;</type><parameter name=""><paramtype><classname>sink</classname> const &amp;</paramtype></parameter></copy-assignment>
 </class></namespace>
 </namespace>
 </namespace>
@@ -530,7 +544,7 @@ The header contains implementation of synchronous sink frontend. </para><namespa
 <class name="synchronous_sink"><template>
       <template-type-parameter name="SinkBackendT"/>
     </template><inherit access="public">basic_sink_frontend</inherit><purpose>Synchronous logging sink frontend. </purpose><description><para>The sink frontend serializes threads before passing logging records to the backend </para></description><typedef name="sink_backend_type"><purpose>Sink implementation type. </purpose><type>SinkBackendT</type></typedef>
-<typedef name="locked_backend_ptr"><description><para>A pointer type that locks the backend until it's destroyed </para></description><type>implementation_defined</type></typedef>
+<typedef name="locked_backend_ptr"><purpose>A pointer type that locks the backend until it's destroyed. </purpose><type>implementation_defined</type></typedef>
 <method-group name="public member functions">
 <method name="locked_backend"><type>locked_backend_ptr</type><description><para>Locking accessor to the attached backend </para></description></method>
 <method name="consume" specifiers="virtual"><type>void</type><parameter name="rec"><paramtype>record_view const &amp;</paramtype></parameter><description><para>Passes the log record to the backend </para></description></method>
@@ -541,6 +555,9 @@ The header contains implementation of synchronous sink frontend. </para><namespa
 <constructor specifiers="explicit"><parameter name="backend"><paramtype>shared_ptr&lt; sink_backend_type &gt; const &amp;</paramtype><description><para>Pointer to the backend instance</para></description></parameter><description><para>Constructor attaches user-constructed backend instance</para><para>
 
 </para></description><requires><para><emphasis>backend</emphasis> is not <computeroutput>NULL</computeroutput>. </para></requires></constructor>
+<constructor specifiers="explicit"><template>
+          <template-nontype-parameter name="Args"><type>typename...</type></template-nontype-parameter>
+        </template><parameter name="args"><paramtype>Args &amp;&amp;...</paramtype></parameter><description><para>Constructor that passes arbitrary named parameters to the interprocess sink backend constructor. Refer to the backend documentation for the list of supported parameters. </para></description></constructor>
 </class></namespace>
 </namespace>
 </namespace>
@@ -596,7 +613,7 @@ The header contains implementation of a Syslog sink backend along with its setup
 </method-group>
 <constructor specifiers="explicit"><parameter name="name"><paramtype>attribute_name const &amp;</paramtype><description><para>Attribute name </para></description></parameter><description><para>Constructor</para><para>
 </para></description></constructor>
-</class><enum name="impl_types"><enumvalue name="native"><default> 0</default><purpose>Use native syslog API. </purpose></enumvalue><enumvalue name="udp_socket_based"><default> 1</default><purpose>Use UDP sockets, according to RFC3164. </purpose></enumvalue><purpose>The enumeration defined the possible implementation types for the syslog backend. </purpose></enum>
+</class><enum name="impl_types"><enumvalue name="native"><default>= 0</default><purpose>Use native syslog API. </purpose></enumvalue><enumvalue name="udp_socket_based"><default>= 1</default><purpose>Use UDP sockets, according to RFC3164. </purpose></enumvalue><purpose>The enumeration defined the possible implementation types for the syslog backend. </purpose></enum>
 
 
 </namespace>
@@ -612,8 +629,8 @@ The header contains definition of constants related to Syslog API. The constants
 <namespace name="log">
 <namespace name="sinks">
 <namespace name="syslog">
-<enum name="level"><enumvalue name="emergency"><default> 0</default><purpose>Equivalent to LOG_EMERG in syslog API. </purpose></enumvalue><enumvalue name="alert"><default> 1</default><purpose>Equivalent to LOG_ALERT in syslog API. </purpose></enumvalue><enumvalue name="critical"><default> 2</default><purpose>Equivalent to LOG_CRIT in syslog API. </purpose></enumvalue><enumvalue name="error"><default> 3</default><purpose>Equivalent to LOG_ERROR in syslog API. </purpose></enumvalue><enumvalue name="warning"><default> 4</default><purpose>Equivalent to LOG_WARNING in syslog API. </purpose></enumvalue><enumvalue name="notice"><default> 5</default><purpose>Equivalent to LOG_NOTICE in syslog API. </purpose></enumvalue><enumvalue name="info"><default> 6</default><purpose>Equivalent to LOG_INFO in syslog API. </purpose></enumvalue><enumvalue name="debug"><default> 7</default><purpose>Equivalent to LOG_DEBUG in syslog API. </purpose></enumvalue><purpose>Syslog record levels. </purpose></enum>
-<enum name="facility"><enumvalue name="kernel"><default> 0 * 8</default><purpose>Kernel messages. </purpose></enumvalue><enumvalue name="user"><default> 1 * 8</default><purpose>User-level messages. Equivalent to LOG_USER in syslog API. </purpose></enumvalue><enumvalue name="mail"><default> 2 * 8</default><purpose>Mail system messages. Equivalent to LOG_MAIL in syslog API. </purpose></enumvalue><enumvalue name="daemon"><default> 3 * 8</default><purpose>System daemons. Equivalent to LOG_DAEMON in syslog API. </purpose></enumvalue><enumvalue name="security0"><default> 4 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="syslogd"><default> 5 * 8</default><purpose>Messages from the syslogd daemon. Equivalent to LOG_SYSLOG in syslog API. </purpose></enumvalue><enumvalue name="printer"><default> 6 * 8</default><purpose>Line printer subsystem. Equivalent to LOG_LPR in syslog API. </purpose></enumvalue><enumvalue name="news"><default> 7 * 8</default><purpose>Network news subsystem. Equivalent to LOG_NEWS in syslog API. </purpose></enumvalue><enumvalue name="uucp"><default> 8 * 8</default><purpose>Messages from UUCP subsystem. Equivalent to LOG_UUCP in syslog API. </purpose></enumvalue><enumvalue name="clock0"><default> 9 * 8</default><purpose>Messages from the clock daemon. </purpose></enumvalue><enumvalue name="security1"><default> 10 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="ftp"><default> 11 * 8</default><purpose>Messages from FTP daemon. </purpose></enumvalue><enumvalue name="ntp"><default> 12 * 8</default><purpose>Messages from NTP daemon. </purpose></enumvalue><enumvalue name="log_audit"><default> 13 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="log_alert"><default> 14 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="clock1"><default> 15 * 8</default><purpose>Messages from the clock daemon. </purpose></enumvalue><enumvalue name="local0"><default> 16 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL0 in syslog API. </purpose></enumvalue><enumvalue name="local1"><default> 17 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL1 in syslog API. </purpose></enumvalue><enumvalue name="local2"><default> 18 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL2 in syslog API. </purpose></enumvalue><enumvalue name="local3"><default> 19 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL3 in syslog API. </purpose></enumvalue><enumvalue name="local4"><default> 20 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL4 in syslog API. </purpose></enumvalue><enumvalue name="local5"><default> 21 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL5 in syslog API. </purpose></enumvalue><enumvalue name="local6"><default> 22 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL6 in syslog API. </purpose></enumvalue><enumvalue name="local7"><default> 23 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL7 in syslog API. </purpose></enumvalue><purpose>Syslog facility codes. </purpose></enum>
+<enum name="level"><enumvalue name="emergency"><default>= 0</default><purpose>Equivalent to LOG_EMERG in syslog API. </purpose></enumvalue><enumvalue name="alert"><default>= 1</default><purpose>Equivalent to LOG_ALERT in syslog API. </purpose></enumvalue><enumvalue name="critical"><default>= 2</default><purpose>Equivalent to LOG_CRIT in syslog API. </purpose></enumvalue><enumvalue name="error"><default>= 3</default><purpose>Equivalent to LOG_ERROR in syslog API. </purpose></enumvalue><enumvalue name="warning"><default>= 4</default><purpose>Equivalent to LOG_WARNING in syslog API. </purpose></enumvalue><enumvalue name="notice"><default>= 5</default><purpose>Equivalent to LOG_NOTICE in syslog API. </purpose></enumvalue><enumvalue name="info"><default>= 6</default><purpose>Equivalent to LOG_INFO in syslog API. </purpose></enumvalue><enumvalue name="debug"><default>= 7</default><purpose>Equivalent to LOG_DEBUG in syslog API. </purpose></enumvalue><purpose>Syslog record levels. </purpose></enum>
+<enum name="facility"><enumvalue name="kernel"><default>= 0 * 8</default><purpose>Kernel messages. </purpose></enumvalue><enumvalue name="user"><default>= 1 * 8</default><purpose>User-level messages. Equivalent to LOG_USER in syslog API. </purpose></enumvalue><enumvalue name="mail"><default>= 2 * 8</default><purpose>Mail system messages. Equivalent to LOG_MAIL in syslog API. </purpose></enumvalue><enumvalue name="daemon"><default>= 3 * 8</default><purpose>System daemons. Equivalent to LOG_DAEMON in syslog API. </purpose></enumvalue><enumvalue name="security0"><default>= 4 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="syslogd"><default>= 5 * 8</default><purpose>Messages from the syslogd daemon. Equivalent to LOG_SYSLOG in syslog API. </purpose></enumvalue><enumvalue name="printer"><default>= 6 * 8</default><purpose>Line printer subsystem. Equivalent to LOG_LPR in syslog API. </purpose></enumvalue><enumvalue name="news"><default>= 7 * 8</default><purpose>Network news subsystem. Equivalent to LOG_NEWS in syslog API. </purpose></enumvalue><enumvalue name="uucp"><default>= 8 * 8</default><purpose>Messages from UUCP subsystem. Equivalent to LOG_UUCP in syslog API. </purpose></enumvalue><enumvalue name="clock0"><default>= 9 * 8</default><purpose>Messages from the clock daemon. </purpose></enumvalue><enumvalue name="security1"><default>= 10 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="ftp"><default>= 11 * 8</default><purpose>Messages from FTP daemon. </purpose></enumvalue><enumvalue name="ntp"><default>= 12 * 8</default><purpose>Messages from NTP daemon. </purpose></enumvalue><enumvalue name="log_audit"><default>= 13 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="log_alert"><default>= 14 * 8</default><purpose>Security/authorization messages. </purpose></enumvalue><enumvalue name="clock1"><default>= 15 * 8</default><purpose>Messages from the clock daemon. </purpose></enumvalue><enumvalue name="local0"><default>= 16 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL0 in syslog API. </purpose></enumvalue><enumvalue name="local1"><default>= 17 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL1 in syslog API. </purpose></enumvalue><enumvalue name="local2"><default>= 18 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL2 in syslog API. </purpose></enumvalue><enumvalue name="local3"><default>= 19 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL3 in syslog API. </purpose></enumvalue><enumvalue name="local4"><default>= 20 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL4 in syslog API. </purpose></enumvalue><enumvalue name="local5"><default>= 21 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL5 in syslog API. </purpose></enumvalue><enumvalue name="local6"><default>= 22 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL6 in syslog API. </purpose></enumvalue><enumvalue name="local7"><default>= 23 * 8</default><purpose>For local use. Equivalent to LOG_LOCAL7 in syslog API. </purpose></enumvalue><purpose>Syslog facility codes. </purpose></enum>
 <function name="make_level"><type>level</type><parameter name="lev"><paramtype>int</paramtype></parameter><description><para>The function constructs log record level from an integer </para></description></function>
 <function name="make_facility"><type>facility</type><parameter name="fac"><paramtype>int</paramtype></parameter><description><para>The function constructs log source facility from an integer </para></description></function>
 </namespace>
@@ -690,10 +707,10 @@ All other placeholders are not supported.</para><para>
 <note><para>In case if <emphasis>method</emphasis> is <computeroutput>scan_matching</computeroutput> the effect of this function is highly dependent on the <emphasis>pattern</emphasis> definition. It is recommended to choose patterns with easily distinguished placeholders (i.e. having delimiters between them). Otherwise either some files can be mistakenly found or not found, which in turn may lead to an incorrect file deletion. </para></note>
 </para></description><returns><para>The number of found files.</para></returns></method>
 </method-group>
-<constructor><description><para>Default constructor </para></description></constructor>
+<constructor cv="= default"><description><para>Default constructor </para></description></constructor>
 <destructor><description><para>Virtual destructor </para></description></destructor>
-<constructor><parameter name=""><paramtype><classname>collector</classname> const &amp;</paramtype></parameter></constructor>
-<copy-assignment><type><classname>collector</classname> &amp;</type><parameter name=""><paramtype><classname>collector</classname> const &amp;</paramtype></parameter></copy-assignment>
+<constructor cv="= delete"><parameter name=""><paramtype><classname>collector</classname> const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type><classname>collector</classname> &amp;</type><parameter name=""><paramtype><classname>collector</classname> const &amp;</paramtype></parameter></copy-assignment>
 </struct><class name="rotation_at_time_point"><description><para>The class represents the time point of log file rotation. One can specify one of three types of time point based rotation:</para><para><itemizedlist>
 <listitem><para>rotation takes place every day, at the specified time </para></listitem>
 <listitem><para>rotation takes place on the specified day of every week, at the specified time </para></listitem>
@@ -716,7 +733,6 @@ The time points are considered to be local time. </para></description><typedef n
 <constructor specifiers="explicit"><parameter name="interval"><paramtype>posix_time::time_duration const &amp;</paramtype><description><para>The interval of the rotation, should be no less than 1 second </para></description></parameter><description><para>Creates a rotation time interval of the specified duration</para><para>
 </para></description></constructor>
 </class><enum name="scan_method"><enumvalue name="no_scan"><purpose>Don't scan for stored files. </purpose></enumvalue><enumvalue name="scan_matching"><purpose>Scan for files with names matching the specified mask. </purpose></enumvalue><enumvalue name="scan_all"><purpose>Scan for all files in the directory. </purpose></enumvalue><purpose>The enumeration of the stored files scan methods. </purpose></enum>
-
 <function name="make_collector"><type>shared_ptr&lt; <classname>collector</classname> &gt;</type><template>
           <template-nontype-parameter name="ArgsT"><type>typename...</type></template-nontype-parameter>
         </template><parameter name="args"><paramtype>ArgsT...const &amp;</paramtype></parameter><description><para>The function creates a file collector for the specified target directory. Each target directory is managed by a single file collector, so if this function is called several times for the same directory, it will return a reference to the same file collector. It is safe to use the same collector in different sinks, even in a multithreaded application.</para><para>One can specify certain restrictions for the stored files, such as maximum total size or minimum free space left in the target directory. If any of the specified restrictions is not met, the oldest stored file is deleted. If the same collector is requested more than once with different restrictions, the collector will act according to the most strict combination of all specified restrictions.</para><para>The following named parameters are supported:</para><para><itemizedlist>
@@ -727,8 +743,38 @@ The time points are considered to be local time. </para></description><typedef n
 </itemizedlist>
 
 </para></description><returns><para>The file collector. </para></returns></function>
+
 </namespace>
 </namespace>
+</namespace>
+</namespace>
+</header>
+<header name="boost/log/sinks/text_ipc_message_queue_backend.hpp">
+<para><para>Lingxi Li </para><para>Andrey Semashev </para>
+<para>14.10.2015</para>
+The header contains implementation of a text interprocess message queue sink backend along with implementation of a supporting interprocess message queue. </para><namespace name="boost">
+<namespace name="log">
+<namespace name="sinks">
+<class name="text_ipc_message_queue_backend"><template>
+      <template-type-parameter name="QueueT"/>
+    </template><inherit access="public">basic_formatted_sink_backend&lt; char, concurrent_feeding &gt;</inherit><purpose>An implementation of a text interprocess message queue sink backend and a supporting interprocess message queue. </purpose><description><para>The sink backend sends formatted log messages to an interprocess message queue which can be extracted by a viewer process. Methods of this class are not thread-safe, unless otherwise specified. </para></description><typedef name="char_type"><purpose>Character type. </purpose><type>base_type::char_type</type></typedef>
+<typedef name="string_type"><purpose>String type to be used as a message text holder. </purpose><type>base_type::string_type</type></typedef>
+<typedef name="queue_type"><purpose>Interprocess message queue type. </purpose><type>QueueT</type></typedef>
+<method-group name="public member functions">
+<method name="message_queue" cv="noexcept"><type>queue_type &amp;</type><description><para>The method returns a reference to the managed <computeroutput>queue_type</computeroutput> object.</para><para>
+</para></description><returns><para>A reference to the managed <computeroutput>queue_type</computeroutput> object. </para></returns></method>
+<method name="message_queue" cv="const noexcept"><type>queue_type const &amp;</type><description><para>The method returns a constant reference to the managed <computeroutput>queue_type</computeroutput> object.</para><para>
+</para></description><returns><para>A constant reference to the managed <computeroutput>queue_type</computeroutput> object. </para></returns></method>
+<method name="is_open" cv="const noexcept"><type>bool</type><description><para>Tests whether the object is associated with any message queue. Only when the backend has an associated message queue, will any message be sent.</para><para>
+</para></description><returns><para><computeroutput>true</computeroutput> if the object is associated with a message queue, and <computeroutput>false</computeroutput> otherwise. </para></returns></method>
+<method name="consume"><type>void</type><parameter name=""><paramtype>record_view const &amp;</paramtype></parameter><parameter name="formatted_message"><paramtype>string_type const &amp;</paramtype></parameter><description><para>The method writes the message to the backend. Concurrent calls to this method are allowed. Therefore, the backend may be used with unlocked frontend. <computeroutput>stop_local()</computeroutput> can be used to have a blocked <computeroutput>consume()</computeroutput> call return and prevent future calls to <computeroutput>consume()</computeroutput> from blocking. </para></description></method>
+</method-group>
+<constructor cv="noexcept"><description><para>Default constructor. The method constructs the backend using the default-constructed interprocess message queue. The queue may need additional setup in order to be able to send messages. </para></description></constructor>
+<constructor specifiers="explicit" cv="noexcept"><parameter name="queue"><paramtype>queue_type &amp;&amp;</paramtype></parameter><description><para>Initializing constructor. The method constructs the backend using the provided interprocess message queue. The constructor moves from the provided queue. </para></description></constructor>
+<constructor specifiers="explicit"><template>
+          <template-nontype-parameter name="Args"><type>typename...</type></template-nontype-parameter>
+        </template><parameter name="args"><paramtype>Args &amp;&amp;...</paramtype></parameter><description><para>Constructor that passes arbitrary named parameters to the interprocess queue constructor. Refer to the queue documentation for the list of supported parameters. </para></description></constructor>
+</class></namespace>
 </namespace>
 </namespace>
 </header>
@@ -763,10 +809,11 @@ The header contains implementation of a text multi-file sink backend. </para><na
 <constructor specifiers="explicit"><parameter name="formatter"><paramtype>formatter_type const &amp;</paramtype></parameter><parameter name="loc"><paramtype>std::locale const &amp;</paramtype><default>std::locale()</default></parameter><description><para>Initializing constructor </para></description></constructor>
 <constructor><parameter name="that"><paramtype><classname>file_name_composer_adapter</classname> const &amp;</paramtype></parameter><description><para>Copy constructor </para></description></constructor>
 <copy-assignment><type><classname>file_name_composer_adapter</classname> &amp;</type><parameter name="that"><paramtype><classname>file_name_composer_adapter</classname> const &amp;</paramtype></parameter><description><para>Assignment </para></description></copy-assignment>
-</class><function name="as_file_name_composer"><type><classname>file_name_composer_adapter</classname>&lt; FormatterT &gt;</type><template>
+</class>
+<function name="as_file_name_composer"><type><classname>file_name_composer_adapter</classname>&lt; FormatterT &gt;</type><template>
           <template-type-parameter name="FormatterT"/>
-        </template><parameter name="fmt"><paramtype>FormatterT const &amp;</paramtype></parameter><parameter name="loc"><paramtype>std::locale const &amp;</paramtype><default>std::locale()</default></parameter><description><para>The function adopts a log record formatter into a file name generator </para></description></function>
-
+        </template><parameter name="fmt"><paramtype>FormatterT const &amp;</paramtype><description><para>The formatter function object to adopt </para></description></parameter><parameter name="loc"><paramtype>std::locale const &amp;</paramtype><default>std::locale()</default><description><para>The locale to use to character code conversion and formatting </para></description></parameter><description><para>The function adopts a log record formatter into a file name generator</para><para>
+</para></description></function>
 </namespace>
 </namespace>
 </namespace>
@@ -868,7 +915,7 @@ The header contains declaration of an unlocked sink frontend. </para><namespace 
 <class name="unlocked_sink"><template>
       <template-type-parameter name="SinkBackendT"/>
     </template><inherit access="public">basic_sink_frontend</inherit><purpose>Non-blocking logging sink frontend. </purpose><description><para>The sink frontend does not perform thread synchronization and simply passes logging records to the sink backend. </para></description><typedef name="sink_backend_type"><purpose>Sink implementation type. </purpose><type>SinkBackendT</type></typedef>
-<typedef name="locked_backend_ptr"><description><para>Type of pointer to the backend </para></description><type>shared_ptr&lt; sink_backend_type &gt;</type></typedef>
+<typedef name="locked_backend_ptr"><purpose>Type of pointer to the backend. </purpose><type>shared_ptr&lt; sink_backend_type &gt;</type></typedef>
 <method-group name="public member functions">
 <method name="locked_backend"><type>locked_backend_ptr</type><description><para>Locking accessor to the attached backend.</para><para><note><para>Does not do any actual locking, provided only for interface consistency with other frontends. </para></note>
 </para></description></method>
@@ -879,6 +926,9 @@ The header contains declaration of an unlocked sink frontend. </para><namespace 
 <constructor specifiers="explicit"><parameter name="backend"><paramtype>shared_ptr&lt; sink_backend_type &gt; const &amp;</paramtype><description><para>Pointer to the backend instance</para></description></parameter><description><para>Constructor attaches user-constructed backend instance</para><para>
 
 </para></description><requires><para><emphasis>backend</emphasis> is not <computeroutput>NULL</computeroutput>. </para></requires></constructor>
+<constructor specifiers="explicit"><template>
+          <template-nontype-parameter name="Args"><type>typename...</type></template-nontype-parameter>
+        </template><parameter name="args"><paramtype>Args &amp;&amp;...</paramtype></parameter><description><para>Constructor that passes arbitrary named parameters to the interprocess sink backend constructor. Refer to the backend documentation for the list of supported parameters. </para></description></constructor>
 </class></namespace>
 </namespace>
 </namespace>

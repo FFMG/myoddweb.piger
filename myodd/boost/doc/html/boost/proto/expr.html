@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Struct template expr</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="../../proto/reference.html#header.boost.proto.expr_hpp" title="Header &lt;boost/proto/expr.hpp&gt;">
 <link rel="prev" href="basic_expr.html" title="Struct template basic_expr">
@@ -51,29 +51,29 @@
     <span class="keyword">typedef</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr/result.html#boost.proto.expr.result.type"><span class="identifier">type</span></a><span class="special">;</span>
   <span class="special">}</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="expr.html#idp304253072-bb">public static functions</a></span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <span class="keyword">static</span> <span class="identifier">expr</span> <span class="keyword">const</span> <a class="link" href="expr.html#idp304253952-bb"><span class="identifier">make</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="expr.html#idm45443357478224-bb">public static functions</a></span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <span class="keyword">static</span> <span class="identifier">expr</span> <span class="keyword">const</span> <a class="link" href="expr.html#idm45443357477344-bb"><span class="identifier">make</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="expr.html#idp304261056-bb">public member functions</a></span>
-  <span class="identifier">expr</span> <span class="special">&amp;</span> <a class="link" href="expr.html#idp304261616-bb"><span class="identifier">proto_base</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="identifier">expr</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="expr.html#idp304263488-bb"><span class="identifier">proto_base</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304266272-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304271600-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304276144-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304280960-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304286096-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304291424-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304295968-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304300784-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304305920-bb"><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idp304311776-bb"><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="expr.html#idm45443357470240-bb">public member functions</a></span>
+  <span class="identifier">expr</span> <span class="special">&amp;</span> <a class="link" href="expr.html#idm45443357469680-bb"><span class="identifier">proto_base</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">expr</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a class="link" href="expr.html#idm45443357467808-bb"><span class="identifier">proto_base</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357465024-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357459696-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357455152-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357450336-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357445200-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357439872-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357435328-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357430512-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357425376-bb"><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a class="link" href="expr.html#idm45443357419520-bb"><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span></a><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
   <span class="comment">// public data members</span>
   <span class="identifier">proto_child</span><em class="replaceable"><code><span class="identifier">N</span></code></em> <span class="identifier">childN</span><span class="special">;</span>  <span class="comment">// For each <em class="replaceable"><code>N</code></em> in <em class="replaceable"><code>[0,max(Arity,1))</code></em>.</span>
   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">long</span> <span class="identifier">proto_arity_c</span><span class="special">;</span>  <span class="comment">// <code class="computeroutput">= Arity;</code></span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp393346960"></a><h2>Description</h2>
+<a name="idm45946401479120"></a><h2>Description</h2>
 <p>
             <code class="computeroutput">proto::expr&lt;&gt;</code> is a node in an expression
             template tree. It is a container for its child sub-trees. It also serves as the
@@ -108,12 +108,15 @@
             expressions.
           </p>
 <div class="refsect2">
-<a name="idp393364256"></a><h3>
-<a name="idp304253072-bb"></a><code class="computeroutput">expr</code> public static functions</h3>
+<a name="idm45946401461824"></a><h3>
+<a name="idm45443357478224-bb"></a><code class="computeroutput">expr</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <span class="keyword">static</span> <span class="identifier">expr</span> <span class="keyword">const</span> <a name="idp304253952-bb"></a><span class="identifier">make</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span> a<span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <span class="keyword">static</span> <span class="identifier">expr</span> <span class="keyword">const</span> <a name="idm45443357477344-bb"></a><span class="identifier">make</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span> a<span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Requires:</span></p></td>
@@ -132,13 +135,16 @@
 </li></ol></div>
 </div>
 <div class="refsect2">
-<a name="idp393381472"></a><h3>
-<a name="idp304261056-bb"></a><code class="computeroutput">expr</code> public member functions</h3>
+<a name="idm45946401444608"></a><h3>
+<a name="idm45443357470240-bb"></a><code class="computeroutput">expr</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">expr</span> <span class="special">&amp;</span> <a name="idp304261616-bb"></a><span class="identifier">proto_base</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<div class="variablelist"><table border="0">
+<pre class="literallayout"><span class="identifier">expr</span> <span class="special">&amp;</span> <a name="idm45443357469680-bb"></a><span class="identifier">proto_base</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><p><code class="computeroutput">*this</code></p></td>
@@ -146,15 +152,18 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">expr</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="idp304263488-bb"></a><span class="identifier">proto_base</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">expr</span> <span class="keyword">const</span> <span class="special">&amp;</span> <a name="idm45443357467808-bb"></a><span class="identifier">proto_base</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from
               the above function only in what argument(s) it accepts.</p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304266272-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357465024-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
 <p>Lazy assignment expression</p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><p>A new expression node representing the assignment operation.</p></td>
@@ -162,31 +171,34 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304271600-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357459696-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
 <p>
                 This is an overloaded member function, provided for convenience. It differs from
                 the above function only in what argument(s) it accepts.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304276144-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357455152-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 This is an overloaded member function, provided for convenience. It differs from
                 the above function only in what argument(s) it accepts.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304280960-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357450336-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 This is an overloaded member function, provided for convenience. It differs from
                 the above function only in what argument(s) it accepts.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304286096-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357445200-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
 <p>Lazy subscript expression</p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><p>A new expression node representing the subscript operation.</p></td>
@@ -194,31 +206,34 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304291424-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357439872-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span><span class="special">;</span></pre>
 <p>
                 This is an overloaded member function, provided for convenience. It differs from
                 the above function only in what argument(s) it accepts.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304295968-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357435328-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 This is an overloaded member function, provided for convenience. It differs from
                 the above function only in what argument(s) it accepts.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304300784-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357430512-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 This is an overloaded member function, provided for convenience. It differs from
                 the above function only in what argument(s) it accepts.
               </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304305920-bb"></a><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span> a<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357425376-bb"></a><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span> a<span class="special">)</span><span class="special">;</span></pre>
 <p>Lazy function call</p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><p>A new expression node representing the function call operation.</p></td>
@@ -226,7 +241,7 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idp304311776-bb"></a><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">...</span> A<span class="special">&gt;</span> <em class="replaceable"><code><span class="identifier">unspecified</span></code></em> <a name="idm45443357419520-bb"></a><span class="keyword">operator</span><span class="special">(</span><span class="special">)</span><span class="special">(</span><span class="identifier">A</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">...</span> a<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>
                 This is an overloaded member function, provided for convenience. It differs from
                 the above function only in what argument(s) it accepts.

@@ -47,6 +47,7 @@ boost_multiprecision/tut/limits/functions.html
 boost_multiprecision/tut/limits/limits32.html
 boost_multiprecision/tut/limits/how_to_tell.html
 boost_multiprecision/tut/input_output.html
+boost_multiprecision/tut/hash.html
 boost_multiprecision/ref.html
 boost_multiprecision/ref/number.html
 boost_multiprecision/ref/cpp_int_ref.html

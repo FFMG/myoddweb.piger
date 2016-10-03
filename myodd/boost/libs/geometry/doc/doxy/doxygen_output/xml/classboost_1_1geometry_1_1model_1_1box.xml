@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1model_1_1box" kind="class" prot="public">
     <compoundname>boost::geometry::model::box</compoundname>
     <includes local="no">box.hpp</includes>
@@ -22,7 +22,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="126" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="126" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="126" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="126" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1model_1_1box_1a0b37bc39a36817db651ea6ae528674f2" prot="private" static="no" mutable="no">
         <type>Point</type>
@@ -35,17 +35,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="125" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="125" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="125" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="125" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1a467032b2a1a7b0649a6b3a88ed5f38e1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1a0df136ed354ce634835cb3118913a32b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>boost::geometry::model::box&lt; Point &gt;::BOOST_CONCEPT_ASSERT</definition>
-        <argsstring>((concept::Point&lt; Point &gt;))</argsstring>
+        <argsstring>((concepts::Point&lt; Point &gt;))</argsstring>
         <name>BOOST_CONCEPT_ASSERT</name>
         <param>
-          <type>(<ref refid="classboost_1_1geometry_1_1concept_1_1_point" kindref="compound">concept::Point</ref>&lt; Point &gt;)</type>
+          <type>(<ref refid="classboost_1_1geometry_1_1concepts_1_1_point" kindref="compound">concepts::Point</ref>&lt; Point &gt;)</type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -53,14 +53,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="56"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="56" column="1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1a69b40a9a03a2cc3f4737af6f6d229a6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1abc7fbd3ef09e4fde188f8ad4179015a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>boost::geometry::model::box&lt; Point &gt;::box</definition>
-        <argsstring>()</argsstring>
+        <argsstring>()=default</argsstring>
         <name>box</name>
         <briefdescription>
 <para>Default constructor, no initialization. </para>        </briefdescription>
@@ -68,7 +68,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="63"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="63" column="1"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1ad13d0a268701c33627f6e5a4c3ae20d0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -89,7 +89,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="84" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="83" bodyend="91"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="83" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="83" bodyend="91"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1abb5bd8205c3530d22fd9449bdb0477fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Point const &amp;</type>
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="101" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="100" bodyend="106"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="100" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="100" bodyend="106"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1a62014bea25cbad5583136e6fc2665ad3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>Point &amp;</type>
@@ -115,7 +115,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="116" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="115" bodyend="121"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="115" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="115" bodyend="121"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1a2e90ba7321cbea9b47690d32e5da4a25" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Point const &amp;</type>
@@ -128,7 +128,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="94" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="93" bodyend="99"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="93" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="93" bodyend="99"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1box_1aaaedfffca974e18df1a7337d8eeb9bc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>Point &amp;</type>
@@ -141,7 +141,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="109" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="108" bodyend="114"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="108" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="108" bodyend="114"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -157,10 +157,10 @@
 </parameteritem>
 </parameterlist>
  <qbk>[include reference/geometries/box.qbk]</qbk>   <qbk.before.synopsis> [heading Model of]</qbk.before.synopsis>   <qbk.before.synopsis> [link geometry.reference.concepts.concept_box Box Concept]</qbk.before.synopsis>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="55" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="54" bodyend="131"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/box.hpp" bodystart="54" bodyend="131"/>
     <listofallmembers>
-      <member refid="classboost_1_1geometry_1_1model_1_1box_1a467032b2a1a7b0649a6b3a88ed5f38e1" prot="private" virt="non-virtual"><scope>boost::geometry::model::box</scope><name>BOOST_CONCEPT_ASSERT</name></member>
-      <member refid="classboost_1_1geometry_1_1model_1_1box_1a69b40a9a03a2cc3f4737af6f6d229a6e" prot="public" virt="non-virtual"><scope>boost::geometry::model::box</scope><name>box</name></member>
+      <member refid="classboost_1_1geometry_1_1model_1_1box_1a0df136ed354ce634835cb3118913a32b" prot="private" virt="non-virtual"><scope>boost::geometry::model::box</scope><name>BOOST_CONCEPT_ASSERT</name></member>
+      <member refid="classboost_1_1geometry_1_1model_1_1box_1abc7fbd3ef09e4fde188f8ad4179015a1" prot="public" virt="non-virtual"><scope>boost::geometry::model::box</scope><name>box</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1box_1ad13d0a268701c33627f6e5a4c3ae20d0" prot="public" virt="non-virtual"><scope>boost::geometry::model::box</scope><name>box</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1box_1a9d9e63fcc5754901fac4915ac48754fe" prot="private" virt="non-virtual"><scope>boost::geometry::model::box</scope><name>m_max_corner</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1box_1a0b37bc39a36817db651ea6ae528674f2" prot="private" virt="non-virtual"><scope>boost::geometry::model::box</scope><name>m_min_corner</name></member>

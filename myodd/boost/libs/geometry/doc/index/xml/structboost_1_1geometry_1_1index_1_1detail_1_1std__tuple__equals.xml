@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1index_1_1detail_1_1std__tuple__equals" kind="struct" prot="public">
     <compoundname>boost::geometry::index::detail::std_tuple_equals</compoundname>
     <templateparamlist>
@@ -37,14 +37,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="173" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="172" bodyend="178"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="172" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="172" bodyend="178"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="171" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="170" bodyend="179"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="171" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="170" bodyend="179"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1std__tuple__equals_1adcc250b04e32838afc4b1b6315f81467" prot="public" virt="non-virtual"><scope>boost::geometry::index::detail::std_tuple_equals</scope><name>apply</name></member>
     </listofallmembers>

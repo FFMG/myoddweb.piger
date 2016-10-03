@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__miter" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::buffer::join_miter</compoundname>
     <includes local="no">buffer_join_miter.hpp</includes>
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="134" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="134" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="134" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="134" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -43,7 +43,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="60" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="58" bodyend="60"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="58" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="58" bodyend="60"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -62,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="125" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="124" bodyend="132"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="124" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="124" bodyend="132"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -77,7 +77,7 @@
 \* [link geometry.reference.algorithms.buffer.buffer_7_with_strategies buffer (with strategies)]
 \* [link geometry.reference.strategies.strategy_buffer_join_round join_round]
 </qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="53" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="52" bodyend="135"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" line="53" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp" bodystart="52" bodyend="135"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__miter_1a6436c74ddb7fb02a86ee5770146d58f7" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::buffer::join_miter</scope><name>join_miter</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__miter_1a6d6b01904a6b6b19576d257ae55411b5" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::buffer::join_miter</scope><name>m_miter_limit</name></member>

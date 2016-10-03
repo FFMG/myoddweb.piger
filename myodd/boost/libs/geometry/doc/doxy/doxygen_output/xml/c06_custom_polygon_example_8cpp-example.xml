@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="c06_custom_polygon_example_8cpp-example" kind="example">
     <compoundname>c06_custom_polygon_example.cpp</compoundname>
     <detaileddescription>
@@ -53,8 +53,8 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>We<sp/>can<sp/>conveniently<sp/>use<sp/>macro&apos;s<sp/>to<sp/>register<sp/>point<sp/>and<sp/>ring</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><ref refid="group__register_1ga040a8280aaf06372fc637e1a436019d8" kindref="member" tooltip="Macro to register a \1.">BOOST_GEOMETRY_REGISTER_POINT_2D</ref>(my_point,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/>cs::cartesian,<sp/>x,<sp/>y)</highlight></codeline>
-<codeline><highlight class="normal"><ref refid="group__register_1ga742491bcf6ece3b0c9d21d5f6a991ac1" kindref="member" tooltip="Macro to register a \1.">BOOST_GEOMETRY_REGISTER_RING</ref>(my_ring)</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="group__register_1ga040a8280aaf06372fc637e1a436019d8" kindref="member">BOOST_GEOMETRY_REGISTER_POINT_2D</ref>(my_point,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/>cs::cartesian,<sp/>x,<sp/>y)</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="group__register_1ga742491bcf6ece3b0c9d21d5f6a991ac1" kindref="member">BOOST_GEOMETRY_REGISTER_RING</ref>(my_ring)</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
@@ -78,7 +78,7 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>boost::array&lt;my_ring,<sp/>2&gt;&amp;<sp/>type;</highlight></codeline>
 <codeline><highlight class="normal">};</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;&gt;<sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="group__exterior__ring_1ga08713d51a3bbe530a5f69b5084107d89" kindref="member" tooltip="Function to get the exterior_ring ring of a polygon.">exterior_ring</ref>&lt;my_polygon&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;&gt;<sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="group__exterior__ring_1ga08713d51a3bbe530a5f69b5084107d89" kindref="member">exterior_ring</ref>&lt;my_polygon&gt;</highlight></codeline>
 <codeline><highlight class="normal">{</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>my_ring&amp;<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">(my_polygon&amp;<sp/>p)</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
@@ -91,7 +91,7 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline><highlight class="normal">};</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;&gt;<sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="group__interior__rings_1gac5980f18e5c2d400f598299104630c8f" kindref="member" tooltip="Function to get the interior rings of a polygon (non const version)">interior_rings</ref>&lt;my_polygon&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;&gt;<sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="group__interior__rings_1gac5980f18e5c2d400f598299104630c8f" kindref="member">interior_rings</ref>&lt;my_polygon&gt;</highlight></codeline>
 <codeline><highlight class="normal">{</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>boost::array&lt;my_ring,<sp/>2&gt;<sp/>holes_type;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
@@ -136,9 +136,9 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Representation<sp/>of<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>p1.name<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>boost::geometry::dsv(p1)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Area<sp/>of<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>p1.name<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member" tooltip="Calculates the area of a geometry.">boost::geometry::area</ref>(p1)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member">boost::geometry::area</ref>(p1)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Perimeter<sp/>of<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>p1.name<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/><ref refid="group__perimeter_1gabf1b8b04c850eece3b57dcb5d95a0bd9" kindref="member" tooltip="Calculates the perimeter of a geometry.">boost::geometry::perimeter</ref>(p1)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/><ref refid="group__perimeter_1gabf1b8b04c850eece3b57dcb5d95a0bd9" kindref="member">boost::geometry::perimeter</ref>(p1)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Centroid<sp/>of<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>p1.name<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>boost::geometry::dsv(boost::geometry::return_centroid&lt;my_point&gt;(p1))<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>

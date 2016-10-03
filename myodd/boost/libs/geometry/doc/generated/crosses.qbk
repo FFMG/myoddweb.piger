@@ -16,7 +16,7 @@
 [section:crosses crosses]
 
 '''<indexterm><primary>crosses</primary></indexterm>'''
-Checks if two geometries \1. 
+Checks if two geometries crosses. 
 
 [heading Synopsis]
 ``template<typename Geometry1, typename Geometry2>
@@ -32,7 +32,7 @@ bool crosses(Geometry1 const & geometry1, Geometry2 const & geometry2)``
 
 
 [heading Returns]
-Returns true if two geometries \1
+Returns true if two geometries crosses
 
 [heading Header]
 Either

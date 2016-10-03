@@ -4,9 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Programming interfaces</title>
 <link rel="stylesheet" href="../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
-<link rel="up" href="../atomic.html" title="Chapter&#160;5.&#160;Boost.Atomic">
+<link rel="up" href="../atomic.html" title="Chapter&#160;6.&#160;Boost.Atomic">
 <link rel="prev" href="thread_coordination.html" title="Thread coordination using Boost.Atomic">
 <link rel="next" href="usage_examples.html" title="Usage examples">
 </head>
@@ -27,7 +27,7 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="atomic.interface"></a><a class="link" href="interface.html" title="Programming interfaces">Programming interfaces</a>
 </h2></div></div></div>
-<div class="toc"><dl>
+<div class="toc"><dl class="toc">
 <dt><span class="section"><a href="interface.html#atomic.interface.configuration">Configuration and building</a></span></dt>
 <dt><span class="section"><a href="interface.html#atomic.interface.interface_memory_order">Memory order</a></span></dt>
 <dt><span class="section"><a href="interface.html#atomic.interface.interface_atomic_object">Atomic objects</a></span></dt>
@@ -69,21 +69,62 @@
 <tr>
 <td>
                 <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_ATOMIC_NO_CMPXCHG8B</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Affects 32-bit x86 Oracle Studio builds. When defined, the library
+                  assumes the target CPU does not support <code class="computeroutput"><span class="identifier">cmpxchg8b</span></code>
+                  instruction used to support 64-bit atomic operations. This is the
+                  case with very old CPUs (pre-Pentium). The library does not perform
+                  runtime detection of this instruction, so running the code that
+                  uses 64-bit atomics on such CPUs will result in crashes, unless
+                  this macro is defined. Note that the macro does not affect MSVC,
+                  GCC and compatible compilers because the library infers this information
+                  from the compiler-defined macros.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
                   <code class="computeroutput"><span class="identifier">BOOST_ATOMIC_NO_CMPXCHG16B</span></code>
                 </p>
               </td>
 <td>
                 <p>
-                  Affects 64-bit x86 MSVC builds. When defined, the library assumes
-                  the target CPU does not support <code class="computeroutput"><span class="identifier">cmpxchg16b</span></code>
-                  instruction used to support 128-bit atomic operations. This is
-                  the case with some early 64-bit AMD CPUs, all Intel CPUs and current
-                  AMD CPUs support this instruction. The library does not perform
-                  runtime detection of this instruction, so running the code that
-                  uses 128-bit atomics on such CPUs will result in crashes, unless
-                  this macro is defined. Note that the macro does not affect GCC
-                  and compatible compilers because the library infers this information
-                  from the compiler-defined macros.
+                  Affects 64-bit x86 MSVC and Oracle Studio builds. When defined,
+                  the library assumes the target CPU does not support <code class="computeroutput"><span class="identifier">cmpxchg16b</span></code> instruction used to
+                  support 128-bit atomic operations. This is the case with some early
+                  64-bit AMD CPUs, all Intel CPUs and current AMD CPUs support this
+                  instruction. The library does not perform runtime detection of
+                  this instruction, so running the code that uses 128-bit atomics
+                  on such CPUs will result in crashes, unless this macro is defined.
+                  Note that the macro does not affect GCC and compatible compilers
+                  because the library infers this information from the compiler-defined
+                  macros.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_ATOMIC_NO_MFENCE</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Affects 32-bit x86 Oracle Studio builds. When defined, the library
+                  assumes the target CPU does not support <code class="computeroutput"><span class="identifier">mfence</span></code>
+                  instruction used to implement thread fences. This instruction was
+                  added with SSE2 instruction set extension, which was available
+                  in CPUs since Intel Pentium 4. The library does not perform runtime
+                  detection of this instruction, so running the library code on older
+                  CPUs will result in crashes, unless this macro is defined. Note
+                  that the macro does not affect MSVC, GCC and compatible compilers
+                  because the library infers this information from the compiler-defined
+                  macros.
                 </p>
               </td>
 </tr>
@@ -273,7 +314,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="atomic.interface.interface_atomic_object"></a><a class="link" href="interface.html#atomic.interface.interface_atomic_object" title="Atomic objects">Atomic objects</a>
 </h3></div></div></div>
-<div class="toc"><dl>
+<div class="toc"><dl class="toc">
 <dt><span class="section"><a href="interface.html#atomic.interface.interface_atomic_object.interface_atomic_generic"><code class="literal">boost::atomic&lt;<span class="emphasis"><em>T</em></span>&gt;</code>
         template class</a></span></dt>
 <dt><span class="section"><a href="interface.html#atomic.interface.interface_atomic_object.interface_atomic_integral"><code class="literal">boost::atomic&lt;<span class="emphasis"><em>integral</em></span>&gt;</code>
@@ -290,7 +331,7 @@
         [basic.types]). Following are examples of the types compatible with this
         requirement:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             a scalar type (e.g. integer, boolean, enum or pointer type)
           </li>

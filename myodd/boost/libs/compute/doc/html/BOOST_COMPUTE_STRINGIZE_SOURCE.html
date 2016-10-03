@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Macro BOOST_COMPUTE_STRINGIZE_SOURCE</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="index.html" title="Chapter&#160;1.&#160;Boost.Compute">
 <link rel="up" href="boost_compute/reference.html#header.boost.compute.utility.source_hpp" title="Header &lt;boost/compute/utility/source.hpp&gt;">
 <link rel="prev" href="boost/compute/program_cache.html" title="Class program_cache">
@@ -33,23 +33,23 @@
 
 </span>BOOST_COMPUTE_STRINGIZE_SOURCE(source)</pre></div>
 <div class="refsect1">
-<a name="idp83906848"></a><h2>Description</h2>
+<a name="idm45639308983040"></a><h2>Description</h2>
 <p>Stringizes OpenCL source code.</p>
 <p>For example, to create a simple kernel which squares each input value: </p>
-<pre class="programlisting"> <span class="keyword">const</span> <span class="keyword">char</span> <span class="identifier">source</span><span class="special">[</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">BOOST_COMPUTE_STRINGIZE_SOURCE</span><span class="special">(</span>
-     <span class="identifier">__kernel</span> <span class="keyword">void</span> <span class="identifier">square</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">float</span> <span class="special">*</span><span class="identifier">input</span><span class="special">,</span> <span class="keyword">float</span> <span class="special">*</span><span class="identifier">output</span><span class="special">)</span>
-     <span class="special">{</span>
-         <span class="keyword">const</span> <span class="identifier">uint</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">get_global_id</span><span class="special">(</span><span class="number">0</span><span class="special">)</span><span class="special">;</span>
-         <span class="keyword">const</span> <span class="keyword">float</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">input</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span><span class="special">;</span>
-         <span class="identifier">output</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">x</span> <span class="special">*</span> <span class="identifier">x</span><span class="special">;</span>
-     <span class="special">}</span>
- <span class="special">)</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">const</span> <span class="keyword">char</span> <span class="identifier">source</span><span class="special">[</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">BOOST_COMPUTE_STRINGIZE_SOURCE</span><span class="special">(</span>
+    <span class="identifier">__kernel</span> <span class="keyword">void</span> <span class="identifier">square</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">float</span> <span class="special">*</span><span class="identifier">input</span><span class="special">,</span> <span class="keyword">float</span> <span class="special">*</span><span class="identifier">output</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">const</span> <span class="identifier">uint</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">get_global_id</span><span class="special">(</span><span class="number">0</span><span class="special">)</span><span class="special">;</span>
+        <span class="keyword">const</span> <span class="keyword">float</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">input</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span><span class="special">;</span>
+        <span class="identifier">output</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">x</span> <span class="special">*</span> <span class="identifier">x</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">)</span><span class="special">;</span>
 
- <span class="comment">// create and build square program</span>
- <span class="identifier">program</span> <span class="identifier">square_program</span> <span class="special">=</span> <span class="identifier">program</span><span class="special">::</span><span class="identifier">build_with_source</span><span class="special">(</span><span class="identifier">source</span><span class="special">,</span> <span class="identifier">context</span><span class="special">)</span><span class="special">;</span>
+<span class="comment">// create and build square program</span>
+<span class="identifier">program</span> <span class="identifier">square_program</span> <span class="special">=</span> <span class="identifier">program</span><span class="special">::</span><span class="identifier">build_with_source</span><span class="special">(</span><span class="identifier">source</span><span class="special">,</span> <span class="identifier">context</span><span class="special">)</span><span class="special">;</span>
 
- <span class="comment">// create square kernel</span>
- <span class="identifier">kernel</span> <span class="identifier">square_kernel</span><span class="special">(</span><span class="identifier">square_program</span><span class="special">,</span> <span class="string">"square"</span><span class="special">)</span><span class="special">;</span>
+<span class="comment">// create square kernel</span>
+<span class="identifier">kernel</span> <span class="identifier">square_kernel</span><span class="special">(</span><span class="identifier">square_program</span><span class="special">,</span> <span class="string">"square"</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <p> </p>
 </div>

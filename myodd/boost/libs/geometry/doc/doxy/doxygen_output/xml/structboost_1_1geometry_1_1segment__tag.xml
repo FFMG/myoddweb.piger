@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1segment__tag" kind="struct" prot="public">
     <compoundname>boost::geometry::segment_tag</compoundname>
     <basecompoundref refid="structboost_1_1geometry_1_1single__tag" prot="public" virt="non-virtual">boost::geometry::single_tag</basecompoundref>
@@ -10,42 +10,42 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1076">
+      <node id="1280">
         <label>boost::geometry::linear_tag</label>
         <link refid="structboost_1_1geometry_1_1linear__tag"/>
       </node>
-      <node id="1075">
+      <node id="1279">
         <label>boost::geometry::single_tag</label>
         <link refid="structboost_1_1geometry_1_1single__tag"/>
       </node>
-      <node id="1074">
+      <node id="1278">
         <label>boost::geometry::segment_tag</label>
         <link refid="structboost_1_1geometry_1_1segment__tag"/>
-        <childnode refid="1075" relation="public-inheritance">
+        <childnode refid="1279" relation="public-inheritance">
         </childnode>
-        <childnode refid="1076" relation="public-inheritance">
+        <childnode refid="1280" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1079">
+      <node id="1283">
         <label>boost::geometry::linear_tag</label>
         <link refid="structboost_1_1geometry_1_1linear__tag"/>
       </node>
-      <node id="1078">
+      <node id="1282">
         <label>boost::geometry::single_tag</label>
         <link refid="structboost_1_1geometry_1_1single__tag"/>
       </node>
-      <node id="1077">
+      <node id="1281">
         <label>boost::geometry::segment_tag</label>
         <link refid="structboost_1_1geometry_1_1segment__tag"/>
-        <childnode refid="1078" relation="public-inheritance">
+        <childnode refid="1282" relation="public-inheritance">
         </childnode>
-        <childnode refid="1079" relation="public-inheritance">
+        <childnode refid="1283" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" line="101" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" bodystart="101" bodyend="101"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" line="101" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" bodystart="101" bodyend="101"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

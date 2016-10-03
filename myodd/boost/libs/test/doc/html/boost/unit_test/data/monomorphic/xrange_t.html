@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class template xrange_t</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../../index.html" title="Boost.Test">
 <link rel="up" href="../../../../header/boost/test/data/monomorphic/generators/xrange_hpp.html" title="Header &lt;boost/test/data/monomorphic/generators/xrange.hpp&gt;">
 <link rel="prev" href="../../../../header/boost/test/data/monomorphic/generators/xrange_hpp.html" title="Header &lt;boost/test/data/monomorphic/generators/xrange.hpp&gt;">
@@ -38,31 +38,31 @@
   <span class="keyword">typedef</span> <span class="identifier">SampleType</span> <a name="boost.unit_test.data.monomorphic.xrange_t.sample"></a><span class="identifier">sample</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="xrange_t.html#boost.unit_test.data.monomorphic.xrange_tconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="xrange_t.html#idp26573520-bb"><span class="identifier">xrange_t</span></a><span class="special">(</span><span class="identifier">SampleType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">StepType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">,</span> <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="xrange_t.html#idm45194482125856-bb"><span class="identifier">xrange_t</span></a><span class="special">(</span><span class="identifier">SampleType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">StepType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="special">,</span> <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="xrange_t.html#idp26569856-bb">public member functions</a></span>
-  <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a class="link" href="xrange_t.html#idp26570416-bb"><span class="identifier">capacity</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">SampleType</span> <a class="link" href="xrange_t.html#idp26571664-bb"><span class="identifier">next</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="xrange_t.html#idp26572512-bb"><span class="identifier">reset</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="xrange_t.html#idm45194482129520-bb">public member functions</a></span>
+  <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a class="link" href="xrange_t.html#idm45194482128960-bb"><span class="identifier">capacity</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">SampleType</span> <a class="link" href="xrange_t.html#idm45194482127712-bb"><span class="identifier">next</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="xrange_t.html#idm45194482126864-bb"><span class="identifier">reset</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp56696208"></a><h2>Description</h2>
+<a name="idm46115252801472"></a><h2>Description</h2>
 <p>This class implements the generator concept (see <a class="link" href="generated_by.html" title="Class template generated_by">boost::unit_test::data::monomorphic::generated_by</a>) for implementing a range like sequence of numbers. </p>
 <div class="refsect2">
-<a name="idp56697776"></a><h3>
+<a name="idm46115252799776"></a><h3>
 <a name="boost.unit_test.data.monomorphic.xrange_tconstruct-copy-destruct"></a><code class="computeroutput">xrange_t</code> 
         public
        construct/copy/destruct</h3>
-<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><a name="idp26573520-bb"></a><span class="identifier">xrange_t</span><span class="special">(</span><span class="identifier">SampleType</span> <span class="keyword">const</span> <span class="special">&amp;</span> begin_<span class="special">,</span> <span class="identifier">StepType</span> <span class="keyword">const</span> <span class="special">&amp;</span> step_<span class="special">,</span> 
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><a name="idm45194482125856-bb"></a><span class="identifier">xrange_t</span><span class="special">(</span><span class="identifier">SampleType</span> <span class="keyword">const</span> <span class="special">&amp;</span> begin_<span class="special">,</span> <span class="identifier">StepType</span> <span class="keyword">const</span> <span class="special">&amp;</span> step_<span class="special">,</span> 
          <a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> size_<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
 </div>
 <div class="refsect2">
-<a name="idp56710240"></a><h3>
-<a name="idp26569856-bb"></a><code class="computeroutput">xrange_t</code> public member functions</h3>
+<a name="idm46115252787312"></a><h3>
+<a name="idm45194482129520-bb"></a><code class="computeroutput">xrange_t</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a name="idp26570416-bb"></a><span class="identifier">capacity</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">SampleType</span> <a name="idp26571664-bb"></a><span class="identifier">next</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idp26572512-bb"></a><span class="identifier">reset</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a class="link" href="../size_t.html" title="Class size_t">data::size_t</a> <a name="idm45194482128960-bb"></a><span class="identifier">capacity</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">SampleType</span> <a name="idm45194482127712-bb"></a><span class="identifier">next</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">void</span> <a name="idm45194482126864-bb"></a><span class="identifier">reset</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>

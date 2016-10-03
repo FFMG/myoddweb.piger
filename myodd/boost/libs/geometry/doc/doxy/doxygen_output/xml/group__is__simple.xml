@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__is__simple" kind="group">
     <compoundname>is_simple</compoundname>
     <title>is_simple: detect if a geometry is simple</title>
@@ -19,7 +19,7 @@
           <declname>geometry</declname>
         </param>
         <briefdescription>
-<para>Checks if a geometry \1. </para>        </briefdescription>
+<para>Checks if a geometry is simple. </para>        </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -37,11 +37,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>Returns true if the geometry \1</para></simplesect>
+<simplesect kind="return"><para>Returns true if the geometry is simple</para></simplesect>
  <qbk>[include reference/algorithms/is_simple.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple/interface.hpp" line="72" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple/interface.hpp" bodystart="71" bodyend="74"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple/interface.hpp" line="71" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple/interface.hpp" bodystart="71" bodyend="74"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

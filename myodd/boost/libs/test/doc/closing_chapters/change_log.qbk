@@ -7,6 +7,40 @@
 
 [section Change log]
 
+[h4 Boost.Test v3.3 / boost 1.62]
+
+[h5 New features]
+* Boost.Test now treats each sample of a dataset test case as being a uniquely named test case under the same test suite,
+  which enables the (re)run of one particular sample from the command line interface. See
+  [link boost_test.tests_organization.test_cases.test_case_generation.datasets_auto_registration.samples_and_test_tree here]
+  for more details,
+* Boost.Test learned to interpret ':' as a separator for the test filters: the string passed to
+  [link boost_test.utf_reference.rt_param_reference.run_test `--run_test`]
+  generates tokens as if `--run_test` has been repeated, which enables the set up of several test filters
+  through the associated environment variable `BOOST_TEST_RUN_FILTERS`
+* the __UTF__ learned to log the messages in the xUnit/JUNIT log format.
+  See [link boost_test.test_output.log_formats.log_junit_format here] for more details.
+* the __UTF__ learned to have several loggers at the same time, each of which with their own log level and log sink.
+  See the associated command line switch [link boost_test.utf_reference.rt_param_reference.logger `--logger`] and
+  corresponding environment variable `BOOST_TEST_LOGGER` for more details.
+* loggers are now able to indicate their default output stream and log level.
+
+[h5 Bugfixes and feature requests]
+# [pull_request 81] Possibility to remove the support of the alternative stack at compilation time. See
+  [link boost_test.utf_reference.link_references.config_disable_alt_stack `BOOST_TEST_DISABLE_ALT_STACK`] for more details.
+# [ticket 8707] Provide Standard xUnit XML Output from Boost Test
+# [ticket 8834] Boost Test should be able to generate report in both XML and HRF together
+# [ticket 11128] `[bb10/qnx failures]` Build error
+# [ticket 11845] Ability to generate the unique and stable test name for every data set in `BOOST_DATA_TEST_CASE`
+# [ticket 11859] Wrong handling of "," in Run-Parameters
+# [ticket 12024] boost test depends on nonexisting `abi::__cxa_demangle` on android
+# [ticket 12093] Boost 1.60.0: Build fails (gcc 4.6)
+# [ticket 12103] Fix for gcc bug 58952 (`getchar()` is defined as a macro in `uClibc`)
+# [ticket 12224] Crash on MSVC with RTTI disabled
+# [ticket 12241] Data-driven testing over a range of `std::tuple` has broken
+# [ticket 12257] Incorrect line numbers in `test_units` generated from `test_case_gen`
+# [ticket 12378] Compilation errors with clang 3.8
+
 [h4 Boost.Test v3.2 / boost 1.61]
 
 [h5 New features]

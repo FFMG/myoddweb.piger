@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1identity__view" kind="struct" prot="public">
     <compoundname>boost::geometry::identity_view</compoundname>
     <includes local="no">identity_view.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="38" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="38" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="38" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structboost_1_1geometry_1_1identity__view_1ab3547e9d964270bd9d688ae92eb02268" prot="public" static="no">
         <type>boost::range_iterator&lt; Range &gt;::type</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="39" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="39" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="39" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="51" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="51" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -63,7 +63,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="45" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="45" bodyend="45"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="45" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="45" bodyend="45"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1identity__view_1a9fff26906845c51f9fe330425c645080" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1identity__view_1ab3547e9d964270bd9d688ae92eb02268" kindref="member">iterator</ref></type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="48" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="48" bodyend="48"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="48" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="48" bodyend="48"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1identity__view_1a365f35ec328c829d79e4f429f6a60806" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1identity__view_1acd314f9e455947f9a45d8cb8c9cf203b" kindref="member">const_iterator</ref></type>
@@ -89,7 +89,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="46" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="46" bodyend="46"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="46" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="46" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1identity__view_1a5c082885878d5f19e0c10a55378602bc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="structboost_1_1geometry_1_1identity__view_1ab3547e9d964270bd9d688ae92eb02268" kindref="member">iterator</ref></type>
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="49" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="49" bodyend="49"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="49" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="49" bodyend="49"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1identity__view_1a49b233f8ae13c92c3ad0b7f9937dfd6c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
         <type></type>
@@ -119,7 +119,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="43" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="41" bodyend="43"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="41" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="41" bodyend="43"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -134,7 +134,7 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="37" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="36" bodyend="52"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" line="37" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/identity_view.hpp" bodystart="36" bodyend="52"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1identity__view_1a6b1fd0ef0c2ec97b320c66435a130a0d" prot="public" virt="non-virtual"><scope>boost::geometry::identity_view</scope><name>begin</name></member>
       <member refid="structboost_1_1geometry_1_1identity__view_1a9fff26906845c51f9fe330425c645080" prot="public" virt="non-virtual"><scope>boost::geometry::identity_view</scope><name>begin</name></member>

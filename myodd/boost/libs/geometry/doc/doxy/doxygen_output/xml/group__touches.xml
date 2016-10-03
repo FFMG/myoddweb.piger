@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__touches" kind="group">
     <compoundname>touches</compoundname>
     <title>touches: detect if a geometry self-touches or if two geometries touch</title>
@@ -19,7 +19,7 @@
           <declname>geometry</declname>
         </param>
         <briefdescription>
-<para>Checks if a geometry \1. </para>        </briefdescription>
+<para>Checks if a geometry has at least one touching point (self-tangency) </para>        </briefdescription>
         <detaileddescription>
 <para><simplesect kind="note"><para>This function can be called for one geometry (self-tangency) and also for two geometries (touch)</para></simplesect>
 <parameterlist kind="templateparam"><parameteritem>
@@ -38,11 +38,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>Returns true if the geometry \1</para></simplesect>
+<simplesect kind="return"><para>Returns true if the geometry is self-touching</para></simplesect>
  <qbk.distinguish>one geometry</qbk.distinguish>   <qbk>[def __one_parameter__]</qbk>   <qbk>[include reference/algorithms/touches.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="561" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="560" bodyend="563"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="560" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="560" bodyend="563"/>
       </memberdef>
       <memberdef kind="function" id="group__touches_1gabbb053b4c78edc40a6c37f1f0f71ddbe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -66,7 +66,7 @@
           <declname>geometry2</declname>
         </param>
         <briefdescription>
-<para>Checks if two geometries \1. </para>        </briefdescription>
+<para>Checks if two geometries have at least one touching point (tangent - non overlapping) </para>        </briefdescription>
         <detaileddescription>
 <para><parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -98,11 +98,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>Returns true if two geometries \1</para></simplesect>
+<simplesect kind="return"><para>Returns true if two geometries touch each other</para></simplesect>
  <qbk.distinguish>two geometries</qbk.distinguish>   <qbk>[include reference/algorithms/touches.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="580" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="579" bodyend="582"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="579" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="579" bodyend="582"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

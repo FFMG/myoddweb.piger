@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1util_1_1calculation__type_1_1geometric_1_1binary" kind="struct" prot="public">
     <compoundname>boost::geometry::util::calculation_type::geometric::binary</compoundname>
     <includes local="no">calculation_type.hpp</includes>
@@ -44,14 +44,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="136" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="136" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="136" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="136" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="129" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="128" bodyend="137"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="129" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="128" bodyend="137"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1util_1_1calculation__type_1_1geometric_1_1binary_1af276eb5a61ef5ab7fb167daf83d24ecc" prot="public" virt="non-virtual"><scope>boost::geometry::util::calculation_type::geometric::binary</scope><name>type</name></member>
     </listofallmembers>

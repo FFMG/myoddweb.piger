@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1transform_1_1map__transformer" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::transform::map_transformer</compoundname>
     <basecompoundref refid="classboost_1_1geometry_1_1strategy_1_1transform_1_1ublas__transformer" prot="public" virt="non-virtual">boost::geometry::strategy::transform::ublas_transformer&lt; CalculationType, Dimension1, Dimension2 &gt;</basecompoundref>
@@ -43,7 +43,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="51" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="51" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -78,7 +78,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="56" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="55" bodyend="61"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="55" bodyend="61"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1transform_1_1map__transformer_1aec8d46f54b17a0e9f57386f43a566ccf" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -123,7 +123,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="66" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="64" bodyend="68"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="64" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="64" bodyend="68"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -170,7 +170,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="105" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="103" bodyend="158"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="103" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="103" bodyend="158"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1transform_1_1map__transformer_1aa295338b3acd1839be29734f587173e4" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -218,7 +218,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="76" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="73" bodyend="99"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="73" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="73" bodyend="99"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -234,30 +234,30 @@
 </parameterlist>
 </para>    </detaileddescription>
     <inheritancegraph>
-      <node id="1341">
+      <node id="1553">
         <label>boost::geometry::strategy::transform::ublas_transformer&lt; CalculationType, Dimension1, Dimension2 &gt;</label>
         <link refid="classboost_1_1geometry_1_1strategy_1_1transform_1_1ublas__transformer"/>
       </node>
-      <node id="1340">
+      <node id="1552">
         <label>boost::geometry::strategy::transform::map_transformer&lt; CalculationType, Dimension1, Dimension2, Mirror, SameScale &gt;</label>
         <link refid="classboost_1_1geometry_1_1strategy_1_1transform_1_1map__transformer"/>
-        <childnode refid="1341" relation="public-inheritance">
+        <childnode refid="1553" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1343">
+      <node id="1555">
         <label>boost::geometry::strategy::transform::ublas_transformer&lt; CalculationType, Dimension1, Dimension2 &gt;</label>
         <link refid="classboost_1_1geometry_1_1strategy_1_1transform_1_1ublas__transformer"/>
       </node>
-      <node id="1342">
+      <node id="1554">
         <label>boost::geometry::strategy::transform::map_transformer&lt; CalculationType, Dimension1, Dimension2, Mirror, SameScale &gt;</label>
         <link refid="classboost_1_1geometry_1_1strategy_1_1transform_1_1map__transformer"/>
-        <childnode refid="1343" relation="public-inheritance">
+        <childnode refid="1555" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="50" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="48" bodyend="159"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" line="50" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/transform/map_transformer.hpp" bodystart="48" bodyend="159"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1transform_1_1map__transformer_1a416db5cfd8ae96934826bdd3d04c4a2c" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::transform::map_transformer</scope><name>M</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1transform_1_1map__transformer_1aa0973e14c29879db15b67d63c571d7dd" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::transform::map_transformer</scope><name>map_transformer</name></member>

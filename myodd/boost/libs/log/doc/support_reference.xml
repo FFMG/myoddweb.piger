@@ -15,6 +15,9 @@ This header enables Boost.DateTime support for Boost.Log. </para><namespace name
 <para>18.07.2009</para>
 This header enables Boost.Exception support for Boost.Log. </para><namespace name="boost">
 <namespace name="log">
+<namespace name="ipc">
+<typedef name="object_name_info"><description><para>System resource name </para></description><type>error_info&lt; struct object_name_tag, object_name &gt;</type></typedef>
+</namespace>
 <typedef name="attribute_name_info"><description><para>Attribute name exception information </para></description><type>error_info&lt; struct attribute_name_info_tag, attribute_name &gt;</type></typedef>
 <typedef name="type_info_info"><description><para>Type info exception information </para></description><type>error_info&lt; struct type_info_info_tag, typeindex::type_index &gt;</type></typedef>
 <typedef name="position_info"><description><para>Parse position exception information </para></description><type>error_info&lt; struct position_info_tag, unsigned int &gt;</type></typedef>

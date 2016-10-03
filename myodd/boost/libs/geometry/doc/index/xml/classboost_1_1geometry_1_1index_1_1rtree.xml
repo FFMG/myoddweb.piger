@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1index_1_1rtree" kind="class" prot="public">
     <compoundname>boost::geometry::index::rtree</compoundname>
     <includes refid="rtree_8hpp" local="no">rtree.hpp</includes>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="161" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="161" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="161" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="161" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a80db5532eb59f7a809bd44ded265eb17" prot="public" static="no">
         <type>Parameters</type>
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="163" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="163" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="163" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="163" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a43a7adb311cafc08e23010ccb4e97fb5" prot="public" static="no">
         <type>IndexableGetter</type>
@@ -72,7 +72,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="165" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="165" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="165" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="165" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1ad8fe544de514014a1bd87ea1b881ff9b" prot="public" static="no">
         <type>EqualTo</type>
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="167" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="167" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="167" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="167" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1ab6618b5c7e88ed70533233fbac0f5b2e" prot="public" static="no">
         <type>Allocator</type>
@@ -98,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="169" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="169" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="169" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="169" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a28e88e55d260a454688fe1bd5e5af96b" prot="public" static="no">
         <type>index::detail::indexable_type&lt; detail::translator&lt; IndexableGetter, EqualTo &gt; &gt;::type</type>
@@ -111,7 +111,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="175" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="175" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="175" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="175" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a12e80f9da4c68e0e687f1c2012321147" prot="public" static="no">
         <type>geometry::model::box&lt; geometry::model::point&lt; typename coordinate_type&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a28e88e55d260a454688fe1bd5e5af96b" kindref="member">indexable_type</ref> &gt;::type, dimension&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a28e88e55d260a454688fe1bd5e5af96b" kindref="member">indexable_type</ref> &gt;::value, typename coordinate_system&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a28e88e55d260a454688fe1bd5e5af96b" kindref="member">indexable_type</ref> &gt;::type &gt; &gt;</type>
@@ -124,7 +124,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="185" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="185" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="185" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="185" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a5301c3d7ee3589751579e0573a9e8165" prot="public" static="no">
         <type>allocators_type::reference</type>
@@ -137,7 +137,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="213" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="213" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="213" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="213" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a615e622930be97ab1f3b8ceee641feaf" prot="public" static="no">
         <type>allocators_type::const_reference</type>
@@ -150,7 +150,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="215" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="215" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="215" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="215" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a762ced6b98d2cc6503e2b00549c6a89a" prot="public" static="no">
         <type>allocators_type::pointer</type>
@@ -163,7 +163,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="217" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="217" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="217" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="217" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1abad30462044d5d8fb607c24a05e8c9c2" prot="public" static="no">
         <type>allocators_type::const_pointer</type>
@@ -176,7 +176,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="219" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="219" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="219" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="219" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1ac256168e9371a070515fc61f29c691ed" prot="public" static="no">
         <type>allocators_type::difference_type</type>
@@ -189,7 +189,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="221" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="221" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="221" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="221" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1acc1f90d7b70afebc58107c523ece5cd5" prot="public" static="no">
         <type>allocators_type::size_type</type>
@@ -202,7 +202,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="223" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="223" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="223" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="223" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a701f65f0d6cf2e8b7be7f1c4b8fb7fde" prot="public" static="no">
         <type>index::detail::rtree::iterators::iterator&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, options_type, translator_type, box_type, allocators_type &gt;</type>
@@ -215,7 +215,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="229" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="229" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="229" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="229" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1ad144a7704ad878caaa84cda79b140855" prot="public" static="no">
         <type>index::detail::rtree::iterators::query_iterator&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, allocators_type &gt;</type>
@@ -228,7 +228,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="235" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="235" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="235" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="235" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-type">
@@ -243,7 +243,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="189" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="189" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="189" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="189" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1acf9b7d882c6a636b39af2f0d262ab54b" prot="private" static="no">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a12e80f9da4c68e0e687f1c2012321147" kindref="member">bounds_type</ref></type>
@@ -256,7 +256,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="191" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="191" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="191" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="191" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a6fb844a6a428b99e7e60d56f7af432c8" prot="private" static="no">
         <type>detail::rtree::options_type&lt; Parameters &gt;::type</type>
@@ -269,7 +269,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="192" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="192" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="192" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="192" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a3f48e5da98a8e1cf1289928d1d923152" prot="private" static="no">
         <type>options_type::node_tag</type>
@@ -282,7 +282,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="193" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="193" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="193" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="193" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a1376189d019e031652df06290992cf0a" prot="private" static="no">
         <type>detail::rtree::allocators&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1ab6618b5c7e88ed70533233fbac0f5b2e" kindref="member">allocator_type</ref>, <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, typename options_type::parameters_type, box_type, node_tag &gt;</type>
@@ -295,7 +295,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="194" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="194" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="194" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="194" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a8fd02414dda5f4dd246ba35d4213115c" prot="private" static="no">
         <type>detail::rtree::node&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, typename options_type::parameters_type, box_type, allocators_type, node_tag &gt;::type</type>
@@ -308,7 +308,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="196" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="196" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="196" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="196" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a868d2270e32fb91daf1308d33db11cee" prot="private" static="no">
         <type>detail::rtree::internal_node&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, typename options_type::parameters_type, box_type, allocators_type, node_tag &gt;::type</type>
@@ -321,7 +321,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="197" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="197" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="197" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="197" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a8e091464e1ff8a0264c5ffb72419ea4d" prot="private" static="no">
         <type>detail::rtree::leaf&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, typename options_type::parameters_type, box_type, allocators_type, node_tag &gt;::type</type>
@@ -334,7 +334,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="198" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="198" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="198" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="198" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1adc98bac42f71145e64c4ca711aeee3c4" prot="private" static="no">
         <type>allocators_type::node_pointer</type>
@@ -347,7 +347,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="200" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="200" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="200" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="200" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1aa9dc5d830362e77b6de638f676285e1a" prot="private" static="no">
         <type>::boost::container::allocator_traits&lt; Allocator &gt;</type>
@@ -360,7 +360,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="201" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="201" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="201" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="201" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1index_1_1rtree_1a9e5026a4c2b01c5e99919ce1fa2e9a9c" prot="private" static="no">
         <type>detail::rtree::subtree_destroyer&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, options_type, translator_type, box_type, allocators_type &gt;</type>
@@ -373,7 +373,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="202" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="202" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="202" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="202" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
@@ -388,7 +388,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="204" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="204" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="202" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="204" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -403,7 +403,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1773" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1773" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1773" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1773" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -456,7 +456,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="253" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="249" bodyend="253"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="249" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="249" bodyend="253"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a1a6b696d4855cbf1866196fe058c3a87" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -515,7 +515,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="271" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="266" bodyend="271"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="266" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="266" bodyend="271"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a037f17d8a1dfa4a818ff471dec61c912" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -610,7 +610,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="297" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="291" bodyend="304"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="291" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="291" bodyend="304"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a7b96b715c52ddc13d7a81db344825848" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -694,7 +694,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="329" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="323" bodyend="336"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="323" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="323" bodyend="336"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1af8db72811d2be53c409240204e63fb5a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -708,7 +708,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="345" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="344" bodyend="347"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="344" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="344" bodyend="347"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a826fc3236e181ad718d5283e95d7866f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -739,7 +739,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="366" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="361" bodyend="368"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="361" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="361" bodyend="368"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a72b6b75e083eea2ed26f54d4a2265375" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -781,7 +781,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="387" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="383" bodyend="389"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="383" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="383" bodyend="389"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1aa8b27db8cb783282ab5274e6769da26a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -807,7 +807,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="406" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="401" bodyend="410"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="401" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="401" bodyend="410"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a8508c4236d17ff39a1caef058aac8486" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -849,7 +849,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="430" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="425" bodyend="441"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="425" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="425" bodyend="441"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1ad0db5e9e41e1553f944b7e740dbbb883" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree" kindref="compound">rtree</ref> &amp;</type>
@@ -880,7 +880,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="456" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="455" bodyend="479"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="455" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="455" bodyend="479"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1af0bf9622ed3e901580b73ed39b746fb7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree" kindref="compound">rtree</ref> &amp;</type>
@@ -910,7 +910,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="494" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="493" bodyend="531"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="493" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="493" bodyend="531"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1aedb719dfece91d298e9ee56878524c9b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -936,7 +936,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="544" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="543" bodyend="561"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="543" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="543" bodyend="561"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1ad47980467e66b8644df18a480dbf9d86" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -967,7 +967,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="579" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="578" bodyend="584"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="578" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="578" bodyend="584"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a60d4c8790fd8810ff8b57f049e6bed8d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1014,7 +1014,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="604" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="603" bodyend="610"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="603" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="603" bodyend="610"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a5db294b14ebf1319edcfc92e78c8167e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1050,7 +1050,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="629" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="628" bodyend="639"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="628" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="628" bodyend="639"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a1ce933b0b833faec5349bfc27bde15d4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1acc1f90d7b70afebc58107c523ece5cd5" kindref="member">size_type</ref></type>
@@ -1082,7 +1082,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="662" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="661" bodyend="667"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="661" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="661" bodyend="667"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1aa97084231d17564a94f0142d095cecaa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1130,7 +1130,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="694" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="693" bodyend="703"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="693" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="693" bodyend="703"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a320cd1861ba7b43364ed53e1f93a4411" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1167,7 +1167,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="728" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="727" bodyend="738"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="727" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="727" bodyend="738"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a7baa88eb4e7a5c640ab847513de45b3e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1217,37 +1217,36 @@ It is possible to negate spatial predicates: <itemizedlist>
 <bold>Nearest predicate</bold></para><para>If the nearest predicate is passed a k-nearest neighbor search will be performed. This query will result in returning k values to the output iterator. Only one nearest predicate may be passed to the query. It may be generated by: <itemizedlist>
 <listitem><para><computeroutput><ref refid="group__predicates_1ga8772d9d3e5b12b3292f7d94d47310e3e" kindref="member">boost::geometry::index::nearest()</ref></computeroutput>.</para></listitem>
 </itemizedlist>
-<bold>Connecting predicates</bold></para><para>Predicates may be passed together connected with <computeroutput>operator&amp;&amp;()</computeroutput>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    // return elements intersecting box
-    tree.query(bgi::intersects(box), std::back_inserter(result));
-    // return elements intersecting poly but not within box
-    tree.query(bgi::intersects(poly) &amp;&amp; !bgi::within(box), std::back_inserter(result));
-    // return elements overlapping box and meeting my_fun unary predicate
-    tree.query(bgi::overlaps(box) &amp;&amp; bgi::satisfies(my_fun), std::back_inserter(result));
-    // return 5 elements nearest to pt and elements are intersecting box
-    tree.query(bgi::nearest(pt, 5) &amp;&amp; bgi::intersects(box), std::back_inserter(result));
+<bold>Connecting predicates</bold></para><para>Predicates may be passed together connected with <computeroutput>operator&amp;&amp;()</computeroutput>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>// return elements intersecting box
+tree.query(bgi::intersects(box), std::back_inserter(result));
+// return elements intersecting poly but not within box
+tree.query(bgi::intersects(poly) &amp;&amp; !bgi::within(box), std::back_inserter(result));
+// return elements overlapping box and meeting my_fun unary predicate
+tree.query(bgi::overlaps(box) &amp;&amp; bgi::satisfies(my_fun), std::back_inserter(result));
+// return 5 elements nearest to pt and elements are intersecting box
+tree.query(bgi::nearest(pt, 5) &amp;&amp; bgi::intersects(box), std::back_inserter(result));
 
-    // For each found value do_something (it is a type of function object)
-    tree.query(bgi::intersects(box),
-               boost::make_function_output_iterator(do_something()));
+// For each found value do_something (it is a type of function object)
+tree.query(bgi::intersects(box),
+           boost::make_function_output_iterator(do_something()));
 
-    // For each value stored in the rtree do_something
-    // always_true is a type of function object always returning true
-    tree.query(bgi::satisfies(always_true()),
-               boost::make_function_output_iterator(do_something()));
+// For each value stored in the rtree do_something
+// always_true is a type of function object always returning true
+tree.query(bgi::satisfies(always_true()),
+           boost::make_function_output_iterator(do_something()));
 
-    // C++11 (lambda expression)
-    tree.query(bgi::intersects(box),
-               boost::make_function_output_iterator([](value_type const&amp; val){
-                   // do something
-               }));
+// C++11 (lambda expression)
+tree.query(bgi::intersects(box),
+           boost::make_function_output_iterator([](value_type const&amp; val){
+               // do something
+           }));
 
-    // C++14 (generic lambda expression)
-    tree.query(bgi::intersects(box),
-               boost::make_function_output_iterator([](auto const&amp; val){
-                   // do something
-               }));
-    </verbatim></para></simplesect>
+// C++14 (generic lambda expression)
+tree.query(bgi::intersects(box),
+           boost::make_function_output_iterator([](auto const&amp; val){
+               // do something
+           }));
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>If Value copy constructor or copy assignment throws. If predicates copy throws.</para></simplesect>
 <simplesect kind="warning"><para>Only one <computeroutput><ref refid="group__predicates_1ga8772d9d3e5b12b3292f7d94d47310e3e" kindref="member">nearest()</ref></computeroutput> perdicate may be passed to the query. Passing more of them results in compile-time error.</para></simplesect>
 <parameterlist kind="param"><parameteritem>
@@ -1269,7 +1268,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="830" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="829" bodyend="839"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="829" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="829" bodyend="839"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1288,26 +1287,25 @@ It is possible to negate spatial predicates: <itemizedlist>
         <briefdescription>
 <para>Returns a query iterator pointing at the begin of the query range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns an iterator which may be used to perform iterative queries. For the information about predicates which may be passed to this method see <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a7baa88eb4e7a5c640ab847513de45b3e" kindref="member">query()</ref>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    for ( Rtree::const_query_iterator it = tree.qbegin(bgi::nearest(pt, 10000)) ;
-          it != tree.qend() ; ++it )
-    {
-        // do something with value
-        if ( has_enough_nearest_values() )
-            break;
-    }
+<para>This method returns an iterator which may be used to perform iterative queries. For the information about predicates which may be passed to this method see <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a7baa88eb4e7a5c640ab847513de45b3e" kindref="member">query()</ref>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>for ( Rtree::const_query_iterator it = tree.qbegin(bgi::nearest(pt, 10000)) ;
+      it != tree.qend() ; ++it )
+{
+    // do something with value
+    if ( has_enough_nearest_values() )
+        break;
+}
 
-    // C++11 (auto)
-    for ( auto it = tree.qbegin(bgi::nearest(pt, 3)) ; it != tree.qend() ; ++it )
-    {
-        // do something with value
-    }
+// C++11 (auto)
+for ( auto it = tree.qbegin(bgi::nearest(pt, 3)) ; it != tree.qend() ; ++it )
+{
+    // do something with value
+}
 
-    // C++14 (generic lambda expression)
-    std::for_each(tree.qbegin(bgi::nearest(pt, 3)), tree.qend(), [](auto const&amp; val){
-        // do something with value
-    });
-    </verbatim></para></simplesect>
+// C++14 (generic lambda expression)
+std::for_each(tree.qbegin(bgi::nearest(pt, 3)), tree.qend(), [](auto const&amp; val){
+    // do something with value
+});
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>If predicates copy throws. If allocation throws.</para></simplesect>
 <simplesect kind="warning"><para>The modification of the rtree may invalidate the iterators.</para></simplesect>
@@ -1323,7 +1321,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="885" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="884" bodyend="887"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="884" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="884" bodyend="887"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1af3b16f4732fa8113c0b2187005182513" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1ad144a7704ad878caaa84cda79b140855" kindref="member">const_query_iterator</ref></type>
@@ -1333,26 +1331,25 @@ It is possible to negate spatial predicates: <itemizedlist>
         <briefdescription>
 <para>Returns a query iterator pointing at the end of the query range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns an iterator which may be used to check if the query has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    for ( Rtree::const_query_iterator it = tree.qbegin(bgi::nearest(pt, 10000)) ;
-          it != tree.qend() ; ++it )
-    {
-        // do something with value
-        if ( has_enough_nearest_values() )
-            break;
-    }
+<para>This method returns an iterator which may be used to check if the query has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>for ( Rtree::const_query_iterator it = tree.qbegin(bgi::nearest(pt, 10000)) ;
+      it != tree.qend() ; ++it )
+{
+    // do something with value
+    if ( has_enough_nearest_values() )
+        break;
+}
 
-    // C++11 (auto)
-    for ( auto it = tree.qbegin(bgi::nearest(pt, 3)) ; it != tree.qend() ; ++it )
-    {
-        // do something with value
-    }
+// C++11 (auto)
+for ( auto it = tree.qbegin(bgi::nearest(pt, 3)) ; it != tree.qend() ; ++it )
+{
+    // do something with value
+}
 
-    // C++14 (generic lambda expression)
-    std::for_each(tree.qbegin(bgi::nearest(pt, 3)), tree.qend(), [](auto const&amp; val){
-        // do something with value
-    });
-    </verbatim></para></simplesect>
+// C++14 (generic lambda expression)
+std::for_each(tree.qbegin(bgi::nearest(pt, 3)), tree.qend(), [](auto const&amp; val){
+    // do something with value
+});
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>Nothing</para></simplesect>
 <simplesect kind="warning"><para>The modification of the rtree may invalidate the iterators.</para></simplesect>
@@ -1360,7 +1357,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="928" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="927" bodyend="930"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="927" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="927" bodyend="930"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a23219a7705ac491862c67be8baa34f0d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a701f65f0d6cf2e8b7be7f1c4b8fb7fde" kindref="member">const_iterator</ref></type>
@@ -1370,26 +1367,25 @@ It is possible to negate spatial predicates: <itemizedlist>
         <briefdescription>
 <para>Returns the iterator pointing at the begin of the rtree values range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be used to iterate over all values stored in the rtree.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    // Copy all values into the vector
-    std::copy(tree.begin(), tree.end(), std::back_inserter(vec));
+<para>This method returns the iterator which may be used to iterate over all values stored in the rtree.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>// Copy all values into the vector
+std::copy(tree.begin(), tree.end(), std::back_inserter(vec));
 
-    for ( Rtree::const_iterator it = tree.begin() ; it != tree.end() ; ++it )
-    {
-        // do something with value
-    }
+for ( Rtree::const_iterator it = tree.begin() ; it != tree.end() ; ++it )
+{
+    // do something with value
+}
 
-    // C++11 (auto)
-    for ( auto it = tree.begin() ; it != tree.end() ; ++it )
-    {
-        // do something with value
-    }
+// C++11 (auto)
+for ( auto it = tree.begin() ; it != tree.end() ; ++it )
+{
+    // do something with value
+}
 
-    // C++14 (generic lambda expression)
-    std::for_each(tree.begin(), tree.end(), [](auto const&amp; val){
-        // do something with value
-    })
-    </verbatim></para></simplesect>
+// C++14 (generic lambda expression)
+std::for_each(tree.begin(), tree.end(), [](auto const&amp; val){
+    // do something with value
+})
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>If allocation throws.</para></simplesect>
 <simplesect kind="warning"><para>The modification of the rtree may invalidate the iterators.</para></simplesect>
@@ -1397,7 +1393,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1172" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1171" bodyend="1177"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1171" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1171" bodyend="1177"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a513f1bd9dfcd022acb208e62115b29b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a701f65f0d6cf2e8b7be7f1c4b8fb7fde" kindref="member">const_iterator</ref></type>
@@ -1407,17 +1403,16 @@ It is possible to negate spatial predicates: <itemizedlist>
         <briefdescription>
 <para>Returns the iterator pointing at the end of the rtree values range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be compared with the iterator returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a23219a7705ac491862c67be8baa34f0d" kindref="member">begin()</ref> in order to check if the iteration has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    for ( Rtree::const_iterator it = tree.begin() ; it != tree.end() ; ++it )
-    {
-        // do something with value
-    }
+<para>This method returns the iterator which may be compared with the iterator returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a23219a7705ac491862c67be8baa34f0d" kindref="member">begin()</ref> in order to check if the iteration has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>for ( Rtree::const_iterator it = tree.begin() ; it != tree.end() ; ++it )
+{
+    // do something with value
+}
 
-    // C++11 (lambda expression)
-    std::for_each(tree.begin(), tree.end(), [](value_type const&amp; val){
-        // do something with value
-    })
-    </verbatim></para></simplesect>
+// C++11 (lambda expression)
+std::for_each(tree.begin(), tree.end(), [](value_type const&amp; val){
+    // do something with value
+})
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>Nothing.</para></simplesect>
 <simplesect kind="warning"><para>The modification of the rtree may invalidate the iterators.</para></simplesect>
@@ -1425,7 +1420,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1210" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1209" bodyend="1212"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1209" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1209" bodyend="1212"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1ac9f152c8c96525e3735b81635d8171b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1acc1f90d7b70afebc58107c523ece5cd5" kindref="member">size_type</ref></type>
@@ -1440,7 +1435,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1223" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1222" bodyend="1225"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1222" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1222" bodyend="1225"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1aa5302ce1c26105d722aac20793e83f0e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -1455,7 +1450,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1236" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1235" bodyend="1238"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1235" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1235" bodyend="1238"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a1bec40977c175983f585c4488cf8fe3c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -1469,7 +1464,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1247" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1246" bodyend="1249"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1246" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1246" bodyend="1249"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a0dad06d0f117f45ed54b5c123cb41d6e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a12e80f9da4c68e0e687f1c2012321147" kindref="member">bounds_type</ref></type>
@@ -1484,7 +1479,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1264" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1263" bodyend="1277"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1263" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1263" bodyend="1277"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1aaa834c241c191ac9de67f134564f36fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1516,7 +1511,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1294" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1293" bodyend="1328"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1293" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1293" bodyend="1328"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a9076baef90a3a9c6018871fa25115a73" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a80db5532eb59f7a809bd44ded265eb17" kindref="member">parameters_type</ref></type>
@@ -1531,7 +1526,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1339" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1338" bodyend="1341"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1338" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1338" bodyend="1341"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1af391fd642a218c5fb10fc68d643a62b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a43a7adb311cafc08e23010ccb4e97fb5" kindref="member">indexable_getter</ref></type>
@@ -1546,7 +1541,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1352" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1351" bodyend="1354"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1351" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1351" bodyend="1354"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a16424563d0973960ac01f7a1969eeebe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1ad8fe544de514014a1bd87ea1b881ff9b" kindref="member">value_equal</ref></type>
@@ -1561,7 +1556,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1365" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1364" bodyend="1367"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1364" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1364" bodyend="1367"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a17d9cef211feb7f674a5b4602f4cc81e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1ab6618b5c7e88ed70533233fbac0f5b2e" kindref="member">allocator_type</ref></type>
@@ -1576,7 +1571,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1378" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1377" bodyend="1380"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1377" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1377" bodyend="1380"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -1597,32 +1592,31 @@ It is possible to negate spatial predicates: <itemizedlist>
         <briefdescription>
 <para>Returns a query iterator pointing at the begin of the query range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns an iterator which may be used to perform iterative queries. For the information about predicates which may be passed to this method see <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a7baa88eb4e7a5c640ab847513de45b3e" kindref="member">query()</ref>.</para><para>The type of the returned iterator depends on the type of passed Predicates but the iterator of this type may be assigned to the variable of const_query_iterator type. If you&apos;d like to use the type of the iterator returned by this method you may get the type e.g. by using C++11 decltype or Boost.Typeof library. This iterator may be compared with iterators returned by both versions of <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1af3b16f4732fa8113c0b2187005182513" kindref="member">qend()</ref> method.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    // Store the result in the container using std::copy() - it requires both iterators of the same type
-    std::copy(tree.qbegin_(bgi::intersects(box)), tree.qend_(bgi::intersects(box)), std::back_inserter(result));
+<para>This method returns an iterator which may be used to perform iterative queries. For the information about predicates which may be passed to this method see <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a7baa88eb4e7a5c640ab847513de45b3e" kindref="member">query()</ref>.</para><para>The type of the returned iterator depends on the type of passed Predicates but the iterator of this type may be assigned to the variable of const_query_iterator type. If you&apos;d like to use the type of the iterator returned by this method you may get the type e.g. by using C++11 decltype or Boost.Typeof library. This iterator may be compared with iterators returned by both versions of <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1af3b16f4732fa8113c0b2187005182513" kindref="member">qend()</ref> method.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>// Store the result in the container using std::copy() - it requires both iterators of the same type
+std::copy(tree.qbegin_(bgi::intersects(box)), tree.qend_(bgi::intersects(box)), std::back_inserter(result));
 
-    // Store the result in the container using std::copy() and type-erased iterators
-    Rtree::const_query_iterator first = tree.qbegin_(bgi::intersects(box));
-    Rtree::const_query_iterator last = tree.qend_();
-    std::copy(first, last, std::back_inserter(result));
+// Store the result in the container using std::copy() and type-erased iterators
+Rtree::const_query_iterator first = tree.qbegin_(bgi::intersects(box));
+Rtree::const_query_iterator last = tree.qend_();
+std::copy(first, last, std::back_inserter(result));
 
-    // Boost.Typeof
-    typedef BOOST_TYPEOF(tree.qbegin(bgi::nearest(pt, 10000))) Iter;
-    for ( Iter it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
-    {
-        // do something with value
-        if ( has_enough_nearest_values() )
-            break;
-    }
+// Boost.Typeof
+typedef BOOST_TYPEOF(tree.qbegin(bgi::nearest(pt, 10000))) Iter;
+for ( Iter it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
+{
+    // do something with value
+    if ( has_enough_nearest_values() )
+        break;
+}
 
-    // C++11 (auto)
-    for ( auto it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
-    {
-        // do something with value
-        if ( has_enough_nearest_values() )
-            break;
-    }
-    </verbatim></para></simplesect>
+// C++11 (auto)
+for ( auto it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
+{
+    // do something with value
+    if ( has_enough_nearest_values() )
+        break;
+}
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>If predicates copy throws. If allocation throws.</para></simplesect>
 <simplesect kind="warning"><para>The modification of the rtree may invalidate the iterators.</para></simplesect>
@@ -1638,7 +1632,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="998" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="997" bodyend="1015"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="997" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="997" bodyend="1015"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a2dadc011f8051f812d7bb81bbffed4a3" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1657,10 +1651,9 @@ It is possible to negate spatial predicates: <itemizedlist>
         <briefdescription>
 <para>Returns the query iterator pointing at the end of the query range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be used to perform iterative queries. For the information about the predicates which may be passed to this method see <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a7baa88eb4e7a5c640ab847513de45b3e" kindref="member">query()</ref>.</para><para>The type of the returned iterator depends on the type of passed Predicates but the iterator of this type may be assigned to the variable of const_query_iterator type. If you&apos;d like to use the type of the iterator returned by this method you may get the type e.g. by using C++11 decltype or Boost.Typeof library.</para><para>The type of the iterator returned by this method is the same as the one returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref> to which the same predicates were passed.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    // Store the result in the container using std::copy() - it requires both iterators of the same type
-    std::copy(tree.qbegin_(bgi::intersects(box)), tree.qend_(bgi::intersects(box)), std::back_inserter(result));
-    </verbatim></para></simplesect>
+<para>This method returns the iterator which may be used to perform iterative queries. For the information about the predicates which may be passed to this method see <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a7baa88eb4e7a5c640ab847513de45b3e" kindref="member">query()</ref>.</para><para>The type of the returned iterator depends on the type of passed Predicates but the iterator of this type may be assigned to the variable of const_query_iterator type. If you&apos;d like to use the type of the iterator returned by this method you may get the type e.g. by using C++11 decltype or Boost.Typeof library.</para><para>The type of the iterator returned by this method is the same as the one returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref> to which the same predicates were passed.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>// Store the result in the container using std::copy() - it requires both iterators of the same type
+std::copy(tree.qbegin_(bgi::intersects(box)), tree.qend_(bgi::intersects(box)), std::back_inserter(result));
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>If predicates copy throws.</para></simplesect>
 <simplesect kind="warning"><para>The modification of the rtree may invalidate the iterators.</para></simplesect>
@@ -1676,7 +1669,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1059" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1058" bodyend="1073"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1058" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1058" bodyend="1073"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a034f29dc509db845ac798f63daae071d" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>detail::rtree::iterators::end_query_iterator&lt; <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a5761a41d87b93d4fd548ecb6600ae757" kindref="member">value_type</ref>, allocators_type &gt;</type>
@@ -1686,29 +1679,28 @@ It is possible to negate spatial predicates: <itemizedlist>
         <briefdescription>
 <para>Returns the query iterator pointing at the end of the query range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be compared with the iterator returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref> in order to check if the query has ended.</para><para>The type of the returned iterator is different than the type returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref> but the iterator of this type may be assigned to the variable of const_query_iterator type. If you&apos;d like to use the type of the iterator returned by this method, which most certainly will be faster than the type-erased iterator, you may get the type e.g. by using C++11 decltype or Boost.Typeof library.</para><para>The type of the iterator returned by this method is dfferent than the type returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-    // Store the result in the container using std::copy() and type-erased iterators
-    Rtree::const_query_iterator first = tree.qbegin_(bgi::intersects(box));
-    Rtree::const_query_iterator last = tree.qend_();
-    std::copy(first, last, std::back_inserter(result));
+<para>This method returns the iterator which may be compared with the iterator returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref> in order to check if the query has ended.</para><para>The type of the returned iterator is different than the type returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref> but the iterator of this type may be assigned to the variable of const_query_iterator type. If you&apos;d like to use the type of the iterator returned by this method, which most certainly will be faster than the type-erased iterator, you may get the type e.g. by using C++11 decltype or Boost.Typeof library.</para><para>The type of the iterator returned by this method is dfferent than the type returned by <ref refid="classboost_1_1geometry_1_1index_1_1rtree_1a63d15f3b5b157a47045fcac3fec3b7a0" kindref="member">qbegin()</ref>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>// Store the result in the container using std::copy() and type-erased iterators
+Rtree::const_query_iterator first = tree.qbegin_(bgi::intersects(box));
+Rtree::const_query_iterator last = tree.qend_();
+std::copy(first, last, std::back_inserter(result));
 
-    // Boost.Typeof
-    typedef BOOST_TYPEOF(tree.qbegin(bgi::nearest(pt, 10000))) Iter;
-    for ( Iter it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
-    {
-        // do something with value
-        if ( has_enough_nearest_values() )
-            break;
-    }
+// Boost.Typeof
+typedef BOOST_TYPEOF(tree.qbegin(bgi::nearest(pt, 10000))) Iter;
+for ( Iter it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
+{
+    // do something with value
+    if ( has_enough_nearest_values() )
+        break;
+}
 
-    // C++11 (auto)
-    for ( auto it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
-    {
-        // do something with value
-        if ( has_enough_nearest_values() )
-            break;
-    }
-    </verbatim></para></simplesect>
+// C++11 (auto)
+for ( auto it = tree.qbegin_(bgi::nearest(pt, 10000)) ; it != tree.qend_() ; ++it )
+{
+    // do something with value
+    if ( has_enough_nearest_values() )
+        break;
+}
+</verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>Nothing</para></simplesect>
 <simplesect kind="warning"><para>The modification of the rtree may invalidate the iterators.</para></simplesect>
@@ -1716,7 +1708,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1126" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1125" bodyend="1128"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1125" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1125" bodyend="1128"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a87046ed7c96647c69f8d75de5adc8d76" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>translator_type</type>
@@ -1731,7 +1723,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1393" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1392" bodyend="1395"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1392" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1392" bodyend="1395"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a3c1db7f535737a58679d8e792061c186" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1762,7 +1754,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1410" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1409" bodyend="1413"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1409" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1409" bodyend="1413"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1ad91d5e7416b0c72ffa6ab69c879a4ede" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1acc1f90d7b70afebc58107c523ece5cd5" kindref="member">size_type</ref></type>
@@ -1777,7 +1769,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1426" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1425" bodyend="1428"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1425" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1425" bodyend="1428"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1ae2a3b7b3d3072ffe84050e80fb921578" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -1804,7 +1796,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1443" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1442" bodyend="1464"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1442" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1442" bodyend="1464"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a26abf079e0206a85a54504b25b0b5329" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="classboost_1_1geometry_1_1index_1_1rtree_1acc1f90d7b70afebc58107c523ece5cd5" kindref="member">size_type</ref></type>
@@ -1830,7 +1822,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1475" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1474" bodyend="1498"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1474" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1474" bodyend="1498"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a5a638d6bdbf89fae4fb6468aa7c03cd3" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -1844,7 +1836,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1507" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1506" bodyend="1513"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1506" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1506" bodyend="1513"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a08b36c40bfbe841d8d3061068f3baafa" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -1870,7 +1862,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1524" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1523" bodyend="1535"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1523" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1523" bodyend="1535"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a3caca679e5a8666f0c6bbf2fd85834f6" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -1918,7 +1910,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1549" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1548" bodyend="1575"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1548" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1548" bodyend="1575"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a87ec74e61941db57f918874898f9fadb" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1952,7 +1944,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1588" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1586" bodyend="1590"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1586" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1586" bodyend="1590"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1aea5bccf7dba972d1f5bef98234bc35c2" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -1986,7 +1978,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1603" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1601" bodyend="1611"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1601" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1601" bodyend="1611"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1afe790f9ceee3c658cd984356e853215b" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -2020,7 +2012,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1624" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1622" bodyend="1626"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1622" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1622" bodyend="1626"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1ae2850f6421dfd0034565d5ec8ddf4644" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -2054,7 +2046,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1639" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1637" bodyend="1649"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1637" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1637" bodyend="1649"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1aaccf7698b52dcf1542c9dca42fa441c4" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -2087,7 +2079,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1659" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1658" bodyend="1666"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1658" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1658" bodyend="1666"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1ad5fdcc1561738afdb8f7eebf09d5ba76" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -2120,7 +2112,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1676" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1675" bodyend="1694"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1675" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1675" bodyend="1694"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1rtree_1a51dfe21d383cd6cfe51417c95725f7f7" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -2143,7 +2135,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1704" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1703" bodyend="1720"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1703" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1703" bodyend="1720"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -2201,7 +2193,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="156" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="155" bodyend="1774"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="156" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="155" bodyend="1774"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1index_1_1rtree_1aa9dc5d830362e77b6de638f676285e1a" prot="private" virt="non-virtual"><scope>boost::geometry::index::rtree</scope><name>allocator_traits_type</name></member>
       <member refid="classboost_1_1geometry_1_1index_1_1rtree_1ab6618b5c7e88ed70533233fbac0f5b2e" prot="public" virt="non-virtual"><scope>boost::geometry::index::rtree</scope><name>allocator_type</name></member>

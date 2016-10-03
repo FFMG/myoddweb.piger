@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_b67f73bc9fc64a4bd2753eadf8cac3b3" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay</compoundname>
     <innerfile refid="add__rings_8hpp">add_rings.hpp</innerfile>
     <innerfile refid="append__no__duplicates_8hpp">append_no_duplicates.hpp</innerfile>
     <innerfile refid="append__no__dups__or__spikes_8hpp">append_no_dups_or_spikes.hpp</innerfile>
@@ -9,6 +9,7 @@
     <innerfile refid="backtrack__check__si_8hpp">backtrack_check_si.hpp</innerfile>
     <innerfile refid="check__enrich_8hpp">check_enrich.hpp</innerfile>
     <innerfile refid="clip__linestring_8hpp">clip_linestring.hpp</innerfile>
+    <innerfile refid="cluster__info_8hpp">cluster_info.hpp</innerfile>
     <innerfile refid="convert__ring_8hpp">convert_ring.hpp</innerfile>
     <innerfile refid="copy__segment__point_8hpp">copy_segment_point.hpp</innerfile>
     <innerfile refid="copy__segments_8hpp">copy_segments.hpp</innerfile>
@@ -28,7 +29,6 @@
     <innerfile refid="get__turn__info__ll_8hpp">get_turn_info_ll.hpp</innerfile>
     <innerfile refid="get__turns_8hpp">get_turns.hpp</innerfile>
     <innerfile refid="handle__colocations_8hpp">handle_colocations.hpp</innerfile>
-    <innerfile refid="handle__touch_8hpp">handle_touch.hpp</innerfile>
     <innerfile refid="inconsistent__turns__exception_8hpp">inconsistent_turns_exception.hpp</innerfile>
     <innerfile refid="intersection__box__box_8hpp">intersection_box_box.hpp</innerfile>
     <innerfile refid="intersection__insert_8hpp">intersection_insert.hpp</innerfile>
@@ -44,7 +44,10 @@
     <innerfile refid="self__turn__points_8hpp">self_turn_points.hpp</innerfile>
     <innerfile refid="sort__by__side_8hpp">sort_by_side.hpp</innerfile>
     <innerfile refid="stream__info_8hpp">stream_info.hpp</innerfile>
+    <innerfile refid="traversal_8hpp">traversal.hpp</innerfile>
     <innerfile refid="traversal__info_8hpp">traversal_info.hpp</innerfile>
+    <innerfile refid="traversal__ring__creator_8hpp">traversal_ring_creator.hpp</innerfile>
+    <innerfile refid="traversal__switch__detector_8hpp">traversal_switch_detector.hpp</innerfile>
     <innerfile refid="traverse_8hpp">traverse.hpp</innerfile>
     <innerfile refid="turn__info_8hpp">turn_info.hpp</innerfile>
     <innerfile refid="visit__info_8hpp">visit_info.hpp</innerfile>

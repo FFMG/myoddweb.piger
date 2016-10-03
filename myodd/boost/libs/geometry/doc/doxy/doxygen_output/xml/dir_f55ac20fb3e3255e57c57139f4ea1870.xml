@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_f55ac20fb3e3255e57c57139f4ea1870" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/util/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/util</compoundname>
     <innerfile refid="add__const__if__c_8hpp">add_const_if_c.hpp</innerfile>
     <innerfile refid="bare__type_8hpp">bare_type.hpp</innerfile>
     <innerfile refid="calculation__type_8hpp">calculation_type.hpp</innerfile>

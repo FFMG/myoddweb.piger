@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1util_1_1combine__if_1_1combine_1_1apply" kind="struct" prot="public">
     <compoundname>boost::geometry::util::combine_if::combine::apply</compoundname>
     <includes local="no">combine_if.hpp</includes>
@@ -23,14 +23,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" line="77" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" bodystart="77" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" line="77" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" bodystart="77" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" line="61" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" bodystart="60" bodyend="78"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" line="61" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/combine_if.hpp" bodystart="60" bodyend="78"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1util_1_1combine__if_1_1combine_1_1apply_1a236951d8d049a520ed6527f28ec10e2b" prot="public" virt="non-virtual"><scope>boost::geometry::util::combine_if::combine::apply</scope><name>type</name></member>
     </listofallmembers>

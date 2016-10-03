@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class shared_library</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="../../boost_dll/reference.html#header.boost.dll.shared_library_hpp" title="Header &lt;boost/dll/shared_library.hpp&gt;">
 <link rel="prev" href="program_location.html" title="Function program_location">
@@ -39,75 +39,78 @@
   <span class="keyword">typedef</span> <span class="identifier">platform_specific</span> <a name="boost.dll.shared_library.native_handle_t"></a><span class="identifier">native_handle_t</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="shared_library.html#boost.dll.shared_libraryconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="shared_library.html#idp74470768-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <a class="link" href="shared_library.html#idp74473136-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="shared_library.html#idp81505936-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="shared_library.html#idp8145072-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <span class="keyword">explicit</span> <a class="link" href="shared_library.html#idp8148800-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> 
+  <a class="link" href="shared_library.html#idm45666830994368-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <a class="link" href="shared_library.html#idm45666830991920-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="shared_library.html#idm45666830987680-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="shared_library.html#idm45666830982272-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="shared_library.html#idm45666830978368-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> 
                           <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="shared_library.html#idp17844064-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">,</span> 
+  <a class="link" href="shared_library.html#idm45666830973680-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">,</span> 
                  <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="shared_library.html#idp17849408-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span><span class="special">,</span> 
+  <a class="link" href="shared_library.html#idm45666830968112-bb"><span class="identifier">shared_library</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span><span class="special">,</span> 
                  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idp83946880-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idp83951296-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <a class="link" href="shared_library.html#idp16028464-bb"><span class="special">~</span><span class="identifier">shared_library</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idm45666830965184-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idm45666830960768-bb"><span class="keyword">operator</span><span class="special">=</span></a><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <a class="link" href="shared_library.html#idm45666830956256-bb"><span class="special">~</span><span class="identifier">shared_library</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="shared_library.html#idp75475184-bb">public member functions</a></span>
-  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idp75475744-bb"><span class="identifier">assign</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idp75481296-bb"><span class="identifier">assign</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="shared_library.html#idp74486464-bb"><span class="identifier">load</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> 
+  <span class="comment">// <a class="link" href="shared_library.html#idm45666831084400-bb">public member functions</a></span>
+  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idm45666831083840-bb"><span class="identifier">assign</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idm45666831078048-bb"><span class="identifier">assign</span></a><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="shared_library.html#idm45666831073408-bb"><span class="identifier">load</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> 
             <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="shared_library.html#idp9256288-bb"><span class="identifier">load</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">,</span> 
+  <span class="keyword">void</span> <a class="link" href="shared_library.html#idm45666831068032-bb"><span class="identifier">load</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">,</span> 
             <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="shared_library.html#idp65961664-bb"><span class="identifier">load</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span><span class="special">,</span> 
+  <span class="keyword">void</span> <a class="link" href="shared_library.html#idm45666831061504-bb"><span class="identifier">load</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span><span class="special">,</span> 
             <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="shared_library.html#idp65965152-bb"><span class="identifier">unload</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idp65968288-bb"><span class="identifier">is_loaded</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idp17524256-bb"><span class="keyword">operator</span><span class="special">!</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <span class="keyword">explicit</span> <a class="link" href="shared_library.html#idp17527232-bb"><span class="keyword">operator</span> <span class="keyword">bool</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idp78715600-bb"><span class="identifier">has</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idp78719664-bb"><span class="identifier">has</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="shared_library.html#idm45666831058016-bb"><span class="identifier">unload</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idm45666831054880-bb"><span class="identifier">is_loaded</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idm45666831051904-bb"><span class="keyword">operator</span><span class="special">!</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="keyword">explicit</span> <a class="link" href="shared_library.html#idm45666831048928-bb"><span class="keyword">operator</span> <span class="keyword">bool</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idm45666831045680-bb"><span class="identifier">has</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="keyword">bool</span> <a class="link" href="shared_library.html#idm45666831041152-bb"><span class="identifier">has</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-    <a class="link" href="shared_library.html#idp22658608-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+    <a class="link" href="shared_library.html#idm45666831038800-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">disable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&amp;</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-    <a class="link" href="shared_library.html#idp22665648-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+    <a class="link" href="shared_library.html#idm45666831030640-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-    <a class="link" href="shared_library.html#idp75469888-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+    <a class="link" href="shared_library.html#idm45666831027360-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">disable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&amp;</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-    <a class="link" href="shared_library.html#idp75473168-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idp78738048-bb"><span class="identifier">get_alias</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idp61704288-bb"><span class="identifier">get_alias</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">native_handle_t</span> <a class="link" href="shared_library.html#idp61707488-bb"><span class="identifier">native</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="shared_library.html#idp61709712-bb"><span class="identifier">location</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="shared_library.html#idp67644400-bb"><span class="identifier">location</span></a><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="keyword">void</span> <a class="link" href="shared_library.html#idp74466608-bb"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
+    <a class="link" href="shared_library.html#idm45666831024080-bb"><span class="identifier">get</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idm45666831020800-bb"><span class="identifier">get_alias</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a class="link" href="shared_library.html#idm45666831014192-bb"><span class="identifier">get_alias</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">native_handle_t</span> <a class="link" href="shared_library.html#idm45666831010992-bb"><span class="identifier">native</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="shared_library.html#idm45666831008704-bb"><span class="identifier">location</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="shared_library.html#idm45666831004192-bb"><span class="identifier">location</span></a><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="shared_library.html#idm45666830998528-bb"><span class="identifier">swap</span></a><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="shared_library.html#idp16030352-bb">public static functions</a></span>
-  <span class="keyword">static</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="shared_library.html#idp16030912-bb"><span class="identifier">suffix</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="shared_library.html#idm45666830953952-bb">public static functions</a></span>
+  <span class="keyword">static</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a class="link" href="shared_library.html#idm45666830953392-bb"><span class="identifier">suffix</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp190283264"></a><h2>Description</h2>
+<a name="idm45946612468224"></a><h2>Description</h2>
 <p><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> instances share reference count to an actual loaded DLL/DSO, so it is safe and memory efficient to have multiple instances of <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> referencing the same DLL/DSO even if those instances were loaded using different paths (relative + absolute) referencing the same object.</p>
 <p>On Linux/POSIX link with library "dl". "-fvisibility=hidden" flag is also recommended for use on Linux/POSIX. </p>
 <div class="refsect2">
-<a name="idp190286208"></a><h3>
+<a name="idm45946612465280"></a><h3>
 <a name="boost.dll.shared_libraryconstruct-copy-destruct"></a><code class="computeroutput">shared_library</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-<pre class="literallayout"><a name="idp74470768-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idm45666830994368-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Creates in anstance that does not reference any DLL/DSO.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Postconditions:</span></p></td>
@@ -121,19 +124,25 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp74473136-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">)</span><span class="special">;</span></pre>
-<p>Copy constructor that increments the reference count of an underlying shared library. Same as calling constructor with `lib.location()` parameter.</p>
+<pre class="literallayout"><a name="idm45666830991920-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">)</span><span class="special">;</span></pre>
+<p>Copy constructor that increments the reference count of an underlying shared library. Same as calling constructor with <code class="computeroutput">lib.location()</code> parameter.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">lib</code></span></p></td>
 <td><p>A library to copy. </p></td>
@@ -152,19 +161,25 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp81505936-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
-<p>Copy constructor that increments the reference count of an underlying shared library. Same as calling constructor with `lib.location(), ec` parameters.</p>
+<pre class="literallayout"><a name="idm45666830987680-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
+<p>Copy constructor that increments the reference count of an underlying shared library. Same as calling constructor with <code class="computeroutput">lib.location(), ec</code> parameters.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><code class="computeroutput">ec</code></span></p></td>
@@ -189,19 +204,25 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp8145072-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span> lib<span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><a name="idm45666830982272-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span> lib<span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Move constructor. Does not invalidate existing symbols and functions loaded from lib.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">lib</code></span></p></td>
 <td><p>A shared library to move from. </p></td>
@@ -220,19 +241,25 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp8148800-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idm45666830978368-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
                         <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Loads a library by specified path with a specified mode.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><code class="computeroutput">lib_path</code></span></p></td>
@@ -253,20 +280,26 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp17844064-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
+<pre class="literallayout"><a name="idm45666830973680-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
                <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">,</span> 
                <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Loads a library by specified path with a specified mode.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><code class="computeroutput">ec</code></span></p></td>
@@ -291,24 +324,30 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp17849408-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode<span class="special">,</span> 
+<pre class="literallayout"><a name="idm45666830968112-bb"></a><span class="identifier">shared_library</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode<span class="special">,</span> 
                <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a name="idp83946880-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a name="idm45666830965184-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">)</span><span class="special">;</span></pre>
 <p>Assignment operator. If this-&gt;is_loaded() then calls this-&gt;unload(). Does not invalidate existing symbols and functions loaded from lib.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">lib</code></span></p></td>
 <td><p>A shared library to assign from. </p></td>
@@ -327,19 +366,25 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a name="idp83951296-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span> lib<span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a name="idm45666830960768-bb"></a><span class="keyword">operator</span><span class="special">=</span><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;&amp;</span> lib<span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Move assignment operator. If this-&gt;is_loaded() then calls this-&gt;unload(). Does not invalidate existing symbols and functions loaded from lib.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">lib</code></span></p></td>
 <td><p>A library to move from. </p></td>
@@ -358,12 +403,15 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a name="idp16028464-bb"></a><span class="special">~</span><span class="identifier">shared_library</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
-<p>Destroys the object by calling `unload()`. If library was loaded multiple times by different instances, the actual DLL/DSO won't be unloaded until there is at least one instance that references the DLL/DSO.</p>
+<pre class="literallayout"><a name="idm45666830956256-bb"></a><span class="special">~</span><span class="identifier">shared_library</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<p>Destroys the object by calling <code class="computeroutput">unload()</code>. If library was loaded multiple times by different instances, the actual DLL/DSO won't be unloaded until there is at least one instance that references the DLL/DSO.</p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Throws:</span></p></td>
 <td>Nothing. </td>
@@ -373,24 +421,30 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp190425440"></a><h3>
-<a name="idp75475184-bb"></a><code class="computeroutput">shared_library</code> public member functions</h3>
+<a name="idm45946612323712"></a><h3>
+<a name="idm45666831084400-bb"></a><code class="computeroutput">shared_library</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
 <pre class="literallayout"><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> 
-<a name="idp75475744-bb"></a><span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
+<a name="idm45666831083840-bb"></a><span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
 <p>Makes *this share the same shared object as lib. If *this is loaded, then unloads it.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><code class="computeroutput">ec</code></span></p></td>
@@ -415,19 +469,25 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a name="idp75481296-bb"></a><span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> <a name="idm45666831078048-bb"></a><span class="identifier">assign</span><span class="special">(</span><span class="keyword">const</span> <a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> lib<span class="special">)</span><span class="special">;</span></pre>
 <p>Makes *this share the same shared object as lib. If *this is loaded, then unloads it.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">lib</code></span></p></td>
 <td><p>A library instance to assign from. </p></td>
@@ -446,20 +506,26 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp74486464-bb"></a><span class="identifier">load</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
+<pre class="literallayout"><span class="keyword">void</span> <a name="idm45666831073408-bb"></a><span class="identifier">load</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
           <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Loads a library by specified path with a specified mode.</p>
 <p>Note that if some library is already loaded in this instance, load will call unload() and then load the new provided library.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><code class="computeroutput">lib_path</code></span></p></td>
@@ -480,7 +546,7 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp9256288-bb"></a><span class="identifier">load</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
+<pre class="literallayout"><span class="keyword">void</span> <a name="idm45666831068032-bb"></a><span class="identifier">load</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> 
           <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">,</span> 
           <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode <span class="special">=</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">default_mode</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Loads a library by specified path with a specified mode.</p>
@@ -488,13 +554,19 @@
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><code class="computeroutput">ec</code></span></p></td>
@@ -519,18 +591,21 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp65961664-bb"></a><span class="identifier">load</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode<span class="special">,</span> 
+<pre class="literallayout"><span class="keyword">void</span> <a name="idm45666831061504-bb"></a><span class="identifier">load</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> lib_path<span class="special">,</span> <span class="identifier">load_mode</span><span class="special">::</span><span class="identifier">type</span> mode<span class="special">,</span> 
           <span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp65965152-bb"></a><span class="identifier">unload</span><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">void</span> <a name="idm45666831058016-bb"></a><span class="identifier">unload</span><span class="special">(</span><span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Unloads a shared library. If library was loaded multiple times by different instances, the actual DLL/DSO won't be unloaded until there is at least one instance that references the DLL/DSO.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Postconditions:</span></p></td>
@@ -544,13 +619,16 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp65968288-bb"></a><span class="identifier">is_loaded</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idm45666831054880-bb"></a><span class="identifier">is_loaded</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Check if an library is loaded.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -564,13 +642,16 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp17524256-bb"></a><span class="keyword">operator</span><span class="special">!</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idm45666831051904-bb"></a><span class="keyword">operator</span><span class="special">!</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Check if an library is not loaded.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -584,13 +665,16 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp17527232-bb"></a><span class="keyword">operator</span> <span class="keyword">bool</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idm45666831048928-bb"></a><span class="keyword">operator</span> <span class="keyword">bool</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Check if an library is loaded.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -604,19 +688,25 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp78715600-bb"></a><span class="identifier">has</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> symbol_name<span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idm45666831045680-bb"></a><span class="identifier">has</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> symbol_name<span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Search for a given symbol on loaded library. Works for all symbols, including alias names.</p>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">symbol_name</code></span></p></td>
 <td><p>Null-terminated symbol name. Can handle std::string, char*, const char*. </p></td>
@@ -625,7 +715,7 @@
 </tr>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
-<td><p>`true` if the loaded library contains a symbol with a given name. </p></td>
+<td><p><code class="computeroutput">true</code> if the loaded library contains a symbol with a given name. </p></td>
 </tr>
 <tr>
 <td><p><span class="term">Throws:</span></p></td>
@@ -635,30 +725,36 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">bool</span> <a name="idp78719664-bb"></a><span class="identifier">has</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> symbol_name<span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">bool</span> <a name="idm45666831041152-bb"></a><span class="identifier">has</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> symbol_name<span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-  <a name="idp22658608-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
-<p>Returns reference to the symbol (function or variable) with the given name from the loaded library. This call will always succeed and throw nothing if call to `has(const char* )` member function with the same symbol name returned `true`.</p>
+  <a name="idm45666831038800-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Returns reference to the symbol (function or variable) with the given name from the loaded library. This call will always succeed and throw nothing if call to <code class="computeroutput">has(const char* )</code> member function with the same symbol name returned <code class="computeroutput">true</code>.</p>
 <p><span class="bold"><strong>Example:</strong></span> </p>
-<pre class="programlisting"> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">i0</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">get</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span><span class="special">(</span><span class="string">"integer_name"</span><span class="special">)</span><span class="special">;</span>
- <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">i1</span> <span class="special">=</span> <span class="special">*</span><span class="identifier">lib</span><span class="special">.</span><span class="identifier">get</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*</span><span class="special">&gt;</span><span class="special">(</span><span class="string">"integer_alias_name"</span><span class="special">)</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">i0</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">get</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span><span class="special">(</span><span class="string">"integer_name"</span><span class="special">)</span><span class="special">;</span>
+<span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">i1</span> <span class="special">=</span> <span class="special">*</span><span class="identifier">lib</span><span class="special">.</span><span class="identifier">get</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">*</span><span class="special">&gt;</span><span class="special">(</span><span class="string">"integer_alias_name"</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <p>
 
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">symbol_name</code></span></p></td>
 <td><p>Null-terminated symbol name. Can handle std::string, char*, const char*. </p></td>
@@ -667,8 +763,11 @@
 </tr>
 <tr>
 <td><p><span class="term">Template Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">T</code></span></p></td>
 <td><p>Type of the symbol that we are going to import. Must be explicitly specified. </p></td>
@@ -689,38 +788,44 @@
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">disable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&amp;</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-  <a name="idp22665648-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+  <a name="idm45666831030640-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-  <a name="idp75469888-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+  <a name="idm45666831027360-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
 <pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> 
   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">disable_if_c</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_member_pointer</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">||</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_reference</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">value</span><span class="special">,</span> <span class="identifier">T</span> <span class="special">&amp;</span> <span class="special">&gt;</span><span class="special">::</span><span class="identifier">type</span> 
-  <a name="idp75473168-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+  <a name="idm45666831024080-bb"></a><span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> symbol_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a name="idp78738048-bb"></a><span class="identifier">get_alias</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> alias_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a name="idm45666831020800-bb"></a><span class="identifier">get_alias</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> alias_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns a symbol (function or variable) from a shared library by alias name of the symbol.</p>
 <p><span class="bold"><strong>Example:</strong></span> </p>
-<pre class="programlisting"> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">get_alias</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span><span class="special">(</span><span class="string">"integer_alias_name"</span><span class="special">)</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">i</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">get_alias</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span><span class="special">(</span><span class="string">"integer_alias_name"</span><span class="special">)</span><span class="special">;</span>
 </pre>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">alias_name</code></span></p></td>
 <td><p>Null-terminated alias symbol name. Can handle std::string, char*, const char*. </p></td>
@@ -729,8 +834,11 @@
 </tr>
 <tr>
 <td><p><span class="term">Template Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">T</code></span></p></td>
 <td><p>Type of the symbol that we are going to import. Must be explicitly specified.. </p></td>
@@ -745,16 +853,19 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a name="idp61704288-bb"></a><span class="identifier">get_alias</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> alias_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> T<span class="special">&gt;</span> <span class="identifier">T</span> <span class="special">&amp;</span> <a name="idm45666831014192-bb"></a><span class="identifier">get_alias</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> alias_name<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">native_handle_t</span> <a name="idp61707488-bb"></a><span class="identifier">native</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">native_handle_t</span> <a name="idm45666831010992-bb"></a><span class="identifier">native</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Returns the native handler of the loaded library.</p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><p>Platform-specific handle. </p></td>
@@ -762,17 +873,20 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="idp61709712-bb"></a><span class="identifier">location</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="idm45666831008704-bb"></a><span class="identifier">location</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns full path and name of this shared object.</p>
 <p><span class="bold"><strong>Example:</strong></span> </p>
-<pre class="programlisting"> <span class="identifier">shared_library</span> <span class="identifier">lib</span><span class="special">(</span><span class="string">"test_lib.dll"</span><span class="special">)</span><span class="special">;</span>
- <span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">full_path</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">location</span><span class="special">(</span><span class="special">)</span><span class="special">;</span> <span class="comment">// C:\Windows\System32\test_lib.dll</span>
+<pre class="programlisting"><span class="identifier">shared_library</span> <span class="identifier">lib</span><span class="special">(</span><span class="string">"test_lib.dll"</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">full_path</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">location</span><span class="special">(</span><span class="special">)</span><span class="special">;</span> <span class="comment">// C:\Windows\System32\test_lib.dll</span>
 </pre>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Returns:</span></p></td>
@@ -786,23 +900,29 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="idp67644400-bb"></a><span class="identifier">location</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="idm45666831004192-bb"></a><span class="identifier">location</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">system</span><span class="special">::</span><span class="identifier">error_code</span> <span class="special">&amp;</span> ec<span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
 <p>Returns full path and name of shared module.</p>
 <p><span class="bold"><strong>Example:</strong></span> </p>
-<pre class="programlisting"> <span class="identifier">shared_library</span> <span class="identifier">lib</span><span class="special">(</span><span class="string">"test_lib.dll"</span><span class="special">)</span><span class="special">;</span>
- <span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">full_path</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">location</span><span class="special">(</span><span class="special">)</span><span class="special">;</span> <span class="comment">// C:\Windows\System32\test_lib.dll</span>
+<pre class="programlisting"><span class="identifier">shared_library</span> <span class="identifier">lib</span><span class="special">(</span><span class="string">"test_lib.dll"</span><span class="special">)</span><span class="special">;</span>
+<span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">full_path</span> <span class="special">=</span> <span class="identifier">lib</span><span class="special">.</span><span class="identifier">location</span><span class="special">(</span><span class="special">)</span><span class="special">;</span> <span class="comment">// C:\Windows\System32\test_lib.dll</span>
 </pre>
 <p>
 
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">ec</code></span></p></td>
 <td><p>Variable that will be set to the result of the operation. </p></td>
@@ -821,18 +941,24 @@
 </table></div>
 </li>
 <li class="listitem">
-<pre class="literallayout"><span class="keyword">void</span> <a name="idp74466608-bb"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> rhs<span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">void</span> <a name="idm45666830998528-bb"></a><span class="identifier">swap</span><span class="special">(</span><a class="link" href="shared_library.html" title="Class shared_library">shared_library</a> <span class="special">&amp;</span> rhs<span class="special">)</span> <span class="keyword">noexcept</span><span class="special">;</span></pre>
 <p>Swaps two libraries. Does not invalidate existing symbols and functions loaded from libraries.</p>
 <p>
 
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term">Parameters:</span></p></td>
-<td><div class="variablelist"><table border="0">
+<td><div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><code class="computeroutput">rhs</code></span></p></td>
 <td><p>Library to swap with. </p></td>
@@ -849,15 +975,18 @@
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp190809360"></a><h3>
-<a name="idp16030352-bb"></a><code class="computeroutput">shared_library</code> public static functions</h3>
+<a name="idm45946611937744"></a><h3>
+<a name="idm45666830953952-bb"></a><code class="computeroutput">shared_library</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
-<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="idp16030912-bb"></a><span class="identifier">suffix</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
+<pre class="literallayout"><span class="keyword">static</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <a name="idm45666830953392-bb"></a><span class="identifier">suffix</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>
 <p>Returns suffix of shared module: in a call to load() or the constructor/load.</p>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term">Returns:</span></p></td>
 <td><p>The suffix od shared module: ".dll" (Windows), ".so" (Unix/Linux/BSD), ".dylib" (MacOS/IOS) </p></td>
@@ -869,7 +998,7 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Renato Tegon Forti, Antony Polukhin<br>Copyright &#169; 2015, 2016 Antony Polukhin<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2014 Renato Tegon Forti, Antony Polukhin<br>Copyright &#169; 2015 Antony Polukhin<br>Copyright &#169; 2016 Antony Polukhin, Klemens Morgenstern<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       </p>

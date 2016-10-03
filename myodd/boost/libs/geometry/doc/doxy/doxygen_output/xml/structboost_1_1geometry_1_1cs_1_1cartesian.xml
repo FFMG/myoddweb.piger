@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1cs_1_1cartesian" kind="struct" prot="public">
     <compoundname>boost::geometry::cs::cartesian</compoundname>
     <includes local="no">cs.hpp</includes>
@@ -8,7 +8,7 @@
     <detaileddescription>
 <para>Defines the Cartesian or rectangular coordinate system where points are defined in 2 or 3 (or more) dimensions and usually (but not always) known as x,y,z <simplesect kind="see"><para><ulink url="http://en.wikipedia.org/wiki/Cartesian_coordinate_system">http://en.wikipedia.org/wiki/Cartesian_coordinate_system</ulink> </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/cs.hpp" line="94" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/cs.hpp" bodystart="94" bodyend="94"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/cs.hpp" line="94" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/cs.hpp" bodystart="94" bodyend="94"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

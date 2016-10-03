@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Examples Where Root Finding Goes Wrong</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.4.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.5.0">
 <link rel="up" href="../roots.html" title="Root finding">
 <link rel="prev" href="bad_guess.html" title="The Effect of a Poor Initial Guess">
 <link rel="next" href="brent_minima.html" title="Locating Function Minima using Brent's algorithm">
@@ -33,14 +33,14 @@
       </p>
 <h4>
 <a name="math_toolkit.roots.bad_roots.h0"></a>
-        <span><a name="math_toolkit.roots.bad_roots.local_minima"></a></span><a class="link" href="bad_roots.html#math_toolkit.roots.bad_roots.local_minima">Local
+        <span class="phrase"><a name="math_toolkit.roots.bad_roots.local_minima"></a></span><a class="link" href="bad_roots.html#math_toolkit.roots.bad_roots.local_minima">Local
         Minima</a>
       </h4>
 <p>
         If you start in the wrong place, such as z<sub>0</sub> here:
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_1.svg" width="372.047244094489" height="262.204724409449"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_1.svg" width="372" height="262"></object></span>
       </p>
 <p>
         Then almost any root-finding algorithm will descend into a local minima rather
@@ -48,14 +48,14 @@
       </p>
 <h4>
 <a name="math_toolkit.roots.bad_roots.h1"></a>
-        <span><a name="math_toolkit.roots.bad_roots.flatlining"></a></span><a class="link" href="bad_roots.html#math_toolkit.roots.bad_roots.flatlining">Flatlining</a>
+        <span class="phrase"><a name="math_toolkit.roots.bad_roots.flatlining"></a></span><a class="link" href="bad_roots.html#math_toolkit.roots.bad_roots.flatlining">Flatlining</a>
       </h4>
 <p>
         In this example, we're starting from a location (z<sub>0</sub>) where the first derivative
         is essentially zero:
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_2.svg" width="372.047244094489" height="262.204724409449"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_2.svg" width="372" height="262"></object></span>
       </p>
 <p>
         In this situation the next iteration will shoot off to infinity (assuming
@@ -75,7 +75,7 @@
         z<sub>0</sub> in this case:
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_4.svg" width="372.047244094489" height="262.204724409449"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_4.svg" width="372" height="262"></object></span>
       </p>
 <p>
         An initial Newton step would take you further from the root than you started,
@@ -83,14 +83,14 @@
       </p>
 <h4>
 <a name="math_toolkit.roots.bad_roots.h2"></a>
-        <span><a name="math_toolkit.roots.bad_roots.micro_stepping_non_convergence"></a></span><a class="link" href="bad_roots.html#math_toolkit.roots.bad_roots.micro_stepping_non_convergence">Micro-stepping
+        <span class="phrase"><a name="math_toolkit.roots.bad_roots.micro_stepping_non_convergence"></a></span><a class="link" href="bad_roots.html#math_toolkit.roots.bad_roots.micro_stepping_non_convergence">Micro-stepping
         / Non-convergence</a>
       </h4>
 <p>
         Consider starting at z<sub>0</sub> in this situation:
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_3.svg" width="372.047244094489" height="262.204724409449"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../roots/bad_root_3.svg" width="372" height="262"></object></span>
       </p>
 <p>
         The first derivative is essentially infinite, and the second close to zero

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1fraction__type" kind="struct" prot="public">
     <compoundname>boost::geometry::fraction_type</compoundname>
     <includes local="no">intersection_result.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="34" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="34" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="33" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1fraction__type_1aab8a764dfb37172a2f259299a9fe7fbb" prot="public" static="no" mutable="no">
         <type>SegmentRatio</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="31" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="31" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="30" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1fraction__type_1ae2a8e556f8df870bb5f05f535b5463af" prot="public" static="no" mutable="no">
         <type>SegmentRatio</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="32" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="32" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="31" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -70,7 +70,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="41" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="40" bodyend="45"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="39" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="39" bodyend="44"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1fraction__type_1a6468847090a7bacbd2a3eb6f88ef621f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="48" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="47" bodyend="52"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="46" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="46" bodyend="51"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1fraction__type_1af71ca24f1bffc1c2290942c50319702b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -104,14 +104,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="37" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="35" bodyend="37"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="34" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="34" bodyend="36"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="30" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="29" bodyend="54"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="29" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="28" bodyend="53"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1fraction__type_1af56eea897c5d86d471cdbc88f01870cb" prot="public" virt="non-virtual"><scope>boost::geometry::fraction_type</scope><name>assign</name></member>
       <member refid="structboost_1_1geometry_1_1fraction__type_1a6468847090a7bacbd2a3eb6f88ef621f" prot="public" virt="non-virtual"><scope>boost::geometry::fraction_type</scope><name>assign</name></member>

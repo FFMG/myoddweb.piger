@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_3ef17d421db005a49eeea1db0210e908" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/</compoundname>
-    <innerdir refid="dir_a3ea32c32e4892434ec17811730eee3c">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/</innerdir>
-    <innerdir refid="dir_3031b9e2f12f859ebfbf5ccda127064a">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/</innerdir>
-    <innerdir refid="dir_937a3bd4d0081552ae9b68f27650b616">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint/</innerdir>
-    <innerdir refid="dir_42d5bc1cdd9bb87e7c1e23fe50079caa">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/</innerdir>
-    <innerdir refid="dir_f9d010407669c283f84388388d11766b">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/</innerdir>
-    <innerdir refid="dir_a389a9de0dc4da0f87ab463cc63bf11d">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/equals/</innerdir>
-    <innerdir refid="dir_fb0871cff28874276e9df77a5e7224a3">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/expand/</innerdir>
-    <innerdir refid="dir_e2a6022e9b6b893585e6efd32eb28246">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/</innerdir>
-    <innerdir refid="dir_dbb29707c3aec431150ec3f92a4a5d27">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple/</innerdir>
-    <innerdir refid="dir_fd10a9410dc95d5be6a5c599ac3244eb">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/</innerdir>
-    <innerdir refid="dir_b67f73bc9fc64a4bd2753eadf8cac3b3">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/</innerdir>
-    <innerdir refid="dir_75e122e08cf075e5a1adee2d1bc7049c">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/</innerdir>
-    <innerdir refid="dir_647565eec0d94dc3299c955b84302d28">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relation/</innerdir>
-    <innerdir refid="dir_8adfea765970617810d1a83b2c339557">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/sections/</innerdir>
-    <innerdir refid="dir_1ebdbb358340eb3b0364c9d3ed6c8a4f">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/</innerdir>
-    <innerdir refid="dir_7ce704194c15a3c97d5827509e8deb1f">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/within/</innerdir>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail</compoundname>
+    <innerdir refid="dir_a3ea32c32e4892434ec17811730eee3c">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer</innerdir>
+    <innerdir refid="dir_3031b9e2f12f859ebfbf5ccda127064a">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance</innerdir>
+    <innerdir refid="dir_937a3bd4d0081552ae9b68f27650b616">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/disjoint</innerdir>
+    <innerdir refid="dir_42d5bc1cdd9bb87e7c1e23fe50079caa">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance</innerdir>
+    <innerdir refid="dir_f9d010407669c283f84388388d11766b">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope</innerdir>
+    <innerdir refid="dir_a389a9de0dc4da0f87ab463cc63bf11d">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/equals</innerdir>
+    <innerdir refid="dir_fb0871cff28874276e9df77a5e7224a3">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/expand</innerdir>
+    <innerdir refid="dir_e2a6022e9b6b893585e6efd32eb28246">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection</innerdir>
+    <innerdir refid="dir_dbb29707c3aec431150ec3f92a4a5d27">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_simple</innerdir>
+    <innerdir refid="dir_fd10a9410dc95d5be6a5c599ac3244eb">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid</innerdir>
+    <innerdir refid="dir_b67f73bc9fc64a4bd2753eadf8cac3b3">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay</innerdir>
+    <innerdir refid="dir_75e122e08cf075e5a1adee2d1bc7049c">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate</innerdir>
+    <innerdir refid="dir_647565eec0d94dc3299c955b84302d28">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relation</innerdir>
+    <innerdir refid="dir_8adfea765970617810d1a83b2c339557">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/sections</innerdir>
+    <innerdir refid="dir_1ebdbb358340eb3b0364c9d3ed6c8a4f">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns</innerdir>
+    <innerdir refid="dir_7ce704194c15a3c97d5827509e8deb1f">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/within</innerdir>
     <innerfile refid="andoyer__inverse_8hpp">andoyer_inverse.hpp</innerfile>
     <innerfile refid="as__range_8hpp">as_range.hpp</innerfile>
     <innerfile refid="assign__box__corners_8hpp">assign_box_corners.hpp</innerfile>

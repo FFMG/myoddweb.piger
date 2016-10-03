@@ -164,6 +164,8 @@ geometry/reference/arithmetic/add_point.html
 geometry/reference/arithmetic/add_value.html
 geometry/reference/arithmetic/assign_point.html
 geometry/reference/arithmetic/assign_value.html
+geometry/reference/arithmetic/cross_product_2.html
+geometry/reference/arithmetic/cross_product_2_0.html
 geometry/reference/arithmetic/divide_point.html
 geometry/reference/arithmetic/divide_value.html
 geometry/reference/arithmetic/dot_product.html

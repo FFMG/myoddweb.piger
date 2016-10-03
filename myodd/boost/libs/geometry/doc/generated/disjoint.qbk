@@ -16,7 +16,7 @@
 [section:disjoint disjoint]
 
 '''<indexterm><primary>disjoint</primary></indexterm>'''
-Checks if two geometries \1. 
+Checks if two geometries are disjoint. 
 
 [heading Synopsis]
 ``template<typename Geometry1, typename Geometry2>
@@ -32,7 +32,7 @@ bool disjoint(Geometry1 const & geometry1, Geometry2 const & geometry2)``
 
 
 [heading Returns]
-Returns true if two geometries \1
+Returns true if two geometries are disjoint
 
 [heading Header]
 Either

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Class template time_zone_names_base</title>
 <link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="../../date_time/doxy.html#header.boost.date_time.time_zone_names_hpp" title="Header &lt;boost/date_time/time_zone_names.hpp&gt;">
 <link rel="prev" href="default_zone_names.html" title="Struct template default_zone_names">
@@ -39,40 +39,40 @@
   <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">basic_string</span><span class="special">&lt;</span> <span class="identifier">CharT</span> <span class="special">&gt;</span> <a name="boost.date_time.time_zone_names_base.string_type"></a><span class="identifier">string_type</span><span class="special">;</span>
 
   <span class="comment">// <a class="link" href="time_zone_names_base.html#boost.date_time.time_zone_names_baseconstruct-copy-destruct">construct/copy/destruct</a></span>
-  <a class="link" href="time_zone_names_base.html#idp5015456-bb"><span class="identifier">time_zone_names_base</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <a class="link" href="time_zone_names_base.html#idp5015744-bb"><span class="identifier">time_zone_names_base</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span><span class="special">,</span> 
+  <a class="link" href="time_zone_names_base.html#idm45443552144816-bb"><span class="identifier">time_zone_names_base</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="time_zone_names_base.html#idm45443552144528-bb"><span class="identifier">time_zone_names_base</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span><span class="special">,</span> 
                        <span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
 
-  <span class="comment">// <a class="link" href="time_zone_names_base.html#idp5665728-bb">public member functions</a></span>
-  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idp9026160-bb"><span class="identifier">dst_zone_abbrev</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idp9027280-bb"><span class="identifier">std_zone_abbrev</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idp9028400-bb"><span class="identifier">dst_zone_name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idp5014176-bb"><span class="identifier">std_zone_name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="time_zone_names_base.html#idm45443552150016-bb">public member functions</a></span>
+  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idm45443552149456-bb"><span class="identifier">dst_zone_abbrev</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idm45443552148336-bb"><span class="identifier">std_zone_abbrev</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idm45443552147216-bb"><span class="identifier">dst_zone_name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">string_type</span> <a class="link" href="time_zone_names_base.html#idm45443552146096-bb"><span class="identifier">std_zone_name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp180777728"></a><h2>Description</h2>
+<a name="idm45946623791408"></a><h2>Description</h2>
 <p>Class that holds various types of strings used for timezones. For example, for the western United States there is the full name: Pacific Standard Time and the abbreviated name: PST. During daylight savings there are additional names: Pacific Daylight Time and PDT.  CharT Allows class to support different character types </p>
 <div class="refsect2">
-<a name="idp180778736"></a><h3>
+<a name="idm45946623790400"></a><h3>
 <a name="boost.date_time.time_zone_names_baseconstruct-copy-destruct"></a><code class="computeroutput">time_zone_names_base</code> 
         public
        construct/copy/destruct</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><a name="idp5015456-bb"></a><span class="identifier">time_zone_names_base</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><a name="idp5015744-bb"></a><span class="identifier">time_zone_names_base</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span> std_zone_name_str<span class="special">,</span> 
+<li class="listitem"><pre class="literallayout"><a name="idm45443552144816-bb"></a><span class="identifier">time_zone_names_base</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><a name="idm45443552144528-bb"></a><span class="identifier">time_zone_names_base</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span> std_zone_name_str<span class="special">,</span> 
                      <span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span> std_zone_abbrev_str<span class="special">,</span> 
                      <span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span> dst_zone_name_str<span class="special">,</span> 
                      <span class="keyword">const</span> <span class="identifier">string_type</span> <span class="special">&amp;</span> dst_zone_abbrev_str<span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 <div class="refsect2">
-<a name="idp180798768"></a><h3>
-<a name="idp5665728-bb"></a><code class="computeroutput">time_zone_names_base</code> public member functions</h3>
+<a name="idm45946623770368"></a><h3>
+<a name="idm45443552150016-bb"></a><code class="computeroutput">time_zone_names_base</code> public member functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idp9026160-bb"></a><span class="identifier">dst_zone_abbrev</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idp9027280-bb"></a><span class="identifier">std_zone_abbrev</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idp9028400-bb"></a><span class="identifier">dst_zone_name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idp5014176-bb"></a><span class="identifier">std_zone_name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idm45443552149456-bb"></a><span class="identifier">dst_zone_abbrev</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idm45443552148336-bb"></a><span class="identifier">std_zone_abbrev</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idm45443552147216-bb"></a><span class="identifier">dst_zone_name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">string_type</span> <a name="idm45443552146096-bb"></a><span class="identifier">std_zone_name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>

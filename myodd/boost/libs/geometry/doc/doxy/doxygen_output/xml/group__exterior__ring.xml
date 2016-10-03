@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__exterior__ring" kind="group">
     <compoundname>exterior_ring</compoundname>
     <title>exterior_ring: exterior_ring</title>
@@ -42,7 +42,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" line="111" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" bodystart="110" bodyend="117"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" line="110" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" bodystart="110" bodyend="117"/>
       </memberdef>
       <memberdef kind="function" id="group__exterior__ring_1ga96a935d3093b77955f100cc3da6a4e51" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -82,7 +82,7 @@
  <qbk.distinguish>const version</qbk.distinguish>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" line="133" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" bodystart="131" bodyend="139"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" line="131" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exterior_ring.hpp" bodystart="131" bodyend="139"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

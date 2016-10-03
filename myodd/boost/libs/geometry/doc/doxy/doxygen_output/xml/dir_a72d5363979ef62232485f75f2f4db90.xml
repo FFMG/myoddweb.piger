@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_a72d5363979ef62232485f75f2f4db90" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/core/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/core</compoundname>
     <innerfile refid="access_8hpp">access.hpp</innerfile>
     <innerfile refid="assert_8hpp">assert.hpp</innerfile>
     <innerfile refid="closure_8hpp">closure.hpp</innerfile>

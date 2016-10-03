@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1detail_1_1andoyer__inverse" kind="struct" prot="public">
     <compoundname>boost::geometry::detail::andoyer_inverse</compoundname>
     <includes local="no">andoyer_inverse.hpp</includes>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="43" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" bodystart="43" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="43" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" bodystart="46" bodyend="199"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="46" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" bodystart="46" bodyend="199"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -86,7 +86,7 @@
 <listitem><para>Technical Report: PAUL D. THOMAS, MATHEMATICAL MODELS FOR NAVIGATION SYSTEMS, 1965 <ulink url="http://www.dtic.mil/docs/citations/AD0627893">http://www.dtic.mil/docs/citations/AD0627893</ulink></para></listitem><listitem><para>Technical Report: PAUL D. THOMAS, SPHEROIDAL GEODESICS, REFERENCE SYSTEMS, AND LOCAL GEOMETRY, 1970 <ulink url="http://www.dtic.mil/docs/citations/AD703541">http://www.dtic.mil/docs/citations/AD703541</ulink> </para></listitem></itemizedlist>
 </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="42" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" bodystart="41" bodyend="200"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="42" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" bodystart="41" bodyend="200"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1detail_1_1andoyer__inverse_1a6ef1aa2a5369b3c3853e113718d7a1f5" prot="public" virt="non-virtual"><scope>boost::geometry::detail::andoyer_inverse</scope><name>apply</name></member>
       <member refid="structboost_1_1geometry_1_1detail_1_1andoyer__inverse_1a308d124e5f4d1e40e1378716a83a0164" prot="public" virt="non-virtual"><scope>boost::geometry::detail::andoyer_inverse</scope><name>result_type</name></member>

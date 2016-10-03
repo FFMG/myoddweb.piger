@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1util_1_1detail_1_1calculation__type" kind="struct" prot="public">
     <compoundname>boost::geometry::util::detail::calculation_type</compoundname>
     <includes local="no">calculation_type.hpp</includes>
@@ -37,7 +37,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="90" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="90" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="90" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="90" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -55,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="63"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="58" column="1"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1util_1_1detail_1_1calculation__type_1afff77c37a92957d4e3b0cf8306c4a36c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -71,7 +71,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="69"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="64" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -80,7 +80,7 @@
 <para>Selects the most appropriate:<itemizedlist>
 <listitem><para>if calculation type is specified (not void), that one is used</para></listitem><listitem><para>else if type is non-fundamental (user defined e.g. ttmath), that one</para></listitem><listitem><para>else if type is floating point, the specified default FP is used</para></listitem><listitem><para>else it is integral and the specified default integral is used </para></listitem></itemizedlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="56" bodyend="91"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" line="57" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/calculation_type.hpp" bodystart="56" bodyend="91"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1util_1_1detail_1_1calculation__type_1a44bd601a79bb7b76861830ac403fb45b" prot="public" virt="non-virtual"><scope>boost::geometry::util::detail::calculation_type</scope><name>BOOST_STATIC_ASSERT</name></member>
       <member refid="structboost_1_1geometry_1_1util_1_1detail_1_1calculation__type_1afff77c37a92957d4e3b0cf8306c4a36c" prot="public" virt="non-virtual"><scope>boost::geometry::util::detail::calculation_type</scope><name>BOOST_STATIC_ASSERT</name></member>

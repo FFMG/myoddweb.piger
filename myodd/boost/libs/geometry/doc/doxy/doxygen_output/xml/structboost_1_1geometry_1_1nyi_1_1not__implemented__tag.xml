@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1nyi_1_1not__implemented__tag" kind="struct" prot="public">
     <compoundname>boost::geometry::nyi::not_implemented_tag</compoundname>
     <derivedcompoundref refid="structboost_1_1geometry_1_1not__implemented" prot="public" virt="non-virtual">boost::geometry::not_implemented&lt; Term1, Term2, Term3 &gt;</derivedcompoundref>
@@ -10,30 +10,30 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="498">
+      <node id="573">
         <label>boost::geometry::not_implemented&lt; Term1, Term2, Term3 &gt;</label>
         <link refid="structboost_1_1geometry_1_1not__implemented"/>
-        <childnode refid="497" relation="public-inheritance">
+        <childnode refid="572" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="499">
+      <node id="574">
         <label>boost::geometry::not_implemented&lt; Geometry &gt;</label>
         <link refid="structboost_1_1geometry_1_1not__implemented"/>
-        <childnode refid="497" relation="public-inheritance">
+        <childnode refid="572" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="497">
+      <node id="572">
         <label>boost::geometry::nyi::not_implemented_tag</label>
         <link refid="structboost_1_1geometry_1_1nyi_1_1not__implemented__tag"/>
       </node>
-      <node id="500">
+      <node id="575">
         <label>boost::geometry::detail_dispatch::helper_geometry&lt; Geometry, NewCoordinateType, NewUnits, Tag &gt;</label>
         <link refid="structboost_1_1geometry_1_1detail__dispatch_1_1helper__geometry"/>
-        <childnode refid="499" relation="public-inheritance">
+        <childnode refid="574" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/not_implemented.hpp" line="54" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/not_implemented.hpp" bodystart="54" bodyend="54"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/not_implemented.hpp" line="54" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/not_implemented.hpp" bodystart="54" bodyend="54"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

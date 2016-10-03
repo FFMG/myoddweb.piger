@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1distance_1_1comparable_1_1pythagoras__box__box_1_1calculation__type" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::distance::comparable::pythagoras_box_box::calculation_type</compoundname>
     <includes local="no">distance_pythagoras_box_box.hpp</includes>
@@ -23,14 +23,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" line="110" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" bodystart="110" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" line="110" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" bodystart="110" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" line="104" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" bodystart="103" bodyend="111"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" line="104" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/distance_pythagoras_box_box.hpp" bodystart="103" bodyend="111"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1distance_1_1comparable_1_1pythagoras__box__box_1_1calculation__type_1ad8d3296f1d3a8f9d72a817e3fecd3bd5" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::distance::comparable::pythagoras_box_box::calculation_type</scope><name>type</name></member>
     </listofallmembers>

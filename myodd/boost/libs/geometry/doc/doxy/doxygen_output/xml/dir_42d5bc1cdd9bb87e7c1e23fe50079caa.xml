@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_42d5bc1cdd9bb87e7c1e23fe50079caa" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance</compoundname>
     <innerfile refid="backward__compatibility_8hpp">backward_compatibility.hpp</innerfile>
     <innerfile refid="box__to__box_8hpp">box_to_box.hpp</innerfile>
     <innerfile refid="default__strategies_8hpp">default_strategies.hpp</innerfile>

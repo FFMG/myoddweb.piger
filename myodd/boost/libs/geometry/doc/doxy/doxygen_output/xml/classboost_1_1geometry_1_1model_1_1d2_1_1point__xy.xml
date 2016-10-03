@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kind="class" prot="public">
     <compoundname>boost::geometry::model::d2::point_xy</compoundname>
     <basecompoundref refid="classboost_1_1geometry_1_1model_1_1point" prot="public" virt="non-virtual">boost::geometry::model::point&lt; CoordinateType, 2, CoordinateSystem &gt;</basecompoundref>
@@ -18,10 +18,10 @@
       </param>
     </templateparamlist>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a9feeb8e17d7ee287c177d50ed459ec7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a69609f33908550b343e653291b836d78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>boost::geometry::model::d2::point_xy&lt; CoordinateType, CoordinateSystem &gt;::point_xy</definition>
-        <argsstring>()</argsstring>
+        <argsstring>()=default</argsstring>
         <name>point_xy</name>
         <briefdescription>
 <para>Default constructor, no initialization. </para>        </briefdescription>
@@ -29,7 +29,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="52"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="52" column="1"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1afc05f085ae9675c83aadbd7026a1be0a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -50,7 +50,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="62" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="60" bodyend="62"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="60" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="60" bodyend="62"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1aa023762716f30c1887fe062e06572238" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>CoordinateType const &amp;</type>
@@ -63,7 +63,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="66" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="65" bodyend="66"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="65" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="65" bodyend="66"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a89ca091e60b57bc097c0292763a52a59" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -80,7 +80,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="74" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="73" bodyend="74"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="73" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="73" bodyend="74"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a3799460788a157cbef0f690006e65744" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>CoordinateType const &amp;</type>
@@ -93,7 +93,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="70" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="69" bodyend="70"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="69" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="69" bodyend="70"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1af0d8f7cc38a4bf2e385bf90a786a1057" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -110,7 +110,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="78" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="77" bodyend="78"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="77" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="77" bodyend="78"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -136,37 +136,37 @@
 [link geometry.reference.concepts.concept_point Point Concept]
 </qbk.before.synopsis> </para><para> <qbk>[include reference/geometries/point_assign_warning.qbk]</qbk>  </para>    </detaileddescription>
     <inheritancegraph>
-      <node id="432">
+      <node id="495">
         <label>boost::geometry::model::point&lt; CoordinateType, 2, CoordinateSystem &gt;</label>
         <link refid="classboost_1_1geometry_1_1model_1_1point"/>
       </node>
-      <node id="431">
+      <node id="494">
         <label>boost::geometry::model::d2::point_xy&lt; CoordinateType, CoordinateSystem &gt;</label>
         <link refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy"/>
-        <childnode refid="432" relation="public-inheritance">
+        <childnode refid="495" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="434">
+      <node id="497">
         <label>boost::geometry::model::point&lt; CoordinateType, 2, CoordinateSystem &gt;</label>
         <link refid="classboost_1_1geometry_1_1model_1_1point"/>
       </node>
-      <node id="433">
+      <node id="496">
         <label>boost::geometry::model::d2::point_xy&lt; CoordinateType, CoordinateSystem &gt;</label>
         <link refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy"/>
-        <childnode refid="434" relation="public-inheritance">
+        <childnode refid="497" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="47" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="46" bodyend="79"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" line="47" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/point_xy.hpp" bodystart="46" bodyend="79"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1model_1_1point_1a5042d74b21e525743168c56563ddf015" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>get</name></member>
-      <member refid="classboost_1_1geometry_1_1model_1_1point_1a071cc303b39a170bf875550844198eab" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point</name></member>
+      <member refid="classboost_1_1geometry_1_1model_1_1point_1a768fcbb0028e80ee4579a47f5d058370" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1point_1a0236fd6973659285b15292d9370e9136" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1point_1abe00d79aa3ed9be100f1a34b7d09249b" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1point_1a2d74ab12275dd09e47b50ab941f71e58" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point</name></member>
-      <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a9feeb8e17d7ee287c177d50ed459ec7d" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point_xy</name></member>
+      <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1a69609f33908550b343e653291b836d78" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point_xy</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1afc05f085ae9675c83aadbd7026a1be0a" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>point_xy</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1point_1adc88778b0d7c9e70aeeed0981c003a67" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>set</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy_1aa023762716f30c1887fe062e06572238" prot="public" virt="non-virtual"><scope>boost::geometry::model::d2::point_xy</scope><name>x</name></member>

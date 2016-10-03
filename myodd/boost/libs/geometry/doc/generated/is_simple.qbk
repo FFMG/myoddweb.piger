@@ -16,7 +16,7 @@
 [section:is_simple is_simple]
 
 '''<indexterm><primary>is_simple</primary></indexterm>'''
-Checks if a geometry \1. 
+Checks if a geometry is simple. 
 
 [heading Synopsis]
 ``template<typename Geometry>
@@ -31,7 +31,7 @@ bool is_simple(Geometry const & geometry)``
 
 
 [heading Returns]
-Returns true if the geometry \1
+Returns true if the geometry is simple
 
 [heading Header]
 Either

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="c04_b_custom_triangle_example_8cpp-example" kind="example">
     <compoundname>c04_b_custom_triangle_example.cpp</compoundname>
     <detaileddescription>
@@ -37,7 +37,7 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Register<sp/>triangle&lt;P&gt;<sp/>as<sp/>a<sp/>ring</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><ref refid="group__register_1ga8a9071c3e9e9e0175250677a50e3fcc8" kindref="member" tooltip="Macro to register a \1.">BOOST_GEOMETRY_REGISTER_RING_TEMPLATED</ref>(triangle)</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="group__register_1ga8a9071c3e9e9e0175250677a50e3fcc8" kindref="member">BOOST_GEOMETRY_REGISTER_RING_TEMPLATED</ref>(triangle)</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal">namespace<sp/>boost<sp/>{<sp/></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">geometry<sp/>{<sp/></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">dispatch<sp/>{</highlight></codeline>
@@ -66,11 +66,11 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>t[2]<sp/>=<sp/>boost::make_tuple(2.5,<sp/>2.5);</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Triangle:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>boost::geometry::dsv(t)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Area:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member" tooltip="Calculates the area of a geometry.">boost::geometry::area</ref>(t)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Area:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member">boost::geometry::area</ref>(t)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//boost::geometry::point_xy&lt;double&gt;<sp/>c;</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>boost::tuple&lt;double,<sp/>double&gt;<sp/>c;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__centroid_1ga3ec2c5e245c42ffaf28f1c88ea564c8c" kindref="member" tooltip="Calculates the centroid of a geometry using the specified strategy.">boost::geometry::centroid</ref>(t,<sp/>c);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__centroid_1ga3ec2c5e245c42ffaf28f1c88ea564c8c" kindref="member">boost::geometry::centroid</ref>(t,<sp/>c);</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Centroid:<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>boost::geometry::dsv(c)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>

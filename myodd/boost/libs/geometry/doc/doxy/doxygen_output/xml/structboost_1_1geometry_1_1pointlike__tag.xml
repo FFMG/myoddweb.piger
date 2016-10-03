@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1pointlike__tag" kind="struct" prot="public">
     <compoundname>boost::geometry::pointlike_tag</compoundname>
     <derivedcompoundref refid="structboost_1_1geometry_1_1multi__point__tag" prot="public" virt="non-virtual">boost::geometry::multi_point_tag</derivedcompoundref>
@@ -10,24 +10,24 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="562">
+      <node id="641">
         <label>boost::geometry::pointlike_tag</label>
         <link refid="structboost_1_1geometry_1_1pointlike__tag"/>
       </node>
-      <node id="564">
+      <node id="643">
         <label>boost::geometry::point_tag</label>
         <link refid="structboost_1_1geometry_1_1point__tag"/>
-        <childnode refid="562" relation="public-inheritance">
+        <childnode refid="641" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="563">
+      <node id="642">
         <label>boost::geometry::multi_point_tag</label>
         <link refid="structboost_1_1geometry_1_1multi__point__tag"/>
-        <childnode refid="562" relation="public-inheritance">
+        <childnode refid="641" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" line="64" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" bodystart="64" bodyend="64"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" line="64" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" bodystart="64" bodyend="64"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

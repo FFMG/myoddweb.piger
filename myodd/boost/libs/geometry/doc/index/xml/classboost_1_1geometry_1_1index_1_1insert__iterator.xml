@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1index_1_1insert__iterator" kind="class" prot="public">
     <compoundname>boost::geometry::index::insert_iterator</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::iterator&lt; std::output_iterator_tag, void, void, void, void &gt;</basecompoundref>
     <templateparamlist>
       <param>
         <type>class Container</type>
@@ -19,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="27" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="27" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="27" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -34,7 +35,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="55" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="55" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -53,7 +54,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="31" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="29" bodyend="31"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="29" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="29" bodyend="31"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1insert__iterator_1a48fcdd18cf538b78c965d332ae643672" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>insert_iterator &amp;</type>
@@ -70,7 +71,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="34" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="33" bodyend="37"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="33" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="33" bodyend="37"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1insert__iterator_1abbbcbb6d42b9d21af2b33ac70e507910" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>insert_iterator &amp;</type>
@@ -83,7 +84,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="40" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="39" bodyend="42"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="39" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="39" bodyend="42"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1insert__iterator_1a2fc4597aa37cf185ed132884b3beb90d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>insert_iterator &amp;</type>
@@ -96,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="45" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="44" bodyend="47"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="44" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="44" bodyend="47"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1insert__iterator_1aa4b211bf68b91e847451fbdaaf7188f4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>insert_iterator</type>
@@ -112,14 +113,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="50" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="49" bodyend="52"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="49" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="49" bodyend="52"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="25" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="23" bodyend="56"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" line="25" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/inserter.hpp" bodystart="23" bodyend="56"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1index_1_1insert__iterator_1a591b8e0b91f6af992050b129308c1c00" prot="private" virt="non-virtual"><scope>boost::geometry::index::insert_iterator</scope><name>container</name></member>
       <member refid="classboost_1_1geometry_1_1index_1_1insert__iterator_1a409b4c7ae762f42b7ef518aed5d5e745" prot="public" virt="non-virtual"><scope>boost::geometry::index::insert_iterator</scope><name>container_type</name></member>

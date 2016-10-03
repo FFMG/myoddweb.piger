@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__distance" kind="group">
     <compoundname>distance</compoundname>
     <title>distance: calculate distance between two geometries</title>
     <innerclass refid="structboost_1_1geometry_1_1comparable__distance__result" prot="public">boost::geometry::comparable_distance_result</innerclass>
-    <innerclass refid="structboost_1_1geometry_1_1concept_1_1_point_distance_strategy" prot="public">boost::geometry::concept::PointDistanceStrategy</innerclass>
+    <innerclass refid="structboost_1_1geometry_1_1concepts_1_1_point_distance_strategy" prot="public">boost::geometry::concepts::PointDistanceStrategy</innerclass>
     <innerclass refid="structboost_1_1geometry_1_1default__comparable__distance__result" prot="public">boost::geometry::default_comparable_distance_result</innerclass>
     <innerclass refid="structboost_1_1geometry_1_1default__distance__result" prot="public">boost::geometry::default_distance_result</innerclass>
     <innerclass refid="structboost_1_1geometry_1_1distance__result" prot="public">boost::geometry::distance_result</innerclass>
@@ -85,11 +85,11 @@
 <para>The strategy which will be used for distance calculations </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated comparable distance</para></simplesect>
  <qbk.distinguish>with strategy</qbk.distinguish>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" line="320" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" bodystart="318" bodyend="329"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" line="318" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" bodystart="318" bodyend="329"/>
       </memberdef>
       <memberdef kind="function" id="group__distance_1gabdb5143911178c7e4c78114a785551ae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -145,11 +145,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated comparable distance</para></simplesect>
  <qbk>[include reference/algorithms/comparable_distance.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" line="352" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" bodystart="351" bodyend="357"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" line="351" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/comparable_distance/interface.hpp" bodystart="351" bodyend="357"/>
       </memberdef>
       <memberdef kind="function" id="group__distance_1ga7d68c34d1ded4428903f906244b31da4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -226,7 +226,7 @@
 <para>The strategy which will be used for distance calculations </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1 </para></simplesect>
+<simplesect kind="return"><para>The calculated distance </para></simplesect>
 <simplesect kind="note"><para>The strategy can be a point-point strategy. In case of distance point-line/point-polygon it may also be a point-segment strategy.</para></simplesect>
  <qbk.distinguish>with strategy</qbk.distinguish> </para><para> <qbk>
 [heading Available Strategies]
@@ -238,7 +238,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" line="363" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" bodystart="360" bodyend="375"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" line="360" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" bodystart="360" bodyend="375"/>
       </memberdef>
       <memberdef kind="function" id="group__distance_1gad5f5e3da7d38da77c40d7bdad61fee54" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -294,11 +294,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated distance</para></simplesect>
  <qbk>[include reference/algorithms/distance.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" line="394" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" bodystart="392" bodyend="399"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" line="392" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/distance/interface.hpp" bodystart="392" bodyend="399"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

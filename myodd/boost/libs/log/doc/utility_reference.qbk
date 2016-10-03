@@ -95,6 +95,14 @@
 
 [template class_log_save_result_wrapper[][classref boost::log::save_result_wrapper save_result_wrapper]]
 
+[template boost_log_utility_ipc_object_name_hpp[][headerref boost/log/utility/ipc/object_name.hpp]]
+
+[template class_ipc_object_name[][classref boost::log::ipc::object_name object_name]]
+
+[template boost_log_utility_ipc_reliable_message_queue_hpp[][headerref boost/log/utility/ipc/reliable_message_queue.hpp]]
+
+[template class_ipc_reliable_message_queue[][classref boost::log::ipc::reliable_message_queue reliable_message_queue]]
+
 [template boost_log_utility_manipulators_hpp[][headerref boost/log/utility/manipulators.hpp]]
 
 [template boost_log_utility_manipulators_add_value_hpp[][headerref boost/log/utility/manipulators/add_value.hpp]]
@@ -114,6 +122,18 @@
 [template boost_log_utility_once_block_hpp[][headerref boost/log/utility/once_block.hpp]]
 
 [template class_log_once_block_flag[][classref boost::log::once_block_flag once_block_flag]]
+
+[template boost_log_utility_open_mode_hpp[][headerref boost/log/utility/open_mode.hpp]]
+
+[template class_open_mode_create_only_tag[][classref boost::log::open_mode::create_only_tag create_only_tag]]
+
+[template class_open_mode_open_only_tag[][classref boost::log::open_mode::open_only_tag open_only_tag]]
+
+[template class_open_mode_open_or_create_tag[][classref boost::log::open_mode::open_or_create_tag open_or_create_tag]]
+
+[template boost_log_utility_permissions_hpp[][headerref boost/log/utility/permissions.hpp]]
+
+[template class_log_permissions[][classref boost::log::permissions permissions]]
 
 [template boost_log_utility_record_ordering_hpp[][headerref boost/log/utility/record_ordering.hpp]]
 
@@ -161,6 +181,8 @@
 
 [template boost_log_utility_strictest_lock_hpp[][headerref boost/log/utility/strictest_lock.hpp]]
 
+[template class_log_thread_access_mode_of[][classref boost::log::thread_access_mode_of thread_access_mode_of]]
+
 [template class_log_strictest_lock[][classref boost::log::strictest_lock strictest_lock]]
 
 [template boost_log_utility_string_literal_hpp[][headerref boost/log/utility/string_literal.hpp]]
@@ -197,6 +219,6 @@
 
 [template boost_log_utility_value_ref_hpp[][headerref boost/log/utility/value_ref.hpp]]
 
-[template class_log_value_ref[][classref boost::log::value_ref value_ref]]
-
 [template boost_log_utility_value_ref_fwd_hpp[][headerref boost/log/utility/value_ref_fwd.hpp]]
+
+[template class_log_value_ref[][classref boost::log::value_ref value_ref]]
