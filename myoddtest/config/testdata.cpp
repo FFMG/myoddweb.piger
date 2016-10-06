@@ -65,3 +65,39 @@ TEST_MEM(ConfigDataTest, LoadFromAnXMLAndGetTheValueDoubleDepthSourceHasDifferen
   ASSERT_EQ(number, data.Get(L"parent\\VALUE"));
   ASSERT_EQ(number, data.Get(L"Parent\\Value"));
 }
+
+TEST_MEM(ConfigDataTest, GetAValueThatDoesNotExist)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"parent\\value"));
+  EXPECT_THROW(data.Get(L"something\\else"), std::exception);
+}
+
+TEST_MEM(ConfigDataTest, GetAValueFromEmptyData)
+{
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Get(L"something\\else"), std::exception);
+}
+
+TEST_MEM(ConfigDataTest, CheckIfContainsTheValue)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_TRUE( data.Contains(L"parent\\value"));
+}
+
+TEST_MEM(ConfigDataTest, CheckIfContainsTheValueVariousCase)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_TRUE(data.Contains(L"Parent\\Value"));
+  ASSERT_TRUE(data.Contains(L"Parent\\VALUE"));
+  ASSERT_TRUE(data.Contains(L"PAREnt\\Value"));
+}

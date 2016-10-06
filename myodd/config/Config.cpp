@@ -10,11 +10,49 @@ namespace myodd{ namespace config{
   ::myodd::config::Data* _data = NULL;
 
   void set(const std::wstring& path, const myodd::dynamic::Any& any) { throw std::exception(); };
-  ::myodd::dynamic::Any get(const std::wstring& path) { throw std::exception(); return 0; }
-  ::myodd::dynamic::Any get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) { throw std::exception(); return 0; }
 
-  bool isset(const std::wstring& path) { throw std::exception(); return false; }
-  bool isset(const wchar_t* path) { throw std::exception(); return false; }
+  /**
+   * Try and get a value, if the value is not found, we throw.
+   * @param const std::wstring& path the name of the value we are looking for.
+   * @return ::myodd::dynamic::Any the value, if it exists.
+   */
+  ::myodd::dynamic::Any get(const std::wstring& path)
+  {
+    if (nullptr == _data)
+    {
+      throw std::exception("The configuration has not been initialised.");
+    }
+    return _data->Get(path );
+  }
+
+  /**
+   * Try and get a value, if the value is not found, we throw.
+   * @param const std::wstring& path the name of the value we are looking for.
+   * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
+   * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
+   */
+  ::myodd::dynamic::Any get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) 
+  { 
+    if (nullptr == _data)
+    {
+      throw std::exception( "The configuration has not been initialised.");
+    }
+    return _data->Get( path, defaultValue ); 
+  }
+
+  /**
+   * Check if the value has been set or not.
+   * @param const std::wstring& path the path we are looking for.
+   * @return bool if the path exists or not.
+   */
+  bool isset(const std::wstring& path)
+  {
+    if (nullptr == _data)
+    {
+      throw std::exception("The configuration has not been initialised.");
+    }
+    return _data->Contains(path);
+  }
 
   void free() { throw std::exception(); }
 

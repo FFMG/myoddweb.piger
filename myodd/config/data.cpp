@@ -43,6 +43,21 @@ namespace myodd {
 #endif
 
     /**
+     * Check if the value has been set or not.
+     * @param const std::wstring& path the path we are looking for.
+     * @return bool if the path exists or not.
+     */
+    bool Data::Contains(const std::wstring& path) const
+    {
+      // cleanup the path
+      auto lpath = myodd::strings::lower(path);
+
+      //
+      // does this value exist?
+      return _values.Contains(lpath.c_str());
+    }
+    
+    /**
     * Try and get a value, if the value is not found, we throw.
     * @param const std::wstring& path the name of the value we are looking for.
     * @return ::myodd::dynamic::Any the value, if it exists.

@@ -29,11 +29,28 @@
 
 namespace myodd{ namespace config{
   void set(const std::wstring& path, const myodd::dynamic::Any& any);
+  
+  /**
+   * Try and get a value, if the value is not found, we throw.
+   * @param const std::wstring& path the name of the value we are looking for.
+   * @return ::myodd::dynamic::Any the value, if it exists.
+   */
   ::myodd::dynamic::Any get(const std::wstring& path);
+
+  /**
+   * Try and get a value, if the value is not found, we throw.
+   * @param const std::wstring& path the name of the value we are looking for.
+   * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
+   * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
+   */
   ::myodd::dynamic::Any get(const std::wstring& path, const myodd::dynamic::Any& defaultValue );
 
+  /**
+   * Check if the value has been set or not.
+   * @param const std::wstring& path the path we are looking for.
+   * @return bool if the path exists or not.
+   */
   bool isset(const std::wstring& path);
-  bool isset(const wchar_t* path);
 
   void free();
 
