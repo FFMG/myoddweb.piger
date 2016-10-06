@@ -75,7 +75,7 @@ namespace myodd{ namespace config{
      * Create the data holder from an XML
      * @return bool success or not.
      */
-    bool FromXMLDocument(tinyxml2::XMLDocument& doc );
+    bool FromXMLDocument( const tinyxml2::XMLDocument& doc );
 
 #ifdef UNICODE
     static std::string ToChar( const std::wstring& s );

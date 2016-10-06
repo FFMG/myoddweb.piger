@@ -149,20 +149,20 @@ TEST_MEM_LOOP(AnyTestTrivialCopy, GetValueDerivedStruct, NUMBER_OF_TESTS)
   ASSERT_EQ(ts2.b, ts.b);
 }
 
-TEST_MEM(AnyTestTrivialCopy, CannotCompareTrivialAndIntFundamentals )
+TEST_MEM(AnyTestTrivialCopy, TrivialAndIntFundamentalsAreNotTheSame )
 {
   TrivialStruct ts = { IntRandomNumber<int>(), IntRandomNumber<int>() };
   ::myodd::dynamic::Any any(ts);
 
-  EXPECT_THROW( any == (int)12, std::bad_cast );
+  ASSERT_FALSE( any == (int)12 );
 }
 
-TEST_MEM(AnyTestTrivialCopy, CannotCompareTrivialAndFloatFundamentals)
+TEST_MEM(AnyTestTrivialCopy, TrivialAndFloatFundamentalsAreNotTheSame)
 {
   TrivialStruct ts = { IntRandomNumber<int>(), IntRandomNumber<int>() };
   ::myodd::dynamic::Any any(ts);
 
-  EXPECT_THROW(any == (float)12, std::bad_cast);
+  ASSERT_FALSE(any == (float)12, std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, FromTrivialToInt )
@@ -440,3 +440,35 @@ TEST_MEM(AnyTestTrivialCopy, CannotCastAPointerToUnsignedChar)
   EXPECT_THROW((unsigned char*)any, std::bad_cast);;
 }
 
+TEST_MEM(AnyTestTrivialCopy, EmptyTrivialItemIsNotEqualToNull)
+{
+  TrivialStruct ts = {};
+  ::myodd::dynamic::Any any(ts);
+
+  ASSERT_FALSE(any == nullptr);
+  ASSERT_TRUE(any != nullptr);
+}
+
+TEST_MEM(AnyTestTrivialCopy, TrivialItemIsNotEqualToNull)
+{
+  TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
+  ::myodd::dynamic::Any any(ts);
+
+  ASSERT_FALSE(any == nullptr);
+  ASSERT_TRUE(any != nullptr);
+}
+
+TEST_MEM(AnyTestTrivialCopy, TrivialItemsAreEqual)
+{
+  auto a = IntRandomNumber<int>(false);
+  auto b = IntRandomNumber<int>(false);
+
+  TrivialStruct ts1 = { a, b };
+  TrivialStruct ts2 = { a, b };
+
+  ::myodd::dynamic::Any any1(ts1);
+  ::myodd::dynamic::Any any2(ts2);
+
+  ASSERT_FALSE(any1 != any2);
+  ASSERT_TRUE(any1 == any2);
+}

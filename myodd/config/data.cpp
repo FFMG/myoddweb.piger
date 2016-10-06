@@ -153,7 +153,8 @@ namespace myodd {
     void Data::WalkElement(const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents)
     {
       //  get the type
-      static const std::wstring sep = _T("\\");
+      const std::wstring sep = _T("\\");
+
       const tinyxml2::XMLAttribute* attributeType = root.FindAttribute("type");
       if (attributeType != NULL)
       {
@@ -238,7 +239,7 @@ namespace myodd {
 #endif // UNICODE
 
         // add that element if there is anything to actually add.
-        // @see _addLoadElement( ... )
+        // @see WalkElement( ... )
         WalkElement(*pValues, parents);
 
         // or/and add the sibling elements.
@@ -309,10 +310,10 @@ namespace myodd {
 
     /**
     * Create the data holder from an XML
-    * @param tinyxml2::XMLDocument& doc the document we are working from.
+    * @param const tinyxml2::XMLDocument& doc the document we are working from.
     * @return bool success or not.
     */
-    bool Data::FromXMLDocument(tinyxml2::XMLDocument& doc )
+    bool Data::FromXMLDocument(const tinyxml2::XMLDocument& doc )
     {
       // look for the root attribute, 'Config'.
       const tinyxml2::XMLElement* pElemConfig = doc.FirstChildElement("Config");
