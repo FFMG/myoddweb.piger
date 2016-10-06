@@ -179,7 +179,7 @@ bool Actions::Add( Action* action )
 
   // make sure we have not reached our limit this can be changed in the config file
   // but if you have more than 2048 then we might have problems with loading speed, memory and so forth.
-  ASSERT( m_Actions.size() <= (size_t)myodd::config::get( _T("paths\\maxcommand"), 2048 ) );
+  ASSERT( m_Actions.size() <= (size_t)::myodd::config::Get( L"paths\\maxcommand", 2048 ) );
   
   // the action was added.
   return true;
@@ -258,10 +258,10 @@ void Actions::GetCommandValue( LPCTSTR lpName, COMMANDS_VALUE& cv ) const
   MYODD_STRING sFullName = _T("commands\\");
   sFullName += lpName;
 
-  LPCTSTR x = (LPCTSTR)myodd::config::get( sFullName + _T(".color"), cv.color);
+  LPCTSTR x = (LPCTSTR)::myodd::config::Get( sFullName + _T(".color"), cv.color);
   cv.color = x;
-  cv.bBold    = myodd::config::get( sFullName+ _T(".bold"), cv.bBold);
-  cv.bItalic  = myodd::config::get( sFullName+ _T(".italic"), cv.bItalic );
+  cv.bBold    = ::myodd::config::Get( sFullName+ _T(".bold"), cv.bBold);
+  cv.bItalic  = ::myodd::config::Get( sFullName+ _T(".italic"), cv.bItalic );
 }
 
 // -------------------------------------------------------------
@@ -509,7 +509,7 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
 void Actions::Init()
 {
   //  get the root directory
-  MYODD_STRING sPath = myodd::config::get( _T("paths\\commands") );
+  MYODD_STRING sPath = ::myodd::config::Get( L"paths\\commands", L"" );
   if( myodd::files::ExpandEnvironment( sPath, sPath ) )
   {
     ParseDirectory( sPath.c_str(), _T("") );
@@ -522,7 +522,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   // make sure that we do not have too many actions
   // this is a sign that something is broken
   // or that we are reading the root directory
-  if( m_Actions.size() > (size_t)myodd::config::get( _T("paths\\maxcommand"), 2048 ) )
+  if( m_Actions.size() > (size_t)::myodd::config::Get( L"paths\\maxcommand", 2048 ) )
   {
     ASSERT( 0 ); // you have reached the limit!
                  // it is pointless to try and add more command.
@@ -601,7 +601,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
       szName = myodd::strings::lower(szName );
       
       //  if we don't want to show the extension then strip it.
-      if( myodd::config::get( _T("commands\\show.extentions"), 0 ) == false )
+      if( ::myodd::config::Get( L"commands\\show.extentions", 0 ) == false )
       {
         myodd::files::StripExtension( szName );
       }        

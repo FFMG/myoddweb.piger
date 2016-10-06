@@ -270,8 +270,8 @@ void CActionMonitorDlg::CalcMaxes( )
 	float fY = (float)GetSystemMetrics(SM_CYSCREEN);
 
   //  calc the percentages.
-  m_ptMaxValues.x = (int)(fX * (int)myodd::config::get( _T("commands\\max.x"), 99)/100.f );
-  m_ptMaxValues.y = (int)(fY * (int)myodd::config::get( _T("commands\\max.y"), 99)/100.f );
+  m_ptMaxValues.x = (int)(fX * (int)::myodd::config::Get( L"commands\\max.x", 99)/100.f );
+  m_ptMaxValues.y = (int)(fY * (int)::myodd::config::Get( L"commands\\max.y", 99)/100.f );
 }
 
 /**
@@ -285,8 +285,8 @@ void CActionMonitorDlg::InitWindow( )
   CalcMaxes();
 
   m_rWindow.bottom  = RECT_MIN_H;
-  m_rWindow.left    = myodd::config::get( _T("commands\\left"), 5);
-  m_rWindow.top     = myodd::config::get( _T("commands\\top"), 5);
+  m_rWindow.left    = ::myodd::config::Get( L"commands\\left", 5);
+  m_rWindow.top     = ::myodd::config::Get( L"commands\\top", 5);
   m_rWindow.right   = m_ptMaxValues.x;
 
   //  move the window to the top left hand corner 
@@ -433,7 +433,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
       //  reset the last command
       App().PossibleActions().CurrentActionReset();
-      ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
+      ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     }
   }
 
@@ -447,7 +447,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
   { 
   case VK_BACK:     // backspace 
     App().PossibleActions().CurrentActionBack();
-    ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
+    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     break;
 
   case 0x0A:        // linefeed 
@@ -458,11 +458,11 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
   case VK_ESCAPE:
     App().PossibleActions().CurrentActionReset( );
-    ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
+    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
 
   case VK_DOWN:
     App().PossibleActions().down();
-    ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
+    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     break;
 
   case VK_CAPITAL:
@@ -470,7 +470,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
   case VK_UP:
     App().PossibleActions().up();
-    ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
+    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     break;
 
   case VK_SHIFT:
@@ -509,7 +509,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
         //  make sure that the window is visible
         //  This will also force a refresh of the window
-        ShowWindow( myodd::config::get( _T("commands\\transparency"), 127) );
+        ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
       }
     }
     break;
@@ -728,7 +728,7 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
   }
  
   // add padding to the bottom pos of the window.
-  rDraw.bottom        += m_rWindow.top + ( 2* (int)myodd::config::get( _T("commands\\pad.y"), 2));
+  rDraw.bottom        += m_rWindow.top + ( 2* (int)::myodd::config::Get( L"commands\\pad.y", 2));
   
   //  make sure that it is within limits
   rDraw.bottom        = rDraw.bottom>m_ptMaxValues.y?m_ptMaxValues.y:rDraw.bottom;
@@ -755,8 +755,8 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
     // DrawHTML(...) function again.
     if( len > 0 )
     {
-      rDraw.left   = m_rWindow.left  + (int)myodd::config::get( _T("commands\\pad.x"), 2);    //  use the full width, (left right)
-      rDraw.right  = m_rWindow.right - (int)myodd::config::get( _T("commands\\pad.x"), 2);    //  and make sure we tabulate the items, (probably RECT_MIN_TAB).
+      rDraw.left   = m_rWindow.left  + (int)::myodd::config::Get( L"commands\\pad.x", 2);    //  use the full width, (left right)
+      rDraw.right  = m_rWindow.right - (int)::myodd::config::Get( L"commands\\pad.x", 2);    //  and make sure we tabulate the items, (probably RECT_MIN_TAB).
       //  and now we can show the text properly
       //
       // Set the background to transparent
@@ -797,7 +797,7 @@ void CActionMonitorDlg::DisplayTime
 )
 {
   //  But only if we want to!
-  if( myodd::config::get( _T("commands\\show.time"), 1) )
+  if( ::myodd::config::Get( L"commands\\show.time", 1) )
   {
     HGDIOBJ pOldTime = SelTimeFont( hdc );
     if(nullptr != pOldTime )
@@ -832,7 +832,7 @@ void CActionMonitorDlg::DisplayTime
         SelectObject( hdc, pOldTime );
       }
     }// SelTimeFont(...)
-  }// myodd::config::get( "commands\\show.time", 1)
+  }// ::myodd::config::Get( "commands\\show.time", 1)
 }// DisplayTime(...)
 
 /**

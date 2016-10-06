@@ -359,15 +359,15 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   {
     // set some of the paths that might be of interest.
     const wchar_t* lp = nullptr;
-    lp = myodd::config::get( _T("paths\\commands") );
+    lp = ::myodd::config::Get( L"paths\\commands", L"" );
     pfMsg( AM_MSG_PATH_CMD, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\in"));
+    lp = ::myodd::config::Get( L"paths\\in", L"");
     pfMsg( AM_MSG_PATH_IN, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\out"));
+    lp = ::myodd::config::Get( L"paths\\out", L"");
     pfMsg( AM_MSG_PATH_OUT, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\tmp"));
+    lp = ::myodd::config::Get( L"paths\\tmp", L"");
     pfMsg( AM_MSG_PATH_TMP, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\plugin"));
+    lp = ::myodd::config::Get( L"paths\\plugin", L"");
     pfMsg( AM_MSG_PATH_PLUGIN, 0, reinterpret_cast<AM_INT>(lp) );
 
     // call the init path

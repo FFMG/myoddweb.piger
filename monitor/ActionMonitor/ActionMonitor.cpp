@@ -420,7 +420,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   }
 
   // do we have a valid value in the config?
-  auto maxClipboardSize = static_cast<size_t>(myodd::config::get( path, 1024 ));
+  auto maxClipboardSize = static_cast<size_t>(::myodd::config::Get( path, 1024 ));
   _maxClipboardSize = maxClipboardSize;
 }
 
@@ -432,7 +432,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
  */
 void CActionMonitorApp::InitReservedPaths()
 {
-  MYODD_STRING sPath = myodd::config::get( _T("paths\\commands") );
+  MYODD_STRING sPath = ::myodd::config::Get( L"paths\\commands", L"");
 
   MYODD_STRING sPathIn;
   myodd::files::Join( sPathIn, sPath, AM_DIRECTORY_IN );
@@ -501,22 +501,22 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
 void CActionMonitorApp::InitLog()
 {
   // check if enabled
-  if (myodd::config::get(_T("log\\file\\enable"), 1 ) != 1)
+  if (::myodd::config::Get(_T("log\\file\\enable"), 1 ) != 1)
   {
     return;
   }
 
   //  the directory we will be logging to.
-  std::wstring logPath = myodd::config::get(_T("log\\file\\path"), LOG_PATH );
+  std::wstring logPath = ::myodd::config::Get(L"log\\file\\path", LOG_PATH );
 
   // the prefix of the filename.
-  std::wstring logPrefix = myodd::config::get(_T("log\\file\\prefix"), _T("myodd"));
+  std::wstring logPrefix = ::myodd::config::Get(L"log\\file\\prefix", L"myodd");
 
   // the file extension
-  std::wstring logExtension = myodd::config::get(_T("log\\file\\extension"), _T("log") );
+  std::wstring logExtension = ::myodd::config::Get(L"log\\file\\extension", L"log" );
 
   //  get the max file size.
-  size_t maxFileSize = myodd::config::get(_T("log\\file\\maxFileSize"), 10 );
+  size_t maxFileSize = ::myodd::config::Get(L"log\\file\\maxFileSize", 10 );
 
   //  sanity check
   if (maxFileSize > 10 || maxFileSize < 1)
