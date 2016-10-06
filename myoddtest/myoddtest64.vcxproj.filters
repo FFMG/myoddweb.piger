@@ -26,6 +26,9 @@
     <Filter Include="myodd\dynamic">
       <UniqueIdentifier>{fde5d0cb-3b4f-4676-885f-7ad74b3804a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\config">
+      <UniqueIdentifier>{cf74c69e-e5af-4ef8-94a8-60a8f466b046}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -159,6 +162,9 @@
     </ClCompile>
     <ClCompile Include="cache\testexpiredcacheitem.cpp">
       <Filter>myodd\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="config\testdata.cpp">
+      <Filter>myodd\config</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

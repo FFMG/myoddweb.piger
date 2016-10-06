@@ -487,7 +487,7 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
 
   // remember that calling ::init(...) will cause the current values to be saved.
   // so witting to the xml while the app is running will have no effect.
-  if (!myodd::config::init(sAPath))
+  if (!myodd::config::FromXMLFile(sAPath))
   {
     MessageBox(nullptr, _T("There was a problem with the given config, is it valid XML?"), _T("Cannot load config"), MB_OK);
     return false;

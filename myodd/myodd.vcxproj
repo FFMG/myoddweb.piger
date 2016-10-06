@@ -476,9 +476,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="common\program_options.cpp" />
-    <ClCompile Include="config\Config.cpp" />
-    <ClCompile Include="config\ConfigBase.cpp" />
-    <ClCompile Include="config\ConfigObject.cpp" />
+    <ClCompile Include="config\Config.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="config\data.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="files\files.cpp" />
     <ClCompile Include="geo\geo.cpp" />
     <ClCompile Include="html\html.cpp">
@@ -778,9 +787,7 @@
     <ClInclude Include="common\includes.h" />
     <ClInclude Include="common\program_options.h" />
     <ClInclude Include="config\Config.h" />
-    <ClInclude Include="config\ConfigBase.h" />
-    <ClInclude Include="config\ConfigData.h" />
-    <ClInclude Include="config\ConfigObject.h" />
+    <ClInclude Include="config\data.h" />
     <ClInclude Include="containers\idx_map.h" />
     <ClInclude Include="containers\Matrix2D.h" />
     <ClInclude Include="dynamic\any.h" />

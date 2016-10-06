@@ -95,12 +95,6 @@
     <ClCompile Include="config\Config.cpp">
       <Filter>Config</Filter>
     </ClCompile>
-    <ClCompile Include="config\ConfigBase.cpp">
-      <Filter>Config</Filter>
-    </ClCompile>
-    <ClCompile Include="config\ConfigObject.cpp">
-      <Filter>Config</Filter>
-    </ClCompile>
     <ClCompile Include="boost\libs\regex\src\c_regex_traits.cpp">
       <Filter>boost\boost.regex</Filter>
     </ClCompile>
@@ -359,6 +353,9 @@
     <ClCompile Include="pcre2\src\pcre2_chartables.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
+    <ClCompile Include="config\data.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -382,15 +379,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="config\Config.h">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="config\ConfigBase.h">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="config\ConfigData.h">
-      <Filter>Config</Filter>
-    </ClInclude>
-    <ClInclude Include="config\ConfigObject.h">
       <Filter>Config</Filter>
     </ClInclude>
     <ClInclude Include="notif\notif.h">
@@ -530,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="dynamic\types.h">
       <Filter>dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="config\data.h">
+      <Filter>Config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
