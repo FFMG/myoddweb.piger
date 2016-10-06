@@ -101,3 +101,38 @@ TEST_MEM(ConfigDataTest, CheckIfContainsTheValueVariousCase)
   ASSERT_TRUE(data.Contains(L"Parent\\VALUE"));
   ASSERT_TRUE(data.Contains(L"PAREnt\\Value"));
 }
+
+TEST_MEM(ConfigDataTest, GetDefaultValueForNonExistent)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+
+  auto defaultNumber = IntRandomNumber<int>();
+  ASSERT_EQ(defaultNumber, data.Get(L"some\\other\\value", defaultNumber));
+}
+
+TEST_MEM(ConfigDataTest, GetDefaultValueForNonExistentButAlmostValid)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+
+  auto defaultNumber = IntRandomNumber<int>();
+  // almost the same as parent\\value
+  ASSERT_EQ(defaultNumber, data.Get(L"parent\\value1", defaultNumber));
+}
+
+TEST_MEM(ConfigDataTest, GetDefaultValueButValueExists)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+
+  // the value does exist
+  auto defaultNumber = IntRandomNumber<int>();
+  ASSERT_EQ(number, data.Get(L"parent\\value", defaultNumber));
+}
