@@ -412,7 +412,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   const MYODD_STRING path = _T("clipboard\\maxmemory");
 
   //  does the value exist?
-  if (!myodd::config::isset(path))
+  if (!myodd::config::Contains(path))
   {
     //  yes, it does, simply use the value and return.
     _maxClipboardSize = 0;

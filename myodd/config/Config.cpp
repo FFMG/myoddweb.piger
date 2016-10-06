@@ -45,7 +45,7 @@ namespace myodd{ namespace config{
    * @param const std::wstring& path the path we are looking for.
    * @return bool if the path exists or not.
    */
-  bool isset(const std::wstring& path)
+  bool Contains(const std::wstring& path)
   {
     if (nullptr == _data)
     {
