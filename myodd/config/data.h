@@ -88,6 +88,13 @@ namespace myodd{ namespace config{
     ::myodd::dynamic::Any Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const;
 
     /**
+     * Check if a given path is a temp value or not
+     * @param const std::wstring& path the path we are looking for.
+     * @return bool if the value is a path or not.
+     */
+    bool IsTemp(const std::wstring& path) const;
+
+    /**
      * Create the data holder from an XML file.
      * @path const std::wstring& path the path of the xml we want to load.
      * @return bool success or not.
@@ -102,6 +109,15 @@ namespace myodd{ namespace config{
     bool FromXML(const std::wstring& source );
 
   protected:
+    /**
+     * Convert the source value to a safe, clean value
+     * in other words a trimmed, lower case path.
+     * We will throw an exception if the value is empty or contains illigal characters.
+     * @param const std::wstring& src the source value we are cleaning up.
+     * @return std::wstring the cleaned-up name
+     */
+    static std::wstring SafeName(const std::wstring& src);
+
     /**
      * Create the data holder from an XML
      * @return bool success or not.

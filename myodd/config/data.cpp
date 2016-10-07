@@ -2,6 +2,7 @@
 
 #include "../string/string.h"
 #include "../files/files.h"
+#include "../pcre2/regex2.h"
 #include "data.h"
 
 namespace myodd {
@@ -41,7 +42,55 @@ namespace myodd {
       return s;
     }
 #endif
+    /**
+     * Convert the source value to a safe, clean value
+     * in other words a trimmed, lower case path.
+     * We will throw an exception if the value is empty or contains illigal characters.
+     * @param const std::wstring& src the source value we are cleaning up.
+     * @return std::wstring the cleaned-up name
+     */
+    std::wstring Data::SafeName(const std::wstring& src)
+    {
+      // lower case.
+      auto result = myodd::strings::lower(src);
 
+      // remove the blank characters.
+      myodd::strings::Trim(result);
+
+      // remove the '\' characters.
+      myodd::strings::Trim(result, L"\\");
+
+      // replace multiple escapes to just one.
+      ::myodd::regex::Regex2::Replace(L"\\\\{2,}", L"\\", result, false);
+      
+      // do we have anything left.
+      if (result.length() == 0)
+      {
+        throw std::invalid_argument("The name/path cannot be empty.");
+      }
+
+      // final check if, look for any character that is not allowed.
+      if (::myodd::regex::Regex2::Search(L"[^a-z0-9-\\\\]", result, false))
+      {
+        throw std::invalid_argument("The name/path contains illigal characters.");
+      }
+
+      // look for elements that start with numbers.
+      // something like "1234\value"
+      if (::myodd::regex::Regex2::Search(L"^[0-9-]", result, false))
+      {
+        throw std::invalid_argument("The name/path cannot be a number only.");
+      }
+      // and something like "value\1234\value"
+      if (::myodd::regex::Regex2::Search(L"(\\\\[0-9-])", result, false))
+      {
+        throw std::invalid_argument("The name/path cannot be a number only.");
+      }
+
+      // return what we have
+      return result;
+    }
+    
     /**
      * Check if the value has been set or not.
      * @param const std::wstring& path the path we are looking for.
@@ -50,13 +99,36 @@ namespace myodd {
     bool Data::Contains(const std::wstring& path) const
     {
       // cleanup the path
-      auto lpath = myodd::strings::lower(path);
+      auto lpath = SafeName(path);
 
       //
       // does this value exist?
       return _values.Contains(lpath.c_str());
     }
-    
+
+    /**
+     * Check if a given path is a temp value or not
+     * @param const std::wstring& path the path we are looking for.
+     * @return bool if the value is a path or not.
+     */
+    bool Data::IsTemp(const std::wstring& path) const
+    {
+      // cleanup the path
+      auto lpath = SafeName(path);
+
+      // do we even know about this value?
+      if (!_values.Contains(lpath.c_str()))
+      {
+        return false;
+      }
+
+      // get the value
+      auto data = (DataStruct)_values.Get(lpath.c_str());
+
+      // return if it is temp or not.
+      return data._temp;
+    }
+        
     /**
     * Try and get a value, if the value is not found, we throw.
     * @param const std::wstring& path the name of the value we are looking for.
@@ -65,7 +137,7 @@ namespace myodd {
     ::myodd::dynamic::Any Data::Get(const std::wstring& path) const
     {
       // cleanup the path
-      auto lpath = myodd::strings::lower(path);
+      auto lpath = SafeName(path);
 
       //
       // does this value exist?
@@ -88,7 +160,7 @@ namespace myodd {
     ::myodd::dynamic::Any Data::Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const
     {
       // cleanup the path
-      auto lpath = myodd::strings::lower(path);
+      auto lpath = SafeName(path);
 
       //
       // does this value exist?
@@ -116,7 +188,7 @@ namespace myodd {
       myodd::threads::AutoLock lock(*this);
 
       // cleanup the name
-      auto lname = myodd::strings::lower(name);
+      auto lname = SafeName(name);
 
       //
       // does this value exist?

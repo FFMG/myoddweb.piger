@@ -16,7 +16,7 @@ TEST_MEM(ConfigDataTest, SetValueWithoutLoadingAnXML)
 {
   // no error should happen
   ::myodd::config::Data data;
-  data.Set(Uuid(), ::myodd::config::Data::type_string, Uuid(), true );
+  data.Set(XmlElementName(), ::myodd::config::Data::type_string, Uuid(), true );
 }
 
 TEST_MEM(ConfigDataTest, LoadFromAnXML)
@@ -74,6 +74,53 @@ TEST_MEM(ConfigDataTest, GetAValueThatDoesNotExist)
   ASSERT_TRUE(data.FromXML(source));
   ASSERT_EQ(number, data.Get(L"parent\\value"));
   EXPECT_THROW(data.Get(L"something\\else"), std::exception);
+}
+
+TEST_MEM(ConfigDataTest, GetAValueWithSpaces)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"     parent\\value    "));
+}
+
+TEST_MEM(ConfigDataTest, GetAValueWithExtrabackslashes)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"\\parent\\value\\"));
+}
+
+TEST_MEM(ConfigDataTest, GetAValueWithMultiplebackslashes)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"\\\\parent\\\\\\value\\\\\\"));
+}
+
+TEST_MEM(ConfigDataTest, NumersAndMinusAreValidElementNames)
+{
+  //  invalid XML, (just number <123-value>sss</123-value> will not be accepted at load time)
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><Value-123 type=\"8\">%d</Value-123></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"parent\\Value-123"));
+}
+
+TEST_MEM(ConfigDataTest, NumersAreValidElementNames)
+{
+  //  invalid XML, (just number <123>sss</123> will not be accepted at load time)
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><x123 type=\"8\">%d</x123></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"parent\\x123"));
 }
 
 TEST_MEM(ConfigDataTest, GetAValueFromEmptyData)
@@ -135,4 +182,65 @@ TEST_MEM(ConfigDataTest, GetDefaultValueButValueExists)
   // the value does exist
   auto defaultNumber = IntRandomNumber<int>();
   ASSERT_EQ(number, data.Get(L"parent\\value", defaultNumber));
+}
+
+TEST_MEM(ConfigDataTest, GetWithSpaces)
+{
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Get(L"    "), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, GetWithNoSpaces)
+{
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Get(L""), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, GetWithOnlyBackSpace)
+{
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Get(L"\\"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberOnly)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Set(L"1234", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberEvenWithMinus)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Set(L"1234-5678", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberOnlyEvenInThePath)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Set(L"valid\\path\\1234", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, YouCannotSetAnEllementThatStartsWithAMinus)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  data.Set(L"valid\\path\\good-name", ::myodd::config::Data::type_int, 1234, false);
+  EXPECT_THROW(data.Set(L"valid\\path\\-bad", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberWithMinusOnlyEvenInThePath)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Set(L"valid\\path\\1234-5678", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberOnlyAtTheBeginingEvenInThePath)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.Set(L"1234\\valid\\path", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
 }

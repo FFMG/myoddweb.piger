@@ -162,7 +162,7 @@ TEST_MEM(AnyTestTrivialCopy, TrivialAndFloatFundamentalsAreNotTheSame)
   TrivialStruct ts = { IntRandomNumber<int>(), IntRandomNumber<int>() };
   ::myodd::dynamic::Any any(ts);
 
-  ASSERT_FALSE(any == (float)12, std::bad_cast);
+  ASSERT_FALSE(any == (float)12);
 }
 
 TEST_MEM(AnyTestTrivialCopy, FromTrivialToInt )
