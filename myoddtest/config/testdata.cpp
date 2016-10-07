@@ -244,3 +244,43 @@ TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberOnlyAtTheBeginingEvenInTheP
   ::myodd::config::Data data;
   EXPECT_THROW(data.Set(L"1234\\valid\\path", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
 }
+
+TEST_MEM(ConfigDataTest, WhenCheckingForTempTheNameMustStillBeValidNumber)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.IsTemp(L"1234"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, WhenCheckingForTempTheNameMustStillBeValidNumberStartPath)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  EXPECT_THROW(data.IsTemp(L"1234\\valid\\path"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, AValueThatDoesNotExistIsNotTemp)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  ASSERT_FALSE(data.IsTemp(L"\\valid\\path"));
+}
+
+TEST_MEM(ConfigDataTest, SwitchBetweenTempAndNotTemp)
+{
+  // those are not valid xml element names
+  ::myodd::config::Data data;
+  auto name = L"\\valid\\path";
+  auto number = IntRandomNumber<int>();
+  ASSERT_FALSE(data.IsTemp(name));
+  data.Set(name, ::myodd::config::Data::type_int, number, false);
+  ASSERT_FALSE(data.IsTemp(name));
+  
+  // make it temp
+  data.Set(name, ::myodd::config::Data::type_int, number, true);
+  ASSERT_TRUE(data.IsTemp(name));
+
+  // make it permanent
+  data.Set(name, ::myodd::config::Data::type_int, number, false);
+  ASSERT_FALSE(data.IsTemp(name));
+}
