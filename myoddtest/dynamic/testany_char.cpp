@@ -1001,3 +1001,39 @@ TEST_MEM(AnyTestCharacter, PartialStringCanEqualANumber)
   ASSERT_TRUE(12.0 >= any2);
   ASSERT_TRUE(12.0 <= any2);
 }
+
+TEST_MEM(AnyTestCharacter, CheckWStringGetSetVauesFromWString)
+{
+  auto set = Uuid();
+  auto any = ::myodd::dynamic::Any(set);
+
+  std::wstring get = any;
+  ASSERT_EQ(set, get);
+}
+
+TEST_MEM(AnyTestCharacter, CheckWStringGetSetVauesFromNumber)
+{
+  auto set = 42;
+  auto any = ::myodd::dynamic::Any(set);
+
+  std::wstring get = any;
+  ASSERT_EQ(L"42", get);
+}
+
+TEST_MEM(AnyTestCharacter, CheckStringGetSetVauesFromWString)
+{
+  auto set = L"Hello";
+  auto any = ::myodd::dynamic::Any(set);
+
+  std::string get = any;
+  ASSERT_EQ("Hello", get);
+}
+
+TEST_MEM(AnyTestCharacter, CheckStringGetSetVauesFromNumber)
+{
+  auto set = 42;
+  auto any = ::myodd::dynamic::Any(set);
+
+  std::string get = any;
+  ASSERT_EQ("42", get);
+}
