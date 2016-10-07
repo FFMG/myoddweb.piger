@@ -258,7 +258,7 @@ void Actions::GetCommandValue( LPCTSTR lpName, COMMANDS_VALUE& cv ) const
   MYODD_STRING sFullName = _T("commands\\");
   sFullName += lpName;
 
-  LPCTSTR x = (LPCTSTR)::myodd::config::Get( sFullName + _T(".color"), cv.color);
+  const wchar_t* x = ::myodd::config::Get( sFullName + _T(".color"), cv.color);
   cv.color = x;
   cv.bBold    = ::myodd::config::Get( sFullName+ _T(".bold"), cv.bBold);
   cv.bItalic  = ::myodd::config::Get( sFullName+ _T(".italic"), cv.bItalic );
