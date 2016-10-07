@@ -28,7 +28,12 @@
 #include "../dynamic/any.h"
 
 namespace myodd{ namespace config{
-  void set(const std::wstring& path, const myodd::dynamic::Any& any);
+  /**
+  * Add a value to the map of values.
+  * @param const std::wstring& name the name of the value we are setting.
+  * @param const ::myodd::dynamic::Any& value the value been added.
+  */
+  void Set(const std::wstring& path, const ::myodd::dynamic::Any& value );
   
   /**
    * Try and get a value, if the value is not found, we throw.

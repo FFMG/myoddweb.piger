@@ -307,7 +307,7 @@ BOOL CActionMonitorApp::InitInstance()
     LPCTSTR lpPath = sAPath.c_str();
 
     //  set it in case next time we have nothing
-    myodd::config::set( _T("paths\\commands"), lpPath );
+    myodd::config::Set( L"paths\\commands", lpPath );
   }
 
   // setup the log
@@ -437,22 +437,22 @@ void CActionMonitorApp::InitReservedPaths()
   MYODD_STRING sPathIn;
   myodd::files::Join( sPathIn, sPath, AM_DIRECTORY_IN );
   myodd::files::CreateFullDirectory( sPathIn, false );
-  myodd::config::set( _T("paths\\in"), sPathIn );
+  myodd::config::Set( L"paths\\in", sPathIn );
 
   MYODD_STRING sPathOut;
   myodd::files::Join( sPathOut, sPath, AM_DIRECTORY_OUT );
   myodd::files::CreateFullDirectory( sPathOut, false );
-  myodd::config::set( _T("paths\\out"), sPathOut );
+  myodd::config::Set( L"paths\\out", sPathOut );
 
   MYODD_STRING sPathTmp;
   myodd::files::Join( sPathTmp, sPath, AM_DIRECTORY_TMP );
   myodd::files::CreateFullDirectory( sPathTmp, false );
-  myodd::config::set( _T("paths\\tmp"), sPathTmp );
+  myodd::config::Set( L"paths\\tmp", sPathTmp );
 
   MYODD_STRING sPathPlugin;
   myodd::files::Join( sPathPlugin, sPath, AM_DIRECTORY_PLUGIN );
   myodd::files::CreateFullDirectory( sPathPlugin, false );
-  myodd::config::set( _T("paths\\plugin"), sPathPlugin );
+  myodd::config::Set( L"paths\\plugin", sPathPlugin );
 }
 
 /**

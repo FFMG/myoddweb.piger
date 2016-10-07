@@ -70,19 +70,19 @@ namespace myodd {
       }
 
       // final check if, look for any character that is not allowed.
-      if (::myodd::regex::Regex2::Search(L"[^a-z0-9-\\\\]", result, false))
+      if (::myodd::regex::Regex2::Search(L"[^a-z0-9-\\.\\\\]", result, false))
       {
         throw std::invalid_argument("The name/path contains illigal characters.");
       }
 
       // look for elements that start with numbers.
       // something like "1234\value"
-      if (::myodd::regex::Regex2::Search(L"^[0-9-]", result, false))
+      if (::myodd::regex::Regex2::Search(L"^[0-9-\\.]", result, false))
       {
         throw std::invalid_argument("The name/path cannot be a number only.");
       }
       // and something like "value\1234\value"
-      if (::myodd::regex::Regex2::Search(L"(\\\\[0-9-])", result, false))
+      if (::myodd::regex::Regex2::Search(L"(\\\\[0-9-\\.])", result, false))
       {
         throw std::invalid_argument("The name/path cannot be a number only.");
       }
@@ -177,11 +177,10 @@ namespace myodd {
     /**
      * Add a value to the map of values.
      * @param const std::wstring& name the name of the value we are setting.
-     * @param long type the data type
      * @param const ::myodd::dynamic::Any& value the value been added.
      * @param bool isTemp
      */
-    void Data::Set(const std::wstring& name, long type, const ::myodd::dynamic::Any& value, bool isTemp)
+    void Data::Set(const std::wstring& name, const ::myodd::dynamic::Any& value, bool isTemp)
     {
       //
       // lock the values
@@ -212,22 +211,16 @@ namespace myodd {
           _dirty = true;
         }
 
-        if (data._type != type)
-        {
-          // the type was changes for some reason
-          _dirty = true;
-        }
-
         // if all the values are the same then there is nothing 
         // more for us to do here, we might as well move on.
-        if (data._temp == isTemp && data._type == type && data._value == value )
+        if (data._temp == isTemp && data._value == value )
         {
           return;
         }
       }
 
       // set the value, if we made it here, it is 'dirty'
-      DataStruct ds = { value, type, isTemp, true };
+      DataStruct ds = { value, isTemp, true };
       _values.Set( lname.c_str(), ds, ::myodd::cache::CacheItemPolicy() );
     }
 
@@ -243,57 +236,59 @@ namespace myodd {
       const std::wstring sep = _T("\\");
 
       const tinyxml2::XMLAttribute* attributeType = root.FindAttribute("type");
-      if (attributeType != NULL)
+      if (attributeType == NULL)
       {
-        // get the value
+        return;
+      }
+
+      // get the value
 #ifdef UNICODE
-        auto stdType = myodd::strings::String2WString(attributeType->Value());
-        auto stdRoot = myodd::strings::String2WString(root.Value());
-        auto stdText = myodd::strings::String2WString(root.GetText());
+      auto stdType = myodd::strings::String2WString(attributeType->Value());
+      auto stdRoot = myodd::strings::String2WString(root.Value());
+      auto stdText = myodd::strings::String2WString(root.GetText());
 #else
-        auto stdType = attributeType->Value;
-        auto stdRoot = root.Value();
-        auto stdText = root.GetText();
+      auto stdType = attributeType->Value;
+      auto stdRoot = root.Value();
+      auto stdText = root.GetText();
 #endif // UNICODE    
 
-        //  create the name of the object that we will be adding.
-        std::wstring stdName = myodd::strings::implode(parents, sep);
+      //  create the name of the object that we will be adding.
+      std::wstring stdName = myodd::strings::implode(parents, sep);
 
-        // and get the data type of the object
-        long ltype = _tstol(stdType.c_str());
+      // and get the data type of the object
+      long ltype = _tstol(stdType.c_str());
 
-        // depending on the type.
-        switch (ltype)
-        {
-        case Data::type_string:
-          //  Set as an string
-          Set(stdName, ltype, stdText, false);
-          break;
+      // depending on the type.
+      switch (ltype)
+      {
+      case ::myodd::dynamic::Type::Character_wchar_t:
+        //  Set as an string
+        Set(stdName, stdText, false);
+        break;
 
-        case Data::type_long:
-          //  Set as an long
-          Set(stdName, ltype, _tstol(stdText.c_str()), false );
-          break;
+      case ::myodd::dynamic::Type::Integer_long_int:
+        //  Set as an long
+        Set(stdName, _tstol(stdText.c_str()), false );
+        break;
 
-        case Data::type_double:
-          //  Set as an double
-          Set(stdName, ltype, _tstof(stdText.c_str()), false);
-          break;
+      case ::myodd::dynamic::Type::Floating_point_double:
+        //  Set as an double
+        Set(stdName, _tstof(stdText.c_str()), false);
+        break;
 
-        case Data::type_int:
-          //  Set as an int
-          Set(stdName, ltype, _tstoi(stdText.c_str()), false);
-          break;
+      case ::myodd::dynamic::Type::Integer_int:
+        //  Set as an int
+        Set(stdName, _tstoi(stdText.c_str()), false);
+        break;
 
-        case Data::type_int64:
-          //  Set as an int64
-          Set(stdName, ltype, _tstoi64(stdText.c_str()), false);
-          break;
+      case ::myodd::dynamic::Type::Integer_long_long_int:
+        //  Set as an int64
+        Set(stdName, _tstoi64(stdText.c_str()), false);
+        break;
 
-        default:
-          ASSERT(0);  //  what type is it?
-          break;
-        }
+      default:
+        Set(stdName, stdText, false);
+        break;
       }
     }
 

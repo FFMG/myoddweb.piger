@@ -9,7 +9,27 @@ namespace myodd{ namespace config{
    */
   ::myodd::config::Data* _data = NULL;
 
-  void set(const std::wstring& path, const myodd::dynamic::Any& any) { throw std::exception(); };
+  /**
+   * Common function used to validate that the data has been initialised.
+   */
+  inline void _ValidateData()
+  {
+    if (nullptr == _data)
+    {
+      throw std::exception("The configuration has not been initialised.");
+    }
+  }
+
+  /**
+   * Add a value to the map of values.
+   * @param const std::wstring& name the name of the value we are setting.
+   * @param const ::myodd::dynamic::Any& value the value been added.
+   */
+  void Set(const std::wstring& path, const ::myodd::dynamic::Any& value )
+  { 
+    _ValidateData();
+    _data->Set(path, value, false);
+  };
 
   /**
    * Try and get a value, if the value is not found, we throw.
@@ -19,10 +39,7 @@ namespace myodd{ namespace config{
    */
   ::myodd::dynamic::Any Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) 
   { 
-    if (nullptr == _data)
-    {
-      throw std::exception( "The configuration has not been initialised.");
-    }
+    _ValidateData();
     return _data->Get( path, defaultValue ); 
   }
 
@@ -33,10 +50,7 @@ namespace myodd{ namespace config{
    */
   bool Contains(const std::wstring& path)
   {
-    if (nullptr == _data)
-    {
-      throw std::exception("The configuration has not been initialised.");
-    }
+    _ValidateData();
     return _data->Contains(path);
   }
 

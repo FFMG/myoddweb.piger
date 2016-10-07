@@ -16,7 +16,7 @@ TEST_MEM(ConfigDataTest, SetValueWithoutLoadingAnXML)
 {
   // no error should happen
   ::myodd::config::Data data;
-  data.Set(XmlElementName(), ::myodd::config::Data::type_string, Uuid(), true );
+  data.Set(XmlElementName(), Uuid(), true );
 }
 
 TEST_MEM(ConfigDataTest, LoadFromAnXML)
@@ -206,43 +206,43 @@ TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberOnly)
 {
   // those are not valid xml element names
   ::myodd::config::Data data;
-  EXPECT_THROW(data.Set(L"1234", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+  EXPECT_THROW(data.Set(L"1234", 1234, false), std::invalid_argument);
 }
 
 TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberEvenWithMinus)
 {
   // those are not valid xml element names
   ::myodd::config::Data data;
-  EXPECT_THROW(data.Set(L"1234-5678", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+  EXPECT_THROW(data.Set(L"1234-5678", 1234, false), std::invalid_argument);
 }
 
 TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberOnlyEvenInThePath)
 {
   // those are not valid xml element names
   ::myodd::config::Data data;
-  EXPECT_THROW(data.Set(L"valid\\path\\1234", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+  EXPECT_THROW(data.Set(L"valid\\path\\1234", 1234, false), std::invalid_argument);
 }
 
 TEST_MEM(ConfigDataTest, YouCannotSetAnEllementThatStartsWithAMinus)
 {
   // those are not valid xml element names
   ::myodd::config::Data data;
-  data.Set(L"valid\\path\\good-name", ::myodd::config::Data::type_int, 1234, false);
-  EXPECT_THROW(data.Set(L"valid\\path\\-bad", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+  data.Set(L"valid\\path\\good-name", 1234, false);
+  EXPECT_THROW(data.Set(L"valid\\path\\-bad", 1234, false), std::invalid_argument);
 }
 
 TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberWithMinusOnlyEvenInThePath)
 {
   // those are not valid xml element names
   ::myodd::config::Data data;
-  EXPECT_THROW(data.Set(L"valid\\path\\1234-5678", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+  EXPECT_THROW(data.Set(L"valid\\path\\1234-5678", 1234, false), std::invalid_argument);
 }
 
 TEST_MEM(ConfigDataTest, YouCannotSetANameWithANumberOnlyAtTheBeginingEvenInThePath)
 {
   // those are not valid xml element names
   ::myodd::config::Data data;
-  EXPECT_THROW(data.Set(L"1234\\valid\\path", ::myodd::config::Data::type_int, 1234, false), std::invalid_argument);
+  EXPECT_THROW(data.Set(L"1234\\valid\\path", 1234, false), std::invalid_argument);
 }
 
 TEST_MEM(ConfigDataTest, WhenCheckingForTempTheNameMustStillBeValidNumber)
@@ -273,14 +273,48 @@ TEST_MEM(ConfigDataTest, SwitchBetweenTempAndNotTemp)
   auto name = L"\\valid\\path";
   auto number = IntRandomNumber<int>();
   ASSERT_FALSE(data.IsTemp(name));
-  data.Set(name, ::myodd::config::Data::type_int, number, false);
+  data.Set(name, number, false);
   ASSERT_FALSE(data.IsTemp(name));
   
   // make it temp
-  data.Set(name, ::myodd::config::Data::type_int, number, true);
+  data.Set(name, number, true);
   ASSERT_TRUE(data.IsTemp(name));
 
   // make it permanent
-  data.Set(name, ::myodd::config::Data::type_int, number, false);
+  data.Set(name, number, false);
   ASSERT_FALSE(data.IsTemp(name));
+}
+
+TEST_MEM(ConfigDataTest, LoadedValuesAreNotTempByDefault)
+{
+  ::myodd::config::Data data;
+  auto number1 = IntRandomNumber<int>();
+  auto value1 = ::myodd::strings::Format(L"<value1 type = \"8\">%d</value2>", number1);
+  auto number2 = IntRandomNumber<int>();
+  auto value2 = ::myodd::strings::Format(L"<value2 type = \"8\">%d</value1>", number2);
+
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent>%s%s</parent></Config>", value1, value2);
+  ASSERT_TRUE(data.FromXML(source));
+
+  // they all temp by default
+  ASSERT_FALSE(data.IsTemp(L"value1"));
+  ASSERT_FALSE(data.IsTemp(L"value2"));
+
+  // set #1 to temp
+  data.Set(L"value1", number1, true);
+  ASSERT_TRUE(data.IsTemp(L"value1"));
+
+  // the other is still not temp.
+  ASSERT_FALSE(data.IsTemp(L"value2"));
+}
+
+TEST_MEM(ConfigDataTest, CheckStringGetSetVaues)
+{
+  ::myodd::config::Data data;
+  auto name = L"\\valid\\path";
+  auto set = Uuid();
+  data.Set(name, set, true );
+  
+  std::wstring get = data.Get(name);
+  ASSERT_EQ(set, get);
 }

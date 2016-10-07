@@ -37,21 +37,6 @@ namespace myodd{ namespace config{
   class Data : public myodd::threads::CritSection
   {
   public:
-    /**
-    * The various types we are saving the config to/from
-    */
-    enum config_type
-    {
-      type_unknown = 0x00,
-      type_string = 0x01,
-      type_long = 0x02,
-      type_double = 0x04,
-      type_int = 0x08,
-      type_int64 = 0x10,
-      type_all = (type_string | type_string | type_long | type_double | type_int | type_int64),
-    };
-
-  public:
     Data();
 
     virtual ~Data();
@@ -70,7 +55,7 @@ namespace myodd{ namespace config{
      * @param const ::myodd::dynamic::Any& value the value been added.
      * @param bool isTemp
      */
-    void Set(const std::wstring& name, long type, const ::myodd::dynamic::Any& value, bool isTemp );
+    void Set(const std::wstring& name, const ::myodd::dynamic::Any& value, bool isTemp );
 
     /**
      * Try and get a value, if the value is not found, we throw.
@@ -168,7 +153,6 @@ namespace myodd{ namespace config{
     struct DataStruct
     {
       ::myodd::dynamic::Any _value;
-      long _type;
       bool _temp;
       bool _dirty;
     };
