@@ -1037,3 +1037,33 @@ TEST_MEM(AnyTestCharacter, CheckStringGetSetVauesFromNumber)
   std::string get = any;
   ASSERT_EQ("42", get);
 }
+
+TEST_MEM(AnyTest, GetWideStringValueConstAndNotConst)
+{
+  const wchar_t* c = L"Hello";
+  auto any = ::myodd::dynamic::Any(c);
+
+  wchar_t* d = any;
+  ASSERT_STREQ(c, d);
+
+  const wchar_t* e = any;
+  ASSERT_STREQ(c, e);
+
+  std::wstring f = any;
+  ASSERT_EQ(c, f);
+}
+
+TEST_MEM(AnyTest, GetStringValueConstAndNotConst)
+{
+  const char* c = "Hello";
+  auto any = ::myodd::dynamic::Any(c);
+
+  char* d = any;
+  ASSERT_STREQ(c, d);
+
+  const char* e = any;
+  ASSERT_STREQ(c, e);
+
+  std::string f = any;
+  ASSERT_EQ(c, f);
+}

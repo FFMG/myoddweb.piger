@@ -318,3 +318,70 @@ TEST_MEM(ConfigDataTest, CheckStringGetSetVaues)
   std::wstring get = data.Get(name);
   ASSERT_EQ(set, get);
 }
+
+TEST_MEM(ConfigDataTest, GetSetVauesAsConstChar)
+{
+  ::myodd::config::Data data;
+  auto name = L"\\valid\\path";
+  auto set = Uuid();
+  data.Set(name, set, true);
+
+  const wchar_t* get = nullptr;
+  get = data.Get(name);
+  ASSERT_STREQ(set.c_str(), get);
+}
+
+TEST_MEM(ConfigDataTest, CheckStringGetSetVauesAsConstChar)
+{
+  ::myodd::config::Data data;
+  auto name = L"\\valid\\path";
+  auto set = Uuid();
+  data.Set(name, set, true);
+
+  std::wstring get = data.Get(name);
+  ASSERT_EQ(set, get);
+}
+
+TEST_MEM(ConfigDataTest, BaseNameCannotHaveSpaces )
+{
+  EXPECT_THROW( ::myodd::config::Data data( L"  Bad  "), std::invalid_argument );
+}
+
+TEST_MEM(ConfigDataTest, BaseNameCannotHaveSpacesBetweenCharacters)
+{
+  EXPECT_THROW(::myodd::config::Data data(L"Bad Name"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, BaseNameCannotHaveSpecialCharacters)
+{
+  EXPECT_THROW(::myodd::config::Data data(L"Bad+Name"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, BaseNameCannotHaveBackSlashInTheMiddle)
+{
+  EXPECT_THROW(::myodd::config::Data data(L"Bad\\Name"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, BaseNameCannotStartWithNumber)
+{
+  EXPECT_THROW(::myodd::config::Data data(L"12BadName"), std::invalid_argument);
+}
+
+TEST_MEM_LOOP(ConfigDataTest, LoadFromAnXMLAndGetTheValueDoubleDepthWithNonDefaultName, NUMBER_OF_TESTS)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data( element );
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><%s><parent><value type=\"8\">%d</value></parent></%s>", element.c_str(), number, element.c_str());
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"parent\\value"));
+}
+
+TEST_MEM_LOOP(ConfigDataTest, NegativeVersionNumber, NUMBER_OF_TESTS)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto version = IntRandomNumber<long>( -100, -1 );
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><%s version=\"%d\"></%s>", element.c_str(), version, element.c_str());
+  EXPECT_THROW(data.FromXML(source), std::exception );
+}

@@ -7,11 +7,28 @@
 
 namespace myodd {
   namespace config {
-    Data::Data() : 
+
+    // the current version number
+    const long _CurrentVersion = 1;
+
+    /**
+     * The constructor, with the root name we will use.
+     * @param const std::wstring& rootName the rootname we want to use.
+     */
+    Data::Data( const std::wstring& rootName ) : 
       _path( "" ), 
       _dirty( false ),
-      _values( L"Config" )
+      _values( L"Configuration" ),
+      _rootName( rootName )
     {
+      // validate the root name.
+      ValidateElementName(_rootName);
+
+      // and prevent '\\' as well.
+      if (::myodd::regex::Regex2::Search(L"\\\\", _rootName, false))
+      {
+        throw std::invalid_argument("The root name cannot have 'back slash'");
+      }
     }
 
     Data::~Data()
@@ -62,35 +79,45 @@ namespace myodd {
 
       // replace multiple escapes to just one.
       ::myodd::regex::Regex2::Replace(L"\\\\{2,}", L"\\", result, false);
+
+      // validate the final value
+      ValidateElementName(result);
       
+      // return what we have
+      return result;
+    }
+
+    /**
+     * Check if the given element is valid or not.
+     * @param const std::wstring& src the element we are checking.
+     */
+    void Data::ValidateElementName(const std::wstring& src)
+    {
       // do we have anything left.
-      if (result.length() == 0)
+      if (src.length() == 0)
       {
         throw std::invalid_argument("The name/path cannot be empty.");
       }
 
       // final check if, look for any character that is not allowed.
-      if (::myodd::regex::Regex2::Search(L"[^a-z0-9-\\.\\\\]", result, false))
+      if (::myodd::regex::Regex2::Search(L"[^a-zA-Z0-9-\\.\\\\]", src, false))
       {
         throw std::invalid_argument("The name/path contains illigal characters.");
       }
 
       // look for elements that start with numbers.
       // something like "1234\value"
-      if (::myodd::regex::Regex2::Search(L"^[0-9-\\.]", result, false))
+      if (::myodd::regex::Regex2::Search(L"^[0-9-\\.]", src, false))
       {
         throw std::invalid_argument("The name/path cannot be a number only.");
       }
       // and something like "value\1234\value"
-      if (::myodd::regex::Regex2::Search(L"(\\\\[0-9-\\.])", result, false))
+      if (::myodd::regex::Regex2::Search(L"(\\\\[0-9-\\.])", src, false))
       {
         throw std::invalid_argument("The name/path cannot be a number only.");
       }
-
-      // return what we have
-      return result;
     }
-    
+
     /**
      * Check if the value has been set or not.
      * @param const std::wstring& path the path we are looking for.
@@ -123,7 +150,7 @@ namespace myodd {
       }
 
       // get the value
-      auto data = (DataStruct)_values.Get(lpath.c_str());
+      auto data = (const DataStruct)_values.Get(lpath.c_str());
 
       // return if it is temp or not.
       return data._temp;
@@ -134,7 +161,7 @@ namespace myodd {
     * @param const std::wstring& path the name of the value we are looking for.
     * @return ::myodd::dynamic::Any the value, if it exists.
     */
-    ::myodd::dynamic::Any Data::Get(const std::wstring& path) const
+    const ::myodd::dynamic::Any Data::Get(const std::wstring& path) const
     {
       // cleanup the path
       auto lpath = SafeName(path);
@@ -147,7 +174,7 @@ namespace myodd {
       }
 
       // get the value.
-      auto data = (DataStruct)_values.Get(lpath.c_str());
+      auto data = (const DataStruct)_values.Get(lpath.c_str());
       return data._value;
     }
 
@@ -157,7 +184,7 @@ namespace myodd {
     * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
     * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
     */
-    ::myodd::dynamic::Any Data::Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const
+    const ::myodd::dynamic::Any Data::Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const
     {
       // cleanup the path
       auto lpath = SafeName(path);
@@ -170,7 +197,7 @@ namespace myodd {
       }
 
       // get the value.
-      auto data = (DataStruct)_values.Get(lpath.c_str());
+      auto data = (const DataStruct)_values.Get(lpath.c_str());
       return data._value;
     }
 
@@ -226,11 +253,11 @@ namespace myodd {
 
     /**
      * In that node look for a 'type' attribute, if it exists then we will look for a value.
+     * @param const long versionNumber the data version number.
      * @param tinyxml2::XMLElement& the current node
      * @param std::vector<std::wstring>& the current list of parent names.
-     * @return none.
      */
-    void Data::WalkElement(const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents)
+    void Data::WalkElement(const long versionNumber, const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents)
     {
       //  get the type
       const std::wstring sep = _T("\\");
@@ -309,6 +336,33 @@ namespace myodd {
     */
     void Data::WalkElements(const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents)
     {
+      long version = 0;
+      const tinyxml2::XMLAttribute* attributeVersion = root.FindAttribute("version");
+      if (attributeVersion != NULL)
+      {
+        // get the value
+        auto stdVersion = attributeVersion->Value();
+        version = std::atol(stdVersion);
+      }
+
+      // is it a valid version number?
+      if (version < 0 || version > _CurrentVersion)
+      {
+        throw std::exception("The given version number is unknown.");
+      }
+
+      // now that we have a version number we can parse the 
+      WalkElements(version, root, parents);
+    }
+
+    /**
+     * Parse the data from the root.
+     * @param const long versionNumber the data version number.
+     * @param tinyxml2::XMLElement& the current node we are traversing.
+     * @param std::vector<std::wstring>& the current names of the parents, (so we can rebuild them in a single string).
+     */
+    void Data::WalkElements(const long versionNumber, const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents)
+    {
       // Look for all the child nodes, they can all be valid item.
       const tinyxml2::XMLElement* pValues = root.FirstChildElement();
       while (pValues)
@@ -322,7 +376,7 @@ namespace myodd {
 
         // add that element if there is anything to actually add.
         // @see WalkElement( ... )
-        WalkElement(*pValues, parents);
+        WalkElement( versionNumber, *pValues, parents);
 
         // or/and add the sibling elements.
         WalkElements(*pValues, parents);
@@ -398,7 +452,8 @@ namespace myodd {
     bool Data::FromXMLDocument(const tinyxml2::XMLDocument& doc )
     {
       // look for the root attribute, 'Config'.
-      const tinyxml2::XMLElement* pElemConfig = doc.FirstChildElement("Config");
+      auto rootName = ToChar(_rootName);
+      const tinyxml2::XMLElement* pElemConfig = doc.FirstChildElement( rootName.c_str() );
       if (nullptr == pElemConfig)
       {
         // something didn't work

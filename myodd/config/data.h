@@ -37,7 +37,11 @@ namespace myodd{ namespace config{
   class Data : public myodd::threads::CritSection
   {
   public:
-    Data();
+    /**
+     * The constructor, with the root name we will use.
+     * @param const std::wstring& rootName the rootname we want to use.
+     */
+    Data(const std::wstring& rootName = L"Config" );
 
     virtual ~Data();
 
@@ -62,7 +66,7 @@ namespace myodd{ namespace config{
      * @param const std::wstring& path the name of the value we are looking for.
      * @return ::myodd::dynamic::Any the value, if it exists.
      */
-    ::myodd::dynamic::Any Get(const std::wstring& path) const;
+    const ::myodd::dynamic::Any Get(const std::wstring& path) const;
 
     /**
      * Try and get a value, if the value is not found, we throw.
@@ -70,7 +74,7 @@ namespace myodd{ namespace config{
      * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
      * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
      */
-    ::myodd::dynamic::Any Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const;
+    const ::myodd::dynamic::Any Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const;
 
     /**
      * Check if a given path is a temp value or not
@@ -104,6 +108,12 @@ namespace myodd{ namespace config{
     static std::wstring SafeName(const std::wstring& src);
 
     /**
+     * Check if the given element is valid or not.
+     * @param const std::wstring& src the element we are checking.
+     */
+    static void ValidateElementName(const std::wstring& src);
+
+    /**
      * Create the data holder from an XML
      * @return bool success or not.
      */
@@ -116,6 +126,14 @@ namespace myodd{ namespace config{
 #endif
 
     /**
+     * Parse the data from the root.
+     * @param const long versionNumber the data version number.
+     * @param tinyxml2::XMLElement& the current node we are traversing.
+     * @param std::vector<std::wstring>& the current names of the parents, (so we can rebuild them in a single string).
+     */
+    void WalkElements(const long versionNumber, const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents);
+  
+    /**
      * Read the root element and look for variables to add.
      * If we find sub nodes we will continue to look for more values.
      * <Config>
@@ -125,20 +143,18 @@ namespace myodd{ namespace config{
      *   </commands>
      *   ...
      * <Config>
-     *
      * @param tinyxml2::XMLElement& the current node we are traversing.
-     * @param std::vector<MYODD_STRING>& the current names of the parents, (so we can rebuild them in a single string).
-     * @return none.
+     * @param std::vector<std::wstring>& the current names of the parents, (so we can rebuild them in a single string).
      */
-    void WalkElements(const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents);
+    void WalkElements( const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents);
 
     /**
      * In that node look for a 'type' attribute, if it exists then we will look for a value.
+     * @param const long versionNumber the data version number.
      * @param tinyxml2::XMLElement& the current node
-     * @param std::vector<MYODD_STRING>& the current list of parent names.
-     * @return none.
+     * @param std::vector<std::wstring>& the current list of parent names.
      */
-    void WalkElement(const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents);
+    void WalkElement(const long versionNumber, const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents);
 
     /**
      * The path to our xml file.
@@ -159,6 +175,9 @@ namespace myodd{ namespace config{
 
     // all the values
     ::myodd::cache::MemoryCache _values;
+
+    // the config name
+    const std::wstring  _rootName;
   };
 } //  config
 } //  myodd

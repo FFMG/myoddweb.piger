@@ -158,8 +158,8 @@ void MessageDlg::Fade()
   // 0 means that we move right away
   if (m_nFadeOut > 0)
   {
-    BYTE bStart = ::myodd::config::Get( L"commands\\transparency", 127);
-    for (BYTE b = bStart; b > 0; --b)
+    unsigned char bStart = ::myodd::config::Get( L"commands\\transparency", 127);
+    for (auto b = bStart; b > 0; --b)
     {
       Transparent(b);
       DWORD d = (GetTickCount() + m_nFadeOut);

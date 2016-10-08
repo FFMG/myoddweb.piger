@@ -35,7 +35,7 @@ protected:
 
   struct COMMANDS_VALUE
   {
-    MYODD_STRING color;
+    std::wstring color;
     bool bBold;
     bool bItalic;
     COMMANDS_VALUE() :
@@ -52,7 +52,7 @@ protected:
   };
 
   static MYODD_STRING toChar( const MYODD_STRING& s, const COMMANDS_VALUE& cv );
-  void GetCommandValue( LPCTSTR lpName, COMMANDS_VALUE& cv ) const;
+  void GetCommandValue( const std::wstring& lpName, COMMANDS_VALUE& cv ) const;
 
 protected:
   //  vectors containing all the commands we can call
