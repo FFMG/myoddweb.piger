@@ -16,7 +16,7 @@ TEST(StringTestFormater, WideStringAddStrings)
   auto stringB = Uuid();
 
   std::wstring result = ::myodd::strings::FormatterW() << stringA << stringB;
-  ASSERT_EQ(::myodd::strings::Format(L"%s%s", stringA, stringB), result);
+  ASSERT_EQ(::myodd::strings::Format(L"%s%s", stringA.c_str(), stringB.c_str()), result);
 }
 
 TEST(StringTestFormater, AsciiStringAddLong)
@@ -36,7 +36,9 @@ TEST(StringTestFormater, AsciiStringAddStrings)
 
   std::string result = ::myodd::strings::FormatterA() << stringA << stringB;
   ASSERT_EQ(
-    ::myodd::strings::WString2String(::myodd::strings::Format(L"%s%s", stringA, stringB))
+    ::myodd::strings::WString2String(
+      ::myodd::strings::Format(L"%s%s", ::myodd::strings::String2WString(stringA).c_str(), ::myodd::strings::String2WString(stringB).c_str())
+    )
     , 
     result);
 }
