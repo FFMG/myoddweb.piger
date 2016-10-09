@@ -55,7 +55,7 @@ namespace myodd {
       };
       std::wstring operator >> (ConvertToString) { return stream_.str(); }
 
-    private:
+    protected:
       std::wstringstream stream_;
 
       // prevent copies
@@ -86,7 +86,7 @@ namespace myodd {
       };
       std::string operator >> (ConvertToString) { return stream_.str(); }
 
-    private:
+    protected:
       std::stringstream stream_;
 
       // prevent copies

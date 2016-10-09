@@ -826,7 +826,7 @@
     <ClInclude Include="stree\smap.h" />
     <ClInclude Include="stree\sset.h" />
     <ClInclude Include="stree\stree.h" />
-    <ClInclude Include="string\formater.h" />
+    <ClInclude Include="string\formatter.h" />
     <ClInclude Include="string\string.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="threads\lock.h" />

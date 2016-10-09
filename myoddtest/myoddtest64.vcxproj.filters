@@ -166,5 +166,8 @@
     <ClCompile Include="config\testdata.cpp">
       <Filter>myodd\config</Filter>
     </ClCompile>
+    <ClCompile Include="string\teststring_formatter.cpp">
+      <Filter>myodd\string</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
