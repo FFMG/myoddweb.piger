@@ -381,7 +381,7 @@ TEST_MEM_LOOP(ConfigDataTest, NegativeVersionNumber, NUMBER_OF_TESTS)
 {
   auto element = XmlElementName();
   ::myodd::config::Data data(element);
-  auto version = IntRandomNumber<long>( -100, -1 );
+  auto version = IntRandomNumber<long>(-100, -1);
   auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><%s version=\"%d\"></%s>", element.c_str(), version, element.c_str());
   EXPECT_THROW(data.FromXML(source), std::exception );
 }

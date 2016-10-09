@@ -242,10 +242,14 @@ inline std::wstring XmlElementName()
 {
   std::wstring result = L"";
   const std::wstring a = L"abcdefghejklmnopqrstuvwxyz";
+  const auto la = (int)a.length() - 1;
+
   const std::wstring b = L"abcdefghejklmnopqrstuvwxyz1234567890-";
+  const auto lb = (int)b.length() - 1;
+
   for (auto i = 0; i < 10; ++i)
   {
-    result += (i == 0 || i == 9) ? a[IntRandomNumber<int>(0, (int)a.length() )] : b[IntRandomNumber<int>(0, (int)a.length())];
+    result += (i == 0 || i == 9) ? a[IntRandomNumber<int>(0, la )] : b[IntRandomNumber<int>(0, lb)];
   }
   return result;
 }
