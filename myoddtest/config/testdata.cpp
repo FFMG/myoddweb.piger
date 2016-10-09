@@ -1,5 +1,6 @@
 #include "config/data.h"
 #include "string\string.h"
+#include "string\formatter.h"
 #include <gtest/gtest.h>
 
 #include "../testcommon.h"
@@ -136,6 +137,63 @@ TEST_MEM(ConfigDataTest, CheckIfContainsTheValue)
   auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
   ASSERT_TRUE(data.FromXML(source));
   ASSERT_TRUE( data.Contains(L"parent\\value"));
+}
+
+TEST_MEM(ConfigDataTest, CheckIfDoesNotConainContainsTheValueSimilarName)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_TRUE(data.Contains(L"parent\\value"));
+
+  // one extra char
+  ASSERT_FALSE(data.Contains(L"parent\\value1"));
+
+  // one less char
+  ASSERT_FALSE(data.Contains(L"parent\\valu"));
+}
+
+TEST_MEM(ConfigDataTest, CheckIfDoesNotConainContainsTheValueWrongParent)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_TRUE(data.Contains(L"parent\\value"));
+
+  // one extra char
+  ASSERT_FALSE(data.Contains(L"parentt\\value"));
+
+  // one less char
+  ASSERT_FALSE(data.Contains(L"paren\\value"));
+}
+
+TEST_MEM(ConfigDataTest, ContainsWithBadNameWillThrowWithNumber)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  EXPECT_THROW(data.Contains(L"123Bad"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, ContainsWithBadNameWillThrowWithSpaces)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  EXPECT_THROW(data.Contains(L"Bad Name"), std::invalid_argument);
+}
+
+TEST_MEM(ConfigDataTest, ContainsWithBadNameWillThrowWithInvalidCharacters)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><value type=\"8\">%d</value></parent></Config>", number);
+  ASSERT_TRUE(data.FromXML(source));
+  EXPECT_THROW(data.Contains(L"Bad+Name"), std::invalid_argument);
 }
 
 TEST_MEM(ConfigDataTest, CheckIfContainsTheValueVariousCase)
@@ -379,4 +437,190 @@ TEST_MEM_LOOP(ConfigDataTest, NegativeVersionNumber, NUMBER_OF_TESTS)
   auto version = IntRandomNumber<long>(-100, -1);
   auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><%s version=\"%d\"></%s>", element.c_str(), version, element.c_str());
   EXPECT_THROW(data.FromXML(source), std::exception );
+}
+
+TEST_MEM(ConfigDataTest, PreviousVersionNumberString)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto type = 1;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << "><value type=\"" << type << L"\">Hello</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(L"Hello", data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Character_wchar_t, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, PreviousVersionNumberLongInt)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto number = IntRandomNumber<long>();
+  auto type = 2;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << "><value type=\"" << type << L"\">" << number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Integer_long_int, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, PreviousVersionNumberDouble)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto number = RealRandomNumber<double>();
+  auto type = 4;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << "><value type=\"" << type << L"\">" << std::fixed << number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_DOUBLE_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Floating_point_double, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, PreviousVersionNumberInt)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto number = IntRandomNumber<int>();
+  auto type = 8;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << "><value type=\"" << type << L"\">" << number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Integer_int, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, PreviousVersionNumberLongLongInt)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto number = IntRandomNumber<long long int>();
+  auto type = 16;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << "><value type=\"" << type << L"\">" << number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Integer_long_long_int, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, CurrentVersionNumberString)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto version = 1;
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><%s version=\"%d\"><value type=\"8\">Hello</value></%s>", element.c_str(), version, element.c_str());
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(L"Hello", data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Character_wchar_t, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, CurrentVersionNumberLongInt)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto version = 1;
+  auto number = IntRandomNumber<long>();
+  auto type = 13;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << " version=\"" << version << L"\"><value type=\"" << type << L"\">"<< number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Integer_long_int, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, CurrentVersionNumberDouble)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto version = 1;
+  auto number = RealRandomNumber<double>();
+  auto type = 18;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << " version=\"" << version << L"\"><value type=\"" << type << L"\">" << std::fixed << number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_DOUBLE_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Floating_point_double, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, CurrentVersionNumberInt)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto version = 1;
+  auto number = IntRandomNumber<int>();
+  auto type = 11;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << " version=\"" << version << L"\"><value type=\"" << type << L"\">" << number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Integer_int, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, CurrentVersionNumberLongLongInt)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto version = 1;
+  auto number = IntRandomNumber<long long int>();
+  auto type = 15;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << " version=\"" << version << L"\"><value type=\"" << type << L"\">" << number << L"</value></" << element << L">";
+  ASSERT_TRUE(data.FromXML(source));
+  ASSERT_EQ(number, data.Get(L"value"));
+  ASSERT_EQ(::myodd::dynamic::Type::Integer_long_long_int, data.Get(L"value").Type());
+}
+
+TEST_MEM(ConfigDataTest, CurrentVersionNumberUnknownType)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto version = 1;
+  auto number = IntRandomNumber<long long int>();
+  auto type = 0;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << " version=\"" << version << L"\"><value type=\"" << type << L"\">" << number << L"</value></" << element << L">";
+  EXPECT_THROW(data.FromXML(source), std::runtime_error );
+}
+
+TEST_MEM(ConfigDataTest, PreviousVersionNumberUnknownType)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto number = IntRandomNumber<long long int>();
+  auto type = 17;
+  std::wstring source = ::myodd::strings::Formatter() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><" << element << "><value type=\"" << type << L"\">" << number << L"</value></" << element << L">";
+  EXPECT_THROW(data.FromXML(source), std::runtime_error);
+}
+
+TEST_MEM_LOOP(ConfigDataTest, ChangeOnlyTheValueNotTemp, NUMBER_OF_TESTS )
+{
+  ::myodd::config::Data data;
+  auto element = XmlElementName();
+  auto temp = BoolRandomNumber();
+  auto uuid1 = Uuid();
+  auto uuid2 = Uuid();
+
+  data.Set(element, uuid1, temp );
+  ASSERT_EQ(uuid1, data.Get(element));
+  ASSERT_EQ(temp, data.IsTemp(element));
+
+  //  only change the value
+  data.Set(element, uuid2, temp);
+  ASSERT_EQ(uuid2, data.Get(element));
+  ASSERT_EQ(temp, data.IsTemp(element));
+}
+
+TEST_MEM_LOOP(ConfigDataTest, ChangeNothingAtAll, NUMBER_OF_TESTS)
+{
+  ::myodd::config::Data data;
+  auto element = XmlElementName();
+  auto temp = BoolRandomNumber();
+  auto uuid = Uuid();
+
+  data.Set(element, uuid, temp);
+  ASSERT_EQ(uuid, data.Get(element));
+  ASSERT_EQ(temp, data.IsTemp(element));
+
+  // change nothing
+  data.Set(element, uuid, temp);
+  ASSERT_EQ(uuid, data.Get(element));
+  ASSERT_EQ(temp, data.IsTemp(element));
+}
+
+TEST_MEM(ConfigDataTest, InvalidXmlWillReturnFalse )
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto source = L"!Invalid XML";
+  ASSERT_FALSE(data.FromXML(source));
 }
