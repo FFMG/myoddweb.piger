@@ -522,5 +522,8 @@
     <ClInclude Include="config\data.h">
       <Filter>Config</Filter>
     </ClInclude>
+    <ClInclude Include="string\formater.h">
+      <Filter>string</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
