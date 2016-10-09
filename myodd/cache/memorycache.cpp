@@ -67,7 +67,9 @@ namespace myodd {
      * @see https://msdn.microsoft.com/en-us/library/system.runtime.caching.memorycache.memorycache(v=vs.110).aspx
      * @param const std::wstring& name The name to use to look up configuration information.
      */
-    MemoryCache::MemoryCache(const wchar_t* name) : _name(name ? name : L"")
+    MemoryCache::MemoryCache(const wchar_t* name) : 
+      _name(name ? name : L""),
+      _nullValue( nullptr )
     {
       ValidateName();
     }
@@ -350,7 +352,7 @@ namespace myodd {
     * @param const wchar_t* regionName
     * @return ::myodd::dynamic::Any* the value or null.
     */
-    const ::myodd::dynamic::Any MemoryCache::Get(const wchar_t* key, const wchar_t* regionName ) const
+    const ::myodd::dynamic::Any& MemoryCache::Get(const wchar_t* key, const wchar_t* regionName ) const
     {
       // get the lock now so we can hold it until we return the value.
       MemoryCache::Lock guard(_mutex);
@@ -360,7 +362,7 @@ namespace myodd {
       if (nullptr == cacheItem )
       {
         // could not find it.
-        return nullptr;
+        return _nullValue;
       }
 
       // return the value.

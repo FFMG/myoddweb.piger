@@ -28,7 +28,6 @@
 #include <vector>
 #include <map>
 #include "../dynamic/any.h"
-#include "../cache/memorycache.h"
 #include "../xml/tinyxml2.h"
 #include "../threads/threads.h"
 
@@ -66,7 +65,7 @@ namespace myodd{ namespace config{
      * @param const std::wstring& path the name of the value we are looking for.
      * @return ::myodd::dynamic::Any the value, if it exists.
      */
-    const ::myodd::dynamic::Any Get(const std::wstring& path) const;
+    const ::myodd::dynamic::Any& Get(const std::wstring& path) const;
 
     /**
      * Try and get a value, if the value is not found, we throw.
@@ -74,7 +73,7 @@ namespace myodd{ namespace config{
      * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
      * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
      */
-    const ::myodd::dynamic::Any Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const;
+    const ::myodd::dynamic::Any& Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const;
 
     /**
      * Check if a given path is a temp value or not
@@ -112,6 +111,16 @@ namespace myodd{ namespace config{
      * @param const std::wstring& src the element we are checking.
      */
     static void ValidateElementName(const std::wstring& src);
+
+    /** 
+     * Get the data type given the version number of the config
+     * Older xmls have different data types.
+     * We will throw if the data type is unknown.
+     * @param const long version the xml file version number
+     * @param const long givenType the type we want to convert.
+     * @return ::myodd::dynamic::Type the converted data type.
+     */
+    static ::myodd::dynamic::Type ConvertToDataType(const long version, const long givenType);
 
     /**
      * Create the data holder from an XML
@@ -174,7 +183,15 @@ namespace myodd{ namespace config{
     };
 
     // all the values
-    ::myodd::cache::MemoryCache _values;
+    typedef std::map<std::wstring, DataStruct> DataStructs;
+    DataStructs _values;
+
+    /**
+     * Look for a certain data structure, return nullptr if we do not find it.
+     * @param const std::wstring& name the value we are looking for.
+     * @return DataStruct* the data struct we found.
+     */
+    const DataStruct* GetRaw(const std::wstring& name) const;
 
     // the config name
     const std::wstring  _rootName;

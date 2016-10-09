@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../string/string.h"
+#include "../string/formatter.h"
 #include "../files/files.h"
 #include "../pcre2/regex2.h"
 #include "data.h"
@@ -18,7 +19,6 @@ namespace myodd {
     Data::Data( const std::wstring& rootName ) : 
       _path( "" ), 
       _dirty( false ),
-      _values( L"Configuration" ),
       _rootName( rootName )
     {
       // validate the root name.
@@ -59,6 +59,31 @@ namespace myodd {
       return s;
     }
 #endif
+
+    /**
+     * Look for a certain data structure, return nullptr if we do not find it.
+     * @param const std::wstring& name the value we are looking for.
+     * @return DataStruct* the data struct we found.
+     */
+    const Data::DataStruct* Data::GetRaw(const std::wstring& name) const
+    {
+      //
+      // lock the values
+      // NB: we are returning a pointer, so locking
+      //     should be also done by the parent function calling this.
+      //     otherwise you could very well loose the data as soon as we 
+      //     releast the lock.
+      myodd::threads::AutoLock lock(*this);
+
+      // look got it.
+      auto it = _values.find(name);
+      if (it == _values.end())
+      {
+        return nullptr;
+      }
+      return &(it->second);
+    }
+
     /**
      * Convert the source value to a safe, clean value
      * in other words a trimmed, lower case path.
@@ -118,6 +143,57 @@ namespace myodd {
       }
     }
 
+    /** 
+     * Get the data type given the version number of the config
+     * Older xmls have different data types.
+     * We will throw if the data type is unknown.
+     * @param const long version the xml file version number
+     * @param const long givenType the type we want to convert.
+     * @return ::myodd::dynamic::Type the converted data type.
+     */
+    ::myodd::dynamic::Type Data::ConvertToDataType(const long version, const long givenType)
+    {
+      //  current version.
+      if (version == _CurrentVersion)
+      {
+        switch ( givenType)
+        {
+        case ::myodd::dynamic::Type::Character_wchar_t:
+        case ::myodd::dynamic::Type::Integer_long_int:
+        case ::myodd::dynamic::Type::Floating_point_double:
+        case ::myodd::dynamic::Type::Integer_int:
+        case ::myodd::dynamic::Type::Integer_long_long_int:
+          // no conversion needed
+          return static_cast<::myodd::dynamic::Type>(givenType);
+
+        default:
+          throw std::runtime_error( myodd::strings::FormatterA() << "Unknown data type :" << givenType );
+        }
+      }
+
+      // the old way
+      switch (givenType)
+      {
+      case 0x1: // type_string = 0x01
+        return ::myodd::dynamic::Type::Character_wchar_t;
+
+      case 0x2: //  type_long = 0x02
+        return ::myodd::dynamic::Type::Integer_long_int;
+
+      case 0x4: //  type_double = 0x04
+        return ::myodd::dynamic::Type::Floating_point_double;
+
+      case 0x8: //  type_int = 0x08
+        return ::myodd::dynamic::Type::Integer_int;
+
+      case 0x10: // type_int64  = 0x10
+        return ::myodd::dynamic::Type::Integer_long_long_int;
+
+      default:
+        throw std::runtime_error(myodd::strings::FormatterA() << "Unknown data type :" << givenType);
+      }
+    }
+
     /**
      * Check if the value has been set or not.
      * @param const std::wstring& path the path we are looking for.
@@ -130,7 +206,7 @@ namespace myodd {
 
       //
       // does this value exist?
-      return _values.Contains(lpath.c_str());
+      return (GetRaw(lpath.c_str()) != nullptr);
     }
 
     /**
@@ -144,16 +220,14 @@ namespace myodd {
       auto lpath = SafeName(path);
 
       // do we even know about this value?
-      if (!_values.Contains(lpath.c_str()))
+      auto data = GetRaw(lpath.c_str());
+      if (nullptr == data )
       {
         return false;
       }
 
-      // get the value
-      auto data = (const DataStruct)_values.Get(lpath.c_str());
-
       // return if it is temp or not.
-      return data._temp;
+      return data->_temp;
     }
         
     /**
@@ -161,21 +235,21 @@ namespace myodd {
     * @param const std::wstring& path the name of the value we are looking for.
     * @return ::myodd::dynamic::Any the value, if it exists.
     */
-    const ::myodd::dynamic::Any Data::Get(const std::wstring& path) const
+    const ::myodd::dynamic::Any& Data::Get(const std::wstring& path) const
     {
       // cleanup the path
       auto lpath = SafeName(path);
 
       //
       // does this value exist?
-      if (!_values.Contains(lpath.c_str()))
+      auto data = GetRaw(lpath.c_str());
+      if (nullptr == data)
       {
-        throw std::exception("Unknown path");
+        throw std::runtime_error("Unknown path");
       }
 
       // get the value.
-      auto data = (const DataStruct)_values.Get(lpath.c_str());
-      return data._value;
+      return data->_value;
     }
 
     /**
@@ -184,21 +258,21 @@ namespace myodd {
     * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
     * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
     */
-    const ::myodd::dynamic::Any Data::Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const
+    const ::myodd::dynamic::Any& Data::Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue) const
     {
       // cleanup the path
       auto lpath = SafeName(path);
 
       //
       // does this value exist?
-      if (!_values.Contains(lpath.c_str()))
+      auto data = GetRaw(lpath.c_str());
+      if (nullptr == data)
       {
         return defaultValue;
       }
 
       // get the value.
-      auto data = (const DataStruct)_values.Get(lpath.c_str());
-      return data._value;
+      return data->_value;
     }
 
     /**
@@ -218,7 +292,8 @@ namespace myodd {
 
       //
       // does this value exist?
-      if (!_values.Contains(lname.c_str()) )
+      auto data = GetRaw(lname.c_str());
+      if (nullptr == data)
       {
         // this value does not exist, so it is new.
         // if the value is not temp, then the entire array is 'dirty'
@@ -230,8 +305,7 @@ namespace myodd {
       else
       {
         // the value aready exists.
-        auto data = (DataStruct)_values.Get( lname.c_str() );
-        if (data._temp && !isTemp)
+        if (data->_temp && !isTemp)
         {
           // it was temp, but it no longer is temp
           // so it is now dirty.
@@ -240,15 +314,14 @@ namespace myodd {
 
         // if all the values are the same then there is nothing 
         // more for us to do here, we might as well move on.
-        if (data._temp == isTemp && data._value == value )
+        if (data->_temp == isTemp && data->_value == value )
         {
           return;
         }
       }
 
       // set the value, if we made it here, it is 'dirty'
-      DataStruct ds = { value, isTemp, true };
-      _values.Set( lname.c_str(), ds, ::myodd::cache::CacheItemPolicy() );
+      _values[lname.c_str()] =  { value, isTemp, true };
     }
 
     /**
@@ -269,12 +342,11 @@ namespace myodd {
       }
 
       // get the value
+      auto stdType = attributeType->Value();
 #ifdef UNICODE
-      auto stdType = myodd::strings::String2WString(attributeType->Value());
       auto stdRoot = myodd::strings::String2WString(root.Value());
       auto stdText = myodd::strings::String2WString(root.GetText());
 #else
-      auto stdType = attributeType->Value;
       auto stdRoot = root.Value();
       auto stdText = root.GetText();
 #endif // UNICODE    
@@ -282,8 +354,9 @@ namespace myodd {
       //  create the name of the object that we will be adding.
       std::wstring stdName = myodd::strings::implode(parents, sep);
 
-      // and get the data type of the object
-      long ltype = _tstol(stdType.c_str());
+      // convert the type to a valid data type
+      // depending on the version number, this could be differemt.
+      auto ltype = ConvertToDataType( versionNumber, std::atol(stdType) );
 
       // depending on the type.
       switch (ltype)
@@ -295,27 +368,28 @@ namespace myodd {
 
       case ::myodd::dynamic::Type::Integer_long_int:
         //  Set as an long
-        Set(stdName, _tstol(stdText.c_str()), false );
+        Set(stdName, std::stol(stdText), false );
         break;
 
       case ::myodd::dynamic::Type::Floating_point_double:
         //  Set as an double
-        Set(stdName, _tstof(stdText.c_str()), false);
+        Set(stdName, std::stod(stdText), false);
         break;
 
       case ::myodd::dynamic::Type::Integer_int:
         //  Set as an int
-        Set(stdName, _tstoi(stdText.c_str()), false);
+        Set(stdName, std::stoi(stdText), false);
         break;
 
       case ::myodd::dynamic::Type::Integer_long_long_int:
-        //  Set as an int64
-        Set(stdName, _tstoi64(stdText.c_str()), false);
+        //  Set as an long long
+        Set(stdName, std::stoll(stdText), false);
         break;
 
       default:
-        Set(stdName, stdText, false);
-        break;
+        //  this should never be reached
+        // @see ConvertToDataType() we should have thrown here.
+        throw std::runtime_error( ::myodd::strings::FormatterA() << "Unknown data type : " << ltype );
       }
     }
 
@@ -342,13 +416,15 @@ namespace myodd {
       {
         // get the value
         auto stdVersion = attributeVersion->Value();
+
+        // convert it to a long
         version = std::atol(stdVersion);
       }
 
       // is it a valid version number?
       if (version < 0 || version > _CurrentVersion)
       {
-        throw std::exception("The given version number is unknown.");
+        throw std::runtime_error("The given version number is unknown.");
       }
 
       // now that we have a version number we can parse the 

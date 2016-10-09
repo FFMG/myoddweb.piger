@@ -325,10 +325,7 @@ TEST_MEM(ConfigDataTest, GetSetVauesAsConstChar)
   auto name = L"\\valid\\path";
   auto set = Uuid();
   data.Set(name, set, true);
-
-  const wchar_t* get = nullptr;
-  get = data.Get(name);
-  ASSERT_STREQ(set.c_str(), get);
+  ASSERT_STREQ(set.c_str(), data.Get(name));
 }
 
 TEST_MEM(ConfigDataTest, CheckStringGetSetVauesAsConstChar)
@@ -337,9 +334,7 @@ TEST_MEM(ConfigDataTest, CheckStringGetSetVauesAsConstChar)
   auto name = L"\\valid\\path";
   auto set = Uuid();
   data.Set(name, set, true);
-
-  std::wstring get = data.Get(name);
-  ASSERT_EQ(set, get);
+  ASSERT_EQ(set, data.Get(name));
 }
 
 TEST_MEM(ConfigDataTest, BaseNameCannotHaveSpaces )
