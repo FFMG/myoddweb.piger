@@ -106,7 +106,6 @@ TEST_MEM(ConfigDataTest, GetAValueWithMultiplebackslashes)
 
 TEST_MEM(ConfigDataTest, NumersAndMinusAreValidElementNames)
 {
-  //  invalid XML, (just number <123-value>sss</123-value> will not be accepted at load time)
   ::myodd::config::Data data;
   auto number = IntRandomNumber<int>();
   auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent><Value-123 type=\"8\">%d</Value-123></parent></Config>", number);
@@ -622,5 +621,16 @@ TEST_MEM(ConfigDataTest, InvalidXmlWillReturnFalse )
   auto element = XmlElementName();
   ::myodd::config::Data data(element);
   auto source = L"!Invalid XML";
+  ASSERT_FALSE(data.FromXML(source));
+}
+
+TEST_MEM(ConfigDataTest, ValidXMLWithoutThExpectedRoot)
+{
+  auto element = XmlElementName();
+  ::myodd::config::Data data(element);
+  auto number = IntRandomNumber<int>();
+
+  auto elementOther = XmlElementName();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><%s><parent><value type=\"8\">%d</value></parent></%s>", elementOther.c_str(), number, elementOther.c_str());
   ASSERT_FALSE(data.FromXML(source));
 }
