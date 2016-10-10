@@ -50,7 +50,11 @@ namespace myodd{ namespace config{
    */
   bool Contains(const std::wstring& path);
 
-  void free();
+  /**
+   * Close the instance, free all the memory
+   * Update the file if need be.
+   */
+  void Close();
 
   /**
    * Create the data holder from and XML

@@ -54,7 +54,23 @@ namespace myodd{ namespace config{
     return _data->Contains(path);
   }
 
-  void free() { throw std::exception(); }
+  /**
+   * Close the instance, free all the memory
+   * Update the file if need be.
+   */
+  void Close() 
+  { 
+    if (nullptr == _data)
+    {
+      return;
+    }
+
+    // first save if needed, then cleanup
+    _data->SaveFileXml();
+
+    delete _data;
+    _data = nullptr;
+  }
 
   /**
    * Create the data holder from and XML
@@ -70,7 +86,7 @@ namespace myodd{ namespace config{
     _data = new ::myodd::config::Data();
 
     // and load it.
-    return _data->FromXMLFile(path);
+    return _data->LoadXmlFile(path);
   }
 } //  config
 } //  myodd

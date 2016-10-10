@@ -537,7 +537,7 @@ void CActionMonitorApp::InitLog()
 int CActionMonitorApp::ExitInstance()
 {
   //  free/save the configuration file
-  myodd::config::free();
+  myodd::config::Close();
 
   //  this should never not be null.
   if (m_hMutex)

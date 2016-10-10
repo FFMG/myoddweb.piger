@@ -83,18 +83,44 @@ namespace myodd{ namespace config{
     bool IsTemp(const std::wstring& path) const;
 
     /**
+     * Check if the data set is dirty or not.
+     * @param const std::wstring& path the path we are looking for.
+     * @return bool if the value is a path or not.
+     */
+    bool IsDirty() const;
+
+    /**
      * Create the data holder from an XML file.
      * @path const std::wstring& path the path of the xml we want to load.
      * @return bool success or not.
      */
-    bool FromXMLFile(const std::wstring& path);
+    bool LoadXmlFile(const std::wstring& path);
 
     /**
      * Create the data holder from an XML
-     * @path const std::wstring& source the xml source
+     * @path const std::string& source the xml source
      * @return bool success or not.
      */
-    bool FromXML(const std::wstring& source );
+    bool LoadXml(const std::wstring& source );
+
+    /**
+     * Save the data to an xml tring
+     * @return std::wstring the formated xml data.
+     */
+    std::wstring SaveXml() const;
+
+    /**
+     * Save the XML to file if we have a path.
+     * @return success or not.
+     */
+    bool SaveFileXml() const;
+
+    /**
+     * Save the XML to file using the given path.
+     * const std::wstring& path the path we are saving to.
+     * @return success or not.
+     */
+    bool SaveFileXml(const std::string& path) const;
 
   protected:
     /**
@@ -126,8 +152,14 @@ namespace myodd{ namespace config{
      * Create the data holder from an XML
      * @return bool success or not.
      */
-    bool FromXMLDocument( const tinyxml2::XMLDocument& doc );
+    bool LoadXmlDocument( const tinyxml2::XMLDocument& doc );
 
+    /**
+     * Save the XML to file using the given path.
+     * @preturn const tinyxml2::XMLDocument& doc the document.
+     */
+    void SaveDocument(tinyxml2::XMLDocument& doc ) const;
+    
 #ifdef UNICODE
     static std::string ToChar( const std::wstring& s );
 #else
@@ -164,6 +196,23 @@ namespace myodd{ namespace config{
      * @param std::vector<std::wstring>& the current list of parent names.
      */
     void WalkElement(const long versionNumber, const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents);
+
+    /**
+     * Given an array of variables we create/look for various node.
+     * So if the user creates a node "something/else" we will create the nodes "something->else"
+     * @param tinyxml2::XMLDocument& doc the document we are working in.
+     * @param tinyxml2::XMLElement& the current node we are adding elements to.
+     * @param const std::vector<std::wstring>& the array of elements we are traversing.
+     * @return tinyxml2::XMLElement* the last element that we will be adding data to.
+     */
+    tinyxml2::XMLElement* Data::GetSaveElement(tinyxml2::XMLDocument& doc, tinyxml2::XMLElement& root, const std::vector<std::wstring>& parents) const;
+
+    /**
+     * Check if the given type is one that can be used to save the data.
+     * @param const ::myodd::dynamic::Type& type the type we want to set/load
+     * @return boolean if the type can be used here.
+     */
+    static bool IsValidDataType( const ::myodd::dynamic::Type& type);
 
     /**
      * The path to our xml file.
