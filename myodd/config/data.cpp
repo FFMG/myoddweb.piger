@@ -288,12 +288,18 @@ namespace myodd {
      */
     void Data::Set(const std::wstring& name, const ::myodd::dynamic::Any& value, bool isTemp)
     {
+      // cleanup the name
+      auto lname = SafeName(name);
+
+      //  make sure that it is a valid type 
+      if (!IsValidDataType(value.Type()))
+      {
+        throw std::runtime_error("The given data type cannot be saved in the config.");
+      }
+
       //
       // lock the values
       myodd::threads::AutoLock lock(*this);
-
-      // cleanup the name
-      auto lname = SafeName(name);
 
       //
       // does this value exist?
@@ -309,20 +315,35 @@ namespace myodd {
       }
       else
       {
-        // the value aready exists.
-        if (data->_temp && !isTemp)
+        ::myodd::dynamic::Type actualType = ::myodd::dynamic::Integer_long_long_int;
+        if (::myodd::dynamic::is_type_character(value.Type()))
         {
-          // it was temp, but it no longer is temp
-          // so it is now dirty.
-          _dirty = true;
+          actualType = ::myodd::dynamic::Character_wchar_t;
+        }
+        if (::myodd::dynamic::is_type_floating(value.Type()))
+        {
+          actualType = ::myodd::dynamic::Floating_point_long_double;
+        }
+        if (::myodd::dynamic::is_type_integer(value.Type()))
+        {
+          actualType = ::myodd::dynamic::Integer_long_long_int;
+        }
+        if (::myodd::dynamic::is_type_boolean( value.Type() ))
+        {
+          actualType = ::myodd::dynamic::Boolean_bool;
         }
 
         // if all the values are the same then there is nothing 
         // more for us to do here, we might as well move on.
-        if (data->_temp == isTemp && data->_value == value)
+        // the type is saved in the XML, so we need to make sure that the type
+        // is the same as well.
+        if (data->_temp == isTemp && data->_value == value && data->_value.Type() == actualType)
         {
           return;
         }
+
+        //  something has changed.
+        _dirty = true;
       }
 
       // set the value, if we made it here, it is 'dirty'
@@ -386,7 +407,7 @@ namespace myodd {
 
       if (::myodd::dynamic::is_type_boolean(ltype))
       {
-        Set(stdName, (std::stoll(stdText) == 0 ? false : true), false);
+        Set(stdName, (std::stoll(stdText) != 0), false);
         return;
       }
 
@@ -457,7 +478,7 @@ namespace myodd {
         WalkElement(versionNumber, *pValues, parents);
 
         // or/and add the sibling elements.
-        WalkElements(*pValues, parents);
+        WalkElements(versionNumber, *pValues, parents);
 
         // remove the item we just added, no longer needed, (we just parsed it).
         // we are going back down one level.
@@ -538,13 +559,20 @@ namespace myodd {
         return false;
       }
 
+      // remove all the elements.
+      // that might have been added/found already
+      _values.clear();
+
       // starting from the beginning we look for sub nodes
       // once there are no more nodes we will add the value.
       // @see _addLoadElements( ... )
       std::vector<std::wstring> parents;
       WalkElements(*pElemConfig, parents);
 
-      // the values look valid to us, bbut maybe no data was gathered.      
+      // we cannot say that the data is dirty.
+      _dirty = false;
+
+      // the values look valid to us, but maybe no data was gathered.      
       return true;
     }
 

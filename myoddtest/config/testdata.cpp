@@ -516,7 +516,7 @@ TEST_MEM_LOOP(ConfigDataTest, CurrentVersionNumberBoolean, NUMBER_OF_TESTS )
   auto boolean = BoolRandomNumber();
   auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><%s version=\"%d\"><value type=\"4\">%d</value></%s>", element.c_str(), version,(boolean?1:0), element.c_str());
   ASSERT_TRUE(data.LoadXml(source));
-  ASSERT_EQ(false, data.Get(L"value"));
+  ASSERT_EQ(boolean, data.Get(L"value"));
   ASSERT_EQ(::myodd::dynamic::Type::Boolean_bool, data.Get(L"value").Type());
 }
 
@@ -658,14 +658,27 @@ TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRoot)
   ASSERT_EQ(expected, xml);
 }
 
-TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithBoolean)
+TEST_MEM_LOOP(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithBoolean, NUMBER_OF_TESTS)
 {
   ::myodd::config::Data data;
-  data.Set(L"path", true, false);
+  auto boolean = BoolRandomNumber();
+  data.Set(L"path", boolean, false);
 
   auto xml = data.SaveXml();
 
-  std::wstring expected = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Config version=\"1\">\n    <path type=\"4\">1</path>\n</Config>\n";
+  std::wstring expected = ::myodd::strings::FormatterW() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Config version=\"1\">\n    <path type=\"4\">" << (boolean? L"1" : L"0") << L"</path>\n</Config>\n";
+  ASSERT_EQ(expected, xml);
+}
+
+TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithLongLongInt)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<long long int>();
+  data.Set(L"path", number, false);
+
+  auto xml = data.SaveXml();
+
+  std::wstring expected = ::myodd::strings::FormatterW() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Config version=\"1\">\n    <path type=\"15\">" << number << L"</path>\n</Config>\n";
   ASSERT_EQ(expected, xml);
 }
 
@@ -681,4 +694,85 @@ TEST_MEM(ConfigDataTest, CreateASimpleXmlWithNonDefaultRoot)
 
   auto x = ::myodd::strings::Format(expected.c_str(), element.c_str(), element.c_str());
   ASSERT_EQ(x, xml);
+}
+
+TEST_MEM(ConfigDataTest, CannotSetAnObjectAsConfigValue)
+{
+  struct X {
+    std::string _x;
+  };
+  X x;
+  ::myodd::config::Data data;
+  EXPECT_THROW( data.Set(L"path", x, false), std::runtime_error );
+}
+
+TEST_MEM(ConfigDataTest, NotDirtyAfterLoading)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config version=\"1\"><value type=\"11\">%d</value></Config>", number);
+  ASSERT_TRUE(data.LoadXml(source));
+  ASSERT_FALSE(data.IsDirty());
+}
+
+TEST_MEM(ConfigDataTest, NotDirtyAfterNotReallyChangingTheValueLongLongInt)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config version=\"1\"><value type=\"11\">%d</value></Config>", number);
+  ASSERT_TRUE(data.LoadXml(source));
+  ASSERT_FALSE(data.IsDirty());
+
+  // set the value to the same value
+  data.Set(L"value", number, false);
+
+  // nothing should have changed.
+  ASSERT_FALSE(data.IsDirty());
+}
+
+TEST_MEM(ConfigDataTest, NotDirtyAfterNotReallyChangingTheValueString)
+{
+  ::myodd::config::Data data;
+  auto stringValue = L"Hello";
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config version=\"1\"><value type=\"8\">%s</value></Config>", stringValue);
+  ASSERT_TRUE(data.LoadXml(source));
+  ASSERT_FALSE(data.IsDirty());
+
+  // set the value to the same value
+  data.Set(L"value", stringValue, false);
+
+  // nothing should have changed.
+  ASSERT_FALSE(data.IsDirty());
+}
+
+
+TEST_MEM(ConfigDataTest, ChangingTheValueTypeOnlyWillNotMakeItDirty)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config version=\"1\"><value type=\"11\">%d</value></Config>", number);
+  ASSERT_TRUE(data.LoadXml(source));
+  ASSERT_FALSE(data.IsDirty());
+
+  //  change the type, will not really change anything
+  // internally it is still a long long int
+  data.Set(L"value", (long int)number, false);
+
+  // so it is not dirty
+  ASSERT_FALSE(data.IsDirty());
+}
+
+TEST_MEM(ConfigDataTest, ChangingTheValueButNotTheTypeWillMakeItDirty)
+{
+  ::myodd::config::Data data;
+  auto number = IntRandomNumber<int>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config version=\"1\"><value type=\"11\">%d</value></Config>", number);
+  ASSERT_TRUE(data.LoadXml(source));
+  ASSERT_FALSE(data.IsDirty());
+
+  // the type is not the same, but the type is.
+  data.Set(L"value", IntRandomNumber<int>(), false);
+
+  // so it is dirty
+  ASSERT_TRUE(data.IsDirty());
 }
