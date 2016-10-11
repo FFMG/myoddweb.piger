@@ -745,6 +745,35 @@ TEST_MEM(ConfigDataTest, NotDirtyAfterNotReallyChangingTheValueString)
   ASSERT_FALSE(data.IsDirty());
 }
 
+TEST_MEM(ConfigDataTest, NotDirtyAfterNotReallyChangingTheValueFloat)
+{
+  ::myodd::config::Data data;
+  auto number = RealRandomNumber<float>();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config version=\"1\"><value type=\"18\">%.64lf</value></Config>", number);
+  ASSERT_TRUE(data.LoadXml(source));
+  ASSERT_FALSE(data.IsDirty());
+
+  // set the value to the same value
+  data.Set(L"value", number, false);
+
+  // nothing should have changed.
+  ASSERT_FALSE(data.IsDirty());
+}
+
+TEST_MEM(ConfigDataTest, NotDirtyAfterNotReallyChangingTheValueBoolean)
+{
+  ::myodd::config::Data data;
+  auto number = BoolRandomNumber();
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config version=\"1\"><value type=\"4\">%d</value></Config>", number ? 1 : 0 );
+  ASSERT_TRUE(data.LoadXml(source));
+  ASSERT_FALSE(data.IsDirty());
+
+  // set the value to the same value
+  data.Set(L"value", number, false);
+
+  // nothing should have changed.
+  ASSERT_FALSE(data.IsDirty());
+}
 
 TEST_MEM(ConfigDataTest, ChangingTheValueTypeOnlyWillNotMakeItDirty)
 {
