@@ -694,6 +694,40 @@ TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithLongDouble)
   ASSERT_EQ(expected, xml);
 }
 
+TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithLongLongIntMultipleEntries)
+{
+  ::myodd::config::Data data;
+  auto number1 = IntRandomNumber<long long int>();
+  data.Set(L"path1", number1, false);
+
+  auto number2 = IntRandomNumber<long long int>();
+  data.Set(L"path2", number2, false);
+
+  auto xml = data.SaveXml();
+
+  std::wstring expected = ::myodd::strings::FormatterW() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Config version=\"1\">\n    <path1 type=\"15\">" << number1 << L"</path1>\n    <path2 type=\"15\">" << number2 << L"</path2>\n</Config>\n";
+  ASSERT_EQ(expected, xml);
+}
+
+TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithLongLongIntMultipleEntriesAndTemp)
+{
+  ::myodd::config::Data data;
+  auto number1 = IntRandomNumber<long long int>();
+  data.Set(L"path1", number1, false);
+
+  auto number2 = IntRandomNumber<long long int>();
+  data.Set(L"path2", number2, false);
+
+  // the temp value is not added.
+  auto number3 = IntRandomNumber<long long int>();
+  data.Set(L"path3", number2, true);
+
+  auto xml = data.SaveXml();
+
+  std::wstring expected = ::myodd::strings::FormatterW() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Config version=\"1\">\n    <path1 type=\"15\">" << number1 << L"</path1>\n    <path2 type=\"15\">" << number2 << L"</path2>\n</Config>\n";
+  ASSERT_EQ(expected, xml);
+}
+
 TEST_MEM(ConfigDataTest, CreateASimpleXmlWithNonDefaultRoot)
 {
   auto element = XmlElementName();
