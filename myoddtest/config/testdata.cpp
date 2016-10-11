@@ -682,6 +682,18 @@ TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithLongLongInt)
   ASSERT_EQ(expected, xml);
 }
 
+TEST_MEM(ConfigDataTest, CreateASimpleXmlWithDefaultRootWithLongDouble)
+{
+  ::myodd::config::Data data;
+  auto number = RealRandomNumber<double>();
+  data.Set(L"path", number, false);
+
+  auto xml = data.SaveXml();
+
+  std::wstring expected = ::myodd::strings::FormatterW() << L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Config version=\"1\">\n    <path type=\"18\">" << myodd::strings::ToString((long double)number) << L"</path>\n</Config>\n";
+  ASSERT_EQ(expected, xml);
+}
+
 TEST_MEM(ConfigDataTest, CreateASimpleXmlWithNonDefaultRoot)
 {
   auto element = XmlElementName();
