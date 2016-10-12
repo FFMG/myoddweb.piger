@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__round__by__divide" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::buffer::join_round_by_divide</compoundname>
     <includes local="no">buffer_join_round_by_divide.hpp</includes>
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="145" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="145" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="145" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="145" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -65,7 +65,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="89" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="85" bodyend="136"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="85" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="85" bodyend="136"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__round__by__divide_1a2a0644df06292c93cdb18215eb01d84c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -83,7 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="36" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="34" bodyend="36"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="34" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="34" bodyend="36"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__round__by__divide_1a7ad771a66722fcf5f4aa591456a9ada9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -135,7 +135,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="50" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="45" bodyend="82"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="45" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="45" bodyend="82"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-func">
@@ -159,14 +159,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="140" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="139" bodyend="142"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="139" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="139" bodyend="142"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="31" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="30" bodyend="146"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" line="31" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp" bodystart="30" bodyend="146"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__round__by__divide_1a7d4034821f4a745c961123b3e732b222" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::buffer::join_round_by_divide</scope><name>apply</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1join__round__by__divide_1a2a0644df06292c93cdb18215eb01d84c" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::buffer::join_round_by_divide</scope><name>join_round_by_divide</name></member>

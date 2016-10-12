@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1within_1_1relate__box__box__loop_3_01_sub_strategy_00_01_7c707eae54d923a4056442231cac0358" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::within::relate_box_box_loop&lt; SubStrategy, Box1, Box2, DimensionCount, DimensionCount &gt;</compoundname>
     <includes local="no">box_in_box.hpp</includes>
@@ -39,14 +39,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="188" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="187" bodyend="190"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="187" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="187" bodyend="190"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="186" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="185" bodyend="191"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="186" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="185" bodyend="191"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1within_1_1relate__box__box__loop_3_01_sub_strategy_00_01_7c707eae54d923a4056442231cac0358_1a613dad582baa0f39bfc0f2bc7222e720" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::within::relate_box_box_loop&lt; SubStrategy, Box1, Box2, DimensionCount, DimensionCount &gt;</scope><name>apply</name></member>
     </listofallmembers>

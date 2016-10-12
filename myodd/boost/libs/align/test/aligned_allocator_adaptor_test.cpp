@@ -29,15 +29,12 @@ public:
         typedef A<U> other;
     };
     A()
-        : state() {
-    }
+        : state() { }
     A(int value)
-        : state(value) {
-    }
+        : state(value) { }
     template<class U>
     A(const A<U>& other)
-        : state(other.state) {
-    }
+        : state(other.state) { }
     pointer allocate(size_type size, const_void_pointer = 0) {
         return static_cast<T*>(::operator new(sizeof(T) * size));
     }

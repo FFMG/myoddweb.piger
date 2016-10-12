@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="geometries_2register_2box_8hpp" kind="file">
     <compoundname>box.hpp</compoundname>
       <sectiondef kind="define">
@@ -14,7 +14,7 @@
     BOOST_GEOMETRY_DETAIL_SPECIALIZE_BOX_ACCESS(Box, Point, MinCorner, MaxCorner) \
 }}}</initializer>
         <briefdescription>
-<para>Macro to register a \1. </para>        </briefdescription>
+<para>Macro to register a box. </para>        </briefdescription>
         <detaileddescription>
 <para>The macro BOOST_GEOMETRY_REGISTER_BOX registers a box such that it is recognized by Boost.Geometry and that Boost.Geometry functionality can used with the specified type. The box may contain template parameters, which must be specified then. <parameterlist kind="param"><parameteritem>
 <parameternamelist>
@@ -52,7 +52,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" line="125" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" bodystart="121" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" line="121" column="9" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" bodystart="121" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="group__register_1ga09c073aef353112e056b096d9630a890" prot="public" static="no">
         <name>BOOST_GEOMETRY_REGISTER_BOX_2D_4VALUES</name>
@@ -67,7 +67,7 @@
     BOOST_GEOMETRY_DETAIL_SPECIALIZE_BOX_ACCESS_4VALUES(Box, Point, Left, Bottom, Right, Top) \
 }}}</initializer>
         <briefdescription>
-<para>Macro to register a \1. </para>        </briefdescription>
+<para>Macro to register a box. </para>        </briefdescription>
         <detaileddescription>
 <para>The macro BOOST_GEOMETRY_REGISTER_BOX_2D_4VALUES registers a box such that it is recognized by Boost.Geometry and that Boost.Geometry functionality can used with the specified type. <parameterlist kind="param"><parameteritem>
 <parameternamelist>
@@ -119,7 +119,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" line="172" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" bodystart="168" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" line="168" column="9" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" bodystart="168" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="group__register_1gab504e31e32ba0ca3a2b9fe323716acbe" prot="public" static="no">
         <name>BOOST_GEOMETRY_REGISTER_BOX_TEMPLATED</name>
@@ -131,7 +131,7 @@
     BOOST_GEOMETRY_DETAIL_SPECIALIZE_BOX_ACCESS_TEMPLATED(Box, MinCorner, MaxCorner) \
 }}}</initializer>
         <briefdescription>
-<para>Macro to register a \1. </para>        </briefdescription>
+<para>Macro to register a box. </para>        </briefdescription>
         <detaileddescription>
 <para>The macro BOOST_GEOMETRY_REGISTER_BOX_TEMPLATED registers a box such that it is recognized by Boost.Geometry and that Boost.Geometry functionality can used with the specified type. The type must have one template parameter, which should be a point type, and should not be specified. Boost.Geometry takes care of inserting the template parameter. Hence all types of this templated box are registered, regardless of their point type. <parameterlist kind="param"><parameteritem>
 <parameternamelist>
@@ -162,7 +162,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" line="147" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" bodystart="143" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" line="143" column="9" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/register/box.hpp" bodystart="143" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

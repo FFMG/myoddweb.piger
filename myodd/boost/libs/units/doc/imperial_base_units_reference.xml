@@ -171,7 +171,7 @@
 <namespace name="boost">
 <namespace name="units">
 <namespace name="imperial">
-<struct name="pint_base_unit"><method-group name="public static functions">
+<struct name="pint_base_unit"><inherit access="public">boost::units::base_unit&lt; pint_base_unit, si::volume::dimension_type,-303 &gt;</inherit><method-group name="public static functions">
 <method name="name" specifiers="static"><type>const char *</type></method>
 <method name="symbol" specifiers="static"><type>const char *</type></method>
 </method-group>
@@ -183,7 +183,7 @@
 <namespace name="boost">
 <namespace name="units">
 <namespace name="imperial">
-<struct name="pound_base_unit"><method-group name="public static functions">
+<struct name="pound_base_unit"><inherit access="public">boost::units::base_unit&lt; pound_base_unit, cgs::gram_base_unit::dimension_type,-302 &gt;</inherit><method-group name="public static functions">
 <method name="name" specifiers="static"><type>const char *</type></method>
 <method name="symbol" specifiers="static"><type>const char *</type></method>
 </method-group>
@@ -265,7 +265,7 @@
 <namespace name="boost">
 <namespace name="units">
 <namespace name="imperial">
-<struct name="yard_base_unit"><method-group name="public static functions">
+<struct name="yard_base_unit"><inherit access="public">boost::units::base_unit&lt; yard_base_unit, si::meter_base_unit::dimension_type,-301 &gt;</inherit><method-group name="public static functions">
 <method name="name" specifiers="static"><type>const char *</type></method>
 <method name="symbol" specifiers="static"><type>const char *</type></method>
 </method-group>

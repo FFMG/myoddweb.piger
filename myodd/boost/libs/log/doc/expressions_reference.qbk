@@ -13,6 +13,8 @@
 
 [template class_expressions_attribute_terminal[][classref boost::log::expressions::attribute_terminal attribute_terminal]]
 
+[template class_expressions_attribute_terminal_result[][classref boost::log::expressions::attribute_terminal::result result]]
+
 [template class_expressions_attribute_actor[][classref boost::log::expressions::attribute_actor attribute_actor]]
 
 [template boost_log_expressions_attr_fwd_hpp[][headerref boost/log/expressions/attr_fwd.hpp]]
@@ -56,6 +58,12 @@
 [template class_expressions_format_terminal[][classref boost::log::expressions::format_terminal format_terminal]]
 
 [template boost_log_expressions_formatters_if_hpp[][headerref boost/log/expressions/formatters/if.hpp]]
+
+[template boost_log_expressions_formatters_max_size_decorator_hpp[][headerref boost/log/expressions/formatters/max_size_decorator.hpp]]
+
+[template class_expressions_max_size_decorator_terminal[][classref boost::log::expressions::max_size_decorator_terminal max_size_decorator_terminal]]
+
+[template class_expressions_max_size_decorator_actor[][classref boost::log::expressions::max_size_decorator_actor max_size_decorator_actor]]
 
 [template boost_log_expressions_formatters_named_scope_hpp[][headerref boost/log/expressions/formatters/named_scope.hpp]]
 

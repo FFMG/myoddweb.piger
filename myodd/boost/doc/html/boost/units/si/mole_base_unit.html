@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Struct mole_base_unit</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="The Boost C++ Libraries BoostBook Documentation Subset">
 <link rel="up" href="../../../boost_units/Reference.html#header.boost.units.base_units.si.mole_hpp" title="Header &lt;boost/units/base_units/si/mole.hpp&gt;">
 <link rel="prev" href="meter_base_unit.html" title="Struct meter_base_unit">
@@ -33,20 +33,22 @@
 <div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../../../boost_units/Reference.html#header.boost.units.base_units.si.mole_hpp" title="Header &lt;boost/units/base_units/si/mole.hpp&gt;">boost/units/base_units/si/mole.hpp</a>&gt;
 
 </span>
-<span class="keyword">struct</span> <a class="link" href="mole_base_unit.html" title="Struct mole_base_unit">mole_base_unit</a> <span class="special">{</span>
+<span class="keyword">struct</span> <a class="link" href="mole_base_unit.html" title="Struct mole_base_unit">mole_base_unit</a> <span class="special">:</span>
+  <span class="keyword">public</span> <span class="identifier">base_unit</span><span class="special">&lt;</span> <span class="identifier">mole_base_unit</span><span class="special">,</span> <span class="identifier">amount_dimension</span><span class="special">,</span><span class="special">-</span><span class="number">4</span> <span class="special">&gt;</span>
+<span class="special">{</span>
 
-  <span class="comment">// <a class="link" href="mole_base_unit.html#idp366575360-bb">public static functions</a></span>
-  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="mole_base_unit.html#idp366575920-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
-  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="mole_base_unit.html#idp366577040-bb"><span class="identifier">symbol</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="comment">// <a class="link" href="mole_base_unit.html#idm45443285672400-bb">public static functions</a></span>
+  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="mole_base_unit.html#idm45443285671840-bb"><span class="identifier">name</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="mole_base_unit.html#idm45443285670720-bb"><span class="identifier">symbol</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
 <span class="special">}</span><span class="special">;</span></pre></div>
 <div class="refsect1">
-<a name="idp541532768"></a><h2>Description</h2>
+<a name="idm45946262970208"></a><h2>Description</h2>
 <div class="refsect2">
-<a name="idp541533184"></a><h3>
-<a name="idp366575360-bb"></a><code class="computeroutput">mole_base_unit</code> public static functions</h3>
+<a name="idm45946262969792"></a><h3>
+<a name="idm45443285672400-bb"></a><code class="computeroutput">mole_base_unit</code> public static functions</h3>
 <div class="orderedlist"><ol class="orderedlist" type="1">
-<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp366575920-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
-<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp366577040-bb"></a><span class="identifier">symbol</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idm45443285671840-bb"></a><span class="identifier">name</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="keyword">static</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idm45443285670720-bb"></a><span class="identifier">symbol</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
 </ol></div>
 </div>
 </div>

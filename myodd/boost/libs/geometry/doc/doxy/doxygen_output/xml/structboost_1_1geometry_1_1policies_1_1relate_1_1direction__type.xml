@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type" kind="struct" prot="public">
     <compoundname>boost::geometry::policies::relate::direction_type</compoundname>
     <includes local="no">direction.hpp</includes>
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="92" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="92" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="92" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="92" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1a4e4c66bd11483ea8152996e8b122d150" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -28,7 +28,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="86" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="86" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="86" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="86" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1adf151fc28e423ed81bd61326d6e1a7e5" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -41,7 +41,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="87" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="87" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="87" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="87" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1a696f3c02934d0dd70860ffe8ffee859f" prot="public" static="no" mutable="no">
         <type>char</type>
@@ -54,7 +54,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="69" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="69" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="69" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="69" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1a6f4ad325157f97988e289bb9c4e0e20c" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -67,7 +67,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="77" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="77" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="77" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="77" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1a77af889be14d4cc94976d528b4b4f764" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -80,7 +80,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="78" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="78" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="78" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="78" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1a8dd129a7d95c45aff44999d6afa8e889" prot="public" static="no" mutable="no">
         <type>bool</type>
@@ -93,7 +93,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="72" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="72" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="72" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1aa694ffa082013a8b6a4051d0fda6ff14" prot="public" static="no" mutable="no">
         <type><ref refid="classboost_1_1geometry_1_1side__info" kindref="compound">side_info</ref></type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="90" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="90" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="90" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="90" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -152,7 +152,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="48" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="37" bodyend="51"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="37" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="37" bodyend="51"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1a7e4950a55885b6f166d6faa54abe25e0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -183,7 +183,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="60" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="53" bodyend="63"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="53" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="53" bodyend="63"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -191,19 +191,19 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="568">
+      <node id="647">
         <label>boost::geometry::side_info</label>
         <link refid="classboost_1_1geometry_1_1side__info"/>
       </node>
-      <node id="567">
+      <node id="646">
         <label>boost::geometry::policies::relate::direction_type</label>
         <link refid="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type"/>
-        <childnode refid="568" relation="usage">
+        <childnode refid="647" relation="usage">
           <edgelabel>sides</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="34" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="33" bodyend="112"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" line="34" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/policies/relate/direction.hpp" bodystart="33" bodyend="112"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1abd5f12ec5061166d6643b00608e7ae72" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::direction_type</scope><name>arrival</name></member>
       <member refid="structboost_1_1geometry_1_1policies_1_1relate_1_1direction__type_1a4e4c66bd11483ea8152996e8b122d150" prot="public" virt="non-virtual"><scope>boost::geometry::policies::relate::direction_type</scope><name>dir_a</name></member>

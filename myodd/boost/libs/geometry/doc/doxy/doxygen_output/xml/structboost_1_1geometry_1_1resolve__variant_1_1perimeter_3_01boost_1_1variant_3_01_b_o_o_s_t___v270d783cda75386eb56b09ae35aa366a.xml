@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1resolve__variant_1_1perimeter_3_01boost_1_1variant_3_01_b_o_o_s_t___v270d783cda75386eb56b09ae35aa366a" kind="struct" prot="public">
     <compoundname>boost::geometry::resolve_variant::perimeter&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::static_visitor&lt; result_type &gt;</basecompoundref>
     <includes local="no">perimeter.hpp</includes>
     <templateparamlist>
       <param>
@@ -20,7 +21,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="161" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="161" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="161" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="161" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -44,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="168" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="167" bodyend="170"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="167" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="167" bodyend="170"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1resolve__variant_1_1perimeter_3_01boost_1_1variant_3_01_b_o_o_s_t___v270d783cda75386eb56b09ae35aa366a_1a00cce0ebdee9e59a0bd947fc76b5d00d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -61,14 +62,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="163" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="163" bodyend="163"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="163" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="163" bodyend="163"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="160" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="159" bodyend="171"/>
+    <inheritancegraph>
+      <node id="1119">
+        <label>boost::static_visitor&lt; result_type &gt;</label>
+      </node>
+      <node id="1118">
+        <label>boost::geometry::resolve_variant::perimeter&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor&lt; Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1perimeter_3_01boost_1_1variant_3_01_b_o_o_s_t___v270d783cda75386eb56b09ae35aa366a"/>
+        <childnode refid="1119" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1121">
+        <label>boost::static_visitor&lt; result_type &gt;</label>
+      </node>
+      <node id="1120">
+        <label>boost::geometry::resolve_variant::perimeter&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor&lt; Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1perimeter_3_01boost_1_1variant_3_01_b_o_o_s_t___v270d783cda75386eb56b09ae35aa366a"/>
+        <childnode refid="1121" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="160" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="159" bodyend="171"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1perimeter_3_01boost_1_1variant_3_01_b_o_o_s_t___v270d783cda75386eb56b09ae35aa366a_1af20d7a3f22b754508f68560e8e16c59f" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::perimeter&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</scope><name>m_strategy</name></member>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1perimeter_3_01boost_1_1variant_3_01_b_o_o_s_t___v270d783cda75386eb56b09ae35aa366a_1a32a0ad5af24a65cc52a7ffbc79f21bc5" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::perimeter&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</scope><name>operator()</name></member>

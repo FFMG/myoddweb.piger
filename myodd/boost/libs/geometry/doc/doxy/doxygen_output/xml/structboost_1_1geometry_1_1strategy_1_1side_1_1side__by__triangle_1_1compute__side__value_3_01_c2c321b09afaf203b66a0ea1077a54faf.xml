@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1_1compute__side__value_3_01_c2c321b09afaf203b66a0ea1077a54faf" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::side::side_by_triangle::compute_side_value&lt; CoordinateType, PromotedType, false &gt;</compoundname>
     <includes local="no">side_by_triangle.hpp</includes>
@@ -53,14 +53,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="148" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="147" bodyend="194"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="147" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="147" bodyend="194"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="145" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="144" bodyend="195"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="145" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="144" bodyend="195"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1_1compute__side__value_3_01_c2c321b09afaf203b66a0ea1077a54faf_1a8ef7c53b8ed8e25b7d5bcba403590735" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::side::side_by_triangle::compute_side_value&lt; CoordinateType, PromotedType, false &gt;</scope><name>apply</name></member>
     </listofallmembers>

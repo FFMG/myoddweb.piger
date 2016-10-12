@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1svg__manipulator" kind="class" prot="public">
     <compoundname>boost::geometry::svg_manipulator</compoundname>
-    <includes local="no">write_svg.hpp</includes>
+    <includes local="no">write.hpp</includes>
     <templateparamlist>
       <param>
-        <type>typename G</type>
+        <type>typename Geometry</type>
       </param>
     </templateparamlist>
       <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="classboost_1_1geometry_1_1svg__manipulator_1ac1b74f3fb43135848415018117e174ad" prot="private" static="no" mutable="no">
-        <type>G const &amp;</type>
-        <definition>G const&amp; boost::geometry::svg_manipulator&lt; G &gt;::m_geometry</definition>
+      <memberdef kind="variable" id="classboost_1_1geometry_1_1svg__manipulator_1a2e86fa26f1c0bcf72804560a7313f374" prot="private" static="no" mutable="no">
+        <type>Geometry const &amp;</type>
+        <definition>Geometry const&amp; boost::geometry::svg_manipulator&lt; Geometry &gt;::m_geometry</definition>
         <argsstring></argsstring>
         <name>m_geometry</name>
         <briefdescription>
@@ -20,11 +20,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" line="281" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" bodystart="281" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" line="393" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" bodystart="393" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="classboost_1_1geometry_1_1svg__manipulator_1a07b3005811e30ff269229df3dc66acd9" prot="private" static="no" mutable="no">
-        <type>int</type>
-        <definition>int boost::geometry::svg_manipulator&lt; G &gt;::m_size</definition>
+      <memberdef kind="variable" id="classboost_1_1geometry_1_1svg__manipulator_1a3a9ade3d8c3603f0f4a9b98bfdf29c27" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double boost::geometry::svg_manipulator&lt; Geometry &gt;::m_size</definition>
         <argsstring></argsstring>
         <name>m_size</name>
         <briefdescription>
@@ -33,11 +33,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" line="283" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" bodystart="283" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" line="395" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" bodystart="395" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="classboost_1_1geometry_1_1svg__manipulator_1a18d78447daf9f3ddb904cf82b7f87740" prot="private" static="no" mutable="no">
+      <memberdef kind="variable" id="classboost_1_1geometry_1_1svg__manipulator_1a7ae751235dfb7249643981ccc1298e3f" prot="private" static="no" mutable="no">
         <type>std::string const &amp;</type>
-        <definition>std::string const&amp; boost::geometry::svg_manipulator&lt; G &gt;::m_style</definition>
+        <definition>std::string const&amp; boost::geometry::svg_manipulator&lt; Geometry &gt;::m_style</definition>
         <argsstring></argsstring>
         <name>m_style</name>
         <briefdescription>
@@ -46,17 +46,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" line="282" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" bodystart="282" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" line="394" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" bodystart="394" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
-      <memberdef kind="function" id="classboost_1_1geometry_1_1svg__manipulator_1a9bbbcc4e7d4e9eab445eeb3347445a6d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classboost_1_1geometry_1_1svg__manipulator_1a99fa922dee93fccd2b55055a5fe65bcd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
-        <definition>boost::geometry::svg_manipulator&lt; G &gt;::svg_manipulator</definition>
-        <argsstring>(G const &amp;g, std::string const &amp;style, int size)</argsstring>
+        <definition>boost::geometry::svg_manipulator&lt; Geometry &gt;::svg_manipulator</definition>
+        <argsstring>(Geometry const &amp;g, std::string const &amp;style, double size)</argsstring>
         <name>svg_manipulator</name>
         <param>
-          <type>G const &amp;</type>
+          <type>Geometry const &amp;</type>
           <declname>g</declname>
         </param>
         <param>
@@ -64,7 +64,7 @@
           <declname>style</declname>
         </param>
         <param>
-          <type>int</type>
+          <type>double</type>
           <declname>size</declname>
         </param>
         <briefdescription>
@@ -73,7 +73,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" line="266" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" bodystart="262" bodyend="266"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" line="374" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" bodystart="374" bodyend="378"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
@@ -104,20 +104,20 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" line="271" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" bodystart="269" bodyend="278"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" line="381" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" bodystart="381" bodyend="390"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
 <para>Generic geometry template manipulator class, takes corresponding output class from traits class. </para>    </briefdescription>
     <detaileddescription>
 <para>Stream manipulator, streams geometry classes as SVG (Scalable Vector Graphics) </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" line="259" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write_svg.hpp" bodystart="258" bodyend="284"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" line="371" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/io/svg/write.hpp" bodystart="370" bodyend="396"/>
     <listofallmembers>
-      <member refid="classboost_1_1geometry_1_1svg__manipulator_1ac1b74f3fb43135848415018117e174ad" prot="private" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>m_geometry</name></member>
-      <member refid="classboost_1_1geometry_1_1svg__manipulator_1a07b3005811e30ff269229df3dc66acd9" prot="private" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>m_size</name></member>
-      <member refid="classboost_1_1geometry_1_1svg__manipulator_1a18d78447daf9f3ddb904cf82b7f87740" prot="private" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>m_style</name></member>
+      <member refid="classboost_1_1geometry_1_1svg__manipulator_1a2e86fa26f1c0bcf72804560a7313f374" prot="private" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>m_geometry</name></member>
+      <member refid="classboost_1_1geometry_1_1svg__manipulator_1a3a9ade3d8c3603f0f4a9b98bfdf29c27" prot="private" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>m_size</name></member>
+      <member refid="classboost_1_1geometry_1_1svg__manipulator_1a7ae751235dfb7249643981ccc1298e3f" prot="private" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>m_style</name></member>
       <member refid="classboost_1_1geometry_1_1svg__manipulator_1a444ed37cc5bbc18eaa6528ad329c83c4" prot="public" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>operator&lt;&lt;</name></member>
-      <member refid="classboost_1_1geometry_1_1svg__manipulator_1a9bbbcc4e7d4e9eab445eeb3347445a6d" prot="public" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>svg_manipulator</name></member>
+      <member refid="classboost_1_1geometry_1_1svg__manipulator_1a99fa922dee93fccd2b55055a5fe65bcd" prot="public" virt="non-virtual"><scope>boost::geometry::svg_manipulator</scope><name>svg_manipulator</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

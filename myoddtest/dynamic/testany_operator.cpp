@@ -3230,7 +3230,6 @@ TEST_MEM_LOOP(AnyTestOperators, EqualOperatorNegativeSignedIntAndUnsignedInt, NU
   ASSERT_FALSE(anyx > y);
 }
 
-
 TEST_MEM_LOOP(AnyTestOperators, EqualOperatorUnsignedIntAndNegativeSignedInt, NUMBER_OF_TESTS)
 {
   auto x = IntRandomNumber<unsigned int>();

@@ -13,11 +13,16 @@ project detail/test
     <toolset>clang:<cxxflags>-Wno-tautological-compare
     <toolset>clang:<cxxflags>-ftemplate-depth-300
     <toolset>gcc:<cxxflags>-ftemplate-depth-300
+    <toolset>gcc:<define>_STLP_DEBUG
+    <toolset>gcc:<define>_GLIBCXX_DEBUG
     <toolset>darwin:<cxxflags>-ftemplate-depth-300
   ;
 
-for tests in [ glob *.cpp ] {
-  run $(tests) : : : : $(tests:B) ;
-}
+# import rules for testing conditional on config file variables
+import ../../config/checks/config : requires ;
 
-
+run binary_search_test.cpp ;
+run is_sorted_test.cpp ;
+run test_utf8_codecvt.cpp : : 
+  : [ requires std_wstreambuf ]
+  ;

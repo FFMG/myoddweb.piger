@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1select__calculation__type" kind="struct" prot="public">
     <compoundname>boost::geometry::select_calculation_type</compoundname>
     <includes local="no">select_calculation_type.hpp</includes>
@@ -32,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" line="55" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" bodystart="55" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -41,7 +41,7 @@
 <para>Based on two input geometry types, and an input calculation type, (which defaults to void in the calling function), this meta-function selects the most appropriate:<itemizedlist>
 <listitem><para>if calculation type is specified, that one is used,</para></listitem><listitem><para>if it is void, the most precise of the two points is used </para></listitem></itemizedlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" line="44" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" bodystart="43" bodyend="56"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" line="44" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_calculation_type.hpp" bodystart="43" bodyend="56"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1select__calculation__type_1ab0dbe24d66f718103e0f84e2591f5c66" prot="public" virt="non-virtual"><scope>boost::geometry::select_calculation_type</scope><name>type</name></member>
     </listofallmembers>

@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1resolve__variant_1_1centroid_3_01boost_1_1variant_3_01_b_o_o_s_t___v_c4e4aa605cccf9059a93fda9ad424429" kind="struct" prot="public">
     <compoundname>boost::geometry::resolve_variant::centroid&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::static_visitor&lt; void &gt;</basecompoundref>
     <includes local="no">centroid.hpp</includes>
     <templateparamlist>
       <param>
@@ -23,7 +24,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="559" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="559" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="559" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="559" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1resolve__variant_1_1centroid_3_01boost_1_1variant_3_01_b_o_o_s_t___v_c4e4aa605cccf9059a93fda9ad424429_1ab73b3794054556dd157dcc201b57233a" prot="public" static="no" mutable="no">
         <type>Strategy const &amp;</type>
@@ -36,7 +37,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="560" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="560" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="560" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="560" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -60,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="568" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="567" bodyend="570"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="567" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="567" bodyend="570"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1resolve__variant_1_1centroid_3_01boost_1_1variant_3_01_b_o_o_s_t___v_c4e4aa605cccf9059a93fda9ad424429_1ad0855bb73ac7013ba499e29dcca38d33" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -81,14 +82,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="564" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="562" bodyend="564"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="562" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="562" bodyend="564"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="558" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="557" bodyend="571"/>
+    <inheritancegraph>
+      <node id="804">
+        <label>boost::static_visitor&lt; void &gt;</label>
+      </node>
+      <node id="803">
+        <label>boost::geometry::resolve_variant::centroid&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor&lt; Point, Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1centroid_3_01boost_1_1variant_3_01_b_o_o_s_t___v_c4e4aa605cccf9059a93fda9ad424429"/>
+        <childnode refid="804" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="806">
+        <label>boost::static_visitor&lt; void &gt;</label>
+      </node>
+      <node id="805">
+        <label>boost::geometry::resolve_variant::centroid&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor&lt; Point, Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1centroid_3_01boost_1_1variant_3_01_b_o_o_s_t___v_c4e4aa605cccf9059a93fda9ad424429"/>
+        <childnode refid="806" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" line="558" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/centroid.hpp" bodystart="557" bodyend="571"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1centroid_3_01boost_1_1variant_3_01_b_o_o_s_t___v_c4e4aa605cccf9059a93fda9ad424429_1a089d8ae8b334efc2d583ad59aa550588" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::centroid&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</scope><name>m_out</name></member>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1centroid_3_01boost_1_1variant_3_01_b_o_o_s_t___v_c4e4aa605cccf9059a93fda9ad424429_1ab73b3794054556dd157dcc201b57233a" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::centroid&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</scope><name>m_strategy</name></member>

@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1resolve__variant_1_1intersection_3_01variant_3_01_b_o_o_s_t___v_a_r_ie289fa05636dfb54c43b2301bb2cfbf8" kind="struct" prot="public">
     <compoundname>boost::geometry::resolve_variant::intersection&lt; variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;::visitor</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::static_visitor&lt; bool &gt;</basecompoundref>
     <includes local="no">interface.hpp</includes>
     <templateparamlist>
       <param>
@@ -20,7 +21,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="232" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="232" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="232" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="232" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -51,7 +52,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="241" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="239" bodyend="251"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="239" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="239" bodyend="251"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1resolve__variant_1_1intersection_3_01variant_3_01_b_o_o_s_t___v_a_r_ie289fa05636dfb54c43b2301bb2cfbf8_1ad1d1eac7a3370272f66f7f7eb5f43972" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -68,14 +69,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="236" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="234" bodyend="236"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="234" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="234" bodyend="236"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="231" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="230" bodyend="252"/>
+    <inheritancegraph>
+      <node id="1047">
+        <label>boost::static_visitor&lt; bool &gt;</label>
+      </node>
+      <node id="1046">
+        <label>boost::geometry::resolve_variant::intersection&lt; variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;::visitor&lt; GeometryOut &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1intersection_3_01variant_3_01_b_o_o_s_t___v_a_r_ie289fa05636dfb54c43b2301bb2cfbf8"/>
+        <childnode refid="1047" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1049">
+        <label>boost::static_visitor&lt; bool &gt;</label>
+      </node>
+      <node id="1048">
+        <label>boost::geometry::resolve_variant::intersection&lt; variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;::visitor&lt; GeometryOut &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1intersection_3_01variant_3_01_b_o_o_s_t___v_a_r_ie289fa05636dfb54c43b2301bb2cfbf8"/>
+        <childnode refid="1049" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" line="231" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/intersection/interface.hpp" bodystart="230" bodyend="252"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1intersection_3_01variant_3_01_b_o_o_s_t___v_a_r_ie289fa05636dfb54c43b2301bb2cfbf8_1aa4cfa871a9d770237fc1b165fb265ae7" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::intersection&lt; variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;::visitor</scope><name>m_geometry_out</name></member>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1intersection_3_01variant_3_01_b_o_o_s_t___v_a_r_ie289fa05636dfb54c43b2301bb2cfbf8_1afdd0653e8a55d3bd69bfe1bdce9d81cb" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::intersection&lt; variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;::visitor</scope><name>operator()</name></member>

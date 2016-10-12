@@ -53,6 +53,7 @@ local doxygen_params =
                         BOOST_RV_REF(x)=\"x&&\" \\
                         BOOST_NESTED_TEMPLATE=template \\
                         BOOST_CONSTEXPR=constexpr \\
+                        BOOST_CXX14_CONSTEXPR=constexpr \\
                         BOOST_CONSTEXPR_OR_CONST=constexpr \\
                         BOOST_NOEXCEPT=noexcept \\
                         BOOST_NOEXCEPT_IF(x)=noexcept(x) \\
@@ -124,6 +125,7 @@ local sinks_includes =
 local utility_includes =
     [ glob
         ../../../boost/log/utility/*.hpp
+        ../../../boost/log/utility/ipc/*.hpp
         ../../../boost/log/utility/setup/*.hpp
         ../../../boost/log/utility/type_dispatch/*.hpp
         ../../../boost/log/utility/functional/*.hpp
@@ -263,3 +265,6 @@ boostbook log
     ;
 
 install html/images/log : [ glob *.png ] ;
+
+alias boostdoc : log
+    : : : <implicit-dependency>log ;

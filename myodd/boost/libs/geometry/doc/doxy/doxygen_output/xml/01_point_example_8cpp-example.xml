@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="01_point_example_8cpp-example" kind="example">
     <compoundname>01_point_example.cpp</compoundname>
     <detaileddescription>
@@ -36,10 +36,10 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Boost.Geometry<sp/>contains<sp/>several<sp/>point<sp/>types:</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1:<sp/>its<sp/>own<sp/>generic<sp/>type</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1point" kindref="compound" tooltip="Basic point class, having coordinates defined in a neutral way.">model::point&lt;double, 2, cs::cartesian&gt;</ref><sp/>pt1;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1point" kindref="compound">model::point&lt;double, 2, cs::cartesian&gt;</ref><sp/>pt1;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>2:<sp/>its<sp/>own<sp/>type<sp/>targetted<sp/>to<sp/>Cartesian<sp/>(x,y)<sp/>coordinates</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">model::d2::point_xy&lt;double&gt;</ref><sp/>pt2;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">model::d2::point_xy&lt;double&gt;</ref><sp/>pt2;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3:<sp/>it<sp/>supports<sp/>Boost<sp/>tuple&apos;s</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>boost::tuple&lt;double,<sp/>double&gt;<sp/>pt3;</highlight></codeline>
@@ -55,7 +55,7 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>7:<sp/>in<sp/>the<sp/>past<sp/>there<sp/>was<sp/>a<sp/>typedef<sp/>point_2d</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>But<sp/>users<sp/>are<sp/>now<sp/>supposted<sp/>to<sp/>do<sp/>that<sp/>themselves:</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">model::d2::point_xy&lt;double&gt;</ref><sp/>point_2d;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">model::d2::point_xy&lt;double&gt;</ref><sp/>point_2d;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>point_2d<sp/>pt7;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
@@ -64,18 +64,18 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>All<sp/>these<sp/>types<sp/>are<sp/>handled<sp/>the<sp/>same<sp/>way.<sp/>We<sp/>show<sp/>here</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>assigning<sp/>them<sp/>and<sp/>calculating<sp/>distances.</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(pt1,<sp/>1,<sp/>1);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(pt2,<sp/>2,<sp/>2);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(pt3,<sp/>3,<sp/>3);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(pt4,<sp/>4,<sp/>4);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(pt5,<sp/>5,<sp/>5);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(pt6,<sp/>6,<sp/>6);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(pt7,<sp/>7,<sp/>7);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(pt1,<sp/>1,<sp/>1);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(pt2,<sp/>2,<sp/>2);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(pt3,<sp/>3,<sp/>3);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(pt4,<sp/>4,<sp/>4);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(pt5,<sp/>5,<sp/>5);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(pt6,<sp/>6,<sp/>6);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(pt7,<sp/>7,<sp/>7);</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d1<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member" tooltip="Calculate the distance of two geometries using the specified strategy.">distance</ref>(pt1,<sp/>pt2);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d2<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member" tooltip="Calculate the distance of two geometries using the specified strategy.">distance</ref>(pt3,<sp/>pt4);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d3<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member" tooltip="Calculate the distance of two geometries using the specified strategy.">distance</ref>(pt5,<sp/>pt6);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d1<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member">distance</ref>(pt1,<sp/>pt2);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d2<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member">distance</ref>(pt3,<sp/>pt4);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d3<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member">distance</ref>(pt5,<sp/>pt6);</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;Distances:<sp/>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&lt;&lt;<sp/>d1<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>and<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>d2<sp/>&lt;&lt;<sp/></highlight><highlight class="stringliteral">&quot;<sp/>and<sp/>&quot;</highlight><highlight class="normal"><sp/>&lt;&lt;<sp/>d3<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
@@ -85,16 +85,16 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Several<sp/>ways<sp/>of<sp/>construction<sp/>and<sp/>setting<sp/>point<sp/>values</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1:<sp/>default,<sp/>empty<sp/>constructor,<sp/>causing<sp/>no<sp/>initialization<sp/>at<sp/>all</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">model::d2::point_xy&lt;double&gt;</ref><sp/>p1;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">model::d2::point_xy&lt;double&gt;</ref><sp/>p1;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>2:<sp/>as<sp/>shown<sp/>above,<sp/>assign_values</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">model::d2::point_xy&lt;double&gt;</ref><sp/>p2;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(p2,<sp/>1,<sp/>1);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">model::d2::point_xy&lt;double&gt;</ref><sp/>p2;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(p2,<sp/>1,<sp/>1);</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3:<sp/>using<sp/>&quot;set&quot;<sp/>function</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>set<sp/>uses<sp/>the<sp/>concepts<sp/>behind,<sp/>such<sp/>that<sp/>it<sp/>can<sp/>be<sp/>applied<sp/>for</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>every<sp/>point-type<sp/>(like<sp/>assign_values)</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">model::d2::point_xy&lt;double&gt;</ref><sp/>p3;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">model::d2::point_xy&lt;double&gt;</ref><sp/>p3;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>set&lt;0&gt;(p3,<sp/>1);</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>set&lt;1&gt;(p3,<sp/>1);</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>set&lt;2&gt;(p3,<sp/>1);<sp/>//will<sp/>result<sp/>in<sp/>compile-error</highlight><highlight class="normal"></highlight></codeline>
@@ -103,11 +103,11 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3:<sp/>for<sp/>any<sp/>point<sp/>type,<sp/>and<sp/>other<sp/>geometry<sp/>objects:</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>there<sp/>is<sp/>the<sp/>&quot;make&quot;<sp/>object<sp/>generator</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/>(this<sp/>one<sp/>requires<sp/>to<sp/>specify<sp/>the<sp/>point-type).</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">model::d2::point_xy&lt;double&gt;</ref><sp/>p4<sp/>=<sp/>make&lt;model::d2::point_xy&lt;double&gt;<sp/>&gt;(1,1);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">model::d2::point_xy&lt;double&gt;</ref><sp/>p4<sp/>=<sp/>make&lt;model::d2::point_xy&lt;double&gt;<sp/>&gt;(1,1);</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>5:<sp/>for<sp/>the<sp/>d2::point_xy&lt;...&gt;<sp/>type<sp/>only:<sp/>constructor<sp/>with<sp/>two<sp/>values</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">model::d2::point_xy&lt;double&gt;</ref><sp/>p5(1,1);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">model::d2::point_xy&lt;double&gt;</ref><sp/>p5(1,1);</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>6:<sp/>for<sp/>boost<sp/>tuples<sp/>you<sp/>can<sp/>of<sp/>course<sp/>use<sp/>make_tuple</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
@@ -128,13 +128,13 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/>dsv(pt3)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>5.<sp/>or<sp/>wkt</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" kindref="member" tooltip="Main WKT-streaming function.">wkt</ref>(p4)<sp/>&lt;&lt;<sp/>(<ref refid="group__equals_1gaf75334fd455c4d01a57a2f2d590d068c" kindref="member" tooltip="Checks if a geometry \1.">equals</ref>(p4,<sp/>p5)<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;<sp/>equals<sp/>&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;<sp/>don&apos;t<sp/>equals<sp/>&quot;</highlight><highlight class="normal">)<sp/>&lt;&lt;<sp/><ref refid="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" kindref="member" tooltip="Main WKT-streaming function.">wkt</ref>(p5)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" kindref="member">wkt</ref>(p4)<sp/>&lt;&lt;<sp/>(<ref refid="group__equals_1gaf75334fd455c4d01a57a2f2d590d068c" kindref="member">equals</ref>(p4,<sp/>p5)<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;<sp/>equals<sp/>&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;<sp/>don&apos;t<sp/>equals<sp/>&quot;</highlight><highlight class="normal">)<sp/>&lt;&lt;<sp/><ref refid="group__wkt_1ga32f68b63c9c15ed3c31f386001c4ec29" kindref="member">wkt</ref>(p5)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>There<sp/>are<sp/>3-dimensional<sp/>points<sp/>too</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1point" kindref="compound" tooltip="Basic point class, having coordinates defined in a neutral way.">model::point&lt;double, 3, cs::cartesian&gt;</ref><sp/>d3a,<sp/>d3b;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(d3a,<sp/>1,<sp/>2,<sp/>3);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member" tooltip="Assign two coordinates to a geometry (usually a 2D point)">assign_values</ref>(d3b,<sp/>4,<sp/>5,<sp/>6);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>d3<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member" tooltip="Calculate the distance of two geometries using the specified strategy.">distance</ref>(d3a,<sp/>d3b);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1model_1_1point" kindref="compound">model::point&lt;double, 3, cs::cartesian&gt;</ref><sp/>d3a,<sp/>d3b;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(d3a,<sp/>1,<sp/>2,<sp/>3);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="group__assign_1ga9ee6c10e38a19e8e52bf9a1fc5a19a05" kindref="member">assign_values</ref>(d3b,<sp/>4,<sp/>5,<sp/>6);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>d3<sp/>=<sp/><ref refid="group__distance_1ga7d68c34d1ded4428903f906244b31da4" kindref="member">distance</ref>(d3a,<sp/>d3b);</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Iterator Utilities</title>
 <link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Iterator">
 <link rel="up" href="../utilities.html" title="Utilities">
 <link rel="prev" href="traits.html" title="Iterator Traits">
@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="iterator.utilities.utilities"></a><a class="link" href="utilities.html" title="Iterator Utilities">Iterator Utilities</a>
 </h3></div></div></div>
-<div class="toc"><dl>
+<div class="toc"><dl class="toc">
 <dt><span class="section"><a href="utilities.html#iterator.utilities.utilities.utilities_traits">Traits</a></span></dt>
 <dt><span class="section"><a href="utilities/utilities_testing.html">Testing
         and Concept Checking</a></span></dt>
@@ -37,7 +37,7 @@
 </h4></div></div></div>
 <h3>
 <a name="iterator.utilities.utilities.utilities_traits.h0"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.overview"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.overview">Overview</a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.overview"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.overview">Overview</a>
         </h3>
 <p>
           Have you ever wanted to write a generic function that can operate on any
@@ -53,7 +53,7 @@
 </pre>
 <h3>
 <a name="iterator.utilities.utilities.utilities_traits.h1"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.pointee"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pointee"><code class="computeroutput"><span class="identifier">pointee</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.pointee"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pointee"><code class="computeroutput"><span class="identifier">pointee</span></code></a>
         </h3>
 <p>
           It turns out to be impossible to come up with a fully-general algorithm
@@ -77,7 +77,7 @@
 </pre>
 <h3>
 <a name="iterator.utilities.utilities.utilities_traits.h2"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.indirect_reference"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.indirect_reference"><code class="computeroutput"><span class="identifier">indirect_reference</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.indirect_reference"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.indirect_reference"><code class="computeroutput"><span class="identifier">indirect_reference</span></code></a>
         </h3>
 <p>
           <code class="computeroutput"><span class="identifier">indirect_reference</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span></code> is rather more specialized than
@@ -92,7 +92,7 @@
         </p>
 <h3>
 <a name="iterator.utilities.utilities.utilities_traits.h3"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.minimum_category"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.minimum_category"><code class="computeroutput"><span class="identifier">minimum_category</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.minimum_category"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.minimum_category"><code class="computeroutput"><span class="identifier">minimum_category</span></code></a>
         </h3>
 <p>
           <code class="computeroutput"><span class="identifier">minimum_category</span></code> takes
@@ -112,14 +112,14 @@
 </pre>
 <h3>
 <a name="iterator.utilities.utilities.utilities_traits.h4"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.iterator_category_and_traversal_"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.iterator_category_and_traversal_">Iterator
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.iterator_category_and_traversal_"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.iterator_category_and_traversal_">Iterator
           category and traversal tags manipulation</a>
         </h3>
 <p>
           The library provides several utilities to simplify conversions between
           iterator categories and traversal tags:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
               <code class="computeroutput"><span class="identifier">iterator_category_to_traversal</span><span class="special">&lt;</span><span class="identifier">C</span><span class="special">&gt;::</span><span class="identifier">type</span></code>
               - the metafunction takes an iterator category <code class="computeroutput"><span class="identifier">C</span></code>
@@ -145,11 +145,11 @@
 </ul></div>
 <h3>
 <a name="iterator.utilities.utilities.utilities_traits.h5"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.reference"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.reference">Reference</a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.reference"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.reference">Reference</a>
         </h3>
 <h4>
 <a name="iterator.utilities.utilities.utilities_traits.h6"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.pointee0"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pointee0"><code class="computeroutput"><span class="identifier">pointee</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.pointee0"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pointee0"><code class="computeroutput"><span class="identifier">pointee</span></code></a>
         </h4>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dereferenceable</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">pointee</span>
@@ -188,7 +188,7 @@
 </pre>
 <h4>
 <a name="iterator.utilities.utilities.utilities_traits.h7"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.indirect_reference0"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.indirect_reference0"><code class="computeroutput"><span class="identifier">indirect_reference</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.indirect_reference0"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.indirect_reference0"><code class="computeroutput"><span class="identifier">indirect_reference</span></code></a>
         </h4>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Dereferenceable</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">indirect_reference</span>
@@ -218,7 +218,7 @@
 </pre>
 <h4>
 <a name="iterator.utilities.utilities.utilities_traits.h8"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.minimum_category0"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.minimum_category0"><code class="computeroutput"><span class="identifier">minimum_category</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.minimum_category0"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.minimum_category0"><code class="computeroutput"><span class="identifier">minimum_category</span></code></a>
         </h4>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">C1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">C2</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">minimum_category</span>
@@ -255,7 +255,7 @@
 </table></div>
 <h4>
 <a name="iterator.utilities.utilities.utilities_traits.h9"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.iterator_category_to_traversal"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.iterator_category_to_traversal"><code class="computeroutput"><span class="identifier">iterator_category_to_traversal</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.iterator_category_to_traversal"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.iterator_category_to_traversal"><code class="computeroutput"><span class="identifier">iterator_category_to_traversal</span></code></a>
         </h4>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">C</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">iterator_category_to_traversal</span>
@@ -276,7 +276,7 @@
         </p>
 <h4>
 <a name="iterator.utilities.utilities.utilities_traits.h10"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.iterator_traversal"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.iterator_traversal"><code class="computeroutput"><span class="identifier">iterator_traversal</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.iterator_traversal"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.iterator_traversal"><code class="computeroutput"><span class="identifier">iterator_traversal</span></code></a>
         </h4>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">iterator_traversal</span>
@@ -292,7 +292,7 @@
         </p>
 <h4>
 <a name="iterator.utilities.utilities.utilities_traits.h11"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.pure_traversal_tag"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pure_traversal_tag"><code class="computeroutput"><span class="identifier">pure_traversal_tag</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.pure_traversal_tag"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pure_traversal_tag"><code class="computeroutput"><span class="identifier">pure_traversal_tag</span></code></a>
         </h4>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">pure_traversal_tag</span>
@@ -312,7 +312,7 @@
         </p>
 <h4>
 <a name="iterator.utilities.utilities.utilities_traits.h12"></a>
-          <span><a name="iterator.utilities.utilities.utilities_traits.pure_iterator_traversal"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pure_iterator_traversal"><code class="computeroutput"><span class="identifier">pure_iterator_traversal</span></code></a>
+          <span class="phrase"><a name="iterator.utilities.utilities.utilities_traits.pure_iterator_traversal"></a></span><a class="link" href="utilities.html#iterator.utilities.utilities.utilities_traits.pure_iterator_traversal"><code class="computeroutput"><span class="identifier">pure_iterator_traversal</span></code></a>
         </h4>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">pure_iterator_traversal</span>

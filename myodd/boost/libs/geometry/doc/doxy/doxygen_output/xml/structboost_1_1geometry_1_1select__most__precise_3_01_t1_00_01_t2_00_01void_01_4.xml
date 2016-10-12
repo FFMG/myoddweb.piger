@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1select__most__precise_3_01_t1_00_01_t2_00_01void_01_4" kind="struct" prot="public">
     <compoundname>boost::geometry::select_most_precise&lt; T1, T2, void &gt;</compoundname>
     <includes local="no">select_most_precise.hpp</includes>
@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="171" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="171" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="171" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="171" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-static-attrib">
@@ -32,7 +32,7 @@
         <definition>const bool boost::geometry::select_most_precise&lt; T1, T2, void &gt;::both_same</definition>
         <argsstring></argsstring>
         <name>both_same</name>
-        <initializer>
+        <initializer>=
         boost::is_floating_point&lt;T1&gt;::type::value
         == boost::is_floating_point&lt;T2&gt;::type::value</initializer>
         <briefdescription>
@@ -41,14 +41,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="142" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="140" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="140" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="140" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1select__most__precise_3_01_t1_00_01_t2_00_01void_01_4_1a69fccda8c325bdd7172d527b4f41fa5d" prot="public" static="yes" mutable="no">
         <type>const bool</type>
         <definition>const bool boost::geometry::select_most_precise&lt; T1, T2, void &gt;::one_not_fundamental</definition>
         <argsstring></argsstring>
         <name>one_not_fundamental</name>
-        <initializer> !
+        <initializer>= !
         (boost::is_fundamental&lt;T1&gt;::type::value
           &amp;&amp; boost::is_fundamental&lt;T2&gt;::type::value)</initializer>
         <briefdescription>
@@ -57,28 +57,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="138" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="136" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="136" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="136" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1select__most__precise_3_01_t1_00_01_t2_00_01void_01_4_1a772f992b9c43b1b74ef0536d022c9c27" prot="public" static="yes" mutable="no">
         <type>const bool</type>
         <definition>const bool boost::geometry::select_most_precise&lt; T1, T2, void &gt;::second_larger</definition>
         <argsstring></argsstring>
         <name>second_larger</name>
-        <initializer> sizeof(T2) &gt; sizeof(T1)</initializer>
+        <initializer>= sizeof(T2) &gt; sizeof(T1)</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="135" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="135" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="135" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="135" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="134" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="133" bodyend="172"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" line="134" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/select_most_precise.hpp" bodystart="133" bodyend="172"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1select__most__precise_3_01_t1_00_01_t2_00_01void_01_4_1aa9d16c6151954943801235e19232681c" prot="public" virt="non-virtual"><scope>boost::geometry::select_most_precise&lt; T1, T2, void &gt;</scope><name>both_same</name></member>
       <member refid="structboost_1_1geometry_1_1select__most__precise_3_01_t1_00_01_t2_00_01void_01_4_1a69fccda8c325bdd7172d527b4f41fa5d" prot="public" virt="non-virtual"><scope>boost::geometry::select_most_precise&lt; T1, T2, void &gt;</scope><name>one_not_fundamental</name></member>

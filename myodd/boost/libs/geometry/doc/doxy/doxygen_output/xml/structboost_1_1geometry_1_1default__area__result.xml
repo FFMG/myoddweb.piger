@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1default__area__result" kind="struct" prot="public">
     <compoundname>boost::geometry::default_area_result</compoundname>
     <includes local="no">default_area_result.hpp</includes>
@@ -22,7 +22,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="37" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="37" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="37" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structboost_1_1geometry_1_1default__area__result_1ad7928572da214c331711cc4b50193122" prot="public" static="no">
         <type><ref refid="structboost_1_1geometry_1_1strategy_1_1area_1_1services_1_1default__strategy" kindref="compound">strategy::area::services::default_strategy</ref>&lt; typename <ref refid="structboost_1_1geometry_1_1cs__tag" kindref="compound">cs_tag</ref>&lt; <ref refid="structboost_1_1geometry_1_1default__area__result_1a5e9f48e50670d285ef17ee812b07517a" kindref="member">point_type</ref> &gt;::<ref refid="structboost_1_1geometry_1_1default__area__result_1ac53936f5f723c7e8cfa54bd3ca59f1eb" kindref="member">type</ref>, <ref refid="structboost_1_1geometry_1_1default__area__result_1a5e9f48e50670d285ef17ee812b07517a" kindref="member">point_type</ref> &gt;::<ref refid="structboost_1_1geometry_1_1default__area__result_1ac53936f5f723c7e8cfa54bd3ca59f1eb" kindref="member">type</ref></type>
@@ -35,7 +35,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="42" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="42" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="42" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structboost_1_1geometry_1_1default__area__result_1ac53936f5f723c7e8cfa54bd3ca59f1eb" prot="public" static="no">
         <type>strategy_type::return_type</type>
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="44" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="44" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="44" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="44" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -56,7 +56,7 @@
     <detaileddescription>
 <para><simplesect kind="note"><para>The strategy defines the return-type (so this situation is different from length, where distance is sqr/sqrt, but length always squared) </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="36" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="35" bodyend="45"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" line="36" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/default_area_result.hpp" bodystart="35" bodyend="45"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1default__area__result_1a5e9f48e50670d285ef17ee812b07517a" prot="public" virt="non-virtual"><scope>boost::geometry::default_area_result</scope><name>point_type</name></member>
       <member refid="structboost_1_1geometry_1_1default__area__result_1ad7928572da214c331711cc4b50193122" prot="public" virt="non-virtual"><scope>boost::geometry::default_area_result</scope><name>strategy_type</name></member>

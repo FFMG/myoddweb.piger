@@ -38,7 +38,7 @@ default_area_result<Geometry>::type area(Geometry const & geometry)``
 
 
 [heading Returns]
-The calculated \1
+The calculated area
 
 [heading Header]
 Either
@@ -79,7 +79,7 @@ Strategy::return_type area(Geometry const & geometry, Strategy const & strategy)
 
 
 [heading Returns]
-The calculated \1
+The calculated area
 
 [heading Header]
 Either

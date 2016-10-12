@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1point__square" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::buffer::point_square</compoundname>
     <includes local="no">buffer_point_square.hpp</includes>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" bodystart="52" bodyend="62"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" line="52" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" bodystart="52" bodyend="62"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1point__square_1ab370afeedf7b8af951937cc1d2d4d508" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -82,7 +82,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" line="73" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" bodystart="70" bodyend="81"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" line="70" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" bodystart="70" bodyend="81"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -97,7 +97,7 @@
 \* [link geometry.reference.algorithms.buffer.buffer_7_with_strategies buffer (with strategies)]
 \* [link geometry.reference.strategies.strategy_buffer_point_circle point_circle]
 </qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" line="45" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" bodystart="44" bodyend="102"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" line="45" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp" bodystart="44" bodyend="102"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1point__square_1a589d6c667c37b6514a30c3890e4a293d" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::buffer::point_square</scope><name>add_point</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1point__square_1ab370afeedf7b8af951937cc1d2d4d508" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::buffer::point_square</scope><name>add_points</name></member>

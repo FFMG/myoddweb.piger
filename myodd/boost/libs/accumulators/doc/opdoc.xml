@@ -4,9 +4,7 @@
 <namespace name="numeric">
 <struct name="default_"><template>
       <template-type-parameter name="T"/>
-    </template><method-group name="public static functions">
-<typedef name="type"><type><classname>default_</classname></type></typedef>
-</method-group>
+    </template><typedef name="type"><type><classname>default_</classname></type></typedef>
 <typedef name="value_type"><type>T</type></typedef>
 <data-member name="value" specifiers="static"><type>T const</type></data-member>
 <method-group name="public member functions">
@@ -30,9 +28,9 @@
 </method-group>
 </struct><struct name="one_or_default"><template>
       <template-type-parameter name="T"/>
-    </template></struct><struct name="zero_or_default"><template>
+    </template><inherit access="public">mpl::if_::type&lt; is_empty&lt; T &gt;, default_&lt; T &gt;, one&lt; T &gt; &gt;</inherit></struct><struct name="zero_or_default"><template>
       <template-type-parameter name="T"/>
-    </template></struct><namespace name="functional">
+    </template><inherit access="public">mpl::if_::type&lt; is_empty&lt; T &gt;, default_&lt; T &gt;, zero&lt; T &gt; &gt;</inherit></struct><namespace name="functional">
 <struct name="left_ref"><template>
       <template-type-parameter name="Left"/>
       <template-type-parameter name="Right"/>
@@ -418,15 +416,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 <function name="operator*"><type>disable_if&lt; mpl::or_&lt; is_same&lt; T, U &gt;, is_same&lt; std::complex&lt; T &gt;, U &gt; &gt;, std::complex&lt; T &gt; &gt;::type</type><template>
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
@@ -435,6 +424,15 @@
           <template-type-parameter name="T"/>
           <template-type-parameter name="U"/>
         </template><parameter name="ri"><paramtype>std::complex&lt; T &gt;</paramtype></parameter><parameter name="u"><paramtype>U const &amp;</paramtype></parameter></function>
+
+
+
+
+
+
+
+
+
 </namespace>
 
 
@@ -464,7 +462,7 @@
       <template-type-parameter name="Left"/>
       <template-type-parameter name="Right"/>
       <template-type-parameter name="RightTag"/>
-    </template><specialization><template-arg>Left</template-arg><template-arg>Right</template-arg><template-arg>std_valarray_tag</template-arg><template-arg>RightTag</template-arg></specialization></struct-specialization><struct-specialization name="promote"><template>
+    </template><specialization><template-arg>Left</template-arg><template-arg>Right</template-arg><template-arg>std_valarray_tag</template-arg><template-arg>RightTag</template-arg></specialization><inherit access="public">mpl::if_::type&lt; are_integral&lt; Left::value_type, Right &gt;, divides&lt; Left, double const  &gt;, divides&lt; Left, Right &gt; &gt;</inherit></struct-specialization><struct-specialization name="promote"><template>
       <template-type-parameter name="To"/>
       <template-type-parameter name="From"/>
     </template><specialization><template-arg>To</template-arg><template-arg>From</template-arg><template-arg>std_valarray_tag</template-arg><template-arg>std_valarray_tag</template-arg></specialization><inherit access="public">std::unary_function&lt; From, To &gt;</inherit><method-group name="public member functions">
@@ -556,7 +554,7 @@
 </struct-specialization><struct-specialization name="fdiv"><template>
       <template-type-parameter name="Left"/>
       <template-type-parameter name="Right"/>
-    </template><specialization><template-arg>Left</template-arg><template-arg>Right</template-arg><template-arg>std_vector_tag</template-arg><template-arg>void</template-arg></specialization></struct-specialization><struct-specialization name="promote"><template>
+    </template><specialization><template-arg>Left</template-arg><template-arg>Right</template-arg><template-arg>std_vector_tag</template-arg><template-arg>void</template-arg></specialization><inherit access="public">mpl::if_::type&lt; are_integral&lt; Left::value_type, Right &gt;, divides&lt; Left, double const  &gt;, divides&lt; Left, Right &gt; &gt;</inherit></struct-specialization><struct-specialization name="promote"><template>
       <template-type-parameter name="To"/>
       <template-type-parameter name="From"/>
     </template><specialization><template-arg>To</template-arg><template-arg>From</template-arg><template-arg>std_vector_tag</template-arg><template-arg>std_vector_tag</template-arg></specialization><inherit access="public">std::unary_function&lt; From, To &gt;</inherit><method-group name="public member functions">
@@ -589,6 +587,8 @@
 </method-group>
 </struct-specialization></namespace>
 <namespace name="operators">
+
+
 
 
 
@@ -626,8 +626,6 @@
 <function name="operator-"><type>std::vector&lt; typename <classname>functional::unary_minus</classname>&lt; Arg &gt;::result_type &gt;</type><template>
           <template-type-parameter name="Arg"/>
         </template><parameter name="arg"><paramtype>std::vector&lt; Arg &gt; const &amp;</paramtype></parameter></function>
-
-
 </namespace>
 
 

@@ -16,7 +16,7 @@
 [section:equals equals]
 
 '''<indexterm><primary>equals</primary></indexterm>'''
-Checks if a geometry \1. 
+Checks if a geometry are spatially equal. 
 
 [heading Description]
 The free function equals checks if the first geometry is spatially equal the second geometry. Spatially equal means that the same point set is included. A box can therefore be spatially equal to a ring or a polygon, or a linestring can be spatially equal to a multi-linestring or a segment. This only works theoretically, not all combinations are implemented yet.
@@ -35,7 +35,7 @@ bool equals(Geometry1 const & geometry1, Geometry2 const & geometry2)``
 
 
 [heading Returns]
-Returns true if two geometries \1
+Returns true if two geometries are spatially equal
 
 [heading Header]
 Either

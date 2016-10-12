@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::intersection::liang_barsky</compoundname>
     <includes local="no">clip_linestring.hpp</includes>
@@ -27,7 +27,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="52" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="52" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="52" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -66,7 +66,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="56" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="55" bodyend="82"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="55" bodyend="82"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -97,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="135" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="134" bodyend="142"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="134" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="134" bodyend="142"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky_1afd243e747b01ae06229935f7dc1f7099" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -126,7 +126,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="87" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="86" bodyend="131"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="86" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="86" bodyend="131"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -152,7 +152,7 @@
 <listitem><para>A tutorial: <ulink url="http://www.skytopia.com/project/articles/compsci/clipping.html">http://www.skytopia.com/project/articles/compsci/clipping.html</ulink></para></listitem><listitem><para>a German applet (link broken): <ulink url="http://ls7-www.cs.uni-dortmund.de/students/projectgroups/acit/lineclip.shtml">http://ls7-www.cs.uni-dortmund.de/students/projectgroups/acit/lineclip.shtml</ulink> </para></listitem></itemizedlist>
 </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="50" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="49" bodyend="143"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" line="50" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/overlay/clip_linestring.hpp" bodystart="49" bodyend="143"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky_1a6cb1453a0fb148bc24c5a09a9546b46e" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::intersection::liang_barsky</scope><name>apply</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky_1a7ad2acbb0d91f5122dbd770d664e8351" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::intersection::liang_barsky</scope><name>check_edge</name></member>

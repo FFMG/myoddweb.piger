@@ -41,7 +41,6 @@ Generate a predicate defining Value and Geometry relationship. Value will be ret
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::contains(box), std::back_inserter(result));
 ``
 
@@ -74,7 +73,6 @@ Generate a predicate defining Value and Geometry relationship. Value will be ret
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::covered_by(box), std::back_inserter(result));
 ``
 
@@ -107,7 +105,6 @@ Generate a predicate defining Value and Geometry relationship. Value will be ret
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::covers(box), std::back_inserter(result));
 ``
 
@@ -140,7 +137,6 @@ Generate a predicate defining Value and Geometry relationship. Value will be ret
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::disjoint(box), std::back_inserter(result));
 ``
 
@@ -173,7 +169,6 @@ Generate a predicate defining Value and Geometry relationship. Value will be ret
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::intersects(box), std::back_inserter(result));
 bgi::query(spatial_index, bgi::intersects(ring), std::back_inserter(result));
 bgi::query(spatial_index, bgi::intersects(polygon), std::back_inserter(result));
@@ -208,7 +203,6 @@ Generate a predicate defining Value and Geometry relationship. Value will be ret
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::overlaps(box), std::back_inserter(result));
 ``
 
@@ -241,7 +235,6 @@ Generate a predicate defining Value and Geometry relationship. Value will be ret
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::within(box), std::back_inserter(result));
 ``
 
@@ -274,7 +267,6 @@ A wrapper around user-defined UnaryPredicate checking if Value should be returne
 [heading Example]
 
 ``
-
 bool is_red(Value const& v) { return v.is_red(); }
 
 struct is_red_o {
@@ -319,7 +311,6 @@ When nearest predicate is passed to the query, k-nearest neighbour search will b
 [heading Example]
 
 ``
-
 bgi::query(spatial_index, bgi::nearest(pt, 5), std::back_inserter(result));
 bgi::query(spatial_index, bgi::nearest(pt, 5) && bgi::intersects(box), std::back_inserter(result));
 bgi::query(spatial_index, bgi::nearest(box, 5), std::back_inserter(result));

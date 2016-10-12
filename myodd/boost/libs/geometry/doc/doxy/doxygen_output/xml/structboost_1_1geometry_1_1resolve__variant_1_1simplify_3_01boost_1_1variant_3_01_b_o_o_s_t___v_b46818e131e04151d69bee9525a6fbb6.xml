@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1resolve__variant_1_1simplify_3_01boost_1_1variant_3_01_b_o_o_s_t___v_b46818e131e04151d69bee9525a6fbb6" kind="struct" prot="public">
     <compoundname>boost::geometry::resolve_variant::simplify&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::static_visitor&lt; void &gt;</basecompoundref>
     <includes local="no">simplify.hpp</includes>
     <templateparamlist>
       <param>
@@ -23,7 +24,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="410" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="410" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="410" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="410" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1resolve__variant_1_1simplify_3_01boost_1_1variant_3_01_b_o_o_s_t___v_b46818e131e04151d69bee9525a6fbb6_1adf2871c8d0342f53890fe0322feeaedd" prot="public" static="no" mutable="no">
         <type>Strategy const &amp;</type>
@@ -36,7 +37,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="411" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="411" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="411" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="411" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -64,7 +65,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="420" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="419" bodyend="422"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="419" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="419" bodyend="422"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1resolve__variant_1_1simplify_3_01boost_1_1variant_3_01_b_o_o_s_t___v_b46818e131e04151d69bee9525a6fbb6_1acef06b3b999f911be39bc35267cc154a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -85,14 +86,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="416" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="413" bodyend="416"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="413" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="413" bodyend="416"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="409" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="408" bodyend="423"/>
+    <inheritancegraph>
+      <node id="1190">
+        <label>boost::geometry::resolve_variant::simplify&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor&lt; Distance, Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1simplify_3_01boost_1_1variant_3_01_b_o_o_s_t___v_b46818e131e04151d69bee9525a6fbb6"/>
+        <childnode refid="1191" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1191">
+        <label>boost::static_visitor&lt; void &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1192">
+        <label>boost::geometry::resolve_variant::simplify&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor&lt; Distance, Strategy &gt;</label>
+        <link refid="structboost_1_1geometry_1_1resolve__variant_1_1simplify_3_01boost_1_1variant_3_01_b_o_o_s_t___v_b46818e131e04151d69bee9525a6fbb6"/>
+        <childnode refid="1193" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1193">
+        <label>boost::static_visitor&lt; void &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="409" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="408" bodyend="423"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1simplify_3_01boost_1_1variant_3_01_b_o_o_s_t___v_b46818e131e04151d69bee9525a6fbb6_1a054444e847d35b31ab67ed1a9fe3dd12" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::simplify&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</scope><name>m_max_distance</name></member>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1simplify_3_01boost_1_1variant_3_01_b_o_o_s_t___v_b46818e131e04151d69bee9525a6fbb6_1adf2871c8d0342f53890fe0322feeaedd" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::simplify&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;::visitor</scope><name>m_strategy</name></member>

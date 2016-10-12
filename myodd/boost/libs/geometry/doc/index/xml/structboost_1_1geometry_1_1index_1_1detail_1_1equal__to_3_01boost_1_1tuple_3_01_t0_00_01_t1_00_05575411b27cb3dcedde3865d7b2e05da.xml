@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1index_1_1detail_1_1equal__to_3_01boost_1_1tuple_3_01_t0_00_01_t1_00_05575411b27cb3dcedde3865d7b2e05da" kind="struct" prot="public">
     <compoundname>boost::geometry::index::detail::equal_to&lt; boost::tuple&lt; T0, T1, T2, T3, T4, T5, T6, T7, T8, T9 &gt;, false &gt;</compoundname>
     <includes refid="equal__to_8hpp" local="no">equal_to.hpp</includes>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="141" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="141" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="141" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="141" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="structboost_1_1geometry_1_1index_1_1detail_1_1equal__to_3_01boost_1_1tuple_3_01_t0_00_01_t1_00_05575411b27cb3dcedde3865d7b2e05da_1a4d7dd6a6b127c6435d9deb1749ec332a" prot="public" static="no">
         <type>bool</type>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="144" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="144" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="144" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="144" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -99,14 +99,14 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="154" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="153" bodyend="158"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="153" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="153" bodyend="158"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
 <para>The function object comparing Values. </para>    </briefdescription>
     <detaileddescription>
 <para>This specialization compares values of type boost::tuple&lt;...&gt;. It compares all members of the tuple from the first one to the last one. </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="140" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="139" bodyend="159"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="140" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="139" bodyend="159"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1equal__to_3_01boost_1_1tuple_3_01_t0_00_01_t1_00_05575411b27cb3dcedde3865d7b2e05da_1a007c1018ef887a3da0a5a0bae5757f6f" prot="public" virt="non-virtual"><scope>boost::geometry::index::detail::equal_to&lt; boost::tuple&lt; T0, T1, T2, T3, T4, T5, T6, T7, T8, T9 &gt;, false &gt;</scope><name>operator()</name></member>
       <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1equal__to_3_01boost_1_1tuple_3_01_t0_00_01_t1_00_05575411b27cb3dcedde3865d7b2e05da_1a4d7dd6a6b127c6435d9deb1749ec332a" prot="public" virt="non-virtual"><scope>boost::geometry::index::detail::equal_to&lt; boost::tuple&lt; T0, T1, T2, T3, T4, T5, T6, T7, T8, T9 &gt;, false &gt;</scope><name>result_type</name></member>

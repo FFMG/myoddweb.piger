@@ -9,7 +9,7 @@ The header contains implementation of a base class for loggers. Convenience macr
       <template-type-parameter name="CharT"/>
       <template-type-parameter name="FinalT"/>
       <template-type-parameter name="ThreadingModelT"/>
-    </template><purpose>Basic logger class. </purpose><description><para>The <computeroutput><classname alt="boost::log::sources::basic_logger">basic_logger</classname></computeroutput> class template serves as a base class for all loggers provided by the library. It can also be used as a base for user-defined loggers. The template parameters are:</para><para><itemizedlist>
+    </template><inherit access="public">ThreadingModelT</inherit><purpose>Basic logger class. </purpose><description><para>The <computeroutput><classname alt="boost::log::sources::basic_logger">basic_logger</classname></computeroutput> class template serves as a base class for all loggers provided by the library. It can also be used as a base for user-defined loggers. The template parameters are:</para><para><itemizedlist>
 <listitem><para><computeroutput>CharT</computeroutput> - logging character type </para></listitem>
 <listitem><para><computeroutput>FinalT</computeroutput> - final type of the logger that eventually derives from the <computeroutput><classname alt="boost::log::sources::basic_logger">basic_logger</classname></computeroutput>. There may be other classes in the hierarchy between the final class and <computeroutput><classname alt="boost::log::sources::basic_logger">basic_logger</classname></computeroutput>. </para></listitem>
 <listitem><para><computeroutput>ThreadingModelT</computeroutput> - threading model policy. Must provide methods of the Boost.Thread locking concept used in <computeroutput><classname alt="boost::log::sources::basic_logger">basic_logger</classname></computeroutput> class and all its derivatives in the hierarchy up to the <computeroutput>FinalT</computeroutput> class. The <computeroutput><classname alt="boost::log::sources::basic_logger">basic_logger</classname></computeroutput> class itself requires methods of the SharedLockable concept. The threading model policy must also be default and copy-constructible and support member function <computeroutput>swap</computeroutput>. There are currently two policies provided: <computeroutput><classname alt="boost::log::sources::single_thread_model">single_thread_model</classname></computeroutput> and <computeroutput><classname alt="boost::log::sources::multi_thread_model">multi_thread_model</classname></computeroutput>.</para></listitem>
@@ -57,7 +57,7 @@ The logger implements fundamental facilities of loggers, such as storing source-
 <method name="get_attributes_unlocked" cv="const"><type>attribute_set</type><description><para>Unlocked <computeroutput>get_attributes</computeroutput> </para></description></method>
 <method name="set_attributes_unlocked"><type>void</type><parameter name="attrs"><paramtype>attribute_set const &amp;</paramtype></parameter><description><para>Unlocked <computeroutput>set_attributes</computeroutput> </para></description></method>
 </method-group>
-<copy-assignment><type><classname>basic_logger</classname> &amp;</type><parameter name=""><paramtype><classname>basic_logger</classname> const &amp;</paramtype></parameter><purpose>Assignment is closed (should be implemented through copy and swap in the final class) </purpose></copy-assignment>
+<copy-assignment cv="= delete"><type><classname>basic_logger</classname> &amp;</type><parameter name=""><paramtype><classname>basic_logger</classname> const &amp;</paramtype></parameter><purpose>Assignment is closed (should be implemented through copy and swap in the final class) </purpose></copy-assignment>
 </class><class name="basic_composite_logger"><template>
       <template-type-parameter name="CharT"/>
       <template-type-parameter name="FinalT"/>
@@ -162,7 +162,7 @@ The header contains implementation of a channel support feature. </para><namespa
 <class name="basic_channel_logger"><template>
       <template-type-parameter name="BaseT"/>
       <template-type-parameter name="ChannelT"/>
-    </template><purpose>Channel feature implementation. </purpose><struct name="make_default_channel_name"><purpose>Default channel name generator. </purpose><typedef name="result_type"><type>channel_type</type></typedef>
+    </template><inherit access="public">BaseT</inherit><purpose>Channel feature implementation. </purpose><struct name="make_default_channel_name"><purpose>Default channel name generator. </purpose><typedef name="result_type"><type>channel_type</type></typedef>
 <method-group name="public member functions">
 <method name="operator()" cv="const"><type>result_type</type></method>
 </method-group>
@@ -292,7 +292,7 @@ The header contains implementation of an exception handler support feature. </pa
 <namespace name="sources">
 <class name="basic_exception_handler_logger"><template>
       <template-type-parameter name="BaseT"/>
-    </template><purpose>Exception handler feature implementation. </purpose><typedef name="threading_model"><purpose>Threading model being used. </purpose><type>base_type::threading_model</type></typedef>
+    </template><inherit access="public">BaseT</inherit><purpose>Exception handler feature implementation. </purpose><typedef name="threading_model"><purpose>Threading model being used. </purpose><type>base_type::threading_model</type></typedef>
 <typedef name="final_type"><purpose>Final logger type. </purpose><type>base_type::final_type</type></typedef>
 <typedef name="exception_handler_type"><purpose>Exception handler function type. </purpose><type><emphasis>unspecified</emphasis></type></typedef>
 <typedef name="open_record_lock"><purpose>Lock requirement for the open_record_unlocked method. </purpose><type>strictest_lock&lt; typename base_type::open_record_lock, no_lock&lt; threading_model &gt; &gt;::type</type></typedef>
@@ -418,8 +418,8 @@ This header contains a wrapper class around a logging record that allows to comp
 <method-group name="private member functions">
 <method name="init_stream"><type>void</type><purpose>The function initializes the stream and the stream buffer. </purpose></method>
 </method-group>
-<constructor><parameter name=""><paramtype><classname>basic_record_ostream</classname> const &amp;</paramtype></parameter></constructor>
-<copy-assignment><type><classname>basic_record_ostream</classname> &amp;</type><parameter name=""><paramtype><classname>basic_record_ostream</classname> const &amp;</paramtype></parameter></copy-assignment>
+<constructor cv="= delete"><parameter name=""><paramtype><classname>basic_record_ostream</classname> const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type><classname>basic_record_ostream</classname> &amp;</type><parameter name=""><paramtype><classname>basic_record_ostream</classname> const &amp;</paramtype></parameter></copy-assignment>
 </class><typedef name="record_ostream"><purpose>Convenience typedef for narrow-character logging. </purpose><type><classname>basic_record_ostream</classname>&lt; char &gt;</type></typedef>
 <typedef name="wrecord_ostream"><purpose>Convenience typedef for wide-character logging. </purpose><type><classname>basic_record_ostream</classname>&lt; wchar_t &gt;</type></typedef>
 <function name="operator&lt;&lt;"><type><emphasis>unspecified</emphasis></type><template>
@@ -515,7 +515,7 @@ The header contains implementation of a severity level support feature. </para><
 <class name="basic_severity_logger"><template>
       <template-type-parameter name="BaseT"/>
       <template-type-parameter name="LevelT"><default>int</default></template-type-parameter>
-    </template><purpose>Severity level feature implementation. </purpose><typedef name="char_type"><purpose>Character type. </purpose><type>base_type::char_type</type></typedef>
+    </template><inherit access="public">BaseT</inherit><purpose>Severity level feature implementation. </purpose><typedef name="char_type"><purpose>Character type. </purpose><type>base_type::char_type</type></typedef>
 <typedef name="final_type"><purpose>Final type. </purpose><type>base_type::final_type</type></typedef>
 <typedef name="threading_model"><purpose>Threading model being used. </purpose><type>base_type::threading_model</type></typedef>
 <typedef name="severity_level"><purpose>Severity level type. </purpose><type>LevelT</type></typedef>

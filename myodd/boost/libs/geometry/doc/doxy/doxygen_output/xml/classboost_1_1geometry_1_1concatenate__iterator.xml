@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1concatenate__iterator" kind="class" prot="public">
     <compoundname>boost::geometry::concatenate_iterator</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">boost::iterator_facade&lt; concatenate_iterator&lt; Iterator1, Iterator2, Value, Reference &gt;, Value, boost::bidirectional_traversal_tag, Reference &gt;</basecompoundref>
     <includes local="no">concatenate_iterator.hpp</includes>
     <templateparamlist>
       <param>
@@ -30,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="46" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="46" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="46" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="classboost_1_1geometry_1_1concatenate__iterator_1a99544726a2b31c0a96f1e3b237fef951" prot="public" static="no">
         <type>Iterator2</type>
@@ -43,7 +44,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="47" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="47" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="47" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="47" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -58,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="43" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="43" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="43" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1concatenate__iterator_1a456b76de496cb8bbf4d4a3c69c93dc55" prot="private" static="no" mutable="no">
         <type>Iterator1</type>
@@ -71,7 +72,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="42" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="42" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="42" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1concatenate__iterator_1a7b0bdfa1fb1c0ad3f30d4baea9d9cc99" prot="private" static="no" mutable="no">
         <type>Iterator1</type>
@@ -84,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="42" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="42" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="42" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1concatenate__iterator_1a4c9a1995de818e99285b25f7d01d4bc2" prot="private" static="no" mutable="no">
         <type>Iterator2</type>
@@ -97,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="43" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="43" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="43" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="friend">
@@ -112,9 +113,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="92" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="92" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="92" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="92" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="friend" id="classboost_1_1geometry_1_1concatenate__iterator_1a3358b3ecf1a87df22c0d363cd95a2b7c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="friend" id="classboost_1_1geometry_1_1concatenate__iterator_1a21e525d10eea7c9537f38d102ac09242" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename It1</type>
+          </param>
+          <param>
+            <type>typename It2</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+          <param>
+            <type>typename R</type>
+          </param>
+        </templateparamlist>
         <type>friend class</type>
         <definition>friend class concatenate_iterator</definition>
         <argsstring></argsstring>
@@ -125,7 +140,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="95" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="95" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="95" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="95" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -140,7 +155,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="50" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="50" bodyend="50"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="50" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="50" bodyend="50"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1concatenate__iterator_1acb437c4a9b91dcd42632ed13f736ff5b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -169,7 +184,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="56" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="53" bodyend="56"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="53" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="53" bodyend="56"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1concatenate__iterator_1a7d9e67c7a5380dc07a5c6788861577eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -194,7 +209,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="61" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="59" bodyend="61"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="59" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="59" bodyend="61"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1concatenate__iterator_1af2981f0a7f8d337982cb8ecbf59dc698" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -225,7 +240,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="81" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="70" bodyend="89"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="70" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="70" bodyend="89"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
@@ -240,7 +255,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="137" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="136" bodyend="146"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="136" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="136" bodyend="146"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1concatenate__iterator_1af20476b029e06adc9cab7fde82955b13" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Reference</type>
@@ -253,7 +268,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="98" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="97" bodyend="104"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="97" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="97" bodyend="104"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1concatenate__iterator_1ac8aeef4dab45ac3e1592c837e492f97c" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -284,7 +299,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="120" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="113" bodyend="122"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="113" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="113" bodyend="122"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1concatenate__iterator_1a9c5b9792394b263b1ad914e3ca71639d" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -297,17 +312,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="125" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="124" bodyend="134"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="124" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="124" bodyend="134"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="40" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="32" bodyend="147"/>
+    <inheritancegraph>
+      <node id="85">
+        <label>boost::iterator_facade&lt; concatenate_iterator&lt; Iterator1, Iterator2, Value, Reference &gt;, Value, boost::bidirectional_traversal_tag, Reference &gt;</label>
+      </node>
+      <node id="84">
+        <label>boost::geometry::concatenate_iterator&lt; Iterator1, Iterator2, Value, Reference &gt;</label>
+        <link refid="classboost_1_1geometry_1_1concatenate__iterator"/>
+        <childnode refid="85" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="87">
+        <label>boost::iterator_facade&lt; concatenate_iterator&lt; Iterator1, Iterator2, Value, Reference &gt;, Value, boost::bidirectional_traversal_tag, Reference &gt;</label>
+      </node>
+      <node id="86">
+        <label>boost::geometry::concatenate_iterator&lt; Iterator1, Iterator2, Value, Reference &gt;</label>
+        <link refid="classboost_1_1geometry_1_1concatenate__iterator"/>
+        <childnode refid="87" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" line="40" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp" bodystart="32" bodyend="147"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1concatenate__iterator_1ac09f73e325921cc50ebcd96bed0f8096" prot="public" virt="non-virtual"><scope>boost::geometry::concatenate_iterator</scope><name>boost::iterator_core_access</name></member>
-      <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a3358b3ecf1a87df22c0d363cd95a2b7c" prot="private" virt="non-virtual"><scope>boost::geometry::concatenate_iterator</scope><name>concatenate_iterator</name></member>
+      <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a21e525d10eea7c9537f38d102ac09242" prot="private" virt="non-virtual"><scope>boost::geometry::concatenate_iterator</scope><name>concatenate_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1concatenate__iterator_1ada42401137480fdc824d0a5065799107" prot="public" virt="non-virtual"><scope>boost::geometry::concatenate_iterator</scope><name>concatenate_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1concatenate__iterator_1acb437c4a9b91dcd42632ed13f736ff5b" prot="public" virt="non-virtual"><scope>boost::geometry::concatenate_iterator</scope><name>concatenate_iterator</name></member>
       <member refid="classboost_1_1geometry_1_1concatenate__iterator_1a7d9e67c7a5380dc07a5c6788861577eb" prot="public" virt="non-virtual"><scope>boost::geometry::concatenate_iterator</scope><name>concatenate_iterator</name></member>

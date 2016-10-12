@@ -27,16 +27,10 @@ namespace test{
 
 static const std::size_t BucketSize = 8;
 
-template<class ValueTraits, class ContainerDefiner>
+template<class ContainerDefiner>
 struct test_unordered
 {
-   typedef typename ValueTraits::value_type value_type;
-   typedef typename ValueTraits::pointer pointer;
-   typedef typename ValueTraits::const_pointer const_pointer;
-   typedef typename ValueContainer< value_type >::type value_cont_type;
-   typedef typename pointer_traits<pointer>::reference      reference;
-   typedef typename pointer_traits
-      <const_pointer>::reference                            const_reference;
+   typedef typename ContainerDefiner::value_cont_type value_cont_type;
 
    static void test_all(value_cont_type& values);
    private:
@@ -51,9 +45,8 @@ struct test_unordered
    static void test_clone(value_cont_type& values);
 };
 
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>::
-   test_all (value_cont_type& values)
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_all (value_cont_type& values)
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
@@ -98,9 +91,8 @@ void test_unordered<ValueTraits, ContainerDefiner>::
 }
 
 //test case due to an error in tree implementation:
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>
-   ::test_impl()
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_impl()
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
@@ -127,9 +119,8 @@ void test_unordered<ValueTraits, ContainerDefiner>
 }
 
 //test: constructor, iterator, clear, reverse_iterator, front, back, size:
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>
-   ::test_sort(value_cont_type& values)
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_sort(value_cont_type& values)
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
@@ -154,9 +145,8 @@ void test_unordered<ValueTraits, ContainerDefiner>
 }
 
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>
-   ::test_insert(value_cont_type& values, detail::false_) //not multikey
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_insert(value_cont_type& values, detail::false_) //not multikey
 {
 
    typedef typename ContainerDefiner::template container
@@ -212,9 +202,8 @@ void test_unordered<ValueTraits, ContainerDefiner>
    }
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>
-   ::test_insert(value_cont_type& values, detail::true_) //is multikey
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_insert(value_cont_type& values, detail::true_) //is multikey
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
@@ -405,9 +394,8 @@ void test_unordered<ValueTraits, ContainerDefiner>
 }
 
 //test: insert (seq-version), swap, erase (seq-version), size:
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>::
-   test_swap(value_cont_type& values)
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_swap(value_cont_type& values)
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
@@ -454,9 +442,8 @@ void test_unordered<ValueTraits, ContainerDefiner>::
 
 //test: rehash:
 
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>
-   ::test_rehash(value_cont_type& values, detail::true_)
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_rehash(value_cont_type& values, detail::true_)
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
@@ -530,27 +517,32 @@ void test_unordered<ValueTraits, ContainerDefiner>
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
 
-   //Full shrink rehash
+   //Shrink rehash
    testset1.rehash(bucket_traits(
       pointer_traits<typename unordered_type::bucket_ptr>::
          pointer_to(buckets1[0]), 4));
    BOOST_TEST (testset1.incremental_rehash() == false);
    {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
       TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
-   //Full shrink rehash again
+
+   //Shrink rehash again
    testset1.rehash(bucket_traits(
       pointer_traits<typename unordered_type::bucket_ptr>::
          pointer_to(buckets1[0]), 2));
    BOOST_TEST (testset1.incremental_rehash() == false);
    {  int init_values [] = { 2, 2, 4, 3, 5, 1 };
       TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
-   //Full growing rehash
+
+   //Growing rehash
    testset1.rehash(bucket_traits(
       pointer_traits<typename unordered_type::bucket_ptr>::
          pointer_to(buckets1[0]), BucketSize));
-   BOOST_TEST (testset1.incremental_rehash() == false);
+
+   //Full rehash (no effects)
+   testset1.full_rehash();
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
+
    //Incremental rehash shrinking
    //First incremental rehashes should lead to the same sequence
    for(std::size_t split_bucket = testset1.split_count(); split_bucket > 6; --split_bucket){
@@ -559,25 +551,27 @@ void test_unordered<ValueTraits, ContainerDefiner>
       {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
    }
+
    //Incremental rehash step
    BOOST_TEST (testset1.incremental_rehash(false) == true);
    BOOST_TEST(testset1.split_count() == (BucketSize/2+1));
    {  int init_values [] = { 5, 1, 2, 2, 3, 4 };
       TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
+
    //Incremental rehash step 2
    BOOST_TEST (testset1.incremental_rehash(false) == true);
    BOOST_TEST(testset1.split_count() == (BucketSize/2));
    {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
       TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
+
    //This incremental rehash should fail because we've reached the half of the bucket array
    BOOST_TEST(testset1.incremental_rehash(false) == false);
    BOOST_TEST(testset1.split_count() == BucketSize/2);
    {  int init_values [] = { 4, 5, 1, 2, 2, 3 };
    TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
 }
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>
-   ::test_rehash(value_cont_type& values, detail::false_)
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_rehash(value_cont_type& values, detail::false_)
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
@@ -619,15 +613,20 @@ void test_unordered<ValueTraits, ContainerDefiner>
          pointer_to(buckets3[0]), BucketSize*2));
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
+
+   //Full rehash (no effects)
+   testset1.full_rehash();
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE_MAYBEUNIQUE( init_values, testset1 );  }
 }
 
 //test: find, equal_range (lower_bound, upper_bound):
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>::
-   test_find(value_cont_type& values)
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_find(value_cont_type& values)
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
+   typedef typename unordered_type::value_type value_type;
 
    typedef typename unordered_type::bucket_traits  bucket_traits;
    typedef typename unordered_type::key_of_value   key_of_value;
@@ -660,13 +659,13 @@ void test_unordered<ValueTraits, ContainerDefiner>::
 }
 
 
-template<class ValueTraits, class ContainerDefiner>
-void test_unordered<ValueTraits, ContainerDefiner>
-   ::test_clone(value_cont_type& values)
+template<class ContainerDefiner>
+void test_unordered<ContainerDefiner>::test_clone(value_cont_type& values)
 {
    typedef typename ContainerDefiner::template container
       <>::type unordered_type;
-   typedef std::multiset<typename ValueTraits::value_type> std_multiset_t;
+   typedef typename unordered_type::value_type value_type;
+   typedef std::multiset<value_type> std_multiset_t;
 
    typedef typename unordered_type::bucket_traits bucket_traits;
    {
@@ -761,98 +760,3 @@ void test_unordered<ValueTraits, ContainerDefiner>
 }  //namespace test{
 }  //namespace intrusive{
 }  //namespace boost{
-/*
-template < class ValueTraits, bool ConstantTimeSize, bool CacheBegin, bool CompareHash, bool Incremental, bool Map, bool DefaultHolder >
-struct rebinder
-{
-   typedef unordered_rebinder_common<ValueTraits, DefaultHolder, Map> common_t;
-
-   template < class Option1 =void
-            , class Option2 =void
-            >
-   struct container
-   {
-      typedef unordered_multiset
-         < typename common_t::value_type
-         , value_traits<ValueTraits>
-         , constant_time_size<ConstantTimeSize>
-         , cache_begin<CacheBegin>
-         , compare_hash<CompareHash>
-         , incremental<Incremental>
-         , typename common_t::holder_opt
-         , typename common_t::key_of_value_opt
-         , Option1
-         , Option2
-         > type;
-      BOOST_STATIC_ASSERT((key_type_tester<typename common_t::key_of_value_opt, type>::value));
-   };
-};
-
-template<class VoidPointer, bool ConstantTimeSize, bool Map, bool DefaultHolder>
-class test_main_template
-{
-   public:
-   static void execute()
-   {
-      typedef testvalue<unordered_hooks<VoidPointer> > value_type;
-      static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
-      typedef typename ValueContainer< value_type >::type value_cont_type;
-      value_cont_type data (6);
-      for (int i = 0; i < 6; ++i)
-         data[i].value_ = random_init[i];
-
-      typedef testvalue_traits< unordered_hooks<VoidPointer> > testval_traits_t;
-      //base
-      typedef typename detail::if_c
-         < ConstantTimeSize
-         , typename testval_traits_t::base_value_traits
-         , typename testval_traits_t::auto_base_value_traits   //store_hash<true>
-         >::type base_hook_t;
-      test::test_unordered_multiset
-         < base_hook_t                       //cache_begin, compare_hash, incremental
-         , rebinder<base_hook_t, ConstantTimeSize, ConstantTimeSize, !ConstantTimeSize, !!ConstantTimeSize, Map, DefaultHolder>
-         >::test_all(data);
-      //member
-      typedef typename detail::if_c
-         < ConstantTimeSize
-         , typename testval_traits_t::member_value_traits      //optimize_multikey<true>
-         , typename testval_traits_t::auto_member_value_traits //store_hash<true>, optimize_multikey<true>
-         >::type member_hook_t;
-      test::test_unordered_multiset
-         < member_hook_t                           //cache_begin, compare_hash, incremental
-         , rebinder<member_hook_t, ConstantTimeSize, false, !ConstantTimeSize, false, !ConstantTimeSize, DefaultHolder>
-         >::test_all(data);
-      //nonmember
-      test::test_unordered_multiset
-         < typename testval_traits_t::nonhook_value_traits                  //cache_begin, compare_hash, incremental
-         , rebinder<typename testval_traits_t::nonhook_value_traits, ConstantTimeSize, false, false, false, Map, DefaultHolder>
-         >::test_all(data);
-   }
-};
-
-int main()
-{
-   //VoidPointer x ConstantTimeSize x Map x DefaultHolder
-
-   //void pointer
-   test_main_template<void*, false, false, false>::execute();
-   test_main_template<void*, false,  true, false>::execute();
-   test_main_template<void*,  true, false, false>::execute();
-   test_main_template<void*,  true,  true, false>::execute();
-
-   //smart_ptr
-   test_main_template<smart_ptr<void>, false, false, false>::execute();
-   test_main_template<smart_ptr<void>, false,  true, false>::execute();
-   test_main_template<smart_ptr<void>,  true, false, false>::execute();
-   test_main_template<smart_ptr<void>,  true,  true, false>::execute();
-
-   ////bounded_ptr (bool ConstantTimeSize, bool Map)
-   //test_main_template_bptr< false, false >::execute();
-   //test_main_template_bptr< false,  true >::execute();
-   //test_main_template_bptr<  true, false >::execute();
-   test_main_template_bptr<  true,  true >::execute();
-
-   return boost::report_errors();
-}
-*/
-

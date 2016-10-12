@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1index_1_1dynamic__linear" kind="class" prot="public">
     <compoundname>boost::geometry::index::dynamic_linear</compoundname>
     <includes refid="parameters_8hpp" local="no">parameters.hpp</includes>
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="172" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="172" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="172" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="172" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1index_1_1dynamic__linear_1a14f5d244b8af42704953c6a67f094701" prot="private" static="no" mutable="no">
         <type>size_t</type>
@@ -28,7 +28,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="173" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="173" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="173" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="173" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -67,7 +67,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="163" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="159" bodyend="166"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="159" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="159" bodyend="166"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1dynamic__linear_1ab2c51d35e52037987d638ca741b4e55f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>size_t</type>
@@ -80,7 +80,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="168" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="168" bodyend="168"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="168" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="168" bodyend="168"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1index_1_1dynamic__linear_1ac8a733e65ef73be1de39139aeba776af" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>size_t</type>
@@ -93,14 +93,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="169" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="169" bodyend="169"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="169" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="169" bodyend="169"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
 <para>Linear r-tree creation algorithm parameters - run-time version. </para>    </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="151" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="150" bodyend="174"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" line="151" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/parameters.hpp" bodystart="150" bodyend="174"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1index_1_1dynamic__linear_1a01a756ed100c5ac7364a487c40d33f2b" prot="public" virt="non-virtual"><scope>boost::geometry::index::dynamic_linear</scope><name>dynamic_linear</name></member>
       <member refid="classboost_1_1geometry_1_1index_1_1dynamic__linear_1ab2c51d35e52037987d638ca741b4e55f" prot="public" virt="non-virtual"><scope>boost::geometry::index::dynamic_linear</scope><name>get_max_elements</name></member>

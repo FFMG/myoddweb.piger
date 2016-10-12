@@ -358,17 +358,17 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   try
   {
     // set some of the paths that might be of interest.
-    const wchar_t* lp = nullptr;
-    lp = myodd::config::get( _T("paths\\commands") );
-    pfMsg( AM_MSG_PATH_CMD, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\in"));
-    pfMsg( AM_MSG_PATH_IN, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\out"));
-    pfMsg( AM_MSG_PATH_OUT, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\tmp"));
-    pfMsg( AM_MSG_PATH_TMP, 0, reinterpret_cast<AM_INT>(lp) );
-    lp = myodd::config::get( _T("paths\\plugin"));
-    pfMsg( AM_MSG_PATH_PLUGIN, 0, reinterpret_cast<AM_INT>(lp) );
+    std::wstring lp;
+    lp = static_cast<const wchar_t*>(::myodd::config::Get( L"paths\\commands", L"" ));
+    pfMsg( AM_MSG_PATH_CMD, 0, reinterpret_cast<AM_INT>(lp.c_str()) );
+    lp = static_cast<const wchar_t*>(::myodd::config::Get( L"paths\\in", L""));
+    pfMsg( AM_MSG_PATH_IN, 0, reinterpret_cast<AM_INT>(lp.c_str()) );
+    lp = static_cast<const wchar_t*>(::myodd::config::Get( L"paths\\out", L""));
+    pfMsg( AM_MSG_PATH_OUT, 0, reinterpret_cast<AM_INT>(lp.c_str()) );
+    lp = static_cast<const wchar_t*>(::myodd::config::Get( L"paths\\tmp", L""));
+    pfMsg( AM_MSG_PATH_TMP, 0, reinterpret_cast<AM_INT>(lp.c_str()) );
+    lp = static_cast<const wchar_t*>(::myodd::config::Get( L"paths\\plugin", L""));
+    pfMsg( AM_MSG_PATH_PLUGIN, 0, reinterpret_cast<AM_INT>(lp.c_str()));
 
     // call the init path
     result = pfMsg( AM_MSG_INIT,     0, reinterpret_cast<AM_INT>(_amPlugin) );

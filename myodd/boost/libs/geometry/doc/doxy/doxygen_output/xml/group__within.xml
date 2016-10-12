@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__within" kind="group">
     <compoundname>within</compoundname>
     <title>within: detect if a geometry is inside another geometry, a.o. point-in-polygon</title>
-    <innerclass refid="classboost_1_1geometry_1_1concept_1_1_within_strategy_polygonal" prot="public">boost::geometry::concept::WithinStrategyPolygonal</innerclass>
+    <innerclass refid="classboost_1_1geometry_1_1concepts_1_1_within_strategy_polygonal" prot="public">boost::geometry::concepts::WithinStrategyPolygonal</innerclass>
     <innerclass refid="structboost_1_1geometry_1_1strategy_1_1within_1_1services_1_1default__strategy" prot="public">boost::geometry::strategy::within::services::default_strategy</innerclass>
       <sectiondef kind="func">
       <memberdef kind="function" id="group__within_1gaf8f597c0a7352f0a6808944db2a549b7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
@@ -69,7 +69,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" line="485" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" bodystart="484" bodyend="491"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" line="484" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" bodystart="484" bodyend="491"/>
       </memberdef>
       <memberdef kind="function" id="group__within_1ga4e277994f726a9e5076429e99a6cd3b8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -153,7 +153,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" line="522" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" bodystart="520" bodyend="528"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" line="520" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/within.hpp" bodystart="520" bodyend="528"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

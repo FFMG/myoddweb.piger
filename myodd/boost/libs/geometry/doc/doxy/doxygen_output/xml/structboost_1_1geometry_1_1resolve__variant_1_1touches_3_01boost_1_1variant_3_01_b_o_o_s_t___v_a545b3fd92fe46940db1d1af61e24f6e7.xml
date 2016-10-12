@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1resolve__variant_1_1touches_3_01boost_1_1variant_3_01_b_o_o_s_t___v_a545b3fd92fe46940db1d1af61e24f6e7" kind="struct" prot="public">
     <compoundname>boost::geometry::resolve_variant::touches&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;</compoundname>
     <includes local="no">touches.hpp</includes>
@@ -32,14 +32,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="487" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="485" bodyend="489"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="485" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="485" bodyend="489"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="473" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="471" bodyend="490"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" line="473" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/touches.hpp" bodystart="471" bodyend="490"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1touches_3_01boost_1_1variant_3_01_b_o_o_s_t___v_a545b3fd92fe46940db1d1af61e24f6e7_1af377d41197743abedeb3c3b29bac8e89" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::touches&lt; boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, boost::variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;</scope><name>apply</name></member>
     </listofallmembers>

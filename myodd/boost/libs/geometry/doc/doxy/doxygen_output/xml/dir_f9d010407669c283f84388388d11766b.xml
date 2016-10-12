@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_f9d010407669c283f84388388d11766b" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/envelope</compoundname>
     <innerfile refid="algorithms_2detail_2envelope_2box_8hpp">box.hpp</innerfile>
     <innerfile refid="envelope_2implementation_8hpp">implementation.hpp</innerfile>
     <innerfile refid="initialize_8hpp">initialize.hpp</innerfile>

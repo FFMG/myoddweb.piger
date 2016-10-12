@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph__vertex" kind="class" prot="public">
     <compoundname>boost::geometry::detail::is_valid::complement_graph_vertex</compoundname>
     <includes local="no">complement_graph.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="71" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="71" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="71" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="71" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph__vertex_1aed0b62c84306bdc3ae995eee0b293ad2" prot="private" static="no" mutable="no">
         <type>TurnPoint const *</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="72" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="72" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="72" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="72" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -52,7 +52,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="40" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="37" bodyend="40"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="37" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="37" bodyend="40"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph__vertex_1ab08bee844ec4bb1058597b0f4897d249" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -73,7 +73,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="46" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="42" bodyend="46"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="42" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="42" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph__vertex_1ae7fcc3cf950c2109c46ab2839dd4c790" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>std::size_t</type>
@@ -86,7 +86,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="48" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="48" bodyend="48"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="48" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="48" bodyend="48"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph__vertex_1a2abf691d7575d98891fee5c370d21028" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -103,14 +103,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="50" bodyend="64"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="50" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="50" bodyend="64"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="35" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="34" bodyend="73"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" line="35" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/is_valid/complement_graph.hpp" bodystart="34" bodyend="73"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph__vertex_1a3281d316ed0580296a6d2c7bb9671fb1" prot="public" virt="non-virtual"><scope>boost::geometry::detail::is_valid::complement_graph_vertex</scope><name>complement_graph_vertex</name></member>
       <member refid="classboost_1_1geometry_1_1detail_1_1is__valid_1_1complement__graph__vertex_1ab08bee844ec4bb1058597b0f4897d249" prot="public" virt="non-virtual"><scope>boost::geometry::detail::is_valid::complement_graph_vertex</scope><name>complement_graph_vertex</name></member>

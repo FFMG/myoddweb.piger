@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1model_1_1multi__polygon" kind="class" prot="public">
     <compoundname>boost::geometry::model::multi_polygon</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Container&lt; Polygon, Allocator&lt; Polygon &gt; &gt;</basecompoundref>
     <includes local="no">multi_polygon.hpp</includes>
     <templateparamlist>
       <param>
@@ -32,17 +33,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="64" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="64" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="64" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1multi__polygon_1a9feddbc7a9075d7c1ef8ff40f7c14b1c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1multi__polygon_1a72287f2cf31374b97f6ba4fbff2daecb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>boost::geometry::model::multi_polygon&lt; Polygon, Container, Allocator &gt;::BOOST_CONCEPT_ASSERT</definition>
-        <argsstring>((concept::Polygon&lt; Polygon &gt;))</argsstring>
+        <argsstring>((concepts::Polygon&lt; Polygon &gt;))</argsstring>
         <name>BOOST_CONCEPT_ASSERT</name>
         <param>
-          <type>(<ref refid="classboost_1_1geometry_1_1concept_1_1_polygon" kindref="compound">concept::Polygon</ref>&lt; Polygon &gt;)</type>
+          <type>(<ref refid="classboost_1_1geometry_1_1concepts_1_1_polygon" kindref="compound">concepts::Polygon</ref>&lt; Polygon &gt;)</type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -50,7 +51,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="57"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="57" column="1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -60,12 +61,12 @@
         <argsstring>()</argsstring>
         <name>multi_polygon</name>
         <briefdescription>
-<para>Default constructor, creating an empty \1. </para>        </briefdescription>
+<para>Default constructor, creating an empty <ref refid="classboost_1_1geometry_1_1model_1_1multi__polygon" kindref="compound">multi_polygon</ref>. </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="70" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="68" bodyend="70"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="68" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="68" bodyend="70"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1multi__polygon_1a90758f0fd28644a647efb91092ad811a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -77,12 +78,12 @@
           <declname>l</declname>
         </param>
         <briefdescription>
-<para>Constructor taking std::initializer_list, filling the \1. </para>        </briefdescription>
+<para>Constructor taking std::initializer_list, filling the <ref refid="classboost_1_1geometry_1_1model_1_1multi__polygon" kindref="compound">multi_polygon</ref>. </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="75" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="73" bodyend="75"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="73" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="73" bodyend="75"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -92,10 +93,32 @@
 [heading Model of]
 [link geometry.reference.concepts.concept_multi_polygon MultiPolygon Concept]
 </qbk.before.synopsis>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="56" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="55" bodyend="91"/>
+    <inheritancegraph>
+      <node id="518">
+        <label>boost::geometry::model::multi_polygon&lt; Polygon, Container, Allocator &gt;</label>
+        <link refid="classboost_1_1geometry_1_1model_1_1multi__polygon"/>
+        <childnode refid="519" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="519">
+        <label>Container&lt; Polygon, Allocator&lt; Polygon &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="520">
+        <label>boost::geometry::model::multi_polygon&lt; Polygon, Container, Allocator &gt;</label>
+        <link refid="classboost_1_1geometry_1_1model_1_1multi__polygon"/>
+        <childnode refid="521" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="521">
+        <label>Container&lt; Polygon, Allocator&lt; Polygon &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" line="56" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/multi_polygon.hpp" bodystart="55" bodyend="91"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1ab1696fd7e5e66c4e8deb1f3466299b74" prot="private" virt="non-virtual"><scope>boost::geometry::model::multi_polygon</scope><name>base_type</name></member>
-      <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1a9feddbc7a9075d7c1ef8ff40f7c14b1c" prot="private" virt="non-virtual"><scope>boost::geometry::model::multi_polygon</scope><name>BOOST_CONCEPT_ASSERT</name></member>
+      <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1a72287f2cf31374b97f6ba4fbff2daecb" prot="private" virt="non-virtual"><scope>boost::geometry::model::multi_polygon</scope><name>BOOST_CONCEPT_ASSERT</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1ac1410fc60a6af27d5956aa60d57b71f5" prot="public" virt="non-virtual"><scope>boost::geometry::model::multi_polygon</scope><name>multi_polygon</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1multi__polygon_1a90758f0fd28644a647efb91092ad811a" prot="public" virt="non-virtual"><scope>boost::geometry::model::multi_polygon</scope><name>multi_polygon</name></member>
     </listofallmembers>

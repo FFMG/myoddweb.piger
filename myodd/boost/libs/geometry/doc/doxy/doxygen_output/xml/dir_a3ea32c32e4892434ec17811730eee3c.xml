@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_a3ea32c32e4892434ec17811730eee3c" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer</compoundname>
     <innerfile refid="buffer__inserter_8hpp">buffer_inserter.hpp</innerfile>
     <innerfile refid="buffer__policies_8hpp">buffer_policies.hpp</innerfile>
     <innerfile refid="buffered__piece__collection_8hpp">buffered_piece_collection.hpp</innerfile>

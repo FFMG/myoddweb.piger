@@ -179,7 +179,7 @@ bool Actions::Add( Action* action )
 
   // make sure we have not reached our limit this can be changed in the config file
   // but if you have more than 2048 then we might have problems with loading speed, memory and so forth.
-  ASSERT( m_Actions.size() <= (size_t)myodd::config::get( _T("paths\\maxcommand"), 2048 ) );
+  ASSERT( m_Actions.size() <= (size_t)::myodd::config::Get( L"paths\\maxcommand", 2048 ) );
   
   // the action was added.
   return true;
@@ -253,15 +253,16 @@ MYODD_STRING Actions::toChar(  const MYODD_STRING& s, const COMMANDS_VALUE& cv )
 }
 
 // -------------------------------------------------------------
-void Actions::GetCommandValue( LPCTSTR lpName, COMMANDS_VALUE& cv ) const
+void Actions::GetCommandValue(const std::wstring& lpName, COMMANDS_VALUE& cv ) const
 {
-  MYODD_STRING sFullName = _T("commands\\");
-  sFullName += lpName;
+  // get the path
+  std::wstring fullPath = ::myodd::strings::Format( L"commands\\%s", lpName.c_str() );
 
-  LPCTSTR x = (LPCTSTR)myodd::config::get(sFullName + _T(".color"), cv.color);
-  cv.color = x;
-  cv.bBold    = myodd::config::get( sFullName+ _T(".bold"), cv.bBold);
-  cv.bItalic  = myodd::config::get( sFullName+ _T(".italic"), cv.bItalic );
+  // get the value
+  auto get = ::myodd::config::Get(fullPath + L".color", cv.color);
+  cv.color    = static_cast<const wchar_t*>(get);
+  cv.bBold    = ::myodd::config::Get( fullPath + L".bold", cv.bBold);
+  cv.bItalic  = ::myodd::config::Get( fullPath + L".italic", cv.bItalic );
 }
 
 // -------------------------------------------------------------
@@ -289,9 +290,9 @@ MYODD_STRING Actions::toChar( ) const
 
   //  the return string
   //  we keep it as global 'cause we are returning it.
-  MYODD_STRING szCurrentView = toChar( getActionAsTyped(), cv );
+  auto szCurrentView = toChar( getActionAsTyped(), cv );
   size_t count =  0;
-  for ( array_of_actions::const_iterator it =  m_ActionsMatch.begin(); it != m_ActionsMatch.end(); it++ )
+  for ( auto it =  m_ActionsMatch.begin(); it != m_ActionsMatch.end(); ++it )
   {
     //  we need a break after the previous line, (even for the current action)
     szCurrentView += _T("<br>");
@@ -509,10 +510,10 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
 void Actions::Init()
 {
   //  get the root directory
-  MYODD_STRING sPath = myodd::config::get( _T("paths\\commands") );
-  if( myodd::files::ExpandEnvironment( sPath, sPath ) )
+  std::wstring commandsPath = ::myodd::config::Get( L"paths\\commands", L"" );
+  if( myodd::files::ExpandEnvironment(commandsPath, commandsPath) )
   {
-    ParseDirectory( sPath.c_str(), _T("") );
+    ParseDirectory(commandsPath.c_str(), _T("") );
   }
 }
 
@@ -522,7 +523,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   // make sure that we do not have too many actions
   // this is a sign that something is broken
   // or that we are reading the root directory
-  if( m_Actions.size() > (size_t)myodd::config::get( _T("paths\\maxcommand"), 2048 ) )
+  if( m_Actions.size() > (size_t)::myodd::config::Get( L"paths\\maxcommand", 2048 ) )
   {
     ASSERT( 0 ); // you have reached the limit!
                  // it is pointless to try and add more command.
@@ -601,7 +602,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
       szName = myodd::strings::lower(szName );
       
       //  if we don't want to show the extension then strip it.
-      if( myodd::config::get( _T("commands\\show.extentions"), 0 ) == false )
+      if( ::myodd::config::Get( L"commands\\show.extentions", 0 ) == false )
       {
         myodd::files::StripExtension( szName );
       }        

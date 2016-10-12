@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1resolve__variant_1_1assign_3_01variant_3_01_b_o_o_s_t___v_a_r_i_a_n_t186dd3cfdb2ed1a3cb901682107e9649" kind="struct" prot="public">
     <compoundname>boost::geometry::resolve_variant::assign&lt; variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;</compoundname>
     <includes local="no">assign.hpp</includes>
@@ -32,14 +32,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" line="342" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" bodystart="340" bodyend="344"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" line="340" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" bodystart="340" bodyend="344"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" line="322" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" bodystart="321" bodyend="345"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" line="322" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/assign.hpp" bodystart="321" bodyend="345"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1resolve__variant_1_1assign_3_01variant_3_01_b_o_o_s_t___v_a_r_i_a_n_t186dd3cfdb2ed1a3cb901682107e9649_1a3259178d1f63a721cf91d04f0d54d762" prot="public" virt="non-virtual"><scope>boost::geometry::resolve_variant::assign&lt; variant&lt; BOOST_VARIANT_ENUM_PARAMS(T1)&gt;, variant&lt; BOOST_VARIANT_ENUM_PARAMS(T2)&gt; &gt;</scope><name>apply</name></member>
     </listofallmembers>

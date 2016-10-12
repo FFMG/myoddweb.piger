@@ -613,20 +613,20 @@ MYODD_CHAR* _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet)
 /**
 * Check if a given string is empty
 * "     " even if the len of the string is not 0
-* @param const MYODD_CHAR*
+* @param const wchar_t* src the string been checked.
 * @return bool if the string is empty or not.
 */
-bool IsEmptyString(const MYODD_CHAR* s )
+bool IsEmptyString(const wchar_t* src )
 {
-	if (s == nullptr)
+	if (src == nullptr)
 	{
 		return true;
 	}
 
-  auto len = _tcslen(s);
+  auto len = wcslen(src);
   for( ;len>0;)
   {
-    if( s[--len] != _T(' ') )
+    if( src[--len] != L' ' )
     {
       return false;
     }
@@ -635,15 +635,51 @@ bool IsEmptyString(const MYODD_CHAR* s )
 }
 
 /**
- * Check if a given string is empty
+* Check if a given string is empty
+* "     " even if the len of the string is not 0
+* @param const char* src the string been checked.
+* @return bool if the string is empty or not.
+*/
+bool IsEmptyString(const char* src)
+{
+  if (src == nullptr)
+  {
+    return true;
+  }
+
+  auto len = strlen(src);
+  for (; len>0;)
+  {
+    if (src[--len] != ' ')
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Check if a given wide string is empty
  * "     " even if the len of the string is not 0
- * @param const MYODD_STRING
+ * @param const std::wstring& src the string we are checking.
  * @return bool if the string is empty or not.
  */
-bool IsEmptyString( const MYODD_STRING& s )
+bool IsEmptyString( const std::wstring& src )
 {
-  return IsEmptyString( s.c_str() );
+  return IsEmptyString( src.c_str() );
 }
+
+/**
+* Check if a given string is empty
+* "     " even if the len of the string is not 0
+* @param const std::string& src the string we are checking.
+* @return bool if the string is empty or not.
+*/
+bool IsEmptyString(const std::string& src )
+{
+  return IsEmptyString(src.c_str());
+}
+
 
 /**
  * Convert a double value to an string given a format.

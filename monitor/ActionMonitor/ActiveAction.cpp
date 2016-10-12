@@ -206,7 +206,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
   }
 
   MYODD_STRING configName = _T("os\\setenvironment\\") + keyConfig;
-  if (myodd::config::get(configName, 1) != 1)
+  if (::myodd::config::Get(configName, 1) != 1)
   {
     return;
   }

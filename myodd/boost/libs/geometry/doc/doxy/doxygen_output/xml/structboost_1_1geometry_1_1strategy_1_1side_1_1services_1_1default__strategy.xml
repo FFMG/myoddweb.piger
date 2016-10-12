@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1side_1_1services_1_1default__strategy" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::side::services::default_strategy</compoundname>
     <includes local="no">side.hpp</includes>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side.hpp" line="43"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side.hpp" line="39" column="1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -55,7 +55,7 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side.hpp" line="38" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side.hpp" bodystart="37" bodyend="44"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/side.hpp" line="38" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/side.hpp" bodystart="37" bodyend="44"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1side_1_1services_1_1default__strategy_1ae208cc27753be700160eb7ad12b4dbc9" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::side::services::default_strategy</scope><name>BOOST_MPL_ASSERT_MSG</name></member>
     </listofallmembers>

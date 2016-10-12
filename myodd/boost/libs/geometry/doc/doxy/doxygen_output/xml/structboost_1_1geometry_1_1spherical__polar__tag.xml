@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1spherical__polar__tag" kind="struct" prot="public">
     <compoundname>boost::geometry::spherical_polar_tag</compoundname>
     <basecompoundref refid="structboost_1_1geometry_1_1spherical__tag" prot="public" virt="non-virtual">boost::geometry::spherical_tag</basecompoundref>
@@ -9,30 +9,30 @@
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="1123">
+      <node id="1329">
         <label>boost::geometry::spherical_tag</label>
         <link refid="structboost_1_1geometry_1_1spherical__tag"/>
       </node>
-      <node id="1122">
+      <node id="1328">
         <label>boost::geometry::spherical_polar_tag</label>
         <link refid="structboost_1_1geometry_1_1spherical__polar__tag"/>
-        <childnode refid="1123" relation="public-inheritance">
+        <childnode refid="1329" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="1125">
+      <node id="1331">
         <label>boost::geometry::spherical_tag</label>
         <link refid="structboost_1_1geometry_1_1spherical__tag"/>
       </node>
-      <node id="1124">
+      <node id="1330">
         <label>boost::geometry::spherical_polar_tag</label>
         <link refid="structboost_1_1geometry_1_1spherical__polar__tag"/>
-        <childnode refid="1125" relation="public-inheritance">
+        <childnode refid="1331" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" line="36" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" bodystart="36" bodyend="36"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" line="36" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/tags.hpp" bodystart="36" bodyend="36"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

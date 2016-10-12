@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__transform" kind="group">
     <compoundname>transform</compoundname>
     <title>transform: apply transformations on geometries</title>
@@ -91,7 +91,7 @@
  <qbk.distinguish>with strategy</qbk.distinguish> </para><para> <qbk>[include reference/algorithms/transform_with_strategy.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" line="453" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" bodystart="451" bodyend="456"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" line="451" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" bodystart="451" bodyend="456"/>
       </memberdef>
       <memberdef kind="function" id="group__transform_1ga5f8dab51e6972613f20878beb34feb36" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -151,7 +151,7 @@
  <qbk>[include reference/algorithms/transform.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" line="472" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" bodystart="471" bodyend="474"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" line="471" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/transform.hpp" bodystart="471" bodyend="474"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

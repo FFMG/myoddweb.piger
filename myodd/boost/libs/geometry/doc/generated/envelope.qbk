@@ -30,7 +30,7 @@ void envelope(Geometry const & geometry, Box & mbr)``
 [table
 [[Type] [Concept] [Name] [Description] ]
 [[Geometry const &] [Any type fulfilling a Geometry Concept ] [geometry] [A model of the specified concept ]]
-[[Box &] [Any type fulfilling a Box Concept ] [mbr] [A model of the specified Box Concept which is set to the \1]]
+[[Box &] [Any type fulfilling a Box Concept ] [mbr] [A model of the specified Box Concept which is set to the envelope]]
 ]
 
 
@@ -73,7 +73,7 @@ Box return_envelope(Geometry const & geometry)``
 
 
 [heading Returns]
-The calculated \1
+The calculated envelope
 
 [heading Header]
 Either

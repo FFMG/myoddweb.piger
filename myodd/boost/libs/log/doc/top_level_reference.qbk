@@ -17,6 +17,10 @@
 
 [template boost_log_exceptions_hpp[][headerref boost/log/exceptions.hpp]]
 
+[template class_log_bad_alloc[][classref boost::log::bad_alloc bad_alloc]]
+
+[template class_log_capacity_limit_reached[][classref boost::log::capacity_limit_reached capacity_limit_reached]]
+
 [template class_log_runtime_error[][classref boost::log::runtime_error runtime_error]]
 
 [template class_log_missing_value[][classref boost::log::missing_value missing_value]]

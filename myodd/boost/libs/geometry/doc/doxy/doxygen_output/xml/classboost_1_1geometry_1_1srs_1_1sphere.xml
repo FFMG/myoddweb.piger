@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1srs_1_1sphere" kind="class" prot="public">
     <compoundname>boost::geometry::srs::sphere</compoundname>
     <includes local="no">srs.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="150" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="150" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="150" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="150" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -42,7 +42,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="135" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="134" bodyend="139"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="134" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="134" bodyend="139"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1srs_1_1sphere_1a9867d897791e767450bf2b8b32c568bd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -66,7 +66,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="143" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="142" bodyend="147"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="142" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="142" bodyend="147"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1srs_1_1sphere_1a962965f709d441f33dfae79b93657c01" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
         <type></type>
@@ -83,7 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="128" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="126" bodyend="128"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="126" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="126" bodyend="128"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1srs_1_1sphere_1a97a10e08d64751135ba03fc261a2b242" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -96,14 +96,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="131" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="129" bodyend="131"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="129" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="129" bodyend="131"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
 <para>Defines sphere radius value for use in spherical CS calculations. </para>    </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="124" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="123" bodyend="151"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" line="124" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/srs.hpp" bodystart="123" bodyend="151"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1srs_1_1sphere_1a9660a1289ebc371bb2b858ff52b5e0b5" prot="public" virt="non-virtual"><scope>boost::geometry::srs::sphere</scope><name>get_radius</name></member>
       <member refid="classboost_1_1geometry_1_1srs_1_1sphere_1aed11b5cf205a0ea2723b2d08c8444374" prot="private" virt="non-virtual"><scope>boost::geometry::srs::sphere</scope><name>m_r</name></member>

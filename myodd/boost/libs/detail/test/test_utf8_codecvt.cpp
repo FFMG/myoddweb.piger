@@ -29,7 +29,7 @@ namespace std{
     using ::wcslen;
 #if !defined(UNDER_CE) && !defined(__PGIC__) 
     using ::w_int;
-#endif    
+#endif
 } // namespace std
 #endif
 
@@ -251,6 +251,16 @@ test_main(int /* argc */, char * /* argv */[]) {
             )
         );
     }
+
+    // Test length calculation
+    {
+        std::codecvt<wchar_t, char, std::mbstate_t> const& fac = std::use_facet< std::codecvt<wchar_t, char, std::mbstate_t> >(utf8_locale);
+        std::mbstate_t mbs = std::mbstate_t();
+        const int utf8_len = sizeof(td::utf8_encoding) / sizeof(*td::utf8_encoding);
+        int res = fac.length(mbs, reinterpret_cast< const char* >(td::utf8_encoding), reinterpret_cast< const char* >(td::utf8_encoding + utf8_len), ~static_cast< std::size_t >(0u));
+        BOOST_TEST_EQ(utf8_len, res);
+    }
+
     return EXIT_SUCCESS;
 }
 

@@ -307,7 +307,7 @@ BOOL CActionMonitorApp::InitInstance()
     LPCTSTR lpPath = sAPath.c_str();
 
     //  set it in case next time we have nothing
-    myodd::config::set( _T("paths\\commands"), lpPath );
+    myodd::config::Set( L"paths\\commands", lpPath );
   }
 
   // setup the log
@@ -412,7 +412,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   const MYODD_STRING path = _T("clipboard\\maxmemory");
 
   //  does the value exist?
-  if (!myodd::config::isset(path))
+  if (!myodd::config::Contains(path))
   {
     //  yes, it does, simply use the value and return.
     _maxClipboardSize = 0;
@@ -420,7 +420,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   }
 
   // do we have a valid value in the config?
-  auto maxClipboardSize = static_cast<size_t>(myodd::config::get( path, 1024 ));
+  auto maxClipboardSize = static_cast<size_t>(::myodd::config::Get( path, 1024 ));
   _maxClipboardSize = maxClipboardSize;
 }
 
@@ -432,27 +432,27 @@ void CActionMonitorApp::InitMaxClipboardSize()
  */
 void CActionMonitorApp::InitReservedPaths()
 {
-  MYODD_STRING sPath = myodd::config::get( _T("paths\\commands") );
+  MYODD_STRING sPath = ::myodd::config::Get( L"paths\\commands", L"");
 
   MYODD_STRING sPathIn;
   myodd::files::Join( sPathIn, sPath, AM_DIRECTORY_IN );
   myodd::files::CreateFullDirectory( sPathIn, false );
-  myodd::config::set( _T("paths\\in"), sPathIn );
+  myodd::config::Set( L"paths\\in", sPathIn );
 
   MYODD_STRING sPathOut;
   myodd::files::Join( sPathOut, sPath, AM_DIRECTORY_OUT );
   myodd::files::CreateFullDirectory( sPathOut, false );
-  myodd::config::set( _T("paths\\out"), sPathOut );
+  myodd::config::Set( L"paths\\out", sPathOut );
 
   MYODD_STRING sPathTmp;
   myodd::files::Join( sPathTmp, sPath, AM_DIRECTORY_TMP );
   myodd::files::CreateFullDirectory( sPathTmp, false );
-  myodd::config::set( _T("paths\\tmp"), sPathTmp );
+  myodd::config::Set( L"paths\\tmp", sPathTmp );
 
   MYODD_STRING sPathPlugin;
   myodd::files::Join( sPathPlugin, sPath, AM_DIRECTORY_PLUGIN );
   myodd::files::CreateFullDirectory( sPathPlugin, false );
-  myodd::config::set( _T("paths\\plugin"), sPathPlugin );
+  myodd::config::Set( L"paths\\plugin", sPathPlugin );
 }
 
 /**
@@ -487,7 +487,7 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
 
   // remember that calling ::init(...) will cause the current values to be saved.
   // so witting to the xml while the app is running will have no effect.
-  if (!myodd::config::init(sAPath))
+  if (!myodd::config::FromXMLFile(sAPath))
   {
     MessageBox(nullptr, _T("There was a problem with the given config, is it valid XML?"), _T("Cannot load config"), MB_OK);
     return false;
@@ -501,22 +501,22 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
 void CActionMonitorApp::InitLog()
 {
   // check if enabled
-  if (myodd::config::get(_T("log\\file\\enable"), 1 ) != 1)
+  if (::myodd::config::Get(_T("log\\file\\enable"), 1 ) != 1)
   {
     return;
   }
 
   //  the directory we will be logging to.
-  std::wstring logPath = myodd::config::get(_T("log\\file\\path"), LOG_PATH );
+  std::wstring logPath = ::myodd::config::Get(L"log\\file\\path", LOG_PATH );
 
   // the prefix of the filename.
-  std::wstring logPrefix = myodd::config::get(_T("log\\file\\prefix"), _T("myodd"));
+  std::wstring logPrefix = ::myodd::config::Get(L"log\\file\\prefix", L"myodd");
 
   // the file extension
-  std::wstring logExtension = myodd::config::get(_T("log\\file\\extension"), _T("log") );
+  std::wstring logExtension = ::myodd::config::Get(L"log\\file\\extension", L"log" );
 
   //  get the max file size.
-  size_t maxFileSize = myodd::config::get(_T("log\\file\\maxFileSize"), 10 );
+  size_t maxFileSize = ::myodd::config::Get(L"log\\file\\maxFileSize", 10 );
 
   //  sanity check
   if (maxFileSize > 10 || maxFileSize < 1)
@@ -537,7 +537,7 @@ void CActionMonitorApp::InitLog()
 int CActionMonitorApp::ExitInstance()
 {
   //  free/save the configuration file
-  myodd::config::free();
+  myodd::config::Close();
 
   //  this should never not be null.
   if (m_hMutex)

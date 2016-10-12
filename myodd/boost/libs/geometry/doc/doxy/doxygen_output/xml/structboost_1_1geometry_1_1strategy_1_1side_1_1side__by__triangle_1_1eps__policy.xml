@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1_1eps__policy" kind="struct" prot="private">
     <compoundname>boost::geometry::strategy::side::side_by_triangle::eps_policy</compoundname>
     <templateparamlist>
@@ -19,7 +19,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="58" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="58" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="58" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="58" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -34,7 +34,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="53" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="53" bodyend="53"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="53" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="53" bodyend="53"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1_1eps__policy_1a8fb11be87af52cbd55488f162a5a3d7b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -68,14 +68,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="55" bodyend="57"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="55" bodyend="57"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="52" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="51" bodyend="59"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="52" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="51" bodyend="59"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1_1eps__policy_1a41048c26aa4f061b709aa0380bd0386c" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::side::side_by_triangle::eps_policy</scope><name>eps_policy</name></member>
       <member refid="structboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1_1eps__policy_1a8fb11be87af52cbd55488f162a5a3d7b" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::side::side_by_triangle::eps_policy</scope><name>eps_policy</name></member>

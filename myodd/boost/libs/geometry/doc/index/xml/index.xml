@@ -1,97 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.7.6.1">
-  <compound refid="classstd_1_1allocator" kind="class"><name>std::allocator</name>
-    <member refid="classstd_1_1allocator_1a55f88dab1194d6b8a34e46017c4dfd79" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1auto__ptr" kind="class"><name>std::auto_ptr</name>
-    <member refid="classstd_1_1auto__ptr_1a076c936287003dc557981f9ccec1d841" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1auto__ptr_1aa16b96ffd607af4bb6ba4738d77124f8" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1bad__alloc" kind="class"><name>std::bad_alloc</name>
-  </compound>
-  <compound refid="classstd_1_1bad__cast" kind="class"><name>std::bad_cast</name>
-  </compound>
-  <compound refid="classstd_1_1bad__exception" kind="class"><name>std::bad_exception</name>
-  </compound>
-  <compound refid="classstd_1_1bad__typeid" kind="class"><name>std::bad_typeid</name>
-  </compound>
-  <compound refid="classstd_1_1basic__fstream" kind="class"><name>std::basic_fstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ifstream" kind="class"><name>std::basic_ifstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ios" kind="class"><name>std::basic_ios</name>
-  </compound>
-  <compound refid="classstd_1_1basic__iostream" kind="class"><name>std::basic_iostream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__istream" kind="class"><name>std::basic_istream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__istringstream" kind="class"><name>std::basic_istringstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ofstream" kind="class"><name>std::basic_ofstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ostream" kind="class"><name>std::basic_ostream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__ostringstream" kind="class"><name>std::basic_ostringstream</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string" kind="class"><name>std::basic_string</name>
-  </compound>
-  <compound refid="classstd_1_1basic__stringstream" kind="class"><name>std::basic_stringstream</name>
-  </compound>
-  <compound refid="classstd_1_1bitset" kind="class"><name>std::bitset</name>
-  </compound>
-  <compound refid="classstd_1_1complex" kind="class"><name>std::complex</name>
-  </compound>
-  <compound refid="classstd_1_1map_1_1const__iterator" kind="class"><name>std::map::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1const__iterator" kind="class"><name>std::multimap::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1const__iterator" kind="class"><name>std::basic_string::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1const__iterator" kind="class"><name>std::multiset::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1const__iterator" kind="class"><name>std::string::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1const__iterator" kind="class"><name>std::vector::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1const__iterator" kind="class"><name>std::wstring::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1const__iterator" kind="class"><name>std::deque::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1list_1_1const__iterator" kind="class"><name>std::list::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1set_1_1const__iterator" kind="class"><name>std::set::const_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1map_1_1const__reverse__iterator" kind="class"><name>std::map::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1const__reverse__iterator" kind="class"><name>std::multimap::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1const__reverse__iterator" kind="class"><name>std::basic_string::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1const__reverse__iterator" kind="class"><name>std::multiset::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1const__reverse__iterator" kind="class"><name>std::vector::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1const__reverse__iterator" kind="class"><name>std::string::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1set_1_1const__reverse__iterator" kind="class"><name>std::set::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1const__reverse__iterator" kind="class"><name>std::wstring::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1const__reverse__iterator" kind="class"><name>std::deque::const_reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1list_1_1const__reverse__iterator" kind="class"><name>std::list::const_reverse_iterator</name>
-  </compound>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.6">
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1default__min__elements__s" kind="struct"><name>boost::geometry::index::detail::default_min_elements_s</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1default__min__elements__s_1af10c4bcd2b2dc1244d9e1e4c9dd257c6" kind="variable"><name>raw_value</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1default__min__elements__s_1a3c73e751e7446d6b34869353c42a638d" kind="variable"><name>value</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1default__rstar__reinserted__elements__s" kind="struct"><name>boost::geometry::index::detail::default_rstar_reinserted_elements_s</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1default__rstar__reinserted__elements__s_1ae7e8b4fa48d63d489a56dccbd93335be" kind="variable"><name>value</name></member>
-  </compound>
-  <compound refid="classstd_1_1deque" kind="class"><name>std::deque</name>
-    <member refid="classstd_1_1deque_1a090b92581de438d2e14bedc190f0b0f9" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1domain__error" kind="class"><name>std::domain_error</name>
   </compound>
   <compound refid="classboost_1_1geometry_1_1index_1_1dynamic__linear" kind="class"><name>boost::geometry::index::dynamic_linear</name>
     <member refid="classboost_1_1geometry_1_1index_1_1dynamic__linear_1afcb84aef0eb4466d0a46c9ca6fc8d9ee" kind="variable"><name>m_max_elements</name></member>
@@ -149,14 +63,6 @@
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1equals_3_01_t_00_01void_01_4" kind="struct"><name>boost::geometry::index::detail::equals&lt; T, void &gt;</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1equals_3_01_t_00_01void_01_4_1a1032c90cf671bad1593dd3764ed0b0a7" kind="function"><name>apply</name></member>
   </compound>
-  <compound refid="classstd_1_1exception" kind="class"><name>std::exception</name>
-  </compound>
-  <compound refid="classstd_1_1ios__base_1_1failure" kind="class"><name>std::ios_base::failure</name>
-  </compound>
-  <compound refid="classstd_1_1fstream" kind="class"><name>std::fstream</name>
-  </compound>
-  <compound refid="classstd_1_1ifstream" kind="class"><name>std::ifstream</name>
-  </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1indexable" kind="struct"><name>boost::geometry::index::detail::indexable</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_1a5d9b0405e7f8a0d7596b73bf5fcf7ce9" kind="typedef"><name>result_type</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1indexable_1a6bc3d13759253370873ca5b39457eac6" kind="function"><name>BOOST_MPL_ASSERT_MSG</name></member>
@@ -192,53 +98,12 @@
     <member refid="classboost_1_1geometry_1_1index_1_1insert__iterator_1a2fc4597aa37cf185ed132884b3beb90d" kind="function"><name>operator++</name></member>
     <member refid="classboost_1_1geometry_1_1index_1_1insert__iterator_1aa4b211bf68b91e847451fbdaaf7188f4" kind="function"><name>operator++</name></member>
   </compound>
-  <compound refid="classstd_1_1invalid__argument" kind="class"><name>std::invalid_argument</name>
-  </compound>
-  <compound refid="classstd_1_1ios" kind="class"><name>std::ios</name>
-  </compound>
-  <compound refid="classstd_1_1ios__base" kind="class"><name>std::ios_base</name>
-  </compound>
-  <compound refid="classstd_1_1istream" kind="class"><name>std::istream</name>
-  </compound>
-  <compound refid="classstd_1_1istringstream" kind="class"><name>std::istringstream</name>
-  </compound>
-  <compound refid="classstd_1_1set_1_1iterator" kind="class"><name>std::set::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1iterator" kind="class"><name>std::basic_string::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1iterator" kind="class"><name>std::multimap::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1iterator" kind="class"><name>std::multiset::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1iterator" kind="class"><name>std::vector::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1iterator" kind="class"><name>std::string::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1map_1_1iterator" kind="class"><name>std::map::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1iterator" kind="class"><name>std::deque::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1list_1_1iterator" kind="class"><name>std::list::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1iterator" kind="class"><name>std::wstring::iterator</name>
-  </compound>
-  <compound refid="classstd_1_1length__error" kind="class"><name>std::length_error</name>
-  </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1linear" kind="struct"><name>boost::geometry::index::linear</name>
     <member refid="structboost_1_1geometry_1_1index_1_1linear_1a36a79c7ea313fa87b0dbd7ec549f982f" kind="variable"><name>max_elements</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1linear_1a4d38e783069dfbf9a511ba49c7ce5315" kind="variable"><name>min_elements</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1linear_1ac6f32e160803ac3b96e435558f1c9c3a" kind="function"><name>BOOST_MPL_ASSERT_MSG</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1linear_1acbe123037c8dcebc6657000f4f2ec6a4" kind="function"><name>get_max_elements</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1linear_1a6bd4b1d2e3e370785f164fb8046bff88" kind="function"><name>get_min_elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1list" kind="class"><name>std::list</name>
-    <member refid="classstd_1_1list_1a682e5c7c91eb377d0cb4f019b2b81a5d" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1logic__error" kind="class"><name>std::logic_error</name>
-  </compound>
-  <compound refid="classstd_1_1map" kind="class"><name>std::map</name>
-    <member refid="classstd_1_1map_1a8dc2b3ed44acf51fb2bd3eb30b237269" kind="variable"><name>keys</name></member>
-    <member refid="classstd_1_1map_1ac69fe575e214b796b8d9457b0c22469a" kind="variable"><name>elements</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1rtree_1_1members__holder" kind="struct"><name>boost::geometry::index::rtree::members_holder</name>
     <member refid="structboost_1_1geometry_1_1index_1_1rtree_1_1members__holder_1a79495f9743ff4a7b10a38253d34af7a5" kind="variable"><name>values_count</name></member>
@@ -257,26 +122,6 @@
     <member refid="structboost_1_1geometry_1_1index_1_1rtree_1_1members__holder_1aefb71c6ca0fda211fd3e4416a95b22be" kind="function"><name>parameters</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1rtree_1_1members__holder_1a0f3486692427b058904953d8a37af61f" kind="function"><name>allocators</name></member>
     <member refid="structboost_1_1geometry_1_1index_1_1rtree_1_1members__holder_1ac9ff09e4f6113a40e267bc95cd2593af" kind="function"><name>allocators</name></member>
-  </compound>
-  <compound refid="classstd_1_1multimap" kind="class"><name>std::multimap</name>
-    <member refid="classstd_1_1multimap_1a4e7d19eda5925ebfcf1e3dcba085cce5" kind="variable"><name>keys</name></member>
-    <member refid="classstd_1_1multimap_1abb7a4781b562bae0a54baeb5726ac28d" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1multiset" kind="class"><name>std::multiset</name>
-    <member refid="classstd_1_1multiset_1a93eb79091066c87f6dfb9d07c6c7cbcd" kind="variable"><name>keys</name></member>
-  </compound>
-  <compound refid="classstd_1_1ofstream" kind="class"><name>std::ofstream</name>
-  </compound>
-  <compound refid="classstd_1_1ostream" kind="class"><name>std::ostream</name>
-  </compound>
-  <compound refid="classstd_1_1ostringstream" kind="class"><name>std::ostringstream</name>
-  </compound>
-  <compound refid="classstd_1_1out__of__range" kind="class"><name>std::out_of_range</name>
-  </compound>
-  <compound refid="classstd_1_1overflow__error" kind="class"><name>std::overflow_error</name>
-  </compound>
-  <compound refid="classstd_1_1priority__queue" kind="class"><name>std::priority_queue</name>
-    <member refid="classstd_1_1priority__queue_1a4df2ae826d2b2caf4a6755adbd34a836" kind="variable"><name>elements</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1quadratic" kind="struct"><name>boost::geometry::index::quadratic</name>
     <member refid="structboost_1_1geometry_1_1index_1_1quadratic_1adb91881a291dbbb125a2e295e22c8094" kind="variable"><name>max_elements</name></member>
@@ -299,33 +144,8 @@
     <member refid="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1ad3fddae943b6a196f4edf30c481cb406" kind="function"><name>begin</name></member>
     <member refid="classboost_1_1geometry_1_1index_1_1adaptors_1_1detail_1_1query__range_1ab1931e9cefb6c4357da677b4bed4ba51" kind="function"><name>end</name></member>
   </compound>
-  <compound refid="classstd_1_1queue" kind="class"><name>std::queue</name>
-    <member refid="classstd_1_1queue_1aebacc4dcb935c5e54144e881eb41e356" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1range__error" kind="class"><name>std::range_error</name>
-  </compound>
   <compound refid="structboost_1_1range__mutable__iterator_3_01boost_1_1geometry_1_1index_1_1rtree_3_01_value_00_01377110862522c8f6142f1a65b06f20fa" kind="struct"><name>boost::range_mutable_iterator&lt; boost::geometry::index::rtree&lt; Value, Parameters, IndexableGetter, EqualTo, Allocator &gt; &gt;</name>
     <member refid="structboost_1_1range__mutable__iterator_3_01boost_1_1geometry_1_1index_1_1rtree_3_01_value_00_01377110862522c8f6142f1a65b06f20fa_1a31fb3372014914ca450efcc0aadb5736" kind="typedef"><name>type</name></member>
-  </compound>
-  <compound refid="classstd_1_1map_1_1reverse__iterator" kind="class"><name>std::map::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1basic__string_1_1reverse__iterator" kind="class"><name>std::basic_string::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1set_1_1reverse__iterator" kind="class"><name>std::set::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1vector_1_1reverse__iterator" kind="class"><name>std::vector::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multimap_1_1reverse__iterator" kind="class"><name>std::multimap::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1string_1_1reverse__iterator" kind="class"><name>std::string::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1wstring_1_1reverse__iterator" kind="class"><name>std::wstring::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1deque_1_1reverse__iterator" kind="class"><name>std::deque::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1list_1_1reverse__iterator" kind="class"><name>std::list::reverse_iterator</name>
-  </compound>
-  <compound refid="classstd_1_1multiset_1_1reverse__iterator" kind="class"><name>std::multiset::reverse_iterator</name>
   </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1rstar" kind="struct"><name>boost::geometry::index::rstar</name>
     <member refid="structboost_1_1geometry_1_1index_1_1rstar_1a95a7115404848fce8d09bb2b42271cd0" kind="variable"><name>max_elements</name></member>
@@ -418,69 +238,17 @@
     <member refid="classboost_1_1geometry_1_1index_1_1rtree_1ad5fdcc1561738afdb8f7eebf09d5ba76" kind="function"><name>query_dispatch</name></member>
     <member refid="classboost_1_1geometry_1_1index_1_1rtree_1a51dfe21d383cd6cfe51417c95725f7f7" kind="function"><name>raw_count</name></member>
   </compound>
-  <compound refid="classstd_1_1runtime__error" kind="class"><name>std::runtime_error</name>
-  </compound>
-  <compound refid="classstd_1_1set" kind="class"><name>std::set</name>
-    <member refid="classstd_1_1set_1a7f92ca6d6e5216b9c4be631bd87f1df4" kind="variable"><name>keys</name></member>
-  </compound>
-  <compound refid="classstd_1_1smart__ptr" kind="class"><name>std::smart_ptr</name>
-    <member refid="classstd_1_1smart__ptr_1a28b08019309e26ad374ef88cd2641ea3" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1smart__ptr_1a34adc9f82172f037139e4b916c275e90" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1stack" kind="class"><name>std::stack</name>
-    <member refid="classstd_1_1stack_1a020dde37186e898d2aacda2c136aef0f" kind="variable"><name>elements</name></member>
-  </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1std__tuple__equals" kind="struct"><name>boost::geometry::index::detail::std_tuple_equals</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1std__tuple__equals_1adcc250b04e32838afc4b1b6315f81467" kind="function"><name>apply</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1std__tuple__equals_3_01_tuple_00_01_i_00_01_i_01_4" kind="struct"><name>boost::geometry::index::detail::std_tuple_equals&lt; Tuple, I, I &gt;</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1std__tuple__equals_3_01_tuple_00_01_i_00_01_i_01_4_1aa58941438b5f6fd03372782fad7fa70c" kind="function"><name>apply</name></member>
   </compound>
-  <compound refid="classstd_1_1string" kind="class"><name>std::string</name>
-  </compound>
-  <compound refid="classstd_1_1stringstream" kind="class"><name>std::stringstream</name>
-  </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1tuple__equals" kind="struct"><name>boost::geometry::index::detail::tuple_equals</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1tuple__equals_1a26bdb0ab0394e64d8f848949e769de32" kind="function"><name>apply</name></member>
   </compound>
   <compound refid="structboost_1_1geometry_1_1index_1_1detail_1_1tuple__equals_3_01_tuple_00_01_i_00_01_i_01_4" kind="struct"><name>boost::geometry::index::detail::tuple_equals&lt; Tuple, I, I &gt;</name>
     <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1tuple__equals_3_01_tuple_00_01_i_00_01_i_01_4_1a8835d6ae4badd577f283921011ec421b" kind="function"><name>apply</name></member>
-  </compound>
-  <compound refid="classstd_1_1underflow__error" kind="class"><name>std::underflow_error</name>
-  </compound>
-  <compound refid="classstd_1_1unique__ptr" kind="class"><name>std::unique_ptr</name>
-    <member refid="classstd_1_1unique__ptr_1adae741234450c126c1260d389e1720b9" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1unique__ptr_1a94e5fed358ff2ef440499ac836dd68f2" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1valarray" kind="class"><name>std::valarray</name>
-    <member refid="classstd_1_1valarray_1adce3a23af4e9d36342f49f58300d8568" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1vector" kind="class"><name>std::vector</name>
-    <member refid="classstd_1_1vector_1a2396209900e8f592db1f0b2467f7d899" kind="variable"><name>elements</name></member>
-  </compound>
-  <compound refid="classstd_1_1weak__ptr" kind="class"><name>std::weak_ptr</name>
-    <member refid="classstd_1_1weak__ptr_1a2346c22e2352ad88a4973f2c8aab91a5" kind="variable"><name>ptr</name></member>
-    <member refid="classstd_1_1weak__ptr_1a3385d327d4804d675b2a052265651a7b" kind="function"><name>operator-&gt;</name></member>
-  </compound>
-  <compound refid="classstd_1_1wfstream" kind="class"><name>std::wfstream</name>
-  </compound>
-  <compound refid="classstd_1_1wifstream" kind="class"><name>std::wifstream</name>
-  </compound>
-  <compound refid="classstd_1_1wios" kind="class"><name>std::wios</name>
-  </compound>
-  <compound refid="classstd_1_1wistream" kind="class"><name>std::wistream</name>
-  </compound>
-  <compound refid="classstd_1_1wistringstream" kind="class"><name>std::wistringstream</name>
-  </compound>
-  <compound refid="classstd_1_1wofstream" kind="class"><name>std::wofstream</name>
-  </compound>
-  <compound refid="classstd_1_1wostream" kind="class"><name>std::wostream</name>
-  </compound>
-  <compound refid="classstd_1_1wostringstream" kind="class"><name>std::wostringstream</name>
-  </compound>
-  <compound refid="classstd_1_1wstring" kind="class"><name>std::wstring</name>
-  </compound>
-  <compound refid="classstd_1_1wstringstream" kind="class"><name>std::wstringstream</name>
   </compound>
   <compound refid="namespaceboost" kind="namespace"><name>boost</name>
   </compound>
@@ -587,12 +355,12 @@
   <compound refid="group__adaptors" kind="group"><name>adaptors</name>
     <member refid="group__adaptors_1ga4716cd5423bfed3ff3e69e9ec274ac81" kind="function"><name>queried</name></member>
   </compound>
-  <compound refid="dir_0d70c6d27e6ac49e78cf999cef868997" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/index/adaptors/</name>
+  <compound refid="dir_0d70c6d27e6ac49e78cf999cef868997" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/index/adaptors</name>
   </compound>
-  <compound refid="dir_a3f3934fe93618c2e6f3527095116c07" kind="dir"><name>/home/travis/build/boostorg/boost/boost/</name>
+  <compound refid="dir_a3f3934fe93618c2e6f3527095116c07" kind="dir"><name>/home/travis/build/boostorg/boost/boost</name>
   </compound>
-  <compound refid="dir_1db53b2a0b4206971f8a07039331107d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/</name>
+  <compound refid="dir_1db53b2a0b4206971f8a07039331107d" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry</name>
   </compound>
-  <compound refid="dir_fdbe8c75440c2b51ea0bcda5afe8de82" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/index/</name>
+  <compound refid="dir_fdbe8c75440c2b51ea0bcda5afe8de82" kind="dir"><name>/home/travis/build/boostorg/boost/boost/geometry/index</name>
   </compound>
 </doxygenindex>

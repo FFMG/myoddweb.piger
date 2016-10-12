@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1detail_1_1turns_1_1turn__printer" kind="struct" prot="public">
     <compoundname>boost::geometry::detail::turns::turn_printer</compoundname>
     <includes local="no">print_turns.hpp</includes>
@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="82" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="82" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="82" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="82" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1detail_1_1turns_1_1turn__printer_1a491791dc4d9c6cf44164c7cf584cd213" prot="public" static="no" mutable="no">
         <type>std::ostream &amp;</type>
@@ -28,7 +28,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="83" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="83" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="83" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="83" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -52,7 +52,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="39" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="38" bodyend="80"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="38" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="38" bodyend="80"/>
       </memberdef>
       <memberdef kind="function" id="structboost_1_1geometry_1_1detail_1_1turns_1_1turn__printer_1ab07f163b9bacb940e04e29527537d015" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -69,7 +69,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="35" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="32" bodyend="35"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="32" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="32" bodyend="35"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -77,33 +77,33 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="256">
+      <node id="281">
         <label>boost::geometry::detail::turns::turn_printer</label>
         <link refid="structboost_1_1geometry_1_1detail_1_1turns_1_1turn__printer"/>
-        <childnode refid="257" relation="usage">
+        <childnode refid="282" relation="usage">
           <edgelabel>out</edgelabel>
         </childnode>
       </node>
-      <node id="259">
+      <node id="284">
         <label>std::basic_ios&lt; Char &gt;</label>
-        <childnode refid="260" relation="public-inheritance">
+        <childnode refid="285" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="260">
+      <node id="285">
         <label>std::ios_base</label>
       </node>
-      <node id="257">
+      <node id="282">
         <label>std::ostream</label>
-        <childnode refid="258" relation="public-inheritance">
+        <childnode refid="283" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="258">
+      <node id="283">
         <label>std::basic_ostream&lt; char &gt;</label>
-        <childnode refid="259" relation="public-inheritance">
+        <childnode refid="284" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="31" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="30" bodyend="84"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" line="31" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/print_turns.hpp" bodystart="30" bodyend="84"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1detail_1_1turns_1_1turn__printer_1ad5bbef3b06dcb39607a140964754c84d" prot="public" virt="non-virtual"><scope>boost::geometry::detail::turns::turn_printer</scope><name>index</name></member>
       <member refid="structboost_1_1geometry_1_1detail_1_1turns_1_1turn__printer_1a7b8ba7edb88b8c5c396ed167c50bd547" prot="public" virt="non-virtual"><scope>boost::geometry::detail::turns::turn_printer</scope><name>operator()</name></member>

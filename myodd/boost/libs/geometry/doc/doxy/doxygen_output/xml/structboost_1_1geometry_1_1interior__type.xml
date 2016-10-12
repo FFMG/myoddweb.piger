@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1interior__type" kind="struct" prot="public">
     <compoundname>boost::geometry::interior_type</compoundname>
     <includes local="no">interior_type.hpp</includes>
@@ -20,11 +20,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" line="147" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" bodystart="147" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" line="147" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" bodystart="147" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Metafunction defining [*type] as the <ref refid="structboost_1_1geometry_1_1interior__type" kindref="compound">interior_type</ref> (container type of inner rings) of the \3. </para>    </briefdescription>
+<para>Metafunction defining [*type] as the <ref refid="structboost_1_1geometry_1_1interior__type" kindref="compound">interior_type</ref> (container type of inner rings) of the specified geometry type. </para>    </briefdescription>
     <detaileddescription>
 <para>Interior rings should be organized as a container (std::vector, std::deque, boost::array) with Boost.Range support. This metafunction defines the type of the container. <parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -35,7 +35,7 @@
 </parameteritem>
 </parameterlist>
  <qbk>[include reference/core/interior_type.qbk]</qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" line="142" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" bodystart="141" bodyend="148"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" line="142" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_type.hpp" bodystart="141" bodyend="148"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1interior__type_1a28215ebe3657036188f6c765250bec86" prot="public" virt="non-virtual"><scope>boost::geometry::interior_type</scope><name>type</name></member>
     </listofallmembers>

@@ -79,9 +79,9 @@
 
 [template class_log_fallback_to_throw[][classref boost::log::fallback_to_throw fallback_to_throw]]
 
-[template class_log_fallback_to_default[][classref boost::log::fallback_to_default fallback_to_default]]
-
 [template boost_log_attributes_fallback_policy_fwd_hpp[][headerref boost/log/attributes/fallback_policy_fwd.hpp]]
+
+[template class_log_fallback_to_default[][classref boost::log::fallback_to_default fallback_to_default]]
 
 [template boost_log_attributes_function_hpp[][headerref boost/log/attributes/function.hpp]]
 

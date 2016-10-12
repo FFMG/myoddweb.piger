@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="namespaceboost_1_1geometry_1_1range" kind="namespace">
     <compoundname>boost::geometry::range</compoundname>
     <innerclass refid="classboost_1_1geometry_1_1range_1_1back__insert__iterator" prot="public">boost::geometry::range::back_insert_iterator</innerclass>
@@ -29,7 +29,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="94" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="92" bodyend="97"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="92" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="92" bodyend="97"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a37def58f63100487876db185b77b41c7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -55,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="107" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="105" bodyend="110"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="105" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="105" bodyend="110"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a181e2238f79cfae182b635ad43b514a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -77,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="145" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="144" bodyend="149"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="144" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="144" bodyend="149"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a8f5be2b44372f48d92fa02bf989f750a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -99,7 +99,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="158" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="157" bodyend="162"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="157" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="157" bodyend="162"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a1e6b151e65be317d5cfaadfd26f5135e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -121,7 +121,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="412" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="411" bodyend="414"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="411" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="411" bodyend="414"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a7496ac429d8e4663e63cba08b2ebbbc5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -143,7 +143,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="172" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="171" bodyend="175"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="171" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="171" bodyend="175"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1ad94cb3604f7519262f2e3c91a71c70b9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -169,7 +169,7 @@
 <para>Short utility to conveniently remove an element from a mutable range. It uses std::copy() and <ref refid="namespaceboost_1_1geometry_1_1range_1a1bfbc6465449dd9c05df14247e6ec7da" kindref="member">resize()</ref>. Version taking non-mutable iterators. </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="269" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="267" bodyend="290"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="267" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="267" bodyend="290"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a885ee36338c8d06af3d513d31c827ec6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -199,7 +199,7 @@
 <para>Short utility to conveniently remove a range of elements from a mutable range. It uses std::copy() and <ref refid="namespaceboost_1_1geometry_1_1range_1a1bfbc6465449dd9c05df14247e6ec7da" kindref="member">resize()</ref>. Version taking non-mutable iterators. </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="321" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="318" bodyend="347"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="318" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="318" bodyend="347"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1ab5ead3456620abff836da1e9db3131e8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -221,7 +221,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="119" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="118" bodyend="122"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="118" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="118" bodyend="122"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a8e9c1776a685d572121fe56c754f7f99" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -243,7 +243,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="131" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="130" bodyend="134"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="130" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="130" bodyend="134"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a3ea08d8b2ff99dbdae56d5d950c45325" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -265,7 +265,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="209" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="208" bodyend="212"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="208" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="208" bodyend="212"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a94e3e9292b920b02e5dd708c1513988c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -291,7 +291,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="68" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="66" bodyend="71"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="66" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="66" bodyend="71"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a9c320c4f30f14532601736cd1148cd1b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -317,7 +317,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="81" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="79" bodyend="84"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="79" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="79" bodyend="84"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1aa7dcc5c6473c511ccf0d74c7eb998a27" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -343,7 +343,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="185" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="183" bodyend="187"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="183" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="183" bodyend="187"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1range_1a1bfbc6465449dd9c05df14247e6ec7da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -369,13 +369,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="197" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="195" bodyend="199"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="195" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" bodystart="195" bodyend="199"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="38"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/util/range.hpp" line="38" column="1"/>
   </compounddef>
 </doxygen>

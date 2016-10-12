@@ -39,6 +39,8 @@
 
 [template class_sinks_basic_formatting_sink_frontend_formatting_context[][classref boost::log::sinks::basic_formatting_sink_frontend::formatting_context formatting_context]]
 
+[template class_sinks_basic_formatting_sink_frontend_formatting_context_cleanup_guard[][classref boost::log::sinks::basic_formatting_sink_frontend::formatting_context::cleanup_guard cleanup_guard]]
+
 [template boost_log_sinks_block_on_overflow_hpp[][headerref boost/log/sinks/block_on_overflow.hpp]]
 
 [template class_sinks_block_on_overflow[][classref boost::log::sinks::block_on_overflow block_on_overflow]]
@@ -91,6 +93,8 @@
 
 [template class_sinks_flushing[][classref boost::log::sinks::flushing flushing]]
 
+[template class_sinks_combine_requirements[][classref boost::log::sinks::combine_requirements combine_requirements]]
+
 [template class_sinks_has_requirement[][classref boost::log::sinks::has_requirement has_requirement]]
 
 [template boost_log_sinks_sink_hpp[][headerref boost/log/sinks/sink.hpp]]
@@ -120,6 +124,10 @@
 [template class_file_rotation_at_time_point[][classref boost::log::sinks::file::rotation_at_time_point rotation_at_time_point]]
 
 [template class_file_rotation_at_time_interval[][classref boost::log::sinks::file::rotation_at_time_interval rotation_at_time_interval]]
+
+[template boost_log_sinks_text_ipc_message_queue_backend_hpp[][headerref boost/log/sinks/text_ipc_message_queue_backend.hpp]]
+
+[template class_sinks_text_ipc_message_queue_backend[][classref boost::log::sinks::text_ipc_message_queue_backend text_ipc_message_queue_backend]]
 
 [template boost_log_sinks_text_multifile_backend_hpp[][headerref boost/log/sinks/text_multifile_backend.hpp]]
 

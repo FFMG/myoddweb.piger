@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Backend Requirements</title>
 <link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Chapter&#160;1.&#160;Boost.Multiprecision">
 <link rel="up" href="../ref.html" title="Reference">
 <link rel="prev" href="internals.html" title="Internal Support Code">
@@ -45,7 +45,8 @@
         In the following tables, type B is the <code class="computeroutput"><span class="identifier">Backend</span></code>
         template argument to <code class="computeroutput"><span class="identifier">number</span></code>,
         <code class="computeroutput"><span class="identifier">b</span></code> and <code class="computeroutput"><span class="identifier">b2</span></code>
-        are a variables of type B, <code class="computeroutput"><span class="identifier">cb</span></code>,
+        are a variables of type B, <code class="computeroutput"><span class="identifier">pb</span></code>
+        is a variable of type B*, <code class="computeroutput"><span class="identifier">cb</span></code>,
         <code class="computeroutput"><span class="identifier">cb2</span></code> and <code class="computeroutput"><span class="identifier">cb3</span></code>
         are constant variables of type <code class="computeroutput"><span class="keyword">const</span>
         <span class="identifier">B</span></code>, <code class="computeroutput"><span class="identifier">rb</span></code>
@@ -3806,6 +3807,36 @@
 <tr>
 <td>
                 <p>
+                  <code class="computeroutput"><span class="identifier">eval_modf</span><span class="special">(</span><span class="identifier">b</span><span class="special">,</span>
+                  <span class="identifier">cb</span><span class="special">,</span>
+                  <span class="identifier">pb</span><span class="special">)</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="keyword">void</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Performs the equivalent operation to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">modf</span></code>
+                  on argument <code class="computeroutput"><span class="identifier">cb</span></code>,
+                  and store the integer result in <code class="computeroutput"><span class="special">*</span><span class="identifier">pb</span></code> and the fractional part in
+                  <code class="computeroutput"><span class="identifier">b</span></code>. Only required
+                  when <code class="computeroutput"><span class="identifier">B</span></code> is an floating-point
+                  type. The default version of this function is synthesised from
+                  other operations above.
+                </p>
+              </td>
+<td>
+                <p>
+                  &#160;
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
                   <code class="computeroutput"><span class="identifier">eval_pow</span><span class="special">(</span><span class="identifier">b</span><span class="special">,</span>
                   <span class="identifier">cb</span><span class="special">,</span>
                   <span class="identifier">cb2</span><span class="special">)</span></code>
@@ -3926,6 +3957,34 @@
                   such that <span class="emphasis"><em>1 &lt;= cb*r<sup>-b</sup> &lt; r</em></span>, where <span class="emphasis"><em>r</em></span>
                   is the radix of type B. The default version of this function is
                   implemented in terms of <code class="computeroutput"><span class="identifier">eval_ilogb</span></code>.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <span class="emphasis"><em>hashing:</em></span>
+                </p>
+              </td>
+<td class="auto-generated">&#160;</td>
+<td class="auto-generated">&#160;</td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">hash_value</span><span class="special">(</span><span class="identifier">cb</span><span class="special">)</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Returns a hash value for the argument that is suitable for use
+                  with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">hash</span></code> etc. If not provided then
+                  no automatic hashing support will be available for the number type.
                 </p>
               </td>
 </tr>

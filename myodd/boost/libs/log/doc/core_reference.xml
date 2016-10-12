@@ -62,8 +62,8 @@ This header contains logging core class definition. </para><namespace name="boos
 <emphasis role="bold">Throws:</emphasis> If an exception handler is installed, only throws if the handler throws. Otherwise may throw if one of the sinks throws. </para></description><requires><para><computeroutput>!!rec == true</computeroutput> </para></requires><postconditions><para><computeroutput>!rec == true</computeroutput> </para></postconditions></method>
 </method-group>
 <destructor><description><para>Destructor. Destroys the core, releases any sinks and attributes that were registered. </para></description></destructor>
-<constructor><parameter name=""><paramtype><classname>core</classname> const &amp;</paramtype></parameter></constructor>
-<copy-assignment><type><classname>core</classname> &amp;</type><parameter name=""><paramtype><classname>core</classname> const &amp;</paramtype></parameter></copy-assignment>
+<constructor cv="= delete"><parameter name=""><paramtype><classname>core</classname> const &amp;</paramtype></parameter></constructor>
+<copy-assignment cv="= delete"><type><classname>core</classname> &amp;</type><parameter name=""><paramtype><classname>core</classname> const &amp;</paramtype></parameter></copy-assignment>
 <method-group name="public static functions">
 <method name="get" specifiers="static"><type>core_ptr</type><description><para>
 </para></description><returns><para>The method returns a pointer to the logging core singleton instance. </para></returns></method>
@@ -108,7 +108,7 @@ This header contains a logging record class definition. </para><namespace name="
 
 </para></description><requires><para><computeroutput>!!*this</computeroutput> </para></requires><postconditions><para><computeroutput>!*this</computeroutput> </para></postconditions><returns><para>The record view that contains all attribute values from the original record. </para></returns></method>
 </method-group>
-<constructor><description><para>Default constructor. Creates an empty record that is equivalent to the invalid record handle.</para><para>
+<constructor cv="noexcept"><description><para>Default constructor. Creates an empty record that is equivalent to the invalid record handle.</para><para>
 </para></description><postconditions><para><computeroutput>!*this == true</computeroutput> </para></postconditions></constructor>
 <constructor cv="noexcept"><parameter name="that"><paramtype><classname>record</classname> &amp;&amp;</paramtype></parameter><description><para>Move constructor. Source record contents unspecified after the operation. </para></description></constructor>
 <destructor><description><para>Destructor. Destroys the record, releases any sinks and attribute values that were involved in processing this record. </para></description></destructor>

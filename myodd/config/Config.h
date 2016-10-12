@@ -1,50 +1,66 @@
+// ***********************************************************************
+// Copyright (c) 2016 Florent Guelfucci
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+// @see https://opensource.org/licenses/MIT
+// ***********************************************************************
 #pragma once
-#ifndef __Config_h
-#define __Config_h
 
-#include "ConfigBase.h"
+#include <string>
+#include "../dynamic/any.h"
 
 namespace myodd{ namespace config{
+  /**
+  * Add a value to the map of values.
+  * @param const std::wstring& name the name of the value we are setting.
+  * @param const ::myodd::dynamic::Any& value the value been added.
+  */
+  void Set(const std::wstring& path, const ::myodd::dynamic::Any& value );
+  
+  /**
+   * Try and get a value, if the value is not found, we throw.
+   * @param const std::wstring& path the name of the value we are looking for.
+   * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
+   * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
+   */
+  ::myodd::dynamic::Any Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue );
 
-bool init( const MYODD_STRING& sz );
-void free();
-bool HasBeenInitialized();
+  /**
+   * Check if the value has been set or not.
+   * @param const std::wstring& path the path we are looking for.
+   * @return bool if the path exists or not.
+   */
+  bool Contains(const std::wstring& path);
 
-bool set ( const MYODD_STRING& stdNotifyName, const DATA_CONTAINER& data );
+  /**
+   * Close the instance, free all the memory
+   * Update the file if need be.
+   */
+  void Close();
 
-// set a group of values.
-bool set ( const MYODD_STRING& stdVarName, const Data &d );
-bool setTemp ( const MYODD_STRING& stdVarName, const Data &d );
-
-// get a value, return a default if it does not exits.
-const Data& get( const MYODD_STRING& stdVarName,  const Data& defaultValue = Data() );
-const Data& getTemp( const MYODD_STRING& stdVarName,  const Data& defaultValue = Data() );
-
-// return true if a value is set
-bool isset( const MYODD_STRING& stdVarName );
-
-// unset a value.
-void unset( const MYODD_STRING& stdVarName );
-
-// add an item to monitor
-// call the function if/when the item change
-void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
-
-template <class T>
-void AddConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, T* lParam ){
-  AddConfigurationMonitor( s, notif, (MYODD_LPARAM)lParam );
-}
-
-// add an item to monitor
-// call the function if/when the item change
-void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, MYODD_LPARAM lParam );
-
-template <class T>
-void RemoveConfigurationMonitor( const MYODD_STRING& s, CONFIG_NOTIFY notif, T* lParam ){
-  RemoveConfigurationMonitor( s, notif, (MYODD_LPARAM)lParam );
-}
-
+  /**
+   * Create the data holder from and XML
+   * @path const std::wstring& path the path of the xml we want to load.
+   * @return bool success or not.
+   */
+  bool FromXMLFile( const std::wstring& path );
 } //  config
 } //  myodd
-
-#endif  //  __Config_h

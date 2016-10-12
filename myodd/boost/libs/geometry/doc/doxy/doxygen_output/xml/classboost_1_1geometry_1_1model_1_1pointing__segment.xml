@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1model_1_1pointing__segment" kind="class" prot="public">
     <compoundname>boost::geometry::model::pointing_segment</compoundname>
     <includes local="no">pointing_segment.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="52" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="52" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="52" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -35,7 +35,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="55" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="55" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1model_1_1pointing__segment_1a8bc1050731083acc4e2716d12f147d91" prot="public" static="no" mutable="no">
         <type>point_type *</type>
@@ -48,17 +48,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="56" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="56" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="56" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="56" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-func">
-      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1pointing__segment_1a4321aa7d0987d6e510690488bb3d5168" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1pointing__segment_1af1320761e3d826d2d11e87ff5d08953f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>boost::geometry::model::pointing_segment&lt; ConstOrNonConstPoint &gt;::BOOST_CONCEPT_ASSERT</definition>
-        <argsstring>((typename boost::mpl::if_&lt; boost::is_const&lt; ConstOrNonConstPoint &gt;, concept::Point&lt; ConstOrNonConstPoint &gt;, concept::ConstPoint&lt; ConstOrNonConstPoint &gt; &gt;))</argsstring>
+        <argsstring>((typename boost::mpl::if_&lt; boost::is_const&lt; ConstOrNonConstPoint &gt;, concepts::Point&lt; ConstOrNonConstPoint &gt;, concepts::ConstPoint&lt; ConstOrNonConstPoint &gt; &gt;))</argsstring>
         <name>BOOST_CONCEPT_ASSERT</name>
         <param>
-          <type>(typename boost::mpl::if_&lt; boost::is_const&lt; ConstOrNonConstPoint &gt;, <ref refid="classboost_1_1geometry_1_1concept_1_1_point" kindref="compound">concept::Point</ref>&lt; ConstOrNonConstPoint &gt;, <ref refid="classboost_1_1geometry_1_1concept_1_1_const_point" kindref="compound">concept::ConstPoint</ref>&lt; ConstOrNonConstPoint &gt; &gt;)</type>
+          <type>(typename boost::mpl::if_&lt; boost::is_const&lt; ConstOrNonConstPoint &gt;, <ref refid="classboost_1_1geometry_1_1concepts_1_1_point" kindref="compound">concepts::Point</ref>&lt; ConstOrNonConstPoint &gt;, <ref refid="classboost_1_1geometry_1_1concepts_1_1_const_point" kindref="compound">concepts::ConstPoint</ref>&lt; ConstOrNonConstPoint &gt; &gt;)</type>
         </param>
         <briefdescription>
         </briefdescription>
@@ -66,7 +66,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="50"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="43" column="1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="61" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="58" bodyend="61"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="58" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="58" bodyend="61"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1model_1_1pointing__segment_1afe26ebf6994c53b12bc328b129e2f01b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -102,16 +102,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="66" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="63" bodyend="66"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="63" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="63" bodyend="66"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="42" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="41" bodyend="67"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" line="42" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/pointing_segment.hpp" bodystart="41" bodyend="67"/>
     <listofallmembers>
-      <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1a4321aa7d0987d6e510690488bb3d5168" prot="private" virt="non-virtual"><scope>boost::geometry::model::pointing_segment</scope><name>BOOST_CONCEPT_ASSERT</name></member>
+      <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1af1320761e3d826d2d11e87ff5d08953f" prot="private" virt="non-virtual"><scope>boost::geometry::model::pointing_segment</scope><name>BOOST_CONCEPT_ASSERT</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1a1f9454874be628c97599476c70b4ace7" prot="public" virt="non-virtual"><scope>boost::geometry::model::pointing_segment</scope><name>first</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1abcf86cdb4bf632e9aebe723cb21afc30" prot="private" virt="non-virtual"><scope>boost::geometry::model::pointing_segment</scope><name>point_type</name></member>
       <member refid="classboost_1_1geometry_1_1model_1_1pointing__segment_1ad61a350c66bd6ab5b8e08be19dbe3733" prot="public" virt="non-virtual"><scope>boost::geometry::model::pointing_segment</scope><name>pointing_segment</name></member>

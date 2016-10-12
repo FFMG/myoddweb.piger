@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1closure" kind="struct" prot="public">
     <compoundname>boost::geometry::closure</compoundname>
     <includes local="no">closure.hpp</includes>
@@ -14,22 +14,22 @@
         <definition>const closure_selector boost::geometry::closure&lt; Geometry &gt;::value</definition>
         <argsstring></argsstring>
         <name>value</name>
-        <initializer> core_dispatch::closure
+        <initializer>= core_dispatch::closure
         &lt;
             typename <ref refid="structboost_1_1geometry_1_1tag" kindref="compound">tag</ref>&lt;Geometry&gt;::type,
             typename <ref refid="structboost_1_1geometry_1_1util_1_1bare__type" kindref="compound">util::bare_type</ref>&lt;Geometry&gt;::type
-        &gt;::<ref refid="structboost_1_1geometry_1_1closure_1aa4b0a120a15b8d787706d2271329e974" kindref="member">value</ref></initializer>
+        &gt;::value</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" line="194" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" bodystart="190" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" line="191" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" bodystart="191" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
-<para>Metafunction defining [*value] as the closure (clockwise, counterclockwise) of the \3. </para>    </briefdescription>
+<para>Metafunction defining [*value] as the closure (clockwise, counterclockwise) of the specified geometry type. </para>    </briefdescription>
     <detaileddescription>
 <para><parameterlist kind="templateparam"><parameteritem>
 <parameternamelist>
@@ -40,7 +40,7 @@
 </parameteritem>
 </parameterlist>
  <qbk>[include reference/core/closure.qbk]</qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" line="189" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" bodystart="188" bodyend="195"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" line="190" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/closure.hpp" bodystart="189" bodyend="196"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1closure_1aa4b0a120a15b8d787706d2271329e974" prot="public" virt="non-virtual"><scope>boost::geometry::closure</scope><name>value</name></member>
     </listofallmembers>

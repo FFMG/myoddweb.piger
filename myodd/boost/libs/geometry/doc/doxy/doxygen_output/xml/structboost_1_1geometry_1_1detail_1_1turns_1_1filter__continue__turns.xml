@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1detail_1_1turns_1_1filter__continue__turns" kind="struct" prot="public">
     <compoundname>boost::geometry::detail::turns::filter_continue_turns</compoundname>
     <includes local="no">filter_continue_turns.hpp</includes>
@@ -28,14 +28,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" line="27" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" bodystart="27" bodyend="27"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" line="27" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" bodystart="27" bodyend="27"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" line="26" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" bodystart="25" bodyend="28"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" line="26" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/turns/filter_continue_turns.hpp" bodystart="25" bodyend="28"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1detail_1_1turns_1_1filter__continue__turns_1a02e1643da8ceb136cd8ffc2ae3d39834" prot="public" virt="non-virtual"><scope>boost::geometry::detail::turns::filter_continue_turns</scope><name>apply</name></member>
     </listofallmembers>

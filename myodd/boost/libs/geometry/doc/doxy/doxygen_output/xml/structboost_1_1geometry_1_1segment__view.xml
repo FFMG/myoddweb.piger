@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1segment__view" kind="struct" prot="public">
     <compoundname>boost::geometry::segment_view</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">detail::points_view&lt; geometry::point_type&lt; Segment &gt;::type, 2 &gt;</basecompoundref>
     <includes local="no">segment_view.hpp</includes>
     <innerclass refid="classboost_1_1geometry_1_1segment__view_1_1copy__policy" prot="private">boost::geometry::segment_view::copy_policy</innerclass>
     <templateparamlist>
@@ -21,7 +22,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" line="52" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" bodystart="52" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" line="52" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -40,7 +41,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" line="57" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" bodystart="55" bodyend="57"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" bodystart="55" bodyend="57"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -58,7 +59,29 @@
 [heading Model of]
 [link geometry.reference.concepts.concept_linestring LineString Concept]
 </qbk.before.synopsis> </para><para> <qbk>[include reference/views/segment_view.qbk]</qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" line="51" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" bodystart="45" bodyend="77"/>
+    <inheritancegraph>
+      <node id="1285">
+        <label>detail::points_view&lt; geometry::point_type&lt; Segment &gt;::type, 2 &gt;</label>
+      </node>
+      <node id="1284">
+        <label>boost::geometry::segment_view&lt; Segment &gt;</label>
+        <link refid="structboost_1_1geometry_1_1segment__view"/>
+        <childnode refid="1285" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1287">
+        <label>detail::points_view&lt; geometry::point_type&lt; Segment &gt;::type, 2 &gt;</label>
+      </node>
+      <node id="1286">
+        <label>boost::geometry::segment_view&lt; Segment &gt;</label>
+        <link refid="structboost_1_1geometry_1_1segment__view"/>
+        <childnode refid="1287" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" line="51" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/views/segment_view.hpp" bodystart="45" bodyend="77"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1segment__view_1a53aef4fbc9e7640c12d4a7f3b94e3a11" prot="public" virt="non-virtual"><scope>boost::geometry::segment_view</scope><name>point_type</name></member>
       <member refid="structboost_1_1geometry_1_1segment__view_1a3b6869acd5e86170db496c200014047a" prot="public" virt="non-virtual"><scope>boost::geometry::segment_view</scope><name>segment_view</name></member>

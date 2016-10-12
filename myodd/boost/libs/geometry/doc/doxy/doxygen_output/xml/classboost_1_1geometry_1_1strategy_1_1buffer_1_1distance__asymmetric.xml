@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1distance__asymmetric" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::buffer::distance_asymmetric</compoundname>
     <includes local="no">buffer_distance_asymmetric.hpp</includes>
@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="104" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="104" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="104" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="104" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classboost_1_1geometry_1_1strategy_1_1buffer_1_1distance__asymmetric_1a6dd85e562afe94c08df5e047e399b6bb" prot="private" static="no" mutable="no">
         <type>NumericType</type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="105" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="105" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="105" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="105" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -71,7 +71,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="55" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="51" bodyend="55"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="51" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="51" bodyend="55"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -94,7 +94,7 @@ This strategy can be used as DistanceStrategy for the buffer algorithm. It can b
 \* [link geometry.reference.algorithms.buffer.buffer_7_with_strategies buffer (with strategies)]
 \* [link geometry.reference.strategies.strategy_buffer_distance_symmetric distance_symmetric]
 </qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="46" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="45" bodyend="106"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" line="46" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp" bodystart="45" bodyend="106"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1distance__asymmetric_1aae9a067157b46964e87039c494603dba" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::buffer::distance_asymmetric</scope><name>distance_asymmetric</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1buffer_1_1distance__asymmetric_1a2dd968090ea62eec07933c34ee78e84d" prot="private" virt="non-virtual"><scope>boost::geometry::strategy::buffer::distance_asymmetric</scope><name>m_left</name></member>

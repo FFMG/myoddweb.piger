@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1within_1_1within__longitude__range" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::within::within_longitude_range</compoundname>
     <includes local="no">point_in_box.hpp</includes>
@@ -32,14 +32,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" line="66" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" bodystart="65" bodyend="69"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" line="65" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" bodystart="65" bodyend="69"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" line="63" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" bodystart="62" bodyend="70"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" line="63" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/point_in_box.hpp" bodystart="62" bodyend="70"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1within_1_1within__longitude__range_1a1a8e8375552f0e2650b69f9127fbfad8" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::within::within_longitude_range</scope><name>apply</name></member>
     </listofallmembers>

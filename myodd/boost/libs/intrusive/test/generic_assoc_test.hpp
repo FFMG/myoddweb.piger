@@ -32,18 +32,13 @@ BOOST_INTRUSIVE_HAS_MEMBER_FUNC_CALLED(has_insert_before, insert_before)
 
 BOOST_INTRUSIVE_HAS_MEMBER_FUNC_CALLED(is_treap, priority_comp)
 
-template<class ValueTraits, class ContainerDefiner>
+template<class ContainerDefiner>
 struct test_generic_assoc
 {
-   typedef typename ValueTraits::value_type value_type;
-   typedef typename ValueTraits::pointer pointer;
-   typedef typename ValueTraits::const_pointer const_pointer;
-   typedef typename ValueContainer< value_type >::type value_cont_type;
-   typedef typename pointer_traits<pointer>::reference      reference;
-   typedef typename pointer_traits
-      <const_pointer>::reference                            const_reference;
+   typedef typename ContainerDefiner::value_cont_type    value_cont_type;
 
    static void test_all(value_cont_type&);
+   static void test_root(value_cont_type&);
    static void test_clone(value_cont_type&);
    static void test_insert_erase_burst();
    static void test_container_from_end(value_cont_type&, detail::true_type);
@@ -60,8 +55,8 @@ struct test_generic_assoc
    static void test_container_from_iterator(value_cont_type&, detail::false_type) {}
 };
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>::
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::
    test_container_from_iterator(value_cont_type& values, detail::true_type)
 {
    typedef typename ContainerDefiner::template container
@@ -84,8 +79,8 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::
    }
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_erase_burst()
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_insert_erase_burst()
 {
    //value_cont_type values;
    const std::size_t MaxValues = 200;
@@ -136,11 +131,12 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_erase_burst(
    }
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>::test_all(value_cont_type& values)
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_all(value_cont_type& values)
 {
    typedef typename ContainerDefiner::template container
       <>::type assoc_type;
+   test_root(values);
    test_clone(values);
    test_container_from_end(values, detail::bool_< assoc_type::has_container_from_iterator >());
    test_splay_up(values, detail::bool_< has_splay< assoc_type >::value >());
@@ -151,17 +147,49 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_all(value_cont_type
    test_container_from_iterator(values, detail::bool_< assoc_type::has_container_from_iterator >());
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>
-   ::test_clone(value_cont_type& values)
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_root(value_cont_type& values)
+{
+   typedef typename ContainerDefiner::template container<>::type  assoc_type;
+   typedef typename assoc_type::iterator                          iterator;
+   typedef typename assoc_type::const_iterator                    const_iterator;
+
+   assoc_type testset1;
+   const assoc_type &ctestset1 = testset1;;
+
+   BOOST_TEST( testset1.root()  ==  testset1.end());
+   BOOST_TEST(ctestset1.root()  == ctestset1.cend());
+   BOOST_TEST( testset1.croot() == ctestset1.cend());
+
+
+   testset1.insert(values.begin(), values.begin() + values.size());
+
+   iterator i = testset1.root();
+   iterator i2(i);
+   BOOST_TEST( i.go_parent().go_parent() == i2);
+
+   const_iterator ci = ctestset1.root();
+   const_iterator ci2(ci);
+   BOOST_TEST( ci.go_parent().go_parent() == ci2);
+
+   ci = testset1.croot();
+   ci2 = ci;
+   BOOST_TEST( ci.go_parent().go_parent() == ci2);
+}
+
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_clone(value_cont_type& values)
 {
    {
       typedef typename ContainerDefiner::template container
          <>::type assoc_type;
+      typedef typename assoc_type::value_type value_type;
+      typedef typename assoc_type::size_type size_type;
+
       assoc_type testset1 (values.begin(), values.begin() + values.size());
       assoc_type testset2;
 
-      typedef typename assoc_type::size_type size_type;
+
       size_type const testset1_oldsize = testset1.size();
       testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       BOOST_TEST (testset1.size() == testset1_oldsize);
@@ -177,8 +205,8 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>
    }
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>
    ::test_container_from_end(value_cont_type& values, detail::true_type)
 {
    typedef typename ContainerDefiner::template container
@@ -188,8 +216,8 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>
    BOOST_TEST (testset == assoc_type::container_from_end_iterator(testset.cend()));
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>::test_splay_up
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_splay_up
 (value_cont_type& values, detail::true_type)
 {
    typedef typename ContainerDefiner::template container
@@ -223,8 +251,8 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_splay_up
    }
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>::test_splay_down
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_splay_down
 (value_cont_type& values, detail::true_type)
 {
    typedef typename ContainerDefiner::template container
@@ -259,8 +287,8 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_splay_down
    }
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>::test_rebalance
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_rebalance
 (value_cont_type& values, detail::true_type)
 {
    typedef typename ContainerDefiner::template container
@@ -294,8 +322,8 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_rebalance
    }
 }
 
-template<class ValueTraits, class ContainerDefiner>
-void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_before
+template<class ContainerDefiner>
+void test_generic_assoc<ContainerDefiner>::test_insert_before
 (value_cont_type& values, detail::true_type)
 {
    typedef typename ContainerDefiner::template container

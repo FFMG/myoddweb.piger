@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1de9im_1_1static__mask" kind="class" prot="public">
     <compoundname>boost::geometry::de9im::static_mask</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">detail::relate::static_mask&lt; boost::mpl::vector_c&lt; char, II, IB, IE, BI, BB, BE, EI, EB, EE &gt;, 3, 3 &gt;</basecompoundref>
     <includes local="no">de9im.hpp</includes>
     <templateparamlist>
       <param>
@@ -127,7 +128,29 @@
 </parameteritem>
 </parameterlist>
  <qbk>[heading See also]</qbk>   <qbk>* [link geometry.reference.algorithms.relate relate]</qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="157" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="148" bodyend="157"/>
+    <inheritancegraph>
+      <node id="172">
+        <label>boost::geometry::de9im::static_mask&lt; II, IB, IE, BI, BB, BE, EI, EB, EE &gt;</label>
+        <link refid="classboost_1_1geometry_1_1de9im_1_1static__mask"/>
+        <childnode refid="173" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="173">
+        <label>detail::relate::static_mask&lt; boost::mpl::vector_c&lt; char, II, IB, IE, BI, BB, BE, EI, EB, EE &gt;, 3, 3 &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="174">
+        <label>boost::geometry::de9im::static_mask&lt; II, IB, IE, BI, BB, BE, EI, EB, EE &gt;</label>
+        <link refid="classboost_1_1geometry_1_1de9im_1_1static__mask"/>
+        <childnode refid="175" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="175">
+        <label>detail::relate::static_mask&lt; boost::mpl::vector_c&lt; char, II, IB, IE, BI, BB, BE, EI, EB, EE &gt;, 3, 3 &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="157" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="148" bodyend="157"/>
     <listofallmembers>
     </listofallmembers>
   </compounddef>

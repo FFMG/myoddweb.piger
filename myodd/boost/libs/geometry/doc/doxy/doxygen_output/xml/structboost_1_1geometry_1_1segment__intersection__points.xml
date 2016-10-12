@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1segment__intersection__points" kind="struct" prot="public">
     <compoundname>boost::geometry::segment_intersection_points</compoundname>
     <includes local="no">intersection_result.hpp</includes>
@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="69" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="69" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="68" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="68" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -38,7 +38,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="64" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="64" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="63" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="63" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1segment__intersection__points_1ae3286ca870f5411c66713f3abee6f08e" prot="public" static="no" mutable="no">
         <type><ref refid="structboost_1_1geometry_1_1fraction__type" kindref="compound">fraction_type</ref>&lt; SegmentRatio &gt;</type>
@@ -51,7 +51,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="68" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="68" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="67" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="67" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1segment__intersection__points_1a52fb0898bf2d0a9ed59f97f509131623" prot="public" static="no" mutable="no">
         <type>Point</type>
@@ -64,7 +64,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="67" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="67" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="66" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="66" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -79,15 +79,15 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="73" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="71" bodyend="73"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="70" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="70" bodyend="72"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
 <para>return-type for segment-intersection </para>    </briefdescription>
     <detaileddescription>
-<para><simplesect kind="note"><para>Set in <ref refid="intersection__points_8hpp" kindref="compound">intersection_points.hpp</ref>, from <ref refid="structboost_1_1geometry_1_1segment__intersection__info" kindref="compound">segment_intersection_info</ref> </para></simplesect>
+<para><simplesect kind="note"><para>Set in <ref refid="intersection__points_8hpp" kindref="compound">intersection_points.hpp</ref>, from segment_intersection_info </para></simplesect>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="63" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="62" bodyend="74"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" line="62" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/intersection_result.hpp" bodystart="61" bodyend="73"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1segment__intersection__points_1a01de8a7bae6f84897c8bad7fcbe2912a" prot="public" virt="non-virtual"><scope>boost::geometry::segment_intersection_points</scope><name>count</name></member>
       <member refid="structboost_1_1geometry_1_1segment__intersection__points_1ae3286ca870f5411c66713f3abee6f08e" prot="public" virt="non-virtual"><scope>boost::geometry::segment_intersection_points</scope><name>fractions</name></member>

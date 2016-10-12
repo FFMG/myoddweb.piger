@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_75e122e08cf075e5a1adee2d1bc7049c" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate</compoundname>
     <innerfile refid="relate_2areal__areal_8hpp">areal_areal.hpp</innerfile>
     <innerfile refid="boundary__checker_8hpp">boundary_checker.hpp</innerfile>
     <innerfile refid="de9im_8hpp">de9im.hpp</innerfile>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1empty__input__exception" kind="class" prot="public">
     <compoundname>boost::geometry::empty_input_exception</compoundname>
     <basecompoundref refid="classboost_1_1geometry_1_1invalid__input__exception" prot="public" virt="non-virtual">boost::geometry::invalid_input_exception</basecompoundref>
@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" line="78" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" bodystart="78" bodyend="78"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" line="78" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" bodystart="78" bodyend="78"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1empty__input__exception_1ae4346930d2abdde6a7d142b3493d66ac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
         <type>char const *</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" line="81" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" bodystart="80" bodyend="83"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" line="80" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" bodystart="80" bodyend="83"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -44,52 +44,52 @@
 \* [link geometry.reference.algorithms.length the length function]
 </qbk>  </para>    </detaileddescription>
     <inheritancegraph>
-      <node id="318">
+      <node id="355">
         <label>boost::geometry::exception</label>
         <link refid="classboost_1_1geometry_1_1exception"/>
-        <childnode refid="319" relation="public-inheritance">
+        <childnode refid="356" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="316">
+      <node id="353">
         <label>boost::geometry::empty_input_exception</label>
         <link refid="classboost_1_1geometry_1_1empty__input__exception"/>
-        <childnode refid="317" relation="public-inheritance">
+        <childnode refid="354" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="319">
+      <node id="356">
         <label>std::exception</label>
       </node>
-      <node id="317">
+      <node id="354">
         <label>boost::geometry::invalid_input_exception</label>
         <link refid="classboost_1_1geometry_1_1invalid__input__exception"/>
-        <childnode refid="318" relation="public-inheritance">
+        <childnode refid="355" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="322">
+      <node id="359">
         <label>boost::geometry::exception</label>
         <link refid="classboost_1_1geometry_1_1exception"/>
-        <childnode refid="323" relation="public-inheritance">
+        <childnode refid="360" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="320">
+      <node id="357">
         <label>boost::geometry::empty_input_exception</label>
         <link refid="classboost_1_1geometry_1_1empty__input__exception"/>
-        <childnode refid="321" relation="public-inheritance">
+        <childnode refid="358" relation="public-inheritance">
         </childnode>
       </node>
-      <node id="323">
+      <node id="360">
         <label>std::exception</label>
       </node>
-      <node id="321">
+      <node id="358">
         <label>boost::geometry::invalid_input_exception</label>
         <link refid="classboost_1_1geometry_1_1invalid__input__exception"/>
-        <childnode refid="322" relation="public-inheritance">
+        <childnode refid="359" relation="public-inheritance">
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" line="75" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" bodystart="74" bodyend="84"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" line="75" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/exception.hpp" bodystart="74" bodyend="84"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1empty__input__exception_1a1c3d65842f0324e29c489917264afdb7" prot="public" virt="non-virtual"><scope>boost::geometry::empty_input_exception</scope><name>empty_input_exception</name></member>
       <member refid="classboost_1_1geometry_1_1invalid__input__exception_1ac12de04bce791576ca6c52fd32f2c357" prot="public" virt="non-virtual"><scope>boost::geometry::empty_input_exception</scope><name>invalid_input_exception</name></member>

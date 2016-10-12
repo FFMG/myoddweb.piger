@@ -210,7 +210,6 @@ inline time_t RandomAbsoluteExpiry( time_t min = 0, bool moreThanAYear = false )
 template<typename T>
 T CharRandom()
 {
-
   // construct a trivial random generator engine from a time-based seed:
   unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
   std::default_random_engine generator(seed);
@@ -237,6 +236,22 @@ inline bool BoolRandomNumber()
 inline std::wstring Uuid()
 {
   return boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
+}
+
+inline std::wstring XmlElementName()
+{
+  std::wstring result = L"";
+  const std::wstring a = L"abcdefghejklmnopqrstuvwxyz";
+  const auto la = (int)a.length() - 1;
+
+  const std::wstring b = L"abcdefghejklmnopqrstuvwxyz1234567890-";
+  const auto lb = (int)b.length() - 1;
+
+  for (auto i = 0; i < 10; ++i)
+  {
+    result += (i == 0 || i == 9) ? a[IntRandomNumber<int>(0, la )] : b[IntRandomNumber<int>(0, lb)];
+  }
+  return result;
 }
 
 enum ExpectedIpcDataType : char

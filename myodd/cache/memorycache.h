@@ -34,6 +34,8 @@
 #include <time.h> // time_t
 #include <future>
 
+#include "../dynamic/any.h"
+
 namespace myodd {
   namespace cache {
     /**
@@ -138,7 +140,7 @@ namespace myodd {
       * @param const wchar_t* regionName
       * @return ::myodd::dynamic::Any* the value or null.
       */
-      virtual const ::myodd::dynamic::Any Get(const wchar_t* key, const wchar_t* regionName = nullptr) const;
+      virtual const ::myodd::dynamic::Any& Get(const wchar_t* key, const wchar_t* regionName = nullptr) const;
 
       /**
       * Inserts a cache entry into the cache by using a CacheItem instance to supply the key and value for the cache entry.
@@ -246,6 +248,9 @@ namespace myodd {
 
       // the timer thread
       std::future<void> _absoluteExpirationTimerThread;
+
+      // null value
+      const ::myodd::dynamic::Any _nullValue;
 
       // call the timer
       void AbsoluteExpirationTimer();

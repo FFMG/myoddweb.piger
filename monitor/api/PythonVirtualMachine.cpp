@@ -107,7 +107,7 @@ bool PythonVirtualMachine::Initialize()
     return false;
   }
 
-  bool embedded = (bool)myodd::config::get(_T("python\\useembedded"), true);
+  bool embedded = ::myodd::config::Get( L"python\\useembedded", true);
   if (embedded)
   {
     // try and load the python core files.

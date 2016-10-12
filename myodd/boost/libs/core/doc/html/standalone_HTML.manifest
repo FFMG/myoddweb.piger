@@ -14,13 +14,11 @@ core/ref.html
 boost/reference_wrapper.html
 boost/is_reference_wrapper.html
 boost/unwrap_reference.html
-boost/ref_idm14304.html
-boost/cref_idm10384.html
-boost/ref_idm6464.html
-boost/cref_idm3408.html
+boost/ref_idm45398594477968.html
+boost/cref_idm45398594473152.html
+boost/ref_idm45398594468336.html
+boost/cref_idm45398586640272.html
 boost/unwrap_ref.html
-BOOST_REF_CONST.html
-BOOST_REF_DELETE.html
 core/scoped_enum.html
 core/swap.html
 core/typeinfo.html

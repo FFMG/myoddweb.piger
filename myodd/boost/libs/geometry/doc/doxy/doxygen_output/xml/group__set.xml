@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__set" kind="group">
     <compoundname>set</compoundname>
     <title>set: set geometries</title>
@@ -70,7 +70,7 @@
  <qbk>[include reference/core/set_point.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" line="309" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" bodystart="303" bodyend="322"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" line="303" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" bodystart="303" bodyend="322"/>
       </memberdef>
       <memberdef kind="function" id="group__set_1gab344165e39efdf322c11f5b3205cb302" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -150,7 +150,7 @@
  <qbk.distinguish>with index</qbk.distinguish>   <qbk>[include reference/core/set_box.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" line="381" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" bodystart="375" bodyend="395"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" line="375" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/access.hpp" bodystart="375" bodyend="395"/>
       </memberdef>
       <memberdef kind="function" id="group__set_1ga78f2e71135a76ccad3e37afab58b0f70" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -212,7 +212,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/radian_access.hpp" line="149" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/radian_access.hpp" bodystart="147" bodyend="152"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/radian_access.hpp" line="147" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/radian_access.hpp" bodystart="147" bodyend="152"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

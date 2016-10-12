@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="rational_8hpp" kind="file">
     <compoundname>rational.hpp</compoundname>
     <includes local="no">boost/rational.hpp</includes>
@@ -7,60 +7,60 @@
     <includes refid="coordinate__cast_8hpp" local="no">boost/geometry/util/coordinate_cast.hpp</includes>
     <includes refid="select__most__precise_8hpp" local="no">boost/geometry/util/select_most_precise.hpp</includes>
     <incdepgraph>
-      <node id="62616">
+      <node id="65580">
         <label>boost/lexical_cast.hpp</label>
       </node>
-      <node id="62618">
+      <node id="65582">
         <label>boost/mpl/if.hpp</label>
       </node>
-      <node id="62615">
+      <node id="65579">
         <label>string</label>
       </node>
-      <node id="62611">
+      <node id="65575">
         <label>boost/rational.hpp</label>
       </node>
-      <node id="62610">
+      <node id="65574">
         <label>/home/travis/build/boostorg/boost/boost/geometry/util/rational.hpp</label>
         <link refid="rational.hpp"/>
-        <childnode refid="62611" relation="include">
+        <childnode refid="65575" relation="include">
         </childnode>
-        <childnode refid="62612" relation="include">
+        <childnode refid="65576" relation="include">
         </childnode>
-        <childnode refid="62613" relation="include">
+        <childnode refid="65577" relation="include">
         </childnode>
-        <childnode refid="62617" relation="include">
+        <childnode refid="65581" relation="include">
         </childnode>
       </node>
-      <node id="62620">
+      <node id="65584">
         <label>boost/type_traits/is_fundamental.hpp</label>
       </node>
-      <node id="62614">
+      <node id="65578">
         <label>cstdlib</label>
       </node>
-      <node id="62619">
+      <node id="65583">
         <label>boost/type_traits/is_floating_point.hpp</label>
       </node>
-      <node id="62612">
+      <node id="65576">
         <label>boost/numeric/conversion/bounds.hpp</label>
       </node>
-      <node id="62617">
+      <node id="65581">
         <label>boost/geometry/util/select_most_precise.hpp</label>
         <link refid="select__most__precise_8hpp"/>
-        <childnode refid="62618" relation="include">
+        <childnode refid="65582" relation="include">
         </childnode>
-        <childnode refid="62619" relation="include">
+        <childnode refid="65583" relation="include">
         </childnode>
-        <childnode refid="62620" relation="include">
+        <childnode refid="65584" relation="include">
         </childnode>
       </node>
-      <node id="62613">
+      <node id="65577">
         <label>boost/geometry/util/coordinate_cast.hpp</label>
         <link refid="coordinate__cast_8hpp"/>
-        <childnode refid="62614" relation="include">
+        <childnode refid="65578" relation="include">
         </childnode>
-        <childnode refid="62615" relation="include">
+        <childnode refid="65579" relation="include">
         </childnode>
-        <childnode refid="62616" relation="include">
+        <childnode refid="65580" relation="include">
         </childnode>
       </node>
     </incdepgraph>

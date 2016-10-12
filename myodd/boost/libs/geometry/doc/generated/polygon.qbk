@@ -47,12 +47,12 @@ class model::polygon
 [[Function] [Description] [Parameters] ]
 [[``polygon()``
 
-] [Default constructor, creating an empty \1. ] [
+] [Default constructor, creating an empty polygon. ] [
 
 ]]
 [[``polygon(std::initializer_list< ring_type > l)``
 
-] [Constructor taking std::initializer_list, filling the \1. ] [[* std::initializer_list< ring_type >]: ['l]:  
+] [Constructor taking std::initializer_list, filling the polygon. ] [[* std::initializer_list< ring_type >]: ['l]:  
 
 
 

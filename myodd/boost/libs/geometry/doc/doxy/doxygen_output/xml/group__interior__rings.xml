@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__interior__rings" kind="group">
     <compoundname>interior_rings</compoundname>
     <title>interior_rings: interior_rings</title>
@@ -42,7 +42,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" line="115" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" bodystart="114" bodyend="121"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" line="114" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" bodystart="114" bodyend="121"/>
       </memberdef>
       <memberdef kind="function" id="group__interior__rings_1gace65f7563db807c7d2b2ad8bc4f7116b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -82,7 +82,7 @@
  <qbk.distinguish>const version</qbk.distinguish>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" line="137" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" bodystart="135" bodyend="143"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" line="135" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/core/interior_rings.hpp" bodystart="135" bodyend="143"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

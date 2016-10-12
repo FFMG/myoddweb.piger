@@ -36,7 +36,7 @@ comparable_distance_result<Geometry1, Geometry2, Strategy>::type comparable_dist
 
 
 [heading Returns]
-The calculated \1
+The calculated comparable distance
 
 [heading Header]
 Either
@@ -73,7 +73,7 @@ default_comparable_distance_result<Geometry1, Geometry2>::type comparable_distan
 
 
 [heading Returns]
-The calculated \1
+The calculated comparable distance
 
 [heading Header]
 Either
@@ -113,7 +113,7 @@ distance_result<Geometry1, Geometry2, Strategy>::type distance(Geometry1 const &
 
 
 [heading Returns]
-The calculated \1 
+The calculated distance 
 
 [heading Header]
 Either
@@ -157,7 +157,7 @@ default_distance_result<Geometry1, Geometry2>::type distance(Geometry1 const & g
 
 
 [heading Returns]
-The calculated \1
+The calculated distance
 
 [heading Header]
 Either

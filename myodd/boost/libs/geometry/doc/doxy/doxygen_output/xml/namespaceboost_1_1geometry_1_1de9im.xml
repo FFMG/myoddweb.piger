@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="namespaceboost_1_1geometry_1_1de9im" kind="namespace">
     <compoundname>boost::geometry::de9im</compoundname>
     <innerclass refid="classboost_1_1geometry_1_1de9im_1_1mask" prot="public">boost::geometry::de9im::mask</innerclass>
@@ -25,7 +25,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="197" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="196" bodyend="202"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="196" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="196" bodyend="202"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1de9im_1a4a0a9c642eb485e28aed2b1c961fbe07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -51,7 +51,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="212" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="211" bodyend="220"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="211" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="211" bodyend="220"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1de9im_1a607513c57e6d565b9feea5714df4450e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -162,7 +162,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="238" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="236" bodyend="244"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="236" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="236" bodyend="244"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1de9im_1a2f15b47be775b80193ee56fc4289e7de" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -231,13 +231,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="261" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="259" bodyend="267"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="259" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" bodystart="259" bodyend="267"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="36"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/relate/de9im.hpp" line="36" column="1"/>
   </compounddef>
 </doxygen>

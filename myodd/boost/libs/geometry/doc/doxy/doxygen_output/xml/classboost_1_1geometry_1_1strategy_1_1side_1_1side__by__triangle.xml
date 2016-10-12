@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::side::side_by_triangle</compoundname>
     <includes local="no">side_by_triangle.hpp</includes>
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="200" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="199" bodyend="241"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="199" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="199" bodyend="241"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1a55b8d0435b33f0fa86772ca27003ac53" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -97,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="88" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="87" bodyend="110"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="87" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="87" bodyend="110"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1a1a1656c066b9ffdc9301ac81e739d826" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -139,7 +139,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="122" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="121" bodyend="125"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="121" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="121" bodyend="125"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -154,7 +154,7 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="49" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="48" bodyend="243"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" line="49" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/side_by_triangle.hpp" bodystart="48" bodyend="243"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1a19703035da3a0fe85963fd33bbf55055" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::side::side_by_triangle</scope><name>apply</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1side_1_1side__by__triangle_1a55b8d0435b33f0fa86772ca27003ac53" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::side::side_by_triangle</scope><name>side_value</name></member>

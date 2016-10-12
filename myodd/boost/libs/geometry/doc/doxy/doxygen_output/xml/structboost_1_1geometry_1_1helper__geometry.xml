@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1helper__geometry" kind="struct" prot="public">
     <compoundname>boost::geometry::helper_geometry</compoundname>
     <includes local="no">helper_geometry.hpp</includes>
@@ -28,14 +28,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="156" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="156" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="156" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="156" bodyend="-1"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="152" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="151" bodyend="157"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" line="152" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/geometries/helper_geometry.hpp" bodystart="151" bodyend="157"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1helper__geometry_1aeb2bda51658ca4b50af21bb5ee606d11" prot="public" virt="non-virtual"><scope>boost::geometry::helper_geometry</scope><name>type</name></member>
     </listofallmembers>

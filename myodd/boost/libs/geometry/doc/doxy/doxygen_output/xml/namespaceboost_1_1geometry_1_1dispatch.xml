@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="namespaceboost_1_1geometry_1_1dispatch" kind="namespace">
     <compoundname>boost::geometry::dispatch</compoundname>
     <innerclass refid="structboost_1_1geometry_1_1dispatch_1_1copy__segment__point_3_01detail_1_1buffer_1_1buffered__ri3c7bfcbd8e37adae623500f2221c498d" prot="public">boost::geometry::dispatch::copy_segment_point&lt; detail::buffer::buffered_ring_collection_tag, MultiRing, Reverse, SegmentIdentifier, PointOut &gt;</innerclass>
@@ -11,6 +11,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffered_ring.hpp" line="161"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffered_ring.hpp" line="177" column="1"/>
   </compounddef>
 </doxygen>

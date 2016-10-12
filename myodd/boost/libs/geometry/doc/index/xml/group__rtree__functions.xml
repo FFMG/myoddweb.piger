@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__rtree__functions" kind="group">
     <compoundname>rtree_functions</compoundname>
     <title>R-tree free functions (boost::geometry::index::)</title>
@@ -55,7 +55,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1789" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1787" bodyend="1791"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1787" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1787" bodyend="1791"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1ga056469ea699e609e67762fe1b789997f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -122,7 +122,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1808" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1806" bodyend="1810"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1806" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1806" bodyend="1810"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gab4edad000d63eb103f2dad3813ceb2b3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -178,7 +178,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1826" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1824" bodyend="1828"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1824" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1824" bodyend="1828"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gaf353d90fd933e6110b031f63166fb45a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -232,7 +232,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1849" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1847" bodyend="1851"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1847" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1847" bodyend="1851"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gaa460a8985496cf133f63f245527ac6e7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -300,7 +300,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1876" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1874" bodyend="1878"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1874" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1874" bodyend="1878"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1ga700c922f8b4d5ebd073e999e12b55249" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -357,7 +357,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1902" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1900" bodyend="1904"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1900" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1900" bodyend="1904"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gadb43b211d5d743ebe2ef256328286e95" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -426,8 +426,7 @@ It is possible to negate spatial predicates: <itemizedlist>
 <bold>Nearest predicate</bold></para><para>If the nearest predicate is passed a k-nearest neighbor search will be performed. This query will result in returning k values to the output iterator. Only one nearest predicate may be passed to the query. It may be generated by: <itemizedlist>
 <listitem><para><computeroutput><ref refid="group__predicates_1ga8772d9d3e5b12b3292f7d94d47310e3e" kindref="member">boost::geometry::index::nearest()</ref></computeroutput>.</para></listitem>
 </itemizedlist>
-<bold>Connecting predicates</bold></para><para>Predicates may be passed together connected with <computeroutput>operator&amp;&amp;()</computeroutput>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-// return elements intersecting box
+<bold>Connecting predicates</bold></para><para>Predicates may be passed together connected with <computeroutput>operator&amp;&amp;()</computeroutput>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>// return elements intersecting box
 bgi::query(tree, bgi::intersects(box), std::back_inserter(result));
 // return elements intersecting poly but not within box
 bgi::query(tree, bgi::intersects(poly) &amp;&amp; !bgi::within(box), std::back_inserter(result));
@@ -468,7 +467,7 @@ tree.query(bgi::intersects(box),
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1985" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1982" bodyend="1987"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="1982" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="1982" bodyend="1987"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1ga45c2b7b112bf730d10367e10df62aa3c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -506,8 +505,7 @@ tree.query(bgi::intersects(box),
         <briefdescription>
 <para>Returns the query iterator pointing at the begin of the query range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be used to perform iterative queries. For the information about the predicates which may be passed to this method see <ref refid="group__rtree__functions_1gadb43b211d5d743ebe2ef256328286e95" kindref="member">query()</ref>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_something());
+<para>This method returns the iterator which may be used to perform iterative queries. For the information about the predicates which may be passed to this method see <ref refid="group__rtree__functions_1gadb43b211d5d743ebe2ef256328286e95" kindref="member">query()</ref>.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_something());
 </verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>If predicates copy throws. If allocation throws.</para></simplesect>
@@ -531,7 +529,7 @@ std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_someth
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2022" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2020" bodyend="2024"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2020" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2020" bodyend="2024"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1ga5c9a1eb0421bf2c702392247d48143e5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -562,8 +560,7 @@ std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_someth
         <briefdescription>
 <para>Returns the query iterator pointing at the end of the query range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be used to check if the query has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_something());
+<para>This method returns the iterator which may be used to check if the query has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_something());
 </verbatim></para></simplesect>
 <simplesect kind="par"><title>Iterator category</title><para>ForwardIterator</para></simplesect>
 <simplesect kind="par"><title>Throws</title><para>Nothing</para></simplesect>
@@ -572,7 +569,7 @@ std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_someth
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2052" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2051" bodyend="2054"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2051" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2051" bodyend="2054"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1ga2467dc6ac90303496abd6ebd136eba18" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -603,8 +600,7 @@ std::for_each(bgi::qbegin(tree, bgi::nearest(pt, 3)), bgi::qend(tree), do_someth
         <briefdescription>
 <para>Returns the iterator pointing at the begin of the rtree values range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be used to iterate over all values stored in the rtree.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-std::for_each(bgi::begin(tree), bgi::end(tree), do_something());
+<para>This method returns the iterator which may be used to iterate over all values stored in the rtree.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>std::for_each(bgi::begin(tree), bgi::end(tree), do_something());
 // the same as
 std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </verbatim></para></simplesect>
@@ -615,7 +611,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2085" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2084" bodyend="2087"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2084" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2084" bodyend="2087"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1ga8fd1e53d8492643cbc9840ff715bb736" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -646,8 +642,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
         <briefdescription>
 <para>Returns the iterator pointing at the end of the rtree values range. </para>        </briefdescription>
         <detaileddescription>
-<para>This method returns the iterator which may be compared with the iterator returned by <ref refid="group__rtree__functions_1ga2467dc6ac90303496abd6ebd136eba18" kindref="member">begin()</ref> in order to check if the iteration has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>
-std::for_each(bgi::begin(tree), bgi::end(tree), do_something());
+<para>This method returns the iterator which may be compared with the iterator returned by <ref refid="group__rtree__functions_1ga2467dc6ac90303496abd6ebd136eba18" kindref="member">begin()</ref> in order to check if the iteration has ended.</para><para><simplesect kind="par"><title>Example</title><para><verbatim>std::for_each(bgi::begin(tree), bgi::end(tree), do_something());
 // the same as
 std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </verbatim></para></simplesect>
@@ -658,7 +653,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2118" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2117" bodyend="2120"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2117" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2117" bodyend="2120"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gabaca6c24c3838a8164aa3700c459e7a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -700,7 +695,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2133" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2132" bodyend="2135"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2132" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2132" bodyend="2135"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gaa19a09e7b5f0a86a4b74ef2342de1d68" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -743,7 +738,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2150" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2149" bodyend="2152"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2149" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2149" bodyend="2152"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gaba44e2fb12fdc7b528bfee56a88e0844" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -786,7 +781,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2167" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2166" bodyend="2169"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2166" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2166" bodyend="2169"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1ga4e43e7720c66e88959ff511a7462a3ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -829,7 +824,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2185" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2184" bodyend="2187"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2184" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2184" bodyend="2187"/>
       </memberdef>
       <memberdef kind="function" id="group__rtree__functions_1gaa1250318a78d7e27ba8f3537eb0ddb3f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -882,7 +877,7 @@ std::for_each(boost::begin(tree), boost::end(tree), do_something());
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2202" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2200" bodyend="2204"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" line="2200" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/rtree.hpp" bodystart="2200" bodyend="2204"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

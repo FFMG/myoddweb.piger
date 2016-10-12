@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="classboost_1_1geometry_1_1strategy_1_1distance_1_1cross__track" kind="class" prot="public">
     <compoundname>boost::geometry::strategy::distance::cross_track</compoundname>
     <includes local="no">distance_cross_track.hpp</includes>
@@ -26,7 +26,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="497" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="497" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="497" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="497" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="private-attrib">
@@ -41,7 +41,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="548" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="548" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="548" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="548" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="519" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="518" bodyend="541"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="518" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="518" bodyend="541"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1distance_1_1cross__track_1af435b28ad83f27983c716b8639102546" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -89,7 +89,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="500" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="499" bodyend="500"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="499" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="499" bodyend="500"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1distance_1_1cross__track_1a89d303f21cddfde7c4fd6a745438aca6" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
         <type></type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="504" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="502" bodyend="504"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="502" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="502" bodyend="504"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1distance_1_1cross__track_1a016bcc1ed8808acd31aad8059524b554" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -123,7 +123,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="508" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="506" bodyend="508"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="506" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="506" bodyend="508"/>
       </memberdef>
       <memberdef kind="function" id="classboost_1_1geometry_1_1strategy_1_1distance_1_1cross__track_1aece00e67efb94ce96210d7753d3f0d8c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Strategy::radius_type</type>
@@ -136,7 +136,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="544" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="543" bodyend="544"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="543" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="543" bodyend="544"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -162,7 +162,7 @@
 [heading See also]
 [link geometry.reference.algorithms.distance.distance_3_with_strategy distance (with strategy)]
 </qbk>  </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="482" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="481" bodyend="549"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" line="482" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/spherical/distance_cross_track.hpp" bodystart="481" bodyend="549"/>
     <listofallmembers>
       <member refid="classboost_1_1geometry_1_1strategy_1_1distance_1_1cross__track_1a7681d2633beb81cf6ac245da5af9b0dc" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::distance::cross_track</scope><name>apply</name></member>
       <member refid="classboost_1_1geometry_1_1strategy_1_1distance_1_1cross__track_1af435b28ad83f27983c716b8639102546" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::distance::cross_track</scope><name>cross_track</name></member>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__perimeter" kind="group">
     <compoundname>perimeter</compoundname>
     <title>perimeter: calculate perimeter of a geometry</title>
@@ -37,11 +37,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated perimeter</para></simplesect>
  <qbk>[include reference/algorithms/perimeter.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="199" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="197" bodyend="202"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="197" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="197" bodyend="202"/>
       </memberdef>
       <memberdef kind="function" id="group__perimeter_1gad580959ac971e1617c5f8cd08e32c6df" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -97,11 +97,11 @@
 <para>strategy to be used for distance calculations. </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated perimeter</para></simplesect>
  <qbk.distinguish>with strategy</qbk.distinguish>   <qbk>[include reference/algorithms/perimeter.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="221" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="219" bodyend="224"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" line="219" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/perimeter.hpp" bodystart="219" bodyend="224"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

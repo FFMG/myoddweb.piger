@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__append" kind="group">
     <compoundname>append</compoundname>
     <title>append: append points to geometries</title>
@@ -85,7 +85,7 @@
  <qbk>[include reference/algorithms/append.qbk]</qbk>  } </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/append.hpp" line="361" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/append.hpp" bodystart="359" bodyend="364"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/append.hpp" line="359" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/append.hpp" bodystart="359" bodyend="364"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>General Techniques</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Boost.Python Tutorial">
 <link rel="up" href="../index.html" title="Boost.Python Tutorial">
 <link rel="prev" href="exception.html" title="Exception Translation">
@@ -18,7 +18,7 @@
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="tutorial.techniques"></a><a class="link" href="techniques.html" title="General Techniques">General Techniques</a>
 </h2></div></div></div>
-<div class="toc"><dl>
+<div class="toc"><dl class="toc">
 <dt><span class="section"><a href="techniques.html#tutorial.techniques.creating_packages">Creating Packages</a></span></dt>
 <dt><span class="section"><a href="techniques.html#tutorial.techniques.extending_wrapped_objects_in_pyt">Extending
       Wrapped Objects in Python</a></span></dt>
@@ -158,12 +158,12 @@
     __init__.py
     core/
         __init__.py
-        <span class="underline">core.pyd
+        _core.pyd
     filters/
-        \</span>_init__.py
-        <span class="underline">filters.pyd
+        __init__.py
+        _filters.pyd
     io/
-        \</span>_init__.py
+        __init__.py
         _io.pyd
 </pre>
 <p>
@@ -273,7 +273,7 @@
         <span class="bold"><strong>All</strong></span> point instances created from C++ will
         also have this member function! This technique has several advantages:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Cut down compile times to zero for these additional functions
           </li>

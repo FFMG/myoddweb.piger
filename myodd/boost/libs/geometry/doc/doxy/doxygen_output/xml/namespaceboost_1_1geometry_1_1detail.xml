@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="namespaceboost_1_1geometry_1_1detail" kind="namespace">
     <compoundname>boost::geometry::detail</compoundname>
     <innerclass refid="structboost_1_1geometry_1_1detail_1_1andoyer__inverse" prot="public">boost::geometry::detail::andoyer_inverse</innerclass>
@@ -43,7 +43,7 @@
 <para>Utility to handle polygon&apos;s outer ring as a range </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" line="71" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" bodystart="70" bodyend="79"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" line="70" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" bodystart="70" bodyend="79"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1detail_1a4aa299422f3d590936b071d07223984e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -68,7 +68,7 @@
 <para>Utility to handle polygon&apos;s outer ring as a range </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" line="90" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" bodystart="89" bodyend="98"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" line="89" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/as_range.hpp" bodystart="89" bodyend="98"/>
       </memberdef>
       <memberdef kind="function" id="namespaceboost_1_1geometry_1_1detail_1abd777e544b2f99a32eaf894c2f7604a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -97,13 +97,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/for_each_range.hpp" line="186" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/for_each_range.hpp" bodystart="185" bodyend="192"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/for_each_range.hpp" line="185" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/for_each_range.hpp" bodystart="185" bodyend="192"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="28"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/andoyer_inverse.hpp" line="28" column="1"/>
   </compounddef>
 </doxygen>

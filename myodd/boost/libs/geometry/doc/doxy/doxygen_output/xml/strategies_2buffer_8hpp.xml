@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="strategies_2buffer_8hpp" kind="file">
     <compoundname>buffer.hpp</compoundname>
     <includedby refid="buffer__inserter_8hpp" local="no">/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffer_inserter.hpp</includedby>
@@ -21,164 +21,164 @@
     <includedby refid="buffer__point__square_8hpp" local="no">/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp</includedby>
     <includedby refid="buffer__side__straight_8hpp" local="no">/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_side_straight.hpp</includedby>
     <invincdepgraph>
-      <node id="1069">
+      <node id="1087">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_square.hpp</label>
         <link refid="buffer__point__square_8hpp"/>
-        <childnode refid="1060" relation="include">
+        <childnode refid="1078" relation="include">
         </childnode>
       </node>
-      <node id="1056">
+      <node id="1074">
         <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/turn_in_piece_visitor.hpp</label>
         <link refid="turn__in__piece__visitor_8hpp"/>
-        <childnode refid="1054" relation="include">
+        <childnode refid="1072" relation="include">
         </childnode>
       </node>
-      <node id="1067">
+      <node id="1085">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round_by_divide.hpp</label>
         <link refid="buffer__join__round__by__divide_8hpp"/>
-        <childnode refid="1060" relation="include">
+        <childnode refid="1078" relation="include">
         </childnode>
       </node>
-      <node id="1060">
+      <node id="1078">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/strategies.hpp</label>
         <link refid="strategies_8hpp"/>
       </node>
-      <node id="1065">
+      <node id="1083">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_miter.hpp</label>
         <link refid="buffer__join__miter_8hpp"/>
-        <childnode refid="1060" relation="include">
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1086">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_circle.hpp</label>
+        <link refid="buffer__point__circle_8hpp"/>
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1080">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_symmetric.hpp</label>
+        <link refid="buffer__distance__symmetric_8hpp"/>
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1079">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp</label>
+        <link refid="buffer__distance__asymmetric_8hpp"/>
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1076">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/line_line_intersection.hpp</label>
+        <link refid="line__line__intersection_8hpp"/>
+        <childnode refid="1069" relation="include">
+        </childnode>
+      </node>
+      <node id="1072">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffered_piece_collection.hpp</label>
+        <link refid="buffered__piece__collection_8hpp"/>
+        <childnode refid="1069" relation="include">
+        </childnode>
+      </node>
+      <node id="1084">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round.hpp</label>
+        <link refid="buffer__join__round_8hpp"/>
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1075">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffered_ring.hpp</label>
+        <link refid="buffered__ring_8hpp"/>
+        <childnode refid="1072" relation="include">
         </childnode>
       </node>
       <node id="1068">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_point_circle.hpp</label>
-        <link refid="buffer__point__circle_8hpp"/>
-        <childnode refid="1060" relation="include">
-        </childnode>
-      </node>
-      <node id="1062">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_symmetric.hpp</label>
-        <link refid="buffer__distance__symmetric_8hpp"/>
-        <childnode refid="1060" relation="include">
-        </childnode>
-      </node>
-      <node id="1061">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/buffer_distance_asymmetric.hpp</label>
-        <link refid="buffer__distance__asymmetric_8hpp"/>
-        <childnode refid="1060" relation="include">
-        </childnode>
-      </node>
-      <node id="1058">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/line_line_intersection.hpp</label>
-        <link refid="line__line__intersection_8hpp"/>
-        <childnode refid="1051" relation="include">
-        </childnode>
-      </node>
-      <node id="1054">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffered_piece_collection.hpp</label>
-        <link refid="buffered__piece__collection_8hpp"/>
-        <childnode refid="1051" relation="include">
-        </childnode>
-      </node>
-      <node id="1066">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_join_round.hpp</label>
-        <link refid="buffer__join__round_8hpp"/>
-        <childnode refid="1060" relation="include">
-        </childnode>
-      </node>
-      <node id="1057">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffered_ring.hpp</label>
-        <link refid="buffered__ring_8hpp"/>
-        <childnode refid="1054" relation="include">
-        </childnode>
-      </node>
-      <node id="1050">
         <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/buffer.hpp</label>
         <link refid="strategies/buffer.hpp"/>
-        <childnode refid="1051" relation="include">
-        </childnode>
-        <childnode refid="1053" relation="include">
-        </childnode>
-        <childnode refid="1054" relation="include">
-        </childnode>
-        <childnode refid="1057" relation="include">
-        </childnode>
-        <childnode refid="1058" relation="include">
-        </childnode>
-        <childnode refid="1059" relation="include">
-        </childnode>
-        <childnode refid="1056" relation="include">
-        </childnode>
-        <childnode refid="1060" relation="include">
-        </childnode>
-        <childnode refid="1061" relation="include">
-        </childnode>
-        <childnode refid="1062" relation="include">
-        </childnode>
-        <childnode refid="1063" relation="include">
-        </childnode>
-        <childnode refid="1064" relation="include">
-        </childnode>
-        <childnode refid="1065" relation="include">
-        </childnode>
-        <childnode refid="1066" relation="include">
-        </childnode>
-        <childnode refid="1067" relation="include">
-        </childnode>
-        <childnode refid="1068" relation="include">
-        </childnode>
         <childnode refid="1069" relation="include">
         </childnode>
+        <childnode refid="1071" relation="include">
+        </childnode>
+        <childnode refid="1072" relation="include">
+        </childnode>
+        <childnode refid="1075" relation="include">
+        </childnode>
+        <childnode refid="1076" relation="include">
+        </childnode>
+        <childnode refid="1077" relation="include">
+        </childnode>
+        <childnode refid="1074" relation="include">
+        </childnode>
+        <childnode refid="1078" relation="include">
+        </childnode>
+        <childnode refid="1079" relation="include">
+        </childnode>
+        <childnode refid="1080" relation="include">
+        </childnode>
+        <childnode refid="1081" relation="include">
+        </childnode>
+        <childnode refid="1082" relation="include">
+        </childnode>
+        <childnode refid="1083" relation="include">
+        </childnode>
+        <childnode refid="1084" relation="include">
+        </childnode>
+        <childnode refid="1085" relation="include">
+        </childnode>
+        <childnode refid="1086" relation="include">
+        </childnode>
+        <childnode refid="1087" relation="include">
+        </childnode>
+        <childnode refid="1088" relation="include">
+        </childnode>
+      </node>
+      <node id="1082">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_end_round.hpp</label>
+        <link refid="buffer__end__round_8hpp"/>
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1081">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_end_flat.hpp</label>
+        <link refid="buffer__end__flat_8hpp"/>
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1069">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffer_inserter.hpp</label>
+        <link refid="buffer__inserter_8hpp"/>
         <childnode refid="1070" relation="include">
         </childnode>
       </node>
-      <node id="1064">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_end_round.hpp</label>
-        <link refid="buffer__end__round_8hpp"/>
-        <childnode refid="1060" relation="include">
-        </childnode>
-      </node>
-      <node id="1063">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_end_flat.hpp</label>
-        <link refid="buffer__end__flat_8hpp"/>
-        <childnode refid="1060" relation="include">
-        </childnode>
-      </node>
-      <node id="1051">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffer_inserter.hpp</label>
-        <link refid="buffer__inserter_8hpp"/>
-        <childnode refid="1052" relation="include">
-        </childnode>
-      </node>
-      <node id="1059">
+      <node id="1077">
         <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/turn_in_original_visitor.hpp</label>
         <link refid="turn__in__original__visitor_8hpp"/>
-        <childnode refid="1054" relation="include">
-        </childnode>
-      </node>
-      <node id="1052">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/buffer.hpp</label>
-        <link refid="algorithms_2buffer_8hpp"/>
-      </node>
-      <node id="1055">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/get_piece_turns.hpp</label>
-        <link refid="get__piece__turns_8hpp"/>
-        <childnode refid="1054" relation="include">
+        <childnode refid="1072" relation="include">
         </childnode>
       </node>
       <node id="1070">
-        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_side_straight.hpp</label>
-        <link refid="buffer__side__straight_8hpp"/>
-        <childnode refid="1060" relation="include">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/buffer.hpp</label>
+        <link refid="algorithms_2buffer_8hpp"/>
+      </node>
+      <node id="1073">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/get_piece_turns.hpp</label>
+        <link refid="get__piece__turns_8hpp"/>
+        <childnode refid="1072" relation="include">
         </childnode>
       </node>
-      <node id="1053">
+      <node id="1088">
+        <label>/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/buffer_side_straight.hpp</label>
+        <link refid="buffer__side__straight_8hpp"/>
+        <childnode refid="1078" relation="include">
+        </childnode>
+      </node>
+      <node id="1071">
         <label>/home/travis/build/boostorg/boost/boost/geometry/algorithms/detail/buffer/buffer_policies.hpp</label>
         <link refid="buffer__policies_8hpp"/>
-        <childnode refid="1054" relation="include">
+        <childnode refid="1072" relation="include">
         </childnode>
-        <childnode refid="1055" relation="include">
+        <childnode refid="1073" relation="include">
         </childnode>
-        <childnode refid="1056" relation="include">
+        <childnode refid="1074" relation="include">
         </childnode>
       </node>
     </invincdepgraph>

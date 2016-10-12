@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="concatenate__iterator_8hpp" kind="file">
     <compoundname>concatenate_iterator.hpp</compoundname>
     <includes local="no">boost/mpl/assert.hpp</includes>
@@ -8,33 +8,33 @@
     <includes local="no">boost/iterator/iterator_facade.hpp</includes>
     <includes local="no">boost/iterator/iterator_categories.hpp</includes>
     <incdepgraph>
-      <node id="54705">
+      <node id="57242">
         <label>boost/iterator/iterator_facade.hpp</label>
       </node>
-      <node id="54702">
+      <node id="57239">
         <label>boost/mpl/assert.hpp</label>
       </node>
-      <node id="54703">
+      <node id="57240">
         <label>boost/type_traits/is_convertible.hpp</label>
       </node>
-      <node id="54706">
+      <node id="57243">
         <label>boost/iterator/iterator_categories.hpp</label>
       </node>
-      <node id="54704">
+      <node id="57241">
         <label>boost/iterator.hpp</label>
       </node>
-      <node id="54701">
+      <node id="57238">
         <label>/home/travis/build/boostorg/boost/boost/geometry/iterators/concatenate_iterator.hpp</label>
         <link refid="concatenate_iterator.hpp"/>
-        <childnode refid="54702" relation="include">
+        <childnode refid="57239" relation="include">
         </childnode>
-        <childnode refid="54703" relation="include">
+        <childnode refid="57240" relation="include">
         </childnode>
-        <childnode refid="54704" relation="include">
+        <childnode refid="57241" relation="include">
         </childnode>
-        <childnode refid="54705" relation="include">
+        <childnode refid="57242" relation="include">
         </childnode>
-        <childnode refid="54706" relation="include">
+        <childnode refid="57243" relation="include">
         </childnode>
       </node>
     </incdepgraph>

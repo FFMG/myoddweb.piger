@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__simplify" kind="group">
     <compoundname>simplify</compoundname>
     <title>simplify: remove points from a geometry, keeping shape (simplification or generalization)</title>
-    <innerclass refid="structboost_1_1geometry_1_1concept_1_1_simplify_strategy" prot="public">boost::geometry::concept::SimplifyStrategy</innerclass>
+    <innerclass refid="structboost_1_1geometry_1_1concepts_1_1_simplify_strategy" prot="public">boost::geometry::concepts::SimplifyStrategy</innerclass>
       <sectiondef kind="func">
       <memberdef kind="function" id="group__simplify_1ga8f1c13c0fe844ffdaa6196ce3854849f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -99,10 +99,10 @@
 </parameteritem>
 </parameterlist>
 <image type="html" name="svg_simplify_country.png">The image below presents the simplified country</image>
-  <qbk.distinguish>with strategy</qbk.distinguish>  </para>        </detaileddescription>
+ <qbk.distinguish>with strategy</qbk.distinguish>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="463" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="461" bodyend="469"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="461" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="461" bodyend="469"/>
       </memberdef>
       <memberdef kind="function" id="group__simplify_1ga7f1ed83b2a595dc644205374eddf0057" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -173,7 +173,7 @@
  <qbk>[include reference/algorithms/simplify.qbk]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="491" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="489" bodyend="495"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" line="489" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/simplify.hpp" bodystart="489" bodyend="495"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

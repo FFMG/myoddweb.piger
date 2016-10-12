@@ -15,8 +15,11 @@ namespace myodd{ namespace strings{
   void Test();  //  test data
 
   // check if a string is empty.
-  bool IsEmptyString(const MYODD_CHAR* s );
-  bool IsEmptyString( const MYODD_STRING& s );
+  bool IsEmptyString(const wchar_t* s );
+  bool IsEmptyString( const std::wstring& s );
+
+  bool IsEmptyString(const char* s);
+  bool IsEmptyString(const std::string& s);
 
   // converst to lower case.
   MYODD_CHAR lower(MYODD_CHAR c );

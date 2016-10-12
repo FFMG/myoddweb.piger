@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="dir_19144ff23f2feaf79e9fd0085ce60eac" kind="dir">
-    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic/</compoundname>
+    <compoundname>/home/travis/build/boostorg/boost/boost/geometry/strategies/agnostic</compoundname>
     <innerfile refid="buffer__distance__asymmetric_8hpp">buffer_distance_asymmetric.hpp</innerfile>
     <innerfile refid="buffer__distance__symmetric_8hpp">buffer_distance_symmetric.hpp</innerfile>
     <innerfile refid="hull__graham__andrew_8hpp">hull_graham_andrew.hpp</innerfile>

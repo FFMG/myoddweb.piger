@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="robustness" kind="page">
     <compoundname>robustness</compoundname>
     <title>Boost.Geometry and Robustness</title>
@@ -27,19 +27,19 @@
 </programlisting></para><para>All algorithms using these points will use the <bold>GMP</bold> resp. <bold>CLN</bold> library for calculations.</para></sect1>
 <sect1 id="robustness_1robustness_par4">
 <title>Calculation types</title>
-<para>If high precision arithmetic types are used as shown above, coordinates are stored in these points. That is not always necessary. Therefore, Boost.Geometry provides a second approach. It is possible to specify that only the calculation is done in high precision. This is done by specifying a strategy. For example, in area:</para><para>Example: The code below shows the calculation of the area. Points are stored in double; calculation is done using <bold>GMP</bold> </para><para><programlisting><codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>boost::geometry::point_xy&lt;double&gt;<sp/>point_type;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>boost::geometry::linear_ring&lt;point_type&gt;<sp/>ring;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ring.push_back(boost::geometry::make&lt;point_type&gt;(0.0,<sp/>0.0));</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ring.push_back(boost::geometry::make&lt;point_type&gt;(0.0,<sp/>0.0012));</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ring.push_back(boost::geometry::make&lt;point_type&gt;(1234567.89012345,<sp/>0.0));</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ring.push_back(ring.front());</highlight></codeline>
+<para>If high precision arithmetic types are used as shown above, coordinates are stored in these points. That is not always necessary. Therefore, Boost.Geometry provides a second approach. It is possible to specify that only the calculation is done in high precision. This is done by specifying a strategy. For example, in area:</para><para>Example: The code below shows the calculation of the area. Points are stored in double; calculation is done using <bold>GMP</bold> </para><para><programlisting><codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>boost::geometry::point_xy&lt;double&gt;<sp/>point_type;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>boost::geometry::linear_ring&lt;point_type&gt;<sp/>ring;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ring.push_back(boost::geometry::make&lt;point_type&gt;(0.0,<sp/>0.0));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ring.push_back(boost::geometry::make&lt;point_type&gt;(0.0,<sp/>0.0012));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ring.push_back(boost::geometry::make&lt;point_type&gt;(1234567.89012345,<sp/>0.0));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ring.push_back(ring.front());</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>boost::numeric_adaptor::gmp_value_type<sp/>gmp;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>boost::numeric_adaptor::gmp_value_type<sp/>gmp;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gmp<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member" tooltip="Calculates the area of a geometry.">area</ref><sp/>=<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member" tooltip="Calculates the area of a geometry.">boost::geometry::area</ref>(ring,<sp/>boost::geometry::strategy::area::by_triangles&lt;point_type,<sp/>gmp&gt;());</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/>area<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>gmp<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member">area</ref><sp/>=<sp/><ref refid="group__area_1gaf7a1c34467f74f290d0b090adb27db62" kindref="member">boost::geometry::area</ref>(ring,<sp/>boost::geometry::strategy::area::by_triangles&lt;point_type,<sp/>gmp&gt;());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/>area<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
 </programlisting></para><para>Above shows how this is used to use <bold>GMP</bold> or <bold>CLN</bold> for double coordinates. Exactly the same mechanism works (of course) also to do calculation in double, where coordinates are stored in float.</para></sect1>
 <sect1 id="robustness_1robustness_par5">
 <title>Strategies</title>

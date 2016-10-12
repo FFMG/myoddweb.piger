@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1centroid_1_1detail_1_1weighted__length__sums" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::centroid::detail::weighted_length_sums</compoundname>
     <includes local="no">centroid_weighted_length.hpp</includes>
@@ -25,7 +25,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="52" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="52" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="52" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-attrib">
@@ -40,7 +40,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="55" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="55" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="55" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structboost_1_1geometry_1_1strategy_1_1centroid_1_1detail_1_1weighted__length__sums_1af7ca2cc6e405d6a2cca81a18254e5a86" prot="public" static="no" mutable="no">
         <type>Type</type>
@@ -53,7 +53,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="54" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="54" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="54" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -68,7 +68,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="59" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="57" bodyend="61"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="57" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="57" bodyend="61"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -76,19 +76,19 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
-      <node id="1183">
+      <node id="1389">
         <label>boost::geometry::model::point&lt; Type, DimensionCount, cs::cartesian &gt;</label>
         <link refid="classboost_1_1geometry_1_1model_1_1point"/>
       </node>
-      <node id="1182">
+      <node id="1388">
         <label>boost::geometry::strategy::centroid::detail::weighted_length_sums&lt; Type, DimensionCount &gt;</label>
         <link refid="structboost_1_1geometry_1_1strategy_1_1centroid_1_1detail_1_1weighted__length__sums"/>
-        <childnode refid="1183" relation="usage">
+        <childnode refid="1389" relation="usage">
           <edgelabel>average_sum</edgelabel>
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="47" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="46" bodyend="62"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" line="47" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/centroid_weighted_length.hpp" bodystart="46" bodyend="62"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1centroid_1_1detail_1_1weighted__length__sums_1a4115015e5ce03189e7dcff00eb9b6520" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::centroid::detail::weighted_length_sums</scope><name>average_sum</name></member>
       <member refid="structboost_1_1geometry_1_1strategy_1_1centroid_1_1detail_1_1weighted__length__sums_1af7ca2cc6e405d6a2cca81a18254e5a86" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::centroid::detail::weighted_length_sums</scope><name>length</name></member>

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="group__area" kind="group">
     <compoundname>area</compoundname>
     <title>area: calculate area of a Geometry</title>
-    <innerclass refid="classboost_1_1geometry_1_1concept_1_1_area_strategy" prot="public">boost::geometry::concept::AreaStrategy</innerclass>
+    <innerclass refid="classboost_1_1geometry_1_1concepts_1_1_area_strategy" prot="public">boost::geometry::concepts::AreaStrategy</innerclass>
     <innerclass refid="structboost_1_1geometry_1_1default__area__result" prot="public">boost::geometry::default_area_result</innerclass>
     <innerclass refid="structboost_1_1geometry_1_1strategy_1_1area_1_1services_1_1default__strategy" prot="public">boost::geometry::strategy::area::services::default_strategy</innerclass>
       <sectiondef kind="func">
@@ -40,11 +40,11 @@
 <para>A model of the specified concept </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated area</para></simplesect>
  <qbk>[include reference/algorithms/area.qbk]</qbk>   <qbk>[heading Examples]</qbk>   <qbk>[area] [area_output]</qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" line="268" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" bodystart="267" bodyend="283"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" line="267" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" bodystart="267" bodyend="283"/>
       </memberdef>
       <memberdef kind="function" id="group__area_1ga59861901cb4e4b95a9e9bf82f3b4fa35" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <templateparamlist>
@@ -100,7 +100,7 @@
 <para>The strategy which will be used for area calculations </para></parameterdescription>
 </parameteritem>
 </parameterlist>
-<simplesect kind="return"><para>The calculated \1</para></simplesect>
+<simplesect kind="return"><para>The calculated area</para></simplesect>
  <qbk.distinguish>with strategy</qbk.distinguish> </para><para> <qbk>
 [include reference/algorithms/area.qbk]
 
@@ -114,7 +114,7 @@
 </qbk>  </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" line="312" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" bodystart="310" bodyend="318"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" line="310" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/algorithms/area.hpp" bodystart="310" bodyend="318"/>
       </memberdef>
       </sectiondef>
     <briefdescription>

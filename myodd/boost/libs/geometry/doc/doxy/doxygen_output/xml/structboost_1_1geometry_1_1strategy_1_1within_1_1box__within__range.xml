@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1strategy_1_1within_1_1box__within__range" kind="struct" prot="public">
     <compoundname>boost::geometry::strategy::within::box_within_range</compoundname>
     <includes local="no">box_in_box.hpp</includes>
@@ -52,14 +52,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="47" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="43" bodyend="50"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="43" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="43" bodyend="50"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="41" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="40" bodyend="51"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" line="41" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/strategies/cartesian/box_in_box.hpp" bodystart="40" bodyend="51"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1strategy_1_1within_1_1box__within__range_1afa7f5cb37cdfd61a338105c3ad4f61f8" prot="public" virt="non-virtual"><scope>boost::geometry::strategy::within::box_within_range</scope><name>apply</name></member>
     </listofallmembers>

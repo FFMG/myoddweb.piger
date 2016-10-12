@@ -2,25 +2,25 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>io_service::strand</title>
-<link rel="stylesheet" href="../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
-<link rel="home" href="../../boost_asio.html" title="Boost.Asio">
+<link rel="stylesheet" href="../../../../../../doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Boost.Asio">
 <link rel="up" href="../reference.html" title="Reference">
 <link rel="prev" href="io_service__service/shutdown_service.html" title="io_service::service::shutdown_service">
 <link rel="next" href="io_service__strand/dispatch.html" title="io_service::strand::dispatch">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../boost.png"></td>
-<td align="center"><a href="../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../libs/libraries.htm">Libraries</a></td>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
-<td align="center"><a href="../../../../more/index.htm">More</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="io_service__service/shutdown_service.html"><img src="../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../reference.html"><img src="../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../boost_asio.html"><img src="../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="io_service__strand/dispatch.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="io_service__service/shutdown_service.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../reference.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="io_service__strand/dispatch.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -33,7 +33,7 @@
 </pre>
 <h5>
 <a name="boost_asio.reference.io_service__strand.h0"></a>
-        <span><a name="boost_asio.reference.io_service__strand.member_functions"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.member_functions">Member
+        <span class="phrase"><a name="boost_asio.reference.io_service__strand.member_functions"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.member_functions">Member
         Functions</a>
       </h5>
 <div class="informaltable"><table class="table">
@@ -148,13 +148,13 @@
       </p>
 <h5>
 <a name="boost_asio.reference.io_service__strand.h1"></a>
-        <span><a name="boost_asio.reference.io_service__strand.order_of_handler_invocation"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.order_of_handler_invocation">Order
+        <span class="phrase"><a name="boost_asio.reference.io_service__strand.order_of_handler_invocation"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.order_of_handler_invocation">Order
         of handler invocation</a>
       </h5>
 <p>
         Given:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             a strand object <code class="computeroutput"><span class="identifier">s</span></code>
           </li>
@@ -180,7 +180,7 @@
 <p>
         if any of the following conditions are true:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">post</span><span class="special">(</span><span class="identifier">a</span><span class="special">)</span></code>
             happens-before <code class="computeroutput"><span class="identifier">s</span><span class="special">.</span><span class="identifier">post</span><span class="special">(</span><span class="identifier">b</span><span class="special">)</span></code>
@@ -221,7 +221,7 @@
       </p>
 <h5>
 <a name="boost_asio.reference.io_service__strand.h2"></a>
-        <span><a name="boost_asio.reference.io_service__strand.remarks"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.remarks">Remarks</a>
+        <span class="phrase"><a name="boost_asio.reference.io_service__strand.remarks"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.remarks">Remarks</a>
       </h5>
 <p>
         The implementation makes no guarantee that handlers posted or dispatched
@@ -230,7 +230,7 @@
       </p>
 <h5>
 <a name="boost_asio.reference.io_service__strand.h3"></a>
-        <span><a name="boost_asio.reference.io_service__strand.thread_safety"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.thread_safety">Thread Safety</a>
+        <span class="phrase"><a name="boost_asio.reference.io_service__strand.thread_safety"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.thread_safety">Thread Safety</a>
       </h5>
 <p>
         <span class="emphasis"><em>Distinct</em></span> <span class="emphasis"><em>objects:</em></span> Safe.
@@ -240,7 +240,7 @@
       </p>
 <h5>
 <a name="boost_asio.reference.io_service__strand.h4"></a>
-        <span><a name="boost_asio.reference.io_service__strand.requirements"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.requirements">Requirements</a>
+        <span class="phrase"><a name="boost_asio.reference.io_service__strand.requirements"></a></span><a class="link" href="io_service__strand.html#boost_asio.reference.io_service__strand.requirements">Requirements</a>
       </h5>
 <p>
         <span class="emphasis"><em>Header: </em></span><code class="literal">boost/asio/strand.hpp</code>
@@ -251,8 +251,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2003-2015 Christopher M.
-      Kohlhoff<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2003-2016 Christopher
+      M. Kohlhoff<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -260,7 +260,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="io_service__service/shutdown_service.html"><img src="../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../reference.html"><img src="../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../boost_asio.html"><img src="../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="io_service__strand/dispatch.html"><img src="../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="io_service__service/shutdown_service.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../reference.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="io_service__strand/dispatch.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

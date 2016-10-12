@@ -16,7 +16,7 @@
 [section:is_valid_1 is_valid]
 
 '''<indexterm><primary>is_valid</primary></indexterm>'''
-Checks if a geometry \1. 
+Checks if a geometry is valid (in the OGC sense) 
 
 [heading Synopsis]
 ``template<typename Geometry>
@@ -31,7 +31,7 @@ bool is_valid(Geometry const & geometry)``
 
 
 [heading Returns]
-{is valid (in the OGC sense); furthermore, the following geometries are considered valid: multi-geometries with no elements, linear geometries containing spikes, areal geometries with duplicate (consecutive) points}
+Returns true if the geometry is valid (in the OGC sense); furthermore, the following geometries are considered valid: multi-geometries with no elements, linear geometries containing spikes, areal geometries with duplicate (consecutive) points
 
 [heading Header]
 Either
@@ -51,7 +51,7 @@ Or
 [section:is_valid_2_with_failure_value is_valid (with failure value)]
 
 '''<indexterm><primary>is_valid</primary></indexterm>'''
-Checks if a geometry \1. 
+Checks if a geometry is valid (in the OGC sense) 
 
 [heading Synopsis]
 ``template<typename Geometry>
@@ -67,7 +67,7 @@ bool is_valid(Geometry const & geometry, validity_failure_type & failure)``
 
 
 [heading Returns]
-{is valid (in the OGC sense); furthermore, the following geometries are considered valid: multi-geometries with no elements, linear geometries containing spikes, areal geometries with duplicate (consecutive) points}
+Returns true if the geometry is valid (in the OGC sense); furthermore, the following geometries are considered valid: multi-geometries with no elements, linear geometries containing spikes, areal geometries with duplicate (consecutive) points
 
 [heading Header]
 Either
@@ -87,7 +87,7 @@ Or
 [section:is_valid_2_with_message is_valid (with message)]
 
 '''<indexterm><primary>is_valid</primary></indexterm>'''
-Checks if a geometry \1. 
+Checks if a geometry is valid (in the OGC sense) 
 
 [heading Synopsis]
 ``template<typename Geometry>
@@ -103,7 +103,7 @@ bool is_valid(Geometry const & geometry, std::string & message)``
 
 
 [heading Returns]
-{is valid (in the OGC sense); furthermore, the following geometries are considered valid: multi-geometries with no elements, linear geometries containing spikes, areal geometries with duplicate (consecutive) points}
+Returns true if the geometry is valid (in the OGC sense); furthermore, the following geometries are considered valid: multi-geometries with no elements, linear geometries containing spikes, areal geometries with duplicate (consecutive) points
 
 [heading Header]
 Either

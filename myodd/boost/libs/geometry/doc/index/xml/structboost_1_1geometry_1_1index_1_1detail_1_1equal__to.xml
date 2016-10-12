@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="structboost_1_1geometry_1_1index_1_1detail_1_1equal__to" kind="struct" prot="public">
     <compoundname>boost::geometry::index::detail::equal_to</compoundname>
     <includes refid="equal__to_8hpp" local="no">equal_to.hpp</includes>
@@ -22,14 +22,13 @@
         <definition>typedef bool boost::geometry::index::detail::equal_to&lt; Value, IsIndexable &gt;::result_type</definition>
         <argsstring></argsstring>
         <name>result_type</name>
-        <reimplementedby refid="structboost_1_1geometry_1_1index_1_1equal__to_1ae6a986988e380c2ba4afa646294cfd93">result_type</reimplementedby>
         <briefdescription>
 <para>The type of result returned by function object. </para>        </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="87" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="87" bodyend="-1"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="87" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="87" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -38,7 +37,6 @@
         <definition>bool boost::geometry::index::detail::equal_to&lt; Value, IsIndexable &gt;::operator()</definition>
         <argsstring>(Value const &amp;l, Value const &amp;r) const </argsstring>
         <name>operator()</name>
-        <reimplementedby refid="structboost_1_1geometry_1_1index_1_1equal__to_1adb497915885d69df9aff938d16922ff3">operator()</reimplementedby>
         <param>
           <type>Value const &amp;</type>
           <declname>l</declname>
@@ -69,7 +67,7 @@
 </para>        </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="97" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="96" bodyend="99"/>
+        <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="96" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="96" bodyend="99"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -91,7 +89,7 @@
 </parameteritem>
 </parameterlist>
 </para>    </detaileddescription>
-    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="85" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="84" bodyend="100"/>
+    <location file="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" line="85" column="1" bodyfile="/home/travis/build/boostorg/boost/boost/geometry/index/equal_to.hpp" bodystart="84" bodyend="100"/>
     <listofallmembers>
       <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1equal__to_1a2fcd9ed3a5085a2dc4914976c0a1cabb" prot="public" virt="non-virtual"><scope>boost::geometry::index::detail::equal_to</scope><name>operator()</name></member>
       <member refid="structboost_1_1geometry_1_1index_1_1detail_1_1equal__to_1afb53f9416414ba2c5faa0cf372fd8f16" prot="public" virt="non-virtual"><scope>boost::geometry::index::detail::equal_to</scope><name>result_type</name></member>

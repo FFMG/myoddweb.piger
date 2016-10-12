@@ -107,8 +107,8 @@ void MessageDlg::InitWindowPos()
   int heightM  = abs( r.bottom - r.top);
 
   //  pad a little
-  widthM  += 2 * (int)myodd::config::get( _T("commands\\pad.x"), 2);
-  heightM += 2 * (int)myodd::config::get( _T("commands\\pad.y"), 2);
+  widthM  += 2 * (int)::myodd::config::Get( L"commands\\pad.x", 2);
+  heightM += 2 * (int)::myodd::config::Get( L"commands\\pad.y", 2);
 
 
   //  move the window to the top left hand corner 
@@ -158,8 +158,8 @@ void MessageDlg::Fade()
   // 0 means that we move right away
   if (m_nFadeOut > 0)
   {
-    BYTE bStart = myodd::config::get(_T("commands\\transparency"), 127);
-    for (BYTE b = bStart; b > 0; --b)
+    unsigned char bStart = ::myodd::config::Get( L"commands\\transparency", 127);
+    for (auto b = bStart; b > 0; --b)
     {
       Transparent(b);
       DWORD d = (GetTickCount() + m_nFadeOut);
@@ -203,8 +203,8 @@ void MessageDlg::OnPaint()
   myodd::html::html(hdc, m_stdMessage.c_str() , m_stdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
 
   //  pad a little
-  r.left += (int)myodd::config::get( _T("commands\\pad.x"), 2);
-  r.top  += (int)myodd::config::get( _T("commands\\pad.y"), 2);
+  r.left += (int)::myodd::config::Get( L"commands\\pad.x", 2);
+  r.top  += (int)::myodd::config::Get( L"commands\\pad.y", 2);
 
   SetBkMode( hdc, TRANSPARENT );
   myodd::html::html(hdc, m_stdMessage.c_str() , m_stdMessage.length(), &r, DT_DEFAULT );
@@ -248,7 +248,7 @@ void MessageDlg::FadeShowWindow()
 {
   // fade the window a little.
   ShowWindow(SW_SHOW);
-  Transparent( myodd::config::get( _T("commands\\transparency"), 127) );
+  Transparent( ::myodd::config::Get( L"commands\\transparency", 127) );
 
   m_timerId = SetTimer( WM_USER+1, m_nElapse, NULL );
 }

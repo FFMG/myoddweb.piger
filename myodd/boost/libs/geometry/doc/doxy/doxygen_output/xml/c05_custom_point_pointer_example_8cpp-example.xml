@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.7.6.1">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
   <compounddef id="c05_custom_point_pointer_example_8cpp-example" kind="example">
     <compoundname>c05_custom_point_pointer_example.cpp</compoundname>
     <detaileddescription>
@@ -28,8 +28,8 @@
 <codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="register_2linestring_8hpp" kindref="compound">boost/geometry/geometries/register/linestring.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="strategies_8hpp" kindref="compound">boost/geometry/strategies/strategies.hpp</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><ref refid="group__register_1ga56729e5117bdd1ef2f5df70e113135d1" kindref="member" tooltip="Macro to register a \1.">BOOST_GEOMETRY_REGISTER_LINESTRING_TEMPLATED</ref>(std::vector)</highlight></codeline>
-<codeline><highlight class="normal"><ref refid="group__register_1ga56729e5117bdd1ef2f5df70e113135d1" kindref="member" tooltip="Macro to register a \1.">BOOST_GEOMETRY_REGISTER_LINESTRING_TEMPLATED</ref>(std::deque)</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="group__register_1ga56729e5117bdd1ef2f5df70e113135d1" kindref="member">BOOST_GEOMETRY_REGISTER_LINESTRING_TEMPLATED</ref>(std::vector)</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="group__register_1ga56729e5117bdd1ef2f5df70e113135d1" kindref="member">BOOST_GEOMETRY_REGISTER_LINESTRING_TEMPLATED</ref>(std::deque)</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Sample<sp/>point,<sp/>having<sp/>x/y</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal">struct<sp/>my_point</highlight></codeline>
@@ -59,7 +59,7 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p.x;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">set</highlight><highlight class="normal">(my_point&amp;<sp/>p,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>value)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__set_1ga547b9e2d42e58aab04949d056b795702" kindref="member">set</ref>(my_point&amp;<sp/>p,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>value)</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>p.x<sp/>=<sp/>value;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
@@ -73,7 +73,7 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p.y;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">set</highlight><highlight class="normal">(my_point&amp;<sp/>p,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>value)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="group__set_1ga547b9e2d42e58aab04949d056b795702" kindref="member">set</ref>(my_point&amp;<sp/>p,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">&amp;<sp/>value)</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>p.y<sp/>=<sp/>value;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
@@ -95,10 +95,10 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>myline.push_back(p);</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__length_1ga38dff36b8deb6a1a8cb0a3d6387af8fc" kindref="member" tooltip="Calculates the length of a geometry.">boost::geometry::length</ref>(myline)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__length_1ga38dff36b8deb6a1a8cb0a3d6387af8fc" kindref="member">boost::geometry::length</ref>(myline)<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound" tooltip="2D point in Cartesian coordinate system">boost::geometry::model::d2::point_xy&lt;double&gt;</ref><sp/>point_2d;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1box" kindref="compound" tooltip="Class box: defines a box made of two describing points.">boost::geometry::model::box&lt;point_2d&gt;</ref><sp/>box_2d;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1d2_1_1point__xy" kindref="compound">boost::geometry::model::d2::point_xy&lt;double&gt;</ref><sp/>point_2d;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1box" kindref="compound">boost::geometry::model::box&lt;point_2d&gt;</ref><sp/>box_2d;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>box_2d<sp/>cb(point_2d(1.5,<sp/>1.5),<sp/>point_2d(4.5,<sp/>4.5));</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>This<sp/>will<sp/>NOT<sp/>work<sp/>because<sp/>would<sp/>need<sp/>dynamicly<sp/>allocating<sp/>memory<sp/>for<sp/>point*<sp/>in<sp/>algorithms:</highlight><highlight class="normal"></highlight></codeline>
@@ -106,14 +106,14 @@
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//boost::geometry::intersection(cb,<sp/>myline,<sp/>clipped);</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>This<sp/>works<sp/>because<sp/>outputs<sp/>to<sp/>a<sp/>normal<sp/>struct<sp/>point,<sp/>no<sp/>point*</highlight><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1linestring" kindref="compound" tooltip="A linestring (named so by OGC) is a collection (default a vector) of points.">boost::geometry::model::linestring&lt;point_2d&gt;</ref><sp/>linestring_2d;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="classboost_1_1geometry_1_1model_1_1linestring" kindref="compound">boost::geometry::model::linestring&lt;point_2d&gt;</ref><sp/>linestring_2d;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;linestring_2d&gt;<sp/>clipped;</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky" kindref="compound" tooltip="Strategy: line clipping algorithm after Liang Barsky.">boost::geometry::strategy::intersection::liang_barsky&lt;box_2d, point_2d&gt;</ref><sp/>strategy;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classboost_1_1geometry_1_1strategy_1_1intersection_1_1liang__barsky" kindref="compound">boost::geometry::strategy::intersection::liang_barsky&lt;box_2d, point_2d&gt;</ref><sp/>strategy;</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>boost::geometry::detail::intersection::clip_range_with_box&lt;linestring_2d&gt;(cb,</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>myline,<sp/><ref refid="namespaceboost_1_1geometry_1_1range_1a1e6b151e65be317d5cfaadfd26f5135e" kindref="member">std::back_inserter</ref>(clipped),<sp/>strategy);</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__length_1ga38dff36b8deb6a1a8cb0a3d6387af8fc" kindref="member" tooltip="Calculates the length of a geometry.">boost::geometry::length</ref>(clipped.front())<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/><ref refid="group__length_1ga38dff36b8deb6a1a8cb0a3d6387af8fc" kindref="member">boost::geometry::length</ref>(clipped.front())<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>free</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>BOOST_FOREACH(my_point*<sp/>p,<sp/>myline)</highlight></codeline>

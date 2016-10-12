@@ -27,7 +27,7 @@ ActionsImmediate::~ActionsImmediate(void)
  */
 void ActionsImmediate::Init()
 {
-  MYODD_STRING sPath = myodd::config::get( _T("paths\\commands") );
+  MYODD_STRING sPath = ::myodd::config::Get( L"paths\\commands", L"");
   if( myodd::files::ExpandEnvironment( sPath, sPath ) )
   {
     ParseDirectory( sPath.c_str(), m_subDir.c_str() );
