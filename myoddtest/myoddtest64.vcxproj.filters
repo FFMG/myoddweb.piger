@@ -100,9 +100,6 @@
     <ClCompile Include="files\testfiles_absolutepath.cpp">
       <Filter>myodd\files</Filter>
     </ClCompile>
-    <ClCompile Include="files\testfiles_cleanfilename.cpp">
-      <Filter>myodd\os</Filter>
-    </ClCompile>
     <ClCompile Include="pcre2\test_match.cpp">
       <Filter>myodd\pcre2</Filter>
     </ClCompile>
@@ -168,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="string\teststring_formatter.cpp">
       <Filter>myodd\string</Filter>
+    </ClCompile>
+    <ClCompile Include="files\testfiles_cleanfilename.cpp">
+      <Filter>myodd\files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

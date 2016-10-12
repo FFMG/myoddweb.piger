@@ -346,11 +346,11 @@ TEST_MEM(ConfigDataTest, LoadedValuesAreNotTempByDefault)
 {
   ::myodd::config::Data data;
   auto number1 = IntRandomNumber<int>();
-  auto value1 = ::myodd::strings::Format(L"<value1 type = \"8\">%d</value2>", number1);
+  auto value1 = ::myodd::strings::Format(L"<value1 type = \"8\">%d</value1>", number1);
   auto number2 = IntRandomNumber<int>();
-  auto value2 = ::myodd::strings::Format(L"<value2 type = \"8\">%d</value1>", number2);
+  auto value2 = ::myodd::strings::Format(L"<value2 type = \"8\">%d</value2>", number2);
 
-  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent>%s%s</parent></Config>", value1, value2);
+  auto source = ::myodd::strings::Format(L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><Config><parent>%s%s</parent></Config>", value1.c_str(), value2.c_str());
   ASSERT_TRUE(data.LoadXml(source));
 
   // they all temp by default

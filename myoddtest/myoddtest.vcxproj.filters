@@ -160,9 +160,6 @@
     <ClCompile Include="cache\testcacheitempolicy.cpp">
       <Filter>myodd\cache</Filter>
     </ClCompile>
-    <ClCompile Include="cache\testany.cpp">
-      <Filter>myodd\cache</Filter>
-    </ClCompile>
     <ClCompile Include="cache\testexpiredcacheitem.cpp">
       <Filter>myodd\cache</Filter>
     </ClCompile>
