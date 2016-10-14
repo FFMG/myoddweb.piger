@@ -3,10 +3,15 @@
 
 .. module:: unittest
    :synopsis: Unit testing framework for Python.
+
 .. moduleauthor:: Steve Purcell <stephen_purcell@yahoo.com>
 .. sectionauthor:: Steve Purcell <stephen_purcell@yahoo.com>
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 .. sectionauthor:: Raymond Hettinger <python@rcn.com>
+
+**Source code:** :source:`Lib/unittest/__init__.py`
+
+--------------
 
 (If you are already familiar with the basic concepts of testing, you might want
 to skip to :ref:`the list of assert methods <assert-methods>`.)
@@ -67,7 +72,7 @@ test runner
    a GUI tool for test discovery and execution.  This is intended largely for ease of use
    for those new to unit testing.  For production environments it is
    recommended that tests be driven by a continuous integration system such as
-   `Buildbot <http://buildbot.net/>`_, `Jenkins <http://jenkins-ci.org/>`_
+   `Buildbot <https://buildbot.net/>`_, `Jenkins <https://jenkins.io/>`_
    or  `Hudson <http://hudson-ci.org/>`_.
 
 
@@ -86,19 +91,19 @@ Here is a short script to test three string methods::
 
   class TestStringMethods(unittest.TestCase):
 
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
+      def test_upper(self):
+          self.assertEqual('foo'.upper(), 'FOO')
 
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
+      def test_isupper(self):
+          self.assertTrue('FOO'.isupper())
+          self.assertFalse('Foo'.isupper())
 
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
+      def test_split(self):
+          s = 'hello world'
+          self.assertEqual(s.split(), ['hello', 'world'])
+          # check that s.split fails when the separator is not a string
+          with self.assertRaises(TypeError):
+              s.split(2)
 
   if __name__ == '__main__':
       unittest.main()
@@ -118,7 +123,7 @@ and produce a report.
 
 The :meth:`~TestCase.setUp` and :meth:`~TestCase.tearDown` methods allow you
 to define instructions that will be executed before and after each test method.
-They are covered in more details in the section :ref:`organizing-tests`.
+They are covered in more detail in the section :ref:`organizing-tests`.
 
 The final block shows a simple way to run the tests. :func:`unittest.main`
 provides a command-line interface to the test script.  When run from the command
@@ -680,10 +685,12 @@ Test cases
       Method called immediately after the test method has been called and the
       result recorded.  This is called even if the test method raised an
       exception, so the implementation in subclasses may need to be particularly
-      careful about checking internal state.  Any exception, other than :exc:`AssertionError`
-      or :exc:`SkipTest`, raised by this method will be considered an error rather than a
-      test failure.  This method will only be called if the :meth:`setUp` succeeds,
-      regardless of the outcome of the test method. The default implementation does nothing.
+      careful about checking internal state.  Any exception, other than
+      :exc:`AssertionError` or :exc:`SkipTest`, raised by this method will be
+      considered an additional error rather than a test failure (thus increasing
+      the total number of reported errors). This method will only be called if
+      the :meth:`setUp` succeeds, regardless of the outcome of the test method.
+      The default implementation does nothing.
 
 
    .. method:: setUpClass()
@@ -762,8 +769,9 @@ Test cases
 
    .. _assert-methods:
 
-   The :class:`TestCase` class provides a number of methods to check for and
-   report failures, such as:
+   The :class:`TestCase` class provides several assert methods to check for and
+   report failures.  The following table lists the most commonly used methods
+   (see the tables below for more assert methods):
 
    +-----------------------------------------+-----------------------------+---------------+
    | Method                                  | Checks that                 | New in        |
@@ -884,7 +892,7 @@ Test cases
 
 
 
-   It is also possible to check the production of exceptions, warnings and
+   It is also possible to check the production of exceptions, warnings, and
    log messages using the following methods:
 
    +---------------------------------------------------------+--------------------------------------+------------+

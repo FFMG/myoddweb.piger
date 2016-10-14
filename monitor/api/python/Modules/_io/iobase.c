@@ -53,8 +53,9 @@ PyDoc_STRVAR(iobase_doc,
     "called.\n"
     "\n"
     "The basic type used for binary data read from or written to a file is\n"
-    "bytes. bytearrays are accepted too, and in some cases (such as\n"
-    "readinto) needed. Text I/O classes work with str data.\n"
+    "bytes. Other bytes-like objects are accepted as method arguments too.\n"
+    "In some cases (such as readinto), a writable object is required. Text\n"
+    "I/O classes work with str data.\n"
     "\n"
     "Note that calling any method (except additional calls to close(),\n"
     "which are ignored) on a closed stream should raise a ValueError.\n"
@@ -335,13 +336,13 @@ _io._IOBase.seekable
 
 Return whether object supports random access.
 
-If False, seek(), tell() and truncate() will raise UnsupportedOperation.
+If False, seek(), tell() and truncate() will raise OSError.
 This method may need to do a test seek().
 [clinic start generated code]*/
 
 static PyObject *
 _io__IOBase_seekable_impl(PyObject *self)
-/*[clinic end generated code: output=4c24c67f5f32a43d input=22676eebb81dcf1e]*/
+/*[clinic end generated code: output=4c24c67f5f32a43d input=b976622f7fdf3063]*/
 {
     Py_RETURN_FALSE;
 }
@@ -368,12 +369,12 @@ _io._IOBase.readable
 
 Return whether object was opened for reading.
 
-If False, read() will raise UnsupportedOperation.
+If False, read() will raise OSError.
 [clinic start generated code]*/
 
 static PyObject *
 _io__IOBase_readable_impl(PyObject *self)
-/*[clinic end generated code: output=e48089250686388b input=12fc3d8f6be46434]*/
+/*[clinic end generated code: output=e48089250686388b input=285b3b866a0ec35f]*/
 {
     Py_RETURN_FALSE;
 }
@@ -401,12 +402,12 @@ _io._IOBase.writable
 
 Return whether object was opened for writing.
 
-If False, write() will raise UnsupportedOperation.
+If False, write() will raise OSError.
 [clinic start generated code]*/
 
 static PyObject *
 _io__IOBase_writable_impl(PyObject *self)
-/*[clinic end generated code: output=406001d0985be14f input=c17a0bb6a8dfc590]*/
+/*[clinic end generated code: output=406001d0985be14f input=9dcac18a013a05b5]*/
 {
     Py_RETURN_FALSE;
 }
@@ -456,12 +457,12 @@ _io._IOBase.fileno
 
 Returns underlying file descriptor if one exists.
 
-An IOError is raised if the IO object does not use a file descriptor.
+OSError is raised if the IO object does not use a file descriptor.
 [clinic start generated code]*/
 
 static PyObject *
 _io__IOBase_fileno_impl(PyObject *self)
-/*[clinic end generated code: output=7cc0973f0f5f3b73 input=32773c5df4b7eede]*/
+/*[clinic end generated code: output=7cc0973f0f5f3b73 input=4e37028947dc1cc8]*/
 {
     return iobase_unsupported("fileno");
 }

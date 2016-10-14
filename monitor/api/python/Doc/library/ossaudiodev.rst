@@ -5,6 +5,7 @@
    :platform: Linux, FreeBSD
    :synopsis: Access to OSS-compatible audio devices.
 
+--------------
 
 This module allows you to access the OSS (Open Sound System) audio interface.
 OSS is available for a wide range of open-source and commercial Unices, and is
@@ -155,7 +156,7 @@ and (read-only) attributes:
    data may not be written
    ---see :meth:`writeall`.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
 
@@ -169,7 +170,7 @@ and (read-only) attributes:
    no return value, since the amount of data written is always equal to the
    amount of data supplied.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
 

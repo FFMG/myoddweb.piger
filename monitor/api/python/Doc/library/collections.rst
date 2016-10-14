@@ -3,16 +3,17 @@
 
 .. module:: collections
     :synopsis: Container datatypes
+
 .. moduleauthor:: Raymond Hettinger <python@rcn.com>
 .. sectionauthor:: Raymond Hettinger <python@rcn.com>
+
+**Source code:** :source:`Lib/collections/__init__.py`
 
 .. testsetup:: *
 
     from collections import *
     import itertools
     __name__ = '<doctest>'
-
-**Source code:** :source:`Lib/collections/__init__.py`
 
 --------------
 
@@ -56,7 +57,7 @@ The class can be used to simulate nested scopes and is useful in templating.
     dictionary is provided so that a new chain always has at least one mapping.
 
     The underlying mappings are stored in a list.  That list is public and can
-    accessed or updated using the *maps* attribute.  There is no other state.
+    be accessed or updated using the *maps* attribute.  There is no other state.
 
     Lookups search the underlying mappings successively until a key is found.  In
     contrast, writes, updates, and deletions only operate on the first mapping.
@@ -116,12 +117,12 @@ The class can be used to simulate nested scopes and is useful in templating.
       :meth:`~collections.ChainMap.parents` property.
 
     * The `Nested Contexts recipe
-      <http://code.activestate.com/recipes/577434/>`_ has options to control
+      <https://code.activestate.com/recipes/577434/>`_ has options to control
       whether writes and other mutations apply only to the first mapping or to
       any mapping in the chain.
 
     * A `greatly simplified read-only version of Chainmap
-      <http://code.activestate.com/recipes/305268/>`_.
+      <https://code.activestate.com/recipes/305268/>`_.
 
 
 :class:`ChainMap` Examples and Recipes
@@ -374,12 +375,12 @@ or subtracting from an empty counter.
 
 .. seealso::
 
-    * `Bag class <http://www.gnu.org/software/smalltalk/manual-base/html_node/Bag.html>`_
+    * `Bag class <https://www.gnu.org/software/smalltalk/manual-base/html_node/Bag.html>`_
       in Smalltalk.
 
-    * Wikipedia entry for `Multisets <http://en.wikipedia.org/wiki/Multiset>`_.
+    * Wikipedia entry for `Multisets <https://en.wikipedia.org/wiki/Multiset>`_.
 
-    * `C++ multisets <http://www.demo2s.com/Tutorial/Cpp/0380__set-multiset/Catalog0380__set-multiset.htm>`_
+    * `C++ multisets <http://www.java2s.com/Tutorial/Cpp/0380__set-multiset/Catalog0380__set-multiset.htm>`_
       tutorial with examples.
 
     * For mathematical operations on multisets and their use cases, see
@@ -476,6 +477,9 @@ or subtracting from an empty counter.
     .. method:: insert(i, x)
 
         Insert *x* into the deque at position *i*.
+
+        If the insertion would cause a bounded deque to grow beyond *maxlen*,
+        an :exc:`IndexError` is raised.
 
         .. versionadded:: 3.5
 
@@ -789,6 +793,11 @@ they add the ability to access fields by name instead of position index.
     Named tuple instances do not have per-instance dictionaries, so they are
     lightweight and require no more memory than regular tuples.
 
+    For simple uses, where the only requirement is to be able to refer to a set
+    of values by name using attribute-style access, the
+    :class:`types.SimpleNamespace` type can be a suitable alternative to using
+    a namedtuple.
+
     .. versionchanged:: 3.1
         Added support for *rename*.
 
@@ -934,6 +943,9 @@ fields:
    >>> Book.title.__doc__ = 'Title of first printing'
    >>> Book.authors.__doc__ = 'List of authors sorted by last name'
 
+.. versionchanged:: 3.5
+   Property docstrings became writeable.
+
 Default values can be implemented by using :meth:`_replace` to
 customize a prototype instance:
 
@@ -946,7 +958,7 @@ customize a prototype instance:
 .. seealso::
 
     * `Recipe for named tuple abstract base class with a metaclass mix-in
-      <http://code.activestate.com/recipes/577629-namedtupleabc-abstract-base-class-mix-in-for-named/>`_
+      <https://code.activestate.com/recipes/577629-namedtupleabc-abstract-base-class-mix-in-for-named/>`_
       by Jan Kaliszewski.  Besides providing an :term:`abstract base class` for
       named tuples, it also supports an alternate :term:`metaclass`-based
       constructor that is convenient for use cases where named tuples are being
@@ -1018,7 +1030,7 @@ Since an ordered dictionary remembers its insertion order, it can be used
 in conjunction with sorting to make a sorted dictionary::
 
     >>> # regular unsorted dictionary
-    >>> d = {'banana': 3, 'apple':4, 'pear': 1, 'orange': 2}
+    >>> d = {'banana': 3, 'apple': 4, 'pear': 1, 'orange': 2}
 
     >>> # dictionary sorted by key
     >>> OrderedDict(sorted(d.items(), key=lambda t: t[0]))

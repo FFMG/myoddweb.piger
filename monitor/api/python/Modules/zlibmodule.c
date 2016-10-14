@@ -22,6 +22,10 @@
     #define LEAVE_ZLIB(obj)
 #endif
 
+#if defined(ZLIB_VERNUM) && ZLIB_VERNUM >= 0x1221
+#define AT_LEAST_ZLIB_1_2_2_1
+#endif
+
 /* The following parameters are copied from zutil.h, version 0.95 */
 #define DEFLATED   8
 #if MAX_MEM_LEVEL >= 8
@@ -271,7 +275,7 @@ zlib.decompress
     data: Py_buffer
         Compressed data.
     wbits: int(c_default="MAX_WBITS") = MAX_WBITS
-        The window buffer size.
+        The window buffer size and container format.
     bufsize: capped_uint(c_default="DEF_BUF_SIZE") = DEF_BUF_SIZE
         The initial output buffer size.
     /
@@ -282,7 +286,7 @@ Returns a bytes object containing the uncompressed data.
 static PyObject *
 zlib_decompress_impl(PyModuleDef *module, Py_buffer *data, int wbits,
                      unsigned int bufsize)
-/*[clinic end generated code: output=444d0987f3429574 input=da095118b3243b27]*/
+/*[clinic end generated code: output=444d0987f3429574 input=75123b0d4ff0541d]*/
 {
     PyObject *result_str = NULL;
     Byte *input;
@@ -390,12 +394,16 @@ zlib_decompress_impl(PyModuleDef *module, Py_buffer *data, int wbits,
 zlib.compressobj
 
     level: int(c_default="Z_DEFAULT_COMPRESSION") = Z_DEFAULT_COMPRESSION
-        The compression level (an integer in the range 0-9; default is 6).
-        Higher compression levels are slower, but produce smaller results.
+        The compression level (an integer in the range 0-9 or -1; default is
+        currently equivalent to 6).  Higher compression levels are slower,
+        but produce smaller results.
     method: int(c_default="DEFLATED") = DEFLATED
         The compression algorithm.  If given, this must be DEFLATED.
     wbits: int(c_default="MAX_WBITS") = MAX_WBITS
-        The base two logarithm of the window size (range: 8..15).
+        +9 to +15: The base-two logarithm of the window size.  Include a zlib
+            container.
+        -9 to -15: Generate a raw stream.
+        +25 to +31: Include a gzip container.
     memLevel: int(c_default="DEF_MEM_LEVEL") = DEF_MEM_LEVEL
         Controls the amount of memory used for internal compression state.
         Valid values range from 1 to 9.  Higher values result in higher memory
@@ -413,7 +421,7 @@ Return a compressor object.
 static PyObject *
 zlib_compressobj_impl(PyModuleDef *module, int level, int method, int wbits,
                       int memLevel, int strategy, Py_buffer *zdict)
-/*[clinic end generated code: output=2949bbb9a5723ccd input=b034847f8821f6af]*/
+/*[clinic end generated code: output=2949bbb9a5723ccd input=2fa3d026f90ab8d5]*/
 {
     compobject *self = NULL;
     int err;
@@ -470,11 +478,36 @@ zlib_compressobj_impl(PyModuleDef *module, int level, int method, int wbits,
     return (PyObject*)self;
 }
 
+static int
+set_inflate_zdict(compobject *self)
+{
+    Py_buffer zdict_buf;
+    int err;
+
+    if (PyObject_GetBuffer(self->zdict, &zdict_buf, PyBUF_SIMPLE) == -1) {
+        return -1;
+    }
+    if ((size_t)zdict_buf.len > UINT_MAX) {
+        PyErr_SetString(PyExc_OverflowError,
+                        "zdict length does not fit in an unsigned int");
+        PyBuffer_Release(&zdict_buf);
+        return -1;
+    }
+    err = inflateSetDictionary(&(self->zst),
+                               zdict_buf.buf, (unsigned int)zdict_buf.len);
+    PyBuffer_Release(&zdict_buf);
+    if (err != Z_OK) {
+        zlib_error(self->zst, err, "while setting zdict");
+        return -1;
+    }
+    return 0;
+}
+
 /*[clinic input]
 zlib.decompressobj
 
     wbits: int(c_default="MAX_WBITS") = MAX_WBITS
-        The window buffer size.
+        The window buffer size and container format.
     zdict: object(c_default="NULL") = b''
         The predefined compression dictionary.  This must be the same
         dictionary as used by the compressor that produced the input data.
@@ -484,7 +517,7 @@ Return a decompressor object.
 
 static PyObject *
 zlib_decompressobj_impl(PyModuleDef *module, int wbits, PyObject *zdict)
-/*[clinic end generated code: output=8ccd583fbd631798 input=67f05145a6920127]*/
+/*[clinic end generated code: output=8ccd583fbd631798 input=d3832b8511fc977b]*/
 {
     int err;
     compobject *self;
@@ -511,6 +544,20 @@ zlib_decompressobj_impl(PyModuleDef *module, int wbits, PyObject *zdict)
     switch(err) {
     case (Z_OK):
         self->is_initialised = 1;
+        if (self->zdict != NULL && wbits < 0) {
+#ifdef AT_LEAST_ZLIB_1_2_2_1
+            if (set_inflate_zdict(self) < 0) {
+                Py_DECREF(self);
+                return NULL;
+            }
+#else
+            PyErr_Format(ZlibError,
+                         "zlib version %s does not allow raw inflate with dictionary",
+                         ZLIB_VERSION);
+            Py_DECREF(self);
+            return NULL;
+#endif
+        }
         return (PyObject*)self;
     case(Z_STREAM_ERROR):
         Py_DECREF(self);
@@ -667,8 +714,7 @@ save_unconsumed_input(compobject *self, int err)
                       PyBytes_AS_STRING(self->unused_data), old_size);
             Py_MEMCPY(PyBytes_AS_STRING(new_data) + old_size,
                       self->zst.next_in, self->zst.avail_in);
-            Py_DECREF(self->unused_data);
-            self->unused_data = new_data;
+            Py_SETREF(self->unused_data, new_data);
             self->zst.avail_in = 0;
         }
     }
@@ -680,8 +726,7 @@ save_unconsumed_input(compobject *self, int err)
                 (char *)self->zst.next_in, self->zst.avail_in);
         if (new_data == NULL)
             return -1;
-        Py_DECREF(self->unconsumed_tail);
-        self->unconsumed_tail = new_data;
+        Py_SETREF(self->unconsumed_tail, new_data);
     }
     return 0;
 }
@@ -739,29 +784,12 @@ zlib_Decompress_decompress_impl(compobject *self, Py_buffer *data,
     Py_END_ALLOW_THREADS
 
     if (err == Z_NEED_DICT && self->zdict != NULL) {
-        Py_buffer zdict_buf;
-        if (PyObject_GetBuffer(self->zdict, &zdict_buf, PyBUF_SIMPLE) == -1) {
+        if (set_inflate_zdict(self) < 0) {
             Py_DECREF(RetVal);
             RetVal = NULL;
             goto error;
         }
 
-        if ((size_t)zdict_buf.len > UINT_MAX) {
-            PyErr_SetString(PyExc_OverflowError,
-                    "zdict length does not fit in an unsigned int");
-            PyBuffer_Release(&zdict_buf);
-            Py_CLEAR(RetVal);
-            goto error;
-        }
-
-        err = inflateSetDictionary(&(self->zst),
-                                   zdict_buf.buf, (unsigned int)zdict_buf.len);
-        PyBuffer_Release(&zdict_buf);
-        if (err != Z_OK) {
-            zlib_error(self->zst, err, "while decompressing data");
-            Py_CLEAR(RetVal);
-            goto error;
-        }
         /* Repeat the call to inflate. */
         Py_BEGIN_ALLOW_THREADS
         err = inflate(&(self->zst), Z_SYNC_FLUSH);
@@ -963,14 +991,11 @@ zlib_Compress_copy_impl(compobject *self)
         goto error;
     }
     Py_INCREF(self->unused_data);
+    Py_XSETREF(retval->unused_data, self->unused_data);
     Py_INCREF(self->unconsumed_tail);
+    Py_XSETREF(retval->unconsumed_tail, self->unconsumed_tail);
     Py_XINCREF(self->zdict);
-    Py_XDECREF(retval->unused_data);
-    Py_XDECREF(retval->unconsumed_tail);
-    Py_XDECREF(retval->zdict);
-    retval->unused_data = self->unused_data;
-    retval->unconsumed_tail = self->unconsumed_tail;
-    retval->zdict = self->zdict;
+    Py_XSETREF(retval->zdict, self->zdict);
     retval->eof = self->eof;
 
     /* Mark it as being initialized */
@@ -1022,14 +1047,11 @@ zlib_Decompress_copy_impl(compobject *self)
     }
 
     Py_INCREF(self->unused_data);
+    Py_XSETREF(retval->unused_data, self->unused_data);
     Py_INCREF(self->unconsumed_tail);
+    Py_XSETREF(retval->unconsumed_tail, self->unconsumed_tail);
     Py_XINCREF(self->zdict);
-    Py_XDECREF(retval->unused_data);
-    Py_XDECREF(retval->unconsumed_tail);
-    Py_XDECREF(retval->zdict);
-    retval->unused_data = self->unused_data;
-    retval->unconsumed_tail = self->unconsumed_tail;
-    retval->zdict = self->zdict;
+    Py_XSETREF(retval->zdict, self->zdict);
     retval->eof = self->eof;
 
     /* Mark it as being initialized */
@@ -1336,7 +1358,7 @@ PyDoc_STRVAR(zlib_module_documentation,
 "decompress(string,[wbits],[bufsize]) -- Decompresses a compressed string.\n"
 "decompressobj([wbits[, zdict]]]) -- Return a decompressor object.\n"
 "\n"
-"'wbits' is window buffer size.\n"
+"'wbits' is window buffer size and container format.\n"
 "Compressor objects support compress() and flush() methods; decompressor\n"
 "objects support decompress() and flush().");
 

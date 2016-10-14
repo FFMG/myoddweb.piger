@@ -7,12 +7,11 @@
 .. moduleauthor:: Bill Janssen <bill.janssen@gmail.com>
 .. sectionauthor::  Bill Janssen <bill.janssen@gmail.com>
 
+**Source code:** :source:`Lib/ssl.py`
 
 .. index:: single: OpenSSL; (use in module ssl)
 
 .. index:: TLS, SSL, Transport Layer Security, Secure Sockets Layer
-
-**Source code:** :source:`Lib/ssl.py`
 
 --------------
 
@@ -206,7 +205,7 @@ instead.
 
    The *ciphers* parameter sets the available ciphers for this SSL object.
    It should be a string in the `OpenSSL cipher list format
-   <http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT>`_.
+   <https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT>`_.
 
    The parameter ``do_handshake_on_connect`` specifies whether to do the SSL
    handshake automatically after doing a :meth:`socket.connect`, or whether the
@@ -296,7 +295,7 @@ Random generation
 
    Read the Wikipedia article, `Cryptographically secure pseudorandom number
    generator (CSPRNG)
-   <http://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator>`_,
+   <https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator>`_,
    to get the requirements of a cryptographically generator.
 
    .. versionadded:: 3.3
@@ -344,7 +343,7 @@ Random generation
    string (so you can always use :const:`0.0`).  See :rfc:`1750` for more
    information on sources of entropy.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
 Certificate handling
@@ -721,7 +720,7 @@ Constants
 
    Whether the OpenSSL library has built-in support for *Next Protocol
    Negotiation* as described in the `NPN draft specification
-   <http://tools.ietf.org/html/draft-agl-tls-nextprotoneg>`_. When true,
+   <https://tools.ietf.org/html/draft-agl-tls-nextprotoneg>`_. When true,
    you can use the :meth:`SSLContext.set_npn_protocols` method to advertise
    which protocols you want to support.
 
@@ -769,7 +768,7 @@ Constants
           ALERT_DESCRIPTION_*
 
    Alert Descriptions from :rfc:`5246` and others. The `IANA TLS Alert Registry
-   <http://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-6>`_
+   <https://www.iana.org/assignments/tls-parameters/tls-parameters.xml#tls-parameters-6>`_
    contains this list and references to the RFCs where their meaning is defined.
 
    Used as the return value of the callback function in
@@ -842,7 +841,7 @@ SSL Sockets
 
 SSL sockets also have the following additional methods and attributes:
 
-.. method:: SSLSocket.read(len=0, buffer=None)
+.. method:: SSLSocket.read(len=1024, buffer=None)
 
    Read up to *len* bytes of data from the SSL socket and return the result as
    a ``bytes`` instance. If *buffer* is specified, then read into the buffer
@@ -1174,7 +1173,7 @@ to speed up repeated connections from the same clients.
    The *capath* string, if present, is
    the path to a directory containing several CA certificates in PEM format,
    following an `OpenSSL specific layout
-   <http://www.openssl.org/docs/ssl/SSL_CTX_load_verify_locations.html>`_.
+   <https://www.openssl.org/docs/ssl/SSL_CTX_load_verify_locations.html>`_.
 
    The *cadata* object, if present, is either an ASCII string of one or more
    PEM-encoded certificates or a :term:`bytes-like object` of DER-encoded
@@ -1212,7 +1211,7 @@ to speed up repeated connections from the same clients.
 
    Set the available ciphers for sockets created with this context.
    It should be a string in the `OpenSSL cipher list format
-   <http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT>`_.
+   <https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT>`_.
    If no cipher can be selected (because compile-time options or other
    configuration forbids use of all the specified ciphers), an
    :class:`SSLError` will be raised.
@@ -1241,7 +1240,7 @@ to speed up repeated connections from the same clients.
    handshake. It should be a list of strings, like ``['http/1.1', 'spdy/2']``,
    ordered by preference. The selection of a protocol will happen during the
    handshake, and will play out according to the `NPN draft specification
-   <http://tools.ietf.org/html/draft-agl-tls-nextprotoneg>`_. After a
+   <https://tools.ietf.org/html/draft-agl-tls-nextprotoneg>`_. After a
    successful handshake, the :meth:`SSLSocket.selected_npn_protocol` method will
    return the agreed-upon protocol.
 
@@ -1369,7 +1368,7 @@ to speed up repeated connections from the same clients.
 
    Get statistics about the SSL sessions created or managed by this context.
    A dictionary is returned which maps the names of each `piece of information
-   <http://www.openssl.org/docs/ssl/SSL_CTX_sess_number.html>`_ to their
+   <https://www.openssl.org/docs/ssl/SSL_CTX_sess_number.html>`_ to their
    numeric values.  For example, here is the total number of hits and misses
    in the session cache since the context was created::
 
@@ -1585,7 +1584,7 @@ should use the following idiom::
    except ImportError:
        pass
    else:
-       ... # do something that requires SSL support
+       ...  # do something that requires SSL support
 
 Client-side operation
 ^^^^^^^^^^^^^^^^^^^^^
@@ -2019,7 +2018,7 @@ enabled when negotiating a SSL session is possible through the
 :meth:`SSLContext.set_ciphers` method.  Starting from Python 3.2.3, the
 ssl module disables certain weak ciphers by default, but you may want
 to further restrict the cipher choice. Be sure to read OpenSSL's documentation
-about the `cipher list format <http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT>`_.
+about the `cipher list format <https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT>`_.
 If you want to check which ciphers are enabled by a given cipher list, use the
 ``openssl ciphers`` command on your system.
 
@@ -2040,26 +2039,26 @@ successful call of :func:`~ssl.RAND_add`, :func:`~ssl.RAND_bytes` or
    Class :class:`socket.socket`
        Documentation of underlying :mod:`socket` class
 
-   `SSL/TLS Strong Encryption: An Introduction <http://httpd.apache.org/docs/trunk/en/ssl/ssl_intro.html>`_
+   `SSL/TLS Strong Encryption: An Introduction <https://httpd.apache.org/docs/trunk/en/ssl/ssl_intro.html>`_
        Intro from the Apache webserver documentation
 
-   `RFC 1422: Privacy Enhancement for Internet Electronic Mail: Part II: Certificate-Based Key Management <http://www.ietf.org/rfc/rfc1422>`_
+   `RFC 1422: Privacy Enhancement for Internet Electronic Mail: Part II: Certificate-Based Key Management <https://www.ietf.org/rfc/rfc1422>`_
        Steve Kent
 
-   `RFC 1750: Randomness Recommendations for Security <http://www.ietf.org/rfc/rfc1750>`_
+   `RFC 1750: Randomness Recommendations for Security <https://www.ietf.org/rfc/rfc1750>`_
        D. Eastlake et. al.
 
-   `RFC 3280: Internet X.509 Public Key Infrastructure Certificate and CRL Profile <http://www.ietf.org/rfc/rfc3280>`_
+   `RFC 3280: Internet X.509 Public Key Infrastructure Certificate and CRL Profile <https://www.ietf.org/rfc/rfc3280>`_
        Housley et. al.
 
-   `RFC 4366: Transport Layer Security (TLS) Extensions <http://www.ietf.org/rfc/rfc4366>`_
+   `RFC 4366: Transport Layer Security (TLS) Extensions <https://www.ietf.org/rfc/rfc4366>`_
        Blake-Wilson et. al.
 
-   `RFC 5246: The Transport Layer Security (TLS) Protocol Version 1.2 <http://tools.ietf.org/html/rfc5246>`_
+   `RFC 5246: The Transport Layer Security (TLS) Protocol Version 1.2 <https://tools.ietf.org/html/rfc5246>`_
        T. Dierks et. al.
 
-   `RFC 6066: Transport Layer Security (TLS) Extensions <http://tools.ietf.org/html/rfc6066>`_
+   `RFC 6066: Transport Layer Security (TLS) Extensions <https://tools.ietf.org/html/rfc6066>`_
        D. Eastlake
 
-   `IANA TLS: Transport Layer Security (TLS) Parameters <http://www.iana.org/assignments/tls-parameters/tls-parameters.xml>`_
+   `IANA TLS: Transport Layer Security (TLS) Parameters <https://www.iana.org/assignments/tls-parameters/tls-parameters.xml>`_
        IANA

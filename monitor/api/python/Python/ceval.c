@@ -1933,8 +1933,9 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
             PyObject *obj = TOP();
             PyTypeObject *type = Py_TYPE(obj);
 
-            if (type->tp_as_async != NULL)
+            if (type->tp_as_async != NULL) {
                 getter = type->tp_as_async->am_aiter;
+            }
 
             if (getter != NULL) {
                 iter = (*getter)(obj);
@@ -1955,6 +1956,27 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
                 goto error;
             }
 
+            if (Py_TYPE(iter)->tp_as_async != NULL &&
+                    Py_TYPE(iter)->tp_as_async->am_anext != NULL) {
+
+                /* Starting with CPython 3.5.2 __aiter__ should return
+                   asynchronous iterators directly (not awaitables that
+                   resolve to asynchronous iterators.)
+
+                   Therefore, we check if the object that was returned
+                   from __aiter__ has an __anext__ method.  If it does,
+                   we wrap it in an awaitable that resolves to `iter`.
+
+                   See http://bugs.python.org/issue27243 for more
+                   details.
+                */
+
+                PyObject *wrapper = _PyAIterWrapper_New(iter);
+                Py_DECREF(iter);
+                SET_TOP(wrapper);
+                DISPATCH();
+            }
+
             awaitable = _PyCoro_GetAwaitableIter(iter);
             if (awaitable == NULL) {
                 SET_TOP(NULL);
@@ -1966,8 +1988,22 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
 
                 Py_DECREF(iter);
                 goto error;
-            } else
+            } else {
                 Py_DECREF(iter);
+
+                if (PyErr_WarnFormat(
+                        PyExc_PendingDeprecationWarning, 1,
+                        "'%.100s' implements legacy __aiter__ protocol; "
+                        "__aiter__ should return an asynchronous "
+                        "iterator, not awaitable",
+                        type->tp_name))
+                {
+                    /* Warning was converted to an error. */
+                    Py_DECREF(awaitable);
+                    SET_TOP(NULL);
+                    goto error;
+                }
+            }
 
             SET_TOP(awaitable);
             DISPATCH();
@@ -2020,6 +2056,21 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
             PyObject *iter = _PyCoro_GetAwaitableIter(iterable);
 
             Py_DECREF(iterable);
+
+            if (iter != NULL && PyCoro_CheckExact(iter)) {
+                PyObject *yf = _PyGen_yf((PyGenObject*)iter);
+                if (yf != NULL) {
+                    /* `iter` is a coroutine object that is being
+                       awaited, `yf` is a pointer to the current awaitable
+                       being awaited on. */
+                    Py_DECREF(yf);
+                    Py_CLEAR(iter);
+                    PyErr_SetString(
+                        PyExc_RuntimeError,
+                        "coroutine is being awaited already");
+                    /* The code below jumps to `error` if `iter` is NULL. */
+                }
+            }
 
             SET_TOP(iter); /* Even if it's NULL */
 
@@ -3214,8 +3265,7 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
                 Py_INCREF(self);
                 func = PyMethod_GET_FUNCTION(func);
                 Py_INCREF(func);
-                Py_DECREF(*pfunc);
-                *pfunc = self;
+                Py_SETREF(*pfunc, self);
                 na++;
                 /* n++; */
             } else
@@ -3270,6 +3320,7 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
                 PyObject *anns = PyDict_New();
                 if (anns == NULL) {
                     Py_DECREF(func);
+                    Py_DECREF(names);
                     goto error;
                 }
                 name_ix = PyTuple_Size(names);
@@ -3285,9 +3336,11 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
                     if (err != 0) {
                         Py_DECREF(anns);
                         Py_DECREF(func);
+                        Py_DECREF(names);
                         goto error;
                     }
                 }
+                Py_DECREF(names);
 
                 if (PyFunction_SetAnnotations(func, anns) != 0) {
                     /* Can't happen unless
@@ -3297,7 +3350,6 @@ PyEval_EvalFrameEx(PyFrameObject *f, int throwflag)
                     goto error;
                 }
                 Py_DECREF(anns);
-                Py_DECREF(names);
             }
 
             /* XXX Maybe this should be a separate opcode? */
@@ -4411,10 +4463,8 @@ _PyEval_SetCoroutineWrapper(PyObject *wrapper)
 {
     PyThreadState *tstate = PyThreadState_GET();
 
-    Py_CLEAR(tstate->coroutine_wrapper);
-
     Py_XINCREF(wrapper);
-    tstate->coroutine_wrapper = wrapper;
+    Py_XSETREF(tstate->coroutine_wrapper, wrapper);
 }
 
 PyObject *
@@ -4670,8 +4720,7 @@ call_function(PyObject ***pp_stack, int oparg
             Py_INCREF(self);
             func = PyMethod_GET_FUNCTION(func);
             Py_INCREF(func);
-            Py_DECREF(*pfunc);
-            *pfunc = self;
+            Py_SETREF(*pfunc, self);
             na++;
             n++;
         } else
@@ -4939,16 +4988,18 @@ ext_do_call(PyObject *func, PyObject ***pp_stack, int flags, int na, int nk)
         stararg = EXT_POP(*pp_stack);
         if (!PyTuple_Check(stararg)) {
             PyObject *t = NULL;
+            if (Py_TYPE(stararg)->tp_iter == NULL &&
+                    !PySequence_Check(stararg)) {
+                PyErr_Format(PyExc_TypeError,
+                             "%.200s%.200s argument after * "
+                             "must be an iterable, not %.200s",
+                             PyEval_GetFuncName(func),
+                             PyEval_GetFuncDesc(func),
+                             stararg->ob_type->tp_name);
+                goto ext_call_fail;
+            }
             t = PySequence_Tuple(stararg);
             if (t == NULL) {
-                if (PyErr_ExceptionMatches(PyExc_TypeError)) {
-                    PyErr_Format(PyExc_TypeError,
-                                 "%.200s%.200s argument after * "
-                                 "must be a sequence, not %.200s",
-                                 PyEval_GetFuncName(func),
-                                 PyEval_GetFuncDesc(func),
-                                 stararg->ob_type->tp_name);
-                }
                 goto ext_call_fail;
             }
             Py_DECREF(stararg);

@@ -439,7 +439,7 @@ is equivalent to ::
 
 .. seealso::
 
-   :pep:`0343` - The "with" statement
+   :pep:`343` - The "with" statement
       The specification, background, and examples for the Python :keyword:`with`
       statement.
 
@@ -469,7 +469,7 @@ A function definition defines a user-defined function object (see section
 .. productionlist::
    funcdef: [`decorators`] "def" `funcname` "(" [`parameter_list`] ")" ["->" `expression`] ":" `suite`
    decorators: `decorator`+
-   decorator: "@" `dotted_name` ["(" [`parameter_list` [","]] ")"] NEWLINE
+   decorator: "@" `dotted_name` ["(" [`argument_list` [","]] ")"] NEWLINE
    dotted_name: `identifier` ("." `identifier`)*
    parameter_list: (`defparameter` ",")*
                  : | "*" [`parameter`] ("," `defparameter`)* ["," "**" `parameter`]
@@ -604,7 +604,7 @@ A class definition defines a class object (see section :ref:`types`):
 
 .. productionlist::
    classdef: [`decorators`] "class" `classname` [`inheritance`] ":" `suite`
-   inheritance: "(" [`parameter_list`] ")"
+   inheritance: "(" [`argument_list`] ")"
    classname: `identifier`
 
 A class definition is an executable statement.  The inheritance list usually
@@ -726,7 +726,7 @@ The following code::
 Is semantically equivalent to::
 
     iter = (ITER)
-    iter = await type(iter).__aiter__(iter)
+    iter = type(iter).__aiter__(iter)
     running = True
     while running:
         try:

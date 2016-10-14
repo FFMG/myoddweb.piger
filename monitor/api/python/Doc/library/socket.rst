@@ -4,6 +4,9 @@
 .. module:: socket
    :synopsis: Low-level networking interface.
 
+**Source code:** :source:`Lib/socket.py`
+
+--------------
 
 This module provides access to the BSD *socket* interface. It is available on
 all modern Unix systems, Windows, MacOS, and probably additional platforms.
@@ -57,7 +60,7 @@ created.  Socket addresses are represented as follows:
       Previously, :const:`AF_UNIX` socket paths were assumed to use UTF-8
       encoding.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
 - A pair ``(host, port)`` is used for the :const:`AF_INET` address family,
@@ -445,9 +448,6 @@ The following functions all create :ref:`socket objects <socket-objects>`.
    .. versionchanged:: 3.2
       *source_address* was added.
 
-   .. versionchanged:: 3.2
-      support for the :keyword:`with` statement was added.
-
 
 .. function:: fromfd(fd, family, type, proto=0)
 
@@ -568,11 +568,6 @@ The :mod:`socket` module also offers various network-related services:
    Return a string containing the hostname of the machine where  the Python
    interpreter is currently executing.
 
-   If you want to know the current machine's IP address, you may want to use
-   ``gethostbyname(gethostname())``. This operation assumes that there is a
-   valid address-to-host mapping for the host, and the assumption does not
-   always hold.
-
    Note: :func:`gethostname` doesn't always return the fully qualified domain
    name; use :func:`getfqdn` for that.
 
@@ -680,7 +675,7 @@ The :mod:`socket` module also offers various network-related services:
    support IPv6, and :func:`inet_ntop` should be used instead for IPv4/v6 dual
    stack support.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
 
@@ -722,7 +717,7 @@ The :mod:`socket` module also offers various network-related services:
    .. versionchanged:: 3.4
       Windows support added
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
 
@@ -836,6 +831,10 @@ Socket objects have the following methods.  Except for
 :meth:`~socket.makefile`, these correspond to Unix system calls applicable
 to sockets.
 
+.. versionchanged:: 3.2
+   Support for the :term:`context manager` protocol was added.  Exiting the
+   context manager is equivalent to calling :meth:`~socket.close`.
+
 
 .. method:: socket.accept()
 
@@ -931,13 +930,12 @@ to sockets.
 
 .. method:: socket.fileno()
 
-   Return the socket's file descriptor (a small integer).  This is useful with
-   :func:`select.select`.
+   Return the socket's file descriptor (a small integer), or -1 on failure. This
+   is useful with :func:`select.select`.
 
    Under Windows the small integer returned by this method cannot be used where a
    file descriptor can be used (such as :func:`os.fdopen`).  Unix does not have
    this limitation.
-
 
 .. method:: socket.get_inheritable()
 
@@ -988,7 +986,7 @@ to sockets.
 
    The :meth:`ioctl` method is a limited interface to the WSAIoctl system
    interface.  Please refer to the `Win32 documentation
-   <http://msdn.microsoft.com/en-us/library/ms741621%28VS.85%29.aspx>`_ for more
+   <https://msdn.microsoft.com/en-us/library/ms741621%28VS.85%29.aspx>`_ for more
    information.
 
    On other platforms, the generic :func:`fcntl.fcntl` and :func:`fcntl.ioctl`
@@ -1011,7 +1009,8 @@ to sockets.
 
    Return a :term:`file object` associated with the socket.  The exact returned
    type depends on the arguments given to :meth:`makefile`.  These arguments are
-   interpreted the same way as by the built-in :func:`open` function.
+   interpreted the same way as by the built-in :func:`open` function, except
+   the only supported *mode* values are ``'r'`` (default), ``'w'`` and ``'b'``.
 
    The socket must be in blocking mode; it can have a timeout, but the file
    object's internal buffer may end up in an inconsistent state if a timeout
@@ -1336,7 +1335,7 @@ to sockets.
    ensure that the bytestring contains the proper bits (see the optional built-in
    module :mod:`struct` for a way to encode C structures as bytestrings).
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
 
@@ -1461,16 +1460,16 @@ The first two examples support IPv4 only. ::
 
    HOST = ''                 # Symbolic name meaning all available interfaces
    PORT = 50007              # Arbitrary non-privileged port
-   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   s.bind((HOST, PORT))
-   s.listen(1)
-   conn, addr = s.accept()
-   print('Connected by', addr)
-   while True:
-       data = conn.recv(1024)
-       if not data: break
-       conn.sendall(data)
-   conn.close()
+   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+       s.bind((HOST, PORT))
+       s.listen(1)
+       conn, addr = s.accept()
+       with conn:
+           print('Connected by', addr)
+           while True:
+               data = conn.recv(1024)
+               if not data: break
+               conn.sendall(data)
 
 ::
 
@@ -1479,11 +1478,10 @@ The first two examples support IPv4 only. ::
 
    HOST = 'daring.cwi.nl'    # The remote host
    PORT = 50007              # The same port as used by the server
-   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   s.connect((HOST, PORT))
-   s.sendall(b'Hello, world')
-   data = s.recv(1024)
-   s.close()
+   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+       s.connect((HOST, PORT))
+       s.sendall(b'Hello, world')
+       data = s.recv(1024)
    print('Received', repr(data))
 
 The next two examples are identical to the above two, but support both IPv4 and
@@ -1520,12 +1518,12 @@ sends traffic to the first one connected successfully. ::
        print('could not open socket')
        sys.exit(1)
    conn, addr = s.accept()
-   print('Connected by', addr)
-   while True:
-       data = conn.recv(1024)
-       if not data: break
-       conn.send(data)
-   conn.close()
+   with conn:
+       print('Connected by', addr)
+       while True:
+           data = conn.recv(1024)
+           if not data: break
+           conn.send(data)
 
 ::
 
@@ -1553,9 +1551,9 @@ sends traffic to the first one connected successfully. ::
    if s is None:
        print('could not open socket')
        sys.exit(1)
-   s.sendall(b'Hello, world')
-   data = s.recv(1024)
-   s.close()
+   with s:
+       s.sendall(b'Hello, world')
+       data = s.recv(1024)
    print('Received', repr(data))
 
 

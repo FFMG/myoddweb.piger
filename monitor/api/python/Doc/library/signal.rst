@@ -4,6 +4,7 @@
 .. module:: signal
    :synopsis: Set handlers for asynchronous events.
 
+--------------
 
 This module provides mechanisms to use signal handlers in Python.
 
@@ -11,7 +12,7 @@ This module provides mechanisms to use signal handlers in Python.
 General rules
 -------------
 
-The :func:`signal.signal` function allows to define custom handlers to be
+The :func:`signal.signal` function allows defining custom handlers to be
 executed when a signal is received.  A small number of default handlers are
 installed: :const:`SIGPIPE` is ignored (so write errors on pipes and sockets
 can be reported as ordinary Python exceptions) and :const:`SIGINT` is
@@ -21,9 +22,6 @@ A handler for a particular signal, once set, remains installed until it is
 explicitly reset (Python emulates the BSD style interface regardless of the
 underlying implementation), with the exception of the handler for
 :const:`SIGCHLD`, which follows the underlying implementation.
-
-There is no way to "block" signals temporarily from critical sections (since
-this is not supported by all Unix flavors).
 
 
 Execution of Python signal handlers
@@ -354,6 +352,9 @@ The :mod:`signal` module defines the following functions:
    On Windows, :func:`signal` can only be called with :const:`SIGABRT`,
    :const:`SIGFPE`, :const:`SIGILL`, :const:`SIGINT`, :const:`SIGSEGV`, or
    :const:`SIGTERM`. A :exc:`ValueError` will be raised in any other case.
+   Note that not all systems define the same set of signal names; an
+   :exc:`AttributeError` will be raised if a signal name is not defined as
+   ``SIG*`` module level constant.
 
 
 .. function:: sigpending()

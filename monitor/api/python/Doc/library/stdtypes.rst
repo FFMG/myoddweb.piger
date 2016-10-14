@@ -361,19 +361,22 @@ Notes:
 All :class:`numbers.Real` types (:class:`int` and :class:`float`) also include
 the following operations:
 
-+--------------------+------------------------------------+--------+
-| Operation          | Result                             | Notes  |
-+====================+====================================+========+
-| ``math.trunc(x)``  | *x* truncated to Integral          |        |
-+--------------------+------------------------------------+--------+
-| ``round(x[, n])``  | *x* rounded to n digits,           |        |
-|                    | rounding half to even. If n is     |        |
-|                    | omitted, it defaults to 0.         |        |
-+--------------------+------------------------------------+--------+
-| ``math.floor(x)``  | the greatest integral float <= *x* |        |
-+--------------------+------------------------------------+--------+
-| ``math.ceil(x)``   | the least integral float >= *x*    |        |
-+--------------------+------------------------------------+--------+
++--------------------+---------------------------------------------+
+| Operation          | Result                                      |
++====================+=============================================+
+| :func:`math.trunc(\| *x* truncated to :class:`~numbers.Integral` |
+| x) <math.trunc>`   |                                             |
++--------------------+---------------------------------------------+
+| :func:`round(x[,   | *x* rounded to *n* digits,                  |
+| n]) <round>`       | rounding half to even. If *n* is            |
+|                    | omitted, it defaults to 0.                  |
++--------------------+---------------------------------------------+
+| :func:`math.floor(\| the greatest :class:`~numbers.Integral`     |
+| x) <math.floor>`   | <= *x*                                      |
++--------------------+---------------------------------------------+
+| :func:`math.ceil(x)| the least :class:`~numbers.Integral` >= *x* |
+| <math.ceil>`       |                                             |
++--------------------+---------------------------------------------+
 
 For additional numeric operations see the :mod:`math` and :mod:`cmath`
 modules.
@@ -397,8 +400,8 @@ Bitwise Operations on Integer Types
    operator: >>
 
 Bitwise operations only make sense for integers.  Negative numbers are treated
-as their 2's complement value (this assumes a sufficiently large number of bits
-that no overflow occurs during the operation).
+as their 2's complement value (this assumes that there are enough bits so that
+no overflow occurs during the operation).
 
 The priorities of the binary bitwise operations are all lower than the numeric
 operations and higher than the comparisons; the unary operation ``~`` has the
@@ -1298,16 +1301,16 @@ loops.
    only represent sequences that follow a strict pattern and repetition and
    concatenation will usually violate that pattern).
 
-   .. data: start
+   .. attribute:: start
 
       The value of the *start* parameter (or ``0`` if the parameter was
       not supplied)
 
-   .. data: stop
+   .. attribute:: stop
 
       The value of the *stop* parameter
 
-   .. data: step
+   .. attribute:: step
 
       The value of the *step* parameter (or ``1`` if the parameter was
       not supplied)
@@ -1450,7 +1453,7 @@ multiple fragments.
 
    For more information on the ``str`` class and its methods, see
    :ref:`textseq` and the :ref:`string-methods` section below.  To output
-   formatted strings, see the :ref:`string-formatting` section.  In addition,
+   formatted strings, see the :ref:`formatstrings` section.  In addition,
    see the :ref:`stringservices` section.
 
 
@@ -1563,10 +1566,9 @@ expression support in the :mod:`re` module).
 
 .. method:: str.find(sub[, start[, end]])
 
-   Return the lowest index in the string where substring *sub* is found, such
-   that *sub* is contained in the slice ``s[start:end]``.  Optional arguments
-   *start* and *end* are interpreted as in slice notation.  Return ``-1`` if
-   *sub* is not found.
+   Return the lowest index in the string where substring *sub* is found within
+   the slice ``s[start:end]``.  Optional arguments *start* and *end* are
+   interpreted as in slice notation.  Return ``-1`` if *sub* is not found.
 
    .. note::
 
@@ -2940,7 +2942,7 @@ place, and instead produce new objects.
 
    Return true if all bytes in the sequence are ASCII whitespace and the
    sequence is not empty, false otherwise.  ASCII whitespace characters are
-   those byte values in the sequence b' \t\n\r\x0b\f' (space, tab, newline,
+   those byte values in the sequence ``b' \t\n\r\x0b\f'`` (space, tab, newline,
    carriage return, vertical tab, form feed).
 
 
@@ -3829,7 +3831,7 @@ The constructors for both classes work the same:
 
    .. describe:: len(s)
 
-      Return the cardinality of set *s*.
+      Return the number of elements in set *s* (cardinality of *s*).
 
    .. describe:: x in s
 
@@ -4434,12 +4436,12 @@ attribute, you need to explicitly set it on the underlying function object::
 See :ref:`types` for more information.
 
 
+.. index:: object; code, code object
+
 .. _bltin-code-objects:
 
 Code Objects
 ------------
-
-.. index:: object: code
 
 .. index::
    builtin: compile

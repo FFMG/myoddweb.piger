@@ -3,14 +3,19 @@
 
 .. module:: json
    :synopsis: Encode and decode the JSON format.
+
 .. moduleauthor:: Bob Ippolito <bob@redivi.com>
 .. sectionauthor:: Bob Ippolito <bob@redivi.com>
+
+**Source code:** :source:`Lib/json/__init__.py`
+
+--------------
 
 `JSON (JavaScript Object Notation) <http://json.org>`_, specified by
 :rfc:`7159` (which obsoletes :rfc:`4627`) and by
 `ECMA-404 <http://www.ecma-international.org/publications/standards/Ecma-404.htm>`_,
 is a lightweight data interchange format inspired by
-`JavaScript <http://en.wikipedia.org/wiki/JavaScript>`_ object literal syntax
+`JavaScript <https://en.wikipedia.org/wiki/JavaScript>`_ object literal syntax
 (although it is not a strict subset of JavaScript [#rfc-errata]_ ).
 
 :mod:`json` exposes an API familiar to users of the standard library
@@ -689,7 +694,7 @@ Command line options
 .. rubric:: Footnotes
 
 .. [#rfc-errata] As noted in `the errata for RFC 7159
-   <http://www.rfc-editor.org/errata_search.php?rfc=7159>`_,
+   <https://www.rfc-editor.org/errata_search.php?rfc=7159>`_,
    JSON permits literal U+2028 (LINE SEPARATOR) and
    U+2029 (PARAGRAPH SEPARATOR) characters in strings, whereas JavaScript
    (as of ECMAScript Edition 5.1) does not.

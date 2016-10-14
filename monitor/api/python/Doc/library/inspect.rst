@@ -3,6 +3,7 @@
 
 .. module:: inspect
    :synopsis: Extract information and source code from live objects.
+
 .. moduleauthor:: Ka-Ping Yee <ping@lfw.org>
 .. sectionauthor:: Ka-Ping Yee <ping@lfw.org>
 
@@ -489,8 +490,12 @@ Retrieving source code
 .. function:: cleandoc(doc)
 
    Clean up indentation from docstrings that are indented to line up with blocks
-   of code.  Any whitespace that can be uniformly removed from the second line
-   onwards is removed.  Also, all tabs are expanded to spaces.
+   of code.
+
+   All leading whitespace is removed from the first line.  Any leading whitespace
+   that can be uniformly removed from the second line onwards is removed.  Empty
+   lines at the beginning and end are subsequently removed.  Also, all tabs are
+   expanded to spaces.
 
 
 .. _inspect-signature-object:
@@ -787,7 +792,7 @@ function.
    functions::
 
       def test(a, *, b):
-         ...
+          ...
 
       sig = signature(test)
       ba = sig.bind(10, b=20)
@@ -829,8 +834,7 @@ Classes and functions
    .. deprecated:: 3.0
       Use :func:`signature` and
       :ref:`Signature Object <inspect-signature-object>`, which provide a
-      better introspecting API for callables.  This function will be removed
-      in Python 3.6.
+      better introspecting API for callables.
 
 
 .. function:: getfullargspec(func)

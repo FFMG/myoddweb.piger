@@ -136,6 +136,22 @@ def find_library_file(compiler, libname, std_dirs, paths):
         p = p.rstrip(os.sep)
 
         if host_platform == 'darwin' and is_macosx_sdk_path(p):
+            # Note that, as of Xcode 7, Apple SDKs may contain textual stub
+            # libraries with .tbd extensions rather than the normal .dylib
+            # shared libraries installed in /.  The Apple compiler tool
+            # chain handles this transparently but it can cause problems
+            # for programs that are being built with an SDK and searching
+            # for specific libraries.  Distutils find_library_file() now
+            # knows to also search for and return .tbd files.  But callers
+            # of find_library_file need to keep in mind that the base filename
+            # of the returned SDK library file might have a different extension
+            # from that of the library file installed on the running system,
+            # for example:
+            #   /Applications/Xcode.app/Contents/Developer/Platforms/
+            #       MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/
+            #       usr/lib/libedit.tbd
+            # vs
+            #   /usr/lib/libedit.dylib
             if os.path.join(sysroot, p[1:]) == dirname:
                 return [ ]
 
@@ -464,6 +480,13 @@ class PyBuildExt(build_ext):
         finally:
             os.unlink(tmpfile)
 
+    def detect_math_libs(self):
+        # Check for MacOS X, which doesn't need libm.a at all
+        if host_platform == 'darwin':
+            return []
+        else:
+            return ['m']
+
     def detect_modules(self):
         # Ensure that /usr/local is always used, but the local build
         # directories (i.e. '.' and 'Include') must be first.  See issue
@@ -568,10 +591,7 @@ class PyBuildExt(build_ext):
                 if item.startswith('-L'):
                     lib_dirs.append(item[2:])
 
-        # Check for MacOS X, which doesn't need libm.a at all
-        math_libs = ['m']
-        if host_platform == 'darwin':
-            math_libs = []
+        math_libs = self.detect_math_libs()
 
         # XXX Omitted modules: gl, pure, dl, SGI-specific modules
 
@@ -582,13 +602,17 @@ class PyBuildExt(build_ext):
 
         # array objects
         exts.append( Extension('array', ['arraymodule.c']) )
+
+        shared_math = 'Modules/_math.o'
         # complex math library functions
-        exts.append( Extension('cmath', ['cmathmodule.c', '_math.c'],
-                               depends=['_math.h'],
+        exts.append( Extension('cmath', ['cmathmodule.c'],
+                               extra_objects=[shared_math],
+                               depends=['_math.h', shared_math],
                                libraries=math_libs) )
         # math library functions, e.g. sin()
-        exts.append( Extension('math',  ['mathmodule.c', '_math.c'],
-                               depends=['_math.h'],
+        exts.append( Extension('math',  ['mathmodule.c'],
+                               extra_objects=[shared_math],
+                               depends=['_math.h', shared_math],
                                libraries=math_libs) )
 
         # time libraries: librt may be needed for clock_gettime()
@@ -600,7 +624,10 @@ class PyBuildExt(build_ext):
         # time operations and variables
         exts.append( Extension('time', ['timemodule.c'],
                                libraries=time_libs) )
-        exts.append( Extension('_datetime', ['_datetimemodule.c']) )
+        # math_libs is needed by delta_new() that uses round() and by accum()
+        # that uses modf().
+        exts.append( Extension('_datetime', ['_datetimemodule.c'],
+                               libraries=math_libs) )
         # random number generator implemented in C
         exts.append( Extension("_random", ["_randommodule.c"]) )
         # bisect
@@ -671,11 +698,14 @@ class PyBuildExt(build_ext):
         # Multimedia modules
         # These don't work for 64-bit platforms!!!
         # These represent audio samples or images as strings:
-
+        #
         # Operations on audio samples
         # According to #993173, this one should actually work fine on
         # 64-bit platforms.
-        exts.append( Extension('audioop', ['audioop.c']) )
+        #
+        # audioop needs math_libs for floor() in multiple functions.
+        exts.append( Extension('audioop', ['audioop.c'],
+                               libraries=math_libs) )
 
         # readline
         do_readline = self.compiler.find_library_file(lib_dirs, 'readline')
@@ -738,7 +768,7 @@ class PyBuildExt(build_ext):
                 # In every directory on the search path search for a dynamic
                 # library and then a static library, instead of first looking
                 # for dynamic libraries on the entire path.
-                # This way a staticly linked custom readline gets picked up
+                # This way a statically linked custom readline gets picked up
                 # before the (possibly broken) dynamic library in /usr/lib.
                 readline_extra_link_args = ('-Wl,-search_paths_first',)
             else:
@@ -1592,7 +1622,7 @@ class PyBuildExt(build_ext):
         #     --with-tcltk-libs="-L/path/to/tcllibs -ltclm.n \
         #                        -L/path/to/tklibs -ltkm.n"
         #
-        # These values can also be specified or overriden via make:
+        # These values can also be specified or overridden via make:
         #    make TCLTK_INCLUDES="..." TCLTK_LIBS="..."
         #
         # This can be useful for building and testing tkinter with multiple
@@ -1917,6 +1947,7 @@ class PyBuildExt(build_ext):
                    '_ctypes/stgdict.c',
                    '_ctypes/cfield.c']
         depends = ['_ctypes/ctypes.h']
+        math_libs = self.detect_math_libs()
 
         if host_platform == 'darwin':
             sources.append('_ctypes/malloc_closure.c')
@@ -1947,8 +1978,10 @@ class PyBuildExt(build_ext):
                         libraries=[],
                         sources=sources,
                         depends=depends)
+        # function my_sqrt() needs math library for sqrt()
         ext_test = Extension('_ctypes_test',
-                             sources=['_ctypes/_ctypes_test.c'])
+                     sources=['_ctypes/_ctypes_test.c'],
+                     libraries=math_libs)
         self.extensions.extend([ext, ext_test])
 
         if not '--with-system-ffi' in sysconfig.get_config_var("CONFIG_ARGS"):

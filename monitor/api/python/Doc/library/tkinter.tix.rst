@@ -3,10 +3,14 @@
 
 .. module:: tkinter.tix
    :synopsis: Tk Extension Widgets for Tkinter
+
 .. sectionauthor:: Mike Clarkson <mikeclarkson@users.sourceforge.net>
 
+**Source code:** :source:`Lib/tkinter/tix.py`
 
 .. index:: single: Tix
+
+--------------
 
 The :mod:`tkinter.tix` (Tk Interface Extension) module provides an additional
 rich set of widgets. Although the standard Tk library has many useful widgets,
@@ -142,7 +146,7 @@ Basic Widgets
 
    The `LabelEntry
    <http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixLabelEntry.htm>`_
-   widget packages an entry widget and a label into one mega widget. It can be used
+   widget packages an entry widget and a label into one mega widget. It can
    be used to simplify the creation of "entry-form" type of interface.
 
 .. Python Demo of:
@@ -267,7 +271,7 @@ File Selectors
 
    The `ExFileSelectBox
    <http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixExFileSelectBox.htm>`_
-   widget is usually embedded in a tixExFileSelectDialog widget. It provides an
+   widget is usually embedded in a tixExFileSelectDialog widget. It provides a
    convenient method for the user to select files. The style of the
    :class:`ExFileSelectBox` widget is very similar to the standard file dialog on
    MS Windows 3.1.

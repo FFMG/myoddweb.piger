@@ -52,7 +52,7 @@ Lock
    :meth:`acquire` is a coroutine and should be called with ``yield from``.
 
    Locks also support the context management protocol.  ``(yield from lock)``
-   should be used as context manager expression.
+   should be used as the context manager expression.
 
    This class is :ref:`not thread safe <asyncio-multithreading>`.
 
@@ -71,14 +71,14 @@ Lock
        lock = Lock()
        ...
        with (yield from lock):
-            ...
+           ...
 
    Lock objects can be tested for locking state::
 
        if not lock.locked():
-          yield from lock
+           yield from lock
        else:
-          # lock is acquired
+           # lock is acquired
            ...
 
    .. method:: locked()

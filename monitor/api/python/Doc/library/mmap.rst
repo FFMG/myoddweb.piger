@@ -4,6 +4,7 @@
 .. module:: mmap
    :synopsis: Interface to memory-mapped files for Unix and Windows.
 
+--------------
 
 Memory-mapped file objects behave like both :class:`bytearray` and like
 :term:`file objects <file object>`.  You can use mmap objects in most places
@@ -127,7 +128,7 @@ To map anonymous memory, -1 should be passed as the fileno along with the length
       import mmap
 
       with mmap.mmap(-1, 13) as mm:
-          mm.write("Hello world!")
+          mm.write(b"Hello world!")
 
    .. versionadded:: 3.2
       Context manager support.
@@ -144,7 +145,7 @@ To map anonymous memory, -1 should be passed as the fileno along with the length
 
       pid = os.fork()
 
-      if pid == 0: # In a child process
+      if pid == 0:  # In a child process
           mm.seek(0)
           print(mm.readline())
 
@@ -174,7 +175,7 @@ To map anonymous memory, -1 should be passed as the fileno along with the length
       Optional arguments *start* and *end* are interpreted as in slice notation.
       Returns ``-1`` on failure.
 
-      .. versionchanged: 3.5
+      .. versionchanged:: 3.5
          Writable :term:`bytes-like object` is now accepted.
 
 
@@ -237,7 +238,7 @@ To map anonymous memory, -1 should be passed as the fileno along with the length
       Optional arguments *start* and *end* are interpreted as in slice notation.
       Returns ``-1`` on failure.
 
-      .. versionchanged: 3.5
+      .. versionchanged:: 3.5
          Writable :term:`bytes-like object` is now accepted.
 
 
@@ -267,7 +268,7 @@ To map anonymous memory, -1 should be passed as the fileno along with the length
       were written. If the mmap was created with :const:`ACCESS_READ`, then
       writing to it will raise a :exc:`TypeError` exception.
 
-      .. versionchanged: 3.5
+      .. versionchanged:: 3.5
          Writable :term:`bytes-like object` is now accepted.
 
 

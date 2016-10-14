@@ -6,6 +6,10 @@
 
 .. versionadded:: 3.4
 
+**Source code:** :source:`Lib/tracemalloc.py`
+
+--------------
+
 The tracemalloc module is a debug tool to trace memory blocks allocated by
 Python. It provides the following information:
 
@@ -620,7 +624,7 @@ Traceback
       *limit* is set, only format the *limit* most recent frames.
 
       Similar to the :func:`traceback.format_tb` function, except that
-      :meth:`format` does not include newlines.
+      :meth:`.format` does not include newlines.
 
       Example::
 

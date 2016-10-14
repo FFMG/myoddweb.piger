@@ -400,9 +400,8 @@ m_lgamma(double x)
    Implementations of the error function erf(x) and the complementary error
    function erfc(x).
 
-   Method: following 'Numerical Recipes' by Flannery, Press et. al. (2nd ed.,
-   Cambridge University Press), we use a series approximation for erf for
-   small x, and a continued fraction approximation for erfc(x) for larger x;
+   Method: we use a series approximation for erf for small x, and a continued
+   fraction approximation for erfc(x) for larger x;
    combined with the relations erf(-x) = -erf(x) and erfc(x) = 1.0 - erf(x),
    this gives us erf(x) and erfc(x) for all x.
 
@@ -958,8 +957,8 @@ static PyObject * math_ceil(PyObject *self, PyObject *number) {
 }
 
 PyDoc_STRVAR(math_ceil_doc,
-             "ceil(x)\n\nReturn the ceiling of x as an int.\n"
-             "This is the smallest integral value >= x.");
+             "ceil(x)\n\nReturn the ceiling of x as an Integral.\n"
+             "This is the smallest integer >= x.");
 
 FUNC2(copysign, copysign,
       "copysign(x, y)\n\nReturn a float with the magnitude (absolute value) "
@@ -998,8 +997,8 @@ static PyObject * math_floor(PyObject *self, PyObject *number) {
 }
 
 PyDoc_STRVAR(math_floor_doc,
-             "floor(x)\n\nReturn the floor of x as an int.\n"
-             "This is the largest integral value <= x.");
+             "floor(x)\n\nReturn the floor of x as an Integral.\n"
+             "This is the largest integer <= x.");
 
 FUNC1A(gamma, m_tgamma,
       "gamma(x)\n\nGamma function at x.")
@@ -2047,7 +2046,7 @@ math_isclose(PyObject *self, PyObject *args, PyObject *kwargs)
 }
 
 PyDoc_STRVAR(math_isclose_doc,
-"is_close(a, b, *, rel_tol=1e-09, abs_tol=0.0) -> bool\n"
+"isclose(a, b, *, rel_tol=1e-09, abs_tol=0.0) -> bool\n"
 "\n"
 "Determine whether two floating point numbers are close in value.\n"
 "\n"

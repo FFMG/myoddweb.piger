@@ -1,18 +1,16 @@
 :mod:`tempfile` --- Generate temporary files and directories
 ============================================================
 
-.. sectionauthor:: Zack Weinberg <zack@codesourcery.com>
-
-
 .. module:: tempfile
    :synopsis: Generate temporary files and directories.
 
+.. sectionauthor:: Zack Weinberg <zack@codesourcery.com>
+
+**Source code:** :source:`Lib/tempfile.py`
 
 .. index::
    pair: temporary; file name
    pair: temporary; file
-
-**Source code:** :source:`Lib/tempfile.py`
 
 --------------
 
@@ -74,7 +72,8 @@ The module defines the following user-callable items:
    This function operates exactly as :func:`TemporaryFile` does, except that
    the file is guaranteed to have a visible name in the file system (on
    Unix, the directory entry is not unlinked).  That name can be retrieved
-   from the :attr:`name` attribute of the file object.  Whether the name can be
+   from the :attr:`name` attribute of the returned
+   file-like object.  Whether the name can be
    used to open the file a second time, while the named temporary file is
    still open, varies across platforms (it can be so used on Unix; it cannot
    on Windows NT or later).  If *delete* is true (the default), the file is
@@ -255,7 +254,7 @@ to specify the directory and this is the recommend approach.
    module.
 
    If ``tempdir`` is unset or ``None`` at any call to any of the above
-   functions except :func:`gettempprefix` it is initalized following the
+   functions except :func:`gettempprefix` it is initialized following the
    algorithm described in :func:`gettempdir`.
 
 .. _tempfile-examples:

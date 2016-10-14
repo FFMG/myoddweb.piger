@@ -3,9 +3,13 @@
 
 .. module:: locale
    :synopsis: Internationalization services.
+
 .. moduleauthor:: Martin von Löwis <martin@v.loewis.de>
 .. sectionauthor:: Martin von Löwis <martin@v.loewis.de>
 
+**Source code:** :source:`Lib/locale.py`
+
+--------------
 
 The :mod:`locale` module opens access to the POSIX locale database and
 functionality. The POSIX locale mechanism allows programmers to deal with
@@ -467,13 +471,13 @@ The :mod:`locale` module defines the following exception and functions:
 Example::
 
    >>> import locale
-   >>> loc = locale.getlocale() # get current locale
+   >>> loc = locale.getlocale()  # get current locale
    # use German locale; name might vary with platform
    >>> locale.setlocale(locale.LC_ALL, 'de_DE')
-   >>> locale.strcoll('f\xe4n', 'foo') # compare a string containing an umlaut
-   >>> locale.setlocale(locale.LC_ALL, '') # use user's preferred locale
-   >>> locale.setlocale(locale.LC_ALL, 'C') # use default (C) locale
-   >>> locale.setlocale(locale.LC_ALL, loc) # restore saved locale
+   >>> locale.strcoll('f\xe4n', 'foo')  # compare a string containing an umlaut
+   >>> locale.setlocale(locale.LC_ALL, '')   # use user's preferred locale
+   >>> locale.setlocale(locale.LC_ALL, 'C')  # use default (C) locale
+   >>> locale.setlocale(locale.LC_ALL, loc)  # restore saved locale
 
 
 Background, details, hints, tips and caveats

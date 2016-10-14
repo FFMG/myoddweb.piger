@@ -2,16 +2,16 @@
 
 .. _asyncio-streams:
 
-++++++++++++++++++++++++
-Streams (high-level API)
-++++++++++++++++++++++++
++++++++++++++++++++++++++++++
+Streams (coroutine based API)
++++++++++++++++++++++++++++++
 
 Stream functions
 ================
 
 .. note::
 
-   The top-level functions in this module are meant convenience wrappers
+   The top-level functions in this module are meant as convenience wrappers
    only; there's really nothing special there, and if they don't do
    exactly what you want, feel free to copy their code.
 
@@ -142,6 +142,30 @@ StreamReader
 
       This method is a :ref:`coroutine <coroutine>`.
 
+   .. coroutinemethod:: readuntil(separator=b'\n')
+
+      Read data from the stream until ``separator`` is found.
+
+      On success, the data and separator will be removed from the
+      internal buffer (consumed). Returned data will include the
+      separator at the end.
+
+      Configured stream limit is used to check result. Limit sets the
+      maximal length of data that can be returned, not counting the
+      separator.
+
+      If an EOF occurs and the complete separator is still not found,
+      an :exc:`IncompleteReadError` exception will be
+      raised, and the internal buffer will be reset.  The
+      :attr:`IncompleteReadError.partial` attribute may contain the
+      separator partially.
+
+      If the data cannot be read because of over limit, a
+      :exc:`LimitOverrunError` exception  will be raised, and the data
+      will be left in the internal buffer, so it can be read again.
+
+      .. versionadded:: 3.5.2
+
    .. method:: at_eof()
 
       Return ``True`` if the buffer is empty and :meth:`feed_eof` was called.
@@ -223,7 +247,7 @@ StreamReaderProtocol
 .. class:: StreamReaderProtocol(stream_reader, client_connected_cb=None, loop=None)
 
     Trivial helper class to adapt between :class:`Protocol` and
-    :class:`StreamReader`. Sublclass of :class:`Protocol`.
+    :class:`StreamReader`. Subclass of :class:`Protocol`.
 
     *stream_reader* is a :class:`StreamReader` instance, *client_connected_cb*
     is an optional function called with (stream_reader, stream_writer) when a
@@ -249,6 +273,18 @@ IncompleteReadError
    .. attribute:: partial
 
       Read bytes string before the end of stream was reached (:class:`bytes`).
+
+
+LimitOverrunError
+=================
+
+.. exception:: LimitOverrunError
+
+   Reached the buffer limit while looking for a separator.
+
+   .. attribute:: consumed
+
+      Total number of to be consumed bytes.
 
 
 Stream examples

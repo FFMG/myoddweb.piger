@@ -144,7 +144,7 @@ Security improvements:
   all of the parent's inheritable handles, only the necessary ones.
 * A new :func:`hashlib.pbkdf2_hmac` function provides
   the `PKCS#5 password-based key derivation function 2
-  <http://en.wikipedia.org/wiki/PBKDF2>`_.
+  <https://en.wikipedia.org/wiki/PBKDF2>`_.
 * :ref:`TLSv1.1 and TLSv1.2 support <whatsnew-tls-11-12>` for :mod:`ssl`.
 * :ref:`Retrieving certificates from the Windows system cert store support
   <whatsnew34-win-cert-store>` for :mod:`ssl`.
@@ -746,7 +746,7 @@ optional *current_offset*), and the resulting object can be iterated to produce
 method, equivalent to calling :mod:`~dis.dis` on the constructor argument, but
 returned as a multi-line string::
 
-    >>> bytecode = dis.Bytecode(lambda x: x +1, current_offset=3)
+    >>> bytecode = dis.Bytecode(lambda x: x + 1, current_offset=3)
     >>> for instr in bytecode:
     ...     print('{} ({})'.format(instr.opname, instr.opcode))
     LOAD_FAST (124)
@@ -902,7 +902,7 @@ hashlib
 
 A new :func:`hashlib.pbkdf2_hmac` function provides
 the `PKCS#5 password-based key derivation function 2
-<http://en.wikipedia.org/wiki/PBKDF2>`_.  (Contributed by Christian
+<https://en.wikipedia.org/wiki/PBKDF2>`_.  (Contributed by Christian
 Heimes in :issue:`18582`.)
 
 The :attr:`~hashlib.hash.name` attribute of :mod:`hashlib` hash objects is now
@@ -1322,7 +1322,7 @@ kernel version of 2.6.36 or later and glibc of 2.13 or later, provides the
 ability to query or set the resource limits for processes other than the one
 making the call.  (Contributed by Christian Heimes in :issue:`16595`.)
 
-On Linux kernel version 2.6.36 or later, there are there are also some new
+On Linux kernel version 2.6.36 or later, there are also some new
 Linux specific constants: :attr:`~resource.RLIMIT_MSGQUEUE`,
 :attr:`~resource.RLIMIT_NICE`, :attr:`~resource.RLIMIT_RTPRIO`,
 :attr:`~resource.RLIMIT_RTTIME`, and :attr:`~resource.RLIMIT_SIGPENDING`.
@@ -1410,7 +1410,7 @@ sqlite3
 
 A new boolean parameter to the :func:`~sqlite3.connect` function, *uri*, can be
 used to indicate that the *database* parameter is a ``uri`` (see the `SQLite
-URI documentation <http://www.sqlite.org/uri.html>`_).  (Contributed by poq in
+URI documentation <https://www.sqlite.org/uri.html>`_).  (Contributed by poq in
 :issue:`13773`.)
 
 
@@ -1457,7 +1457,7 @@ s), as well as a :meth:`~ssl.SSLContext.get_ca_certs` method that returns a
 list of the loaded ``CA`` certificates.  (Contributed by Christian Heimes in
 :issue:`18147`.)
 
-If OpenSSL 0.9.8 or later is available, :class:`~ssl.SSLContext` has an new
+If OpenSSL 0.9.8 or later is available, :class:`~ssl.SSLContext` has a new
 attribute :attr:`~ssl.SSLContext.verify_flags` that can be used to control the
 certificate verification process by setting it to some combination of the new
 constants :data:`~ssl.VERIFY_DEFAULT`, :data:`~ssl.VERIFY_CRL_CHECK_LEAF`,
@@ -1917,8 +1917,8 @@ Other Build and C API Changes
   :issue:`18596`.)
 
 * The Windows build now uses `Address Space Layout Randomization
-  <http://en.wikipedia.org/wiki/ASLR>`_ and `Data Execution Prevention
-  <http://en.wikipedia.org/wiki/Data_Execution_Prevention>`_.  (Contributed by
+  <https://en.wikipedia.org/wiki/Address_space_layout_randomization>`_ and `Data Execution Prevention
+  <https://en.wikipedia.org/wiki/Data_Execution_Prevention>`_.  (Contributed by
   Christian Heimes in :issue:`16632`.)
 
 * New function :c:func:`PyObject_LengthHint` is the C API equivalent

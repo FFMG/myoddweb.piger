@@ -459,8 +459,8 @@ Pdata_grow(Pdata *self)
 static PyObject *
 Pdata_pop(Pdata *self)
 {
-    PickleState *st = _Pickle_GetGlobalState();
     if (Py_SIZE(self) == 0) {
+        PickleState *st = _Pickle_GetGlobalState();
         PyErr_SetString(st->UnpicklingError, "bad pickle data");
         return NULL;
     }
@@ -550,7 +550,7 @@ typedef struct PicklerObject {
     int bin;                    /* Boolean, true if proto > 0 */
     int framing;                /* True when framing is enabled, proto >= 4 */
     Py_ssize_t frame_start;     /* Position in output_buffer where the
-                                   where the current frame begins. -1 if there
+                                   current frame begins. -1 if there
                                    is no frame currently open. */
 
     Py_ssize_t buf_size;        /* Size of the current buffered pickle data */
@@ -846,9 +846,8 @@ PyMemoTable_Set(PyMemoTable *self, PyObject *key, Py_ssize_t value)
 static int
 _Pickler_ClearBuffer(PicklerObject *self)
 {
-    Py_CLEAR(self->output_buffer);
-    self->output_buffer =
-        PyBytes_FromStringAndSize(NULL, self->max_output_len);
+    Py_XSETREF(self->output_buffer,
+              PyBytes_FromStringAndSize(NULL, self->max_output_len));
     if (self->output_buffer == NULL)
         return -1;
     self->output_len = 0;
@@ -1097,7 +1096,7 @@ _Unpickler_SkipConsumed(UnpicklerObject *self)
         return 0;
 
     assert(self->peek);  /* otherwise we did something wrong */
-    /* This makes an useless copy... */
+    /* This makes a useless copy... */
     r = PyObject_CallFunction(self->read, "n", consumed);
     if (r == NULL)
         return -1;
@@ -3089,9 +3088,8 @@ fix_imports(PyObject **module_name, PyObject **global_name)
                          Py_TYPE(item)->tp_name);
             return -1;
         }
-        Py_CLEAR(*module_name);
         Py_INCREF(item);
-        *module_name = item;
+        Py_XSETREF(*module_name, item);
     }
     else if (PyErr_Occurred()) {
         return -1;
@@ -4015,7 +4013,7 @@ _pickle_Pickler___sizeof___impl(PicklerObject *self)
 {
     Py_ssize_t res, s;
 
-    res = sizeof(PicklerObject);
+    res = _PyObject_SIZE(Py_TYPE(self));
     if (self->memo != NULL) {
         res += sizeof(PyMemoTable);
         res += self->memo->mt_allocated * sizeof(PyMemoEntry);
@@ -4631,7 +4629,7 @@ calc_binsize(char *bytes, int nbytes)
 
 /* s contains x bytes of a little-endian integer.  Return its value as a
  * C int.  Obscure:  when x is 1 or 2, this is an unsigned little-endian
- * int, but when x is 4 it's a signed one.  This is an historical source
+ * int, but when x is 4 it's a signed one.  This is a historical source
  * of x-platform bugs.
  */
 static long
@@ -4984,15 +4982,14 @@ load_counted_binunicode(UnpicklerObject *self, int nbytes)
 }
 
 static int
-load_tuple(UnpicklerObject *self)
+load_counted_tuple(UnpicklerObject *self, Py_ssize_t len)
 {
     PyObject *tuple;
-    Py_ssize_t i;
 
-    if ((i = marker(self)) < 0)
-        return -1;
+    if (Py_SIZE(self->stack) < len)
+        return stack_underflow();
 
-    tuple = Pdata_poptuple(self->stack, i);
+    tuple = Pdata_poptuple(self->stack, Py_SIZE(self->stack) - len);
     if (tuple == NULL)
         return -1;
     PDATA_PUSH(self->stack, tuple, -1);
@@ -5000,24 +4997,14 @@ load_tuple(UnpicklerObject *self)
 }
 
 static int
-load_counted_tuple(UnpicklerObject *self, int len)
+load_tuple(UnpicklerObject *self)
 {
-    PyObject *tuple;
+    Py_ssize_t i;
 
-    tuple = PyTuple_New(len);
-    if (tuple == NULL)
+    if ((i = marker(self)) < 0)
         return -1;
 
-    while (--len >= 0) {
-        PyObject *item;
-
-        PDATA_POP(self->stack, item);
-        if (item == NULL)
-            return -1;
-        PyTuple_SET_ITEM(tuple, len, item);
-    }
-    PDATA_PUSH(self->stack, tuple, -1);
-    return 0;
+    return load_counted_tuple(self, Py_SIZE(self->stack) - i);
 }
 
 static int
@@ -5148,6 +5135,9 @@ load_obj(UnpicklerObject *self)
     if ((i = marker(self)) < 0)
         return -1;
 
+    if (Py_SIZE(self->stack) - i < 1)
+        return stack_underflow();
+
     args = Pdata_poptuple(self->stack, i + 1);
     if (args == NULL)
         return -1;
@@ -5192,8 +5182,10 @@ load_inst(UnpicklerObject *self)
         return -1;
 
     if ((len = _Unpickler_Readline(self, &s)) >= 0) {
-        if (len < 2)
+        if (len < 2) {
+            Py_DECREF(module_name);
             return bad_readline();
+        }
         class_name = PyUnicode_DecodeASCII(s, len - 1, "strict");
         if (class_name != NULL) {
             cls = find_class(self, module_name, class_name);
@@ -5806,13 +5798,18 @@ do_append(UnpicklerObject *self, Py_ssize_t x)
 static int
 load_append(UnpicklerObject *self)
 {
+    if (Py_SIZE(self->stack) - 1 <= 0)
+        return stack_underflow();
     return do_append(self, Py_SIZE(self->stack) - 1);
 }
 
 static int
 load_appends(UnpicklerObject *self)
 {
-    return do_append(self, marker(self));
+    Py_ssize_t i = marker(self);
+    if (i < 0)
+        return -1;
+    return do_append(self, i);
 }
 
 static int
@@ -5862,7 +5859,10 @@ load_setitem(UnpicklerObject *self)
 static int
 load_setitems(UnpicklerObject *self)
 {
-    return do_setitems(self, marker(self));
+    Py_ssize_t i = marker(self);
+    if (i < 0)
+        return -1;
+    return do_setitems(self, i);
 }
 
 static int
@@ -5872,6 +5872,8 @@ load_additems(UnpicklerObject *self)
     Py_ssize_t mark, len, i;
 
     mark =  marker(self);
+    if (mark < 0)
+        return -1;
     len = Py_SIZE(self->stack);
     if (mark > len || mark <= 0)
         return stack_underflow();
@@ -6414,7 +6416,7 @@ _pickle_Unpickler___sizeof___impl(UnpicklerObject *self)
 {
     Py_ssize_t res;
 
-    res = sizeof(UnpicklerObject);
+    res = _PyObject_SIZE(Py_TYPE(self));
     if (self->memo != NULL)
         res += self->memo_size * sizeof(PyObject *);
     if (self->marks != NULL)
@@ -6518,7 +6520,7 @@ binary file object opened for reading, an io.BytesIO object, or any
 other custom object that meets this interface.
 
 Optional keyword arguments are *fix_imports*, *encoding* and *errors*,
-which are used to control compatiblity support for pickle stream
+which are used to control compatibility support for pickle stream
 generated by Python 2.  If *fix_imports* is True, pickle will try to
 map the old Python 2 names to the new names used in Python 3.  The
 *encoding* and *errors* tell pickle how to decode 8-bit string
@@ -6531,7 +6533,7 @@ static int
 _pickle_Unpickler___init___impl(UnpicklerObject *self, PyObject *file,
                                 int fix_imports, const char *encoding,
                                 const char *errors)
-/*[clinic end generated code: output=e2c8ce748edc57b0 input=04ece661aa884837]*/
+/*[clinic end generated code: output=e2c8ce748edc57b0 input=f9b7da04f5f4f335]*/
 {
     _Py_IDENTIFIER(persistent_load);
 
@@ -7064,7 +7066,7 @@ binary file object opened for reading, an io.BytesIO object, or any
 other custom object that meets this interface.
 
 Optional keyword arguments are *fix_imports*, *encoding* and *errors*,
-which are used to control compatiblity support for pickle stream
+which are used to control compatibility support for pickle stream
 generated by Python 2.  If *fix_imports* is True, pickle will try to
 map the old Python 2 names to the new names used in Python 3.  The
 *encoding* and *errors* tell pickle how to decode 8-bit string
@@ -7076,7 +7078,7 @@ string instances as bytes objects.
 static PyObject *
 _pickle_load_impl(PyModuleDef *module, PyObject *file, int fix_imports,
                   const char *encoding, const char *errors)
-/*[clinic end generated code: output=798f1c57cb2b4eb1 input=2df7c7a1e6742204]*/
+/*[clinic end generated code: output=798f1c57cb2b4eb1 input=01b44dd3fc07afa7]*/
 {
     PyObject *result;
     UnpicklerObject *unpickler = _Unpickler_New();
@@ -7118,7 +7120,7 @@ protocol argument is needed.  Bytes past the pickled object's
 representation are ignored.
 
 Optional keyword arguments are *fix_imports*, *encoding* and *errors*,
-which are used to control compatiblity support for pickle stream
+which are used to control compatibility support for pickle stream
 generated by Python 2.  If *fix_imports* is True, pickle will try to
 map the old Python 2 names to the new names used in Python 3.  The
 *encoding* and *errors* tell pickle how to decode 8-bit string
@@ -7130,7 +7132,7 @@ string instances as bytes objects.
 static PyObject *
 _pickle_loads_impl(PyModuleDef *module, PyObject *data, int fix_imports,
                    const char *encoding, const char *errors)
-/*[clinic end generated code: output=61e9cdb01e36a736 input=f57f0fdaa2b4cb8b]*/
+/*[clinic end generated code: output=61e9cdb01e36a736 input=70605948a719feb9]*/
 {
     PyObject *result;
     UnpicklerObject *unpickler = _Unpickler_New();

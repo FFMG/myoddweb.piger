@@ -4,6 +4,7 @@
 .. module:: sys
    :synopsis: Access system-specific parameters and functions.
 
+--------------
 
 This module provides access to some variables used or maintained by the
 interpreter and to functions that interact strongly with the interpreter. It is
@@ -474,7 +475,7 @@ always available.
    additional garbage collector overhead if the object is managed by the garbage
    collector.
 
-   See `recursive sizeof recipe <http://code.activestate.com/recipes/577504>`_
+   See `recursive sizeof recipe <https://code.activestate.com/recipes/577504>`_
    for an example of using :func:`getsizeof` recursively to find the size of
    containers and all their contents.
 
@@ -774,19 +775,32 @@ always available.
 
 .. data:: meta_path
 
-    A list of :term:`finder` objects that have their :meth:`find_module`
-    methods called to see if one of the objects can find the module to be
-    imported. The :meth:`find_module` method is called at least with the
-    absolute name of the module being imported. If the module to be imported is
-    contained in package then the parent package's :attr:`__path__` attribute
-    is passed in as a second argument. The method returns ``None`` if
-    the module cannot be found, else returns a :term:`loader`.
+    A list of :term:`meta path finder` objects that have their
+    :meth:`~importlib.abc.MetaPathFinder.find_spec` methods called to see if one
+    of the objects can find the module to be imported. The
+    :meth:`~importlib.abc.MetaPathFinder.find_spec` method is called with at
+    least the absolute name of the module being imported. If the module to be
+    imported is contained in a package, then the parent package's :attr:`__path__`
+    attribute is passed in as a second argument. The method returns a
+    :term:`module spec`, or ``None`` if the module cannot be found.
 
-    :data:`sys.meta_path` is searched before any implicit default finders or
-    :data:`sys.path`.
+    .. seealso::
 
-    See :pep:`302` for the original specification.
+        :class:`importlib.abc.MetaPathFinder`
+          The abstract base class defining the interface of finder objects on
+          :data:`meta_path`.
+        :class:`importlib.machinery.ModuleSpec`
+          The concrete class which
+          :meth:`~importlib.abc.MetaPathFinder.find_spec` should return
+          instances of.
 
+    .. versionchanged:: 3.4
+
+        :term:`Module specs <module spec>` were introduced in Python 3.4, by
+        :pep:`451`. Earlier versions of Python looked for a method called
+        :meth:`~importlib.abc.MetaPathFinder.find_module`.
+        This is still called as a fallback if a :data:`meta_path` entry doesn't
+        have a :meth:`~importlib.abc.MetaPathFinder.find_spec` method.
 
 .. data:: modules
 

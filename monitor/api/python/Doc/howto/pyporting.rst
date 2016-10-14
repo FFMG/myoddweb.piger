@@ -243,8 +243,8 @@ bothered to add the ``b`` mode when opening a binary file (e.g., ``rb`` for
 binary reading).  Under Python 3, binary files and text files are clearly
 distinct and mutually incompatible; see the :mod:`io` module for details.
 Therefore, you **must** make a decision of whether a file will be used for
-binary access (allowing to read and/or write binary data) or text access
-(allowing to read and/or write text data). You should also use :func:`io.open`
+binary access (allowing binary data to be read and/or written) or text access
+(allowing text data to be read and/or written). You should also use :func:`io.open`
 for opening files instead of the built-in :func:`open` function as the :mod:`io`
 module is consistent from Python 2 to 3 while the built-in :func:`open` function
 is not (in Python 3 it's actually :func:`io.open`).
@@ -281,6 +281,50 @@ To summarize:
 #. Open files using :func:`io.open` and make sure to specify the ``b`` mode when
    appropriate
 #. Be careful when indexing binary data
+
+
+Use feature detection instead of version detection
+++++++++++++++++++++++++++++++++++++++++++++++++++
+Inevitably you will have code that has to choose what to do based on what
+version of Python is running. The best way to do this is with feature detection
+of whether the version of Python you're running under supports what you need.
+If for some reason that doesn't work then you should make the version check is
+against Python 2 and not Python 3. To help explain this, let's look at an
+example.
+
+Let's pretend that you need access to a feature of importlib_ that
+is available in Python's standard library since Python 3.3 and available for
+Python 2 through importlib2_ on PyPI. You might be tempted to write code to
+access e.g. the ``importlib.abc`` module by doing the following::
+
+  import sys
+
+  if sys.version[0] == 3:
+      from importlib import abc
+  else:
+      from importlib2 import abc
+
+The problem with this code is what happens when Python 4 comes out? It would
+be better to treat Python 2 as the exceptional case instead of Python 3 and
+assume that future Python versions will be more compatible with Python 3 than
+Python 2::
+
+  import sys
+
+  if sys.version[0] > 2:
+      from importlib import abc
+  else:
+      from importlib2 import abc
+
+The best solution, though, is to do no version detection at all and instead rely
+on feature detection. That avoids any potential issues of getting the version
+detection wrong and helps keep you future-compatible::
+
+  try:
+      from importlib import abc
+  except ImportError:
+      from importlib2 import abc
+
 
 Prevent compatibility regressions
 ---------------------------------
@@ -346,7 +390,7 @@ your tests under multiple Python interpreters is tox_. You can then integrate
 tox with your continuous integration system so that you never accidentally break
 Python 2 or 3 support.
 
-You may also want to use use the ``-bb`` flag with the Python 3 interpreter to
+You may also want to use the ``-bb`` flag with the Python 3 interpreter to
 trigger an exception when you are comparing bytes to strings or bytes to an int
 (the latter is available starting in Python 3.5). By default type-differing
 comparisons simply return ``False``, but if you made a mistake in your
@@ -381,10 +425,12 @@ supported by Python 2. You should also update the classifiers in your
 .. _cheat sheet: http://python-future.org/compatible_idioms.html
 .. _coverage.py: https://pypi.python.org/pypi/coverage
 .. _Futurize: http://python-future.org/automatic_conversion.html
-.. _Modernize: http://python-modernize.readthedocs.org/en/latest/
+.. _importlib: https://docs.python.org/3/library/importlib.html#module-importlib
+.. _importlib2: https://pypi.python.org/pypi/importlib2
+.. _Modernize: https://python-modernize.readthedocs.org/en/latest/
 .. _Porting to Python 3: http://python3porting.com/
 .. _Pylint: https://pypi.python.org/pypi/pylint
-.. _Python 3 Q & A: http://ncoghlan-devs-python-notes.readthedocs.org/en/latest/python3/questions_and_answers.html
+.. _Python 3 Q & A: https://ncoghlan-devs-python-notes.readthedocs.org/en/latest/python3/questions_and_answers.html
 
 .. _python-future: http://python-future.org/
 .. _python-porting: https://mail.python.org/mailman/listinfo/python-porting

@@ -4,6 +4,7 @@
 .. module:: asyncore
    :synopsis: A base class for developing asynchronous socket handling
               services.
+
 .. moduleauthor:: Sam Rushing <rushing@nightmare.com>
 .. sectionauthor:: Christopher Petrilli <petrilli@amber.org>
 .. sectionauthor:: Steve Holden <sholden@holdenweb.com>
@@ -315,8 +316,8 @@ implement its socket handling::
            self.buffer = self.buffer[sent:]
 
 
-    client = HTTPClient('www.python.org', '/')
-    asyncore.loop()
+   client = HTTPClient('www.python.org', '/')
+   asyncore.loop()
 
 .. _asyncore-example-2:
 

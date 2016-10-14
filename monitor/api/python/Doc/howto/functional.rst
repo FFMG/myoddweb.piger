@@ -332,7 +332,7 @@ substring.
 
 List comprehensions and generator expressions (short form: "listcomps" and
 "genexps") are a concise notation for such operations, borrowed from the
-functional programming language Haskell (http://www.haskell.org/).  You can strip
+functional programming language Haskell (https://www.haskell.org/).  You can strip
 all the whitespace from a stream of strings with the following code::
 
     line_list = ['  line 1\n', 'line 2  \n', ...]
@@ -395,14 +395,14 @@ equivalent to the following Python code::
             continue   # Skip this element
         for expr2 in sequence2:
             if not (condition2):
-                continue    # Skip this element
+                continue   # Skip this element
             ...
             for exprN in sequenceN:
-                 if not (conditionN):
-                     continue   # Skip this element
+                if not (conditionN):
+                    continue   # Skip this element
 
-                 # Output the value of
-                 # the expression.
+                # Output the value of
+                # the expression.
 
 This means that when there are multiple ``for...in`` clauses but no ``if``
 clauses, the length of the resulting output will be equal to the product of the
@@ -716,7 +716,7 @@ returns them in a tuple::
 It doesn't construct an in-memory list and exhaust all the input iterators
 before returning; instead tuples are constructed and returned only if they're
 requested.  (The technical term for this behaviour is `lazy evaluation
-<http://en.wikipedia.org/wiki/Lazy_evaluation>`__.)
+<https://en.wikipedia.org/wiki/Lazy_evaluation>`__.)
 
 This iterator is intended to be used with iterables that are all of the same
 length.  If the iterables are of different lengths, the resulting stream will be
@@ -1199,7 +1199,7 @@ General
 
 **Structure and Interpretation of Computer Programs**, by Harold Abelson and
 Gerald Jay Sussman with Julie Sussman.  Full text at
-http://mitpress.mit.edu/sicp/.  In this classic textbook of computer science,
+https://mitpress.mit.edu/sicp/.  In this classic textbook of computer science,
 chapters 2 and 3 discuss the use of sequences and streams to organize the data
 flow inside a program.  The book uses Scheme for its examples, but many of the
 design approaches described in these chapters are applicable to functional-style
@@ -1208,12 +1208,12 @@ Python code.
 http://www.defmacro.org/ramblings/fp.html: A general introduction to functional
 programming that uses Java examples and has a lengthy historical introduction.
 
-http://en.wikipedia.org/wiki/Functional_programming: General Wikipedia entry
+https://en.wikipedia.org/wiki/Functional_programming: General Wikipedia entry
 describing functional programming.
 
-http://en.wikipedia.org/wiki/Coroutine: Entry for coroutines.
+https://en.wikipedia.org/wiki/Coroutine: Entry for coroutines.
 
-http://en.wikipedia.org/wiki/Currying: Entry for the concept of currying.
+https://en.wikipedia.org/wiki/Currying: Entry for the concept of currying.
 
 Python-specific
 ---------------
@@ -1225,9 +1225,9 @@ Text Processing".
 
 Mertz also wrote a 3-part series of articles on functional programming
 for IBM's DeveloperWorks site; see
-`part 1 <http://www.ibm.com/developerworks/linux/library/l-prog/index.html>`__,
-`part 2 <http://www.ibm.com/developerworks/linux/library/l-prog2/index.html>`__, and
-`part 3 <http://www.ibm.com/developerworks/linux/library/l-prog3/index.html>`__,
+`part 1 <https://www.ibm.com/developerworks/linux/library/l-prog/index.html>`__,
+`part 2 <https://www.ibm.com/developerworks/linux/library/l-prog2/index.html>`__, and
+`part 3 <https://www.ibm.com/developerworks/linux/library/l-prog3/index.html>`__,
 
 
 Python documentation

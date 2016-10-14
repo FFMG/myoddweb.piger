@@ -4,13 +4,12 @@
 .. module:: zipapp
    :synopsis: Manage executable python zip archives
 
-
-.. index::
-   single: Executable Zip Files
-
 .. versionadded:: 3.5
 
 **Source code:** :source:`Lib/zipapp.py`
+
+.. index::
+   single: Executable Zip Files
 
 --------------
 
@@ -23,7 +22,7 @@ Python code, which can be  :ref:`executed directly by the Python interpreter
 Basic Example
 -------------
 
-The following example shows how the :ref:`command-line-interface`
+The following example shows how the :ref:`zipapp-command-line-interface`
 can be used to create an executable archive from a directory containing
 Python code.  When run, the archive will execute the ``main`` function from
 the module ``myapp`` in the archive.

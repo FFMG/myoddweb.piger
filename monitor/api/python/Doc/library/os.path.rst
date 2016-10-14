@@ -4,7 +4,13 @@
 .. module:: os.path
    :synopsis: Operations on pathnames.
 
+**Source code:** :source:`Lib/posixpath.py` (for POSIX),
+:source:`Lib/ntpath.py` (for Windows NT),
+and :source:`Lib/macpath.py` (for Macintosh)
+
 .. index:: single: path; operations
+
+--------------
 
 This module implements some useful functions on pathnames. To read or
 write files see :func:`open`, and for accessing the filesystem see the
@@ -214,7 +220,7 @@ the :mod:`glob` module.)
 .. function:: islink(path)
 
    Return ``True`` if *path* refers to a directory entry that is a symbolic link.
-   Always ``False`` if symbolic links are not supported by the python runtime.
+   Always ``False`` if symbolic links are not supported by the Python runtime.
 
 
 .. function:: ismount(path)

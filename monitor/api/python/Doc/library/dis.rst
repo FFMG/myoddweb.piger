@@ -139,11 +139,11 @@ operation is being performed, so the intermediate analysis object isn't useful:
    Disassemble the *x* object.  *x* can denote either a module, a class, a
    method, a function, a generator, a code object, a string of source code or
    a byte sequence of raw bytecode.  For a module, it disassembles all functions.
-   For a class, it disassembles all methods.  For a code object or sequence of
-   raw bytecode, it prints one line per bytecode instruction.  Strings are first
-   compiled to code objects with the :func:`compile` built-in function before being
-   disassembled.  If no object is provided, this function disassembles the last
-   traceback.
+   For a class, it disassembles all methods (including class and static methods).
+   For a code object or sequence of raw bytecode, it prints one line per bytecode
+   instruction.  Strings are first compiled to code objects with the :func:`compile`
+   built-in function before being disassembled.  If no object is provided, this
+   function disassembles the last traceback.
 
    The disassembly is written as text to the supplied *file* argument if
    provided and to ``sys.stdout`` otherwise.
@@ -708,7 +708,7 @@ the more significant byte last.
 
    Implements assignment with a starred target: Unpacks an iterable in TOS into
    individual values, where the total number of values can be smaller than the
-   number of items in the iterable: one the new values will be a list of all
+   number of items in the iterable: one of the new values will be a list of all
    leftover items.
 
    The low byte of *counts* is the number of values before the list value, the

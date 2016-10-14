@@ -380,9 +380,8 @@ faulthandler_enable(PyObject *self, PyObject *args, PyObject *kwargs)
     if (tstate == NULL)
         return NULL;
 
-    Py_XDECREF(fatal_error.file);
     Py_XINCREF(file);
-    fatal_error.file = file;
+    Py_XSETREF(fatal_error.file, file);
     fatal_error.fd = fd;
     fatal_error.all_threads = all_threads;
     fatal_error.interp = tstate->interp;
@@ -491,7 +490,7 @@ faulthandler_thread(void *unused)
         assert(st == PY_LOCK_FAILURE);
 
         /* get the thread holding the GIL, NULL if no thread hold the GIL */
-        current = (PyThreadState*)_Py_atomic_load_relaxed(&_PyThreadState_Current);
+        current = _PyThreadState_UncheckedGet();
 
         _Py_write_noraise(thread.fd, thread.header, (int)thread.header_len);
 
@@ -599,9 +598,8 @@ faulthandler_dump_traceback_later(PyObject *self,
     /* Cancel previous thread, if running */
     cancel_dump_traceback_later();
 
-    Py_XDECREF(thread.file);
     Py_XINCREF(file);
-    thread.file = file;
+    Py_XSETREF(thread.file, file);
     thread.fd = fd;
     thread.timeout_us = timeout_us;
     thread.repeat = repeat;
@@ -778,9 +776,8 @@ faulthandler_register_py(PyObject *self,
         user->previous = previous;
     }
 
-    Py_XDECREF(user->file);
     Py_XINCREF(file);
-    user->file = file;
+    Py_XSETREF(user->file, file);
     user->fd = fd;
     user->all_threads = all_threads;
     user->chain = chain;
@@ -938,10 +935,18 @@ static PyObject *
 faulthandler_fatal_error_py(PyObject *self, PyObject *args)
 {
     char *message;
-    if (!PyArg_ParseTuple(args, "y:fatal_error", &message))
+    int release_gil = 0;
+    if (!PyArg_ParseTuple(args, "y|i:fatal_error", &message, &release_gil))
         return NULL;
     faulthandler_suppress_crash_report();
-    Py_FatalError(message);
+    if (release_gil) {
+        Py_BEGIN_ALLOW_THREADS
+        Py_FatalError(message);
+        Py_END_ALLOW_THREADS
+    }
+    else {
+        Py_FatalError(message);
+    }
     Py_RETURN_NONE;
 }
 
@@ -1046,7 +1051,7 @@ static PyMethodDef module_methods[] = {
     {"register",
      (PyCFunction)faulthandler_register_py, METH_VARARGS|METH_KEYWORDS,
      PyDoc_STR("register(signum, file=sys.stderr, all_threads=True, chain=False): "
-               "register an handler for the signal 'signum': dump the "
+               "register a handler for the signal 'signum': dump the "
                "traceback of the current thread, or of all threads if "
                "all_threads is True, into file")},
     {"unregister",

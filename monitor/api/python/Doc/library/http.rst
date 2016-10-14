@@ -4,11 +4,13 @@
 .. module:: http
    :synopsis: HTTP status codes and messages
 
+**Source code:** :source:`Lib/http/__init__.py`
+
 .. index::
    pair: HTTP; protocol
    single: HTTP; http (standard module)
 
-**Source code:** :source:`Lib/http/__init__.py`
+--------------
 
 :mod:`http` is a package that collects several modules for working with the
 HyperText Transfer Protocol:
@@ -51,7 +53,7 @@ HTTP status codes
 -----------------
 
 Supported,
-`IANA-registered <http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml>`_
+`IANA-registered <https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml>`_
 status codes available in :class:`http.HTTPStatus` are:
 
 ======= =================================== ==================================================================

@@ -17,7 +17,7 @@ extensions = ['sphinx.ext.coverage', 'sphinx.ext.doctest',
 
 # General substitutions.
 project = 'Python'
-copyright = '1990-%s, Python Software Foundation' % time.strftime('%Y')
+copyright = '2001-%s, Python Software Foundation' % time.strftime('%Y')
 
 # We look for the Include/patchlevel.h file in the current Python source tree
 # and replace the values accordingly.
@@ -138,6 +138,11 @@ latex_appendices = ['glossary', 'about', 'license', 'copyright']
 # Get LaTeX to handle Unicode correctly
 latex_elements = {'inputenc': r'\usepackage[utf8x]{inputenc}', 'utf8extra': ''}
 
+# Options for Epub output
+# -----------------------
+
+epub_author = 'Python Documentation Authors'
+epub_publisher = 'Python Software Foundation'
 
 # Options for the coverage checker
 # --------------------------------

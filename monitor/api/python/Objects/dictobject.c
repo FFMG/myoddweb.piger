@@ -1064,8 +1064,7 @@ PyDict_GetItem(PyObject *op, PyObject *key)
        Let's just hope that no exception occurs then...  This must be
        _PyThreadState_Current and not PyThreadState_GET() because in debug
        mode, the latter complains if tstate is NULL. */
-    tstate = (PyThreadState*)_Py_atomic_load_relaxed(
-        &_PyThreadState_Current);
+    tstate = _PyThreadState_UncheckedGet();
     if (tstate != NULL && tstate->curexc_type != NULL) {
         /* preserve the existing exception */
         PyObject *err_type, *err_value, *err_tb;
@@ -1102,8 +1101,7 @@ _PyDict_GetItem_KnownHash(PyObject *op, PyObject *key, Py_hash_t hash)
        Let's just hope that no exception occurs then...  This must be
        _PyThreadState_Current and not PyThreadState_GET() because in debug
        mode, the latter complains if tstate is NULL. */
-    tstate = (PyThreadState*)_Py_atomic_load_relaxed(
-        &_PyThreadState_Current);
+    tstate = _PyThreadState_UncheckedGet();
     if (tstate != NULL && tstate->curexc_type != NULL) {
         /* preserve the existing exception */
         PyObject *err_type, *err_value, *err_tb;
@@ -2554,26 +2552,32 @@ dict_tp_clear(PyObject *op)
 
 static PyObject *dictiter_new(PyDictObject *, PyTypeObject *);
 
-PyObject *
+Py_ssize_t
 _PyDict_SizeOf(PyDictObject *mp)
 {
     Py_ssize_t size, res;
 
     size = DK_SIZE(mp->ma_keys);
-    res = sizeof(PyDictObject);
+    res = _PyObject_SIZE(Py_TYPE(mp));
     if (mp->ma_values)
         res += size * sizeof(PyObject*);
     /* If the dictionary is split, the keys portion is accounted-for
        in the type object. */
     if (mp->ma_keys->dk_refcnt == 1)
         res += sizeof(PyDictKeysObject) + (size-1) * sizeof(PyDictKeyEntry);
-    return PyLong_FromSsize_t(res);
+    return res;
 }
 
 Py_ssize_t
 _PyDict_KeysSize(PyDictKeysObject *keys)
 {
     return sizeof(PyDictKeysObject) + (DK_SIZE(keys)-1) * sizeof(PyDictKeyEntry);
+}
+
+static PyObject *
+dict_sizeof(PyDictObject *mp)
+{
+    return PyLong_FromSsize_t(_PyDict_SizeOf(mp));
 }
 
 PyDoc_STRVAR(getitem__doc__, "x.__getitem__(y) <==> x[y]");
@@ -2623,7 +2627,7 @@ static PyMethodDef mapp_methods[] = {
     DICT___CONTAINS___METHODDEF
     {"__getitem__", (PyCFunction)dict_subscript,        METH_O | METH_COEXIST,
      getitem__doc__},
-    {"__sizeof__",      (PyCFunction)_PyDict_SizeOf,       METH_NOARGS,
+    {"__sizeof__",      (PyCFunction)dict_sizeof,       METH_NOARGS,
      sizeof__doc__},
     {"get",         (PyCFunction)dict_get,          METH_VARARGS,
      get__doc__},
@@ -2981,8 +2985,8 @@ static PyObject *dictiter_iternextkey(dictiterobject *di)
     return key;
 
 fail:
-    Py_DECREF(d);
     di->di_dict = NULL;
+    Py_DECREF(d);
     return NULL;
 }
 
@@ -3062,8 +3066,8 @@ static PyObject *dictiter_iternextvalue(dictiterobject *di)
     return value;
 
 fail:
-    Py_DECREF(d);
     di->di_dict = NULL;
+    Py_DECREF(d);
     return NULL;
 }
 
@@ -3157,8 +3161,8 @@ static PyObject *dictiter_iternextitem(dictiterobject *di)
     return result;
 
 fail:
-    Py_DECREF(d);
     di->di_dict = NULL;
+    Py_DECREF(d);
     return NULL;
 }
 
@@ -3444,7 +3448,7 @@ dictviews_sub(PyObject* self, PyObject *other)
     if (result == NULL)
         return NULL;
 
-    tmp = _PyObject_CallMethodId(result, &PyId_difference_update, "O", other);
+    tmp = _PyObject_CallMethodIdObjArgs(result, &PyId_difference_update, other, NULL);
     if (tmp == NULL) {
         Py_DECREF(result);
         return NULL;
@@ -3464,7 +3468,7 @@ _PyDictView_Intersect(PyObject* self, PyObject *other)
     if (result == NULL)
         return NULL;
 
-    tmp = _PyObject_CallMethodId(result, &PyId_intersection_update, "O", other);
+    tmp = _PyObject_CallMethodIdObjArgs(result, &PyId_intersection_update, other, NULL);
     if (tmp == NULL) {
         Py_DECREF(result);
         return NULL;
@@ -3484,7 +3488,7 @@ dictviews_or(PyObject* self, PyObject *other)
     if (result == NULL)
         return NULL;
 
-    tmp = _PyObject_CallMethodId(result, &PyId_update, "O", other);
+    tmp = _PyObject_CallMethodIdObjArgs(result, &PyId_update, other, NULL);
     if (tmp == NULL) {
         Py_DECREF(result);
         return NULL;
@@ -3504,8 +3508,7 @@ dictviews_xor(PyObject* self, PyObject *other)
     if (result == NULL)
         return NULL;
 
-    tmp = _PyObject_CallMethodId(result, &PyId_symmetric_difference_update, "O",
-                              other);
+    tmp = _PyObject_CallMethodIdObjArgs(result, &PyId_symmetric_difference_update, other, NULL);
     if (tmp == NULL) {
         Py_DECREF(result);
         return NULL;

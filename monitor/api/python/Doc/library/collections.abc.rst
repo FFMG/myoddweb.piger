@@ -3,19 +3,20 @@
 
 .. module:: collections.abc
    :synopsis: Abstract base classes for containers
+
 .. moduleauthor:: Raymond Hettinger <python at rcn.com>
 .. sectionauthor:: Raymond Hettinger <python at rcn.com>
 
 .. versionadded:: 3.3
    Formerly, this module was part of the :mod:`collections` module.
 
+**Source code:** :source:`Lib/_collections_abc.py`
+
 .. testsetup:: *
 
    from collections import *
    import itertools
    __name__ = '<doctest>'
-
-**Source code:** :source:`Lib/_collections_abc.py`
 
 --------------
 
@@ -218,19 +219,22 @@ The ABC supplies the remaining methods such as :meth:`__and__` and
 :meth:`isdisjoint`::
 
     class ListBasedSet(collections.abc.Set):
-         ''' Alternate set implementation favoring space over speed
-             and not requiring the set elements to be hashable. '''
-         def __init__(self, iterable):
-             self.elements = lst = []
-             for value in iterable:
-                 if value not in lst:
-                     lst.append(value)
-         def __iter__(self):
-             return iter(self.elements)
-         def __contains__(self, value):
-             return value in self.elements
-         def __len__(self):
-             return len(self.elements)
+        ''' Alternate set implementation favoring space over speed
+            and not requiring the set elements to be hashable. '''
+        def __init__(self, iterable):
+            self.elements = lst = []
+            for value in iterable:
+                if value not in lst:
+                    lst.append(value)
+
+        def __iter__(self):
+            return iter(self.elements)
+
+        def __contains__(self, value):
+            return value in self.elements
+
+        def __len__(self):
+            return len(self.elements)
 
     s1 = ListBasedSet('abcdef')
     s2 = ListBasedSet('defghi')
@@ -263,7 +267,7 @@ Notes on using :class:`Set` and :class:`MutableSet` as a mixin:
 
 .. seealso::
 
-   * `OrderedSet recipe <http://code.activestate.com/recipes/576694/>`_ for an
+   * `OrderedSet recipe <https://code.activestate.com/recipes/576694/>`_ for an
      example built on :class:`MutableSet`.
 
    * For more about ABCs, see the :mod:`abc` module and :pep:`3119`.

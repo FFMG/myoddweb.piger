@@ -23,6 +23,8 @@
    # make sure each group gets a fresh context
    setcontext(Context())
 
+--------------
+
 The :mod:`decimal` module provides support for fast correctly-rounded
 decimal floating point arithmetic. It offers several advantages over the
 :class:`float` datatype:
@@ -108,9 +110,6 @@ reset them before monitoring a calculation.
 
    * IBM's General Decimal Arithmetic Specification, `The General Decimal Arithmetic
      Specification <http://speleotrove.com/decimal/decarith.html>`_.
-
-   * IEEE standard 854-1987, `Unofficial IEEE 854 Text
-     <http://754r.ucbtest.org/standards/854.pdf>`_.
 
 .. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

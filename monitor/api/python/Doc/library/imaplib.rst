@@ -3,6 +3,7 @@
 
 .. module:: imaplib
    :synopsis: IMAP4 protocol client (requires sockets).
+
 .. moduleauthor:: Piers Lauder <piers@communitysolutions.com.au>
 .. sectionauthor:: Piers Lauder <piers@communitysolutions.com.au>
 .. revised by ESR, January 2000
@@ -10,13 +11,12 @@
 .. changes for IMAP4_stream by Piers Lauder <piers@communitysolutions.com.au>,
    November 2002
 
+**Source code:** :source:`Lib/imaplib.py`
 
 .. index::
    pair: IMAP4; protocol
    pair: IMAP4_SSL; protocol
    pair: IMAP4_stream; protocol
-
-**Source code:** :source:`Lib/imaplib.py`
 
 --------------
 
@@ -157,7 +157,7 @@ example of usage.
 
    Documents describing the protocol, and sources and binaries  for servers
    implementing it, can all be found at the University of Washington's *IMAP
-   Information Center* (http://www.washington.edu/imap/).
+   Information Center* (https://www.washington.edu/imap/).
 
 
 .. _imap4-objects:

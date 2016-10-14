@@ -3,6 +3,7 @@
 
 .. module:: xmlrpc.server
    :synopsis: Basic XML-RPC server implementations.
+
 .. moduleauthor:: Brian Quinlan <brianq@activestate.com>
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 
@@ -18,7 +19,7 @@ servers written in Python.  Servers can either be free standing, using
 
 .. warning::
 
-   The :mod:`xmlrpc.client` module is not secure against maliciously
+   The :mod:`xmlrpc.server` module is not secure against maliciously
    constructed data.  If you need to parse untrusted or unauthenticated data see
    :ref:`xml-vulnerabilities`.
 

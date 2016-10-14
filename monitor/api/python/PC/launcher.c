@@ -114,7 +114,7 @@ static wchar_t * get_env(wchar_t * key)
     if (result >= BUFSIZE) {
         /* Large environment variable. Accept some leakage */
         wchar_t *buf2 = (wchar_t*)malloc(sizeof(wchar_t) * (result+1));
-        if (buf2 = NULL) {
+        if (buf2 == NULL) {
             error(RC_NO_MEMORY, L"Could not allocate environment buffer");
         }
         GetEnvironmentVariableW(key, buf2, result);
@@ -171,6 +171,9 @@ static wchar_t * location_checks[] = {
     L"\\",
     L"\\PCBuild\\win32\\",
     L"\\PCBuild\\amd64\\",
+    // To support early 32bit versions of Python that stuck the build binaries
+    // directly in PCBuild...
+    L"\\PCBuild\\",
     NULL
 };
 
@@ -965,10 +968,12 @@ typedef struct {
  */
 static BOM BOMs[] = {
     { 3, { 0xEF, 0xBB, 0xBF }, CP_UTF8 },           /* UTF-8 - keep first */
-    { 2, { 0xFF, 0xFE }, CP_UTF16LE },              /* UTF-16LE */
-    { 2, { 0xFE, 0xFF }, CP_UTF16BE },              /* UTF-16BE */
+    /* Test UTF-32LE before UTF-16LE since UTF-16LE BOM is a prefix
+     * of UTF-32LE BOM. */
     { 4, { 0xFF, 0xFE, 0x00, 0x00 }, CP_UTF32LE },  /* UTF-32LE */
     { 4, { 0x00, 0x00, 0xFE, 0xFF }, CP_UTF32BE },  /* UTF-32BE */
+    { 2, { 0xFF, 0xFE }, CP_UTF16LE },              /* UTF-16LE */
+    { 2, { 0xFE, 0xFF }, CP_UTF16BE },              /* UTF-16BE */
     { 0 }                                           /* sentinel */
 };
 
@@ -1063,18 +1068,21 @@ typedef struct {
 } PYC_MAGIC;
 
 static PYC_MAGIC magic_values[] = {
-    { 0xc687, 0xc687, L"2.0" },
-    { 0xeb2a, 0xeb2a, L"2.1" },
-    { 0xed2d, 0xed2d, L"2.2" },
-    { 0xf23b, 0xf245, L"2.3" },
-    { 0xf259, 0xf26d, L"2.4" },
-    { 0xf277, 0xf2b3, L"2.5" },
-    { 0xf2c7, 0xf2d1, L"2.6" },
-    { 0xf2db, 0xf303, L"2.7" },
-    { 0x0bb8, 0x0c3b, L"3.0" },
-    { 0x0c45, 0x0c4f, L"3.1" },
-    { 0x0c58, 0x0c6c, L"3.2" },
-    { 0x0c76, 0x0c76, L"3.3" },
+    { 50823, 50823, L"2.0" },
+    { 60202, 60202, L"2.1" },
+    { 60717, 60717, L"2.2" },
+    { 62011, 62021, L"2.3" },
+    { 62041, 62061, L"2.4" },
+    { 62071, 62131, L"2.5" },
+    { 62151, 62161, L"2.6" },
+    { 62171, 62211, L"2.7" },
+    { 3000, 3131, L"3.0" },
+    { 3141, 3151, L"3.1" },
+    { 3160, 3180, L"3.2" },
+    { 3190, 3230, L"3.3" },
+    { 3250, 3310, L"3.4" },
+    { 3320, 3350, L"3.5" },
+    { 3360, 3361, L"3.6" },
     { 0 }
 };
 
@@ -1252,7 +1260,7 @@ path '%ls'", command);
                              * is no version specification.
                              */
                             debug(L"searching PATH for python executable\n");
-                            cmd = find_on_path(L"python");
+                            cmd = find_on_path(PYTHON_EXECUTABLE);
                             debug(L"Python on path: %ls\n", cmd ? cmd->value : L"<not found>");
                             if (cmd) {
                                 debug(L"located python on PATH: %ls\n", cmd->value);

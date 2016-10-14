@@ -4,6 +4,9 @@
 .. module:: multiprocessing
    :synopsis: Process-based parallelism.
 
+**Source code:** :source:`Lib/multiprocessing/`
+
+--------------
 
 Introduction
 ------------
@@ -316,7 +319,7 @@ However, if you really do need to use some shared data then
    proxies.
 
    A manager returned by :func:`Manager` will support types
-   :class:`list`, :class:`dict`, :class:`Namespace`, :class:`Lock`,
+   :class:`list`, :class:`dict`, :class:`~managers.Namespace`, :class:`Lock`,
    :class:`RLock`, :class:`Semaphore`, :class:`BoundedSemaphore`,
    :class:`Condition`, :class:`Event`, :class:`Barrier`,
    :class:`Queue`, :class:`Value` and :class:`Array`.  For example, ::
@@ -361,8 +364,9 @@ processes in a few different ways.
 
 For example::
 
-   from multiprocessing import Pool
-   from time import sleep
+   from multiprocessing import Pool, TimeoutError
+   import time
+   import os
 
    def f(x):
        return x*x
@@ -378,15 +382,29 @@ For example::
            for i in pool.imap_unordered(f, range(10)):
                print(i)
 
-           # evaluate "f(10)" asynchronously
-           res = pool.apply_async(f, [10])
-           print(res.get(timeout=1))             # prints "100"
+           # evaluate "f(20)" asynchronously
+           res = pool.apply_async(f, (20,))      # runs in *only* one process
+           print(res.get(timeout=1))             # prints "400"
 
-           # make worker sleep for 10 secs
-           res = pool.apply_async(sleep, [10])
-           print(res.get(timeout=1))             # raises multiprocessing.TimeoutError
+           # evaluate "os.getpid()" asynchronously
+           res = pool.apply_async(os.getpid, ()) # runs in *only* one process
+           print(res.get(timeout=1))             # prints the PID of that process
+
+           # launching multiple evaluations asynchronously *may* use more processes
+           multiple_results = [pool.apply_async(os.getpid, ()) for i in range(4)]
+           print([res.get(timeout=1) for res in multiple_results])
+
+           # make a single worker sleep for 10 secs
+           res = pool.apply_async(time.sleep, (10,))
+           try:
+               print(res.get(timeout=1))
+           except TimeoutError:
+               print("We lacked patience and got a multiprocessing.TimeoutError")
+
+           print("For the moment, the pool remains available for more work")
 
        # exiting the 'with'-block has stopped the pool
+       print("Now the pool is closed and no longer available")
 
 Note that the methods of a pool should only ever be used by the
 process which created it.
@@ -901,8 +919,10 @@ Miscellaneous
    If the ``freeze_support()`` line is omitted then trying to run the frozen
    executable will raise :exc:`RuntimeError`.
 
-   If the module is being run normally by the Python interpreter then
-   :func:`freeze_support` has no effect.
+   Calling ``freeze_support()`` has no effect when invoked on any operating
+   system other than Windows.  In addition, if the module is being run
+   normally by the Python interpreter on Windows (the program has not been
+   frozen), then ``freeze_support()`` has no effect.
 
 .. function:: get_all_start_methods()
 
@@ -1745,24 +1765,26 @@ their parent process exits.  The manager classes are defined in the
          lproxy[0] = d
 
 
-Namespace objects
->>>>>>>>>>>>>>>>>
+.. class:: Namespace
 
-A namespace object has no public methods, but does have writable attributes.
-Its representation shows the values of its attributes.
+   A type that can register with :class:`SyncManager`.
 
-However, when using a proxy for a namespace object, an attribute beginning with
-``'_'`` will be an attribute of the proxy and not an attribute of the referent:
+   A namespace object has no public methods, but does have writable attributes.
+   Its representation shows the values of its attributes.
 
-.. doctest::
+   However, when using a proxy for a namespace object, an attribute beginning
+   with ``'_'`` will be an attribute of the proxy and not an attribute of the
+   referent:
 
-   >>> manager = multiprocessing.Manager()
-   >>> Global = manager.Namespace()
-   >>> Global.x = 10
-   >>> Global.y = 'hello'
-   >>> Global._z = 12.3    # this is an attribute of the proxy
-   >>> print(Global)
-   Namespace(x=10, y='hello')
+   .. doctest::
+
+    >>> manager = multiprocessing.Manager()
+    >>> Global = manager.Namespace()
+    >>> Global.x = 10
+    >>> Global.y = 'hello'
+    >>> Global._z = 12.3    # this is an attribute of the proxy
+    >>> print(Global)
+    Namespace(x=10, y='hello')
 
 
 Customized managers
@@ -2167,13 +2189,14 @@ with the :class:`Pool` class.
 The following example demonstrates the use of a pool::
 
    from multiprocessing import Pool
+   import time
 
    def f(x):
        return x*x
 
    if __name__ == '__main__':
        with Pool(processes=4) as pool:         # start 4 worker processes
-           result = pool.apply_async(f, (10,)) # evaluate "f(10)" asynchronously
+           result = pool.apply_async(f, (10,)) # evaluate "f(10)" asynchronously in a single process
            print(result.get(timeout=1))        # prints "100" unless your computer is *very* slow
 
            print(pool.map(f, range(10)))       # prints "[0, 1, 4,..., 81]"
@@ -2183,9 +2206,8 @@ The following example demonstrates the use of a pool::
            print(next(it))                     # prints "1"
            print(it.next(timeout=1))           # prints "4" unless your computer is *very* slow
 
-           import time
            result = pool.apply_async(time.sleep, (10,))
-           print(result.get(timeout=1))        # raises TimeoutError
+           print(result.get(timeout=1))        # raises multiprocessing.TimeoutError
 
 
 .. _multiprocessing-listeners-clients:
@@ -2459,7 +2481,7 @@ the connection.)
 
 If authentication is requested but no authentication key is specified then the
 return value of ``current_process().authkey`` is used (see
-:class:`~multiprocessing.Process`).  This value will automatically inherited by
+:class:`~multiprocessing.Process`).  This value will be automatically inherited by
 any :class:`~multiprocessing.Process` object that the current process creates.
 This means that (by default) all processes of a multi-process program will share
 a single authentication key which can be used when setting up connections
@@ -2644,8 +2666,8 @@ Explicitly pass resources to child processes
             ... do something using "lock" ...
 
         if __name__ == '__main__':
-           lock = Lock()
-           for i in range(10):
+            lock = Lock()
+            for i in range(10):
                 Process(target=f).start()
 
     should be rewritten as ::
@@ -2656,8 +2678,8 @@ Explicitly pass resources to child processes
             ... do something using "l" ...
 
         if __name__ == '__main__':
-           lock = Lock()
-           for i in range(10):
+            lock = Lock()
+            for i in range(10):
                 Process(target=f, args=(lock,)).start()
 
 Beware of replacing :data:`sys.stdin` with a "file like object"
@@ -2670,7 +2692,7 @@ Beware of replacing :data:`sys.stdin` with a "file like object"
     in issues with processes-in-processes. This has been changed to::
 
         sys.stdin.close()
-        sys.stdin = open(os.devnull)
+        sys.stdin = open(os.open(os.devnull, os.O_RDONLY), closefd=False)
 
     Which solves the fundamental issue of processes colliding with each other
     resulting in a bad file descriptor error, but introduces a potential danger

@@ -3,17 +3,18 @@
 
 .. module:: statistics
    :synopsis: mathematical statistics functions
+
 .. moduleauthor:: Steven D'Aprano <steve+python@pearwood.info>
 .. sectionauthor:: Steven D'Aprano <steve+python@pearwood.info>
 
 .. versionadded:: 3.4
 
+**Source code:** :source:`Lib/statistics.py`
+
 .. testsetup:: *
 
    from statistics import *
    __name__ = '<doctest>'
-
-**Source code:** :source:`Lib/statistics.py`
 
 --------------
 
@@ -223,7 +224,7 @@ However, for reading convenience, most of the examples show sorted sequences.
       * "Statistics for the Behavioral Sciences", Frederick J Gravetter and
         Larry B Wallnau (8th Edition).
 
-      * Calculating the `median <http://www.ualberta.ca/~opscan/median.html>`_.
+      * Calculating the `median <https://www.ualberta.ca/~opscan/median.html>`_.
 
       * The `SSMEDIAN
         <https://help.gnome.org/users/gnumeric/stable/gnumeric.html#gnumeric-function-SSMEDIAN>`_

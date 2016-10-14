@@ -50,7 +50,7 @@ Module Objects
 
 .. c:function:: PyObject* PyModule_New(const char *name)
 
-   Similar to :c:func:`PyImport_NewObject`, but the name is an UTF-8 encoded
+   Similar to :c:func:`PyImport_NewObject`, but the name is a UTF-8 encoded
    string instead of a Unicode object.
 
 
@@ -129,7 +129,7 @@ which export an initialization function), or compiled-in modules
 (where the initialization function is added using :c:func:`PyImport_AppendInittab`).
 See :ref:`building` or :ref:`extending-with-embedding` for details.
 
-The initialization function can either pass pass a module definition instance
+The initialization function can either pass a module definition instance
 to :c:func:`PyModule_Create`, and return the resulting module object,
 or request "multi-phase initialization" by returning the definition struct itself.
 

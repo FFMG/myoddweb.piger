@@ -206,8 +206,7 @@ BaseException_set_args(PyBaseExceptionObject *self, PyObject *val)
     seq = PySequence_Tuple(val);
     if (!seq)
         return -1;
-    Py_CLEAR(self->args);
-    self->args = seq;
+    Py_XSETREF(self->args, seq);
     return 0;
 }
 
@@ -236,8 +235,7 @@ BaseException_set_tb(PyBaseExceptionObject *self, PyObject *tb)
     }
 
     Py_XINCREF(tb);
-    Py_XDECREF(self->traceback);
-    self->traceback = tb;
+    Py_XSETREF(self->traceback, tb);
     return 0;
 }
 
@@ -563,12 +561,14 @@ SystemExit_init(PySystemExitObject *self, PyObject *args, PyObject *kwds)
 
     if (size == 0)
         return 0;
-    Py_CLEAR(self->code);
-    if (size == 1)
-        self->code = PyTuple_GET_ITEM(args, 0);
-    else /* size > 1 */
-        self->code = args;
-    Py_INCREF(self->code);
+    if (size == 1) {
+        Py_INCREF(PyTuple_GET_ITEM(args, 0));
+        Py_XSETREF(self->code, PyTuple_GET_ITEM(args, 0));
+    }
+    else { /* size > 1 */
+        Py_INCREF(args);
+        Py_XSETREF(self->code, args);
+    }
     return 0;
 }
 
@@ -627,9 +627,8 @@ ImportError_init(PyImportErrorObject *self, PyObject *args, PyObject *kwds)
 #define GET_KWD(kwd) { \
     kwd = PyDict_GetItemString(kwds, #kwd); \
     if (kwd) { \
-        Py_CLEAR(self->kwd); \
-        self->kwd = kwd;   \
-        Py_INCREF(self->kwd);\
+        Py_INCREF(kwd); \
+        Py_XSETREF(self->kwd, kwd); \
         if (PyDict_DelItemString(kwds, #kwd)) \
             return -1; \
     } \
@@ -647,9 +646,8 @@ ImportError_init(PyImportErrorObject *self, PyObject *args, PyObject *kwds)
     if (!PyArg_UnpackTuple(args, "ImportError", 1, 1, &msg))
         return -1;
 
-    Py_CLEAR(self->msg);          /* replacing */
-    self->msg = msg;
-    Py_INCREF(self->msg);
+    Py_INCREF(msg);
+    Py_XSETREF(self->msg, msg);
 
     return 0;
 }
@@ -859,8 +857,7 @@ oserror_init(PyOSErrorObject *self, PyObject **p_args,
 #endif
 
     /* Steals the reference to args */
-    Py_CLEAR(self->args);
-    self->args = args;
+    Py_XSETREF(self->args, args);
     *p_args = args = NULL;
 
     return 0;
@@ -879,7 +876,7 @@ oserror_use_init(PyTypeObject *type)
        solution, given __new__ takes a variable number of arguments,
        is to defer arg parsing and initialization to __init__.
 
-       But when __new__ is overriden as well, it should call our __new__
+       But when __new__ is overridden as well, it should call our __new__
        with the right arguments.
 
        (see http://bugs.python.org/issue12555#msg148829 )
@@ -1279,9 +1276,8 @@ SyntaxError_init(PySyntaxErrorObject *self, PyObject *args, PyObject *kwds)
         return -1;
 
     if (lenargs >= 1) {
-        Py_CLEAR(self->msg);
-        self->msg = PyTuple_GET_ITEM(args, 0);
-        Py_INCREF(self->msg);
+        Py_INCREF(PyTuple_GET_ITEM(args, 0));
+        Py_XSETREF(self->msg, PyTuple_GET_ITEM(args, 0));
     }
     if (lenargs == 2) {
         info = PyTuple_GET_ITEM(args, 1);
@@ -1296,21 +1292,17 @@ SyntaxError_init(PySyntaxErrorObject *self, PyObject *args, PyObject *kwds)
             return -1;
         }
 
-        Py_CLEAR(self->filename);
-        self->filename = PyTuple_GET_ITEM(info, 0);
-        Py_INCREF(self->filename);
+        Py_INCREF(PyTuple_GET_ITEM(info, 0));
+        Py_XSETREF(self->filename, PyTuple_GET_ITEM(info, 0));
 
-        Py_CLEAR(self->lineno);
-        self->lineno = PyTuple_GET_ITEM(info, 1);
-        Py_INCREF(self->lineno);
+        Py_INCREF(PyTuple_GET_ITEM(info, 1));
+        Py_XSETREF(self->lineno, PyTuple_GET_ITEM(info, 1));
 
-        Py_CLEAR(self->offset);
-        self->offset = PyTuple_GET_ITEM(info, 2);
-        Py_INCREF(self->offset);
+        Py_INCREF(PyTuple_GET_ITEM(info, 2));
+        Py_XSETREF(self->offset, PyTuple_GET_ITEM(info, 2));
 
-        Py_CLEAR(self->text);
-        self->text = PyTuple_GET_ITEM(info, 3);
-        Py_INCREF(self->text);
+        Py_INCREF(PyTuple_GET_ITEM(info, 3));
+        Py_XSETREF(self->text, PyTuple_GET_ITEM(info, 3));
 
         Py_DECREF(info);
 
@@ -1555,8 +1547,7 @@ set_unicodefromstring(PyObject **attr, const char *value)
     PyObject *obj = PyUnicode_FromString(value);
     if (!obj)
         return -1;
-    Py_CLEAR(*attr);
-    *attr = obj;
+    Py_XSETREF(*attr, obj);
     return 0;
 }
 
@@ -1962,8 +1953,7 @@ UnicodeDecodeError_init(PyObject *self, PyObject *args, PyObject *kwds)
         Py_buffer view;
         if (PyObject_GetBuffer(ude->object, &view, PyBUF_SIMPLE) != 0)
             goto error;
-        Py_CLEAR(ude->object);
-        ude->object = PyBytes_FromStringAndSize(view.buf, view.len);
+        Py_XSETREF(ude->object, PyBytes_FromStringAndSize(view.buf, view.len));
         PyBuffer_Release(&view);
         if (!ude->object)
             goto error;
@@ -2872,9 +2862,8 @@ _check_for_legacy_statements(PySyntaxErrorObject *self, Py_ssize_t start)
     }
     if (PyUnicode_Tailmatch(self->text, print_prefix,
                             start, text_len, -1)) {
-        Py_CLEAR(self->msg);
-        self->msg = PyUnicode_FromString(
-                   "Missing parentheses in call to 'print'");
+        Py_XSETREF(self->msg,
+                  PyUnicode_FromString("Missing parentheses in call to 'print'"));
         return 1;
     }
 
@@ -2887,9 +2876,8 @@ _check_for_legacy_statements(PySyntaxErrorObject *self, Py_ssize_t start)
     }
     if (PyUnicode_Tailmatch(self->text, exec_prefix,
                             start, text_len, -1)) {
-        Py_CLEAR(self->msg);
-        self->msg = PyUnicode_FromString(
-                    "Missing parentheses in call to 'exec'");
+        Py_XSETREF(self->msg,
+                  PyUnicode_FromString("Missing parentheses in call to 'exec'"));
         return 1;
     }
     /* Fall back to the default error message */

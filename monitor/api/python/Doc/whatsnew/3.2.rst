@@ -116,7 +116,7 @@ or more positional arguments is present, and making a required option::
 
 Example of calling the parser on a command string::
 
-    >>> cmd  = 'deploy sneezy.example.com sleepy.example.com -u skycaptain'
+    >>> cmd = 'deploy sneezy.example.com sleepy.example.com -u skycaptain'
     >>> result = parser.parse_args(cmd.split())
     >>> result.action
     'deploy'
@@ -212,7 +212,8 @@ loaded and called with code like this::
 
    >>> import json, logging.config
    >>> with open('conf.json') as f:
-           conf = json.load(f)
+   ...     conf = json.load(f)
+   ...
    >>> logging.config.dictConfig(conf)
    >>> logging.info("Transaction completed normally")
    INFO    : root           : Transaction completed normally
@@ -460,15 +461,15 @@ Some smaller changes made to the core Python language are:
     'The testing project status is green as of February 15, 2011'
 
     >>> class LowerCasedDict(dict):
-            def __getitem__(self, key):
-                return dict.__getitem__(self, key.lower())
+    ...     def __getitem__(self, key):
+    ...         return dict.__getitem__(self, key.lower())
     >>> lcd = LowerCasedDict(part='widgets', quantity=10)
     >>> 'There are {QUANTITY} {Part} in stock'.format_map(lcd)
     'There are 10 widgets in stock'
 
     >>> class PlaceholderDict(dict):
-            def __missing__(self, key):
-                return '<{}>'.format(key)
+    ...     def __missing__(self, key):
+    ...         return '<{}>'.format(key)
     >>> 'Hello {name}, welcome to {location}'.format_map(PlaceholderDict())
     'Hello <name>, welcome to <location>'
 
@@ -496,10 +497,10 @@ Some smaller changes made to the core Python language are:
   exceptions pass through::
 
     >>> class A:
-            @property
-            def f(self):
-                return 1 // 0
-
+    ...     @property
+    ...     def f(self):
+    ...         return 1 // 0
+    ...
     >>> a = A()
     >>> hasattr(a, 'f')
     Traceback (most recent call last):
@@ -537,7 +538,7 @@ Some smaller changes made to the core Python language are:
 
        def outer(x):
            def inner():
-              return x
+               return x
            inner()
            del x
 
@@ -547,12 +548,12 @@ Some smaller changes made to the core Python language are:
 
        def f():
            def print_error():
-              print(e)
+               print(e)
            try:
-              something
+               something
            except Exception as e:
-              print_error()
-              # implicit "del e" here
+               print_error()
+               # implicit "del e" here
 
   (See :issue:`4617`.)
 
@@ -769,8 +770,8 @@ functools
 
   (Contributed by Raymond Hettinger and incorporating design ideas from Jim
   Baker, Miki Tebeka, and Nick Coghlan; see `recipe 498245
-  <http://code.activestate.com/recipes/498245>`_\, `recipe 577479
-  <http://code.activestate.com/recipes/577479>`_\, :issue:`10586`, and
+  <https://code.activestate.com/recipes/498245>`_\, `recipe 577479
+  <https://code.activestate.com/recipes/577479>`_\, :issue:`10586`, and
   :issue:`10593`.)
 
 * The :func:`functools.wraps` decorator now adds a :attr:`__wrapped__` attribute
@@ -799,6 +800,7 @@ functools
         def __eq__(self, other):
             return ((self.lastname.lower(), self.firstname.lower()) ==
                     (other.lastname.lower(), other.firstname.lower()))
+
         def __lt__(self, other):
             return ((self.lastname.lower(), self.firstname.lower()) <
                     (other.lastname.lower(), other.firstname.lower()))
@@ -845,9 +847,9 @@ collections
 
 * The :class:`collections.Counter` class now has two forms of in-place
   subtraction, the existing *-=* operator for `saturating subtraction
-  <http://en.wikipedia.org/wiki/Saturation_arithmetic>`_ and the new
+  <https://en.wikipedia.org/wiki/Saturation_arithmetic>`_ and the new
   :meth:`~collections.Counter.subtract` method for regular subtraction.  The
-  former is suitable for `multisets <http://en.wikipedia.org/wiki/Multiset>`_
+  former is suitable for `multisets <https://en.wikipedia.org/wiki/Multiset>`_
   which only have positive counts, and the latter is more suitable for use cases
   that allow negative counts:
 
@@ -906,7 +908,7 @@ with multiple preconditions does not run until all of the predecessor tasks are
 complete.
 
 Barriers can work with an arbitrary number of threads.  This is a generalization
-of a `Rendezvous <http://en.wikipedia.org/wiki/Synchronous_rendezvous>`_ which
+of a `Rendezvous <https://en.wikipedia.org/wiki/Synchronous_rendezvous>`_ which
 is defined for only two threads.
 
 Implemented as a two-phase cyclic barrier, :class:`~threading.Barrier` objects
@@ -942,7 +944,7 @@ released and a :exc:`~threading.BrokenBarrierError` exception is raised::
     def get_votes(site):
         ballots = conduct_election(site)
         try:
-            all_polls_closed.wait(timeout = midnight - time.now())
+            all_polls_closed.wait(timeout=midnight - time.now())
         except BrokenBarrierError:
             lockbox = seal_ballots(ballots)
             queue.put(lockbox)
@@ -955,7 +957,7 @@ sites do not finish before midnight, the barrier times-out and the ballots are
 sealed and deposited in a queue for later handling.
 
 See `Barrier Synchronization Patterns
-<http://parlab.eecs.berkeley.edu/wiki/_media/patterns/paraplop_g1_3.pdf>`_ for
+<https://parlab.eecs.berkeley.edu/wiki/_media/patterns/paraplop_g1_3.pdf>`_ for
 more examples of how barriers can be used in parallel computing.  Also, there is
 a simple but thorough explanation of barriers in `The Little Book of Semaphores
 <http://greenteapress.com/semaphores/downey08semaphores.pdf>`_, *section 3.6*.
@@ -1043,7 +1045,7 @@ of nearly equal quantities:
 0.013765762467652909
 
 The :func:`~math.erf` function computes a probability integral or `Gaussian
-error function <http://en.wikipedia.org/wiki/Error_function>`_.  The
+error function <https://en.wikipedia.org/wiki/Error_function>`_.  The
 complementary error function, :func:`~math.erfc`, is ``1 - erf(x)``:
 
 >>> erf(1.0/sqrt(2.0))   # portion of normal distribution within 1 standard deviation
@@ -1054,7 +1056,7 @@ complementary error function, :func:`~math.erfc`, is ``1 - erf(x)``:
 1.0
 
 The :func:`~math.gamma` function is a continuous extension of the factorial
-function.  See http://en.wikipedia.org/wiki/Gamma_function for details.  Because
+function.  See https://en.wikipedia.org/wiki/Gamma_function for details.  Because
 the function is related to factorials, it grows large even for small values of
 *x*, so there is also a :func:`~math.lgamma` function for computing the natural
 logarithm of the gamma function:
@@ -1097,16 +1099,16 @@ for slice notation are well-suited to in-place editing::
     >>> REC_LEN, LOC_START, LOC_LEN = 34, 7, 11
 
     >>> def change_location(buffer, record_number, location):
-            start = record_number * REC_LEN + LOC_START
-            buffer[start: start+LOC_LEN] = location
+    ...     start = record_number * REC_LEN + LOC_START
+    ...     buffer[start: start+LOC_LEN] = location
 
     >>> import io
 
     >>> byte_stream = io.BytesIO(
-        b'G3805  storeroom  Main chassis    '
-        b'X7899  shipping   Reserve cog     '
-        b'L6988  receiving  Primary sprocket'
-    )
+    ...     b'G3805  storeroom  Main chassis    '
+    ...     b'X7899  shipping   Reserve cog     '
+    ...     b'L6988  receiving  Primary sprocket'
+    ... )
     >>> buffer = byte_stream.getbuffer()
     >>> change_location(buffer, 1, b'warehouse  ')
     >>> change_location(buffer, 0, b'showroom   ')
@@ -1131,10 +1133,10 @@ decorator, :func:`~reprlib.recursive_repr`, for detecting recursive calls to
 :meth:`__repr__` and substituting a placeholder string instead::
 
         >>> class MyList(list):
-                @recursive_repr()
-                def __repr__(self):
-                    return '<' + '|'.join(map(repr, self)) + '>'
-
+        ...     @recursive_repr()
+        ...     def __repr__(self):
+        ...         return '<' + '|'.join(map(repr, self)) + '>'
+        ...
         >>> m = MyList('abc')
         >>> m.append(m)
         >>> m.append('x')
@@ -1197,8 +1199,8 @@ the field names::
     >>> w.writeheader()
     "name","dept"
     >>> w.writerows([
-            {'name': 'tom', 'dept': 'accounting'},
-            {'name': 'susan', 'dept': 'Salesl'}])
+    ...     {'name': 'tom', 'dept': 'accounting'},
+    ...     {'name': 'susan', 'dept': 'Salesl'}])
     "tom","accounting"
     "susan","sales"
 
@@ -1423,14 +1425,14 @@ function can return *None*::
     >>> import tarfile, glob
 
     >>> def myfilter(tarinfo):
-           if tarinfo.isfile():             # only save real files
-                tarinfo.uname = 'monty'     # redact the user name
-                return tarinfo
+    ...     if tarinfo.isfile():             # only save real files
+    ...         tarinfo.uname = 'monty'      # redact the user name
+    ...         return tarinfo
 
     >>> with tarfile.open(name='myarchive.tar.gz', mode='w:gz') as tf:
-            for filename in glob.glob('*.txt'):
-                tf.add(filename, filter=myfilter)
-            tf.list()
+    ...     for filename in glob.glob('*.txt'):
+    ...         tf.add(filename, filter=myfilter)
+    ...     tf.list()
     -rw-r--r-- monty/501        902 2011-01-26 17:59:11 annotations.txt
     -rw-r--r-- monty/501        123 2011-01-26 17:59:11 general_questions.txt
     -rw-r--r-- monty/501       3514 2011-01-26 17:59:11 prion.txt
@@ -1536,26 +1538,26 @@ step is non-destructive (the original files are left unchanged).
 
     >>> import shutil, pprint
 
-    >>> os.chdir('mydata')                               # change to the source directory
+    >>> os.chdir('mydata')  # change to the source directory
     >>> f = shutil.make_archive('/var/backup/mydata',
-                                'zip')                   # archive the current directory
-    >>> f                                                # show the name of archive
+    ...                         'zip')      # archive the current directory
+    >>> f                                   # show the name of archive
     '/var/backup/mydata.zip'
-    >>> os.chdir('tmp')                                  # change to an unpacking
+    >>> os.chdir('tmp')                     # change to an unpacking
     >>> shutil.unpack_archive('/var/backup/mydata.zip')  # recover the data
 
-    >>> pprint.pprint(shutil.get_archive_formats())      # display known formats
+    >>> pprint.pprint(shutil.get_archive_formats())  # display known formats
     [('bztar', "bzip2'ed tar-file"),
      ('gztar', "gzip'ed tar-file"),
      ('tar', 'uncompressed tar file'),
      ('zip', 'ZIP file')]
 
-    >>> shutil.register_archive_format(                  # register a new archive format
-            name = 'xz',
-            function = xz.compress,                      # callable archiving function
-            extra_args = [('level', 8)],                 # arguments to the function
-            description = 'xz compression'
-    )
+    >>> shutil.register_archive_format(     # register a new archive format
+    ...     name='xz',
+    ...     function=xz.compress,           # callable archiving function
+    ...     extra_args=[('level', 8)],      # arguments to the function
+    ...     description='xz compression'
+    ... )
 
 (Contributed by Tarek Ziadé.)
 
@@ -1618,7 +1620,7 @@ for secure (encrypted, authenticated) internet connections:
 * The :func:`ssl.wrap_socket` constructor function now takes a *ciphers*
   argument.  The *ciphers* string lists the allowed encryption algorithms using
   the format described in the `OpenSSL documentation
-  <http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT>`__.
+  <https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT>`__.
 
 * When linked against recent versions of OpenSSL, the :mod:`ssl` module now
   supports the Server Name Indication extension to the TLS protocol, allowing
@@ -1854,7 +1856,7 @@ inspect
 
     >>> from inspect import getgeneratorstate
     >>> def gen():
-            yield 'demo'
+    ...     yield 'demo'
     >>> g = gen()
     >>> getgeneratorstate(g)
     'GEN_CREATED'
@@ -1874,11 +1876,11 @@ inspect
   change state while it is searching::
 
     >>> class A:
-            @property
-            def f(self):
-                print('Running')
-                return 10
-
+    ...     @property
+    ...     def f(self):
+    ...         print('Running')
+    ...         return 10
+    ...
     >>> a = A()
     >>> getattr(a, 'f')
     Running
@@ -2102,19 +2104,19 @@ Config parsers gained a new API based on the mapping protocol::
 
     >>> parser = ConfigParser()
     >>> parser.read_string("""
-    [DEFAULT]
-    location = upper left
-    visible = yes
-    editable = no
-    color = blue
-
-    [main]
-    title = Main Menu
-    color = green
-
-    [options]
-    title = Options
-    """)
+    ... [DEFAULT]
+    ... location = upper left
+    ... visible = yes
+    ... editable = no
+    ... color = blue
+    ...
+    ... [main]
+    ... title = Main Menu
+    ... color = green
+    ...
+    ... [options]
+    ... title = Options
+    ... """)
     >>> parser['main']['color']
     'green'
     >>> parser['main']['editable']
@@ -2138,24 +2140,24 @@ handler :class:`~configparser.ExtendedInterpolation`::
 
   >>> parser = ConfigParser(interpolation=ExtendedInterpolation())
   >>> parser.read_dict({'buildout': {'directory': '/home/ambv/zope9'},
-                        'custom': {'prefix': '/usr/local'}})
+  ...                   'custom': {'prefix': '/usr/local'}})
   >>> parser.read_string("""
-      [buildout]
-      parts =
-        zope9
-        instance
-      find-links =
-        ${buildout:directory}/downloads/dist
-
-      [zope9]
-      recipe = plone.recipe.zope9install
-      location = /opt/zope
-
-      [instance]
-      recipe = plone.recipe.zope9instance
-      zope9-location = ${zope9:location}
-      zope-conf = ${custom:prefix}/etc/zope.conf
-      """)
+  ... [buildout]
+  ... parts =
+  ...   zope9
+  ...   instance
+  ... find-links =
+  ...   ${buildout:directory}/downloads/dist
+  ...
+  ... [zope9]
+  ... recipe = plone.recipe.zope9install
+  ... location = /opt/zope
+  ...
+  ... [instance]
+  ... recipe = plone.recipe.zope9instance
+  ... zope9-location = ${zope9:location}
+  ... zope-conf = ${custom:prefix}/etc/zope.conf
+  ... """)
   >>> parser['buildout']['find-links']
   '\n/home/ambv/zope9/downloads/dist'
   >>> parser['instance']['zope-conf']
@@ -2180,7 +2182,7 @@ urllib.parse
 A number of usability improvements were made for the :mod:`urllib.parse` module.
 
 The :func:`~urllib.parse.urlparse` function now supports `IPv6
-<http://en.wikipedia.org/wiki/IPv6>`_ addresses as described in :rfc:`2732`:
+<https://en.wikipedia.org/wiki/IPv6>`_ addresses as described in :rfc:`2732`:
 
     >>> import urllib.parse
     >>> urllib.parse.urlparse('http://[dead:beef:cafe:5417:affe:8FA3:deaf:feed]/foo/')
@@ -2207,9 +2209,9 @@ string, then the *safe*, *encoding*, and *error* parameters are sent to
 :func:`~urllib.parse.quote_plus` for encoding::
 
     >>> urllib.parse.urlencode([
-             ('type', 'telenovela'),
-             ('name', '¿Dónde Está Elisa?')],
-             encoding='latin-1')
+    ...      ('type', 'telenovela'),
+    ...      ('name', '¿Dónde Está Elisa?')],
+    ...      encoding='latin-1')
     'type=telenovela&name=%BFD%F3nde+Est%E1+Elisa%3F'
 
 As detailed in :ref:`parsing-ascii-encoded-bytes`, all the :mod:`urllib.parse`
@@ -2328,7 +2330,7 @@ A number of small performance enhancements have been added:
   (Contributed by Alexandre Vassalotti, Antoine Pitrou
   and the Unladen Swallow team in :issue:`9410` and :issue:`3873`.)
 
-* The `Timsort algorithm <http://en.wikipedia.org/wiki/Timsort>`_ used in
+* The `Timsort algorithm <https://en.wikipedia.org/wiki/Timsort>`_ used in
   :meth:`list.sort` and :func:`sorted` now runs faster and uses less memory
   when called with a :term:`key function`.  Previously, every element of
   a list was wrapped with a temporary object that remembered the key value
@@ -2380,7 +2382,7 @@ Unicode
 
 Python has been updated to `Unicode 6.0.0
 <http://unicode.org/versions/Unicode6.0.0/>`_.  The update to the standard adds
-over 2,000 new characters including `emoji <http://en.wikipedia.org/wiki/Emoji>`_
+over 2,000 new characters including `emoji <https://en.wikipedia.org/wiki/Emoji>`_
 symbols which are important for mobile phones.
 
 In addition, the updated standard has altered the character properties for two
@@ -2432,7 +2434,7 @@ The documentation continues to be improved.
     **Source code** :source:`Lib/functools.py`.
 
   (Contributed by Raymond Hettinger; see
-  `rationale <http://rhettinger.wordpress.com/2011/01/28/open-your-source-more/>`_.)
+  `rationale <https://rhettinger.wordpress.com/2011/01/28/open-your-source-more/>`_.)
 
 * The docs now contain more examples and recipes.  In particular, :mod:`re`
   module has an extensive section, :ref:`re-examples`.  Likewise, the
@@ -2468,7 +2470,7 @@ Code Repository
 ===============
 
 In addition to the existing Subversion code repository at http://svn.python.org
-there is now a `Mercurial <http://mercurial.selenic.com/>`_ repository at
+there is now a `Mercurial <https://www.mercurial-scm.org/>`_ repository at
 https://hg.python.org/\ .
 
 After the 3.2 release, there are plans to switch to Mercurial as the primary
@@ -2478,7 +2480,7 @@ members of the community to create and share external changesets.  See
 
 To learn to use the new version control system, see the `tutorial by Joel
 Spolsky <http://hginit.com>`_ or the `Guide to Mercurial Workflows
-<http://mercurial.selenic.com/guide>`_.
+<https://www.mercurial-scm.org/guide>`_.
 
 
 Build and C API Changes
@@ -2559,7 +2561,7 @@ Also, there were a number of updates to the Mac OS X build, see
 :source:`Mac/BuildScript/README.txt` for details.  For users running a 32/64-bit
 build, there is a known problem with the default Tcl/Tk on Mac OS X 10.6.
 Accordingly, we recommend installing an updated alternative such as
-`ActiveState Tcl/Tk 8.5.9 <http://www.activestate.com/activetcl/downloads>`_\.
+`ActiveState Tcl/Tk 8.5.9 <https://www.activestate.com/activetcl/downloads>`_\.
 See https://www.python.org/download/mac/tcltk/ for additional details.
 
 Porting to Python 3.2

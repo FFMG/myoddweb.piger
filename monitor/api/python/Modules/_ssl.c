@@ -1589,8 +1589,7 @@ static int PySSL_set_context(PySSLSocket *self, PyObject *value,
         return -1;
 #else
         Py_INCREF(value);
-        Py_DECREF(self->ctx);
-        self->ctx = (PySSLContext *) value;
+        Py_SETREF(self->ctx, (PySSLContext *)value);
         SSL_set_SSL_CTX(self->ssl, self->ctx->ctx);
 #endif
     } else {
@@ -1647,8 +1646,7 @@ PySSL_get_owner(PySSLSocket *self, void *c)
 static int
 PySSL_set_owner(PySSLSocket *self, PyObject *value, void *c)
 {
-    Py_XDECREF(self->owner);
-    self->owner = PyWeakref_NewRef(value, NULL);
+    Py_XSETREF(self->owner, PyWeakref_NewRef(value, NULL));
     if (self->owner == NULL)
         return -1;
     return 0;
@@ -1896,6 +1894,11 @@ _ssl__SSLSocket_read_impl(PySSLSocket *self, int len, int group_right_1,
     PySocketSockObject *sock = GET_SOCKET(self);
     _PyTime_t timeout, deadline = 0;
     int has_timeout;
+
+    if (!group_right_1 && len < 0) {
+        PyErr_SetString(PyExc_ValueError, "size should not be negative");
+        return NULL;
+    }
 
     if (sock != NULL) {
         if (((PyObject*)sock) == Py_None) {
@@ -2221,6 +2224,9 @@ _ssl__SSLContext_impl(PyTypeObject *type, int proto_version)
     PySSLContext *self;
     long options;
     SSL_CTX *ctx = NULL;
+#if defined(SSL_MODE_RELEASE_BUFFERS)
+    unsigned long libver;
+#endif
 
     PySSL_BEGIN_ALLOW_THREADS
     if (proto_version == PY_SSL_VERSION_TLS1)
@@ -2282,6 +2288,22 @@ _ssl__SSLContext_impl(PyTypeObject *type, int proto_version)
     if (proto_version != PY_SSL_VERSION_SSL3)
         options |= SSL_OP_NO_SSLv3;
     SSL_CTX_set_options(self->ctx, options);
+
+#if defined(SSL_MODE_RELEASE_BUFFERS)
+    /* Set SSL_MODE_RELEASE_BUFFERS. This potentially greatly reduces memory
+       usage for no cost at all. However, don't do this for OpenSSL versions
+       between 1.0.1 and 1.0.1h or 1.0.0 and 1.0.0m, which are affected by CVE
+       2014-0198. I can't find exactly which beta fixed this CVE, so be
+       conservative and assume it wasn't fixed until release. We do this check
+       at runtime to avoid problems from the dynamic linker.
+       See #25672 for more on this. */
+    libver = SSLeay();
+    if (!(libver >= 0x10001000UL && libver < 0x1000108fUL) &&
+        !(libver >= 0x10000000UL && libver < 0x100000dfUL)) {
+        SSL_CTX_set_mode(self->ctx, SSL_MODE_RELEASE_BUFFERS);
+    }
+#endif
+
 
 #ifndef OPENSSL_NO_ECDH
     /* Allow automatic ECDH curve selection (on OpenSSL 1.0.2+), or use
@@ -4183,7 +4205,9 @@ _ssl_enum_certificates_impl(PyModuleDef *module, const char *store_name)
     if (result == NULL) {
         return NULL;
     }
-    hStore = CertOpenSystemStore((HCRYPTPROV)NULL, store_name);
+    hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, 0, (HCRYPTPROV)NULL,
+                            CERT_STORE_READONLY_FLAG | CERT_SYSTEM_STORE_LOCAL_MACHINE,
+                            store_name);
     if (hStore == NULL) {
         Py_DECREF(result);
         return PyErr_SetFromWindowsErr(GetLastError());
@@ -4269,7 +4293,9 @@ _ssl_enum_crls_impl(PyModuleDef *module, const char *store_name)
     if (result == NULL) {
         return NULL;
     }
-    hStore = CertOpenSystemStore((HCRYPTPROV)NULL, store_name);
+    hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, 0, (HCRYPTPROV)NULL,
+                            CERT_STORE_READONLY_FLAG | CERT_SYSTEM_STORE_LOCAL_MACHINE,
+                            store_name);
     if (hStore == NULL) {
         Py_DECREF(result);
         return PyErr_SetFromWindowsErr(GetLastError());

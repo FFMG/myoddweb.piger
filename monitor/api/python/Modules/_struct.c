@@ -1437,8 +1437,7 @@ s_init(PyObject *self, PyObject *args, PyObject *kwds)
         return -1;
     }
 
-    Py_CLEAR(soself->s_format);
-    soself->s_format = o_format;
+    Py_XSETREF(soself->s_format, o_format);
 
     ret = prepare_s(soself);
     return ret;
@@ -1498,8 +1497,8 @@ PyDoc_STRVAR(s_unpack__doc__,
 "S.unpack(buffer) -> (v1, v2, ...)\n\
 \n\
 Return a tuple containing values unpacked according to the format\n\
-string S.format.  Requires len(buffer) == S.size.  See help(struct)\n\
-for more on format strings.");
+string S.format.  The buffer's size in bytes must be S.size.  See\n\
+help(struct) for more on format strings.");
 
 static PyObject *
 s_unpack(PyObject *self, PyObject *input)
@@ -1528,8 +1527,8 @@ PyDoc_STRVAR(s_unpack_from__doc__,
 "S.unpack_from(buffer, offset=0) -> (v1, v2, ...)\n\
 \n\
 Return a tuple containing values unpacked according to the format\n\
-string S.format.  Requires len(buffer[offset:]) >= S.size.  See\n\
-help(struct) for more on format strings.");
+string S.format.  The buffer's size in bytes, minus offset, must be at\n\
+least S.size.  See help(struct) for more on format strings.");
 
 static PyObject *
 s_unpack_from(PyObject *self, PyObject *args, PyObject *kwds)
@@ -1924,7 +1923,7 @@ s_sizeof(PyStructObject *self, void *unused)
     Py_ssize_t size;
     formatcode *code;
 
-    size = sizeof(PyStructObject) + sizeof(formatcode);
+    size = _PyObject_SIZE(Py_TYPE(self)) + sizeof(formatcode);
     for (code = self->s_codes; code->fmtdef != NULL; code++)
         size += sizeof(formatcode);
     return PyLong_FromSsize_t(size);
@@ -2131,8 +2130,8 @@ PyDoc_STRVAR(unpack_doc,
 "unpack(fmt, buffer) -> (v1, v2, ...)\n\
 \n\
 Return a tuple containing values unpacked according to the format string\n\
-fmt.  Requires len(buffer) == calcsize(fmt). See help(struct) for more\n\
-on format strings.");
+fmt.  The buffer's size in bytes must be calcsize(fmt). See help(struct)\n\
+for more on format strings.");
 
 static PyObject *
 unpack(PyObject *self, PyObject *args)
@@ -2154,8 +2153,8 @@ PyDoc_STRVAR(unpack_from_doc,
 "unpack_from(fmt, buffer, offset=0) -> (v1, v2, ...)\n\
 \n\
 Return a tuple containing values unpacked according to the format string\n\
-fmt.  Requires len(buffer[offset:]) >= calcsize(fmt).  See help(struct)\n\
-for more on format strings.");
+fmt.  The buffer's size, minus offset, must be at least calcsize(fmt).\n\
+See help(struct) for more on format strings.");
 
 static PyObject *
 unpack_from(PyObject *self, PyObject *args, PyObject *kwds)

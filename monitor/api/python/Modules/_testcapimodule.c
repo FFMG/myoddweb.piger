@@ -872,6 +872,120 @@ test_L_code(PyObject *self)
 
 #endif  /* ifdef HAVE_LONG_LONG */
 
+static PyObject *
+return_none(void *unused)
+{
+    Py_RETURN_NONE;
+}
+
+static PyObject *
+raise_error(void *unused)
+{
+    PyErr_SetNone(PyExc_ValueError);
+    return NULL;
+}
+
+static int
+test_buildvalue_N_error(const char *fmt)
+{
+    PyObject *arg, *res;
+
+    arg = PyList_New(0);
+    if (arg == NULL) {
+        return -1;
+    }
+
+    Py_INCREF(arg);
+    res = Py_BuildValue(fmt, return_none, NULL, arg);
+    if (res == NULL) {
+        return -1;
+    }
+    Py_DECREF(res);
+    if (Py_REFCNT(arg) != 1) {
+        PyErr_Format(TestError, "test_buildvalue_N: "
+                     "arg was not decrefed in successful "
+                     "Py_BuildValue(\"%s\")", fmt);
+        return -1;
+    }
+
+    Py_INCREF(arg);
+    res = Py_BuildValue(fmt, raise_error, NULL, arg);
+    if (res != NULL || !PyErr_Occurred()) {
+        PyErr_Format(TestError, "test_buildvalue_N: "
+                     "Py_BuildValue(\"%s\") didn't complain", fmt);
+        return -1;
+    }
+    PyErr_Clear();
+    if (Py_REFCNT(arg) != 1) {
+        PyErr_Format(TestError, "test_buildvalue_N: "
+                     "arg was not decrefed in failed "
+                     "Py_BuildValue(\"%s\")", fmt);
+        return -1;
+    }
+    Py_DECREF(arg);
+    return 0;
+}
+
+static PyObject *
+test_buildvalue_N(PyObject *self, PyObject *noargs)
+{
+    PyObject *arg, *res;
+
+    arg = PyList_New(0);
+    if (arg == NULL) {
+        return NULL;
+    }
+    Py_INCREF(arg);
+    res = Py_BuildValue("N", arg);
+    if (res == NULL) {
+        return NULL;
+    }
+    if (res != arg) {
+        return raiseTestError("test_buildvalue_N",
+                              "Py_BuildValue(\"N\") returned wrong result");
+    }
+    if (Py_REFCNT(arg) != 2) {
+        return raiseTestError("test_buildvalue_N",
+                              "arg was not decrefed in Py_BuildValue(\"N\")");
+    }
+    Py_DECREF(res);
+    Py_DECREF(arg);
+
+    if (test_buildvalue_N_error("O&N") < 0)
+        return NULL;
+    if (test_buildvalue_N_error("(O&N)") < 0)
+        return NULL;
+    if (test_buildvalue_N_error("[O&N]") < 0)
+        return NULL;
+    if (test_buildvalue_N_error("{O&N}") < 0)
+        return NULL;
+    if (test_buildvalue_N_error("{()O&(())N}") < 0)
+        return NULL;
+
+    Py_RETURN_NONE;
+}
+
+
+static PyObject *
+get_args(PyObject *self, PyObject *args)
+{
+    if (args == NULL) {
+        args = Py_None;
+    }
+    Py_INCREF(args);
+    return args;
+}
+
+static PyObject *
+get_kwargs(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    if (kwargs == NULL) {
+        kwargs = Py_None;
+    }
+    Py_INCREF(kwargs);
+    return kwargs;
+}
+
 /* Test tuple argument processing */
 static PyObject *
 getargs_tuple(PyObject *self, PyObject *args)
@@ -1083,12 +1197,78 @@ test_k_code(PyObject *self)
 }
 
 static PyObject *
+getargs_f(PyObject *self, PyObject *args)
+{
+    float f;
+    if (!PyArg_ParseTuple(args, "f", &f))
+        return NULL;
+    return PyFloat_FromDouble(f);
+}
+
+static PyObject *
+getargs_d(PyObject *self, PyObject *args)
+{
+    double d;
+    if (!PyArg_ParseTuple(args, "d", &d))
+        return NULL;
+    return PyFloat_FromDouble(d);
+}
+
+static PyObject *
+getargs_D(PyObject *self, PyObject *args)
+{
+    Py_complex cval;
+    if (!PyArg_ParseTuple(args, "D", &cval))
+        return NULL;
+    return PyComplex_FromCComplex(cval);
+}
+
+static PyObject *
+getargs_S(PyObject *self, PyObject *args)
+{
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args, "S", &obj))
+        return NULL;
+    Py_INCREF(obj);
+    return obj;
+}
+
+static PyObject *
+getargs_Y(PyObject *self, PyObject *args)
+{
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args, "Y", &obj))
+        return NULL;
+    Py_INCREF(obj);
+    return obj;
+}
+
+static PyObject *
+getargs_U(PyObject *self, PyObject *args)
+{
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args, "U", &obj))
+        return NULL;
+    Py_INCREF(obj);
+    return obj;
+}
+
+static PyObject *
 getargs_c(PyObject *self, PyObject *args)
 {
     char c;
     if (!PyArg_ParseTuple(args, "c", &c))
         return NULL;
-    return PyBytes_FromStringAndSize(&c, 1);
+    return PyLong_FromLong((unsigned char)c);
+}
+
+static PyObject *
+getargs_C(PyObject *self, PyObject *args)
+{
+    int c;
+    if (!PyArg_ParseTuple(args, "C", &c))
+        return NULL;
+    return PyLong_FromLong(c);
 }
 
 static PyObject *
@@ -1241,6 +1421,84 @@ getargs_Z_hash(PyObject *self, PyObject *args)
         return PyUnicode_FromUnicode(str, size);
     else
         Py_RETURN_NONE;
+}
+
+static PyObject *
+getargs_es(PyObject *self, PyObject *args)
+{
+    PyObject *arg, *result;
+    const char *encoding = NULL;
+    char *str;
+
+    if (!PyArg_ParseTuple(args, "O|s", &arg, &encoding))
+        return NULL;
+    if (!PyArg_Parse(arg, "es", encoding, &str))
+        return NULL;
+    result = PyBytes_FromString(str);
+    PyMem_Free(str);
+    return result;
+}
+
+static PyObject *
+getargs_et(PyObject *self, PyObject *args)
+{
+    PyObject *arg, *result;
+    const char *encoding = NULL;
+    char *str;
+
+    if (!PyArg_ParseTuple(args, "O|s", &arg, &encoding))
+        return NULL;
+    if (!PyArg_Parse(arg, "et", encoding, &str))
+        return NULL;
+    result = PyBytes_FromString(str);
+    PyMem_Free(str);
+    return result;
+}
+
+static PyObject *
+getargs_es_hash(PyObject *self, PyObject *args)
+{
+    PyObject *arg, *result;
+    const char *encoding = NULL;
+    PyByteArrayObject *buffer = NULL;
+    char *str = NULL;
+    Py_ssize_t size;
+
+    if (!PyArg_ParseTuple(args, "O|sY", &arg, &encoding, &buffer))
+        return NULL;
+    if (buffer != NULL) {
+        str = PyByteArray_AS_STRING(buffer);
+        size = PyByteArray_GET_SIZE(buffer);
+    }
+    if (!PyArg_Parse(arg, "es#", encoding, &str, &size))
+        return NULL;
+    result = PyBytes_FromStringAndSize(str, size);
+    if (buffer == NULL)
+        PyMem_Free(str);
+    return result;
+}
+
+static PyObject *
+getargs_et_hash(PyObject *self, PyObject *args)
+{
+    PyObject *arg, *result;
+    const char *encoding = NULL;
+    PyByteArrayObject *buffer = NULL;
+    char *str = NULL;
+    Py_ssize_t size;
+
+    if (!PyArg_ParseTuple(args, "O|sY", &arg, &encoding, &buffer))
+        return NULL;
+    if (buffer != NULL) {
+        str = PyByteArray_AS_STRING(buffer);
+        size = PyByteArray_GET_SIZE(buffer);
+    }
+    if (!PyArg_Parse(arg, "et#", encoding, &str, &size))
+        return NULL;
+    result = PyBytes_FromStringAndSize(str, size);
+    if (buffer == NULL)
+        PyMem_Free(str);
+    return result;
 }
 
 /* Test the s and z codes for PyArg_ParseTuple.
@@ -3564,6 +3822,9 @@ static PyMethodDef TestMethods[] = {
     {"test_pep3118_obsolete_write_locks", (PyCFunction)test_pep3118_obsolete_write_locks, METH_NOARGS},
 #endif
     {"getbuffer_with_null_view", getbuffer_with_null_view, METH_O},
+    {"test_buildvalue_N",       test_buildvalue_N,               METH_NOARGS},
+    {"get_args", get_args, METH_VARARGS},
+    {"get_kwargs", (PyCFunction)get_kwargs, METH_VARARGS|METH_KEYWORDS},
     {"getargs_tuple",           getargs_tuple,                   METH_VARARGS},
     {"getargs_keywords", (PyCFunction)getargs_keywords,
       METH_VARARGS|METH_KEYWORDS},
@@ -3587,7 +3848,14 @@ static PyMethodDef TestMethods[] = {
         (PyCFunction)test_long_long_and_overflow, METH_NOARGS},
     {"test_L_code",             (PyCFunction)test_L_code,        METH_NOARGS},
 #endif
+    {"getargs_f",               getargs_f,                       METH_VARARGS},
+    {"getargs_d",               getargs_d,                       METH_VARARGS},
+    {"getargs_D",               getargs_D,                       METH_VARARGS},
+    {"getargs_S",               getargs_S,                       METH_VARARGS},
+    {"getargs_Y",               getargs_Y,                       METH_VARARGS},
+    {"getargs_U",               getargs_U,                       METH_VARARGS},
     {"getargs_c",               getargs_c,                       METH_VARARGS},
+    {"getargs_C",               getargs_C,                       METH_VARARGS},
     {"getargs_s",               getargs_s,                       METH_VARARGS},
     {"getargs_s_star",          getargs_s_star,                  METH_VARARGS},
     {"getargs_s_hash",          getargs_s_hash,                  METH_VARARGS},
@@ -3602,6 +3870,10 @@ static PyMethodDef TestMethods[] = {
     {"getargs_Z",               getargs_Z,                       METH_VARARGS},
     {"getargs_Z_hash",          getargs_Z_hash,                  METH_VARARGS},
     {"getargs_w_star",          getargs_w_star,                  METH_VARARGS},
+    {"getargs_es",              getargs_es,                      METH_VARARGS},
+    {"getargs_et",              getargs_et,                      METH_VARARGS},
+    {"getargs_es_hash",         getargs_es_hash,                 METH_VARARGS},
+    {"getargs_et_hash",         getargs_et_hash,                 METH_VARARGS},
     {"codec_incrementalencoder",
      (PyCFunction)codec_incrementalencoder,                      METH_VARARGS},
     {"codec_incrementaldecoder",

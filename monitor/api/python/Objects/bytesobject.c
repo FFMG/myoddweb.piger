@@ -34,7 +34,7 @@ static PyBytesObject *nullstring;
    For PyBytes_FromString(), the parameter `str' points to a null-terminated
    string containing exactly `size' bytes.
 
-   For PyBytes_FromStringAndSize(), the parameter the parameter `str' is
+   For PyBytes_FromStringAndSize(), the parameter `str' is
    either NULL or else points to a string containing at least `size' bytes.
    For PyBytes_FromStringAndSize(), the string in the `str' parameter does
    not have to be null-terminated.  (Therefore it is safe to construct a
@@ -3146,7 +3146,7 @@ static PyNumberMethods bytes_as_number = {
 };
 
 static PyObject *
-str_subtype_new(PyTypeObject *type, PyObject *args, PyObject *kwds);
+bytes_subtype_new(PyTypeObject *type, PyObject *args, PyObject *kwds);
 
 static PyObject *
 bytes_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
@@ -3161,7 +3161,7 @@ bytes_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     _Py_IDENTIFIER(__bytes__);
 
     if (type != &PyBytes_Type)
-        return str_subtype_new(type, args, kwds);
+        return bytes_subtype_new(type, args, kwds);
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "|Oss:bytes", kwlist, &x,
                                      &encoding, &errors))
         return NULL;
@@ -3175,11 +3175,11 @@ bytes_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return PyBytes_FromStringAndSize(NULL, 0);
     }
 
-    if (PyUnicode_Check(x)) {
+    if (encoding != NULL) {
         /* Encode via the codec registry */
-        if (encoding == NULL) {
+        if (!PyUnicode_Check(x)) {
             PyErr_SetString(PyExc_TypeError,
-                            "string argument without an encoding");
+                            "encoding without a string argument");
             return NULL;
         }
         new = PyUnicode_AsEncodedString(x, encoding, errors);
@@ -3189,10 +3189,11 @@ bytes_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return new;
     }
 
-    /* If it's not unicode, there can't be encoding or errors */
-    if (encoding != NULL || errors != NULL) {
+    if (errors != NULL) {
         PyErr_SetString(PyExc_TypeError,
-            "encoding or errors without a string argument");
+                        PyUnicode_Check(x) ?
+                        "string argument without an encoding" :
+                        "errors without a string argument");
         return NULL;
     }
 
@@ -3217,6 +3218,11 @@ bytes_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     else if (PyErr_Occurred())
         return NULL;
 
+    if (PyUnicode_Check(x)) {
+        PyErr_SetString(PyExc_TypeError,
+                        "string argument without an encoding");
+        return NULL;
+    }
     /* Is it an integer? */
     size = PyNumber_AsSsize_t(x, PyExc_OverflowError);
     if (size == -1 && PyErr_Occurred()) {
@@ -3388,7 +3394,7 @@ PyBytes_FromObject(PyObject *x)
 }
 
 static PyObject *
-str_subtype_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+bytes_subtype_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
     PyObject *tmp, *pnew;
     Py_ssize_t n;
@@ -3397,7 +3403,7 @@ str_subtype_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     tmp = bytes_new(&PyBytes_Type, args, kwds);
     if (tmp == NULL)
         return NULL;
-    assert(PyBytes_CheckExact(tmp));
+    assert(PyBytes_Check(tmp));
     n = PyBytes_GET_SIZE(tmp);
     pnew = type->tp_alloc(type, n);
     if (pnew != NULL) {
@@ -3514,8 +3520,7 @@ PyBytes_Concat(PyObject **pv, PyObject *w)
         /* Multiple references, need to create new object */
         PyObject *v;
         v = bytes_concat(*pv, w);
-        Py_DECREF(*pv);
-        *pv = v;
+        Py_SETREF(*pv, v);
     }
 }
 
@@ -3623,8 +3628,8 @@ striter_next(striterobject *it)
         return item;
     }
 
-    Py_DECREF(seq);
     it->it_seq = NULL;
+    Py_DECREF(seq);
     return NULL;
 }
 

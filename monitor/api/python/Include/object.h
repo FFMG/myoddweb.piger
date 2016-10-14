@@ -134,7 +134,7 @@ typedef struct {
    usage, the string "foo" is interned, and the structures are linked. On interpreter
    shutdown, all strings are released (through _PyUnicode_ClearStaticStrings).
 
-   Alternatively, _Py_static_string allows to choose the variable name.
+   Alternatively, _Py_static_string allows choosing the variable name.
    _PyUnicode_FromId returns a borrowed reference to the interned string.
    _PyObject_{Get,Set,Has}AttrId are __getattr__ versions using _Py_Identifier*.
 */
@@ -845,6 +845,42 @@ PyAPI_FUNC(void) _Py_Dealloc(PyObject *);
         if (_py_xdecref_tmp != NULL)                  \
             Py_DECREF(_py_xdecref_tmp);               \
     } while (0)
+
+#ifndef Py_LIMITED_API
+/* Safely decref `op` and set `op` to `op2`.
+ *
+ * As in case of Py_CLEAR "the obvious" code can be deadly:
+ *
+ *     Py_DECREF(op);
+ *     op = op2;
+ *
+ * The safe way is:
+ *
+ *      Py_SETREF(op, op2);
+ *
+ * That arranges to set `op` to `op2` _before_ decref'ing, so that any code
+ * triggered as a side-effect of `op` getting torn down no longer believes
+ * `op` points to a valid object.
+ *
+ * Py_XSETREF is a variant of Py_SETREF that uses Py_XDECREF instead of
+ * Py_DECREF.
+ */
+
+#define Py_SETREF(op, op2)                      \
+    do {                                        \
+        PyObject *_py_tmp = (PyObject *)(op);   \
+        (op) = (op2);                           \
+        Py_DECREF(_py_tmp);                     \
+    } while (0)
+
+#define Py_XSETREF(op, op2)                     \
+    do {                                        \
+        PyObject *_py_tmp = (PyObject *)(op);   \
+        (op) = (op2);                           \
+        Py_XDECREF(_py_tmp);                    \
+    } while (0)
+
+#endif /* ifndef Py_LIMITED_API */
 
 /*
 These are provided as conveniences to Python runtime embedders, so that

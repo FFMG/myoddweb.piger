@@ -78,7 +78,7 @@ gen_dealloc(PyGenObject *gen)
 }
 
 static PyObject *
-gen_send_ex(PyGenObject *gen, PyObject *arg, int exc)
+gen_send_ex(PyGenObject *gen, PyObject *arg, int exc, int closing)
 {
     PyThreadState *tstate = PyThreadState_GET();
     PyFrameObject *f = gen->gi_frame;
@@ -92,9 +92,18 @@ gen_send_ex(PyGenObject *gen, PyObject *arg, int exc)
         return NULL;
     }
     if (f == NULL || f->f_stacktop == NULL) {
-        /* Only set exception if called from send() */
-        if (arg && !exc)
+        if (PyCoro_CheckExact(gen) && !closing) {
+            /* `gen` is an exhausted coroutine: raise an error,
+               except when called from gen_close(), which should
+               always be a silent method. */
+            PyErr_SetString(
+                PyExc_RuntimeError,
+                "cannot reuse already awaited coroutine");
+        } else if (arg && !exc) {
+            /* `gen` is an exhausted generator:
+               only set exception if called from send(). */
             PyErr_SetNone(PyExc_StopIteration);
+        }
         return NULL;
     }
 
@@ -220,7 +229,7 @@ return next yielded value or raise StopIteration.");
 PyObject *
 _PyGen_Send(PyGenObject *gen, PyObject *arg)
 {
-    return gen_send_ex(gen, arg, 0);
+    return gen_send_ex(gen, arg, 0, 0);
 }
 
 PyDoc_STRVAR(close_doc,
@@ -258,8 +267,8 @@ gen_close_iter(PyObject *yf)
     return 0;
 }
 
-static PyObject *
-gen_yf(PyGenObject *gen)
+PyObject *
+_PyGen_yf(PyGenObject *gen)
 {
     PyObject *yf = NULL;
     PyFrameObject *f = gen->gi_frame;
@@ -281,7 +290,7 @@ static PyObject *
 gen_close(PyGenObject *gen, PyObject *args)
 {
     PyObject *retval;
-    PyObject *yf = gen_yf(gen);
+    PyObject *yf = _PyGen_yf(gen);
     int err = 0;
 
     if (yf) {
@@ -292,7 +301,7 @@ gen_close(PyGenObject *gen, PyObject *args)
     }
     if (err == 0)
         PyErr_SetNone(PyExc_GeneratorExit);
-    retval = gen_send_ex(gen, Py_None, 1);
+    retval = gen_send_ex(gen, Py_None, 1, 1);
     if (retval) {
         char *msg = "generator ignored GeneratorExit";
         if (PyCoro_CheckExact(gen))
@@ -321,7 +330,7 @@ gen_throw(PyGenObject *gen, PyObject *args)
     PyObject *typ;
     PyObject *tb = NULL;
     PyObject *val = NULL;
-    PyObject *yf = gen_yf(gen);
+    PyObject *yf = _PyGen_yf(gen);
     _Py_IDENTIFIER(throw);
 
     if (!PyArg_UnpackTuple(args, "throw", 1, 3, &typ, &val, &tb))
@@ -336,7 +345,7 @@ gen_throw(PyGenObject *gen, PyObject *args)
             gen->gi_running = 0;
             Py_DECREF(yf);
             if (err < 0)
-                return gen_send_ex(gen, Py_None, 1);
+                return gen_send_ex(gen, Py_None, 1, 0);
             goto throw_here;
         }
         if (PyGen_CheckExact(yf)) {
@@ -369,10 +378,10 @@ gen_throw(PyGenObject *gen, PyObject *args)
             /* Termination repetition of YIELD_FROM */
             gen->gi_frame->f_lasti++;
             if (_PyGen_FetchStopIterationValue(&val) == 0) {
-                ret = gen_send_ex(gen, val, 0);
+                ret = gen_send_ex(gen, val, 0, 0);
                 Py_DECREF(val);
             } else {
-                ret = gen_send_ex(gen, Py_None, 1);
+                ret = gen_send_ex(gen, Py_None, 1, 0);
             }
         }
         return ret;
@@ -426,7 +435,7 @@ throw_here:
     }
 
     PyErr_Restore(typ, val, tb);
-    return gen_send_ex(gen, Py_None, 1);
+    return gen_send_ex(gen, Py_None, 1, 0);
 
 failed_throw:
     /* Didn't use our arguments, so restore their original refcounts */
@@ -440,7 +449,7 @@ failed_throw:
 static PyObject *
 gen_iternext(PyGenObject *gen)
 {
-    return gen_send_ex(gen, NULL, 0);
+    return gen_send_ex(gen, NULL, 0, 0);
 }
 
 /*
@@ -555,7 +564,7 @@ gen_set_qualname(PyGenObject *op, PyObject *value)
 static PyObject *
 gen_getyieldfrom(PyGenObject *gen)
 {
-    PyObject *yf = gen_yf(gen);
+    PyObject *yf = _PyGen_yf(gen);
     if (yf == NULL)
         Py_RETURN_NONE;
     return yf;
@@ -790,7 +799,7 @@ coro_await(PyCoroObject *coro)
 static PyObject *
 coro_get_cr_await(PyCoroObject *coro)
 {
-    PyObject *yf = gen_yf((PyGenObject *) coro);
+    PyObject *yf = _PyGen_yf((PyGenObject *) coro);
     if (yf == NULL)
         Py_RETURN_NONE;
     return yf;
@@ -901,13 +910,13 @@ coro_wrapper_dealloc(PyCoroWrapper *cw)
 static PyObject *
 coro_wrapper_iternext(PyCoroWrapper *cw)
 {
-    return gen_send_ex((PyGenObject *)cw->cw_coroutine, NULL, 0);
+    return gen_send_ex((PyGenObject *)cw->cw_coroutine, NULL, 0, 0);
 }
 
 static PyObject *
 coro_wrapper_send(PyCoroWrapper *cw, PyObject *arg)
 {
-    return gen_send_ex((PyGenObject *)cw->cw_coroutine, arg, 0);
+    return gen_send_ex((PyGenObject *)cw->cw_coroutine, arg, 0, 0);
 }
 
 static PyObject *
@@ -982,4 +991,98 @@ PyObject *
 PyCoro_New(PyFrameObject *f, PyObject *name, PyObject *qualname)
 {
     return gen_new_with_qualname(&PyCoro_Type, f, name, qualname);
+}
+
+
+/* __aiter__ wrapper; see http://bugs.python.org/issue27243 for details. */
+
+typedef struct {
+    PyObject_HEAD
+    PyObject *aw_aiter;
+} PyAIterWrapper;
+
+
+static PyObject *
+aiter_wrapper_iternext(PyAIterWrapper *aw)
+{
+    PyErr_SetObject(PyExc_StopIteration, aw->aw_aiter);
+    return NULL;
+}
+
+static int
+aiter_wrapper_traverse(PyAIterWrapper *aw, visitproc visit, void *arg)
+{
+    Py_VISIT((PyObject *)aw->aw_aiter);
+    return 0;
+}
+
+static void
+aiter_wrapper_dealloc(PyAIterWrapper *aw)
+{
+    _PyObject_GC_UNTRACK((PyObject *)aw);
+    Py_CLEAR(aw->aw_aiter);
+    PyObject_GC_Del(aw);
+}
+
+static PyAsyncMethods aiter_wrapper_as_async = {
+    PyObject_SelfIter,                          /* am_await */
+    0,                                          /* am_aiter */
+    0                                           /* am_anext */
+};
+
+PyTypeObject _PyAIterWrapper_Type = {
+    PyVarObject_HEAD_INIT(&PyType_Type, 0)
+    "aiter_wrapper",
+    sizeof(PyAIterWrapper),                     /* tp_basicsize */
+    0,                                          /* tp_itemsize */
+    (destructor)aiter_wrapper_dealloc,          /* destructor tp_dealloc */
+    0,                                          /* tp_print */
+    0,                                          /* tp_getattr */
+    0,                                          /* tp_setattr */
+    &aiter_wrapper_as_async,                    /* tp_as_async */
+    0,                                          /* tp_repr */
+    0,                                          /* tp_as_number */
+    0,                                          /* tp_as_sequence */
+    0,                                          /* tp_as_mapping */
+    0,                                          /* tp_hash */
+    0,                                          /* tp_call */
+    0,                                          /* tp_str */
+    PyObject_GenericGetAttr,                    /* tp_getattro */
+    0,                                          /* tp_setattro */
+    0,                                          /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC,    /* tp_flags */
+    "A wrapper object for __aiter__ bakwards compatibility.",
+    (traverseproc)aiter_wrapper_traverse,       /* tp_traverse */
+    0,                                          /* tp_clear */
+    0,                                          /* tp_richcompare */
+    0,                                          /* tp_weaklistoffset */
+    PyObject_SelfIter,                          /* tp_iter */
+    (iternextfunc)aiter_wrapper_iternext,       /* tp_iternext */
+    0,                                          /* tp_methods */
+    0,                                          /* tp_members */
+    0,                                          /* tp_getset */
+    0,                                          /* tp_base */
+    0,                                          /* tp_dict */
+    0,                                          /* tp_descr_get */
+    0,                                          /* tp_descr_set */
+    0,                                          /* tp_dictoffset */
+    0,                                          /* tp_init */
+    0,                                          /* tp_alloc */
+    0,                                          /* tp_new */
+    PyObject_Del,                               /* tp_free */
+};
+
+
+PyObject *
+_PyAIterWrapper_New(PyObject *aiter)
+{
+    PyAIterWrapper *aw = PyObject_GC_New(PyAIterWrapper,
+                                         &_PyAIterWrapper_Type);
+    if (aw == NULL) {
+        return NULL;
+    }
+    Py_INCREF(aiter);
+    aw->aw_aiter = aiter;
+    _PyObject_GC_TRACK(aw);
+    return (PyObject *)aw;
 }

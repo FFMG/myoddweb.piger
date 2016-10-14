@@ -5,6 +5,7 @@
    :synopsis: Convert Python objects to streams of bytes and back (with different
               constraints).
 
+--------------
 
 This module contains functions that can read and write Python values in a binary
 format.  The format is specific to Python, but independent of machine
@@ -16,7 +17,6 @@ rarely does). [#]_
 .. index::
    module: pickle
    module: shelve
-   object: code
 
 This is not a general "persistence" module.  For general persistence and
 transfer of Python objects through RPC calls, see the modules :mod:`pickle` and
@@ -34,13 +34,15 @@ supports a substantially wider range of objects than marshal.
    maliciously constructed data.  Never unmarshal data received from an
    untrusted or unauthenticated source.
 
+.. index:: object; code, code object
+
 Not all Python object types are supported; in general, only objects whose value
 is independent from a particular invocation of Python can be written and read by
 this module.  The following types are supported: booleans, integers, floating
 point numbers, complex numbers, strings, bytes, bytearrays, tuples, lists, sets,
 frozensets, dictionaries, and code objects, where it should be understood that
 tuples, lists, sets, frozensets and dictionaries are only supported as long as
-the values contained therein are themselves supported.
+the values contained therein are themselves supported.  The
 singletons :const:`None`, :const:`Ellipsis` and :exc:`StopIteration` can also be
 marshalled and unmarshalled.
 For format *version* lower than 3, recursive lists, sets and dictionaries cannot

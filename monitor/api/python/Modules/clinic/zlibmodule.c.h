@@ -48,7 +48,7 @@ PyDoc_STRVAR(zlib_decompress__doc__,
 "  data\n"
 "    Compressed data.\n"
 "  wbits\n"
-"    The window buffer size.\n"
+"    The window buffer size and container format.\n"
 "  bufsize\n"
 "    The initial output buffer size.");
 
@@ -89,12 +89,16 @@ PyDoc_STRVAR(zlib_compressobj__doc__,
 "Return a compressor object.\n"
 "\n"
 "  level\n"
-"    The compression level (an integer in the range 0-9; default is 6).\n"
-"    Higher compression levels are slower, but produce smaller results.\n"
+"    The compression level (an integer in the range 0-9 or -1; default is\n"
+"    currently equivalent to 6).  Higher compression levels are slower,\n"
+"    but produce smaller results.\n"
 "  method\n"
 "    The compression algorithm.  If given, this must be DEFLATED.\n"
 "  wbits\n"
-"    The base two logarithm of the window size (range: 8..15).\n"
+"    +9 to +15: The base-two logarithm of the window size.  Include a zlib\n"
+"        container.\n"
+"    -9 to -15: Generate a raw stream.\n"
+"    +25 to +31: Include a gzip container.\n"
 "  memLevel\n"
 "    Controls the amount of memory used for internal compression state.\n"
 "    Valid values range from 1 to 9.  Higher values result in higher memory\n"
@@ -145,7 +149,7 @@ PyDoc_STRVAR(zlib_decompressobj__doc__,
 "Return a decompressor object.\n"
 "\n"
 "  wbits\n"
-"    The window buffer size.\n"
+"    The window buffer size and container format.\n"
 "  zdict\n"
 "    The predefined compression dictionary.  This must be the same\n"
 "    dictionary as used by the compressor that produced the input data.");
@@ -438,4 +442,4 @@ exit:
 #ifndef ZLIB_COMPRESS_COPY_METHODDEF
     #define ZLIB_COMPRESS_COPY_METHODDEF
 #endif /* !defined(ZLIB_COMPRESS_COPY_METHODDEF) */
-/*[clinic end generated code: output=7734aec079550bc8 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=f31627b314a7bd2f input=a9049054013a1b77]*/

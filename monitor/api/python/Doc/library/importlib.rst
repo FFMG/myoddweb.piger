@@ -9,6 +9,9 @@
 
 .. versionadded:: 3.1
 
+**Source code:** :source:`Lib/importlib/__init__.py`
+
+--------------
 
 Introduction
 ------------
@@ -51,6 +54,9 @@ generically as an :term:`importer`) to participate in the import process.
 
     :pep:`366`
         Main module explicit relative imports
+
+    :pep:`420`
+        Implicit namespace packages
 
     :pep:`451`
         A ModuleSpec Type for the Import System
@@ -230,7 +236,7 @@ ABC hierarchy::
    .. deprecated:: 3.3
       Use :class:`MetaPathFinder` or :class:`PathEntryFinder` instead.
 
-   .. method:: find_module(fullname, path=None)
+   .. abstractmethod:: find_module(fullname, path=None)
 
       An abstact method for finding a :term:`loader` for the specified
       module.  Originally specified in :pep:`302`, this method was meant
@@ -453,7 +459,7 @@ ABC hierarchy::
     :pep:`302` protocol for loading arbitrary resources from the storage
     back-end.
 
-    .. method:: get_data(path)
+    .. abstractmethod:: get_data(path)
 
         An abstract method to return the bytes for the data located at *path*.
         Loaders that have a file-like storage back-end
@@ -489,7 +495,7 @@ ABC hierarchy::
         .. versionchanged:: 3.4
            No longer abstract and a concrete implementation is provided.
 
-    .. method:: get_source(fullname)
+    .. abstractmethod:: get_source(fullname)
 
         An abstract method to return the source of a module. It is returned as
         a text string using :term:`universal newlines`, translating all
@@ -546,7 +552,7 @@ ABC hierarchy::
     when implemented, helps a module to be executed as a script. The ABC
     represents an optional :pep:`302` protocol.
 
-    .. method:: get_filename(fullname)
+    .. abstractmethod:: get_filename(fullname)
 
         An abstract method that is to return the value of :attr:`__file__` for
         the specified module. If no path is available, :exc:`ImportError` is
@@ -586,11 +592,11 @@ ABC hierarchy::
       .. deprecated:: 3.4
          Use :meth:`Loader.exec_module` instead.
 
-   .. method:: get_filename(fullname)
+   .. abstractmethod:: get_filename(fullname)
 
       Returns :attr:`path`.
 
-   .. method:: get_data(path)
+   .. abstractmethod:: get_data(path)
 
       Reads *path* as a binary file and returns the bytes from it.
 
@@ -1113,7 +1119,7 @@ an :term:`importer`.
 
    .. versionadded:: 3.4
 
-   .. versionchanged ::3.5
+   .. versionchanged:: 3.5
       The *optimization* parameter was added and the *debug_override* parameter
       was deprecated.
 
@@ -1273,7 +1279,8 @@ an :term:`importer`.
    :meth:`~importlib.abc.Loader.exec_module` as control over what module type
    is used for the module is required. For those same reasons, the loader's
    :meth:`~importlib.abc.Loader.create_module` method will be ignored (i.e., the
-   loader's method should only return ``None``). Finally,
+   loader's method should only return ``None``; this excludes
+   :class:`BuiltinImporter` and :class:`ExtensionFileLoader`). Finally,
    modules which substitute the object placed into :attr:`sys.modules` will
    not work as there is no way to properly replace the module references
    throughout the interpreter safely; :exc:`ValueError` is raised if such a
@@ -1298,4 +1305,4 @@ an :term:`importer`.
         suffixes = importlib.machinery.SOURCE_SUFFIXES
         loader = importlib.machinery.SourceFileLoader
         lazy_loader = importlib.util.LazyLoader.factory(loader)
-        finder = importlib.machinery.FileFinder(path, [(lazy_loader, suffixes)])
+        finder = importlib.machinery.FileFinder(path, (lazy_loader, suffixes))

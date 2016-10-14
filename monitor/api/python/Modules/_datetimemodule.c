@@ -219,7 +219,7 @@ days_in_month(int year, int month)
         return _days_in_month[month];
 }
 
-/* year, month -> number of days in year preceeding first day of month */
+/* year, month -> number of days in year preceding first day of month */
 static int
 days_before_month(int year, int month)
 {
@@ -1073,7 +1073,7 @@ format_utcoffset(char *buf, size_t buflen, const char *sep,
     minutes = divmod(seconds, 60, &seconds);
     hours = divmod(minutes, 60, &minutes);
     assert(seconds == 0);
-    /* XXX ignore sub-minute data, curently not allowed. */
+    /* XXX ignore sub-minute data, currently not allowed. */
     PyOS_snprintf(buf, buflen, "%c%02d%s%02d", sign, hours, sep, minutes);
 
     return 0;
@@ -3304,7 +3304,7 @@ timezone_str(PyDateTime_TimeZone *self)
     Py_DECREF(offset);
     minutes = divmod(seconds, 60, &seconds);
     hours = divmod(minutes, 60, &minutes);
-    /* XXX ignore sub-minute data, curently not allowed. */
+    /* XXX ignore sub-minute data, currently not allowed. */
     assert(seconds == 0);
     return PyUnicode_FromFormat("UTC%c%02d:%02d", sign, hours, minutes);
 }
@@ -4749,7 +4749,12 @@ local_timezone(PyDateTime_DateTime *utc_time)
     PyObject *nameo = NULL;
     const char *zone = NULL;
 
-    delta = datetime_subtract((PyObject *)utc_time, PyDateTime_Epoch);
+    delta = new_delta(ymd_to_ord(GET_YEAR(utc_time), GET_MONTH(utc_time),
+                                 GET_DAY(utc_time)) - 719163,
+                      60 * (60 * DATE_GET_HOUR(utc_time) +
+                            DATE_GET_MINUTE(utc_time)) +
+                      DATE_GET_SECOND(utc_time),
+                      0, 0);
     if (delta == NULL)
         return NULL;
     one_second = new_delta(0, 1, 0, 0);

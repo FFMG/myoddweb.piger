@@ -72,7 +72,7 @@ Importing Modules
 
 .. c:function:: PyObject* PyImport_ImportModuleLevel(const char *name, PyObject *globals, PyObject *locals, PyObject *fromlist, int level)
 
-   Similar to :c:func:`PyImport_ImportModuleLevelObject`, but the name is an
+   Similar to :c:func:`PyImport_ImportModuleLevelObject`, but the name is a
    UTF-8 encoded string instead of a Unicode object.
 
    .. versionchanged:: 3.3
@@ -236,11 +236,6 @@ Importing Modules
    For internal use only.
 
 
-.. c:function:: PyObject* _PyImport_FixupExtension(char *, char *)
-
-   For internal use only.
-
-
 .. c:function:: int PyImport_ImportFrozenModuleObject(PyObject *name)
 
    Load a frozen module named *name*.  Return ``1`` for success, ``0`` if the
@@ -277,7 +272,7 @@ Importing Modules
       };
 
 
-.. c:var:: struct _frozen* PyImport_FrozenModules
+.. c:var:: const struct _frozen* PyImport_FrozenModules
 
    This pointer is initialized to point to an array of :c:type:`struct _frozen`
    records, terminated by one whose members are all *NULL* or zero.  When a frozen

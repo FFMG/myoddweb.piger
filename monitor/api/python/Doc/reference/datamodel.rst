@@ -846,11 +846,9 @@ Internal types
    definitions may change with future versions of the interpreter, but they are
    mentioned here for completeness.
 
-   Code objects
-      .. index::
-         single: bytecode
-         object: code
+   .. index:: bytecode, object; code, code object
 
+   Code objects
       Code objects represent *byte-compiled* executable Python code, or :term:`bytecode`.
       The difference between a code object and a function object is that the function
       object contains an explicit reference to the function's globals (the module in
@@ -1734,6 +1732,11 @@ After the class object is created, it is passed to the class decorators
 included in the class definition (if any) and the resulting object is bound
 in the local namespace as the defined class.
 
+When a new class is created by ``type.__new__``, the object provided as the
+namespace parameter is copied to a standard Python dictionary and the original
+object is discarded. The new copy becomes the :attr:`~object.__dict__` attribute
+of the class object.
+
 .. seealso::
 
    :pep:`3135` - New super
@@ -1753,11 +1756,11 @@ to remember the order that class variables are defined::
 
     class OrderedClass(type):
 
-         @classmethod
-         def __prepare__(metacls, name, bases, **kwds):
+        @classmethod
+        def __prepare__(metacls, name, bases, **kwds):
             return collections.OrderedDict()
 
-         def __new__(cls, name, bases, namespace, **kwds):
+        def __new__(cls, name, bases, namespace, **kwds):
             result = type.__new__(cls, name, bases, dict(namespace))
             result.members = tuple(namespace)
             return result
@@ -2188,7 +2191,7 @@ For more information on context managers, see :ref:`typecontextmanager`.
 
 .. seealso::
 
-   :pep:`0343` - The "with" statement
+   :pep:`343` - The "with" statement
       The specification, background, and examples for the Python :keyword:`with`
       statement.
 
@@ -2316,6 +2319,10 @@ Coroutines also have the methods listed below, which are analogous to
 those of generators (see :ref:`generator-methods`).  However, unlike
 generators, coroutines do not directly support iteration.
 
+.. versionchanged:: 3.5.2
+   It is a :exc:`RuntimeError` to await on a coroutine more than once.
+
+
 .. method:: coroutine.send(value)
 
    Starts or resumes execution of the coroutine.  If *value* is ``None``,
@@ -2350,6 +2357,7 @@ generators, coroutines do not directly support iteration.
    Coroutine objects are automatically closed using the above process when
    they are about to be destroyed.
 
+.. _async-iterators:
 
 Asynchronous Iterators
 ----------------------
@@ -2362,7 +2370,7 @@ Asynchronous iterators can be used in an :keyword:`async for` statement.
 
 .. method:: object.__aiter__(self)
 
-   Must return an *awaitable* resulting in an *asynchronous iterator* object.
+   Must return an *asynchronous iterator* object.
 
 .. method:: object.__anext__(self)
 
@@ -2375,7 +2383,7 @@ An example of an asynchronous iterable object::
         async def readline(self):
             ...
 
-        async def __aiter__(self):
+        def __aiter__(self):
             return self
 
         async def __anext__(self):
@@ -2385,6 +2393,49 @@ An example of an asynchronous iterable object::
             return val
 
 .. versionadded:: 3.5
+
+.. note::
+
+   .. versionchanged:: 3.5.2
+      Starting with CPython 3.5.2, ``__aiter__`` can directly return
+      :term:`asynchronous iterators <asynchronous iterator>`.  Returning
+      an :term:`awaitable` object will result in a
+      :exc:`PendingDeprecationWarning`.
+
+      The recommended way of writing backwards compatible code in
+      CPython 3.5.x is to continue returning awaitables from
+      ``__aiter__``.  If you want to avoid the PendingDeprecationWarning
+      and keep the code backwards compatible, the following decorator
+      can be used::
+
+          import functools
+          import sys
+
+          if sys.version_info < (3, 5, 2):
+              def aiter_compat(func):
+                  @functools.wraps(func)
+                  async def wrapper(self):
+                      return func(self)
+                  return wrapper
+          else:
+              def aiter_compat(func):
+                  return func
+
+      Example::
+
+          class AsyncIterator:
+
+              @aiter_compat
+              def __aiter__(self):
+                  return self
+
+              async def __anext__(self):
+                  ...
+
+      Starting with CPython 3.6, the :exc:`PendingDeprecationWarning`
+      will be replaced with the :exc:`DeprecationWarning`.
+      In CPython 3.7, returning an awaitable from ``__aiter__`` will
+      result in a :exc:`RuntimeError`.
 
 
 Asynchronous Context Managers

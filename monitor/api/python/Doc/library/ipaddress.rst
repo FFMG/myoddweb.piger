@@ -3,6 +3,7 @@
 
 .. module:: ipaddress
    :synopsis: IPv4/IPv6 manipulation library.
+
 .. moduleauthor:: Peter Moody
 
 **Source code:** :source:`Lib/ipaddress.py`
@@ -198,8 +199,8 @@ write code that handles both IP versions correctly.
       ``True`` if the address is reserved for link-local usage.  See
       :RFC:`3927`.
 
-.. _iana-ipv4-special-registry: http://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml
-.. _iana-ipv6-special-registry: http://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml
+.. _iana-ipv4-special-registry: https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml
+.. _iana-ipv6-special-registry: https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml
 
 
 .. class:: IPv6Address(address)
@@ -580,7 +581,7 @@ so to avoid duplication they are only documented for :class:`IPv4Network`.
 
    4. A two-tuple of an address description and a netmask, where the address
       description is either a string, a 128-bits integer, a 16-bytes packed
-      integer, or an existing IPv4Address object; and the netmask is an
+      integer, or an existing IPv6Address object; and the netmask is an
       integer representing the prefix length.
 
    An :exc:`AddressValueError` is raised if *address* is not a valid IPv6
@@ -653,7 +654,7 @@ network.  For iteration, *all* hosts are returned, including unusable hosts
 example::
 
    >>> for addr in IPv4Network('192.0.2.0/28'):
-   ...   addr
+   ...     addr
    ...
    IPv4Address('192.0.2.0')
    IPv4Address('192.0.2.1')

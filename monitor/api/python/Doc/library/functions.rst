@@ -158,7 +158,7 @@ are always available.  They are listed here in alphabetical order.
 
    Return the string representing a character whose Unicode code point is the
    integer *i*.  For example, ``chr(97)`` returns the string ``'a'``, while
-   ``chr(957)`` returns the string ``'ν'``. This is the inverse of :func:`ord`.
+   ``chr(8364)`` returns the string ``'€'``. This is the inverse of :func:`ord`.
 
    The valid range for the argument is from 0 through 1,114,111 (0x10FFFF in
    base 16).  :exc:`ValueError` will be raised if *i* is outside that range.
@@ -230,7 +230,7 @@ are always available.  They are listed here in alphabetical order.
    or ``2`` (docstrings are removed too).
 
    This function raises :exc:`SyntaxError` if the compiled source is invalid,
-   and :exc:`TypeError` if the source contains null bytes.
+   and :exc:`ValueError` if the source contains null bytes.
 
    If you want to parse Python code into its AST representation, see
    :func:`ast.parse`.
@@ -245,6 +245,10 @@ are always available.  They are listed here in alphabetical order.
    .. versionchanged:: 3.2
       Allowed use of Windows and Mac newlines.  Also input in ``'exec'`` mode
       does not have to end in a newline anymore.  Added the *optimize* parameter.
+
+   .. versionchanged:: 3.5
+      Previously, :exc:`TypeError` was raised when null bytes were encountered
+      in *source*.
 
 
 .. class:: complex([real[, imag]])
@@ -1070,13 +1074,15 @@ are always available.  They are listed here in alphabetical order.
       exception, the function now retries the system call instead of raising an
       :exc:`InterruptedError` exception (see :pep:`475` for the rationale).
 
+   .. versionchanged:: 3.5
+      The ``'namereplace'`` error handler was added.
 
 .. function:: ord(c)
 
    Given a string representing one Unicode character, return an integer
    representing the Unicode code point of that character.  For example,
-   ``ord('a')`` returns the integer ``97`` and ``ord('ν')`` returns ``957``.
-   This is the inverse of :func:`chr`.
+   ``ord('a')`` returns the integer ``97`` and ``ord('€')`` (Euro sign)
+   returns ``8364``.  This is the inverse of :func:`chr`.
 
 
 .. function:: pow(x, y[, z])
@@ -1306,8 +1312,7 @@ are always available.  They are listed here in alphabetical order.
    compare equal --- this is helpful for sorting in multiple passes (for
    example, sort by department, then by salary grade).
 
-   For sorting examples and a brief sorting tutorial, see `Sorting HowTo
-   <https://wiki.python.org/moin/HowTo/Sorting/>`_\.
+   For sorting examples and a brief sorting tutorial, see :ref:`sortinghowto`.
 
 .. function:: staticmethod(function)
 
@@ -1415,7 +1420,7 @@ are always available.  They are listed here in alphabetical order.
 
    For practical suggestions on how to design cooperative classes using
    :func:`super`, see `guide to using super()
-   <http://rhettinger.wordpress.com/2011/05/26/super-considered-super/>`_.
+   <https://rhettinger.wordpress.com/2011/05/26/super-considered-super/>`_.
 
 
 .. _func-tuple:
@@ -1444,8 +1449,9 @@ are always available.  They are listed here in alphabetical order.
    class name and becomes the :attr:`~class.__name__` attribute; the *bases*
    tuple itemizes the base classes and becomes the :attr:`~class.__bases__`
    attribute; and the *dict* dictionary is the namespace containing definitions
-   for class body and becomes the :attr:`~object.__dict__` attribute.  For
-   example, the following two statements create identical :class:`type` objects:
+   for class body and is copied to a standard dictionary to become the
+   :attr:`~object.__dict__` attribute.  For example, the following two
+   statements create identical :class:`type` objects:
 
       >>> class X:
       ...     a = 1

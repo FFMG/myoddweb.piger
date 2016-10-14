@@ -3,6 +3,7 @@
 
 .. module:: webbrowser
    :synopsis: Easy-to-use controller for Web browsers.
+
 .. moduleauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 
@@ -33,7 +34,7 @@ browsers are not available on Unix, the controlling process will launch a new
 browser and wait.
 
 The script :program:`webbrowser` can be used as a command-line interface for the
-module. It accepts an URL as the argument. It accepts the following optional
+module. It accepts a URL as the argument. It accepts the following optional
 parameters: ``-n`` opens the URL in a new browser window, if possible;
 ``-t`` opens the URL in a new browser page ("tab"). The options are,
 naturally, mutually exclusive.  Usage example::

@@ -772,19 +772,17 @@ _odict_clear_nodes(PyODictObject *od)
 {
     _ODictNode *node, *next;
 
-    if (!_odict_EMPTY(od)) {
-        node = _odict_FIRST(od);
-        while (node != NULL) {
-            next = _odictnode_NEXT(node);
-            _odictnode_DEALLOC(node);
-            node = next;
-        }
-        _odict_FIRST(od) = NULL;
-        _odict_LAST(od) = NULL;
-    }
-
     _odict_free_fast_nodes(od);
     od->od_fast_nodes = NULL;
+
+    node = _odict_FIRST(od);
+    _odict_FIRST(od) = NULL;
+    _odict_LAST(od) = NULL;
+    while (node != NULL) {
+        next = _odictnode_NEXT(node);
+        _odictnode_DEALLOC(node);
+        node = next;
+    }
 }
 
 /* There isn't any memory management of nodes past this point. */
@@ -940,29 +938,7 @@ PyDoc_STRVAR(odict_sizeof__doc__, "");
 static PyObject *
 odict_sizeof(PyODictObject *od)
 {
-    PyObject *pylong;
-    Py_ssize_t res, temp;
-
-    pylong = _PyDict_SizeOf((PyDictObject *)od);
-    if (pylong == NULL)
-        return NULL;
-    res = PyLong_AsSsize_t(pylong);
-    Py_DECREF(pylong);
-    if (res == -1 && PyErr_Occurred())
-        return NULL;
-
-    res += sizeof(PyODictObject) - sizeof(PyDictObject);
-
-    /* instance dict */
-    pylong = _PyDict_SizeOf((PyDictObject *)od->od_inst_dict);
-    if (pylong == NULL)
-        return NULL;
-    temp = PyLong_AsSsize_t(pylong);
-    Py_DECREF(pylong);
-    if (temp == -1 && PyErr_Occurred())
-        return NULL;
-    res += temp;
-
+    Py_ssize_t res = _PyDict_SizeOf((PyDictObject *)od);
     res += sizeof(_ODictNode *) * _odict_FAST_SIZE(od);  /* od_fast_nodes */
     if (!_odict_EMPTY(od)) {
         res += sizeof(_ODictNode) * PyODict_SIZE(od);  /* linked-list */
@@ -1255,8 +1231,6 @@ odict_clear(register PyODictObject *od)
 {
     PyDict_Clear((PyObject *)od);
     _odict_clear_nodes(od);
-    _odict_FIRST(od) = NULL;
-    _odict_LAST(od) = NULL;
     if (_odict_resize(od) < 0)
         return NULL;
     Py_RETURN_NONE;
@@ -1578,8 +1552,13 @@ PyDoc_STRVAR(odict_doc,
 static int
 odict_traverse(PyODictObject *od, visitproc visit, void *arg)
 {
+    _ODictNode *node;
+
     Py_VISIT(od->od_inst_dict);
     Py_VISIT(od->od_weakreflist);
+    _odict_FOREACH(od, node) {
+        Py_VISIT(_odictnode_KEY(node));
+    }
     return PyDict_Type.tp_traverse((PyObject *)od, visit, arg);
 }
 

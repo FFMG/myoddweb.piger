@@ -77,7 +77,7 @@ source.
    the :mod:`__main__` module.
 
    Since the argument is a *module* name, you must not give a file extension
-   (``.py``).  The ``module-name`` should be a valid Python module name, but
+   (``.py``).  The module name should be a valid absolute Python module name, but
    the implementation may not always enforce this (e.g. it may allow you to
    use a name that includes a hyphen).
 
@@ -194,7 +194,7 @@ Miscellaneous options
    :class:`str` or :class:`bytes` with :class:`int`.  Issue an error when the
    option is given twice (:option:`-bb`).
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Affects comparisons of :class:`bytes` with :class:`int`.
 
 .. cmdoption:: -B
@@ -398,7 +398,7 @@ Miscellaneous options
      tracing with a traceback limit of *NFRAME* frames. See the
      :func:`tracemalloc.start` for more information.
 
-   It also allows to pass arbitrary values and retrieve them through the
+   It also allows passing arbitrary values and retrieving them through the
    :data:`sys._xoptions` dictionary.
 
    .. versionchanged:: 3.2

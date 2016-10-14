@@ -344,7 +344,7 @@ of the following values:
 
 When operation is LOCK_SH or LOCK_EX, it can also be bitwise ORed with
 LOCK_NB to avoid blocking on lock acquisition.  If LOCK_NB is used and the
-lock cannot be acquired, an IOError will be raised and the exception will
+lock cannot be acquired, an OSError will be raised and the exception will
 have an errno attribute set to EACCES or EAGAIN (depending on the operating
 system -- for portability, check for either value).
 
@@ -360,7 +360,7 @@ starts.  `whence` is as with fileobj.seek(), specifically:
 static PyObject *
 fcntl_lockf_impl(PyModuleDef *module, int fd, int code, PyObject *lenobj,
                  PyObject *startobj, int whence)
-/*[clinic end generated code: output=31af35eba08b9af7 input=9c594391de821f24]*/
+/*[clinic end generated code: output=31af35eba08b9af7 input=3a5dc01b04371f1a]*/
 {
     int ret;
 

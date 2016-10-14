@@ -19,6 +19,8 @@
    single: ini file
    single: Windows ini file
 
+--------------
+
 This module provides the :class:`ConfigParser` class which implements a basic
 configuration language which provides a structure similar to what's found in
 Microsoft Windows INI files.  You can use this to write Python programs which
@@ -833,13 +835,13 @@ To get interpolation, use :class:`ConfigParser`::
 
    # Set the optional *raw* argument of get() to True if you wish to disable
    # interpolation in a single get operation.
-   print(cfg.get('Section1', 'foo', raw=False)) # -> "Python is fun!"
-   print(cfg.get('Section1', 'foo', raw=True))  # -> "%(bar)s is %(baz)s!"
+   print(cfg.get('Section1', 'foo', raw=False))  # -> "Python is fun!"
+   print(cfg.get('Section1', 'foo', raw=True))   # -> "%(bar)s is %(baz)s!"
 
    # The optional *vars* argument is a dict with members that will take
    # precedence in interpolation.
    print(cfg.get('Section1', 'foo', vars={'bar': 'Documentation',
-                                             'baz': 'evil'}))
+                                          'baz': 'evil'}))
 
    # The optional *fallback* argument can be used to provide a fallback value
    print(cfg.get('Section1', 'foo'))
@@ -866,10 +868,10 @@ interpolation if an option used is not defined elsewhere. ::
    config = configparser.ConfigParser({'bar': 'Life', 'baz': 'hard'})
    config.read('example.cfg')
 
-   print(config.get('Section1', 'foo')) # -> "Python is fun!"
+   print(config.get('Section1', 'foo'))     # -> "Python is fun!"
    config.remove_option('Section1', 'bar')
    config.remove_option('Section1', 'baz')
-   print(config.get('Section1', 'foo')) # -> "Life is hard!"
+   print(config.get('Section1', 'foo'))     # -> "Life is hard!"
 
 
 .. _configparser-objects:

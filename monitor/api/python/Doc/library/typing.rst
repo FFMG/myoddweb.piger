@@ -4,6 +4,8 @@
 .. module:: typing
    :synopsis: Support for type hints (see PEP 484).
 
+.. versionadded:: 3.5
+
 **Source code:** :source:`Lib/typing.py`
 
 --------------
@@ -20,7 +22,7 @@ The function below takes and returns a string and is annotated as follows::
    def greeting(name: str) -> str:
        return 'Hello ' + name
 
-In the function ``greeting``, the argument ``name`` is expected to by of type
+In the function ``greeting``, the argument ``name`` is expected to be of type
 :class:`str` and the return type :class:`str`. Subtypes are accepted as
 arguments.
 
@@ -154,7 +156,7 @@ You can use multiple inheritance with :class:`Generic`::
    class LinkedList(Sized, Generic[T]):
        ...
 
-When inheriting from generic classes, some type variables could fixed::
+When inheriting from generic classes, some type variables could be fixed::
 
     from typing import TypeVar, Mapping
 
@@ -286,9 +288,16 @@ The module defines the following classes, functions and decorators:
 
    ``Optional[X]`` is equivalent to ``Union[X, type(None)]``.
 
+   Note that this is not the same concept as an optional argument,
+   which is one that has a default.  An optional argument with a
+   default needn't use the ``Optional`` qualifier on its type
+   annotation (although it is inferred if the default is ``None``).
+   A mandatory argument may still have an ``Optional`` type if an
+   explicit value of ``None`` is allowed.
+
 .. class:: Tuple
 
-  Tuple type; ``Tuple[X, Y]`` is the is the type of a tuple of two items
+  Tuple type; ``Tuple[X, Y]`` is the type of a tuple of two items
   with the first item of type X and the second of type Y.
 
   Example: ``Tuple[T1, T2]`` is a tuple of two elements corresponding
@@ -422,9 +431,9 @@ The module defines the following classes, functions and decorators:
       def slice__to_4(vector: Sequence[T]) -> List[T]:
           return vector[0:4]
 
-.. class:: AbstractSet(set, MutableSet[T])
+.. class:: Set(set, MutableSet[T])
 
-   A generic version of :class:`collections.abc.Set`.
+   A generic version of :class:`builtins.set <set>`.
 
 .. class:: MappingView(Sized, Iterable[T_co])
 

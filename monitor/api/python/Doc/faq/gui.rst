@@ -29,15 +29,15 @@ Tkinter
 Standard builds of Python include an object-oriented interface to the Tcl/Tk
 widget set, called :ref:`tkinter <Tkinter>`.  This is probably the easiest to
 install (since it comes included with most
-`binary distributions <https://www.python.org/download/>`_ of Python) and use.
+`binary distributions <https://www.python.org/downloads/>`_ of Python) and use.
 For more info about Tk, including pointers to the source, see the
-`Tcl/Tk home page <http://www.tcl.tk>`_.  Tcl/Tk is fully portable to the
+`Tcl/Tk home page <https://www.tcl.tk>`_.  Tcl/Tk is fully portable to the
 Mac OS X, Windows, and Unix platforms.
 
 wxWidgets
 ---------
 
-wxWidgets (http://www.wxwidgets.org) is a free, portable GUI class
+wxWidgets (https://www.wxwidgets.org) is a free, portable GUI class
 library written in C++ that provides a native look and feel on a
 number of platforms, with Windows, Mac OS X, GTK, X11, all listed as
 current stable targets.  Language bindings are available for a number
@@ -58,21 +58,21 @@ Qt
 ---
 
 There are bindings available for the Qt toolkit (using either `PyQt
-<http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ or `PySide
-<http://www.pyside.org/>`_) and for KDE (`PyKDE <https://techbase.kde.org/Development/Languages/Python>`__).
+<https://riverbankcomputing.com/software/pyqt/intro>`_ or `PySide
+<https://wiki.qt.io/PySide>`_) and for KDE (`PyKDE4 <https://techbase.kde.org/Languages/Python/Using_PyKDE_4>`__).
 PyQt is currently more mature than PySide, but you must buy a PyQt license from
-`Riverbank Computing <http://www.riverbankcomputing.co.uk/software/pyqt/license>`_
+`Riverbank Computing <https://www.riverbankcomputing.com/commercial/license-faq>`_
 if you want to write proprietary applications.  PySide is free for all applications.
 
 Qt 4.5 upwards is licensed under the LGPL license; also, commercial licenses
-are available from `The Qt Company <http://www.qt.io/licensing/>`_.
+are available from `The Qt Company <https://www.qt.io/licensing/>`_.
 
 Gtk+
 ----
 
-The `GObject introspection bindings <https://live.gnome.org/PyGObject>`_
+The `GObject introspection bindings <https://wiki.gnome.org/Projects/PyGObject>`_
 for Python allow you to write GTK+ 3 applications.  There is also a
-`Python GTK+ 3 Tutorial <http://python-gtk-3-tutorial.readthedocs.org/en/latest/>`_.
+`Python GTK+ 3 Tutorial <https://python-gtk-3-tutorial.readthedocs.org/en/latest/>`_.
 
 The older PyGtk bindings for the `Gtk+ 2 toolkit <http://www.gtk.org>`_ have
 been implemented by James Henstridge; see <http://www.pygtk.org>.

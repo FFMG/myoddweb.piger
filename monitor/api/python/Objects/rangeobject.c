@@ -5,7 +5,7 @@
 
 /* Support objects whose length is > PY_SSIZE_T_MAX.
 
-   This could be sped up for small PyLongs if they fit in an Py_ssize_t.
+   This could be sped up for small PyLongs if they fit in a Py_ssize_t.
    This only matters on Win64.  Though we could use PY_LONG_LONG which
    would presumably help perf.
 */
@@ -1001,8 +1001,7 @@ longrangeiter_setstate(longrangeiterobject *r, PyObject *state)
         return NULL;
     cmp = PyObject_RichCompareBool(state, zero, Py_LT);
     if (cmp > 0) {
-        Py_CLEAR(r->index);
-        r->index = zero;
+        Py_XSETREF(r->index, zero);
         Py_RETURN_NONE;
     }
     Py_DECREF(zero);
@@ -1015,9 +1014,8 @@ longrangeiter_setstate(longrangeiterobject *r, PyObject *state)
     if (cmp > 0)
         state = r->len;
 
-    Py_CLEAR(r->index);
-    r->index = state;
-    Py_INCREF(r->index);
+    Py_INCREF(state);
+    Py_XSETREF(r->index, state);
     Py_RETURN_NONE;
 }
 
@@ -1066,8 +1064,7 @@ longrangeiter_next(longrangeiterobject *r)
     result = PyNumber_Add(r->start, product);
     Py_DECREF(product);
     if (result) {
-        Py_DECREF(r->index);
-        r->index = new_index;
+        Py_SETREF(r->index, new_index);
     }
     else {
         Py_DECREF(new_index);

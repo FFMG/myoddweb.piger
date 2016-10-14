@@ -7,6 +7,10 @@
 .. moduleauthor:: R. David Murray <rdmurray@bitdance.com>
 .. sectionauthor:: R. David Murray <rdmurray@bitdance.com>
 
+.. versionadded:: 3.3
+   as a :term:`provisional module <provisional package>`.
+
+**Source code:** :source:`Lib/email/headerregistry.py`
 
 .. note::
 
@@ -15,8 +19,7 @@
    changes (up to and including removal of the module) may occur if deemed
    necessary by the core developers.
 
-.. versionadded:: 3.3
-   as a :term:`provisional module <provisional package>`.
+--------------
 
 Headers are represented by customized subclasses of :class:`str`.  The
 particular class used to represent a given header is determined by the
@@ -171,7 +174,7 @@ headers.
    :class:`~datetime.datetime` instance.  This means, for example, that
    the following code is valid and does what one would expect::
 
-       msg['Date']  = datetime(2011, 7, 15, 21)
+       msg['Date'] = datetime(2011, 7, 15, 21)
 
    Because this is a naive ``datetime`` it will be interpreted as a UTC
    timestamp, and the resulting value will have a timezone of ``-0000``.  Much

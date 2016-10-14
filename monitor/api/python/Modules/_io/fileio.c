@@ -250,6 +250,7 @@ _io_FileIO___init___impl(fileio *self, PyObject *nameobj, const char *mode,
     int *atomic_flag_works = NULL;
 #endif
     struct _Py_stat_struct fdfstat;
+    int fstat_result;
     int async_err = 0;
 
     assert(PyFileIO_Check(self));
@@ -420,7 +421,13 @@ _io_FileIO___init___impl(fileio *self, PyObject *nameobj, const char *mode,
 
             self->fd = _PyLong_AsInt(fdobj);
             Py_DECREF(fdobj);
-            if (self->fd == -1) {
+            if (self->fd < 0) {
+                if (!PyErr_Occurred()) {
+                    /* The opener returned a negative but didn't set an
+                       exception.  See issue #27066 */
+                    PyErr_Format(PyExc_ValueError,
+                                 "opener returned %d", self->fd);
+                }
                 goto error;
             }
         }
@@ -438,22 +445,39 @@ _io_FileIO___init___impl(fileio *self, PyObject *nameobj, const char *mode,
     }
 
     self->blksize = DEFAULT_BUFFER_SIZE;
-    if (_Py_fstat(self->fd, &fdfstat) < 0)
-        goto error;
-#if defined(S_ISDIR) && defined(EISDIR)
-    /* On Unix, open will succeed for directories.
-       In Python, there should be no file objects referring to
-       directories, so we need a check.  */
-    if (S_ISDIR(fdfstat.st_mode)) {
-        errno = EISDIR;
-        PyErr_SetFromErrnoWithFilenameObject(PyExc_IOError, nameobj);
-        goto error;
+    Py_BEGIN_ALLOW_THREADS
+    fstat_result = _Py_fstat_noraise(self->fd, &fdfstat);
+    Py_END_ALLOW_THREADS
+    if (fstat_result < 0) {
+        /* Tolerate fstat() errors other than EBADF.  See Issue #25717, where
+        an anonymous file on a Virtual Box shared folder filesystem would
+        raise ENOENT. */
+#ifdef MS_WINDOWS
+        if (GetLastError() == ERROR_INVALID_HANDLE) {
+            PyErr_SetFromWindowsErr(0);
+#else
+        if (errno == EBADF) {
+            PyErr_SetFromErrno(PyExc_OSError);
+#endif
+            goto error;
+        }
     }
+    else {
+#if defined(S_ISDIR) && defined(EISDIR)
+        /* On Unix, open will succeed for directories.
+           In Python, there should be no file objects referring to
+           directories, so we need a check.  */
+        if (S_ISDIR(fdfstat.st_mode)) {
+            errno = EISDIR;
+            PyErr_SetFromErrnoWithFilenameObject(PyExc_IOError, nameobj);
+            goto error;
+        }
 #endif /* defined(S_ISDIR) */
 #ifdef HAVE_STRUCT_STAT_ST_BLKSIZE
-    if (fdfstat.st_blksize > 1)
-        self->blksize = fdfstat.st_blksize;
+        if (fdfstat.st_blksize > 1)
+            self->blksize = fdfstat.st_blksize;
 #endif /* HAVE_STRUCT_STAT_ST_BLKSIZE */
+    }
 
 #if defined(MS_WINDOWS) || defined(__CYGWIN__)
     /* don't translate newlines (\r\n <=> \n) */
@@ -818,7 +842,7 @@ _io.FileIO.write
     b: Py_buffer
     /
 
-Write bytes b to file, return number written.
+Write buffer b to file, return number of bytes written.
 
 Only makes one system call, so not all of the data may be written.
 The number of bytes actually written is returned.  In non-blocking mode,
@@ -827,7 +851,7 @@ returns None if the write would block.
 
 static PyObject *
 _io_FileIO_write_impl(fileio *self, Py_buffer *b)
-/*[clinic end generated code: output=b4059db3d363a2f7 input=ffbd8834f447ac31]*/
+/*[clinic end generated code: output=b4059db3d363a2f7 input=6e7908b36f0ce74f]*/
 {
     Py_ssize_t n;
     int err;

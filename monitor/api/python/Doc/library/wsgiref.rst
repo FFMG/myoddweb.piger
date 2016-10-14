@@ -3,9 +3,11 @@
 
 .. module:: wsgiref
    :synopsis: WSGI Utilities and Reference Implementation.
+
 .. moduleauthor:: Phillip J. Eby <pje@telecommunity.com>
 .. sectionauthor:: Phillip J. Eby <pje@telecommunity.com>
 
+--------------
 
 The Web Server Gateway Interface (WSGI) is a standard interface between web
 server software and web applications written in Python. Having a standard
@@ -24,8 +26,8 @@ for implementing WSGI servers, a demo HTTP server that serves WSGI applications,
 and a validation tool that checks WSGI servers and applications for conformance
 to the WSGI specification (:pep:`3333`).
 
-See http://www.wsgi.org for more information about WSGI, and links to tutorials
-and other resources.
+See https://wsgi.readthedocs.org/ for more information about WSGI, and links to
+tutorials and other resources.
 
 .. XXX If you're just trying to write a web application...
 
@@ -419,8 +421,8 @@ Paste" library.
       # Our callable object which is intentionally not compliant to the
       # standard, so the validator is going to break
       def simple_app(environ, start_response):
-          status = '200 OK' # HTTP Status
-          headers = [('Content-type', 'text/plain')] # HTTP Headers
+          status = '200 OK'  # HTTP Status
+          headers = [('Content-type', 'text/plain')]  # HTTP Headers
           start_response(status, headers)
 
           # This is going to break because we need to return a list, and
@@ -514,6 +516,9 @@ input, output, and error streams.
    environment and streams via the constructor.  The supplied environment and
    streams are stored in the :attr:`stdin`, :attr:`stdout`, :attr:`stderr`, and
    :attr:`environ` attributes.
+
+   The :meth:`~io.BufferedIOBase.write` method of *stdout* should write
+   each chunk in full, like :class:`io.BufferedIOBase`.
 
 
 .. class:: BaseHandler()
@@ -762,8 +767,8 @@ This is a working "Hello World" WSGI application::
    # is a dictionary containing CGI-style environment variables and the
    # second variable is the callable object (see PEP 333).
    def hello_world_app(environ, start_response):
-       status = '200 OK' # HTTP Status
-       headers = [('Content-type', 'text/plain; charset=utf-8')] # HTTP Headers
+       status = '200 OK'  # HTTP Status
+       headers = [('Content-type', 'text/plain; charset=utf-8')]  # HTTP Headers
        start_response(status, headers)
 
        # The returned object is going to be printed

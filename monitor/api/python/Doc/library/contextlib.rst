@@ -603,7 +603,7 @@ an explicit ``with`` statement.
 
 .. seealso::
 
-   :pep:`0343` - The "with" statement
+   :pep:`343` - The "with" statement
       The specification, background, and examples for the Python :keyword:`with`
       statement.
 
@@ -644,7 +644,7 @@ to yield if an attempt is made to use them a second time::
     Before
     After
     >>> with cm:
-    ...    pass
+    ...     pass
     ...
     Traceback (most recent call last):
         ...

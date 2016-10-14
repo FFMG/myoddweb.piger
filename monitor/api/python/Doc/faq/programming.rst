@@ -28,9 +28,9 @@ graphical debugger.
 PythonWin is a Python IDE that includes a GUI debugger based on pdb.  The
 Pythonwin debugger colors breakpoints and has quite a few cool features such as
 debugging non-Pythonwin programs.  Pythonwin is available as part of the `Python
-for Windows Extensions <http://sourceforge.net/projects/pywin32/>`__ project and
+for Windows Extensions <https://sourceforge.net/projects/pywin32/>`__ project and
 as a part of the ActivePython distribution (see
-http://www.activestate.com/activepython\ ).
+https://www.activestate.com/activepython\ ).
 
 `Boa Constructor <http://boa-constructor.sourceforge.net/>`_ is an IDE and GUI
 builder that uses wxWidgets.  It offers visual frame creation and manipulation,
@@ -44,13 +44,13 @@ and the Scintilla editing component.
 Pydb is a version of the standard Python debugger pdb, modified for use with DDD
 (Data Display Debugger), a popular graphical debugger front end.  Pydb can be
 found at http://bashdb.sourceforge.net/pydb/ and DDD can be found at
-http://www.gnu.org/software/ddd.
+https://www.gnu.org/software/ddd.
 
 There are a number of commercial Python IDEs that include graphical debuggers.
 They include:
 
-* Wing IDE (http://wingware.com/)
-* Komodo IDE (http://komodoide.com/)
+* Wing IDE (https://wingware.com/)
+* Komodo IDE (https://komodoide.com/)
 * PyCharm (https://www.jetbrains.com/pycharm/)
 
 
@@ -63,13 +63,13 @@ PyChecker is a static analysis tool that finds bugs in Python source code and
 warns about code complexity and style.  You can get PyChecker from
 http://pychecker.sourceforge.net/.
 
-`Pylint <http://www.logilab.org/projects/pylint>`_ is another tool that checks
+`Pylint <https://www.pylint.org/>`_ is another tool that checks
 if a module satisfies a coding standard, and also makes it possible to write
 plug-ins to add a custom feature.  In addition to the bug checking that
 PyChecker performs, Pylint offers some additional features such as checking line
 length, whether variable names are well-formed according to your coding
 standard, whether declared interfaces are fully implemented, and more.
-http://docs.pylint.org/ provides a full list of Pylint's features.
+https://docs.pylint.org/ provides a full list of Pylint's features.
 
 
 How can I create a stand-alone binary from a Python script?
@@ -207,7 +207,7 @@ functions), e.g.::
 
    >>> squares = []
    >>> for x in range(5):
-   ...    squares.append(lambda: x**2)
+   ...     squares.append(lambda: x**2)
 
 This gives you a list that contains 5 lambdas that calculate ``x**2``.  You
 might expect that, when called, they would return, respectively, ``0``, ``1``,
@@ -234,7 +234,7 @@ lambdas, so that they don't rely on the value of the global ``x``::
 
    >>> squares = []
    >>> for x in range(5):
-   ...    squares.append(lambda n=x: n**2)
+   ...     squares.append(lambda n=x: n**2)
 
 Here, ``n=x`` creates a new variable ``n`` local to the lambda and computed
 when the lambda is defined so that it has the same value that ``x`` had at
@@ -539,7 +539,7 @@ desired effect in a number of ways.
           args['a'] = 'new-value'     # args is a mutable dictionary
           args['b'] = args['b'] + 1   # change it in-place
 
-      args = {'a':' old-value', 'b': 99}
+      args = {'a': 'old-value', 'b': 99}
       func3(args)
       print(args['a'], args['b'])
 
@@ -655,16 +655,15 @@ Essentially, assignment always binds a name to a value; The same is true of
 ``def`` and ``class`` statements, but in that case the value is a
 callable. Consider the following code::
 
-   class A:
-       pass
-
-   B = A
-
-   a = B()
-   b = a
-   print(b)
+   >>> class A:
+   ...     pass
+   ...
+   >>> B = A
+   >>> a = B()
+   >>> b = a
+   >>> print(b)
    <__main__.A object at 0x16D07CC>
-   print(a)
+   >>> print(a)
    <__main__.A object at 0x16D07CC>
 
 Arguably the class has a name: even though it is bound to two names and invoked
@@ -839,7 +838,7 @@ How do I convert a number to a string?
 To convert, e.g., the number 144 to the string '144', use the built-in type
 constructor :func:`str`.  If you want a hexadecimal or octal representation, use
 the built-in functions :func:`hex` or :func:`oct`.  For fancy formatting, see
-the :ref:`string-formatting` section, e.g. ``"{:04d}".format(144)`` yields
+the :ref:`formatstrings` section, e.g. ``"{:04d}".format(144)`` yields
 ``'0144'`` and ``"{:.3f}".format(1.0/3.0)`` yields ``'0.333'``.
 
 
@@ -1010,8 +1009,7 @@ performance levels:
   may come up with.  This is doubly true for primitives written in C, such
   as builtins and some extension types.  For example, be sure to use
   either the :meth:`list.sort` built-in method or the related :func:`sorted`
-  function to do sorting (and see the
-  `sorting mini-HOWTO <https://wiki.python.org/moin/HowTo/Sorting>`_ for examples
+  function to do sorting (and see the :ref:`sortinghowto` for examples
   of moderately advanced usage).
 
 * Abstractions tend to create indirections and force the interpreter to work
@@ -1100,7 +1098,7 @@ How do I iterate over a sequence in reverse order?
 Use the :func:`reversed` built-in function, which is new in Python 2.4::
 
    for x in reversed(sequence):
-       ... # do something with x...
+       ...  # do something with x ...
 
 This won't touch your original sequence, but build a new copy with reversed
 order to iterate over.
@@ -1108,7 +1106,7 @@ order to iterate over.
 With Python 2.3, you can use an extended slice syntax::
 
    for x in sequence[::-1]:
-       ... # do something with x...
+       ...  # do something with x ...
 
 
 How do you remove duplicates from a list?
@@ -1116,7 +1114,7 @@ How do you remove duplicates from a list?
 
 See the Python Cookbook for a long discussion of many ways to do this:
 
-   http://code.activestate.com/recipes/52560/
+   https://code.activestate.com/recipes/52560/
 
 If you don't mind reordering the list, sort it and then scan from the end of the
 list, deleting duplicates as you go::
@@ -1173,16 +1171,28 @@ You probably tried to make a multidimensional array like this::
 
    >>> A = [[None] * 2] * 3
 
-This looks correct if you print it::
+This looks correct if you print it:
+
+.. testsetup::
+
+   A = [[None] * 2] * 3
+
+.. doctest::
 
    >>> A
    [[None, None], [None, None], [None, None]]
 
 But when you assign a value, it shows up in multiple places:
 
-  >>> A[0][0] = 5
-  >>> A
-  [[5, None], [5, None], [5, None]]
+.. testsetup::
+
+   A = [[None] * 2] * 3
+
+.. doctest::
+
+   >>> A[0][0] = 5
+   >>> A
+   [[5, None], [5, None], [5, None]]
 
 The reason is that replicating a list with ``*`` doesn't create copies, it only
 creates references to the existing objects.  The ``*3`` creates a list
@@ -1202,7 +1212,7 @@ use a list comprehension::
    w, h = 2, 3
    A = [[None] * w for i in range(h)]
 
-Or, you can use an extension that provides a matrix datatype; `Numeric Python
+Or, you can use an extension that provides a matrix datatype; `NumPy
 <http://www.numpy.org/>`_ is the best known.
 
 
@@ -1314,39 +1324,10 @@ I want to do a complicated sort: can you do a Schwartzian Transform in Python?
 
 The technique, attributed to Randal Schwartz of the Perl community, sorts the
 elements of a list by a metric which maps each element to its "sort value". In
-Python, just use the ``key`` argument for the ``sort()`` method::
+Python, use the ``key`` argument for the :meth:`list.sort` method::
 
    Isorted = L[:]
    Isorted.sort(key=lambda s: int(s[10:15]))
-
-The ``key`` argument is new in Python 2.4, for older versions this kind of
-sorting is quite simple to do with list comprehensions.  To sort a list of
-strings by their uppercase values::
-
-  tmp1 = [(x.upper(), x) for x in L]  # Schwartzian transform
-  tmp1.sort()
-  Usorted = [x[1] for x in tmp1]
-
-To sort by the integer value of a subfield extending from positions 10-15 in
-each string::
-
-  tmp2 = [(int(s[10:15]), s) for s in L]  # Schwartzian transform
-  tmp2.sort()
-  Isorted = [x[1] for x in tmp2]
-
-For versions prior to 3.0, Isorted may also be computed by ::
-
-   def intfield(s):
-       return int(s[10:15])
-
-   def Icmp(s1, s2):
-       return cmp(intfield(s1), intfield(s2))
-
-   Isorted = L[:]
-   Isorted.sort(Icmp)
-
-but since this method calls ``intfield()`` many times for each element of L, it
-is slower than the Schwartzian Transform.
 
 
 How can I sort one list by values from another list?
@@ -1406,7 +1387,7 @@ A method is a function on some object ``x`` that you normally call as
 definition::
 
    class C:
-       def meth (self, arg):
+       def meth(self, arg):
            return arg * 2 + self.attribute
 
 
@@ -1439,9 +1420,9 @@ that does something::
 
    def search(obj):
        if isinstance(obj, Mailbox):
-           # ... code to search a mailbox
+           ...  # code to search a mailbox
        elif isinstance(obj, Document):
-           # ... code to search a document
+           ...  # code to search a document
        elif ...
 
 A better approach is to define a ``search()`` method on all the classes and just
@@ -1449,11 +1430,11 @@ call it::
 
    class Mailbox:
        def search(self):
-           # ... code to search a mailbox
+           ...  # code to search a mailbox
 
    class Document:
        def search(self):
-           # ... code to search a document
+           ...  # code to search a document
 
    obj.search()
 
@@ -1510,7 +1491,7 @@ How do I call a method defined in a base class from a derived class that overrid
 Use the built-in :func:`super` function::
 
    class Derived(Base):
-       def meth (self):
+       def meth(self):
            super(Derived, self).meth()
 
 For version prior to 3.0, you may be using classic classes: For a class
@@ -1695,9 +1676,9 @@ address, it happens frequently that after an object is deleted from memory, the
 next freshly created object is allocated at the same position in memory.  This
 is illustrated by this example:
 
->>> id(1000)
+>>> id(1000) # doctest: +SKIP
 13901272
->>> id(2000)
+>>> id(2000) # doctest: +SKIP
 13901272
 
 The two ids belong to different integer objects that are created before, and
@@ -1706,9 +1687,9 @@ objects whose id you want to examine are still alive, create another reference
 to the object:
 
 >>> a = 1000; b = 2000
->>> id(a)
+>>> id(a) # doctest: +SKIP
 13901272
->>> id(b)
+>>> id(b) # doctest: +SKIP
 13891296
 
 

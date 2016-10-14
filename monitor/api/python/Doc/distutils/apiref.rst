@@ -319,12 +319,12 @@ This module provides the following functions.
 
 .. function:: gen_preprocess_options(macros, include_dirs)
 
-   Generate C pre-processor options (:option:`-D`, :option:`-U`, :option:`-I`) as
+   Generate C pre-processor options (:option:`-D`, :option:`!-U`, :option:`!-I`) as
    used by at least two types of compilers: the typical Unix compiler and Visual
    C++. *macros* is the usual thing, a list of 1- or 2-tuples, where ``(name,)``
-   means undefine (:option:`-U`) macro *name*, and ``(name, value)`` means define
+   means undefine (:option:`!-U`) macro *name*, and ``(name, value)`` means define
    (:option:`-D`) macro *name* to *value*.  *include_dirs* is just a list of
-   directory names to be added to the header file search path (:option:`-I`).
+   directory names to be added to the header file search path (:option:`!-I`).
    Returns a list of command-line options suitable for either Unix compilers or
    Visual C++.
 
@@ -799,7 +799,7 @@ This module provides the :class:`UnixCCompiler` class, a subclass of
 
 * library search directories specified with :option:`-Ldir`
 
-* compile handled by :program:`cc` (or similar) executable with :option:`-c`
+* compile handled by :program:`cc` (or similar) executable with :option:`!-c`
   option: compiles :file:`.c` to :file:`.o`
 
 * link static library handled by :program:`ar` command (possibly with
@@ -837,7 +837,7 @@ selection by :class:`MSVCCompiler`.
 .. module:: distutils.bcppcompiler
 
 
-This module provides :class:`BorlandCCompiler`, an subclass of the abstract
+This module provides :class:`BorlandCCompiler`, a subclass of the abstract
 :class:`CCompiler` class for the Borland C++ compiler.
 
 
@@ -876,7 +876,7 @@ tarballs or zipfiles.
    archive.  *root_dir* and *base_dir* both default to the current directory.
    Returns the name of the archive file.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Added support for the ``xztar`` format.
 
 
@@ -891,7 +891,7 @@ tarballs or zipfiles.
    compression extension (``.gz``, ``.bz2``, ``.xz`` or ``.Z``).  Return the
    output filename.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Added support for the ``xz`` compression.
 
 
@@ -1234,7 +1234,7 @@ other utility module.
       <imp.get_tag>` in their name, in a :file:`__pycache__` subdirectory
       instead of files without tag in the current directory.
 
-   .. versionchanged: 3.5
+   .. versionchanged:: 3.5
       Create ``.pyc`` files according to :pep:`488`.
 
 
@@ -1822,7 +1822,7 @@ Subclasses of :class:`Command` must define the following methods.
 
    Builds a `Windows Installer`_ (.msi) binary package.
 
-   .. _Windows Installer: http://msdn.microsoft.com/en-us/library/cc185688(VS.85).aspx
+   .. _Windows Installer: https://msdn.microsoft.com/en-us/library/cc185688(VS.85).aspx
 
    In most cases, the ``bdist_msi`` installer is a better choice than the
    ``bdist_wininst`` installer, because it provides better support for
@@ -1907,9 +1907,9 @@ Subclasses of :class:`Command` must define the following methods.
    that is designed to run with both Python 2.x and 3.x, add::
 
      try:
-        from distutils.command.build_py import build_py_2to3 as build_py
+         from distutils.command.build_py import build_py_2to3 as build_py
      except ImportError:
-        from distutils.command.build_py import build_py
+         from distutils.command.build_py import build_py
 
    to your setup.py, and later::
 

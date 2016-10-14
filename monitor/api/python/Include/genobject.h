@@ -43,6 +43,7 @@ PyAPI_FUNC(PyObject *) PyGen_NewWithQualName(struct _frame *,
 PyAPI_FUNC(int) PyGen_NeedsFinalizing(PyGenObject *);
 PyAPI_FUNC(int) _PyGen_FetchStopIterationValue(PyObject **);
 PyObject *_PyGen_Send(PyGenObject *, PyObject *);
+PyObject *_PyGen_yf(PyGenObject *);
 PyAPI_FUNC(void) _PyGen_Finalize(PyObject *self);
 
 #ifndef Py_LIMITED_API
@@ -52,6 +53,9 @@ typedef struct {
 
 PyAPI_DATA(PyTypeObject) PyCoro_Type;
 PyAPI_DATA(PyTypeObject) _PyCoroWrapper_Type;
+
+PyAPI_DATA(PyTypeObject) _PyAIterWrapper_Type;
+PyObject *_PyAIterWrapper_New(PyObject *aiter);
 
 #define PyCoro_CheckExact(op) (Py_TYPE(op) == &PyCoro_Type)
 PyObject *_PyCoro_GetAwaitableIter(PyObject *o);

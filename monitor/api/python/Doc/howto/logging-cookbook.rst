@@ -63,6 +63,7 @@ Here is the auxiliary module::
         def __init__(self):
             self.logger = logging.getLogger('spam_application.auxiliary.Auxiliary')
             self.logger.info('creating an instance of Auxiliary')
+
         def do_something(self):
             self.logger.info('doing something')
             a = 1 + 1
@@ -93,6 +94,61 @@ The output looks like this::
        received a call to 'some_function'
     2005-03-23 23:47:11,673 - spam_application - INFO -
        done with auxiliary_module.some_function()
+
+Logging from multiple threads
+-----------------------------
+
+Logging from multiple threads requires no special effort. The following example
+shows logging from the main (initial) thread and another thread::
+
+    import logging
+    import threading
+    import time
+
+    def worker(arg):
+        while not arg['stop']:
+            logging.debug('Hi from myfunc')
+            time.sleep(0.5)
+
+    def main():
+        logging.basicConfig(level=logging.DEBUG, format='%(relativeCreated)6d %(threadName)s %(message)s')
+        info = {'stop': False}
+        thread = threading.Thread(target=worker, args=(info,))
+        thread.start()
+        while True:
+            try:
+                logging.debug('Hello from main')
+                time.sleep(0.75)
+            except KeyboardInterrupt:
+                info['stop'] = True
+                break
+        thread.join()
+
+    if __name__ == '__main__':
+        main()
+
+When run, the script should print something like the following::
+
+     0 Thread-1 Hi from myfunc
+     3 MainThread Hello from main
+   505 Thread-1 Hi from myfunc
+   755 MainThread Hello from main
+  1007 Thread-1 Hi from myfunc
+  1507 MainThread Hello from main
+  1508 Thread-1 Hi from myfunc
+  2010 Thread-1 Hi from myfunc
+  2258 MainThread Hello from main
+  2512 Thread-1 Hi from myfunc
+  3009 MainThread Hello from main
+  3013 Thread-1 Hi from myfunc
+  3515 Thread-1 Hi from myfunc
+  3761 MainThread Hello from main
+  4017 Thread-1 Hi from myfunc
+  4513 MainThread Hello from main
+  4518 Thread-1 Hi from myfunc
+
+This shows the logging output interspersed as one might expect. This approach
+works for more threads than shown here, of course.
 
 Multiple handlers and formatters
 --------------------------------
@@ -305,7 +361,7 @@ classes, which would eat up one thread per handler for no particular benefit.
 
 An example of using these two classes follows (imports omitted)::
 
-    que = queue.Queue(-1) # no limit on size
+    que = queue.Queue(-1)  # no limit on size
     queue_handler = QueueHandler(que)
     handler = logging.StreamHandler()
     listener = QueueListener(que, handler)
@@ -601,21 +657,21 @@ script::
             return True
 
     if __name__ == '__main__':
-       levels = (logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL)
-       logging.basicConfig(level=logging.DEBUG,
-                           format='%(asctime)-15s %(name)-5s %(levelname)-8s IP: %(ip)-15s User: %(user)-8s %(message)s')
-       a1 = logging.getLogger('a.b.c')
-       a2 = logging.getLogger('d.e.f')
+        levels = (logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR, logging.CRITICAL)
+        logging.basicConfig(level=logging.DEBUG,
+                            format='%(asctime)-15s %(name)-5s %(levelname)-8s IP: %(ip)-15s User: %(user)-8s %(message)s')
+        a1 = logging.getLogger('a.b.c')
+        a2 = logging.getLogger('d.e.f')
 
-       f = ContextFilter()
-       a1.addFilter(f)
-       a2.addFilter(f)
-       a1.debug('A debug message')
-       a1.info('An info message with %s', 'some parameters')
-       for x in range(10):
-           lvl = choice(levels)
-           lvlname = logging.getLevelName(lvl)
-           a2.log(lvl, 'A message at %s level with %d %s', lvlname, 2, 'parameters')
+        f = ContextFilter()
+        a1.addFilter(f)
+        a2.addFilter(f)
+        a1.debug('A debug message')
+        a1.info('An info message with %s', 'some parameters')
+        for x in range(10):
+            lvl = choice(levels)
+            lvlname = logging.getLevelName(lvl)
+            a2.log(lvl, 'A message at %s level with %d %s', lvlname, 2, 'parameters')
 
 which, when run, produces something like::
 
@@ -709,10 +765,10 @@ the basis for code meeting your own specific requirements::
         while True:
             try:
                 record = queue.get()
-                if record is None: # We send this as a sentinel to tell the listener to quit.
+                if record is None:  # We send this as a sentinel to tell the listener to quit.
                     break
                 logger = logging.getLogger(record.name)
-                logger.handle(record) # No level or filter logic applied - just do it!
+                logger.handle(record)  # No level or filter logic applied - just do it!
             except Exception:
                 import sys, traceback
                 print('Whoops! Problem:', file=sys.stderr)
@@ -735,10 +791,11 @@ the basis for code meeting your own specific requirements::
     # Note that on Windows you can't rely on fork semantics, so each process
     # will run the logging configuration code when it starts.
     def worker_configurer(queue):
-        h = logging.handlers.QueueHandler(queue) # Just the one handler needed
+        h = logging.handlers.QueueHandler(queue)  # Just the one handler needed
         root = logging.getLogger()
         root.addHandler(h)
-        root.setLevel(logging.DEBUG) # send all messages, for demo; no other level or filter logic applied.
+        # send all messages, for demo; no other level or filter logic applied.
+        root.setLevel(logging.DEBUG)
 
     # This is the worker process top-level loop, which just logs ten events with
     # random intervening delays before terminating.
@@ -766,7 +823,7 @@ the basis for code meeting your own specific requirements::
         workers = []
         for i in range(10):
             worker = multiprocessing.Process(target=worker_process,
-                                           args=(queue, worker_configurer))
+                                             args=(queue, worker_configurer))
             workers.append(worker)
             worker.start()
         for w in workers:
@@ -1190,12 +1247,12 @@ You can use a :class:`QueueHandler` subclass to send messages to other kinds
 of queues, for example a ZeroMQ 'publish' socket. In the example below,the
 socket is created separately and passed to the handler (as its 'queue')::
 
-    import zmq # using pyzmq, the Python binding for ZeroMQ
-    import json # for serializing records portably
+    import zmq   # using pyzmq, the Python binding for ZeroMQ
+    import json  # for serializing records portably
 
     ctx = zmq.Context()
-    sock = zmq.Socket(ctx, zmq.PUB) # or zmq.PUSH, or other suitable value
-    sock.bind('tcp://*:5556') # or wherever
+    sock = zmq.Socket(ctx, zmq.PUB)  # or zmq.PUSH, or other suitable value
+    sock.bind('tcp://*:5556')        # or wherever
 
     class ZeroMQSocketHandler(QueueHandler):
         def enqueue(self, record):
@@ -1233,7 +1290,7 @@ of queues, for example a ZeroMQ 'subscribe' socket. Here's an example::
         def __init__(self, uri, *handlers, **kwargs):
             self.ctx = kwargs.get('ctx') or zmq.Context()
             socket = zmq.Socket(self.ctx, zmq.SUB)
-            socket.setsockopt(zmq.SUBSCRIBE, '') # subscribe to everything
+            socket.setsockopt(zmq.SUBSCRIBE, '')  # subscribe to everything
             socket.connect(uri)
 
         def dequeue(self):
@@ -1261,7 +1318,7 @@ An example dictionary-based configuration
 -----------------------------------------
 
 Below is an example of a logging configuration dictionary - it's taken from
-the `documentation on the Django project <https://docs.djangoproject.com/en/1.3/topics/logging/#configuring-logging>`_.
+the `documentation on the Django project <https://docs.djangoproject.com/en/1.9/topics/logging/#configuring-logging>`_.
 This dictionary is passed to :func:`~config.dictConfig` to put the configuration into effect::
 
     LOGGING = {
@@ -1317,7 +1374,7 @@ This dictionary is passed to :func:`~config.dictConfig` to put the configuration
     }
 
 For more information about this configuration, you can see the `relevant
-section <https://docs.djangoproject.com/en/1.6/topics/logging/#configuring-logging>`_
+section <https://docs.djangoproject.com/en/1.9/topics/logging/#configuring-logging>`_
 of the Django documentation.
 
 .. _cookbook-rotator-namer:
@@ -1579,11 +1636,11 @@ works::
 Inserting a BOM into messages sent to a SysLogHandler
 -----------------------------------------------------
 
-`RFC 5424 <http://tools.ietf.org/html/rfc5424>`_ requires that a
+`RFC 5424 <https://tools.ietf.org/html/rfc5424>`_ requires that a
 Unicode message be sent to a syslog daemon as a set of bytes which have the
 following structure: an optional pure-ASCII component, followed by a UTF-8 Byte
 Order Mark (BOM), followed by Unicode encoded using UTF-8. (See the `relevant
-section of the specification <http://tools.ietf.org/html/rfc5424#section-6>`_.)
+section of the specification <https://tools.ietf.org/html/rfc5424#section-6>`_.)
 
 In Python 3.1, code was added to
 :class:`~logging.handlers.SysLogHandler` to insert a BOM into the message, but
@@ -2061,7 +2118,7 @@ class, as shown in the following example::
             Format an exception so that it prints on a single line.
             """
             result = super(OneLineExceptionFormatter, self).formatException(exc_info)
-            return repr(result) # or format into one line however you want to
+            return repr(result)  # or format into one line however you want to
 
         def format(self, record):
             s = super(OneLineExceptionFormatter, self).format(record)
@@ -2176,7 +2233,7 @@ flushing behavior.
 
 The example script has a simple function, ``foo``, which just cycles through
 all the logging levels, writing to ``sys.stderr`` to say what level it's about
-to log at, and then actually logging a message that that level. You can pass a
+to log at, and then actually logging a message at that level. You can pass a
 parameter to ``foo`` which, if true, will log at ERROR and CRITICAL levels -
 otherwise, it only logs at DEBUG, INFO and WARNING levels.
 
@@ -2354,3 +2411,105 @@ When this script is run, it should print something like::
 
 showing how the time is formatted both as local time and UTC, one for each
 handler.
+
+
+.. _context-manager:
+
+Using a context manager for selective logging
+---------------------------------------------
+
+There are times when it would be useful to temporarily change the logging
+configuration and revert it back after doing something. For this, a context
+manager is the most obvious way of saving and restoring the logging context.
+Here is a simple example of such a context manager, which allows you to
+optionally change the logging level and add a logging handler purely in the
+scope of the context manager::
+
+    import logging
+    import sys
+
+    class LoggingContext(object):
+        def __init__(self, logger, level=None, handler=None, close=True):
+            self.logger = logger
+            self.level = level
+            self.handler = handler
+            self.close = close
+
+        def __enter__(self):
+            if self.level is not None:
+                self.old_level = self.logger.level
+                self.logger.setLevel(self.level)
+            if self.handler:
+                self.logger.addHandler(self.handler)
+
+        def __exit__(self, et, ev, tb):
+            if self.level is not None:
+                self.logger.setLevel(self.old_level)
+            if self.handler:
+                self.logger.removeHandler(self.handler)
+            if self.handler and self.close:
+                self.handler.close()
+            # implicit return of None => don't swallow exceptions
+
+If you specify a level value, the logger's level is set to that value in the
+scope of the with block covered by the context manager. If you specify a
+handler, it is added to the logger on entry to the block and removed on exit
+from the block. You can also ask the manager to close the handler for you on
+block exit - you could do this if you don't need the handler any more.
+
+To illustrate how it works, we can add the following block of code to the
+above::
+
+    if __name__ == '__main__':
+        logger = logging.getLogger('foo')
+        logger.addHandler(logging.StreamHandler())
+        logger.setLevel(logging.INFO)
+        logger.info('1. This should appear just once on stderr.')
+        logger.debug('2. This should not appear.')
+        with LoggingContext(logger, level=logging.DEBUG):
+            logger.debug('3. This should appear once on stderr.')
+        logger.debug('4. This should not appear.')
+        h = logging.StreamHandler(sys.stdout)
+        with LoggingContext(logger, level=logging.DEBUG, handler=h, close=True):
+            logger.debug('5. This should appear twice - once on stderr and once on stdout.')
+        logger.info('6. This should appear just once on stderr.')
+        logger.debug('7. This should not appear.')
+
+We initially set the logger's level to ``INFO``, so message #1 appears and
+message #2 doesn't. We then change the level to ``DEBUG`` temporarily in the
+following ``with`` block, and so message #3 appears. After the block exits, the
+logger's level is restored to ``INFO`` and so message #4 doesn't appear. In the
+next ``with`` block, we set the level to ``DEBUG`` again but also add a handler
+writing to ``sys.stdout``. Thus, message #5 appears twice on the console (once
+via ``stderr`` and once via ``stdout``). After the ``with`` statement's
+completion, the status is as it was before so message #6 appears (like message
+#1) whereas message #7 doesn't (just like message #2).
+
+If we run the resulting script, the result is as follows::
+
+    $ python logctx.py
+    1. This should appear just once on stderr.
+    3. This should appear once on stderr.
+    5. This should appear twice - once on stderr and once on stdout.
+    5. This should appear twice - once on stderr and once on stdout.
+    6. This should appear just once on stderr.
+
+If we run it again, but pipe ``stderr`` to ``/dev/null``, we see the following,
+which is the only message written to ``stdout``::
+
+    $ python logctx.py 2>/dev/null
+    5. This should appear twice - once on stderr and once on stdout.
+
+Once again, but piping ``stdout`` to ``/dev/null``, we get::
+
+    $ python logctx.py >/dev/null
+    1. This should appear just once on stderr.
+    3. This should appear once on stderr.
+    5. This should appear twice - once on stderr and once on stdout.
+    6. This should appear just once on stderr.
+
+In this case, the message #5 printed to ``stdout`` doesn't appear, as expected.
+
+Of course, the approach described here can be generalised, for example to attach
+logging filters temporarily. Note that the above code works in Python 2 as well
+as Python 3.

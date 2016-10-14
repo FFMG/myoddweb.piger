@@ -705,7 +705,7 @@ _lzma.LZMACompressor.__init__
 
     check: int(c_default="-1") = unspecified
         The integrity check to use.  For FORMAT_XZ, the default
-        is CHECK_CRC64.  FORMAT_ALONE and FORMAT_RAW do not suport integrity
+        is CHECK_CRC64.  FORMAT_ALONE and FORMAT_RAW do not support integrity
         checks; for these formats, check must be omitted, or be CHECK_NONE.
 
     preset: object = None
@@ -1011,9 +1011,8 @@ decompress(Decompressor *d, uint8_t *data, size_t len, Py_ssize_t max_length)
     if (d->eof) {
         d->needs_input = 0;
         if (lzs->avail_in > 0) {
-            Py_CLEAR(d->unused_data);
-            d->unused_data = PyBytes_FromStringAndSize(
-                (char *)lzs->next_in, lzs->avail_in);
+            Py_XSETREF(d->unused_data,
+                      PyBytes_FromStringAndSize((char *)lzs->next_in, lzs->avail_in));
             if (d->unused_data == NULL)
                 goto error;
         }

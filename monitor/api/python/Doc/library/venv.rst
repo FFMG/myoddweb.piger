@@ -3,15 +3,15 @@
 
 .. module:: venv
    :synopsis: Creation of virtual environments.
+
 .. moduleauthor:: Vinay Sajip <vinay_sajip@yahoo.co.uk>
 .. sectionauthor:: Vinay Sajip <vinay_sajip@yahoo.co.uk>
 
-
-.. index:: pair: Environments; virtual
-
 .. versionadded:: 3.3
 
-**Source code:** :source:`Lib/venv`
+**Source code:** :source:`Lib/venv/`
+
+.. index:: pair: Environments; virtual
 
 --------------
 
@@ -43,11 +43,6 @@ Creating virtual environments
    Common installation tools such as ``Setuptools`` and ``pip`` work as
    expected with venvs - i.e. when a venv is active, they install Python
    packages into the venv without needing to be told to do so explicitly.
-   Of course, you need to install them into the venv first: this could be
-   done by running ``ez_setup.py`` with the venv activated,
-   followed by running ``easy_install pip``. Alternatively, you could download
-   the source tarballs and run ``python setup.py install`` after unpacking,
-   with the venv activated.
 
    When a venv is active (i.e. the venv's Python interpreter is running), the
    attributes :attr:`sys.prefix` and :attr:`sys.exec_prefix` point to the base

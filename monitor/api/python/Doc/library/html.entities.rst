@@ -3,6 +3,7 @@
 
 .. module:: html.entities
    :synopsis: Definitions of HTML general entities.
+
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 
 **Source code:** :source:`Lib/html/entities.py`
@@ -43,4 +44,4 @@ This module defines four dictionaries, :data:`html5`,
 
 .. rubric:: Footnotes
 
-.. [#] See http://www.w3.org/TR/html5/syntax.html#named-character-references
+.. [#] See https://www.w3.org/TR/html5/syntax.html#named-character-references

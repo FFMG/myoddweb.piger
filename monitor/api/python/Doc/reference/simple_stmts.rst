@@ -45,7 +45,7 @@ expression statements are allowed and occasionally useful.  The syntax for an
 expression statement is:
 
 .. productionlist::
-   expression_stmt: `expression_list`
+   expression_stmt: `starred_expression`
 
 An expression statement evaluates the expression list (which may be a single
 expression).
@@ -81,11 +81,11 @@ Assignment statements are used to (re)bind names to values and to modify
 attributes or items of mutable objects:
 
 .. productionlist::
-   assignment_stmt: (`target_list` "=")+ (`expression_list` | `yield_expression`)
+   assignment_stmt: (`target_list` "=")+ (`starred_expression` | `yield_expression`)
    target_list: `target` ("," `target`)* [","]
    target: `identifier`
          : | "(" `target_list` ")"
-         : | "[" `target_list` "]"
+         : | "[" [`target_list`] "]"
          : | `attributeref`
          : | `subscription`
          : | `slicing`
@@ -115,21 +115,25 @@ given with the definition of the object types (see section :ref:`types`).
 Assignment of an object to a target list, optionally enclosed in parentheses or
 square brackets, is recursively defined as follows.
 
-* If the target list is a single target: The object is assigned to that target.
+* If the target list is empty: The object must also be an empty iterable.
 
-* If the target list is a comma-separated list of targets: The object must be an
-  iterable with the same number of items as there are targets in the target list,
-  and the items are assigned, from left to right, to the corresponding targets.
+* If the target list is a single target in parentheses: The object is assigned
+  to that target.
+
+* If the target list is a comma-separated list of targets, or a single target
+  in square brackets: The object must be an iterable with the same number of
+  items as there are targets in the target list, and the items are assigned,
+  from left to right, to the corresponding targets.
 
   * If the target list contains one target prefixed with an asterisk, called a
-    "starred" target: The object must be a sequence with at least as many items
+    "starred" target: The object must be an iterable with at least as many items
     as there are targets in the target list, minus one.  The first items of the
-    sequence are assigned, from left to right, to the targets before the starred
-    target.  The final items of the sequence are assigned to the targets after
-    the starred target.  A list of the remaining items in the sequence is then
+    iterable are assigned, from left to right, to the targets before the starred
+    target.  The final items of the iterable are assigned to the targets after
+    the starred target.  A list of the remaining items in the iterable is then
     assigned to the starred target (the list can be empty).
 
-  * Else: The object must be a sequence with the same number of items as there
+  * Else: The object must be an iterable with the same number of items as there
     are targets in the target list, and the items are assigned, from left to
     right, to the corresponding targets.
 
@@ -149,11 +153,6 @@ Assignment of an object to a single target is recursively defined as follows.
   The name is rebound if it was already bound.  This may cause the reference
   count for the object previously bound to the name to reach zero, causing the
   object to be deallocated and its destructor (if it has one) to be called.
-
-* If the target is a target list enclosed in parentheses or in square brackets:
-  The object must be an iterable with the same number of items as there are
-  targets in the target list, and its items are assigned, from left to right,
-  to the corresponding targets.
 
   .. index:: pair: attribute; assignment
 
@@ -237,7 +236,7 @@ Assignment of an object to a single target is recursively defined as follows.
    phase, causing less detailed error messages.
 
 Although the definition of assignment implies that overlaps between the
-left-hand side and the right-hand side are 'simultanenous' (for example ``a, b =
+left-hand side and the right-hand side are 'simultaneous' (for example ``a, b =
 b, a`` swaps two variables), overlaps *within* the collection of assigned-to
 variables occur left-to-right, sometimes resulting in confusion.  For instance,
 the following program prints ``[0, 2]``::
@@ -331,12 +330,12 @@ program:
 The simple form, ``assert expression``, is equivalent to ::
 
    if __debug__:
-      if not expression: raise AssertionError
+       if not expression: raise AssertionError
 
 The extended form, ``assert expression1, expression2``, is equivalent to ::
 
    if __debug__:
-      if not expression1: raise AssertionError(expression2)
+       if not expression1: raise AssertionError(expression2)
 
 .. index::
    single: __debug__
@@ -661,7 +660,7 @@ steps:
 
 When the statement contains multiple clauses (separated by
 commas) the two steps are carried out separately for each clause, just
-as though the clauses had been separated out into individiual import
+as though the clauses had been separated out into individual import
 statements.
 
 The details of the first step, finding and loading modules are described in
@@ -893,7 +892,7 @@ The :keyword:`nonlocal` statement
    nonlocal_stmt: "nonlocal" `identifier` ("," `identifier`)*
 
 .. XXX add when implemented
-                : ["=" (`target_list` "=")+ expression_list]
+                : ["=" (`target_list` "=")+ starred_expression]
                 : | "nonlocal" identifier augop expression_list
 
 The :keyword:`nonlocal` statement causes the listed identifiers to refer to

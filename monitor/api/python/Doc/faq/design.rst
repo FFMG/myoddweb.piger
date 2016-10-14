@@ -158,7 +158,7 @@ where in Python you're forced to write this::
        line = f.readline()
        if not line:
            break
-       ... # do something with line
+       ...  # do something with line
 
 The reason for not allowing assignment in Python expressions is a common,
 hard-to-find bug in those other languages, caused by this construct:
@@ -190,7 +190,7 @@ generally less robust than the "while True" solution::
 
    line = f.readline()
    while line:
-       ... # do something with line...
+       ...  # do something with line...
        line = f.readline()
 
 The problem with this is that if you change your mind about exactly how you get
@@ -203,7 +203,7 @@ objects using the ``for`` statement.  For example, :term:`file objects
 <file object>` support the iterator protocol, so you can write simply::
 
    for line in f:
-       ... # do something with line...
+       ...  # do something with line...
 
 
 
@@ -368,9 +368,9 @@ Can Python be compiled to machine code, C or some other language?
 
 Practical answer:
 
-`Cython <http://cython.org/>`_ and `Pyrex <http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/>`_
+`Cython <http://cython.org/>`_ and `Pyrex <https://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/>`_
 compile a modified version of Python with optional annotations into C
-extensions.  `Weave <http://docs.scipy.org/doc/scipy-dev/reference/tutorial/weave.html>`_ makes it easy to
+extensions.  `Weave <https://scipy.github.io/devdocs/tutorial/weave.html>`_ makes it easy to
 intermingle Python and C code in various ways to increase performance.
 `Nuitka <http://www.nuitka.net/>`_ is an up-and-coming compiler of Python
 into C++ code, aiming to support the full Python language.
@@ -577,8 +577,10 @@ other structure). ::
    class ListWrapper:
        def __init__(self, the_list):
            self.the_list = the_list
+
        def __eq__(self, other):
            return self.the_list == other.the_list
+
        def __hash__(self):
            l = self.the_list
            result = 98767 - len(l)*555
@@ -619,7 +621,7 @@ it and returns it.  For example, here's how to iterate over the keys of a
 dictionary in sorted order::
 
    for key in sorted(mydict):
-       ... # do whatever with mydict[key]...
+       ...  # do whatever with mydict[key]...
 
 
 How do you specify and enforce an interface spec in Python?
@@ -675,11 +677,11 @@ languages.  For example::
    class label(Exception): pass  # declare a label
 
    try:
-        ...
-        if condition: raise label()  # goto label
-        ...
+       ...
+       if condition: raise label()  # goto label
+       ...
    except label:  # where to goto
-        pass
+       pass
    ...
 
 This doesn't allow you to jump into the middle of a loop, but that's usually

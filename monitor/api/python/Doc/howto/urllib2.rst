@@ -64,7 +64,7 @@ you can do so via the :func:`~urllib.request.urlretrieve` function::
     html = open(local_filename)
 
 Many uses of urllib will be that simple (note that instead of an 'http:' URL we
-could have used an URL starting with 'ftp:', 'file:', etc.).  However, it's the
+could have used a URL starting with 'ftp:', 'file:', etc.).  However, it's the
 purpose of this tutorial to explain the more complicated cases, concentrating on
 HTTP.
 
@@ -115,14 +115,14 @@ library. ::
               'language' : 'Python' }
 
     data = urllib.parse.urlencode(values)
-    data = data.encode('utf-8') # data should be bytes
+    data = data.encode('ascii') # data should be bytes
     req = urllib.request.Request(url, data)
     with urllib.request.urlopen(req) as response:
        the_page = response.read()
 
 Note that other encodings are sometimes required (e.g. for file upload from HTML
 forms - see `HTML Specification, Form Submission
-<http://www.w3.org/TR/REC-html40/interact/forms.html#h-17.13>`_ for more
+<https://www.w3.org/TR/REC-html40/interact/forms.html#h-17.13>`_ for more
 details).
 
 If you do not pass the ``data`` argument, urllib uses a **GET** request. One
@@ -175,13 +175,13 @@ Explorer [#]_. ::
 
     url = 'http://www.someserver.com/cgi-bin/register.cgi'
     user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
-    values = {'name' : 'Michael Foord',
-              'location' : 'Northampton',
-              'language' : 'Python' }
-    headers = { 'User-Agent' : user_agent }
+    values = {'name': 'Michael Foord',
+              'location': 'Northampton',
+              'language': 'Python' }
+    headers = {'User-Agent': user_agent}
 
-    data  = urllib.parse.urlencode(values)
-    data = data.encode('utf-8')
+    data = urllib.parse.urlencode(values)
+    data = data.encode('ascii')
     req = urllib.request.Request(url, data, headers)
     with urllib.request.urlopen(req) as response:
        the_page = response.read()
@@ -215,7 +215,7 @@ e.g. ::
     >>> req = urllib.request.Request('http://www.pretend_server.org')
     >>> try: urllib.request.urlopen(req)
     ... except urllib.error.URLError as e:
-    ...    print(e.reason)      #doctest: +SKIP
+    ...     print(e.reason)      #doctest: +SKIP
     ...
     (4, 'getaddrinfo failed')
 
@@ -372,7 +372,7 @@ Number 2
 ::
 
     from urllib.request import Request, urlopen
-    from urllib.error import  URLError
+    from urllib.error import URLError
     req = Request(someurl)
     try:
         response = urlopen(req)
@@ -403,7 +403,7 @@ fetched, particularly the headers sent by the server. It is currently an
 :class:`http.client.HTTPMessage` instance.
 
 Typical headers include 'Content-length', 'Content-type', and so on. See the
-`Quick Reference to HTTP Headers <http://www.cs.tut.fi/~jkorpela/http.html>`_
+`Quick Reference to HTTP Headers <https://www.cs.tut.fi/~jkorpela/http.html>`_
 for a useful listing of HTTP headers with brief explanations of their meaning
 and use.
 
@@ -514,7 +514,7 @@ component and the hostname and optionally the port number)
 e.g. "http://example.com/" *or* an "authority" (i.e. the hostname,
 optionally including the port number) e.g. "example.com" or "example.com:8080"
 (the latter example includes a port number).  The authority, if present, must
-NOT contain the "userinfo" component - for example "joe@password:example.com" is
+NOT contain the "userinfo" component - for example "joe:password@example.com" is
 not correct.
 
 
@@ -586,5 +586,5 @@ This document was reviewed and revised by John Lee.
        scripts with a localhost server, I have to prevent urllib from using
        the proxy.
 .. [#] urllib opener for SSL proxy (CONNECT method): `ASPN Cookbook Recipe
-       <http://code.activestate.com/recipes/456195/>`_.
+       <https://code.activestate.com/recipes/456195/>`_.
 

@@ -176,7 +176,7 @@ check_force_ascii(void)
 #endif
 
 error:
-    /* if an error occured, force the ASCII encoding */
+    /* if an error occurred, force the ASCII encoding */
     return 1;
 }
 
@@ -599,7 +599,7 @@ _Py_attribute_data_to_stat(BY_HANDLE_FILE_INFORMATION *info, ULONG reparse_tag,
 
    On Windows, use GetFileType() and GetFileInformationByHandle() which support
    files larger than 2 GB.  fstat() may fail with EOVERFLOW on files larger
-   than 2 GB because the file size type is an signed 32-bit integer: see issue
+   than 2 GB because the file size type is a signed 32-bit integer: see issue
    #23152.
 
    On Windows, set the last Windows error and return nonzero on error. On
@@ -669,7 +669,7 @@ _Py_fstat_noraise(int fd, struct _Py_stat_struct *status)
 
    On Windows, use GetFileType() and GetFileInformationByHandle() which support
    files larger than 2 GB.  fstat() may fail with EOVERFLOW on files larger
-   than 2 GB because the file size type is an signed 32-bit integer: see issue
+   than 2 GB because the file size type is a signed 32-bit integer: see issue
    #23152.
 
    Raise an exception and return -1 on error. On Windows, set the last Windows
@@ -856,7 +856,7 @@ set_inheritable(int fd, int inheritable, int raise, int *atomic_flag_works)
             return 0;
         }
 
-        if (errno != ENOTTY) {
+        if (errno != ENOTTY && errno != EACCES) {
             if (raise)
                 PyErr_SetFromErrno(PyExc_OSError);
             return -1;
@@ -865,7 +865,12 @@ set_inheritable(int fd, int inheritable, int raise, int *atomic_flag_works)
             /* Issue #22258: Here, ENOTTY means "Inappropriate ioctl for
                device". The ioctl is declared but not supported by the kernel.
                Remember that ioctl() doesn't work. It is the case on
-               Illumos-based OS for example. */
+               Illumos-based OS for example.
+
+               Issue #27057: When SELinux policy disallows ioctl it will fail
+               with EACCES. While FIOCLEX is safe operation it may be
+               unavailable because ioctl was denied altogether.
+               This can be the case on Android. */
             ioctl_works = 0;
         }
         /* fallback to fcntl() if ioctl() does not work */

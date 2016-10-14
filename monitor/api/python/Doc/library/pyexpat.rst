@@ -3,8 +3,10 @@
 
 .. module:: xml.parsers.expat
    :synopsis: An interface to the Expat non-validating XML parser.
+
 .. moduleauthor:: Paul Prescod <paul@prescod.net>
 
+--------------
 
 .. Markup notes:
 
@@ -570,9 +572,9 @@ Content Model Descriptions
 
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 
-Content modules are described using nested tuples.  Each tuple contains four
+Content models are described using nested tuples.  Each tuple contains four
 values: the type, the quantifier, the name, and a tuple of children.  Children
-are simply additional content module descriptions.
+are simply additional content model descriptions.
 
 The values of the first two fields are constants defined in the
 :mod:`xml.parsers.expat.model` module.  These constants can be collected in two
@@ -867,6 +869,6 @@ The ``errors`` module has the following attributes:
 
 .. [#] The encoding string included in XML output should conform to the
    appropriate standards. For example, "UTF-8" is valid, but "UTF8" is
-   not. See http://www.w3.org/TR/2006/REC-xml11-20060816/#NT-EncodingDecl
-   and http://www.iana.org/assignments/character-sets/character-sets.xhtml.
+   not. See https://www.w3.org/TR/2006/REC-xml11-20060816/#NT-EncodingDecl
+   and https://www.iana.org/assignments/character-sets/character-sets.xhtml.
 

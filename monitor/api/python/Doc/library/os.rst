@@ -4,6 +4,9 @@
 .. module:: os
    :synopsis: Miscellaneous operating system interfaces.
 
+**Source code:** :source:`Lib/os.py`
+
+--------------
 
 This module provides a portable way of using operating system dependent
 functionality.  If you just want to read or write a file see :func:`open`, if
@@ -894,7 +897,7 @@ The following constants are options for the *flags* parameter to the
 :func:`~os.open` function.  They can be combined using the bitwise OR operator
 ``|``.  Some of them are not available on all platforms.  For descriptions of
 their availability and use, consult the :manpage:`open(2)` manual page on Unix
-or `the MSDN <http://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windows.
+or `the MSDN <https://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windows.
 
 
 .. data:: O_RDONLY
@@ -1623,9 +1626,15 @@ features:
 
    Create a directory named *path* with numeric mode *mode*.
 
+   If the directory already exists, :exc:`FileExistsError` is raised.
+
+   .. _mkdir_modebits:
+
    On some systems, *mode* is ignored.  Where it is used, the current umask
-   value is first masked out.  If the directory already exists, :exc:`OSError`
-   is raised.
+   value is first masked out.  If bits other than the last 9 (i.e. the last 3
+   digits of the octal representation of the *mode*) are set, their meaning is
+   platform-dependent.  On some platforms, they are ignored and you should call
+   :func:`chmod` explicitly to set them.
 
    This function can also support :ref:`paths relative to directory descriptors
    <dir_fd>`.
@@ -1646,8 +1655,8 @@ features:
    Recursive directory creation function.  Like :func:`mkdir`, but makes all
    intermediate-level directories needed to contain the leaf directory.
 
-   The default *mode* is ``0o777`` (octal).  On some systems, *mode* is
-   ignored.  Where it is used, the current umask value is first masked out.
+   The *mode* parameter is passed to :func:`mkdir`; see :ref:`the mkdir()
+   description <mkdir_modebits>` for how it is interpreted.
 
    If *exist_ok* is ``False`` (the default), an :exc:`OSError` is raised if the
    target directory already exists.
@@ -1762,7 +1771,7 @@ features:
    ``os.path.join(os.path.dirname(path), result)``.
 
    If the *path* is a string object, the result will also be a string object,
-   and the call may raise an UnicodeDecodeError. If the *path* is a bytes
+   and the call may raise a UnicodeDecodeError. If the *path* is a bytes
    object, the result will be a bytes object.
 
    This function can also support :ref:`paths relative to directory descriptors
@@ -1789,7 +1798,7 @@ features:
    be raised; on Unix, the directory entry is removed but the storage allocated
    to the file is not made available until the original file is no longer in use.
 
-   This function is identical to :func:`unlink`.
+   This function is semantically identical to :func:`unlink`.
 
    .. versionadded:: 3.3
       The *dir_fd* argument.
@@ -1907,9 +1916,9 @@ features:
       and
       `readdir() <http://pubs.opengroup.org/onlinepubs/009695399/functions/readdir_r.html>`_
       functions. On Windows, it uses the Win32
-      `FindFirstFileW <http://msdn.microsoft.com/en-us/library/windows/desktop/aa364418(v=vs.85).aspx>`_
+      `FindFirstFileW <https://msdn.microsoft.com/en-us/library/windows/desktop/aa364418(v=vs.85).aspx>`_
       and
-      `FindNextFileW <http://msdn.microsoft.com/en-us/library/windows/desktop/aa364428(v=vs.85).aspx>`_
+      `FindNextFileW <https://msdn.microsoft.com/en-us/library/windows/desktop/aa364428(v=vs.85).aspx>`_
       functions.
 
    .. versionadded:: 3.5
@@ -1960,62 +1969,65 @@ features:
 
       Return the inode number of the entry.
 
-      The result is cached on the ``DirEntry`` object, use ``os.stat(entry.path,
+      The result is cached on the ``DirEntry`` object. Use ``os.stat(entry.path,
       follow_symlinks=False).st_ino`` to fetch up-to-date information.
 
-      On Unix, no system call is required.
+      On the first, uncached call, a system call is required on Windows but
+      not on Unix.
 
    .. method:: is_dir(\*, follow_symlinks=True)
 
-      If *follow_symlinks* is ``True`` (the default), return ``True`` if the
-      entry is a directory or a symbolic link pointing to a directory;
-      return ``False`` if it is or points to any other kind of file, or if it
-      doesn't exist anymore.
+      Return ``True`` if this entry is a directory or a symbolic link pointing
+      to a directory; return ``False`` if the entry is or points to any other
+      kind of file, or if it doesn't exist anymore.
 
       If *follow_symlinks* is ``False``, return ``True`` only if this entry
-      is a directory; return ``False`` if it is any other kind of file
-      or if it doesn't exist anymore.
+      is a directory (without following symlinks); return ``False`` if the
+      entry is any other kind of file or if it doesn't exist anymore.
 
-      The result is cached on the ``DirEntry`` object. Call :func:`os.stat`
-      along with :func:`stat.S_ISDIR` to fetch up-to-date information.
+      The result is cached on the ``DirEntry`` object, with a separate cache
+      for *follow_symlinks* ``True`` and ``False``. Call :func:`os.stat` along
+      with :func:`stat.S_ISDIR` to fetch up-to-date information.
+
+      On the first, uncached call, no system call is required in most cases.
+      Specifically, for non-symlinks, neither Windows or Unix require a system
+      call, except on certain Unix file systems, such as network file systems,
+      that return ``dirent.d_type == DT_UNKNOWN``. If the entry is a symlink,
+      a system call will be required to follow the symlink unless
+      *follow_symlinks* is ``False``.
 
       This method can raise :exc:`OSError`, such as :exc:`PermissionError`,
       but :exc:`FileNotFoundError` is caught and not raised.
-
-      In most cases, no system call is required.
 
    .. method:: is_file(\*, follow_symlinks=True)
 
-      If *follow_symlinks* is ``True`` (the default), return ``True`` if the
-      entry is a file or a symbolic link pointing to a file; return ``False``
-      if it is or points to a directory or other non-file entry, or if it
-      doesn't exist anymore.
+      Return ``True`` if this entry is a file or a symbolic link pointing to a
+      file; return ``False`` if the entry is or points to a directory or other
+      non-file entry, or if it doesn't exist anymore.
 
       If *follow_symlinks* is ``False``, return ``True`` only if this entry
-      is a file; return ``False`` if it is a directory or other non-file entry,
-      or if it doesn't exist anymore.
+      is a file (without following symlinks); return ``False`` if the entry is
+      a directory or other non-file entry, or if it doesn't exist anymore.
 
-      The result is cached on the ``DirEntry`` object. Call :func:`os.stat`
-      along with :func:`stat.S_ISREG` to fetch up-to-date information.
-
-      This method can raise :exc:`OSError`, such as :exc:`PermissionError`,
-      but :exc:`FileNotFoundError` is caught and not raised.
-
-      In most cases, no system call is required.
+      The result is cached on the ``DirEntry`` object. Caching, system calls
+      made, and exceptions raised are as per :func:`~DirEntry.is_dir`.
 
    .. method:: is_symlink()
 
       Return ``True`` if this entry is a symbolic link (even if broken);
-      return ``False`` if it points to a directory or any kind of file,
+      return ``False`` if the entry points to a directory or any kind of file,
       or if it doesn't exist anymore.
 
       The result is cached on the ``DirEntry`` object. Call
       :func:`os.path.islink` to fetch up-to-date information.
 
-      The method can raise :exc:`OSError`, such as :exc:`PermissionError`,
-      but :exc:`FileNotFoundError` is caught and not raised.
+      On the first, uncached call, no system call is required in most cases.
+      Specifically, neither Windows or Unix require a system call, except on
+      certain Unix file systems, such as network file systems, that return
+      ``dirent.d_type == DT_UNKNOWN``.
 
-      In most cases, no system call is required.
+      This method can raise :exc:`OSError`, such as :exc:`PermissionError`,
+      but :exc:`FileNotFoundError` is caught and not raised.
 
    .. method:: stat(\*, follow_symlinks=True)
 
@@ -2023,17 +2035,23 @@ features:
       follows symbolic links by default; to stat a symbolic link add the
       ``follow_symlinks=False`` argument.
 
-      On Unix, this method always requires a system call. On Windows,
-      ``DirEntry.stat()`` requires a system call only if the
-      entry is a symbolic link, and ``DirEntry.stat(follow_symlinks=False)``
-      never requires a system call.
+      On Unix, this method always requires a system call. On Windows, it
+      only requires a system call if *follow_symlinks* is ``True`` and the
+      entry is a symbolic link.
 
       On Windows, the ``st_ino``, ``st_dev`` and ``st_nlink`` attributes of the
       :class:`stat_result` are always set to zero. Call :func:`os.stat` to
       get these attributes.
 
-      The result is cached on the ``DirEntry`` object. Call :func:`os.stat`
-      to fetch up-to-date information.
+      The result is cached on the ``DirEntry`` object, with a separate cache
+      for *follow_symlinks* ``True`` and ``False``. Call :func:`os.stat` to
+      fetch up-to-date information.
+
+   Note that there is a nice correspondence between several attributes
+   and methods of ``DirEntry`` and of :class:`pathlib.Path`.  In
+   particular, the ``name`` and ``path`` attributes have the same
+   meaning, as do the ``is_dir()``, ``is_file()``, ``is_symlink()``
+   and ``stat()`` methods.
 
    .. versionadded:: 3.5
 
@@ -2452,10 +2470,10 @@ features:
 
 .. function:: unlink(path, *, dir_fd=None)
 
-   Remove (delete) the file *path*.  This function is identical to
-   :func:`remove`; the ``unlink`` name is its traditional Unix
-   name.  Please see the documentation for :func:`remove` for
-   further information.
+   Remove (delete) the file *path*.  This function is semantically
+   identical to :func:`remove`; the ``unlink`` name is its
+   traditional Unix name.  Please see the documentation for
+   :func:`remove` for further information.
 
    .. versionadded:: 3.3
       The *dir_fd* parameter.
@@ -3477,7 +3495,7 @@ operating system.
 
 .. data:: SCHED_RESET_ON_FORK
 
-   This flag can OR'ed with any other scheduling policy. When a process with
+   This flag can be OR'ed with any other scheduling policy. When a process with
    this flag set forks, its child's scheduling policy and priority are reset to
    the default.
 
@@ -3724,13 +3742,20 @@ Miscellaneous Functions
 
    This function returns random bytes from an OS-specific randomness source.  The
    returned data should be unpredictable enough for cryptographic applications,
-   though its exact quality depends on the OS implementation.  On a Unix-like
-   system this will query ``/dev/urandom``, and on Windows it will use
-   ``CryptGenRandom()``.  If a randomness source is not found,
+   though its exact quality depends on the OS implementation.
+
+   On Linux, ``getrandom()`` syscall is used if available and the urandom
+   entropy pool is initialized (``getrandom()`` does not block).
+   On a Unix-like system this will query ``/dev/urandom``. On Windows, it
+   will use ``CryptGenRandom()``.  If a randomness source is not found,
    :exc:`NotImplementedError` will be raised.
 
    For an easy-to-use interface to the random number generator
    provided by your platform, please see :class:`random.SystemRandom`.
+
+   .. versionchanged:: 3.5.2
+      On Linux, if ``getrandom()`` blocks (the urandom entropy pool is not
+      initialized yet), fall back on reading ``/dev/urandom``.
 
    .. versionchanged:: 3.5
       On Linux 3.17 and newer, the ``getrandom()`` syscall is now used

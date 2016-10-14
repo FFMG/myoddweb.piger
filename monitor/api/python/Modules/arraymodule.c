@@ -1743,7 +1743,7 @@ array_array___sizeof___impl(arrayobject *self)
 /*[clinic end generated code: output=d8e1c61ebbe3eaed input=805586565bf2b3c6]*/
 {
     Py_ssize_t res;
-    res = sizeof(arrayobject) + self->allocated * self->ob_descr->itemsize;
+    res = _PyObject_SIZE(Py_TYPE(self)) + self->allocated * self->ob_descr->itemsize;
     return PyLong_FromSsize_t(res);
 }
 
@@ -2090,7 +2090,7 @@ array__array_reconstructor_impl(PyModuleDef *module, PyTypeObject *arraytype,
          * that fits better. This may result in an array with narrower
          * or wider elements.
          *
-         * For example, if a 32-bit machine pickles a L-code array of
+         * For example, if a 32-bit machine pickles an L-code array of
          * unsigned longs, then the array will be unpickled by 64-bit
          * machine as an I-code array of unsigned ints.
          *

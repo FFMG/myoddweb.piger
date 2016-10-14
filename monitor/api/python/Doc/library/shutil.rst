@@ -3,14 +3,15 @@
 
 .. module:: shutil
    :synopsis: High-level file operations, including copying.
+
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 .. partly based on the docstrings
+
+**Source code:** :source:`Lib/shutil.py`
 
 .. index::
    single: file; copying
    single: copying files
-
-**Source code:** :source:`Lib/shutil.py`
 
 --------------
 
@@ -342,7 +343,7 @@ Directory and files operations
    Return the path to an executable which would be run if the given *cmd* was
    called.  If no *cmd* would be called, return ``None``.
 
-   *mode* is a permission mask passed a to :func:`os.access`, by default
+   *mode* is a permission mask passed to :func:`os.access`, by default
    determining if the file exists and executable.
 
    When no *path* is specified, the results of :func:`os.environ` are used,

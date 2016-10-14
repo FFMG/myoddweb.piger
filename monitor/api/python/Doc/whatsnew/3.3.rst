@@ -440,15 +440,15 @@ return a final value to the outer generator::
     ...
     >>> tallies = []
     >>> acc = gather_tallies(tallies)
-    >>> next(acc) # Ensure the accumulator is ready to accept values
+    >>> next(acc)  # Ensure the accumulator is ready to accept values
     >>> for i in range(4):
     ...     acc.send(i)
     ...
-    >>> acc.send(None) # Finish the first tally
+    >>> acc.send(None)  # Finish the first tally
     >>> for i in range(5):
     ...     acc.send(i)
     ...
-    >>> acc.send(None) # Finish the second tally
+    >>> acc.send(None)  # Finish the second tally
     >>> tallies
     [6, 10]
 
@@ -1528,7 +1528,7 @@ by Petri Lehtinen in :issue:`12021`.)
 multiprocessing
 ---------------
 
-The new :func:`multiprocessing.connection.wait` function allows to poll
+The new :func:`multiprocessing.connection.wait` function allows polling
 multiple objects (such as connections, sockets and pipes) with a timeout.
 (Contributed by Richard Oudkerk in :issue:`12328`.)
 
@@ -1715,8 +1715,8 @@ pickle
 ------
 
 :class:`pickle.Pickler` objects now have an optional
-:attr:`~pickle.Pickler.dispatch_table` attribute allowing to set per-pickler
-reduction functions.
+:attr:`~pickle.Pickler.dispatch_table` attribute allowing per-pickler
+reduction functions to be set.
 
 (Contributed by Richard Oudkerk in :issue:`14166`.)
 
@@ -1884,13 +1884,13 @@ socket
   Heiko Wundram)
 
 * The :class:`~socket.socket` class now supports the PF_CAN protocol family
-  (http://en.wikipedia.org/wiki/Socketcan), on Linux
-  (http://lwn.net/Articles/253425).
+  (https://en.wikipedia.org/wiki/Socketcan), on Linux
+  (https://lwn.net/Articles/253425).
 
   (Contributed by Matthias Fuchs, updated by Tiago Gonçalves in :issue:`10141`.)
 
 * The :class:`~socket.socket` class now supports the PF_RDS protocol family
-  (http://en.wikipedia.org/wiki/Reliable_Datagram_Sockets and
+  (https://en.wikipedia.org/wiki/Reliable_Datagram_Sockets and
   https://oss.oracle.com/projects/rds/).
 
 * The :class:`~socket.socket` class now supports the ``PF_SYSTEM`` protocol

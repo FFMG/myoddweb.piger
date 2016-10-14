@@ -3,6 +3,7 @@
 
 .. module:: zipfile
    :synopsis: Read and write ZIP-format archive files.
+
 .. moduleauthor:: James C. Ahlstrom <jim@interet.com>
 .. sectionauthor:: James C. Ahlstrom <jim@interet.com>
 
@@ -13,8 +14,7 @@
 The ZIP file format is a common archive and compression standard. This module
 provides tools to create, read, write, append, and list a ZIP file.  Any
 advanced use of this module will require an understanding of the format, as
-defined in `PKZIP Application Note
-<http://www.pkware.com/documents/casestudies/APPNOTE.TXT>`_.
+defined in `PKZIP Application Note`_.
 
 This module does not currently handle multi-disk ZIP files.
 It can handle ZIP files that use the ZIP64 extensions
@@ -115,7 +115,7 @@ The module defines the following items:
 
 .. seealso::
 
-   `PKZIP Application Note <http://www.pkware.com/documents/casestudies/APPNOTE.TXT>`_
+   `PKZIP Application Note`_
       Documentation on the ZIP file format by Phil Katz, the creator of the format and
       algorithms used.
 
@@ -134,8 +134,8 @@ ZipFile Objects
 
    Open a ZIP file, where *file* can be either a path to a file (a string) or a
    file-like object.  The *mode* parameter should be ``'r'`` to read an existing
-   file, ``'w'`` to truncate and write a new file, ``'x'`` to exclusive create
-   and write a new file, or ``'a'`` to append to an existing file.
+   file, ``'w'`` to truncate and write a new file, ``'a'`` to append to an
+   existing file, or ``'x'`` to exclusively create and write a new file.
    If *mode* is ``'x'`` and *file* refers to an existing file,
    a :exc:`FileExistsError` will be raised.
    If *mode* is ``'a'`` and *file* refers to an existing ZIP
@@ -511,8 +511,7 @@ Instances have the following attributes:
 
 .. attribute:: ZipInfo.extra
 
-   Expansion field data.  The `PKZIP Application Note
-   <http://www.pkware.com/documents/casestudies/APPNOTE.TXT>`_ contains
+   Expansion field data.  The `PKZIP Application Note`_ contains
    some comments on the internal structure of the data contained in this string.
 
 
@@ -574,3 +573,5 @@ Instances have the following attributes:
 .. attribute:: ZipInfo.file_size
 
    Size of the uncompressed file.
+
+.. _PKZIP Application Note: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT

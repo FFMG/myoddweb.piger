@@ -187,7 +187,7 @@ Library
 
 - Issue #15777: Fix a refleak in _posixsubprocess.
 
-- Issue ##665194: Update `email.utils.localtime` to use datetime.astimezone and
+- Issue #665194: Update `email.utils.localtime` to use datetime.astimezone and
   correctly handle historic changes in UTC offsets.
 
 - Issue #15199: Fix JavaScript's default MIME type to application/javascript.
@@ -782,7 +782,7 @@ Library
 - Issue #15008: Implement PEP 362 "Signature Objects".
   Patch by Yury Selivanov.
 
-- Issue: #15138: base64.urlsafe_{en,de}code() are now 3-4x faster.
+- Issue #15138: base64.urlsafe_{en,de}code() are now 3-4x faster.
 
 - Issue #444582: Add shutil.which, for finding programs on the system path.
   Original patch by Erik Demaine, with later iterations by Jan Killian
@@ -1095,7 +1095,7 @@ Library
   functions to support PEP 3115 compliant dynamic class creation. Patch by
   Daniel Urban and Nick Coghlan.
 
-- Issue #13152: Allow to specify a custom tabsize for expanding tabs in
+- Issue #13152: Allow specifying a custom tabsize for expanding tabs in
   textwrap. Patch by John Feuerstein.
 
 - Issue #14721: Send the correct 'Content-length: 0' header when the body is an
@@ -1834,7 +1834,7 @@ Core and Builtins
   objects.  Initial patch by Matthias Troffaes.
 
 - Fix OSError.__init__ and OSError.__new__ so that each of them can be
-  overriden and take additional arguments (followup to issue #12555).
+  overridden and take additional arguments (followup to issue #12555).
 
 - Fix the fix for issue #12149: it was incorrect, although it had the side
   effect of appearing to resolve the issue.  Thanks to Mark Shannon for
@@ -2053,7 +2053,7 @@ Core and Builtins
   given, produce an informative error message which includes the name(s) of the
   missing arguments.
 
-- Issue #12370: Fix super with no arguments when __class__ is overriden in the
+- Issue #12370: Fix super with no arguments when __class__ is overridden in the
   class body.
 
 - Issue #12084: os.stat on Windows now works properly with relative symbolic
@@ -2234,10 +2234,10 @@ Library
   fixed.
 
 - Issue #14166: Pickler objects now have an optional ``dispatch_table``
-  attribute which allows to set custom per-pickler reduction functions.
+  attribute which allows setting custom per-pickler reduction functions.
   Patch by sbt.
 
-- Issue #14177: marshal.loads() now raises TypeError when given an unicode
+- Issue #14177: marshal.loads() now raises TypeError when given a unicode
   string.  Patch by Guilherme Gonçalves.
 
 - Issue #13550: Remove the debug machinery from the threading module: remove
@@ -2482,11 +2482,11 @@ Library
 - Issue #13591: A bug in importlib has been fixed that caused import_module
   to load a module twice.
 
-- Issue #13449 sched.scheduler.run() method has a new "blocking" parameter which
+- Issue #13449: sched.scheduler.run() method has a new "blocking" parameter which
   when set to False makes run() execute the scheduled events due to expire
   soonest (if any) and then return.  Patch by Giampaolo Rodolà.
 
-- Issue #8684 sched.scheduler class can be safely used in multi-threaded
+- Issue #8684: sched.scheduler class can be safely used in multi-threaded
   environments.  Patch by Josiah Carlson and Giampaolo Rodolà.
 
 - Alias resource.error to OSError ala PEP 3151.
@@ -3185,7 +3185,7 @@ Library
   binary mode, but ensure that the shebang is decodable from UTF-8 and from the
   encoding of the script.
 
-- Issue #8498: In socket.accept(), allow to specify 0 as a backlog value in
+- Issue #8498: In socket.accept(), allow specifying 0 as a backlog value in
   order to accept exactly one connection.  Patch by Daniel Evers.
 
 - Issue #12011: signal.signal() and signal.siginterrupt() raise an OSError,
@@ -3885,7 +3885,7 @@ Tests
 - Issue #12331: The test suite for lib2to3 can now run from an installed
   Python.
 
-- Issue #12626: In regrtest, allow to filter tests using a glob filter
+- Issue #12626: In regrtest, allow filtering tests using a glob filter
   with the ``-m`` (or ``--match``) option.  This works with all test cases
   using the unittest module.  This is useful with long test suites
   such as test_io or test_subprocess.
@@ -4221,7 +4221,7 @@ What's New in Python 3.2 Release Candidate 2?
 Core and Builtins
 -----------------
 
-- Issue #10451: memoryview objects could allow to mutate a readable buffer.
+- Issue #10451: memoryview objects could allow mutating a readable buffer.
   Initial patch by Ross Lagerwall.
 
 Library
@@ -4765,7 +4765,7 @@ Library
 
 - Add the "display" and "undisplay" pdb commands.
 
-- Issue #7245: Add a SIGINT handler in pdb that allows to break a program again
+- Issue #7245: Add a SIGINT handler in pdb that allows breaking a program again
   after a "continue" command.
 
 - Add the "interact" pdb command.
@@ -6633,7 +6633,7 @@ C-API
   PyErr_Format, on machines with HAVE_LONG_LONG defined.
 
 - Issue #6151: Made PyDescr_COMMON conform to standard C (like PyObject_HEAD in
-  PEP 3123).  The PyDescr_TYPE and PyDescr_NAME macros should be should used for
+  PEP 3123).  The PyDescr_TYPE and PyDescr_NAME macros should be used for
   accessing the d_type and d_name members of structures using PyDescr_COMMON.
 
 - Issue #6405: Remove duplicate type declarations in descrobject.h.
@@ -6916,7 +6916,7 @@ Library
   correct encoding.
 
 - Issue #4870: Add an `options` attribute to SSL contexts, as well as several
-  ``OP_*`` constants to the `ssl` module.  This allows to selectively disable
+  ``OP_*`` constants to the `ssl` module.  This allows selectively disabling
   protocol versions, when used in combination with `PROTOCOL_SSLv23`.
 
 - Issue #8759: Fixed user paths in sysconfig for posix and os2 schemes.
@@ -7220,7 +7220,7 @@ Library
   cElementTree module is updated too.
 
 - Issue #7774: Set sys.executable to an empty string if argv[0] has been set to
-  an non existent program name and Python is unable to retrieve the real program
+  a non existent program name and Python is unable to retrieve the real program
   name.
 
 - Issue #7880: Fix sysconfig when the python executable is a symbolic link.
@@ -7273,7 +7273,7 @@ Library
   messages parsed by email.Parser.HeaderParser.
 
 - Issue #7361: Importlib was not properly checking the number of bytes in
-  bytecode file when it was less then 8 bytes.
+  bytecode file when it was less than 8 bytes.
 
 - Issue #7633: In the decimal module, Context class methods (with the exception
   of canonical and is_canonical) now accept instances of int and long wherever a
@@ -7709,7 +7709,7 @@ Extension Modules
 
 - Issue #7900: The getgroups(2) system call on MacOSX behaves rather oddly
   compared to other unix systems. In particular, os.getgroups() does not reflect
-  any changes made using os.setgroups() but basicly always returns the same
+  any changes made using os.setgroups() but basically always returns the same
   information as the id command. os.getgroups() can now return more than 16
   groups on MacOSX.
 
@@ -7728,7 +7728,7 @@ Extension Modules
 - Issue #1578269: Implement os.symlink for Windows 6.0+.  Patch by Jason
   R. Coombs.
 
-- In struct.pack, correctly propogate exceptions from computing the truth of an
+- In struct.pack, correctly propagate exceptions from computing the truth of an
   object in the '?' format.
 
 - Issue #9000: datetime.timezone objects now have eval-friendly repr.
@@ -8215,7 +8215,7 @@ Build
   added LIBS to OS X framework builds.
 
 - Issue #5809: Specifying both --enable-framework and --enable-shared is
-  an error. Configure now explicity tells you about this.
+  an error. Configure now explicitly tells you about this.
 
 
 
@@ -8304,7 +8304,7 @@ Library
 - Issue #1664: Make nntplib IPv6-capable. Patch by Derek Morr.
 
 - Issue #5006: Better handling of unicode byte-order marks (BOM) in the io
-  library. This means, for example, that opening an UTF-16 text file in
+  library. This means, for example, that opening a UTF-16 text file in
   append mode doesn't add a BOM at the end of the file if the file isn't
   empty.
 
@@ -9209,7 +9209,7 @@ Library
   been backported to help facilitate transitions from 2.7 to 3.1.
 
 - Issue #1885: distutils. When running sdist with --formats=tar,gztar
-  the tar file was overriden by the gztar one.
+  the tar file was overridden by the gztar one.
 
 - Issue #4863: distutils.mwerkscompiler has been removed.
 
@@ -9328,7 +9328,7 @@ Library
 - Issue #4756: zipfile.is_zipfile() now supports file-like objects. Patch by
   Gabriel Genellina.
 
-- Issue #4574: reading an UTF16-encoded text file crashes if \r on 64-char
+- Issue #4574: reading a UTF16-encoded text file crashes if \r on 64-char
   boundary.
 
 - Issue #4223: inspect.getsource() will now correctly display source code
@@ -9497,8 +9497,8 @@ Extension Modules
 
 - Issue #4051: Prevent conflict of UNICODE macros in cPickle.
 
-- Issue #4738: Each zlib object now has a separate lock, allowing to compress
-  or decompress several streams at once on multi-CPU systems. Also, the GIL
+- Issue #4738: Each zlib object now has a separate lock, allowing several streams
+  to be compressed or decompressed at once on multi-CPU systems. Also, the GIL
   is now released when computing the CRC of a large buffer. Patch by ebfe.
 
 - Issue #4228: Pack negative values the same way as 2.4 in struct's L format.
@@ -9822,7 +9822,7 @@ Core and Builtins
   the recursion limit checking code, due to bogus handling of recursion
   limit when USE_STACKCHEK was enabled.
 
-- Issue 3639: The _warnings module could segfault the interpreter when
+- Issue #3639: The _warnings module could segfault the interpreter when
   unexpected types were passed in as arguments.
 
 - Issue #3712: The memoryview object had a reference leak and didn't support
@@ -9901,14 +9901,14 @@ Library
   It is now maintained outside of the standard library at
   http://www.jcea.es/programacion/pybsddb.htm.
 
-- Issue 600362:  Relocated parse_qs() and parse_qsl(), from the cgi module
+- Issue #600362:  Relocated parse_qs() and parse_qsl(), from the cgi module
   to the urlparse one.  Added a DeprecationWarning in the old module, it
   will be deprecated in the future.
 
 - Issue #3719: platform.architecture() fails if there are spaces in the
   path to the Python binary.
 
-- Issue 3602: As part of the merge of r66135, make the parameters on
+- Issue #3602: As part of the merge of r66135, make the parameters on
   warnings.catch_warnings() keyword-only. Also remove a DeprecationWarning.
 
 - The deprecation warnings for the camelCase threading API names were removed.
@@ -9929,7 +9929,7 @@ Extension Modules
   exploitation of poor argument checking.
 
 - bsddb code updated to version 4.7.3pre2. This code is the same than
-  Python 2.6 one, since the intention is to keep an unified 2.x/3.x codebase.
+  Python 2.6 one, since the intention is to keep a unified 2.x/3.x codebase.
   The Python code is automatically translated using "2to3". Please, do not
   update this code in Python 3.0 by hand. Update the 2.6 one and then
   do "2to3".
@@ -9996,7 +9996,7 @@ Core and Builtins
   as bytes string, please use PyUnicode_AsUTF8String() instead.
 
 - Issue #3460: PyUnicode_Join() implementation is 10% to 80% faster thanks
-  to Python 3.0's stricter semantics which allow to avoid successive
+  to Python 3.0's stricter semantics which allow avoiding successive
   reallocations of the result string (this also affects str.join()).
 
 
@@ -10639,8 +10639,8 @@ Core and Builtins
   certain operations between bytes/buffer and str like str(b'') and
   comparison.
 
-- The standards streams sys.stdin, stdout and stderr may be None when
-  the when the C runtime library returns an invalid file descriptor
+- The standard streams sys.stdin, stdout and stderr may be None
+  when the C runtime library returns an invalid file descriptor
   for the streams (fileno(stdin) < 0). For now this happens only for
   Windows GUI apps and scripts started with `pythonw.exe`.
 
@@ -10679,7 +10679,7 @@ Library
 
 - Removed the 'new' module.
 
-- Removed all types from the 'types' module that are easily accessable
+- Removed all types from the 'types' module that are easily accessible
   through builtins.
 
 
@@ -12762,7 +12762,7 @@ Library
 
 - Patch #1110248: SYNC_FLUSH the zlib buffer for GZipFile.flush.
 
-- Patch #1107973: Allow to iterate over the lines of a tarfile.ExFileObject.
+- Patch #1107973: Allow iterating over the lines of a tarfile.ExFileObject.
 
 - Patch #1104111: Alter setup.py --help and --help-commands.
 
@@ -13739,7 +13739,7 @@ Library
   same as when the argument is omitted).
   [SF bug 658254, patch 663482]
 
-- nntplib does now allow to ignore a .netrc file.
+- nntplib does now allow ignoring a .netrc file.
 
 - urllib2 now recognizes Basic authentication even if other authentication
   schemes are offered.
@@ -14013,7 +14013,7 @@ Core and builtins
   would not be removed while allocating a new weakref object.  Since
   GC could be invoked at that time, however, that assumption was
   invalid.  In a truly obscure case of GC being triggered during
-  creation for a new weakref object for an referent which already
+  creation for a new weakref object for a referent which already
   has a weakref without a callback which is only referenced from
   cyclic trash, a memory error can occur.  This consistently created a
   segfault in a debug build, but provided less predictable behavior in
@@ -14157,7 +14157,7 @@ Extension modules
 
 - fcntl.ioctl now warns if the mutate flag is not specified.
 
-- nt now properly allows to refer to UNC roots, e.g. in nt.stat().
+- nt now properly allows referring to UNC roots, e.g. in nt.stat().
 
 - the weakref module now supports additional objects:  array.array,
   sre.pattern_objects, file objects, and sockets.
@@ -16065,7 +16065,7 @@ Core and builtins
 - All standard iterators now ensure that, once StopIteration has been
   raised, all future calls to next() on the same iterator will also
   raise StopIteration.  There used to be various counterexamples to
-  this behavior, which could caused confusion or subtle program
+  this behavior, which could have caused confusion or subtle program
   breakage, without any benefits.  (Note that this is still an
   iterator's responsibility; the iterator framework does not enforce
   this.)
@@ -16715,7 +16715,7 @@ C API
 - New functions PyErr_SetExcFromWindowsErr() and
   PyErr_SetExcFromWindowsErrWithFilename(). Similar to
   PyErr_SetFromWindowsErrWithFilename() and
-  PyErr_SetFromWindowsErr(), but they allow to specify
+  PyErr_SetFromWindowsErr(), but they allow specifying
   the exception type to raise. Available on Windows.
 
 - Py_FatalError() is now declared as taking a const char* argument.  It
@@ -17590,8 +17590,8 @@ Type/class unification and new-style classes
 - property() now takes 4 keyword arguments:  fget, fset, fdel and doc.
   These map to read-only attributes 'fget', 'fset', 'fdel', and '__doc__'
   in the constructed property object.  fget, fset and fdel weren't
-  discoverable from Python in 2.2a3.  __doc__ is new, and allows to
-  associate a docstring with a property.
+  discoverable from Python in 2.2a3.  __doc__ is new, and allows
+  associating a docstring with a property.
 
 - Comparison overloading is now more completely implemented.  For
   example, a str subclass instance can properly be compared to a str
@@ -18006,7 +18006,7 @@ Tests
 -----
 
 - regrtest.py now knows which tests are expected to be skipped on some
-  platforms, allowing to give clearer test result output.  regrtest
+  platforms, allowing clearer test result output to be given.  regrtest
   also has optional --use/-u switch to run normally disabled tests
   which require network access or consume significant disk resources.
 
@@ -18737,7 +18737,7 @@ Standard library
 
 - xml.dom.minidom offers a toprettyxml method. A number of DOM
   conformance issues have been resolved. In particular, Element now
-  has an hasAttributes method, and the handling of namespaces was
+  has a hasAttributes method, and the handling of namespaces was
   improved.
 
 - Ka-Ping Yee contributed two new modules: inspect.py, a module for
@@ -18936,7 +18936,7 @@ Core language, builtins, and interpreter
 
 - There is a new Unicode companion to the PyObject_Str() API
   called PyObject_Unicode(). It behaves in the same way as the
-  former, but assures that the returned value is an Unicode object
+  former, but assures that the returned value is a Unicode object
   (applying the usual coercion if necessary).
 
 - The comparison operators support "rich comparison overloading" (PEP
@@ -20227,7 +20227,7 @@ list of all new modules is included below.
 
 Probably the most pervasive change is the addition of Unicode support.
 We've added a new fundamental datatype, the Unicode string, a new
-build-in function unicode(), an numerous C APIs to deal with Unicode
+built-in function unicode(), and numerous C APIs to deal with Unicode
 and encodings.  See the file Misc/unicode.txt for details, or
 http://starship.python.net/crew/lemburg/unicode-proposal.txt.
 
@@ -20921,7 +20921,7 @@ Fri Mar 26 22:36:00 1999  Fred Drake  <fdrake@eric.cnri.reston.va.us>
 
 	* Tools/scripts/dutree.py:
 	During display, if EPIPE is raised, it's probably because a pager was
-	killed.  Discard the error in that case, but propogate it otherwise.
+	killed.  Discard the error in that case, but propagate it otherwise.
 
 Fri Mar 26 16:20:45 1999  Guido van Rossum  <guido@eric.cnri.reston.va.us>
 
@@ -21712,7 +21712,7 @@ real list objects.
 - The uu module now deals better with trailing garbage generated by
 some broke uuencoders.
 
-- The telnet module now has an my_interact() method which uses threads
+- The telnet module now has a my_interact() method which uses threads
 instead of select.  The interact() method uses this by default on
 Windows (where the single-threaded version doesn't work).
 
@@ -22769,7 +22769,7 @@ PyEval_CallMethod().
 - New macros to access object members for PyFunction, PyCFunction
 objects.
 
-- New APIs PyImport_AppendInittab() an PyImport_ExtendInittab() to
+- New APIs PyImport_AppendInittab() and PyImport_ExtendInittab() to
 dynamically add one or many entries to the table of built-in modules.
 
 - New macro Py_InitModule3(name, methods, doc) which calls
@@ -23743,7 +23743,7 @@ the first class with an applicable hook wins.  Makes more sense.
 - Changed the checks made in Py_Initialize() and Py_Finalize().  It is
 now legal to call these more than once.  The first call to
 Py_Initialize() initializes, the first call to Py_Finalize()
-finalizes.  There's also a new API, Py_IsInitalized() which checks
+finalizes.  There's also a new API, Py_IsInitialized() which checks
 whether we are already initialized (in case you want to leave things
 as they were).
 
@@ -26799,7 +26799,7 @@ the first time it is imported.
 python parser.  Corresponding standard library modules token and symbol
 defines the numeric values of tokens and non-terminal symbols.
 
-* The posix module has aquired new functions setuid(), setgid(),
+* The posix module has acquired new functions setuid(), setgid(),
 execve(), and exec() has been renamed to execv().
 
 * The array module is extended with 8-byte object swaps, the 'i'
@@ -26813,7 +26813,7 @@ module can't be decoded by the new version.
 * For select.select(), a timeout (4th) argument of None means the same
 as leaving the timeout argument out.
 
-* Module strop (and hence standard library module string) has aquired
+* Module strop (and hence standard library module string) has acquired
 a new function: rindex().  Thanks to Amrit Prem!
 
 * Module regex defines a new function symcomp() which uses an extended
@@ -27179,7 +27179,7 @@ a string it is returned unchanged, otherwise it returns `x`.
 * repr(x) returns the same as `x`.  (Some users found it easier to
 have this as a function.)
 
-* round(x) returns the floating point number x rounded to an whole
+* round(x) returns the floating point number x rounded to a whole
 number, represented as a floating point number.  round(x, n) returns x
 rounded to n digits.
 
@@ -27959,7 +27959,7 @@ New features in 0.9.6:
   to give more useful results for negative operands
 - Changed/added range checks for long/plain integer shifts
 - Options found after "-c command" are now passed to the command in sys.argv
-  (note subtle incompatiblity with "python -c command -- -options"!)
+  (note subtle incompatibility with "python -c command -- -options"!)
 - Module stdwin is better protected against touching objects after they've
   been closed; menus can now also be closed explicitly
 - Stdwin now uses its own exception (stdwin.error)

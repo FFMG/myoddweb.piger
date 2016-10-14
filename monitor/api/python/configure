@@ -673,6 +673,7 @@ LLVM_PROF_FILE
 LLVM_PROF_MERGER
 PGO_PROF_USE_FLAG
 PGO_PROF_GEN_FLAG
+LTOFLAGS
 ABIFLAGS
 LN
 MKDIR_P
@@ -750,6 +751,7 @@ build_os
 build_vendor
 build_cpu
 build
+cross_compiling
 HAS_HG
 HGBRANCH
 HGTAG
@@ -801,11 +803,13 @@ with_universal_archs
 with_framework_name
 enable_framework
 with_gcc
+with_icc
 with_cxx_main
 with_suffix
 enable_shared
 enable_profiling
 with_pydebug
+with_lto
 with_hash_algorithm
 with_address_sanitizer
 with_libs
@@ -1480,11 +1484,14 @@ Optional Packages:
                           specify an alternate name of the framework built
                           with --enable-framework
   --without-gcc           never use gcc
+  --with-icc              build with icc
   --with-cxx-main=<compiler>
                           compile main() and link python executable with C++
                           compiler
   --with-suffix=.exe      set executable suffix
   --with-pydebug          build with Py_DEBUG defined
+  --with-lto              Enable Link Time Optimization in PGO builds.
+                          Disabled by default.
   --with-hash-algorithm=[fnv|siphash24]
                           select hash algorithm
   --with-address-sanitizer
@@ -2869,6 +2876,7 @@ fi
 ac_config_headers="$ac_config_headers pyconfig.h"
 
 
+
 ac_aux_dir=
 for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
   if test -f "$ac_dir/install-sh"; then
@@ -3489,7 +3497,7 @@ fi
 #
 # SGI compilers allow the specification of the both the ABI and the
 # ISA on the command line.  Depending on the values of these switches,
-# different and often incompatable code will be generated.
+# different and often incompatible code will be generated.
 #
 # The SGI_ABI variable can be used to modify the CC and LDFLAGS and
 # thus supply support for various ABI/ISA combinations.  The MACHDEP
@@ -3548,6 +3556,29 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $without_gcc" >&5
 $as_echo "$without_gcc" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for --with-icc" >&5
+$as_echo_n "checking for --with-icc... " >&6; }
+
+# Check whether --with-icc was given.
+if test "${with_icc+set}" = set; then :
+  withval=$with_icc;
+	case $withval in
+	no)	CC=${CC:-cc}
+		with_icc=no;;
+	yes)	CC=icc
+		CXX=icpc
+		with_icc=yes;;
+	*)	CC=$withval
+		with_icc=$withval;;
+	esac
+else
+
+	with_icc=no
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_icc" >&5
+$as_echo "$with_icc" >&6; }
 
 # If the user switches compilers, we can't believe the cache
 if test ! -z "$ac_cv_prog_CC" -a ! -z "$CC" -a "$CC" != "$ac_cv_prog_CC"
@@ -4928,6 +4959,104 @@ fi
 
   if test "x$ac_pt_CXX" = x; then
     CXX="clang++"
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ac_tool_warned=yes ;;
+esac
+    CXX=$ac_pt_CXX
+  fi
+else
+  CXX="$ac_cv_path_CXX"
+fi
+ ;;
+        icc|*/icc)         if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}icpc", so it can be a program name with args.
+set dummy ${ac_tool_prefix}icpc; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_CXX+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $CXX in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_CXX="$CXX" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in notfound
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_CXX="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+CXX=$ac_cv_path_CXX
+if test -n "$CXX"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CXX" >&5
+$as_echo "$CXX" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_CXX"; then
+  ac_pt_CXX=$CXX
+  # Extract the first word of "icpc", so it can be a program name with args.
+set dummy icpc; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_ac_pt_CXX+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $ac_pt_CXX in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_CXX="$ac_pt_CXX" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in notfound
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_ac_pt_CXX="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_CXX=$ac_cv_path_ac_pt_CXX
+if test -n "$ac_pt_CXX"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_CXX" >&5
+$as_echo "$ac_pt_CXX" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+  if test "x$ac_pt_CXX" = x; then
+    CXX="icpc"
   else
     case $cross_compiling:$ac_tool_warned in
 yes:)
@@ -6437,7 +6566,55 @@ $as_echo "no" >&6; }
 fi
 
 
+# Enable LTO flags
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for --with-lto" >&5
+$as_echo_n "checking for --with-lto... " >&6; }
+
+# Check whether --with-lto was given.
+if test "${with_lto+set}" = set; then :
+  withval=$with_lto;
+if test "$withval" != no
+then
+  Py_LTO='true'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; };
+else
+  Py_LTO='false'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; };
+fi
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+if test "$Py_LTO" = 'true' ; then
+  case $CC in
+    *clang*)
+      # Any changes made here should be reflected in the GCC+Darwin case below
+      LTOFLAGS="-flto"
+      ;;
+    *gcc*)
+      case $ac_sys_system in
+        Darwin*)
+          LTOFLAGS="-flto"
+          ;;
+        *)
+          LTOFLAGS="-flto -fuse-linker-plugin -ffat-lto-objects -flto-partition=none"
+          ;;
+      esac
+      ;;
+  esac
+fi
+
 # Enable PGO flags.
+
+
+
+
+
+
 # Extract the first word of "llvm-profdata", so it can be a program name with args.
 set dummy llvm-profdata; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -6508,6 +6685,12 @@ case $CC in
         LLVM_PROF_FILE=""
         ;;
     esac
+    ;;
+  *icc*)
+    PGO_PROF_GEN_FLAG="-prof-gen"
+    PGO_PROF_USE_FLAG="-prof-use"
+    LLVM_PROF_MERGER="true"
+    LLVM_PROF_FILE=""
     ;;
 esac
 
@@ -6655,6 +6838,13 @@ $as_echo "$ac_cv_no_strict_aliasing" >&6; }
       BASECFLAGS="$BASECFLAGS -fno-strict-aliasing"
     fi
 
+    # ICC doesn't recognize the option, but only emits a warning
+    ## XXX does it emit an unused result warning and can it be disabled?
+    case "$CC" in
+    *icc*)
+    ac_cv_disable_unused_result_warning=no
+    ;;
+    *)
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if we can turn off $CC unused result warning" >&5
 $as_echo_n "checking if we can turn off $CC unused result warning... " >&6; }
      ac_save_cc="$CC"
@@ -6692,6 +6882,8 @@ fi
      CC="$ac_save_cc"
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_disable_unused_result_warning" >&5
 $as_echo "$ac_cv_disable_unused_result_warning" >&6; }
+    ;;
+    esac
 
     if test $ac_cv_disable_unused_result_warning = yes
     then
@@ -6819,15 +7011,24 @@ fi
 
      CFLAGS="$save_CFLAGS"
      CC="$ac_save_cc"
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_enable_unreachable_code_warning" >&5
-$as_echo "$ac_cv_enable_unreachable_code_warning" >&6; }
 
     # Don't enable unreachable code warning in debug mode, since it usually
     # results in non-standard code paths.
-    if test $ac_cv_enable_unreachable_code_warning = yes && test "$Py_DEBUG" != "true"
+    # Issue #24324: Unfortunately, the unreachable code warning does not work
+    # correctly on gcc and has been silently removed from the compiler.
+    # It is supported on clang but on OS X systems gcc may be an alias
+    # for clang.  Try to determine if the compiler is not really gcc and,
+    # if so, only then enable the warning.
+    if test $ac_cv_enable_unreachable_code_warning = yes && \
+        test "$Py_DEBUG" != "true" && \
+        test -z "`$CC --version 2>/dev/null | grep 'Free Software Foundation'`"
     then
       BASECFLAGS="$BASECFLAGS -Wunreachable-code"
+    else
+      ac_cv_enable_unreachable_code_warning=no
     fi
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_enable_unreachable_code_warning" >&5
+$as_echo "$ac_cv_enable_unreachable_code_warning" >&6; }
 
     # if using gcc on alpha, use -mieee to get (near) full IEEE 754
     # support.  Without this, treatment of subnormals doesn't follow
@@ -6978,6 +7179,13 @@ $as_echo "$MACOSX_DEPLOYMENT_TARGET" >&6; }
 	BASECFLAGS="$BASECFLAGS -belf -Ki486 -DSCO5"
 	;;
     esac
+    ;;
+esac
+
+# ICC needs -fp-model strict or floats behave badly
+case "$CC" in
+*icc*)
+    CFLAGS_NODIST="$CFLAGS_NODIST -fp-model strict"
     ;;
 esac
 
@@ -7361,7 +7569,7 @@ sys/param.h sys/select.h sys/sendfile.h sys/socket.h sys/statvfs.h \
 sys/stat.h sys/syscall.h sys/sys_domain.h sys/termio.h sys/time.h \
 sys/times.h sys/types.h sys/uio.h sys/un.h sys/utsname.h sys/wait.h pty.h \
 libutil.h sys/resource.h netpacket/packet.h sysexits.h bluetooth.h \
-bluetooth/bluetooth.h linux/tipc.h spawn.h util.h alloca.h endian.h \
+bluetooth/bluetooth.h linux/tipc.h linux/random.h spawn.h util.h alloca.h endian.h \
 sys/endian.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -12709,17 +12917,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-$as_echo "#define HAVE_ST_BLOCKS 1" >>confdefs.h
-
-else
-  case " $LIBOBJS " in
-  *" fileblocks.$ac_objext "* ) ;;
-  *) LIBOBJS="$LIBOBJS fileblocks.$ac_objext"
- ;;
-esac
-
 fi
-
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for time.h that defines altzone" >&5
@@ -14779,6 +14977,50 @@ $as_echo "#define HAVE_RL_COMPLETION_DISPLAY_MATCHES_HOOK 1" >>confdefs.h
 fi
 
 
+# also in 4.0, but not in editline
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_resize_terminal in -lreadline" >&5
+$as_echo_n "checking for rl_resize_terminal in -lreadline... " >&6; }
+if ${ac_cv_lib_readline_rl_resize_terminal+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lreadline $READLINE_LIBS $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char rl_resize_terminal ();
+int
+main ()
+{
+return rl_resize_terminal ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_readline_rl_resize_terminal=yes
+else
+  ac_cv_lib_readline_rl_resize_terminal=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_rl_resize_terminal" >&5
+$as_echo "$ac_cv_lib_readline_rl_resize_terminal" >&6; }
+if test "x$ac_cv_lib_readline_rl_resize_terminal" = xyes; then :
+
+$as_echo "#define HAVE_RL_RESIZE_TERMINAL 1" >>confdefs.h
+
+fi
+
+
 # check for readline 4.2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for rl_completion_matches in -lreadline" >&5
 $as_echo_n "checking for rl_completion_matches in -lreadline... " >&6; }
@@ -16082,13 +16324,15 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
+    #include <unistd.h>
     #include <sys/syscall.h>
+    #include <linux/random.h>
 
     int main() {
         char buffer[1];
         const size_t buflen = sizeof(buffer);
-        const int flags = 0;
-        /* ignore the result, Python checks for ENOSYS at runtime */
+        const int flags = GRND_NONBLOCK;
+        /* ignore the result, Python checks for ENOSYS and EAGAIN at runtime */
         (void)syscall(SYS_getrandom, buffer, buflen, flags);
         return 0;
     }

@@ -4,8 +4,10 @@
 .. module:: distutils
    :synopsis: Support for building and installing Python modules into an
               existing Python installation.
+
 .. sectionauthor:: Fred L. Drake, Jr. <fdrake@acm.org>
 
+--------------
 
 The :mod:`distutils` package provides support for building and installing
 additional modules into a Python installation.  The new modules may be either
@@ -15,7 +17,7 @@ collections of Python packages which include modules coded in both Python and C.
 Most Python users will *not* want to use this module directly, but instead
 use the cross-version tools maintained by the Python Packaging Authority. In
 particular,
-`setuptools <https://setuptools.pypa.io/en/latest/setuptools.html>`__ is an
+`setuptools <https://setuptools.readthedocs.io/en/latest/>`__ is an
 enhanced alternative to :mod:`distutils` that provides:
 
 * support for declaring project dependencies

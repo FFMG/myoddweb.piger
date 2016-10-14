@@ -247,6 +247,19 @@ be used inside a coroutine function declared with :keyword:`async def`.
 Coroutine functions are intended to be run inside a compatible event loop,
 such as the :ref:`asyncio loop <asyncio-event-loop>`.
 
+
+.. note::
+
+   .. versionchanged:: 3.5.2
+      Starting with CPython 3.5.2, ``__aiter__`` can directly return
+      :term:`asynchronous iterators <asynchronous iterator>`.  Returning
+      an :term:`awaitable` object will result in a
+      :exc:`PendingDeprecationWarning`.
+
+      See more details in the :ref:`async-iterators` documentation
+      section.
+
+
 .. seealso::
 
    :pep:`492` -- Coroutines with async and await syntax
@@ -307,7 +320,7 @@ PEP 448 - Additional Unpacking Generalizations
 
 :pep:`448` extends the allowed uses of the ``*`` iterable unpacking
 operator and ``**`` dictionary unpacking operator.  It is now possible
-to use an arbitrary number of unpackings in function calls::
+to use an arbitrary number of unpackings in :ref:`function calls <calls>`::
 
     >>> print(*[1], *[2], 3, *[4, 5])
     1 2 3 4 5
@@ -320,7 +333,7 @@ to use an arbitrary number of unpackings in function calls::
     1 2 3 4
 
 Similarly, tuple, list, set, and dictionary displays allow multiple
-unpackings::
+unpackings (see :ref:`exprlists` and :ref:`dict`)::
 
     >>> *range(4), 4
     (0, 1, 2, 3, 4)
@@ -343,8 +356,8 @@ unpackings::
 
 .. _whatsnew-pep-461:
 
-PEP 461 - % formatting support for bytes and bytearray
-------------------------------------------------------
+PEP 461 - percent formatting support for bytes and bytearray
+------------------------------------------------------------
 
 :pep:`461` adds support for the ``%``
 :ref:`interpolation operator <bytes-formatting>` to :class:`bytes`
@@ -748,7 +761,7 @@ Improved Modules
 argparse
 --------
 
-The :class:`~argparse.ArgumentParser` class now allows to disable
+The :class:`~argparse.ArgumentParser` class now allows disabling
 :ref:`abbreviated usage <prefix-matching>` of long options by setting
 :ref:`allow_abbrev` to ``False``.  (Contributed by Jonathan Paugh,
 Steven Bethard, paul j3 and Daniel Eriksson in :issue:`14910`.)
@@ -809,6 +822,46 @@ Updates in 3.5.1:
   use it, such as :meth:`loop.run_until_complete() <asyncio.BaseEventLoop.run_until_complete>`,
   now accept all kinds of :term:`awaitable objects <awaitable>`.
   (Contributed by Yury Selivanov.)
+
+* New :func:`~asyncio.run_coroutine_threadsafe` function to submit
+  coroutines to event loops from other threads.
+  (Contributed by Vincent Michel.)
+
+* New :meth:`Transport.is_closing() <asyncio.BaseTransport.is_closing>`
+  method to check if the transport is closing or closed.
+  (Contributed by Yury Selivanov.)
+
+* The :meth:`loop.create_server() <asyncio.BaseEventLoop.create_server>`
+  method can now accept a list of hosts.
+  (Contributed by Yann Sionneau.)
+
+Updates in 3.5.2:
+
+* New :meth:`loop.create_future() <asyncio.BaseEventLoop.create_future>`
+  method to create Future objects.  This allows alternative event
+  loop implementations, such as
+  `uvloop <https://github.com/MagicStack/uvloop>`_, to provide a faster
+  :class:`asyncio.Future` implementation.
+  (Contributed by Yury Selivanov.)
+
+* New :meth:`loop.get_exception_handler() <asyncio.BaseEventLoop.get_exception_handler>`
+  method to get the current exception handler.
+  (Contributed by Yury Selivanov.)
+
+* New :meth:`StreamReader.readuntil() <asyncio.StreamReader.readuntil>`
+  method to read data from the stream until a separator bytes
+  sequence appears.
+  (Contributed by Mark Korenberg.)
+
+* The :meth:`loop.create_connection() <asyncio.BaseEventLoop.create_connection>`
+  and :meth:`loop.create_server() <asyncio.BaseEventLoop.create_server>`
+  methods are optimized to avoid calling the system ``getaddrinfo``
+  function if the address is already resolved.
+  (Contributed by A. Jesse Jiryu Davis.)
+
+* The :meth:`loop.sock_connect(sock, address) <asyncio.BaseEventLoop.sock_connect>`
+  no longer requires the *address* to be resolved prior to the call.
+  (Contributed by A. Jesse Jiryu Davis.)
 
 
 bz2
@@ -901,12 +954,12 @@ external `PyPI package <https://pypi.python.org/pypi/backports_abc>`_.
 compileall
 ----------
 
-A new :mod:`compileall` option, :samp:`-j {N}`, allows to run *N* workers
-sumultaneously to perform parallel bytecode compilation.
+A new :mod:`compileall` option, :samp:`-j {N}`, allows running *N* workers
+simultaneously to perform parallel bytecode compilation.
 The :func:`~compileall.compile_dir` function has a corresponding ``workers``
 parameter.  (Contributed by Claudiu Popa in :issue:`16104`.)
 
-Another new option, ``-r``, allows to control the maximum recursion
+Another new option, ``-r``, allows controlling the maximum recursion
 level for subdirectories.  (Contributed by Claudiu Popa in :issue:`19628`.)
 
 The ``-q`` command line option can now be specified more than once, in
@@ -1441,8 +1494,8 @@ or newer, and ``getentropy()`` on OpenBSD 5.6 and newer, removing the need to
 use ``/dev/urandom`` and avoiding failures due to potential file descriptor
 exhaustion.  (Contributed by Victor Stinner in :issue:`22181`.)
 
-New :func:`~os.get_blocking` and :func:`~os.set_blocking` functions allow to
-get and set a file descriptor's blocking mode (:data:`~os.O_NONBLOCK`.)
+New :func:`~os.get_blocking` and :func:`~os.set_blocking` functions allow
+getting and setting a file descriptor's blocking mode (:data:`~os.O_NONBLOCK`.)
 (Contributed by Victor Stinner in :issue:`22054`.)
 
 The :func:`~os.truncate` and :func:`~os.ftruncate` functions are now supported
@@ -1651,7 +1704,7 @@ messages. (Contributed by Gavin Chappell and Maciej Szulik in :issue:`16914`.)
 
 Both the :meth:`SMTP.sendmail() <smtplib.SMTP.sendmail>` and
 :meth:`SMTP.send_message() <smtplib.SMTP.send_message>` methods now
-support support :rfc:`6531` (SMTPUTF8).
+support :rfc:`6531` (SMTPUTF8).
 (Contributed by Milan Oberkirch and R. David Murray in :issue:`22027`.)
 
 
@@ -1669,8 +1722,8 @@ socket
 Functions with timeouts now use a monotonic clock, instead of a system clock.
 (Contributed by Victor Stinner in :issue:`22043`.)
 
-A new :meth:`socket.sendfile() <socket.socket.sendfile>` method allows to
-send a file over a socket by using the high-performance :func:`os.sendfile`
+A new :meth:`socket.sendfile() <socket.socket.sendfile>` method allows
+sending a file over a socket by using the high-performance :func:`os.sendfile`
 function on UNIX, resulting in uploads being from 2 to 3 times faster than when
 using plain :meth:`socket.send() <socket.socket.send>`.
 (Contributed by Giampaolo Rodola' in :issue:`17552`.)
@@ -2157,7 +2210,7 @@ for details.)
 The :c:member:`PyTypeObject.tp_finalize` slot is now part of the stable ABI.
 
 Windows builds now require Microsoft Visual C++ 14.0, which
-is available as part of `Visual Studio 2015 <http://www.visualstudio.com>`_.
+is available as part of `Visual Studio 2015 <https://www.visualstudio.com/>`_.
 
 Extension modules now include a platform information tag in their filename on
 some platforms (the tag is optional, and CPython will import extensions without
@@ -2259,9 +2312,8 @@ class has been deprecated.
 (Contributed by Serhiy Storchaka in :issue:`23671`.)
 
 The :func:`platform.dist` and :func:`platform.linux_distribution` functions
-are now deprecated and will be removed in Python 3.7.  Linux distributions use
-too many different ways of describing themselves, so the functionality is
-left to a package.
+are now deprecated.  Linux distributions use too many different ways of
+describing themselves, so the functionality is left to a package.
 (Contributed by Vajrasky Kok and Berker Peksag in :issue:`1322`.)
 
 The previously undocumented ``from_function`` and ``from_builtin`` methods of

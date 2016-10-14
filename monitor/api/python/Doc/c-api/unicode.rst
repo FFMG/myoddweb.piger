@@ -367,7 +367,7 @@ These APIs can be used to work with surrogates:
 
 .. c:macro:: Py_UNICODE_IS_HIGH_SURROGATE(ch)
 
-   Check if *ch* is an high surrogate (``0xD800 <= ch <= 0xDBFF``).
+   Check if *ch* is a high surrogate (``0xD800 <= ch <= 0xDBFF``).
 
 .. c:macro:: Py_UNICODE_IS_LOW_SURROGATE(ch)
 
@@ -423,7 +423,7 @@ APIs:
 
 .. c:function:: PyObject *PyUnicode_FromString(const char *u)
 
-   Create a Unicode object from an UTF-8 encoded null-terminated char buffer
+   Create a Unicode object from a UTF-8 encoded null-terminated char buffer
    *u*.
 
 
@@ -450,7 +450,7 @@ APIs:
    | :attr:`%%`        | *n/a*               | The literal % character.       |
    +-------------------+---------------------+--------------------------------+
    | :attr:`%c`        | int                 | A single character,            |
-   |                   |                     | represented as an C int.       |
+   |                   |                     | represented as a C int.        |
    +-------------------+---------------------+--------------------------------+
    | :attr:`%d`        | int                 | Exactly equivalent to          |
    |                   |                     | ``printf("%d")``.              |
@@ -556,14 +556,13 @@ APIs:
 .. c:function:: PyObject* PyUnicode_FromEncodedObject(PyObject *obj, \
                                const char *encoding, const char *errors)
 
-   Coerce an encoded object *obj* to an Unicode object and return a reference with
-   incremented refcount.
+   Decode an encoded object *obj* to a Unicode object.
 
    :class:`bytes`, :class:`bytearray` and other
    :term:`bytes-like objects <bytes-like object>`
    are decoded according to the given *encoding* and using the error handling
    defined by *errors*. Both can be *NULL* to have the interface use the default
-   values (see the next section for details).
+   values (see :ref:`builtincodecs` for details).
 
    All other objects, including Unicode objects, cause a :exc:`TypeError` to be
    set.
@@ -614,8 +613,7 @@ APIs:
 
    This function checks that *unicode* is a Unicode object, that the index is
    not out of bounds, and that the object can be modified safely (i.e. that it
-   its reference count is one), in contrast to the macro version
-   :c:func:`PyUnicode_WRITE_CHAR`.
+   its reference count is one).
 
    .. versionadded:: 3.3
 
@@ -745,8 +743,11 @@ Extension modules can continue using them, as they will not be removed in Python
 
 .. c:function:: PyObject* PyUnicode_FromObject(PyObject *obj)
 
-   Shortcut for ``PyUnicode_FromEncodedObject(obj, NULL, "strict")`` which is used
-   throughout the interpreter whenever coercion to Unicode is needed.
+   Copy an instance of a Unicode subtype to a new true Unicode object if
+   necessary. If *obj* is already a true Unicode object (not a subtype),
+   return the reference with incremented refcount.
+
+   Objects other than Unicode or its subtypes will cause a :exc:`TypeError`.
 
 
 Locale Encoding
@@ -1224,7 +1225,7 @@ These are the UTF-16 codec APIs:
 
    If *Py_UNICODE_WIDE* is defined, a single :c:type:`Py_UNICODE` value may get
    represented as a surrogate pair. If it is not defined, each :c:type:`Py_UNICODE`
-   values is interpreted as an UCS-2 character.
+   values is interpreted as a UCS-2 character.
 
    Return *NULL* if an exception was raised by the codec.
 

@@ -4,9 +4,6 @@
    Written and maintained by Raymond D. Hettinger <python@rcn.com>
    Derived from Lib/sets.py and Objects/dictobject.c.
 
-   Copyright (c) 2003-2015 Python Software Foundation.
-   All rights reserved.
-
    The basic lookup function used by all operations.
    This is based on Algorithm D from Knuth Vol. 3, Sec. 6.4.
 
@@ -842,8 +839,8 @@ static PyObject *setiter_iternext(setiterobject *si)
     return key;
 
 fail:
-    Py_DECREF(so);
     si->si_set = NULL;
+    Py_DECREF(so);
     return NULL;
 }
 
@@ -1940,7 +1937,7 @@ set_sizeof(PySetObject *so)
 {
     Py_ssize_t res;
 
-    res = sizeof(PySetObject);
+    res = _PyObject_SIZE(Py_TYPE(so));
     if (so->table != so->smalltable)
         res = res + (so->mask + 1) * sizeof(setentry);
     return PyLong_FromSsize_t(res);

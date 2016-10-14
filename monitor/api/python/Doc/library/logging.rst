@@ -4,10 +4,10 @@
 .. module:: logging
    :synopsis: Flexible event logging system for applications.
 
-
 .. moduleauthor:: Vinay Sajip <vinay_sajip@red-dove.com>
 .. sectionauthor:: Vinay Sajip <vinay_sajip@red-dove.com>
 
+**Source code:** :source:`Lib/logging/__init__.py`
 
 .. index:: pair: Errors; logging
 
@@ -19,9 +19,6 @@
    * :ref:`Basic Tutorial <logging-basic-tutorial>`
    * :ref:`Advanced Tutorial <logging-advanced-tutorial>`
    * :ref:`Logging Cookbook <logging-cookbook>`
-
-
-**Source code:** :source:`Lib/logging/__init__.py`
 
 --------------
 
@@ -743,7 +740,9 @@ the options available to you.
 | Attribute name | Format                  | Description                                   |
 +================+=========================+===============================================+
 | args           | You shouldn't need to   | The tuple of arguments merged into ``msg`` to |
-|                | format this yourself.   | produce ``message``.                          |
+|                | format this yourself.   | produce ``message``, or a dict whose values   |
+|                |                         | are used for the merge (when there is only one|
+|                |                         | argument, and it is a dictionary).            |
 +----------------+-------------------------+-----------------------------------------------+
 | asctime        | ``%(asctime)s``         | Human-readable time when the                  |
 |                |                         | :class:`LogRecord` was created.  By default   |
@@ -1244,7 +1243,7 @@ with the :mod:`warnings` module.
       The proposal which described this feature for inclusion in the Python standard
       library.
 
-   `Original Python logging package <http://www.red-dove.com/python_logging.html>`_
+   `Original Python logging package <https://www.red-dove.com/python_logging.html>`_
       This is the original source for the :mod:`logging` package.  The version of the
       package available from this site is suitable for use with Python 1.5.2, 2.1.x
       and 2.2.x, which do not include the :mod:`logging` package in the standard

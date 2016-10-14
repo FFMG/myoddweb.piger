@@ -359,7 +359,7 @@ The module name can be 'dotted', in the form ``package.module`` if needed:
 
 A nice pattern is to actually decorate test methods themselves:
 
-    >>> class MyTest(unittest2.TestCase):
+    >>> class MyTest(unittest.TestCase):
     ...     @patch.object(SomeClass, 'attribute', sentinel.attribute)
     ...     def test_something(self):
     ...         self.assertEqual(SomeClass.attribute, sentinel.attribute)
@@ -372,7 +372,7 @@ If you want to patch with a Mock, you can use :func:`patch` with only one argume
 (or :func:`patch.object` with two arguments). The mock will be created for you and
 passed into the test function / method:
 
-    >>> class MyTest(unittest2.TestCase):
+    >>> class MyTest(unittest.TestCase):
     ...     @patch.object(SomeClass, 'static_method')
     ...     def test_something(self, mock_method):
     ...         SomeClass.static_method()
@@ -382,7 +382,7 @@ passed into the test function / method:
 
 You can stack up multiple patch decorators using this pattern:
 
-    >>> class MyTest(unittest2.TestCase):
+    >>> class MyTest(unittest.TestCase):
     ...     @patch('package.module.ClassName1')
     ...     @patch('package.module.ClassName2')
     ...     def test_something(self, MockClass2, MockClass1):
@@ -549,7 +549,7 @@ Calls to the date constructor are recorded in the ``mock_date`` attributes
 
 An alternative way of dealing with mocking dates, or other builtin classes,
 is discussed in `this blog entry
-<http://www.williamjohnbert.com/2011/07/how-to-unit-testing-in-django-with-mocking-and-patching/>`_.
+<https://williambert.online/2011/07/how-to-unit-testing-in-django-with-mocking-and-patching/>`_.
 
 
 Mocking a Generator Method
@@ -1010,7 +1010,7 @@ subclass.
 Sometimes this is inconvenient. For example, `one user
 <https://code.google.com/p/mock/issues/detail?id=105>`_ is subclassing mock to
 created a `Twisted adaptor
-<http://twistedmatrix.com/documents/11.0.0/api/twisted.python.components.html>`_.
+<https://twistedmatrix.com/documents/11.0.0/api/twisted.python.components.html>`_.
 Having this applied to attributes too actually causes errors.
 
 ``Mock`` (in all its flavours) uses a method called ``_get_child_mock`` to create
@@ -1251,7 +1251,7 @@ With a bit of tweaking you could have the comparison function raise the
 :exc:`AssertionError` directly and provide a more useful failure message.
 
 As of version 1.5, the Python testing library `PyHamcrest
-<https://pypi.python.org/pypi/PyHamcrest>`_ provides similar functionality,
+<https://pyhamcrest.readthedocs.org/>`_ provides similar functionality,
 that may be useful here, in the form of its equality matcher
 (`hamcrest.library.integration.match_equality
-<http://pythonhosted.org/PyHamcrest/integration.html#hamcrest.library.integration.match_equality.match_equality>`_).
+<https://pyhamcrest.readthedocs.org/en/release-1.8/integration/#module-hamcrest.library.integration.match_equality>`_).

@@ -24,8 +24,8 @@ up irregularities and dark corners of the language design.
 This article doesn't attempt to provide a complete specification of the new
 features, but instead provides a convenient overview.  For full details, you
 should refer to the documentation for Python 2.2, such as the `Python Library
-Reference <https://www.python.org/doc/2.2/lib/lib.html>`_ and the `Python
-Reference Manual <https://www.python.org/doc/2.2/ref/ref.html>`_.  If you want to
+Reference <https://docs.python.org/2.2/lib/lib.html>`_ and the `Python
+Reference Manual <https://docs.python.org/2.2/ref/ref.html>`_.  If you want to
 understand the complete implementation and design rationale for a change, refer
 to the PEP for a particular new feature.
 
@@ -395,7 +395,7 @@ This section has just been a quick overview of the new features, giving enough
 of an explanation to start you programming, but many details have been
 simplified or ignored.  Where should you go to get a more complete picture?
 
-https://www.python.org/2.2/descrintro.html is a lengthy tutorial introduction to
+https://docs.python.org/dev/howto/descriptor.html is a lengthy tutorial introduction to
 the descriptor features, written by Guido van Rossum. If my description has
 whetted your appetite, go read this tutorial next, because it goes into much
 more detail about the new features while still remaining quite easy to read.
@@ -632,10 +632,10 @@ queen threatens another) and the Knight's Tour (a route that takes a knight to
 every square of an $NxN$ chessboard without visiting any square twice).
 
 The idea of generators comes from other programming languages, especially Icon
-(http://www.cs.arizona.edu/icon/), where the idea of generators is central.  In
+(https://www.cs.arizona.edu/icon/), where the idea of generators is central.  In
 Icon, every expression and function call behaves like a generator.  One example
 from "An Overview of the Icon Programming Language" at
-http://www.cs.arizona.edu/icon/docs/ipd266.htm gives an idea of what this looks
+https://www.cs.arizona.edu/icon/docs/ipd266.htm gives an idea of what this looks
 like::
 
    sentence := "Store it in the neighboring harbor"
@@ -720,7 +720,7 @@ possible types of the operands.
 
 (The controversy is over whether this is *really* a design flaw, and whether
 it's worth breaking existing code to fix this.  It's caused endless discussions
-on python-dev, and in July 2001 erupted into an storm of acidly sarcastic
+on python-dev, and in July 2001 erupted into a storm of acidly sarcastic
 postings on :newsgroup:`comp.lang.python`. I won't argue for either side here
 and will stick to describing what's  implemented in 2.2.  Read :pep:`238` for a
 summary of arguments and counter-arguments.)
@@ -758,7 +758,7 @@ Here are the changes 2.2 introduces:
   operators.
 
 * Python 2.2 supports some command-line arguments for testing whether code will
-  works with the changed division semantics.  Running python with :option:`-Q
+  work with the changed division semantics.  Running python with :option:`-Q
   warn` will cause a warning to be issued whenever division is applied to two
   integers.  You can use this to find code that's affected by the change and fix
   it.  By default, Python 2.2 will simply perform classic division without a

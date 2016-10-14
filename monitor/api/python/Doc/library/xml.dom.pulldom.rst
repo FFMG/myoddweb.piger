@@ -3,6 +3,7 @@
 
 .. module:: xml.dom.pulldom
    :synopsis: Support for building partial DOM trees from SAX events.
+
 .. moduleauthor:: Paul Prescod <paul@prescod.net>
 
 **Source code:** :source:`Lib/xml/dom/pulldom.py`
@@ -114,13 +115,15 @@ DOMEventStream Objects
 
       Expands all children of *node* into *node*. Example::
 
+          from xml.dom import pulldom
+
           xml = '<html><title>Foo</title> <p>Some text <div>and more</div></p> </html>'
           doc = pulldom.parseString(xml)
           for event, node in doc:
               if event == pulldom.START_ELEMENT and node.tagName == 'p':
                   # Following statement only prints '<p/>'
                   print(node.toxml())
-                  doc.exandNode(node)
+                  doc.expandNode(node)
                   # Following statement prints node with all its children '<p>Some text <div>and more</div></p>'
                   print(node.toxml())
 

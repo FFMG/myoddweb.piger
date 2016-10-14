@@ -66,7 +66,7 @@ _declspec(align(4))
 #endif
 {
     PyObject *filename;
-    int lineno;
+    unsigned int lineno;
 } frame_t;
 
 typedef struct {
@@ -189,7 +189,7 @@ get_reentrant(void)
 static void
 set_reentrant(int reentrant)
 {
-    assert(!reentrant || !get_reentrant());
+    assert(reentrant != tracemalloc_reentrant);
     tracemalloc_reentrant = reentrant;
 }
 #endif
@@ -266,12 +266,13 @@ tracemalloc_get_frame(PyFrameObject *pyframe, frame_t *frame)
     PyCodeObject *code;
     PyObject *filename;
     _Py_hashtable_entry_t *entry;
+    int lineno;
 
     frame->filename = unknown_filename;
-    frame->lineno = PyFrame_GetLineNumber(pyframe);
-    assert(frame->lineno >= 0);
-    if (frame->lineno < 0)
-        frame->lineno = 0;
+    lineno = PyFrame_GetLineNumber(pyframe);
+    if (lineno < 0)
+        lineno = 0;
+    frame->lineno = (unsigned int)lineno;
 
     code = pyframe->f_code;
     if (code == NULL) {
@@ -295,7 +296,7 @@ tracemalloc_get_frame(PyFrameObject *pyframe, frame_t *frame)
 
     if (!PyUnicode_Check(filename)) {
 #ifdef TRACE_DEBUG
-        tracemalloc_error("filename is not an unicode string");
+        tracemalloc_error("filename is not a unicode string");
 #endif
         return;
     }
@@ -375,7 +376,6 @@ traceback_get_frames(traceback_t *traceback)
     for (pyframe = tstate->frame; pyframe != NULL; pyframe = pyframe->f_back) {
         tracemalloc_get_frame(pyframe, &traceback->frames[traceback->nframe]);
         assert(traceback->frames[traceback->nframe].filename != NULL);
-        assert(traceback->frames[traceback->nframe].lineno >= 0);
         traceback->nframe++;
         if (traceback->nframe == tracemalloc_config.max_nframe)
             break;
@@ -519,7 +519,7 @@ tracemalloc_realloc(void *ctx, void *ptr, size_t new_size)
                the caller, because realloc() may already have shrinked the
                memory block and so removed bytes.
 
-               This case is very unlikely: an hash entry has just been
+               This case is very unlikely: a hash entry has just been
                released, so the hash table should have at least one free entry.
 
                The GIL and the table lock ensures that only one thread is
@@ -740,10 +740,6 @@ tracemalloc_clear_traces(void)
     assert(PyGILState_Check());
 #endif
 
-    /* Disable also reentrant calls to tracemalloc_malloc() to not add a new
-       trace while we are clearing traces */
-    assert(get_reentrant());
-
     TABLES_LOCK();
     _Py_hashtable_clear(tracemalloc_traces);
     tracemalloc_traced_memory = 0;
@@ -822,11 +818,6 @@ tracemalloc_init(void)
     tracemalloc_empty_traceback.frames[0].filename = unknown_filename;
     tracemalloc_empty_traceback.frames[0].lineno = 0;
     tracemalloc_empty_traceback.hash = traceback_hash(&tracemalloc_empty_traceback);
-
-    /* Disable tracing allocations until hooks are installed. Set
-       also the reentrant flag to detect bugs: fail with an assertion error
-       if set_reentrant(1) is called while tracing is disabled. */
-    set_reentrant(1);
 
     tracemalloc_config.initialized = TRACEMALLOC_INITIALIZED;
     return 0;
@@ -912,7 +903,6 @@ tracemalloc_start(int max_nframe)
 
     /* everything is ready: start tracing Python memory allocations */
     tracemalloc_config.tracing = 1;
-    set_reentrant(0);
 
     return 0;
 }
@@ -926,10 +916,6 @@ tracemalloc_stop(void)
     /* stop tracing Python memory allocations */
     tracemalloc_config.tracing = 0;
 
-    /* set the reentrant flag to detect bugs: fail with an assertion error if
-       set_reentrant(1) is called while tracing is disabled. */
-    set_reentrant(1);
-
     /* unregister the hook on memory allocators */
 #ifdef TRACE_RAW_MALLOC
     PyMem_SetAllocator(PYMEM_DOMAIN_RAW, &allocators.raw);
@@ -941,15 +927,6 @@ tracemalloc_stop(void)
     tracemalloc_clear_traces();
     raw_free(tracemalloc_traceback);
     tracemalloc_traceback = NULL;
-}
-
-static PyObject*
-lineno_as_obj(int lineno)
-{
-    if (lineno >= 0)
-        return PyLong_FromLong(lineno);
-    else
-        Py_RETURN_NONE;
 }
 
 PyDoc_STRVAR(tracemalloc_is_tracing_doc,
@@ -996,8 +973,7 @@ frame_to_pyobject(frame_t *frame)
     Py_INCREF(frame->filename);
     PyTuple_SET_ITEM(frame_obj, 0, frame->filename);
 
-    assert(frame->lineno >= 0);
-    lineno_obj = lineno_as_obj(frame->lineno);
+    lineno_obj = PyLong_FromUnsignedLong(frame->lineno);
     if (lineno_obj == NULL) {
         Py_DECREF(frame_obj);
         return NULL;

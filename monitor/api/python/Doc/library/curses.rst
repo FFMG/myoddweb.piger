@@ -5,8 +5,11 @@
    :synopsis: An interface to the curses library, providing portable
               terminal handling.
    :platform: Unix
+
 .. sectionauthor:: Moshe Zadka <moshez@zadka.site.co.il>
 .. sectionauthor:: Eric Raymond <esr@thyrsus.com>
+
+--------------
 
 The :mod:`curses` module provides an interface to the curses library, the
 de-facto standard for portable advanced terminal handling.
@@ -1508,9 +1511,9 @@ keys); also, the following keypad mappings are standard:
 +------------------+-----------+
 | :kbd:`End`       | KEY_END   |
 +------------------+-----------+
-| :kbd:`Page Up`   | KEY_NPAGE |
+| :kbd:`Page Up`   | KEY_PPAGE |
 +------------------+-----------+
-| :kbd:`Page Down` | KEY_PPAGE |
+| :kbd:`Page Down` | KEY_NPAGE |
 +------------------+-----------+
 
 The following table lists characters from the alternate character set. These are

@@ -3,6 +3,7 @@
 
 .. module:: http.cookies
    :synopsis: Support for HTTP state management (cookies).
+
 .. moduleauthor:: Timothy O'Malley <timo@alum.mit.edu>
 .. sectionauthor:: Moshe Zadka <moshez@zadka.site.co.il>
 
@@ -141,7 +142,7 @@ Morsel Objects
    in HTTP requests, and is not accessible through JavaScript. This is intended
    to mitigate some forms of cross-site scripting.
 
-   The keys are case-insensitive.
+   The keys are case-insensitive and their default value is ``''``.
 
    .. versionchanged:: 3.5
       :meth:`~Morsel.__eq__` now takes :attr:`~Morsel.key` and :attr:`~Morsel.value`

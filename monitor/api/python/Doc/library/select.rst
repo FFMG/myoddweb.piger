@@ -4,6 +4,7 @@
 .. module:: select
    :synopsis: Wait for I/O completion on multiple streams.
 
+--------------
 
 This module provides access to the :c:func:`select` and :c:func:`poll` functions
 available in most operating systems, :c:func:`devpoll` available on
@@ -472,7 +473,7 @@ Kqueue Objects
 Kevent Objects
 --------------
 
-http://www.freebsd.org/cgi/man.cgi?query=kqueue&sektion=2
+https://www.freebsd.org/cgi/man.cgi?query=kqueue&sektion=2
 
 .. attribute:: kevent.ident
 

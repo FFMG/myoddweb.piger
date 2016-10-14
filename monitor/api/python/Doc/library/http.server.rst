@@ -4,14 +4,13 @@
 .. module:: http.server
    :synopsis: HTTP server and request handlers.
 
+**Source code:** :source:`Lib/http/server.py`
 
 .. index::
    pair: WWW; server
    pair: HTTP; protocol
    single: URL
    single: httpd
-
-**Source code:** :source:`Lib/http/server.py`
 
 --------------
 
@@ -97,7 +96,6 @@ of which this module provides three different variants:
       :mod:`http.client` is used to parse the headers and it requires that the
       HTTP request provide a valid :rfc:`2822` style header.
 
-
    .. attribute:: rfile
 
       Contains an input stream, positioned at the start of the optional input
@@ -109,7 +107,7 @@ of which this module provides three different variants:
       client. Proper adherence to the HTTP protocol must be used when writing to
       this stream.
 
-   :class:`BaseHTTPRequestHandler` has the following class variables:
+   :class:`BaseHTTPRequestHandler` has the following attributes:
 
    .. attribute:: server_version
 
@@ -125,13 +123,10 @@ of which this module provides three different variants:
 
    .. attribute:: error_message_format
 
-      Specifies a format string for building an error response to the client. It
-      uses parenthesized, keyed format specifiers, so the format operand must be
-      a dictionary. The *code* key should be an integer, specifying the numeric
-      HTTP error code value. *message* should be a string containing a
-      (detailed) error message of what occurred, and *explain* should be an
-      explanation of the error code number. Default *message* and *explain*
-      values can found in the :attr:`responses` class variable.
+      Specifies a format string that should be used by :meth:`send_error` method
+      for building an error response to the client. The string is filled by
+      default with variables from :attr:`responses` based on the status code
+      that passed to :meth:`send_error`.
 
    .. attribute:: error_content_type
 
@@ -154,11 +149,11 @@ of which this module provides three different variants:
 
    .. attribute:: responses
 
-      This variable contains a mapping of error code integers to two-element tuples
+      This attribute contains a mapping of error code integers to two-element tuples
       containing a short and long message. For example, ``{code: (shortmessage,
       longmessage)}``. The *shortmessage* is usually used as the *message* key in an
-      error response, and *longmessage* as the *explain* key (see the
-      :attr:`error_message_format` class variable).
+      error response, and *longmessage* as the *explain* key.  It is used by
+      :meth:`send_response_only` and :meth:`send_error` methods.
 
    A :class:`BaseHTTPRequestHandler` instance has the following methods:
 
@@ -191,16 +186,17 @@ of which this module provides three different variants:
       specifies the HTTP error code, with *message* as an optional, short, human
       readable description of the error.  The *explain* argument can be used to
       provide more detailed information about the error; it will be formatted
-      using the :attr:`error_message_format` class variable and emitted, after
+      using the :attr:`error_message_format` attribute and emitted, after
       a complete set of headers, as the response body.  The :attr:`responses`
-      class variable holds the default values for *message* and *explain* that
+      attribute holds the default values for *message* and *explain* that
       will be used if no value is provided; for unknown codes the default value
-      for both is the string ``???``.
+      for both is the string ``???``. The body will be empty if the method is
+      HEAD or the response code is one of the following: ``1xx``,
+      ``204 No Content``, ``205 Reset Content``, ``304 Not Modified``.
 
       .. versionchanged:: 3.4
          The error response includes a Content-Length header.
          Added the *explain* argument.
-
 
    .. method:: send_response(code, message=None)
 
@@ -217,7 +213,6 @@ of which this module provides three different variants:
          Headers are stored to an internal buffer and :meth:`end_headers`
          needs to be called explicitly.
 
-
    .. method:: send_header(keyword, value)
 
       Adds the HTTP header to an internal buffer which will be written to the
@@ -228,7 +223,6 @@ of which this module provides three different variants:
 
       .. versionchanged:: 3.2
          Headers are stored in an internal buffer.
-
 
    .. method:: send_response_only(code, message=None)
 
@@ -279,7 +273,7 @@ of which this module provides three different variants:
    .. method:: version_string()
 
       Returns the server software's version string. This is a combination of the
-      :attr:`server_version` and :attr:`sys_version` class variables.
+      :attr:`server_version` and :attr:`sys_version` attributes.
 
    .. method:: date_time_string(timestamp=None)
 

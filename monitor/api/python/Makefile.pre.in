@@ -221,6 +221,7 @@ LIBOBJS=	@LIBOBJS@
 PYTHON=		python$(EXE)
 BUILDPYTHON=	python$(BUILDEXE)
 
+cross_compiling=@cross_compiling@
 PYTHON_FOR_BUILD=@PYTHON_FOR_BUILD@
 _PYTHON_HOST_PLATFORM=@_PYTHON_HOST_PLATFORM@
 BUILD_GNU_TYPE=	@build@
@@ -230,8 +231,10 @@ HOST_GNU_TYPE=	@host@
 TCLTK_INCLUDES=	@TCLTK_INCLUDES@
 TCLTK_LIBS=	@TCLTK_LIBS@
 
-# The task to run while instrument when building the profile-opt target
-PROFILE_TASK=-m test.regrtest --pgo
+# The task to run while instrumented when building the profile-opt target.
+# We exclude unittests with -x that take a rediculious amount of time to
+# run in the instrumented training build or do not provide much value.
+PROFILE_TASK=-m test.regrtest --pgo -x test_asyncore test_gdb test_multiprocessing_fork test_multiprocessing_forkserver test_multiprocessing_main_handling test_multiprocessing_spawn test_subprocess
 
 # report files for gcov / lcov coverage report
 COVERAGE_INFO=	$(abs_builddir)/coverage.info
@@ -483,7 +486,7 @@ build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks Programs/_testembed 
 
 # Compile a binary with profile guided optimization.
 profile-opt:
-	@if [ $(LLVM_PROF_ERR) == yes ]; then \
+	@if [ $(LLVM_PROF_ERR) = yes ]; then \
 		echo "Error: Cannot perform PGO build because llvm-profdata was not found in PATH" ;\
 		echo "Please add it to PATH and run ./configure again" ;\
 		exit 1;\
@@ -502,7 +505,7 @@ profile-opt:
 	$(MAKE) profile-removal
 
 build_all_generate_profile:
-	$(MAKE) all CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_GEN_FLAG)" LDFLAGS="$(LDFLAGS) $(PGO_PROF_GEN_FLAG)" LIBS="$(LIBS)"
+	$(MAKE) all CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_GEN_FLAG) @LTOFLAGS@" LDFLAGS="$(LDFLAGS) $(PGO_PROF_GEN_FLAG) @LTOFLAGS@" LIBS="$(LIBS)"
 
 run_profile_task:
 	: # FIXME: can't run for a cross build
@@ -512,7 +515,7 @@ build_all_merge_profile:
 	$(LLVM_PROF_MERGER)
 
 build_all_use_profile:
-	$(MAKE) all CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_USE_FLAG)"
+	$(MAKE) all CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_USE_FLAG) @LTOFLAGS@" LDFLAGS="$(LDFLAGS) @LTOFLAGS@"
 
 # Compile and run with gcov
 .PHONY=coverage coverage-lcov coverage-report
@@ -586,11 +589,15 @@ pybuilddir.txt: $(BUILDPYTHON)
 		exit 1 ; \
 	fi
 
+# This is shared by the math and cmath modules
+Modules/_math.o: Modules/_math.c Modules/_math.h
+	$(CC) -c $(CCSHARED) $(PY_CORE_CFLAGS) -o $@ $<
+
 # Build the shared modules
 # Under GNU make, MAKEFLAGS are sorted and normalized; the 's' for
 # -s, --silent or --quiet is always the first char.
 # Under BSD make, MAKEFLAGS might be " -s -v x=y".
-sharedmods: $(BUILDPYTHON) pybuilddir.txt
+sharedmods: $(BUILDPYTHON) pybuilddir.txt Modules/_math.o
 	@case "$$MAKEFLAGS" in \
 	    *\ -s*|s*) quiet="-q";; \
 	    *) quiet="";; \
@@ -712,12 +719,16 @@ Programs/_freeze_importlib: Programs/_freeze_importlib.o $(LIBRARY_OBJS_OMIT_FRO
 	$(LINKCC) $(PY_LDFLAGS) -o $@ Programs/_freeze_importlib.o $(LIBRARY_OBJS_OMIT_FROZEN) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
 
 Python/importlib_external.h: $(srcdir)/Lib/importlib/_bootstrap_external.py Programs/_freeze_importlib
-	./Programs/_freeze_importlib \
-		$(srcdir)/Lib/importlib/_bootstrap_external.py Python/importlib_external.h
+	if test "$(cross_compiling)" != "yes"; then \
+	    ./Programs/_freeze_importlib \
+	        $(srcdir)/Lib/importlib/_bootstrap_external.py Python/importlib_external.h; \
+	fi
 
 Python/importlib.h: $(srcdir)/Lib/importlib/_bootstrap.py Programs/_freeze_importlib
-	./Programs/_freeze_importlib \
-		$(srcdir)/Lib/importlib/_bootstrap.py Python/importlib.h
+	if test "$(cross_compiling)" != "yes"; then \
+	    ./Programs/_freeze_importlib \
+	        $(srcdir)/Lib/importlib/_bootstrap.py Python/importlib.h; \
+	fi
 
 
 ############################################################################
@@ -778,10 +789,21 @@ Python/sysmodule.o: $(srcdir)/Python/sysmodule.c Makefile
 $(IO_OBJS): $(IO_H)
 
 $(GRAMMAR_H): $(GRAMMAR_INPUT) $(PGEN)
-		@$(MKDIR_P) Include
-		$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C)
+	@$(MKDIR_P) Include
+	# Avoid copying the file onto itself for an in-tree build
+	if test "$(cross_compiling)" != "yes"; then \
+		$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C); \
+	else \
+		cp $(srcdir)/Include/graminit.h $(GRAMMAR_H).tmp; \
+		mv $(GRAMMAR_H).tmp $(GRAMMAR_H); \
+	fi
 $(GRAMMAR_C): $(GRAMMAR_H)
-		touch $(GRAMMAR_C)
+	if test "$(cross_compiling)" != "yes"; then \
+		touch $(GRAMMAR_C); \
+	else \
+		cp $(srcdir)/Python/graminit.c $(GRAMMAR_C).tmp; \
+		mv $(GRAMMAR_C).tmp $(GRAMMAR_C); \
+	fi
 
 $(PGEN): $(PGENOBJS)
 		$(CC) $(OPT) $(PY_LDFLAGS) $(PGENOBJS) $(LIBS) -o $(PGEN)
@@ -1110,6 +1132,10 @@ altbininstall: $(BUILDPYTHON) @FRAMEWORKPYTHONW@
 	fi
 
 bininstall: altbininstall
+	if test ! -d $(DESTDIR)$(LIBPC); then \
+		echo "Creating directory $(LIBPC)"; \
+		$(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC); \
+	fi
 	-if test -f $(DESTDIR)$(BINDIR)/python3$(EXE) -o -h $(DESTDIR)$(BINDIR)/python3$(EXE); \
 	then rm -f $(DESTDIR)$(BINDIR)/python3$(EXE); \
 	else true; \
@@ -1429,7 +1455,7 @@ sharedinstall: sharedmods
 # the Makefile in Mac
 #
 #
-# This target is here for backward compatiblity, previous versions of Python
+# This target is here for backward compatibility, previous versions of Python
 # hadn't integrated framework installation in the normal install process.
 frameworkinstall: install
 
@@ -1588,6 +1614,7 @@ clean: pycremoval
 profile-removal:
 	find . -name '*.gc??' -exec rm -f {} ';'
 	find . -name '*.profclang?' -exec rm -f {} ';'
+	find . -name '*.dyn' -exec rm -f {} ';'
 	rm -f $(COVERAGE_INFO)
 	rm -rf $(COVERAGE_REPORT)
 

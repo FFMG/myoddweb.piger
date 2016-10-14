@@ -315,9 +315,8 @@ assign_version_tag(PyTypeObject *type)
            are borrowed reference */
         for (i = 0; i < (1 << MCACHE_SIZE_EXP); i++) {
             method_cache[i].value = NULL;
-            Py_XDECREF(method_cache[i].name);
-            method_cache[i].name = Py_None;
             Py_INCREF(Py_None);
+            Py_XSETREF(method_cache[i].name, Py_None);
         }
         /* mark all version tags as invalid */
         PyType_Modified(&PyBaseObject_Type);
@@ -402,9 +401,8 @@ type_qualname(PyTypeObject *type, void *context)
 static int
 type_set_name(PyTypeObject *type, PyObject *value, void *context)
 {
-    PyHeapTypeObject* et;
-    char *tp_name;
-    PyObject *tmp;
+    const char *tp_name;
+    Py_ssize_t name_size;
 
     if (!check_set_special_type_attr(type, value, "__name__"))
         return -1;
@@ -415,33 +413,18 @@ type_set_name(PyTypeObject *type, PyObject *value, void *context)
         return -1;
     }
 
-    /* Check absence of null characters */
-    tmp = PyUnicode_FromStringAndSize("\0", 1);
-    if (tmp == NULL)
-        return -1;
-    if (PyUnicode_Contains(value, tmp) != 0) {
-        Py_DECREF(tmp);
-        PyErr_Format(PyExc_ValueError,
-                     "__name__ must not contain null bytes");
-        return -1;
-    }
-    Py_DECREF(tmp);
-
-    tp_name = _PyUnicode_AsString(value);
+    tp_name = PyUnicode_AsUTF8AndSize(value, &name_size);
     if (tp_name == NULL)
         return -1;
-
-    et = (PyHeapTypeObject*)type;
-
-    Py_INCREF(value);
-
-    /* Wait until et is a sane state before Py_DECREF'ing the old et->ht_name
-       value.  (Bug #16447.)  */
-    tmp = et->ht_name;
-    et->ht_name = value;
+    if (strlen(tp_name) != (size_t)name_size) {
+        PyErr_SetString(PyExc_ValueError,
+                        "type name must not contain null characters");
+        return -1;
+    }
 
     type->tp_name = tp_name;
-    Py_DECREF(tmp);
+    Py_INCREF(value);
+    Py_SETREF(((PyHeapTypeObject*)type)->ht_name, value);
 
     return 0;
 }
@@ -462,8 +445,7 @@ type_set_qualname(PyTypeObject *type, PyObject *value, void *context)
 
     et = (PyHeapTypeObject*)type;
     Py_INCREF(value);
-    Py_DECREF(et->ht_qualname);
-    et->ht_qualname = value;
+    Py_SETREF(et->ht_qualname, value);
     return 0;
 }
 
@@ -2287,8 +2269,8 @@ type_new(PyTypeObject *metatype, PyObject *args, PyObject *kwds)
     PyTypeObject *type = NULL, *base, *tmptype, *winner;
     PyHeapTypeObject *et;
     PyMemberDef *mp;
-    Py_ssize_t i, nbases, nslots, slotoffset, add_dict, add_weak;
-    int j, may_add_dict, may_add_weak;
+    Py_ssize_t i, nbases, nslots, slotoffset, name_size;
+    int j, may_add_dict, may_add_weak, add_dict, add_weak;
     _Py_IDENTIFIER(__qualname__);
     _Py_IDENTIFIER(__slots__);
 
@@ -2511,9 +2493,14 @@ type_new(PyTypeObject *metatype, PyObject *args, PyObject *kwds)
     type->tp_as_sequence = &et->as_sequence;
     type->tp_as_mapping = &et->as_mapping;
     type->tp_as_buffer = &et->as_buffer;
-    type->tp_name = _PyUnicode_AsString(name);
+    type->tp_name = PyUnicode_AsUTF8AndSize(name, &name_size);
     if (!type->tp_name)
         goto error;
+    if (strlen(type->tp_name) != (size_t)name_size) {
+        PyErr_SetString(PyExc_ValueError,
+                        "type name must not contain null characters");
+        goto error;
+    }
 
     /* Set tp_base and tp_bases */
     type->tp_bases = bases;
@@ -2588,8 +2575,10 @@ type_new(PyTypeObject *metatype, PyObject *args, PyObject *kwds)
         tmp = PyStaticMethod_New(tmp);
         if (tmp == NULL)
             goto error;
-        if (_PyDict_SetItemId(dict, &PyId___new__, tmp) < 0)
+        if (_PyDict_SetItemId(dict, &PyId___new__, tmp) < 0) {
+            Py_DECREF(tmp);
             goto error;
+        }
         Py_DECREF(tmp);
     }
 
@@ -2910,8 +2899,7 @@ _PyType_Lookup(PyTypeObject *type, PyObject *name)
         else
             method_cache_misses++;
 #endif
-        Py_DECREF(method_cache[h].name);
-        method_cache[h].name = name;
+        Py_SETREF(method_cache[h].name, name);
     }
     return res;
 }
@@ -3834,7 +3822,7 @@ _PyType_GetSlotNames(PyTypeObject *cls)
 }
 
 Py_LOCAL(PyObject *)
-_PyObject_GetState(PyObject *obj)
+_PyObject_GetState(PyObject *obj, int required)
 {
     PyObject *state;
     PyObject *getstate;
@@ -3848,6 +3836,13 @@ _PyObject_GetState(PyObject *obj)
             return NULL;
         }
         PyErr_Clear();
+
+        if (required && obj->ob_type->tp_itemsize) {
+            PyErr_Format(PyExc_TypeError,
+                         "can't pickle %.200s objects",
+                         Py_TYPE(obj)->tp_name);
+            return NULL;
+        }
 
         {
             PyObject **dict;
@@ -3889,8 +3884,10 @@ _PyObject_GetState(PyObject *obj)
                 PyObject *name, *value;
 
                 name = PyList_GET_ITEM(slotnames, i);
+                Py_INCREF(name);
                 value = PyObject_GetAttr(obj, name);
                 if (value == NULL) {
+                    Py_DECREF(name);
                     if (!PyErr_ExceptionMatches(PyExc_AttributeError)) {
                         goto error;
                     }
@@ -3899,13 +3896,14 @@ _PyObject_GetState(PyObject *obj)
                 }
                 else {
                     int err = PyDict_SetItem(slots, name, value);
+                    Py_DECREF(name);
                     Py_DECREF(value);
                     if (err) {
                         goto error;
                     }
                 }
 
-                /* The list is stored on the class so it may mutates while we
+                /* The list is stored on the class so it may mutate while we
                    iterate over it */
                 if (slotnames_size != Py_SIZE(slotnames)) {
                     PyErr_Format(PyExc_RuntimeError,
@@ -4039,7 +4037,7 @@ _PyObject_GetNewArguments(PyObject *obj, PyObject **args, PyObject **kwargs)
     }
 
     /* The object does not have __getnewargs_ex__ and __getnewargs__. This may
-       means __new__ does not takes any arguments on this object, or that the
+       mean __new__ does not takes any arguments on this object, or that the
        object does not implement the reduce protocol for pickling or
        copying. */
     *args = NULL;
@@ -4099,29 +4097,24 @@ reduce_newobj(PyObject *obj, int proto)
     PyObject *copyreg;
     PyObject *newobj, *newargs, *state, *listitems, *dictitems;
     PyObject *result;
+    int hasargs;
 
     if (Py_TYPE(obj)->tp_new == NULL) {
         PyErr_Format(PyExc_TypeError,
-                     "can't pickle %s objects",
+                     "can't pickle %.200s objects",
                      Py_TYPE(obj)->tp_name);
         return NULL;
     }
     if (_PyObject_GetNewArguments(obj, &args, &kwargs) < 0)
         return NULL;
 
-    if (args == NULL) {
-        args = PyTuple_New(0);
-        if (args == NULL) {
-            Py_XDECREF(kwargs);
-            return NULL;
-        }
-    }
     copyreg = import_copyreg();
     if (copyreg == NULL) {
-        Py_DECREF(args);
+        Py_XDECREF(args);
         Py_XDECREF(kwargs);
         return NULL;
     }
+    hasargs = (args != NULL);
     if (kwargs == NULL || PyDict_Size(kwargs) == 0) {
         _Py_IDENTIFIER(__newobj__);
         PyObject *cls;
@@ -4131,13 +4124,13 @@ reduce_newobj(PyObject *obj, int proto)
         newobj = _PyObject_GetAttrId(copyreg, &PyId___newobj__);
         Py_DECREF(copyreg);
         if (newobj == NULL) {
-            Py_DECREF(args);
+            Py_XDECREF(args);
             return NULL;
         }
-        n = PyTuple_GET_SIZE(args);
+        n = args ? PyTuple_GET_SIZE(args) : 0;
         newargs = PyTuple_New(n+1);
         if (newargs == NULL) {
-            Py_DECREF(args);
+            Py_XDECREF(args);
             Py_DECREF(newobj);
             return NULL;
         }
@@ -4149,7 +4142,7 @@ reduce_newobj(PyObject *obj, int proto)
             Py_INCREF(v);
             PyTuple_SET_ITEM(newargs, i+1, v);
         }
-        Py_DECREF(args);
+        Py_XDECREF(args);
     }
     else if (proto >= 4) {
         _Py_IDENTIFIER(__newobj_ex__);
@@ -4180,7 +4173,8 @@ reduce_newobj(PyObject *obj, int proto)
         return NULL;
     }
 
-    state = _PyObject_GetState(obj);
+    state = _PyObject_GetState(obj,
+                !hasargs && !PyList_Check(obj) && !PyDict_Check(obj));
     if (state == NULL) {
         Py_DECREF(newobj);
         Py_DECREF(newargs);
@@ -7344,9 +7338,9 @@ super_init(PyObject *self, PyObject *args, PyObject *kwds)
         Py_INCREF(obj);
     }
     Py_INCREF(type);
-    su->type = type;
-    su->obj = obj;
-    su->obj_type = obj_type;
+    Py_XSETREF(su->type, type);
+    Py_XSETREF(su->obj, obj);
+    Py_XSETREF(su->obj_type, obj_type);
     return 0;
 }
 
