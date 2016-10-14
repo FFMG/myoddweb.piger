@@ -2,8 +2,11 @@
 To build the code you might need to update some third party libraries from time to time.
   
 ## Lua
-## Python
+## SQLite
+- Download the latest version from [https://www.sqlite.org/download.html](), get the amalgamation file, (the file is normally called "sqlite-amalgamation-*.zip")
+- Unzip the files to *\myoddweb.piger\myodd\sqlite\*.**
 
+## Python
 - Download the latest code from the Windows section of [Python.org](https://www.python.org/)    
 You will need 3 files, the code for x86/x64 as well as the code itself.
 	- The x64 is called "Windows x86-64 embeddable zip file"
