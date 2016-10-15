@@ -56,7 +56,7 @@ namespace Am
       var ipcResponse = Connector.Send(ipcRequest);
       if (null == ipcResponse)
       {
-        throw new Exception("There was a problem sending the 'Say(...) messages over to the monitor.'");
+        throw new Exception("There was a problem sending the 'Say(...)' messages over to the monitor.");
       }
       var i = ipcResponse.Get<int>(0);
       return i == 1;

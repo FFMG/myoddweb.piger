@@ -214,3 +214,126 @@ TEST(MyoddOsTest, TryingToGetAnOutofRangeItemInEmptyIpc) {
 
   EXPECT_THROW( ipc.Get<std::wstring>(0), std::exception );
 }
+
+TEST_MEM(MyoddOsTest, CompareWitNoData)
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc1 = myodd::os::IpcData(uuid);
+
+  // copy it
+  auto ipc2 = ipc1;
+
+  // check it.
+  ASSERT_EQ(ipc1, ipc2);
+}
+
+TEST_MEM(MyoddOsTest, CompareWitNoDataAndNotSameGuid)
+{
+  // create the ipc
+  auto uuid1 = Uuid();
+  auto ipc1 = myodd::os::IpcData(uuid1);
+
+  auto uuid2 = Uuid();
+  auto ipc2 = myodd::os::IpcData(uuid2);
+
+  // check it.
+  ASSERT_NE(ipc1, ipc2);
+}
+
+TEST_MEM(MyoddOsTest, CompareJustAnInt32)
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc = myodd::os::IpcData(uuid);
+  ipc.Add( IntRandomNumber<int32_t>());
+
+  // copy it
+  auto ipc2 = ipc;
+
+  // check it.
+  ASSERT_EQ(ipc, ipc2);
+}
+
+TEST_MEM(MyoddOsTest, CompareJustAnInt64)
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc = myodd::os::IpcData(uuid);
+  ipc.Add(IntRandomNumber<int64_t>());
+
+  // copy it
+  auto ipc2 = ipc;
+
+  // check it.
+  ASSERT_EQ(ipc, ipc2);
+}
+
+TEST_MEM(MyoddOsTest, CompareJustAString )
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc = myodd::os::IpcData(uuid);
+  ipc.Add(RandomString( IntRandomNumber<size_t>(10, 20)));
+
+  // copy it
+  auto ipc2 = ipc;
+
+  // check it.
+  ASSERT_EQ(ipc, ipc2);
+}
+
+TEST_MEM(MyoddOsTest, CompareJustAWideString)
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc = myodd::os::IpcData(uuid);
+  ipc.Add(RandomString(IntRandomNumber<size_t>(10, 20)));
+
+  // copy it
+  auto ipc2 = ipc;
+
+  // check it.
+  ASSERT_EQ(ipc, ipc2);
+}
+
+TEST_MEM_LOOP(MyoddOsTest, CompareVariousTypeSizes, NUMBER_OF_TESTS)
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc = myodd::os::IpcData(uuid);
+  auto size = IntRandomNumber<size_t>(20, 50);
+  for (auto i = 0; i < size; ++i)
+  {
+    auto type = IntRandomNumber<unsigned int>(0, 3);
+    switch (type)
+    {
+    case 0:
+      ipc.Add(IntRandomNumber<int32_t>());
+      break;
+
+    case 1:
+      ipc.Add(IntRandomNumber<int64_t>());
+      break;
+
+    case 2:
+      ipc.Add(RandomWideString(IntRandomNumber<size_t>(10, 20)));
+      break;
+
+    case 3:
+      ipc.Add(RandomString(IntRandomNumber<size_t>(10, 20)));
+      break;
+
+    default:
+      throw std::runtime_error("Unknown type...");
+      break;
+    }
+  }
+
+  // copy it
+  auto ipc2 = ipc;
+
+  // check it.
+  ASSERT_EQ(ipc, ipc2);
+}
+

@@ -238,8 +238,12 @@ inline std::wstring Uuid()
   return boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
 }
 
-inline std::wstring XmlElementName()
+inline std::wstring RandomWideString( size_t len )
 {
+  if (len == 0)
+  {
+    return L"";
+  }
   std::wstring result = L"";
   const std::wstring a = L"abcdefghejklmnopqrstuvwxyz";
   const auto la = (int)a.length() - 1;
@@ -247,9 +251,43 @@ inline std::wstring XmlElementName()
   const std::wstring b = L"abcdefghejklmnopqrstuvwxyz1234567890-";
   const auto lb = (int)b.length() - 1;
 
-  for (auto i = 0; i < 10; ++i)
+  for (auto i = 0; i < len; ++i)
   {
-    result += (i == 0 || i == 9) ? a[IntRandomNumber<int>(0, la )] : b[IntRandomNumber<int>(0, lb)];
+    result += (i == 0 || i == (len-1)) ? a[IntRandomNumber<int>(0, la)] : b[IntRandomNumber<int>(0, lb)];
+  }
+  return result;
+}
+
+inline std::string RandomString(size_t len)
+{
+  if (len == 0)
+  {
+    return "";
+  }
+  std::string result = "";
+  const std::string a = "abcdefghejklmnopqrstuvwxyz1234567890-";
+  const auto la = (int)a.length() - 1;
+
+  for (auto i = 0; i < len; ++i)
+  {
+    result += a[IntRandomNumber<int>(0, la)];
+  }
+  return result;
+}
+
+inline std::wstring XmlElementName()
+{
+  const size_t len = 10;
+  std::wstring result = L"";
+  const std::wstring a = L"abcdefghejklmnopqrstuvwxyz";
+  const auto la = (int)a.length() - 1;
+
+  const std::wstring b = L"abcdefghejklmnopqrstuvwxyz1234567890-";
+  const auto lb = (int)b.length() - 1;
+
+  for (auto i = 0; i < len; ++i)
+  {
+    result += (i == 0 || i == (len - 1)) ? a[IntRandomNumber<int>(0, la)] : b[IntRandomNumber<int>(0, lb)];
   }
   return result;
 }

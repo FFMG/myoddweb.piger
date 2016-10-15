@@ -67,6 +67,9 @@ namespace myodd {
       // is it an int?
       bool IsInt(unsigned int index) const;
 
+      bool operator==(const IpcData& rhs) const;
+      bool operator!=(const IpcData& rhs) const;
+
     private:
       // the number of arguments we were passed.
       unsigned int _numArguments;

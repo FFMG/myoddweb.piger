@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ipcdata.h"
 #include <afxwin.h>
 #include <../string/string.h>
@@ -50,6 +49,79 @@ IpcData::~IpcData()
   ResetPtr();
 }
 
+bool IpcData::operator!=(const IpcData& rhs) const
+{
+  return !(*this == rhs);
+}
+
+bool IpcData::operator==(const IpcData& rhs) const
+{
+  //  check the number of arguments.
+  if (_numArguments != rhs._numArguments)
+  {
+    return false;
+  }
+
+  //  check the guid
+  if (_guid != rhs._guid)
+  {
+    return false;
+  }
+
+  // check all the arguments.
+  for (unsigned int i = 0; i < _numArguments; ++i)
+  {
+    auto indexi = AdjustIndexNumber(i);
+    auto ipclhs = _ipcArguments[indexi];
+
+    auto indexj = rhs.AdjustIndexNumber(i);
+    auto ipcrhs = rhs._ipcArguments[indexj];
+    if (ipclhs->dataType != ipcrhs->dataType)
+    {
+      return false;
+    }
+
+    switch (ipclhs->dataType)
+    {
+    case IpcDataType::Int32:
+      if ( *static_cast<int32_t*>(ipclhs->pData) != *static_cast<int32_t*>(ipcrhs->pData))
+      {
+        return false;
+      }
+      break;
+
+    case IpcDataType::Int64:
+      if ( *static_cast<int64_t*>(ipclhs->pData) != *static_cast<int64_t*>(ipcrhs->pData))
+      {
+        return false;
+      }
+      break;
+
+    case IpcDataType::String:
+    case IpcDataType::Guid:
+      if ( *static_cast<std::wstring*>(ipclhs->pData) != *static_cast<std::wstring*>(ipcrhs->pData))
+      {
+        return false;
+      }
+      break;
+
+    case IpcDataType::StringAscii:
+      if (*static_cast<std::string*>(ipclhs->pData) != *static_cast<std::string*>(ipcrhs->pData))
+      {
+        return false;
+      }
+      break;
+
+    case IpcDataType::None:
+    default:
+      throw std::exception("Unnown data type.");
+    }
+  }
+
+  // if we made it that far, then it is equal.
+  return true;
+}
+
 const IpcData& IpcData::operator=(const IpcData& rhs)
 {
   if( this != &rhs )
@@ -87,6 +159,7 @@ const IpcData& IpcData::operator=(const IpcData& rhs)
           IpcDataType::Int32
         });
       }
+      break;
 
       case IpcDataType::Int64:
       {

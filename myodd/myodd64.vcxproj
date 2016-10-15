@@ -577,7 +577,12 @@
     <ClCompile Include="math\math.cpp" />
     <ClCompile Include="network\network.cpp" />
     <ClCompile Include="offsets\offset.cpp" />
-    <ClCompile Include="os\ipcdata.cpp" />
+    <ClCompile Include="os\ipcdata.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="os\ipclistener.cpp" />
     <ClCompile Include="os\ipclistenerwnd.cpp" />
     <ClCompile Include="os\os.cpp">

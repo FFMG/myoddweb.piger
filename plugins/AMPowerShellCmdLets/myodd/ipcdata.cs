@@ -564,7 +564,7 @@ namespace MyOdd
         return (IntPtr)HGlobal;
       }
 
-      // make sure we clean what needst to be
+      // make sure we clean what needs to be
       ResetPtr();
 
       // build the pointer.
