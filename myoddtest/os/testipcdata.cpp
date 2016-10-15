@@ -297,31 +297,27 @@ TEST_MEM(MyoddOsTest, CompareJustAWideString)
   ASSERT_EQ(ipc, ipc2);
 }
 
-TEST_MEM_LOOP(MyoddOsTest, CompareVariousTypeSizes, NUMBER_OF_TESTS)
+void CreateRandomIpcData( const size_t size, myodd::os::IpcData& parent)
 {
-  // create the ipc
-  auto uuid = Uuid();
-  auto ipc = myodd::os::IpcData(uuid);
-  auto size = IntRandomNumber<size_t>(20, 50);
   for (auto i = 0; i < size; ++i)
   {
     auto type = IntRandomNumber<unsigned int>(0, 3);
     switch (type)
     {
     case 0:
-      ipc.Add(IntRandomNumber<int32_t>());
+      parent.Add(IntRandomNumber<int32_t>());
       break;
 
     case 1:
-      ipc.Add(IntRandomNumber<int64_t>());
+      parent.Add(IntRandomNumber<int64_t>());
       break;
 
     case 2:
-      ipc.Add(RandomWideString(IntRandomNumber<size_t>(10, 20)));
+      parent.Add(RandomWideString(IntRandomNumber<size_t>(10, 20)));
       break;
 
     case 3:
-      ipc.Add(RandomString(IntRandomNumber<size_t>(10, 20)));
+      parent.Add(RandomString(IntRandomNumber<size_t>(10, 20)));
       break;
 
     default:
@@ -329,6 +325,35 @@ TEST_MEM_LOOP(MyoddOsTest, CompareVariousTypeSizes, NUMBER_OF_TESTS)
       break;
     }
   }
+}
+
+TEST_MEM(MyoddOsTest, AssignValueToAnItemThatAlreadyHasValues)
+{
+  // create 2 ipc
+  auto uuid1 = Uuid();
+  auto ipc1 = myodd::os::IpcData(uuid1);
+  auto size1 = IntRandomNumber<size_t>(20, 50);
+  CreateRandomIpcData(size1, ipc1);
+
+  auto uuid2 = Uuid();
+  auto ipc2 = myodd::os::IpcData(uuid2);
+  auto size2 = IntRandomNumber<size_t>(20, 50);
+  CreateRandomIpcData(size2, ipc2);
+
+  // now assign 1 to 2
+  ipc2 = ipc1;
+
+  // and 1 should equal 2
+  ASSERT_EQ(ipc1, ipc2);
+}
+
+TEST_MEM_LOOP(MyoddOsTest, CompareVariousTypeSizes, NUMBER_OF_TESTS)
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc = myodd::os::IpcData(uuid);
+  auto size = IntRandomNumber<size_t>(20, 50);
+  CreateRandomIpcData(size, ipc);
 
   // copy it
   auto ipc2 = ipc;
@@ -336,4 +361,23 @@ TEST_MEM_LOOP(MyoddOsTest, CompareVariousTypeSizes, NUMBER_OF_TESTS)
   // check it.
   ASSERT_EQ(ipc, ipc2);
 }
+
+TEST_MEM_LOOP(MyoddOsTest, CompareVariousTypeSizesButNotQuiteSame, NUMBER_OF_TESTS)
+{
+  // create the ipc
+  auto uuid = Uuid();
+  auto ipc = myodd::os::IpcData(uuid);
+  auto size = IntRandomNumber<size_t>(20, 50);
+  CreateRandomIpcData(size, ipc);
+
+  // copy it
+  auto ipc2 = ipc;
+
+  //   just add a couple of items
+  CreateRandomIpcData(2, ipc2);
+
+  // they are no longer equal.
+  ASSERT_NE(ipc, ipc2);
+}
+
 
