@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "lock.h"
 
 namespace myodd {

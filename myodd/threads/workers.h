@@ -17,7 +17,7 @@ namespace myodd {
       Workers();
       virtual ~Workers();
 
-    protected:
+    public:
       void WaitForAllWorkers();
       std::thread& QueueWorker(std::thread* threadToQueue);
 
