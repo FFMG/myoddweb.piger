@@ -2,7 +2,7 @@
 To build the code you might need to update some third party libraries from time to time.
   
 ## Lua
-- Download the latest version from [https://www.lua.org/download.html](), there should only be one version called "source"
+- Download the latest version from [https://www.lua.org/download.html](https://www.lua.org/download.html), there should only be one version called "source"
 - Delete the files and folders
 	- *\myoddweb.piger\monitor\api\lua\doc\*
 	- *\myoddweb.piger\monitor\api\lua\src\*
