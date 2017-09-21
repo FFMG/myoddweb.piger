@@ -2,7 +2,7 @@
 To build the code you might need to update some third party libraries from time to time.
   
 ## Lua
-- Download the latest version from [https://www.lua.org/download.html](), there should only be one version called "source"
+- Download the latest version from [https://www.lua.org/download.html](https://www.lua.org/download.html), there should only be one version called "source"
 - Delete the files and folders
 	- *\myoddweb.piger\monitor\api\lua\doc\*
 	- *\myoddweb.piger\monitor\api\lua\src\*
@@ -11,7 +11,7 @@ To build the code you might need to update some third party libraries from time 
 - Unpack the file in *\myoddweb.piger\monitor\api\lua\src\*
 
 ## SQLite
-- Download the latest version from [https://www.sqlite.org/download.html](), get the amalgamation file, (the file is normally called "sqlite-amalgamation-*.zip")
+- Download the latest version from [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html), get the amalgamation file, (the file is normally called "sqlite-amalgamation-*.zip")
 - Unzip the files to *\myoddweb.piger\myodd\sqlite\*.**
 
 ## Python
