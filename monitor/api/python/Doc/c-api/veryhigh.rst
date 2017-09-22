@@ -219,9 +219,10 @@ the same library that the Python runtime is using.
 .. c:function:: PyObject* PyRun_StringFlags(const char *str, int start, PyObject *globals, PyObject *locals, PyCompilerFlags *flags)
 
    Execute Python source code from *str* in the context specified by the
-   dictionaries *globals* and *locals* with the compiler flags specified by
-   *flags*.  The parameter *start* specifies the start token that should be used to
-   parse the source code.
+   objects *globals* and *locals* with the compiler flags specified by
+   *flags*.  *globals* must be a dictionary; *locals* can be any object
+   that implements the mapping protocol.  The parameter *start* specifies
+   the start token that should be used to parse the source code.
 
    Returns the result of executing the code as a Python object, or *NULL* if an
    exception was raised.
@@ -287,7 +288,7 @@ the same library that the Python runtime is using.
 
 .. c:function:: PyObject* Py_CompileStringExFlags(const char *str, const char *filename, int start, PyCompilerFlags *flags, int optimize)
 
-   Like :c:func:`Py_CompileStringExFlags`, but *filename* is a byte string
+   Like :c:func:`Py_CompileStringObject`, but *filename* is a byte string
    decoded from the filesystem encoding (:func:`os.fsdecode`).
 
    .. versionadded:: 3.2
@@ -295,16 +296,17 @@ the same library that the Python runtime is using.
 .. c:function:: PyObject* PyEval_EvalCode(PyObject *co, PyObject *globals, PyObject *locals)
 
    This is a simplified interface to :c:func:`PyEval_EvalCodeEx`, with just
-   the code object, and the dictionaries of global and local variables.
-   The other arguments are set to *NULL*.
+   the code object, and global and local variables.  The other arguments are
+   set to *NULL*.
 
 
-.. c:function:: PyObject* PyEval_EvalCodeEx(PyObject *co, PyObject *globals, PyObject *locals, PyObject **args, int argcount, PyObject **kws, int kwcount, PyObject **defs, int defcount, PyObject *closure)
+.. c:function:: PyObject* PyEval_EvalCodeEx(PyObject *co, PyObject *globals, PyObject *locals, PyObject **args, int argcount, PyObject **kws, int kwcount, PyObject **defs, int defcount, PyObject *kwdefs, PyObject *closure)
 
    Evaluate a precompiled code object, given a particular environment for its
-   evaluation.  This environment consists of dictionaries of global and local
-   variables, arrays of arguments, keywords and defaults, and a closure tuple of
-   cells.
+   evaluation.  This environment consists of a dictionary of global variables,
+   a mapping object of local variables, arrays of arguments, keywords and
+   defaults, a dictionary of default values for :ref:`keyword-only\
+   <keyword-only_parameter>` arguments and a closure tuple of cells.
 
 
 .. c:type:: PyFrameObject

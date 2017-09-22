@@ -60,10 +60,10 @@ typedef enum {
 
 typedef struct {
     QuoteStyle style;
-    char *name;
+    const char *name;
 } StyleDesc;
 
-static StyleDesc quote_styles[] = {
+static const StyleDesc quote_styles[] = {
     { QUOTE_MINIMAL,    "QUOTE_MINIMAL" },
     { QUOTE_ALL,        "QUOTE_ALL" },
     { QUOTE_NONNUMERIC, "QUOTE_NONNUMERIC" },
@@ -286,7 +286,7 @@ _set_str(const char *name, PyObject **target, PyObject *src, const char *dflt)
 static int
 dialect_check_quoting(int quoting)
 {
-    StyleDesc *qs;
+    const StyleDesc *qs;
 
     for (qs = quote_styles; qs->name; qs++) {
         if ((int)qs->style == quoting)
@@ -518,15 +518,13 @@ static PyTypeObject Dialect_Type = {
 static PyObject *
 _call_dialect(PyObject *dialect_inst, PyObject *kwargs)
 {
-    PyObject *ctor_args;
-    PyObject *dialect;
-
-    ctor_args = Py_BuildValue(dialect_inst ? "(O)" : "()", dialect_inst);
-    if (ctor_args == NULL)
-        return NULL;
-    dialect = PyObject_Call((PyObject *)&Dialect_Type, ctor_args, kwargs);
-    Py_DECREF(ctor_args);
-    return dialect;
+    PyObject *type = (PyObject *)&Dialect_Type;
+    if (dialect_inst) {
+        return _PyObject_FastCallDict(type, &dialect_inst, 1, kwargs);
+    }
+    else {
+        return _PyObject_FastCallDict(type, NULL, 0, kwargs);
+    }
 }
 
 /*
@@ -1014,11 +1012,19 @@ join_append_data(WriterObj *self, unsigned int field_kind, void *field_data,
     int i;
     Py_ssize_t rec_len;
 
-#define ADDCH(c) \
+#define INCLEN \
+    do {\
+        if (!copy_phase && rec_len == PY_SSIZE_T_MAX) {    \
+            goto overflow; \
+        } \
+        rec_len++; \
+    } while(0)
+
+#define ADDCH(c)                                \
     do {\
         if (copy_phase) \
             self->rec[rec_len] = c;\
-        rec_len++;\
+        INCLEN;\
     } while(0)
 
     rec_len = self->rec_len;
@@ -1072,11 +1078,18 @@ join_append_data(WriterObj *self, unsigned int field_kind, void *field_data,
     if (*quoted) {
         if (copy_phase)
             ADDCH(dialect->quotechar);
-        else
-            rec_len += 2;
+        else {
+            INCLEN; /* starting quote */
+            INCLEN; /* ending quote */
+        }
     }
     return rec_len;
+
+  overflow:
+    PyErr_NoMemory();
+    return -1;
 #undef ADDCH
+#undef INCLEN
 }
 
 static int
@@ -1633,7 +1646,7 @@ PyMODINIT_FUNC
 PyInit__csv(void)
 {
     PyObject *module;
-    StyleDesc *style;
+    const StyleDesc *style;
 
     if (PyType_Ready(&Dialect_Type) < 0)
         return NULL;

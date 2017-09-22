@@ -67,7 +67,9 @@ perform some operation on a file. ::
        Py_Initialize();
        PyRun_SimpleString("from time import time,ctime\n"
                           "print('Today is', ctime(time()))\n");
-       Py_Finalize();
+       if (Py_FinalizeEx() < 0) {
+           exit(120);
+       }
        PyMem_RawFree(program);
        return 0;
    }
@@ -76,7 +78,7 @@ The :c:func:`Py_SetProgramName` function should be called before
 :c:func:`Py_Initialize` to inform the interpreter about paths to Python run-time
 libraries.  Next, the Python interpreter is initialized with
 :c:func:`Py_Initialize`, followed by the execution of a hard-coded Python script
-that prints the date and time.  Afterwards, the :c:func:`Py_Finalize` call shuts
+that prints the date and time.  Afterwards, the :c:func:`Py_FinalizeEx` call shuts
 the interpreter down, followed by the end of the program.  In a real program,
 you may want to get the Python script from another source, perhaps a text-editor
 routine, a file, or a database.  Getting the Python code from a file can better
@@ -155,7 +157,9 @@ script, such as:
            c = c + b
        return c
 
-then the result should be::
+then the result should be:
+
+.. code-block:: shell-session
 
    $ call multiply multiply 3 2
    Will compute 3 times 2
@@ -289,16 +293,20 @@ available).  This script has several options, of which the following will
 be directly useful to you:
 
 * ``pythonX.Y-config --cflags`` will give you the recommended flags when
-  compiling::
+  compiling:
 
-   $ /opt/bin/python3.4-config --cflags
-   -I/opt/include/python3.4m -I/opt/include/python3.4m -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes
+  .. code-block:: shell-session
+
+     $ /opt/bin/python3.4-config --cflags
+     -I/opt/include/python3.4m -I/opt/include/python3.4m -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes
 
 * ``pythonX.Y-config --ldflags`` will give you the recommended flags when
-  linking::
+  linking:
 
-   $ /opt/bin/python3.4-config --ldflags
-   -L/opt/lib/python3.4/config-3.4m -lpthread -ldl -lutil -lm -lpython3.4m -Xlinker -export-dynamic
+  .. code-block:: shell-session
+
+     $ /opt/bin/python3.4-config --ldflags
+     -L/opt/lib/python3.4/config-3.4m -lpthread -ldl -lutil -lm -lpython3.4m -Xlinker -export-dynamic
 
 .. note::
    To avoid confusion between several Python installations (and especially

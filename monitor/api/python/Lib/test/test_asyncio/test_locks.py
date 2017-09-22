@@ -19,6 +19,7 @@ RGX_REPR = re.compile(STR_RGX_REPR)
 class LockTests(test_utils.TestCase):
 
     def setUp(self):
+        super().setUp()
         self.loop = self.new_test_loop()
 
     def test_ctor_loop(self):
@@ -130,8 +131,8 @@ class LockTests(test_utils.TestCase):
     def test_cancel_race(self):
         # Several tasks:
         # - A acquires the lock
-        # - B is blocked in aqcuire()
-        # - C is blocked in aqcuire()
+        # - B is blocked in acquire()
+        # - C is blocked in acquire()
         #
         # Now, concurrently:
         # - B is cancelled
@@ -174,6 +175,28 @@ class LockTests(test_utils.TestCase):
         self.assertTrue(ta.done())
         self.assertTrue(tb.cancelled())
         self.assertTrue(tc.done())
+
+    def test_finished_waiter_cancelled(self):
+        lock = asyncio.Lock(loop=self.loop)
+
+        ta = asyncio.Task(lock.acquire(), loop=self.loop)
+        test_utils.run_briefly(self.loop)
+        self.assertTrue(lock.locked())
+
+        tb = asyncio.Task(lock.acquire(), loop=self.loop)
+        test_utils.run_briefly(self.loop)
+        self.assertEqual(len(lock._waiters), 1)
+
+        # Create a second waiter, wake up the first, and cancel it.
+        # Without the fix, the second was not woken up.
+        tc = asyncio.Task(lock.acquire(), loop=self.loop)
+        lock.release()
+        tb.cancel()
+        test_utils.run_briefly(self.loop)
+
+        self.assertTrue(lock.locked())
+        self.assertTrue(ta.done())
+        self.assertTrue(tb.cancelled())
 
     def test_release_not_acquired(self):
         lock = asyncio.Lock(loop=self.loop)
@@ -235,6 +258,7 @@ class LockTests(test_utils.TestCase):
 class EventTests(test_utils.TestCase):
 
     def setUp(self):
+        super().setUp()
         self.loop = self.new_test_loop()
 
     def test_ctor_loop(self):
@@ -364,6 +388,7 @@ class EventTests(test_utils.TestCase):
 class ConditionTests(test_utils.TestCase):
 
     def setUp(self):
+        super().setUp()
         self.loop = self.new_test_loop()
 
     def test_ctor_loop(self):
@@ -699,6 +724,7 @@ class ConditionTests(test_utils.TestCase):
 class SemaphoreTests(test_utils.TestCase):
 
     def setUp(self):
+        super().setUp()
         self.loop = self.new_test_loop()
 
     def test_ctor_loop(self):

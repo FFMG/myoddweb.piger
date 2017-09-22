@@ -42,6 +42,12 @@ module-level functions and methods on
 that don't require you to compile a regex object first, but miss some
 fine-tuning parameters.
 
+.. seealso::
+
+   The third-party `regex <https://pypi.python.org/pypi/regex/>`_ module,
+   which has an API compatible with the standard library :mod:`re` module,
+   but offers additional functionality and a more thorough Unicode support.
+
 
 .. _re-syntax:
 
@@ -78,6 +84,12 @@ characters either stand for classes of ordinary characters, or affect
 how the regular expressions around them are interpreted. Regular
 expression pattern strings may not contain null bytes, but can specify
 the null byte using a ``\number`` notation such as ``'\x00'``.
+
+Repetition qualifiers (``*``, ``+``, ``?``, ``{m,n}``, etc) cannot be
+directly nested. This avoids ambiguity with the non-greedy modifier suffix
+``?``, and with other modifiers in other implementations. To apply a second
+repetition to an inner repetition, parentheses may be used. For example,
+the expression ``(?:a{6})*`` matches any multiple of six ``'a'`` characters.
 
 
 The special characters are:
@@ -224,18 +236,24 @@ The special characters are:
    flags are described in :ref:`contents-of-module-re`.) This
    is useful if you wish to include the flags as part of the regular
    expression, instead of passing a *flag* argument to the
-   :func:`re.compile` function.
-
-   Note that the ``(?x)`` flag changes how the expression is parsed. It should be
-   used first in the expression string, or after one or more whitespace characters.
-   If there are non-whitespace characters before the flag, the results are
-   undefined.
+   :func:`re.compile` function.  Flags should be used first in the
+   expression string.
 
 ``(?:...)``
    A non-capturing version of regular parentheses.  Matches whatever regular
    expression is inside the parentheses, but the substring matched by the group
    *cannot* be retrieved after performing a match or referenced later in the
    pattern.
+
+``(?imsx-imsx:...)``
+   (Zero or more letters from the set ``'i'``, ``'m'``, ``'s'``, ``'x'``,
+   optionally followed by ``'-'`` followed by one or more letters from the
+   same set.)  The letters set or removes the corresponding flags:
+   :const:`re.I` (ignore case), :const:`re.M` (multi-line), :const:`re.S`
+   (dot matches all), and :const:`re.X` (verbose), for the part of the
+   expression.  (The flags are described in :ref:`contents-of-module-re`.)
+
+   .. versionadded:: 3.6
 
 ``(?P<name>...)``
    Similar to regular parentheses, but the substring matched by the group is
@@ -321,8 +339,9 @@ The special characters are:
 
 
 The special sequences consist of ``'\'`` and a character from the list below.
-If the ordinary character is not on the list, then the resulting RE will match
-the second character.  For example, ``\$`` matches the character ``'$'``.
+If the ordinary character is not an ASCII digit or an ASCII letter, then the
+resulting RE will match the second character.  For example, ``\$`` matches the
+character ``'$'``.
 
 ``\number``
    Matches the contents of the group of the same number.  Groups are numbered
@@ -442,9 +461,8 @@ three digits in length.
 .. versionchanged:: 3.3
    The ``'\u'`` and ``'\U'`` escape sequences have been added.
 
-.. deprecated-removed:: 3.5 3.6
-   Unknown escapes consist of ``'\'`` and ASCII letter now raise a
-   deprecation warning and will be forbidden in Python 3.6.
+.. versionchanged:: 3.6
+   Unknown escapes consisting of ``'\'`` and an ASCII letter now are errors.
 
 
 .. seealso::
@@ -466,6 +484,9 @@ functions are simplified versions of the full featured methods for compiled
 regular expressions.  Most non-trivial applications always use the compiled
 form.
 
+.. versionchanged:: 3.6
+   Flag constants are now instances of :class:`RegexFlag`, which is a subclass of
+   :class:`enum.IntFlag`.
 
 .. function:: compile(pattern, flags=0)
 
@@ -532,11 +553,11 @@ form.
    current locale. The use of this flag is discouraged as the locale mechanism
    is very unreliable, and it only handles one "culture" at a time anyway;
    you should use Unicode matching instead, which is the default in Python 3
-   for Unicode (str) patterns. This flag makes sense only with bytes patterns.
+   for Unicode (str) patterns. This flag can be used only with bytes patterns.
 
-   .. deprecated-removed:: 3.5 3.6
-      Deprecated the use of  :const:`re.LOCALE` with string patterns or
-      :const:`re.ASCII`.
+   .. versionchanged:: 3.6
+      :const:`re.LOCALE` can be used only with bytes patterns and is
+      not compatible with :const:`re.ASCII`.
 
 
 .. data:: M
@@ -742,9 +763,13 @@ form.
    .. versionchanged:: 3.5
       Unmatched groups are replaced with an empty string.
 
-   .. deprecated-removed:: 3.5 3.6
-      Unknown escapes consist of ``'\'`` and ASCII letter now raise a
-      deprecation warning and will be forbidden in Python 3.6.
+   .. versionchanged:: 3.6
+      Unknown escapes in *pattern* consisting of ``'\'`` and an ASCII letter
+      now are errors.
+
+   .. deprecated-removed:: 3.5 3.7
+      Unknown escapes in *repl* consisting of ``'\'`` and an ASCII letter now raise
+      a deprecation warning and will be forbidden in Python 3.7.
 
 
 .. function:: subn(pattern, repl, string, count=0, flags=0)
@@ -759,11 +784,22 @@ form.
       Unmatched groups are replaced with an empty string.
 
 
-.. function:: escape(string)
+.. function:: escape(pattern)
 
-   Escape all the characters in pattern except ASCII letters, numbers and ``'_'``.
+   Escape all the characters in *pattern* except ASCII letters, numbers and ``'_'``.
    This is useful if you want to match an arbitrary literal string that may
-   have regular expression metacharacters in it.
+   have regular expression metacharacters in it.  For example::
+
+      >>> print(re.escape('python.exe'))
+      python\.exe
+
+      >>> legal_chars = string.ascii_lowercase + string.digits + "!#$%&'*+-.^_`|~:"
+      >>> print('[%s]+' % re.escape(legal_chars))
+      [abcdefghijklmnopqrstuvwxyz0123456789\!\#\$\%\&\'\*\+\-\.\^_\`\|\~\:]+
+
+      >>> operators = ['+', '-', '*', '/', '**']
+      >>> print('|'.join(map(re.escape, sorted(operators, reverse=True))))
+      \/|\-|\+|\*\*|\*
 
    .. versionchanged:: 3.3
       The ``'_'`` character is no longer escaped.
@@ -792,15 +828,15 @@ form.
 
    .. attribute:: pos
 
-      The index of *pattern* where compilation failed.
+      The index in *pattern* where compilation failed (may be ``None``).
 
    .. attribute:: lineno
 
-      The line corresponding to *pos*.
+      The line corresponding to *pos* (may be ``None``).
 
    .. attribute:: colno
 
-      The column corresponding to *pos*.
+      The column corresponding to *pos* (may be ``None``).
 
    .. versionchanged:: 3.5
       Added additional attributes.
@@ -1008,6 +1044,22 @@ Match objects support the following methods and attributes:
       >>> m = re.match(r"(..)+", "a1b2c3")  # Matches 3 times.
       >>> m.group(1)                        # Returns only the last match.
       'c3'
+
+
+.. method:: match.__getitem__(g)
+
+   This is identical to ``m.group(g)``.  This allows easier access to
+   an individual group from a match:
+
+      >>> m = re.match(r"(\w+) (\w+)", "Isaac Newton, physicist")
+      >>> m[0]       # The entire match
+      'Isaac Newton'
+      >>> m[1]       # The first parenthesized subgroup.
+      'Isaac'
+      >>> m[2]       # The second parenthesized subgroup.
+      'Newton'
+
+   .. versionadded:: 3.6
 
 
 .. method:: match.groups(default=None)
@@ -1430,7 +1482,7 @@ successive matches::
             elif kind == 'SKIP':
                 pass
             elif kind == 'MISMATCH':
-                raise RuntimeError('%r unexpected on line %d' % (value, line_num))
+                raise RuntimeError(f'{value!r} unexpected on line {line_num}')
             else:
                 if kind == 'ID' and value in keywords:
                     kind = value

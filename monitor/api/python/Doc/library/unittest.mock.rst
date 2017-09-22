@@ -244,7 +244,7 @@ the *new_callable* argument to :func:`patch`.
 
       .. versionadded:: 3.5
 
-    * *wraps*: Item for the mock object to wrap. If *wraps* is not None then
+    * *wraps*: Item for the mock object to wrap. If *wraps* is not ``None`` then
       calling the Mock will pass the call through to the wrapped object
       (returning the real result). Attribute access on the mock will return a
       Mock object that wraps the corresponding attribute of the wrapped
@@ -262,6 +262,34 @@ the *new_callable* argument to :func:`patch`.
     used to set attributes on the mock after it is created. See the
     :meth:`configure_mock` method for details.
 
+    .. method:: assert_called(*args, **kwargs)
+
+        Assert that the mock was called at least once.
+
+            >>> mock = Mock()
+            >>> mock.method()
+            <Mock name='mock.method()' id='...'>
+            >>> mock.method.assert_called()
+
+        .. versionadded:: 3.6
+
+    .. method:: assert_called_once(*args, **kwargs)
+
+        Assert that the mock was called exactly once.
+
+            >>> mock = Mock()
+            >>> mock.method()
+            <Mock name='mock.method()' id='...'>
+            >>> mock.method.assert_called_once()
+            >>> mock.method()
+            <Mock name='mock.method()' id='...'>
+            >>> mock.method.assert_called_once()
+            Traceback (most recent call last):
+            ...
+            AssertionError: Expected 'method' to have been called once. Called 2 times.
+
+        .. versionadded:: 3.6
+
 
     .. method:: assert_called_with(*args, **kwargs)
 
@@ -275,14 +303,14 @@ the *new_callable* argument to :func:`patch`.
 
     .. method:: assert_called_once_with(*args, **kwargs)
 
-       Assert that the mock was called exactly once and with the specified
-       arguments.
+       Assert that the mock was called exactly once and that that call was
+       with the specified arguments.
 
             >>> mock = Mock(return_value=None)
             >>> mock('foo', bar='baz')
             >>> mock.assert_called_once_with('foo', bar='baz')
-            >>> mock('foo', bar='baz')
-            >>> mock.assert_called_once_with('foo', bar='baz')
+            >>> mock('other', bar='values')
+            >>> mock.assert_called_once_with('other', bar='values')
             Traceback (most recent call last):
               ...
             AssertionError: Expected 'mock' to be called once. Called 2 times.
@@ -294,7 +322,8 @@ the *new_callable* argument to :func:`patch`.
 
         The assert passes if the mock has *ever* been called, unlike
         :meth:`assert_called_with` and :meth:`assert_called_once_with` that
-        only pass if the call is the most recent one.
+        only pass if the call is the most recent one, and in the case of
+        :meth:`assert_called_once_with` it must also be the only call.
 
             >>> mock = Mock(return_value=None)
             >>> mock(1, 2, arg='thing')
@@ -324,7 +353,7 @@ the *new_callable* argument to :func:`patch`.
             >>> calls = [call(4), call(2), call(3)]
             >>> mock.assert_has_calls(calls, any_order=True)
 
-    .. method:: assert_not_called(*args, **kwargs)
+    .. method:: assert_not_called()
 
         Assert the mock was never called.
 
@@ -339,7 +368,7 @@ the *new_callable* argument to :func:`patch`.
         .. versionadded:: 3.5
 
 
-    .. method:: reset_mock()
+    .. method:: reset_mock(*, return_value=False, side_effect=False)
 
         The reset_mock method resets all the call attributes on a mock object:
 
@@ -351,11 +380,19 @@ the *new_callable* argument to :func:`patch`.
             >>> mock.called
             False
 
+        .. versionchanged:: 3.6
+           Added two keyword only argument to the reset_mock function.
+
         This can be useful where you want to make a series of assertions that
         reuse the same object. Note that :meth:`reset_mock` *doesn't* clear the
         return value, :attr:`side_effect` or any child attributes you have
-        set using normal assignment. Child mocks and the return value mock
+        set using normal assignment by default. In case you want to reset
+        *return_value* or :attr:`side_effect`, then pass the corresponding
+        parameter as ``True``. Child mocks and the return value mock
         (if any) are reset as well.
+
+        .. note:: *return_value*, and :attr:`side_effect` are keyword only
+                  argument.
 
 
     .. method:: mock_add_spec(spec, spec_set=False)
@@ -1794,6 +1831,9 @@ sentinel
     Attributes are created on demand when you access them by name. Accessing
     the same attribute will always return the same object. The objects
     returned have a sensible repr so that test failure messages are readable.
+
+    The ``sentinel`` attributes don't preserve their identity when they are
+    :mod:`copied <copy>` or :mod:`pickled <pickle>`.
 
 Sometimes when testing you need to test that a specific object is passed as an
 argument to another method, or returned. It can be common to create named

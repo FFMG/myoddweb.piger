@@ -14,7 +14,7 @@ PyDoc_STRVAR(_multibytecodec_MultibyteCodec_encode__doc__,
 "registered with codecs.register_error that can handle UnicodeEncodeErrors.");
 
 #define _MULTIBYTECODEC_MULTIBYTECODEC_ENCODE_METHODDEF    \
-    {"encode", (PyCFunction)_multibytecodec_MultibyteCodec_encode, METH_VARARGS|METH_KEYWORDS, _multibytecodec_MultibyteCodec_encode__doc__},
+    {"encode", (PyCFunction)_multibytecodec_MultibyteCodec_encode, METH_FASTCALL, _multibytecodec_MultibyteCodec_encode__doc__},
 
 static PyObject *
 _multibytecodec_MultibyteCodec_encode_impl(MultibyteCodecObject *self,
@@ -22,16 +22,18 @@ _multibytecodec_MultibyteCodec_encode_impl(MultibyteCodecObject *self,
                                            const char *errors);
 
 static PyObject *
-_multibytecodec_MultibyteCodec_encode(MultibyteCodecObject *self, PyObject *args, PyObject *kwargs)
+_multibytecodec_MultibyteCodec_encode(MultibyteCodecObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"input", "errors", NULL};
+    static const char * const _keywords[] = {"input", "errors", NULL};
+    static _PyArg_Parser _parser = {"O|z:encode", _keywords, 0};
     PyObject *input;
     const char *errors = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|z:encode", _keywords,
-        &input, &errors))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &input, &errors)) {
         goto exit;
+    }
     return_value = _multibytecodec_MultibyteCodec_encode_impl(self, input, errors);
 
 exit:
@@ -50,7 +52,7 @@ PyDoc_STRVAR(_multibytecodec_MultibyteCodec_decode__doc__,
 "codecs.register_error that is able to handle UnicodeDecodeErrors.\"");
 
 #define _MULTIBYTECODEC_MULTIBYTECODEC_DECODE_METHODDEF    \
-    {"decode", (PyCFunction)_multibytecodec_MultibyteCodec_decode, METH_VARARGS|METH_KEYWORDS, _multibytecodec_MultibyteCodec_decode__doc__},
+    {"decode", (PyCFunction)_multibytecodec_MultibyteCodec_decode, METH_FASTCALL, _multibytecodec_MultibyteCodec_decode__doc__},
 
 static PyObject *
 _multibytecodec_MultibyteCodec_decode_impl(MultibyteCodecObject *self,
@@ -58,22 +60,25 @@ _multibytecodec_MultibyteCodec_decode_impl(MultibyteCodecObject *self,
                                            const char *errors);
 
 static PyObject *
-_multibytecodec_MultibyteCodec_decode(MultibyteCodecObject *self, PyObject *args, PyObject *kwargs)
+_multibytecodec_MultibyteCodec_decode(MultibyteCodecObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"input", "errors", NULL};
+    static const char * const _keywords[] = {"input", "errors", NULL};
+    static _PyArg_Parser _parser = {"y*|z:decode", _keywords, 0};
     Py_buffer input = {NULL, NULL};
     const char *errors = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y*|z:decode", _keywords,
-        &input, &errors))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &input, &errors)) {
         goto exit;
+    }
     return_value = _multibytecodec_MultibyteCodec_decode_impl(self, &input, errors);
 
 exit:
     /* Cleanup for input */
-    if (input.obj)
+    if (input.obj) {
        PyBuffer_Release(&input);
+    }
 
     return return_value;
 }
@@ -84,7 +89,7 @@ PyDoc_STRVAR(_multibytecodec_MultibyteIncrementalEncoder_encode__doc__,
 "\n");
 
 #define _MULTIBYTECODEC_MULTIBYTEINCREMENTALENCODER_ENCODE_METHODDEF    \
-    {"encode", (PyCFunction)_multibytecodec_MultibyteIncrementalEncoder_encode, METH_VARARGS|METH_KEYWORDS, _multibytecodec_MultibyteIncrementalEncoder_encode__doc__},
+    {"encode", (PyCFunction)_multibytecodec_MultibyteIncrementalEncoder_encode, METH_FASTCALL, _multibytecodec_MultibyteIncrementalEncoder_encode__doc__},
 
 static PyObject *
 _multibytecodec_MultibyteIncrementalEncoder_encode_impl(MultibyteIncrementalEncoderObject *self,
@@ -92,16 +97,18 @@ _multibytecodec_MultibyteIncrementalEncoder_encode_impl(MultibyteIncrementalEnco
                                                         int final);
 
 static PyObject *
-_multibytecodec_MultibyteIncrementalEncoder_encode(MultibyteIncrementalEncoderObject *self, PyObject *args, PyObject *kwargs)
+_multibytecodec_MultibyteIncrementalEncoder_encode(MultibyteIncrementalEncoderObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"input", "final", NULL};
+    static const char * const _keywords[] = {"input", "final", NULL};
+    static _PyArg_Parser _parser = {"O|i:encode", _keywords, 0};
     PyObject *input;
     int final = 0;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|i:encode", _keywords,
-        &input, &final))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &input, &final)) {
         goto exit;
+    }
     return_value = _multibytecodec_MultibyteIncrementalEncoder_encode_impl(self, input, final);
 
 exit:
@@ -131,7 +138,7 @@ PyDoc_STRVAR(_multibytecodec_MultibyteIncrementalDecoder_decode__doc__,
 "\n");
 
 #define _MULTIBYTECODEC_MULTIBYTEINCREMENTALDECODER_DECODE_METHODDEF    \
-    {"decode", (PyCFunction)_multibytecodec_MultibyteIncrementalDecoder_decode, METH_VARARGS|METH_KEYWORDS, _multibytecodec_MultibyteIncrementalDecoder_decode__doc__},
+    {"decode", (PyCFunction)_multibytecodec_MultibyteIncrementalDecoder_decode, METH_FASTCALL, _multibytecodec_MultibyteIncrementalDecoder_decode__doc__},
 
 static PyObject *
 _multibytecodec_MultibyteIncrementalDecoder_decode_impl(MultibyteIncrementalDecoderObject *self,
@@ -139,22 +146,25 @@ _multibytecodec_MultibyteIncrementalDecoder_decode_impl(MultibyteIncrementalDeco
                                                         int final);
 
 static PyObject *
-_multibytecodec_MultibyteIncrementalDecoder_decode(MultibyteIncrementalDecoderObject *self, PyObject *args, PyObject *kwargs)
+_multibytecodec_MultibyteIncrementalDecoder_decode(MultibyteIncrementalDecoderObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"input", "final", NULL};
+    static const char * const _keywords[] = {"input", "final", NULL};
+    static _PyArg_Parser _parser = {"y*|i:decode", _keywords, 0};
     Py_buffer input = {NULL, NULL};
     int final = 0;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y*|i:decode", _keywords,
-        &input, &final))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &input, &final)) {
         goto exit;
+    }
     return_value = _multibytecodec_MultibyteIncrementalDecoder_decode_impl(self, &input, final);
 
 exit:
     /* Cleanup for input */
-    if (input.obj)
+    if (input.obj) {
        PyBuffer_Release(&input);
+    }
 
     return return_value;
 }
@@ -196,8 +206,9 @@ _multibytecodec_MultibyteStreamReader_read(MultibyteStreamReaderObject *self, Py
 
     if (!PyArg_UnpackTuple(args, "read",
         0, 1,
-        &sizeobj))
+        &sizeobj)) {
         goto exit;
+    }
     return_value = _multibytecodec_MultibyteStreamReader_read_impl(self, sizeobj);
 
 exit:
@@ -224,8 +235,9 @@ _multibytecodec_MultibyteStreamReader_readline(MultibyteStreamReaderObject *self
 
     if (!PyArg_UnpackTuple(args, "readline",
         0, 1,
-        &sizeobj))
+        &sizeobj)) {
         goto exit;
+    }
     return_value = _multibytecodec_MultibyteStreamReader_readline_impl(self, sizeobj);
 
 exit:
@@ -252,8 +264,9 @@ _multibytecodec_MultibyteStreamReader_readlines(MultibyteStreamReaderObject *sel
 
     if (!PyArg_UnpackTuple(args, "readlines",
         0, 1,
-        &sizehintobj))
+        &sizehintobj)) {
         goto exit;
+    }
     return_value = _multibytecodec_MultibyteStreamReader_readlines_impl(self, sizehintobj);
 
 exit:
@@ -317,4 +330,4 @@ PyDoc_STRVAR(_multibytecodec___create_codec__doc__,
 
 #define _MULTIBYTECODEC___CREATE_CODEC_METHODDEF    \
     {"__create_codec", (PyCFunction)_multibytecodec___create_codec, METH_O, _multibytecodec___create_codec__doc__},
-/*[clinic end generated code: output=eebb21e18c3043d1 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=134b9e36cb985939 input=a9049054013a1b77]*/

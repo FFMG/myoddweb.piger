@@ -45,15 +45,18 @@ The module defines the following functions:
    * if *tb* is not ``None``, it prints a header ``Traceback (most recent
      call last):``
    * it prints the exception *etype* and *value* after the stack trace
-   * if *etype* is :exc:`SyntaxError` and *value* has the appropriate format, it
-     prints the line where the syntax error occurred with a caret indicating the
-     approximate position of the error.
+   * if *type(value)* is :exc:`SyntaxError` and *value* has the appropriate
+     format, it prints the line where the syntax error occurred with a caret
+     indicating the approximate position of the error.
 
    The optional *limit* argument has the same meaning as for :func:`print_tb`.
    If *chain* is true (the default), then chained exceptions (the
    :attr:`__cause__` or :attr:`__context__` attributes of the exception) will be
    printed as well, like the interpreter itself does when printing an unhandled
    exception.
+
+   .. versionchanged:: 3.5
+      The *etype* argument is ignored and inferred from the type of *value*.
 
 
 .. function:: print_exc(limit=None, file=None, chain=True)
@@ -130,6 +133,9 @@ The module defines the following functions:
    return value is a list of strings, each ending in a newline and some
    containing internal newlines.  When these lines are concatenated and printed,
    exactly the same text is printed as does :func:`print_exception`.
+
+   .. versionchanged:: 3.5
+      The *etype* argument is ignored and inferred from the type of *value*.
 
 
 .. function:: format_exc(limit=None, chain=True)
@@ -291,6 +297,20 @@ capture data for later printing in a lightweight fashion.
       of tuples. Each tuple should be a 4-tuple with filename, lineno, name,
       line as the elements.
 
+   .. method:: format()
+
+      Returns a list of strings ready for printing.  Each string in the
+      resulting list corresponds to a single frame from the stack.
+      Each string ends in a newline; the strings may contain internal
+      newlines as well, for those items with source text lines.
+
+      For long sequences of the same frame and line, the first few
+      repetitions are shown, followed by a summary line stating the exact
+      number of further repetitions.
+
+      .. versionchanged:: 3.6
+         Long sequences of repeated frames are now abbreviated.
+
 
 :class:`FrameSummary` Objects
 -----------------------------
@@ -358,15 +378,17 @@ exception and traceback:
        print("*** print_tb:")
        traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
        print("*** print_exception:")
+       # exc_type below is ignored on 3.5 and later
        traceback.print_exception(exc_type, exc_value, exc_traceback,
                                  limit=2, file=sys.stdout)
        print("*** print_exc:")
-       traceback.print_exc()
+       traceback.print_exc(limit=2, file=sys.stdout)
        print("*** format_exc, first and last line:")
        formatted_lines = traceback.format_exc().splitlines()
        print(formatted_lines[0])
        print(formatted_lines[-1])
        print("*** format_exception:")
+       # exc_type below is ignored on 3.5 and later
        print(repr(traceback.format_exception(exc_type, exc_value,
                                              exc_traceback)))
        print("*** extract_tb:")
@@ -407,9 +429,9 @@ The output for the example would look similar to this:
     '  File "<doctest...>", line 7, in bright_side_of_death\n    return tuple()[0]\n',
     'IndexError: tuple index out of range\n']
    *** extract_tb:
-   [('<doctest...>', 10, '<module>', 'lumberjack()'),
-    ('<doctest...>', 4, 'lumberjack', 'bright_side_of_death()'),
-    ('<doctest...>', 7, 'bright_side_of_death', 'return tuple()[0]')]
+   [<FrameSummary file <doctest...>, line 10 in <module>>,
+    <FrameSummary file <doctest...>, line 4 in lumberjack>,
+    <FrameSummary file <doctest...>, line 7 in bright_side_of_death>]
    *** format_tb:
    ['  File "<doctest...>", line 10, in <module>\n    lumberjack()\n',
     '  File "<doctest...>", line 4, in lumberjack\n    bright_side_of_death()\n',

@@ -159,7 +159,7 @@ How do I obtain a copy of the Python source?
 
 The latest Python source distribution is always available from python.org, at
 https://www.python.org/downloads/.  The latest development sources can be obtained
-via anonymous Mercurial access at https://hg.python.org/cpython.
+at https://github.com/python/cpython/.
 
 The source distribution is a gzipped tar file containing the complete C source,
 Sphinx-formatted documentation, Python library modules, example programs, and
@@ -222,8 +222,8 @@ releases are announced on the comp.lang.python and comp.lang.python.announce
 newsgroups and on the Python home page at https://www.python.org/; an RSS feed of
 news is available.
 
-You can also access the development version of Python through Mercurial.  See
-https://docs.python.org/devguide/faq.html for details.
+You can also access the development version of Python through Git.  See
+`The Python Developer's Guide <https://docs.python.org/devguide/>`_ for details.
 
 
 How do I submit bug reports and patches for Python?
@@ -252,7 +252,7 @@ outdated.
 
     Guido van Rossum and Jelke de Boer, "Interactively Testing Remote Servers
     Using the Python Programming Language", CWI Quarterly, Volume 4, Issue 4
-    (December 1991), Amsterdam, pp 283-303.
+    (December 1991), Amsterdam, pp 283--303.
 
 
 Are there any books on Python?
@@ -438,7 +438,7 @@ remember the methods for a list, they can do something like this::
    >>> L
    [1]
 
-With the interpreter, documentation is never far from the student as he's
+With the interpreter, documentation is never far from the student as they are
 programming.
 
 There are also good IDEs for Python.  IDLE is a cross-platform IDE for Python

@@ -18,12 +18,6 @@
 
 #include <lzma.h>
 
-
-#ifndef PY_LONG_LONG
-#error "This module requires PY_LONG_LONG to be defined"
-#endif
-
-
 #ifdef WITH_THREAD
 #define ACQUIRE_LOCK(obj) do { \
     if (!PyThread_acquire_lock((obj)->lock, 0)) { \
@@ -163,7 +157,7 @@ grow_buffer(PyObject **buf, Py_ssize_t max_length)
       uint32_t - the "I" (unsigned int) specifier is the right size, but
       silently ignores overflows on conversion.
 
-      lzma_vli - the "K" (unsigned PY_LONG_LONG) specifier is the right
+      lzma_vli - the "K" (unsigned long long) specifier is the right
       size, but like "I" it silently ignores overflows on conversion.
 
       lzma_mode and lzma_match_finder - these are enumeration types, and
@@ -176,12 +170,12 @@ grow_buffer(PyObject **buf, Py_ssize_t max_length)
     static int \
     FUNCNAME(PyObject *obj, void *ptr) \
     { \
-        unsigned PY_LONG_LONG val; \
+        unsigned long long val; \
         \
         val = PyLong_AsUnsignedLongLong(obj); \
         if (PyErr_Occurred()) \
             return 0; \
-        if ((unsigned PY_LONG_LONG)(TYPE)val != val) { \
+        if ((unsigned long long)(TYPE)val != val) { \
             PyErr_SetString(PyExc_OverflowError, \
                             "Value too large for " #TYPE " type"); \
             return 0; \
@@ -398,7 +392,7 @@ parse_filter_chain_spec(lzma_filter filters[], PyObject *filterspecs)
    Python-level filter specifiers (represented as dicts). */
 
 static int
-spec_add_field(PyObject *spec, _Py_Identifier *key, unsigned PY_LONG_LONG value)
+spec_add_field(PyObject *spec, _Py_Identifier *key, unsigned long long value)
 {
     int status;
     PyObject *value_object;
@@ -527,6 +521,8 @@ compress(Compressor *c, uint8_t *data, size_t len, lzma_action action)
         Py_BEGIN_ALLOW_THREADS
         lzret = lzma_code(&c->lzs, action);
         data_size = (char *)c->lzs.next_out - PyBytes_AS_STRING(result);
+        if (lzret == LZMA_BUF_ERROR && len == 0 && c->lzs.avail_out > 0)
+            lzret = LZMA_OK; /* That wasn't a real error */
         Py_END_ALLOW_THREADS
         if (catch_lzma_error(lzret))
             goto error;
@@ -553,7 +549,6 @@ error:
 /*[clinic input]
 _lzma.LZMACompressor.compress
 
-    self: self(type="Compressor *")
     data: Py_buffer
     /
 
@@ -567,7 +562,7 @@ flush() method to finish the compression process.
 
 static PyObject *
 _lzma_LZMACompressor_compress_impl(Compressor *self, Py_buffer *data)
-/*[clinic end generated code: output=31f615136963e00f input=8b60cb13e0ce6420]*/
+/*[clinic end generated code: output=31f615136963e00f input=64019eac7f2cc8d0]*/
 {
     PyObject *result = NULL;
 
@@ -583,8 +578,6 @@ _lzma_LZMACompressor_compress_impl(Compressor *self, Py_buffer *data)
 /*[clinic input]
 _lzma.LZMACompressor.flush
 
-    self: self(type="Compressor *")
-
 Finish the compression process.
 
 Returns the compressed data left in internal buffers.
@@ -594,7 +587,7 @@ The compressor object may not be used after this method is called.
 
 static PyObject *
 _lzma_LZMACompressor_flush_impl(Compressor *self)
-/*[clinic end generated code: output=fec21f3e22504f50 input=3060fb26f9b4042c]*/
+/*[clinic end generated code: output=fec21f3e22504f50 input=6b369303f67ad0a8]*/
 {
     PyObject *result = NULL;
 
@@ -698,7 +691,6 @@ Compressor_init_raw(lzma_stream *lzs, PyObject *filterspecs)
 /*[-clinic input]
 _lzma.LZMACompressor.__init__
 
-    self: self(type="Compressor *")
     format: int(c_default="FORMAT_XZ") = FORMAT_XZ
         The container format to use for the output.  This can
         be FORMAT_XZ (default), FORMAT_ALONE, or FORMAT_RAW.
@@ -906,6 +898,9 @@ decompress_buf(Decompressor *d, Py_ssize_t max_length)
     PyObject *result;
     lzma_stream *lzs = &d->lzs;
 
+    if (lzs->avail_in == 0)
+        return PyBytes_FromStringAndSize(NULL, 0);
+
     if (max_length < 0 || max_length >= INITIAL_BUFFER_SIZE)
         result = PyBytes_FromStringAndSize(NULL, INITIAL_BUFFER_SIZE);
     else
@@ -1005,8 +1000,10 @@ decompress(Decompressor *d, uint8_t *data, size_t len, Py_ssize_t max_length)
     }
 
     result = decompress_buf(d, max_length);
-    if(result == NULL)
+    if (result == NULL) {
+        lzs->next_in = NULL;
         return NULL;
+    }
 
     if (d->eof) {
         d->needs_input = 0;
@@ -1063,7 +1060,6 @@ error:
 /*[clinic input]
 _lzma.LZMADecompressor.decompress
 
-    self: self(type="Decompressor *")
     data: Py_buffer
     max_length: Py_ssize_t=-1
 
@@ -1086,7 +1082,7 @@ the unused_data attribute.
 static PyObject *
 _lzma_LZMADecompressor_decompress_impl(Decompressor *self, Py_buffer *data,
                                        Py_ssize_t max_length)
-/*[clinic end generated code: output=ef4e20ec7122241d input=f2bb902cc1caf203]*/
+/*[clinic end generated code: output=ef4e20ec7122241d input=60c1f135820e309d]*/
 {
     PyObject *result = NULL;
 
@@ -1126,7 +1122,6 @@ Decompressor_init_raw(lzma_stream *lzs, PyObject *filterspecs)
 /*[clinic input]
 _lzma.LZMADecompressor.__init__
 
-    self: self(type="Decompressor *")
     format: int(c_default="FORMAT_AUTO") = FORMAT_AUTO
         Specifies the container format of the input stream.  If this is
         FORMAT_AUTO (the default), the decompressor will automatically detect
@@ -1152,7 +1147,7 @@ For one-shot decompression, use the decompress() function instead.
 static int
 _lzma_LZMADecompressor___init___impl(Decompressor *self, int format,
                                      PyObject *memlimit, PyObject *filters)
-/*[clinic end generated code: output=3e1821f8aa36564c input=458ca6132ef29801]*/
+/*[clinic end generated code: output=3e1821f8aa36564c input=81fe684a6c2f8a27]*/
 {
     const uint32_t decoder_flags = LZMA_TELL_ANY_CHECK | LZMA_TELL_NO_CHECK;
     uint64_t memlimit_ = UINT64_MAX;
@@ -1342,8 +1337,8 @@ Always returns True for CHECK_NONE and CHECK_CRC32.
 [clinic start generated code]*/
 
 static PyObject *
-_lzma_is_check_supported_impl(PyModuleDef *module, int check_id)
-/*[clinic end generated code: output=bb828e90e00ad96e input=5518297b97b2318f]*/
+_lzma_is_check_supported_impl(PyObject *module, int check_id)
+/*[clinic end generated code: output=e4f14ba3ce2ad0a5 input=5518297b97b2318f]*/
 {
     return PyBool_FromLong(lzma_check_is_supported(check_id));
 }
@@ -1360,8 +1355,8 @@ The result does not include the filter ID itself, only the options.
 [clinic start generated code]*/
 
 static PyObject *
-_lzma__encode_filter_properties_impl(PyModuleDef *module, lzma_filter filter)
-/*[clinic end generated code: output=b5fe690acd6b61d1 input=d4c64f1b557c77d4]*/
+_lzma__encode_filter_properties_impl(PyObject *module, lzma_filter filter)
+/*[clinic end generated code: output=5c93c8e14e7be5a8 input=d4c64f1b557c77d4]*/
 {
     lzma_ret lzret;
     uint32_t encoded_size;
@@ -1400,9 +1395,9 @@ The result does not include the filter ID itself, only the options.
 [clinic start generated code]*/
 
 static PyObject *
-_lzma__decode_filter_properties_impl(PyModuleDef *module, lzma_vli filter_id,
+_lzma__decode_filter_properties_impl(PyObject *module, lzma_vli filter_id,
                                      Py_buffer *encoded_props)
-/*[clinic end generated code: output=af248f570746668b input=246410800782160c]*/
+/*[clinic end generated code: output=714fd2ef565d5c60 input=246410800782160c]*/
 {
     lzma_filter filter;
     lzma_ret lzret;
@@ -1447,7 +1442,7 @@ static PyModuleDef _lzmamodule = {
 /* Some of our constants are more than 32 bits wide, so PyModule_AddIntConstant
    would not work correctly on platforms with 32-bit longs. */
 static int
-module_add_int_constant(PyObject *m, const char *name, PY_LONG_LONG value)
+module_add_int_constant(PyObject *m, const char *name, long long value)
 {
     PyObject *o = PyLong_FromLongLong(value);
     if (o == NULL)

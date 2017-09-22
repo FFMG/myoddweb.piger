@@ -659,7 +659,7 @@ _bufferedreader_raw_read(buffered *self, char *start, Py_ssize_t len);
 
 /* Sets the current error to BlockingIOError */
 static void
-_set_BlockingIOError(char *msg, Py_ssize_t written)
+_set_BlockingIOError(const char *msg, Py_ssize_t written)
 {
     PyObject *err;
     PyErr_Clear();
@@ -1416,8 +1416,18 @@ buffered_repr(buffered *self)
         res = PyUnicode_FromFormat("<%s>", Py_TYPE(self)->tp_name);
     }
     else {
-        res = PyUnicode_FromFormat("<%s name=%R>",
-                                   Py_TYPE(self)->tp_name, nameobj);
+        int status = Py_ReprEnter((PyObject *)self);
+        res = NULL;
+        if (status == 0) {
+            res = PyUnicode_FromFormat("<%s name=%R>",
+                                       Py_TYPE(self)->tp_name, nameobj);
+            Py_ReprLeave((PyObject *)self);
+        }
+        else if (status > 0) {
+            PyErr_Format(PyExc_RuntimeError,
+                         "reentrant call inside %s.__repr__",
+                         Py_TYPE(self)->tp_name);
+        }
         Py_DECREF(nameobj);
     }
     return res;

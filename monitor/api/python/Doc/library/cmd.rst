@@ -266,10 +266,10 @@ immediate playback::
             'Draw circle with given radius an options extent and steps:  CIRCLE 50'
             circle(*parse(arg))
         def do_position(self, arg):
-            'Print the current turle position:  POSITION'
+            'Print the current turtle position:  POSITION'
             print('Current position is %d %d\n' % position())
         def do_heading(self, arg):
-            'Print the current turle heading in degrees:  HEADING'
+            'Print the current turtle heading in degrees:  HEADING'
             print('Current heading is %d\n' % (heading(),))
         def do_color(self, arg):
             'Set the color:  COLOR BLUE'
@@ -314,7 +314,9 @@ immediate playback::
 
 
 Here is a sample session with the turtle shell showing the help functions, using
-blank lines to repeat commands, and the simple record and playback facility::
+blank lines to repeat commands, and the simple record and playback facility:
+
+.. code-block:: none
 
     Welcome to the turtle shell.   Type help or ? to list commands.
 
@@ -373,4 +375,3 @@ blank lines to repeat commands, and the simple record and playback facility::
 
     (turtle) bye
     Thank you for using Turtle
-

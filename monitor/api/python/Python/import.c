@@ -38,14 +38,6 @@ module _imp
 
 #include "clinic/import.c.h"
 
-/*[python input]
-class fs_unicode_converter(CConverter):
-    type = 'PyObject *'
-    converter = 'PyUnicode_FSDecoder'
-
-[python start generated code]*/
-/*[python end generated code: output=da39a3ee5e6b4b0d input=9d6786230166006e]*/
-
 /* Initialize things */
 
 void
@@ -242,8 +234,8 @@ On platforms without threads, return False.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_lock_held_impl(PyModuleDef *module)
-/*[clinic end generated code: output=d7a8cc3a5169081a input=9b088f9b217d9bdf]*/
+_imp_lock_held_impl(PyObject *module)
+/*[clinic end generated code: output=8b89384b5e1963fc input=9b088f9b217d9bdf]*/
 {
 #ifdef WITH_THREAD
     return PyBool_FromLong(import_lock_thread != -1);
@@ -262,8 +254,8 @@ modules. On platforms without threads, this function does nothing.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_acquire_lock_impl(PyModuleDef *module)
-/*[clinic end generated code: output=cc143b1d16422cae input=4a2d4381866d5fdc]*/
+_imp_acquire_lock_impl(PyObject *module)
+/*[clinic end generated code: output=1aff58cb0ee1b026 input=4a2d4381866d5fdc]*/
 {
 #ifdef WITH_THREAD
     _PyImport_AcquireLock();
@@ -281,8 +273,8 @@ On platforms without threads, this function does nothing.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_release_lock_impl(PyModuleDef *module)
-/*[clinic end generated code: output=74d28e38ebe2b224 input=934fb11516dd778b]*/
+_imp_release_lock_impl(PyObject *module)
+/*[clinic end generated code: output=7faab6d0be178b0a input=934fb11516dd778b]*/
 {
 #ifdef WITH_THREAD
     if (_PyImport_ReleaseLock() < 0) {
@@ -320,7 +312,7 @@ PyImport_GetModuleDict(void)
 
 
 /* List of names to clear in sys */
-static char* sys_deletes[] = {
+static const char * const sys_deletes[] = {
     "path", "argv", "ps1", "ps2",
     "last_type", "last_value", "last_traceback",
     "path_hooks", "path_importer_cache", "meta_path",
@@ -330,7 +322,7 @@ static char* sys_deletes[] = {
     NULL
 };
 
-static char* sys_files[] = {
+static const char * const sys_files[] = {
     "stdin", "__stdin__",
     "stdout", "__stdout__",
     "stderr", "__stderr__",
@@ -347,7 +339,7 @@ PyImport_Cleanup(void)
     PyInterpreterState *interp = PyThreadState_GET()->interp;
     PyObject *modules = interp->modules;
     PyObject *weaklist = NULL;
-    char **p;
+    const char * const *p;
 
     if (modules == NULL)
         return; /* Already done */
@@ -883,10 +875,8 @@ update_code_filenames(PyCodeObject *co, PyObject *oldname, PyObject *newname)
     if (PyUnicode_Compare(co->co_filename, oldname))
         return;
 
-    tmp = co->co_filename;
-    co->co_filename = newname;
-    Py_INCREF(co->co_filename);
-    Py_DECREF(tmp);
+    Py_INCREF(newname);
+    Py_XSETREF(co->co_filename, newname);
 
     constants = co->co_consts;
     n = PyTuple_GET_SIZE(constants);
@@ -926,9 +916,9 @@ Changes code.co_filename to specify the passed-in file path.
 [clinic start generated code]*/
 
 static PyObject *
-_imp__fix_co_filename_impl(PyModuleDef *module, PyCodeObject *code,
+_imp__fix_co_filename_impl(PyObject *module, PyCodeObject *code,
                            PyObject *path)
-/*[clinic end generated code: output=f4db56aac0a1327f input=895ba50e78b82f05]*/
+/*[clinic end generated code: output=1d002f100235587d input=895ba50e78b82f05]*/
 
 {
     update_compiled_module(code, path);
@@ -946,10 +936,9 @@ static const struct _frozen * find_frozen(PyObject *);
 static int
 is_builtin(PyObject *name)
 {
-    int i, cmp;
+    int i;
     for (i = 0; PyImport_Inittab[i].name != NULL; i++) {
-        cmp = PyUnicode_CompareWithASCIIString(name, PyImport_Inittab[i].name);
-        if (cmp == 0) {
+        if (_PyUnicode_EqualToASCIIString(name, PyImport_Inittab[i].name)) {
             if (PyImport_Inittab[i].initfunc == NULL)
                 return -1;
             else
@@ -960,12 +949,13 @@ is_builtin(PyObject *name)
 }
 
 
-/* Return an importer object for a sys.path/pkg.__path__ item 'p',
+/* Return a finder object for a sys.path/pkg.__path__ item 'p',
    possibly by fetching it from the path_importer_cache dict. If it
    wasn't yet cached, traverse path_hooks until a hook is found
    that can handle the path item. Return None if no hook could;
-   this tells our caller it should fall back to the builtin
-   import mechanism. Cache the result in path_importer_cache.
+   this tells our caller that the path based finder could not find
+   a finder for this path item. Cache the result in
+   path_importer_cache.
    Returns a borrowed reference. */
 
 static PyObject *
@@ -1040,8 +1030,8 @@ Create an extension module.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_create_builtin(PyModuleDef *module, PyObject *spec)
-/*[clinic end generated code: output=5038f467617226bd input=37f966f890384e47]*/
+_imp_create_builtin(PyObject *module, PyObject *spec)
+/*[clinic end generated code: output=ace7ff22271e6f39 input=37f966f890384e47]*/
 {
     struct _inittab *p;
     PyObject *name;
@@ -1056,7 +1046,7 @@ _imp_create_builtin(PyModuleDef *module, PyObject *spec)
     mod = _PyImport_FindExtensionObject(name, name);
     if (mod || PyErr_Occurred()) {
         Py_DECREF(name);
-        Py_INCREF(mod);
+        Py_XINCREF(mod);
         return mod;
     }
 
@@ -1068,7 +1058,7 @@ _imp_create_builtin(PyModuleDef *module, PyObject *spec)
 
     for (p = PyImport_Inittab; p->name != NULL; p++) {
         PyModuleDef *def;
-        if (PyUnicode_CompareWithASCIIString(name, p->name) == 0) {
+        if (_PyUnicode_EqualToASCIIString(name, p->name)) {
             if (p->initfunc == NULL) {
                 /* Cannot re-init internal module ("sys" or "builtins") */
                 mod = PyImport_AddModule(namestr);
@@ -1086,6 +1076,10 @@ _imp_create_builtin(PyModuleDef *module, PyObject *spec)
             } else {
                 /* Remember pointer to module init function. */
                 def = PyModule_GetDef(mod);
+                if (def == NULL) {
+                    Py_DECREF(name);
+                    return NULL;
+                }
                 def->m_base.m_init = p->initfunc;
                 if (_PyImport_FixupExtensionObject(mod, name, name) < 0) {
                     Py_DECREF(name);
@@ -1114,7 +1108,7 @@ find_frozen(PyObject *name)
     for (p = PyImport_FrozenModules; ; p++) {
         if (p->name == NULL)
             return NULL;
-        if (PyUnicode_CompareWithASCIIString(name, p->name) == 0)
+        if (_PyUnicode_EqualToASCIIString(name, p->name))
             break;
     }
     return p;
@@ -1315,12 +1309,8 @@ remove_importlib_frames(void)
         int now_in_importlib;
 
         assert(PyTraceBack_Check(tb));
-        now_in_importlib = (PyUnicode_CompareWithASCIIString(
-                                code->co_filename,
-                                importlib_filename) == 0) ||
-                           (PyUnicode_CompareWithASCIIString(
-                                code->co_filename,
-                                external_filename) == 0);
+        now_in_importlib = _PyUnicode_EqualToASCIIString(code->co_filename, importlib_filename) ||
+                           _PyUnicode_EqualToASCIIString(code->co_filename, external_filename);
         if (now_in_importlib && !in_importlib) {
             /* This is the link to this chunk of importlib tracebacks */
             outer_link = prev_link;
@@ -1329,12 +1319,9 @@ remove_importlib_frames(void)
 
         if (in_importlib &&
             (always_trim ||
-             PyUnicode_CompareWithASCIIString(code->co_name,
-                                              remove_frames) == 0)) {
-            PyObject *tmp = *outer_link;
-            *outer_link = next;
+             _PyUnicode_EqualToASCIIString(code->co_name, remove_frames))) {
             Py_XINCREF(next);
-            Py_DECREF(tmp);
+            Py_XSETREF(*outer_link, next);
             prev_link = outer_link;
         }
         else {
@@ -1347,61 +1334,170 @@ done:
 }
 
 
-PyObject *
-PyImport_ImportModuleLevelObject(PyObject *name, PyObject *given_globals,
-                                 PyObject *locals, PyObject *given_fromlist,
-                                 int level)
+static PyObject *
+resolve_name(PyObject *name, PyObject *globals, int level)
 {
-    _Py_IDENTIFIER(__import__);
     _Py_IDENTIFIER(__spec__);
-    _Py_IDENTIFIER(_initializing);
     _Py_IDENTIFIER(__package__);
     _Py_IDENTIFIER(__path__);
     _Py_IDENTIFIER(__name__);
+    _Py_IDENTIFIER(parent);
+    PyObject *abs_name;
+    PyObject *package = NULL;
+    PyObject *spec;
+    PyInterpreterState *interp = PyThreadState_GET()->interp;
+    Py_ssize_t last_dot;
+    PyObject *base;
+    int level_up;
+
+    if (globals == NULL) {
+        PyErr_SetString(PyExc_KeyError, "'__name__' not in globals");
+        goto error;
+    }
+    if (!PyDict_Check(globals)) {
+        PyErr_SetString(PyExc_TypeError, "globals must be a dict");
+        goto error;
+    }
+    package = _PyDict_GetItemId(globals, &PyId___package__);
+    if (package == Py_None) {
+        package = NULL;
+    }
+    spec = _PyDict_GetItemId(globals, &PyId___spec__);
+
+    if (package != NULL) {
+        Py_INCREF(package);
+        if (!PyUnicode_Check(package)) {
+            PyErr_SetString(PyExc_TypeError, "package must be a string");
+            goto error;
+        }
+        else if (spec != NULL && spec != Py_None) {
+            int equal;
+            PyObject *parent = _PyObject_GetAttrId(spec, &PyId_parent);
+            if (parent == NULL) {
+                goto error;
+            }
+
+            equal = PyObject_RichCompareBool(package, parent, Py_EQ);
+            Py_DECREF(parent);
+            if (equal < 0) {
+                goto error;
+            }
+            else if (equal == 0) {
+                if (PyErr_WarnEx(PyExc_ImportWarning,
+                        "__package__ != __spec__.parent", 1) < 0) {
+                    goto error;
+                }
+            }
+        }
+    }
+    else if (spec != NULL && spec != Py_None) {
+        package = _PyObject_GetAttrId(spec, &PyId_parent);
+        if (package == NULL) {
+            goto error;
+        }
+        else if (!PyUnicode_Check(package)) {
+            PyErr_SetString(PyExc_TypeError,
+                    "__spec__.parent must be a string");
+            goto error;
+        }
+    }
+    else {
+        if (PyErr_WarnEx(PyExc_ImportWarning,
+                    "can't resolve package from __spec__ or __package__, "
+                    "falling back on __name__ and __path__", 1) < 0) {
+            goto error;
+        }
+
+        package = _PyDict_GetItemId(globals, &PyId___name__);
+        if (package == NULL) {
+            PyErr_SetString(PyExc_KeyError, "'__name__' not in globals");
+            goto error;
+        }
+
+        Py_INCREF(package);
+        if (!PyUnicode_Check(package)) {
+            PyErr_SetString(PyExc_TypeError, "__name__ must be a string");
+            goto error;
+        }
+
+        if (_PyDict_GetItemId(globals, &PyId___path__) == NULL) {
+            Py_ssize_t dot;
+
+            if (PyUnicode_READY(package) < 0) {
+                goto error;
+            }
+
+            dot = PyUnicode_FindChar(package, '.',
+                                        0, PyUnicode_GET_LENGTH(package), -1);
+            if (dot == -2) {
+                goto error;
+            }
+
+            if (dot >= 0) {
+                PyObject *substr = PyUnicode_Substring(package, 0, dot);
+                if (substr == NULL) {
+                    goto error;
+                }
+                Py_SETREF(package, substr);
+            }
+        }
+    }
+
+    last_dot = PyUnicode_GET_LENGTH(package);
+    if (last_dot == 0) {
+        PyErr_SetString(PyExc_ImportError,
+                "attempted relative import with no known parent package");
+        goto error;
+    }
+    else if (PyDict_GetItem(interp->modules, package) == NULL) {
+        PyErr_Format(PyExc_SystemError,
+                "Parent module %R not loaded, cannot perform relative "
+                "import", package);
+        goto error;
+    }
+
+    for (level_up = 1; level_up < level; level_up += 1) {
+        last_dot = PyUnicode_FindChar(package, '.', 0, last_dot, -1);
+        if (last_dot == -2) {
+            goto error;
+        }
+        else if (last_dot == -1) {
+            PyErr_SetString(PyExc_ValueError,
+                            "attempted relative import beyond top-level "
+                            "package");
+            goto error;
+        }
+    }
+
+    base = PyUnicode_Substring(package, 0, last_dot);
+    Py_DECREF(package);
+    if (base == NULL || PyUnicode_GET_LENGTH(name) == 0) {
+        return base;
+    }
+
+    abs_name = PyUnicode_FromFormat("%U.%U", base, name);
+    Py_DECREF(base);
+    return abs_name;
+
+  error:
+    Py_XDECREF(package);
+    return NULL;
+}
+
+PyObject *
+PyImport_ImportModuleLevelObject(PyObject *name, PyObject *globals,
+                                 PyObject *locals, PyObject *fromlist,
+                                 int level)
+{
     _Py_IDENTIFIER(_find_and_load);
     _Py_IDENTIFIER(_handle_fromlist);
-    _Py_IDENTIFIER(_lock_unlock_module);
-    _Py_static_string(single_dot, ".");
     PyObject *abs_name = NULL;
-    PyObject *builtins_import = NULL;
     PyObject *final_mod = NULL;
     PyObject *mod = NULL;
     PyObject *package = NULL;
-    PyObject *globals = NULL;
-    PyObject *fromlist = NULL;
     PyInterpreterState *interp = PyThreadState_GET()->interp;
     int has_from;
 
-    /* Make sure to use default values so as to not have
-       PyObject_CallMethodObjArgs() truncate the parameter list because of a
-       NULL argument. */
-    if (given_globals == NULL) {
-        globals = PyDict_New();
-        if (globals == NULL) {
-            goto error;
-        }
-    }
-    else {
-        /* Only have to care what given_globals is if it will be used
-           for something. */
-        if (level > 0 && !PyDict_Check(given_globals)) {
-            PyErr_SetString(PyExc_TypeError, "globals must be a dict");
-            goto error;
-        }
-        globals = given_globals;
-        Py_INCREF(globals);
-    }
-
-    if (given_fromlist == NULL) {
-        fromlist = PyList_New(0);
-        if (fromlist == NULL) {
-            goto error;
-        }
-    }
-    else {
-        fromlist = given_fromlist;
-        Py_INCREF(fromlist);
-    }
     if (name == NULL) {
         PyErr_SetString(PyExc_ValueError, "Empty module name");
         goto error;
@@ -1414,141 +1510,44 @@ PyImport_ImportModuleLevelObject(PyObject *name, PyObject *given_globals,
         PyErr_SetString(PyExc_TypeError, "module name must be a string");
         goto error;
     }
-    else if (PyUnicode_READY(name) < 0) {
+    if (PyUnicode_READY(name) < 0) {
         goto error;
     }
     if (level < 0) {
         PyErr_SetString(PyExc_ValueError, "level must be >= 0");
         goto error;
     }
-    else if (level > 0) {
-        package = _PyDict_GetItemId(globals, &PyId___package__);
-        if (package != NULL && package != Py_None) {
-            Py_INCREF(package);
-            if (!PyUnicode_Check(package)) {
-                PyErr_SetString(PyExc_TypeError, "package must be a string");
-                goto error;
-            }
-        }
-        else {
-            package = _PyDict_GetItemId(globals, &PyId___name__);
-            if (package == NULL) {
-                PyErr_SetString(PyExc_KeyError, "'__name__' not in globals");
-                goto error;
-            }
-            else if (!PyUnicode_Check(package)) {
-                PyErr_SetString(PyExc_TypeError, "__name__ must be a string");
-            }
-            Py_INCREF(package);
 
-            if (_PyDict_GetItemId(globals, &PyId___path__) == NULL) {
-                PyObject *partition = NULL;
-                PyObject *borrowed_dot = _PyUnicode_FromId(&single_dot);
-                if (borrowed_dot == NULL) {
-                    goto error;
-                }
-                partition = PyUnicode_RPartition(package, borrowed_dot);
-                Py_DECREF(package);
-                if (partition == NULL) {
-                    goto error;
-                }
-                package = PyTuple_GET_ITEM(partition, 0);
-                Py_INCREF(package);
-                Py_DECREF(partition);
-            }
-        }
-
-        if (PyDict_GetItem(interp->modules, package) == NULL) {
-            PyErr_Format(PyExc_SystemError,
-                    "Parent module %R not loaded, cannot perform relative "
-                    "import", package);
+    if (level > 0) {
+        abs_name = resolve_name(name, globals, level);
+        if (abs_name == NULL)
             goto error;
-        }
     }
     else {  /* level == 0 */
         if (PyUnicode_GET_LENGTH(name) == 0) {
             PyErr_SetString(PyExc_ValueError, "Empty module name");
             goto error;
         }
-        package = Py_None;
-        Py_INCREF(package);
-    }
-
-    if (level > 0) {
-        Py_ssize_t last_dot = PyUnicode_GET_LENGTH(package);
-        PyObject *base = NULL;
-        int level_up = 1;
-
-        for (level_up = 1; level_up < level; level_up += 1) {
-            last_dot = PyUnicode_FindChar(package, '.', 0, last_dot, -1);
-            if (last_dot == -2) {
-                goto error;
-            }
-            else if (last_dot == -1) {
-                PyErr_SetString(PyExc_ValueError,
-                                "attempted relative import beyond top-level "
-                                "package");
-                goto error;
-            }
-        }
-
-        base = PyUnicode_Substring(package, 0, last_dot);
-        if (base == NULL)
-            goto error;
-
-        if (PyUnicode_GET_LENGTH(name) > 0) {
-            PyObject *borrowed_dot, *seq = NULL;
-
-            borrowed_dot = _PyUnicode_FromId(&single_dot);
-            seq = PyTuple_Pack(2, base, name);
-            Py_DECREF(base);
-            if (borrowed_dot == NULL || seq == NULL) {
-                goto error;
-            }
-
-            abs_name = PyUnicode_Join(borrowed_dot, seq);
-            Py_DECREF(seq);
-            if (abs_name == NULL) {
-                goto error;
-            }
-        }
-        else {
-            abs_name = base;
-        }
-    }
-    else {
         abs_name = name;
         Py_INCREF(abs_name);
     }
-
-#ifdef WITH_THREAD
-    _PyImport_AcquireLock();
-#endif
-   /* From this point forward, goto error_with_unlock! */
-    if (PyDict_Check(globals)) {
-        builtins_import = _PyDict_GetItemId(globals, &PyId___import__);
-    }
-    if (builtins_import == NULL) {
-        builtins_import = _PyDict_GetItemId(interp->builtins, &PyId___import__);
-        if (builtins_import == NULL) {
-            PyErr_SetString(PyExc_ImportError, "__import__ not found");
-            goto error_with_unlock;
-        }
-    }
-    Py_INCREF(builtins_import);
 
     mod = PyDict_GetItem(interp->modules, abs_name);
     if (mod == Py_None) {
         PyObject *msg = PyUnicode_FromFormat("import of %R halted; "
                                              "None in sys.modules", abs_name);
         if (msg != NULL) {
-            PyErr_SetImportError(msg, abs_name, NULL);
+            PyErr_SetImportErrorSubclass(PyExc_ModuleNotFoundError, msg,
+                    abs_name, NULL);
             Py_DECREF(msg);
         }
         mod = NULL;
-        goto error_with_unlock;
+        goto error;
     }
     else if (mod != NULL) {
+        _Py_IDENTIFIER(__spec__);
+        _Py_IDENTIFIER(_initializing);
+        _Py_IDENTIFIER(_lock_unlock_module);
         PyObject *value = NULL;
         PyObject *spec;
         int initializing = 0;
@@ -1571,91 +1570,83 @@ PyImport_ImportModuleLevelObject(PyObject *name, PyObject *given_globals,
             Py_DECREF(value);
             if (initializing == -1)
                 PyErr_Clear();
-        }
-        if (initializing > 0) {
-            /* _bootstrap._lock_unlock_module() releases the import lock */
-            value = _PyObject_CallMethodIdObjArgs(interp->importlib,
-                                            &PyId__lock_unlock_module, abs_name,
-                                            NULL);
-            if (value == NULL)
-                goto error;
-            Py_DECREF(value);
-        }
-        else {
+            if (initializing > 0) {
 #ifdef WITH_THREAD
-            if (_PyImport_ReleaseLock() < 0) {
-                PyErr_SetString(PyExc_RuntimeError, "not holding the import lock");
-                goto error;
-            }
+                _PyImport_AcquireLock();
 #endif
+                /* _bootstrap._lock_unlock_module() releases the import lock */
+                value = _PyObject_CallMethodIdObjArgs(interp->importlib,
+                                                &PyId__lock_unlock_module, abs_name,
+                                                NULL);
+                if (value == NULL)
+                    goto error;
+                Py_DECREF(value);
+            }
         }
     }
     else {
+#ifdef WITH_THREAD
+        _PyImport_AcquireLock();
+#endif
         /* _bootstrap._find_and_load() releases the import lock */
         mod = _PyObject_CallMethodIdObjArgs(interp->importlib,
                                             &PyId__find_and_load, abs_name,
-                                            builtins_import, NULL);
+                                            interp->import_func, NULL);
         if (mod == NULL) {
             goto error;
         }
     }
-    /* From now on we don't hold the import lock anymore. */
 
-    has_from = PyObject_IsTrue(fromlist);
-    if (has_from < 0)
-        goto error;
+    has_from = 0;
+    if (fromlist != NULL && fromlist != Py_None) {
+        has_from = PyObject_IsTrue(fromlist);
+        if (has_from < 0)
+            goto error;
+    }
     if (!has_from) {
-        if (level == 0 || PyUnicode_GET_LENGTH(name) > 0) {
-            PyObject *front = NULL;
-            PyObject *partition = NULL;
-            PyObject *borrowed_dot = _PyUnicode_FromId(&single_dot);
+        Py_ssize_t len = PyUnicode_GET_LENGTH(name);
+        if (level == 0 || len > 0) {
+            Py_ssize_t dot;
 
-            if (borrowed_dot == NULL) {
+            dot = PyUnicode_FindChar(name, '.', 0, len, 1);
+            if (dot == -2) {
                 goto error;
             }
 
-            partition = PyUnicode_Partition(name, borrowed_dot);
-            if (partition == NULL) {
-                goto error;
-            }
-
-            if (PyUnicode_GET_LENGTH(PyTuple_GET_ITEM(partition, 1)) == 0) {
+            if (dot == -1) {
                 /* No dot in module name, simple exit */
-                Py_DECREF(partition);
                 final_mod = mod;
                 Py_INCREF(mod);
                 goto error;
             }
 
-            front = PyTuple_GET_ITEM(partition, 0);
-            Py_INCREF(front);
-            Py_DECREF(partition);
-
             if (level == 0) {
-                final_mod = PyObject_CallFunctionObjArgs(builtins_import, front, NULL);
+                PyObject *front = PyUnicode_Substring(name, 0, dot);
+                if (front == NULL) {
+                    goto error;
+                }
+
+                final_mod = PyImport_ImportModuleLevelObject(front, NULL, NULL, NULL, 0);
                 Py_DECREF(front);
             }
             else {
-                Py_ssize_t cut_off = PyUnicode_GET_LENGTH(name) -
-                                        PyUnicode_GET_LENGTH(front);
+                Py_ssize_t cut_off = len - dot;
                 Py_ssize_t abs_name_len = PyUnicode_GET_LENGTH(abs_name);
                 PyObject *to_return = PyUnicode_Substring(abs_name, 0,
                                                         abs_name_len - cut_off);
-                Py_DECREF(front);
                 if (to_return == NULL) {
                     goto error;
                 }
 
                 final_mod = PyDict_GetItem(interp->modules, to_return);
+                Py_DECREF(to_return);
                 if (final_mod == NULL) {
                     PyErr_Format(PyExc_KeyError,
                                  "%R not in sys.modules as expected",
                                  to_return);
+                    goto error;
                 }
-                else {
-                    Py_INCREF(final_mod);
-                }
-                Py_DECREF(to_return);
+                Py_INCREF(final_mod);
             }
         }
         else {
@@ -1666,24 +1657,14 @@ PyImport_ImportModuleLevelObject(PyObject *name, PyObject *given_globals,
     else {
         final_mod = _PyObject_CallMethodIdObjArgs(interp->importlib,
                                                   &PyId__handle_fromlist, mod,
-                                                  fromlist, builtins_import,
+                                                  fromlist, interp->import_func,
                                                   NULL);
     }
-    goto error;
 
-  error_with_unlock:
-#ifdef WITH_THREAD
-    if (_PyImport_ReleaseLock() < 0) {
-        PyErr_SetString(PyExc_RuntimeError, "not holding the import lock");
-    }
-#endif
   error:
     Py_XDECREF(abs_name);
-    Py_XDECREF(builtins_import);
     Py_XDECREF(mod);
     Py_XDECREF(package);
-    Py_XDECREF(globals);
-    Py_XDECREF(fromlist);
     if (final_mod == NULL)
         remove_importlib_frames();
     return final_mod;
@@ -1804,9 +1785,13 @@ PyImport_Import(PyObject *module_name)
     Py_DECREF(r);
 
     modules = PyImport_GetModuleDict();
-    r = PyDict_GetItem(modules, module_name);
-    if (r != NULL)
+    r = PyDict_GetItemWithError(modules, module_name);
+    if (r != NULL) {
         Py_INCREF(r);
+    }
+    else if (!PyErr_Occurred()) {
+        PyErr_SetObject(PyExc_KeyError, module_name);
+    }
 
   err:
     Py_XDECREF(globals);
@@ -1823,8 +1808,8 @@ Returns the list of file suffixes used to identify extension modules.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_extension_suffixes_impl(PyModuleDef *module)
-/*[clinic end generated code: output=d44c1566ef362229 input=ecdeeecfcb6f839e]*/
+_imp_extension_suffixes_impl(PyObject *module)
+/*[clinic end generated code: output=0bf346e25a8f0cd3 input=ecdeeecfcb6f839e]*/
 {
     PyObject *list;
     const char *suffix;
@@ -1862,8 +1847,8 @@ Initializes a frozen module.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_init_frozen_impl(PyModuleDef *module, PyObject *name)
-/*[clinic end generated code: output=a9de493bdd711878 input=13019adfc04f3fb3]*/
+_imp_init_frozen_impl(PyObject *module, PyObject *name)
+/*[clinic end generated code: output=fc0511ed869fd69c input=13019adfc04f3fb3]*/
 {
     int ret;
     PyObject *m;
@@ -1890,8 +1875,8 @@ Create a code object for a frozen module.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_get_frozen_object_impl(PyModuleDef *module, PyObject *name)
-/*[clinic end generated code: output=3114c970a47f2e3c input=ed689bc05358fdbd]*/
+_imp_get_frozen_object_impl(PyObject *module, PyObject *name)
+/*[clinic end generated code: output=2568cc5b7aa0da63 input=ed689bc05358fdbd]*/
 {
     return get_frozen_object(name);
 }
@@ -1906,8 +1891,8 @@ Returns True if the module name is of a frozen package.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_is_frozen_package_impl(PyModuleDef *module, PyObject *name)
-/*[clinic end generated code: output=3e4cab802b56d649 input=81b6cdecd080fbb8]*/
+_imp_is_frozen_package_impl(PyObject *module, PyObject *name)
+/*[clinic end generated code: output=e70cbdb45784a1c9 input=81b6cdecd080fbb8]*/
 {
     return is_frozen_package(name);
 }
@@ -1922,8 +1907,8 @@ Returns True if the module name corresponds to a built-in module.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_is_builtin_impl(PyModuleDef *module, PyObject *name)
-/*[clinic end generated code: output=2deec9cac6fb9a7e input=86befdac021dd1c7]*/
+_imp_is_builtin_impl(PyObject *module, PyObject *name)
+/*[clinic end generated code: output=3bfd1162e2d3be82 input=86befdac021dd1c7]*/
 {
     return PyLong_FromLong(is_builtin(name));
 }
@@ -1938,8 +1923,8 @@ Returns True if the module name corresponds to a frozen module.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_is_frozen_impl(PyModuleDef *module, PyObject *name)
-/*[clinic end generated code: output=7de8e260c8e36aed input=7301dbca1897d66b]*/
+_imp_is_frozen_impl(PyObject *module, PyObject *name)
+/*[clinic end generated code: output=01f408f5ec0f2577 input=7301dbca1897d66b]*/
 {
     const struct _frozen *p;
 
@@ -1959,19 +1944,15 @@ exec_builtin_or_dynamic(PyObject *mod) {
 
     def = PyModule_GetDef(mod);
     if (def == NULL) {
-        if (PyErr_Occurred()) {
-            return -1;
-        }
         return 0;
     }
+
     state = PyModule_GetState(mod);
-    if (PyErr_Occurred()) {
-        return -1;
-    }
     if (state) {
         /* Already initialized; skip reload */
         return 0;
     }
+
     return PyModule_ExecDef(mod, def);
 }
 
@@ -1988,8 +1969,8 @@ Create an extension module.
 [clinic start generated code]*/
 
 static PyObject *
-_imp_create_dynamic_impl(PyModuleDef *module, PyObject *spec, PyObject *file)
-/*[clinic end generated code: output=935cde5b3872d56d input=c31b954f4cf4e09d]*/
+_imp_create_dynamic_impl(PyObject *module, PyObject *spec, PyObject *file)
+/*[clinic end generated code: output=83249b827a4fde77 input=c31b954f4cf4e09d]*/
 {
     PyObject *mod, *name, *path;
     FILE *fp;
@@ -2043,8 +2024,8 @@ Initialize an extension module.
 [clinic start generated code]*/
 
 static int
-_imp_exec_dynamic_impl(PyModuleDef *module, PyObject *mod)
-/*[clinic end generated code: output=4b84f1301b22d4bd input=9fdbfcb250280d3a]*/
+_imp_exec_dynamic_impl(PyObject *module, PyObject *mod)
+/*[clinic end generated code: output=f5720ac7b465877d input=9fdbfcb250280d3a]*/
 {
     return exec_builtin_or_dynamic(mod);
 }
@@ -2062,8 +2043,8 @@ Initialize a built-in module.
 [clinic start generated code]*/
 
 static int
-_imp_exec_builtin_impl(PyModuleDef *module, PyObject *mod)
-/*[clinic end generated code: output=215e99876a27e284 input=7beed5a2f12a60ca]*/
+_imp_exec_builtin_impl(PyObject *module, PyObject *mod)
+/*[clinic end generated code: output=0262447b240c038e input=7beed5a2f12a60ca]*/
 {
     return exec_builtin_or_dynamic(mod);
 }

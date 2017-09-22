@@ -98,14 +98,18 @@ of which this module provides three different variants:
 
    .. attribute:: rfile
 
-      Contains an input stream, positioned at the start of the optional input
-      data.
+      An :class:`io.BufferedIOBase` input stream, ready to read from
+      the start of the optional input data.
 
    .. attribute:: wfile
 
       Contains the output stream for writing a response back to the
       client. Proper adherence to the HTTP protocol must be used when writing to
-      this stream.
+      this stream in order to achieve successful interoperation with HTTP
+      clients.
+
+      .. versionchanged:: 3.6
+         This is an :class:`io.BufferedIOBase` stream.
 
    :class:`BaseHTTPRequestHandler` has the following attributes:
 
@@ -277,7 +281,7 @@ of which this module provides three different variants:
 
    .. method:: date_time_string(timestamp=None)
 
-      Returns the date and time given by *timestamp* (which must be None or in
+      Returns the date and time given by *timestamp* (which must be ``None`` or in
       the format returned by :func:`time.time`), formatted for a message
       header. If *timestamp* is omitted, it uses the current date and time.
 
@@ -369,10 +373,9 @@ the current directory::
 
    Handler = http.server.SimpleHTTPRequestHandler
 
-   httpd = socketserver.TCPServer(("", PORT), Handler)
-
-   print("serving at port", PORT)
-   httpd.serve_forever()
+   with socketserver.TCPServer(("", PORT), Handler) as httpd:
+       print("serving at port", PORT)
+       httpd.serve_forever()
 
 .. _http-server-cli:
 

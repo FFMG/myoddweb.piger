@@ -3,6 +3,8 @@ import os
 import io
 from hashlib import md5
 from contextlib import contextmanager
+from random import Random
+import pathlib
 
 import unittest
 import unittest.mock
@@ -349,12 +351,17 @@ class CommonReadTest(ReadTest):
 
     def test_ignore_zeros(self):
         # Test TarFile's ignore_zeros option.
+        # generate 512 pseudorandom bytes
+        data = Random(0).getrandbits(512*8).to_bytes(512, 'big')
         for char in (b'\0', b'a'):
             # Test if EOFHeaderError ('\0') and InvalidHeaderError ('a')
             # are ignored correctly.
             with self.open(tmpname, "w") as fobj:
                 fobj.write(char * 1024)
-                fobj.write(tarfile.TarInfo("foo").tobuf())
+                tarinfo = tarfile.TarInfo("foo")
+                tarinfo.size = len(data)
+                fobj.write(tarinfo.tobuf())
+                fobj.write(data)
 
             tar = tarfile.open(tmpname, mode="r", ignore_zeros=True)
             try:
@@ -433,6 +440,22 @@ class MiscReadTestBase(CommonReadTest):
             with tarfile.open(fileobj=fobj, mode=self.mode) as tar:
                 self.assertIsInstance(tar.name, bytes)
                 self.assertEqual(tar.name, os.path.abspath(fobj.name))
+
+    def test_pathlike_name(self):
+        tarname = pathlib.Path(self.tarname)
+        with tarfile.open(tarname, mode=self.mode) as tar:
+            self.assertIsInstance(tar.name, str)
+            self.assertEqual(tar.name, os.path.abspath(os.fspath(tarname)))
+        with self.taropen(tarname) as tar:
+            self.assertIsInstance(tar.name, str)
+            self.assertEqual(tar.name, os.path.abspath(os.fspath(tarname)))
+        with tarfile.TarFile.open(tarname, mode=self.mode) as tar:
+            self.assertIsInstance(tar.name, str)
+            self.assertEqual(tar.name, os.path.abspath(os.fspath(tarname)))
+        if self.suffix == '':
+            with tarfile.TarFile(tarname, mode='r') as tar:
+                self.assertIsInstance(tar.name, str)
+                self.assertEqual(tar.name, os.path.abspath(os.fspath(tarname)))
 
     def test_illegal_mode_arg(self):
         with open(tmpname, 'wb'):
@@ -575,6 +598,26 @@ class MiscReadTestBase(CommonReadTest):
                     self.assertEqual(os.stat(extracted).st_mode & 0o777, 0o755)
         finally:
             support.rmtree(DIR)
+
+    def test_extractall_pathlike_name(self):
+        DIR = pathlib.Path(TEMPDIR) / "extractall"
+        with support.temp_dir(DIR), \
+             tarfile.open(tarname, encoding="iso8859-1") as tar:
+            directories = [t for t in tar if t.isdir()]
+            tar.extractall(DIR, directories)
+            for tarinfo in directories:
+                path = DIR / tarinfo.name
+                self.assertEqual(os.path.getmtime(path), tarinfo.mtime)
+
+    def test_extract_pathlike_name(self):
+        dirtype = "ustar/dirtype"
+        DIR = pathlib.Path(TEMPDIR) / "extractall"
+        with support.temp_dir(DIR), \
+             tarfile.open(tarname, encoding="iso8859-1") as tar:
+            tarinfo = tar.getmember(dirtype)
+            tar.extract(tarinfo, path=DIR)
+            extracted = DIR / dirtype
+            self.assertEqual(os.path.getmtime(extracted), tarinfo.mtime)
 
     def test_init_close_fobj(self):
         # Issue #7341: Close the internal file object in the TarFile
@@ -1086,6 +1129,17 @@ class WriteTest(WriteTestBase, unittest.TestCase):
         finally:
             support.rmdir(path)
 
+    def test_gettarinfo_pathlike_name(self):
+        with tarfile.open(tmpname, self.mode) as tar:
+            path = pathlib.Path(TEMPDIR) / "file"
+            with open(path, "wb") as fobj:
+                fobj.write(b"aaa")
+            tarinfo = tar.gettarinfo(path)
+            tarinfo2 = tar.gettarinfo(os.fspath(path))
+            self.assertIsInstance(tarinfo.name, str)
+            self.assertEqual(tarinfo.name, tarinfo2.name)
+            self.assertEqual(tarinfo.size, 3)
+
     @unittest.skipUnless(hasattr(os, "link"),
                          "Missing hardlink implementation")
     def test_link_size(self):
@@ -1521,6 +1575,34 @@ class CreateTest(WriteTestBase, unittest.TestCase):
             names = tobj.getnames()
         self.assertEqual(len(names), 1)
         self.assertIn("spameggs42", names[0])
+
+    def test_create_pathlike_name(self):
+        with tarfile.open(pathlib.Path(tmpname), self.mode) as tobj:
+            self.assertIsInstance(tobj.name, str)
+            self.assertEqual(tobj.name, os.path.abspath(tmpname))
+            tobj.add(pathlib.Path(self.file_path))
+            names = tobj.getnames()
+        self.assertEqual(len(names), 1)
+        self.assertIn('spameggs42', names[0])
+
+        with self.taropen(tmpname) as tobj:
+            names = tobj.getnames()
+        self.assertEqual(len(names), 1)
+        self.assertIn('spameggs42', names[0])
+
+    def test_create_taropen_pathlike_name(self):
+        with self.taropen(pathlib.Path(tmpname), "x") as tobj:
+            self.assertIsInstance(tobj.name, str)
+            self.assertEqual(tobj.name, os.path.abspath(tmpname))
+            tobj.add(pathlib.Path(self.file_path))
+            names = tobj.getnames()
+        self.assertEqual(len(names), 1)
+        self.assertIn('spameggs42', names[0])
+
+        with self.taropen(tmpname) as tobj:
+            names = tobj.getnames()
+        self.assertEqual(len(names), 1)
+        self.assertIn('spameggs42', names[0])
 
 
 class GzipCreateTest(GzipTest, CreateTest):
@@ -2073,6 +2155,24 @@ class MiscTest(unittest.TestCase):
             tarfile.itn(-0x10000000001, 6, tarfile.GNU_FORMAT)
         with self.assertRaises(ValueError):
             tarfile.itn(0x10000000000, 6, tarfile.GNU_FORMAT)
+
+    def test__all__(self):
+        blacklist = {'version', 'grp', 'pwd', 'symlink_exception',
+                     'NUL', 'BLOCKSIZE', 'RECORDSIZE', 'GNU_MAGIC',
+                     'POSIX_MAGIC', 'LENGTH_NAME', 'LENGTH_LINK',
+                     'LENGTH_PREFIX', 'REGTYPE', 'AREGTYPE', 'LNKTYPE',
+                     'SYMTYPE', 'CHRTYPE', 'BLKTYPE', 'DIRTYPE', 'FIFOTYPE',
+                     'CONTTYPE', 'GNUTYPE_LONGNAME', 'GNUTYPE_LONGLINK',
+                     'GNUTYPE_SPARSE', 'XHDTYPE', 'XGLTYPE', 'SOLARIS_XHDTYPE',
+                     'SUPPORTED_TYPES', 'REGULAR_TYPES', 'GNU_TYPES',
+                     'PAX_FIELDS', 'PAX_NAME_FIELDS', 'PAX_NUMBER_FIELDS',
+                     'stn', 'nts', 'nti', 'itn', 'calc_chksums', 'copyfileobj',
+                     'filemode',
+                     'EmptyHeaderError', 'TruncatedHeaderError',
+                     'EOFHeaderError', 'InvalidHeaderError',
+                     'SubsequentHeaderError', 'ExFileObject',
+                     'main'}
+        support.check__all__(self, tarfile, blacklist=blacklist)
 
 
 class CommandLineTest(unittest.TestCase):

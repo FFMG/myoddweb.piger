@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
+        <Property Id="ROOTREGISTRYKEY" Value="Software\Python\PythonCore" />
+    </Fragment>
+    
+    <Fragment>
         <Property Id="REGISTRYKEY" Value="Software\Python\PythonCore\$(var.ShortVersion)$(var.PyArchExt)$(var.PyTestExt)" />
     </Fragment>
     
@@ -16,10 +20,12 @@
     <Fragment>
         <Property Id="UpgradeTable" Value="1" />
         
+        <?ifndef SuppressUpgradeTable ?>
         <Upgrade Id="$(var.UpgradeCode)">
             <UpgradeVersion Property="DOWNGRADE" Minimum="$(var.Version)" IncludeMinimum="no" OnlyDetect="yes" />
             <UpgradeVersion Property="UPGRADE" Minimum="$(var.UpgradeMinimumVersion)" IncludeMinimum="yes" Maximum="$(var.Version)" IncludeMaximum="no" />
         </Upgrade>
+        <?endif ?>
         
         <?ifdef CoreUpgradeCode ?>
         <?if $(var.UpgradeCode)!=$(var.CoreUpgradeCode) ?>
@@ -40,7 +46,7 @@
     
     <Fragment>
         <!-- Include an icon for the Programs and Features dialog -->
-        <Icon Id="ARPIcon" SourceFile="!(bindpath.src)PC\pycon.ico" />
+        <Icon Id="ARPIcon" SourceFile="!(bindpath.src)PC\icons\python.ico" />
         <Property Id="ARPPRODUCTICON" Value="ARPIcon" />
         <Property Id="ARPNOMODIFY" Value="1" />
         <Property Id="DISABLEADVTSHORTCUTS" Value="1" />
@@ -57,7 +63,9 @@
     <!-- Top-level directories -->
     <Fragment>
         <DirectoryRef Id="InstallDirectory">
-            <Directory Id="DLLs" Name="DLLs" />
+            <Directory Id="DLLs" Name="DLLs">
+                <Directory Id="Catalogs" />
+            </Directory>
         </DirectoryRef>
     </Fragment>
 

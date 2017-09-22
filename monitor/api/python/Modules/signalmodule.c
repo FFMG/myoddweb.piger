@@ -154,18 +154,18 @@ itimer_retval(struct itimerval *iv)
 
     r = PyTuple_New(2);
     if (r == NULL)
-    return NULL;
+        return NULL;
 
     if(!(v = PyFloat_FromDouble(double_from_timeval(&iv->it_value)))) {
-    Py_DECREF(r);
-    return NULL;
+        Py_DECREF(r);
+        return NULL;
     }
 
     PyTuple_SET_ITEM(r, 0, v);
 
     if(!(v = PyFloat_FromDouble(double_from_timeval(&iv->it_interval)))) {
-    Py_DECREF(r);
-    return NULL;
+        Py_DECREF(r);
+        return NULL;
     }
 
     PyTuple_SET_ITEM(r, 1, v);
@@ -198,7 +198,7 @@ static int
 report_wakeup_write_error(void *data)
 {
     int save_errno = errno;
-    errno = (int) (Py_intptr_t) data;
+    errno = (int) (intptr_t) data;
     PyErr_SetFromErrno(PyExc_OSError);
     PySys_WriteStderr("Exception ignored when trying to write to the "
                       "signal wakeup fd:\n");
@@ -244,6 +244,32 @@ trip_signal(int sig_num)
 
     Handlers[sig_num].tripped = 1;
 
+    if (!is_tripped) {
+        /* Set is_tripped after setting .tripped, as it gets
+           cleared in PyErr_CheckSignals() before .tripped. */
+        is_tripped = 1;
+        Py_AddPendingCall(checksignals_witharg, NULL);
+    }
+
+    /* And then write to the wakeup fd *after* setting all the globals and
+       doing the Py_AddPendingCall. We used to write to the wakeup fd and then
+       set the flag, but this allowed the following sequence of events
+       (especially on windows, where trip_signal runs in a new thread):
+
+       - main thread blocks on select([wakeup_fd], ...)
+       - signal arrives
+       - trip_signal writes to the wakeup fd
+       - the main thread wakes up
+       - the main thread checks the signal flags, sees that they're unset
+       - the main thread empties the wakeup fd
+       - the main thread goes back to sleep
+       - trip_signal sets the flags to request the Python-level signal handler
+         be run
+       - the main thread doesn't notice, because it's asleep
+
+       See bpo-30038 for more details.
+    */
+
 #ifdef MS_WINDOWS
     fd = Py_SAFE_DOWNCAST(wakeup.fd, SOCKET_T, int);
 #else
@@ -277,16 +303,9 @@ trip_signal(int sig_num)
 
             if (rc < 0) {
                 Py_AddPendingCall(report_wakeup_write_error,
-                                  (void *)(Py_intptr_t)errno);
+                                  (void *)(intptr_t)errno);
             }
         }
-    }
-
-    if (!is_tripped) {
-        /* Set is_tripped after setting .tripped, as it gets
-           cleared in PyErr_CheckSignals() before .tripped. */
-        is_tripped = 1;
-        Py_AddPendingCall(checksignals_witharg, NULL);
     }
 }
 
@@ -340,8 +359,8 @@ Arrange for SIGALRM to arrive after the given number of seconds.
 [clinic start generated code]*/
 
 static long
-signal_alarm_impl(PyModuleDef *module, int seconds)
-/*[clinic end generated code: output=f5f9badaab25d3e7 input=0d5e97e0e6f39e86]*/
+signal_alarm_impl(PyObject *module, int seconds)
+/*[clinic end generated code: output=144232290814c298 input=0d5e97e0e6f39e86]*/
 {
     /* alarm() returns the number of seconds remaining */
     return (long)alarm(seconds);
@@ -358,8 +377,8 @@ Wait until a signal arrives.
 [clinic start generated code]*/
 
 static PyObject *
-signal_pause_impl(PyModuleDef *module)
-/*[clinic end generated code: output=9245704caa63bbe9 input=f03de0f875752062]*/
+signal_pause_impl(PyObject *module)
+/*[clinic end generated code: output=391656788b3c3929 input=f03de0f875752062]*/
 {
     Py_BEGIN_ALLOW_THREADS
     (void)pause();
@@ -394,8 +413,8 @@ the first is the signal number, the second is the interrupted stack frame.
 [clinic start generated code]*/
 
 static PyObject *
-signal_signal_impl(PyModuleDef *module, int signalnum, PyObject *handler)
-/*[clinic end generated code: output=622d7d0beebea546 input=deee84af5fa0432c]*/
+signal_signal_impl(PyObject *module, int signalnum, PyObject *handler)
+/*[clinic end generated code: output=b44cfda43780f3a1 input=deee84af5fa0432c]*/
 {
     PyObject *old_handler;
     void (*func)(int);
@@ -472,8 +491,8 @@ The return value can be:
 [clinic start generated code]*/
 
 static PyObject *
-signal_getsignal_impl(PyModuleDef *module, int signalnum)
-/*[clinic end generated code: output=d50ec355757e360c input=ac23a00f19dfa509]*/
+signal_getsignal_impl(PyObject *module, int signalnum)
+/*[clinic end generated code: output=35b3e0e796fd555e input=ac23a00f19dfa509]*/
 {
     PyObject *old_handler;
     if (signalnum < 1 || signalnum >= NSIG) {
@@ -507,8 +526,8 @@ signal sig, else system calls will be interrupted.
 [clinic start generated code]*/
 
 static PyObject *
-signal_siginterrupt_impl(PyModuleDef *module, int signalnum, int flag)
-/*[clinic end generated code: output=5dcf8b031b0e8044 input=4160acacca3e2099]*/
+signal_siginterrupt_impl(PyObject *module, int signalnum, int flag)
+/*[clinic end generated code: output=063816243d85dd19 input=4160acacca3e2099]*/
 {
     if (signalnum < 1 || signalnum >= NSIG) {
         PyErr_SetString(PyExc_ValueError,
@@ -579,7 +598,7 @@ signal_set_wakeup_fd(PyObject *self, PyObject *args)
             }
 
             fd = (int)sockfd;
-            if ((SOCKET_T)fd != sockfd || !_PyVerify_fd(fd)) {
+            if ((SOCKET_T)fd != sockfd) {
                 PyErr_SetString(PyExc_ValueError, "invalid fd");
                 return NULL;
             }
@@ -608,11 +627,6 @@ signal_set_wakeup_fd(PyObject *self, PyObject *args)
 #else
     if (fd != -1) {
         int blocking;
-
-        if (!_PyVerify_fd(fd)) {
-            PyErr_SetString(PyExc_ValueError, "invalid fd");
-            return NULL;
-        }
 
         if (_Py_fstat(fd, &status) != 0)
             return NULL;
@@ -682,9 +696,9 @@ Returns old values as a tuple: (delay, interval).
 [clinic start generated code]*/
 
 static PyObject *
-signal_setitimer_impl(PyModuleDef *module, int which, double seconds,
+signal_setitimer_impl(PyObject *module, int which, double seconds,
                       double interval)
-/*[clinic end generated code: output=9a9227a27bd05988 input=0d27d417cfcbd51a]*/
+/*[clinic end generated code: output=6f51da0fe0787f2c input=0d27d417cfcbd51a]*/
 {
     struct itimerval new, old;
 
@@ -714,8 +728,8 @@ Returns current value of given itimer.
 [clinic start generated code]*/
 
 static PyObject *
-signal_getitimer_impl(PyModuleDef *module, int which)
-/*[clinic end generated code: output=d1349ab18aadc569 input=f7d21d38f3490627]*/
+signal_getitimer_impl(PyObject *module, int which)
+/*[clinic end generated code: output=9e053175d517db40 input=f7d21d38f3490627]*/
 {
     struct itimerval old;
 
@@ -829,8 +843,8 @@ Fetch and/or change the signal mask of the calling thread.
 [clinic start generated code]*/
 
 static PyObject *
-signal_pthread_sigmask_impl(PyModuleDef *module, int how, PyObject *mask)
-/*[clinic end generated code: output=b043a9f0eeb1e075 input=f3b7d7a61b7b8283]*/
+signal_pthread_sigmask_impl(PyObject *module, int how, PyObject *mask)
+/*[clinic end generated code: output=ff640fe092bc9181 input=f3b7d7a61b7b8283]*/
 {
     sigset_t newmask, previous;
     int err;
@@ -867,8 +881,8 @@ the calling thread.
 [clinic start generated code]*/
 
 static PyObject *
-signal_sigpending_impl(PyModuleDef *module)
-/*[clinic end generated code: output=bf4ced803e7e51dd input=e0036c016f874e29]*/
+signal_sigpending_impl(PyObject *module)
+/*[clinic end generated code: output=53375ffe89325022 input=e0036c016f874e29]*/
 {
     int err;
     sigset_t mask;
@@ -897,8 +911,8 @@ and returns the signal number.
 [clinic start generated code]*/
 
 static PyObject *
-signal_sigwait(PyModuleDef *module, PyObject *sigset)
-/*[clinic end generated code: output=dae53048b0336a5c input=11af2d82d83c2e94]*/
+signal_sigwait(PyObject *module, PyObject *sigset)
+/*[clinic end generated code: output=557173647424f6e4 input=11af2d82d83c2e94]*/
 {
     sigset_t set;
     int err, signum;
@@ -986,8 +1000,8 @@ Returns a struct_siginfo containing information about the signal.
 [clinic start generated code]*/
 
 static PyObject *
-signal_sigwaitinfo(PyModuleDef *module, PyObject *sigset)
-/*[clinic end generated code: output=0bb53b07e5e926b5 input=f3779a74a991e171]*/
+signal_sigwaitinfo(PyObject *module, PyObject *sigset)
+/*[clinic end generated code: output=c40f27b269cd2309 input=f3779a74a991e171]*/
 {
     sigset_t set;
     siginfo_t si;
@@ -1026,9 +1040,9 @@ The timeout is specified in seconds, with floating point numbers allowed.
 [clinic start generated code]*/
 
 static PyObject *
-signal_sigtimedwait_impl(PyModuleDef *module, PyObject *sigset,
+signal_sigtimedwait_impl(PyObject *module, PyObject *sigset,
                          PyObject *timeout_obj)
-/*[clinic end generated code: output=c1960b5cea139929 input=53fd4ea3e3724eb8]*/
+/*[clinic end generated code: output=f7eff31e679f4312 input=53fd4ea3e3724eb8]*/
 {
     struct timespec ts;
     sigset_t set;
@@ -1097,8 +1111,8 @@ Send a signal to a thread.
 [clinic start generated code]*/
 
 static PyObject *
-signal_pthread_kill_impl(PyModuleDef *module, long thread_id, int signalnum)
-/*[clinic end generated code: output=35aed2713c756d7a input=77ed6a3b6f2a8122]*/
+signal_pthread_kill_impl(PyObject *module, long thread_id, int signalnum)
+/*[clinic end generated code: output=2a09ce41f1c4228a input=77ed6a3b6f2a8122]*/
 {
     int err;
 
@@ -1271,229 +1285,186 @@ PyInit__signal(void)
     }
 
 #ifdef SIGHUP
-    x = PyLong_FromLong(SIGHUP);
-    PyDict_SetItemString(d, "SIGHUP", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGHUP))
+         goto finally;
 #endif
 #ifdef SIGINT
-    x = PyLong_FromLong(SIGINT);
-    PyDict_SetItemString(d, "SIGINT", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGINT))
+         goto finally;
 #endif
 #ifdef SIGBREAK
-    x = PyLong_FromLong(SIGBREAK);
-    PyDict_SetItemString(d, "SIGBREAK", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGBREAK))
+         goto finally;
 #endif
 #ifdef SIGQUIT
-    x = PyLong_FromLong(SIGQUIT);
-    PyDict_SetItemString(d, "SIGQUIT", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGQUIT))
+         goto finally;
 #endif
 #ifdef SIGILL
-    x = PyLong_FromLong(SIGILL);
-    PyDict_SetItemString(d, "SIGILL", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGILL))
+         goto finally;
 #endif
 #ifdef SIGTRAP
-    x = PyLong_FromLong(SIGTRAP);
-    PyDict_SetItemString(d, "SIGTRAP", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGTRAP))
+         goto finally;
 #endif
 #ifdef SIGIOT
-    x = PyLong_FromLong(SIGIOT);
-    PyDict_SetItemString(d, "SIGIOT", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGIOT))
+         goto finally;
 #endif
 #ifdef SIGABRT
-    x = PyLong_FromLong(SIGABRT);
-    PyDict_SetItemString(d, "SIGABRT", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGABRT))
+         goto finally;
 #endif
 #ifdef SIGEMT
-    x = PyLong_FromLong(SIGEMT);
-    PyDict_SetItemString(d, "SIGEMT", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGEMT))
+         goto finally;
 #endif
 #ifdef SIGFPE
-    x = PyLong_FromLong(SIGFPE);
-    PyDict_SetItemString(d, "SIGFPE", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGFPE))
+         goto finally;
 #endif
 #ifdef SIGKILL
-    x = PyLong_FromLong(SIGKILL);
-    PyDict_SetItemString(d, "SIGKILL", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGKILL))
+         goto finally;
 #endif
 #ifdef SIGBUS
-    x = PyLong_FromLong(SIGBUS);
-    PyDict_SetItemString(d, "SIGBUS", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGBUS))
+         goto finally;
 #endif
 #ifdef SIGSEGV
-    x = PyLong_FromLong(SIGSEGV);
-    PyDict_SetItemString(d, "SIGSEGV", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGSEGV))
+         goto finally;
 #endif
 #ifdef SIGSYS
-    x = PyLong_FromLong(SIGSYS);
-    PyDict_SetItemString(d, "SIGSYS", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGSYS))
+         goto finally;
 #endif
 #ifdef SIGPIPE
-    x = PyLong_FromLong(SIGPIPE);
-    PyDict_SetItemString(d, "SIGPIPE", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGPIPE))
+         goto finally;
 #endif
 #ifdef SIGALRM
-    x = PyLong_FromLong(SIGALRM);
-    PyDict_SetItemString(d, "SIGALRM", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGALRM))
+         goto finally;
 #endif
 #ifdef SIGTERM
-    x = PyLong_FromLong(SIGTERM);
-    PyDict_SetItemString(d, "SIGTERM", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGTERM))
+         goto finally;
 #endif
 #ifdef SIGUSR1
-    x = PyLong_FromLong(SIGUSR1);
-    PyDict_SetItemString(d, "SIGUSR1", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGUSR1))
+         goto finally;
 #endif
 #ifdef SIGUSR2
-    x = PyLong_FromLong(SIGUSR2);
-    PyDict_SetItemString(d, "SIGUSR2", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGUSR2))
+         goto finally;
 #endif
 #ifdef SIGCLD
-    x = PyLong_FromLong(SIGCLD);
-    PyDict_SetItemString(d, "SIGCLD", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGCLD))
+         goto finally;
 #endif
 #ifdef SIGCHLD
-    x = PyLong_FromLong(SIGCHLD);
-    PyDict_SetItemString(d, "SIGCHLD", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGCHLD))
+         goto finally;
 #endif
 #ifdef SIGPWR
-    x = PyLong_FromLong(SIGPWR);
-    PyDict_SetItemString(d, "SIGPWR", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGPWR))
+         goto finally;
 #endif
 #ifdef SIGIO
-    x = PyLong_FromLong(SIGIO);
-    PyDict_SetItemString(d, "SIGIO", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGIO))
+         goto finally;
 #endif
 #ifdef SIGURG
-    x = PyLong_FromLong(SIGURG);
-    PyDict_SetItemString(d, "SIGURG", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGURG))
+         goto finally;
 #endif
 #ifdef SIGWINCH
-    x = PyLong_FromLong(SIGWINCH);
-    PyDict_SetItemString(d, "SIGWINCH", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGWINCH))
+         goto finally;
 #endif
 #ifdef SIGPOLL
-    x = PyLong_FromLong(SIGPOLL);
-    PyDict_SetItemString(d, "SIGPOLL", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGPOLL))
+         goto finally;
 #endif
 #ifdef SIGSTOP
-    x = PyLong_FromLong(SIGSTOP);
-    PyDict_SetItemString(d, "SIGSTOP", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGSTOP))
+         goto finally;
 #endif
 #ifdef SIGTSTP
-    x = PyLong_FromLong(SIGTSTP);
-    PyDict_SetItemString(d, "SIGTSTP", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGTSTP))
+         goto finally;
 #endif
 #ifdef SIGCONT
-    x = PyLong_FromLong(SIGCONT);
-    PyDict_SetItemString(d, "SIGCONT", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGCONT))
+         goto finally;
 #endif
 #ifdef SIGTTIN
-    x = PyLong_FromLong(SIGTTIN);
-    PyDict_SetItemString(d, "SIGTTIN", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGTTIN))
+         goto finally;
 #endif
 #ifdef SIGTTOU
-    x = PyLong_FromLong(SIGTTOU);
-    PyDict_SetItemString(d, "SIGTTOU", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGTTOU))
+         goto finally;
 #endif
 #ifdef SIGVTALRM
-    x = PyLong_FromLong(SIGVTALRM);
-    PyDict_SetItemString(d, "SIGVTALRM", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGVTALRM))
+         goto finally;
 #endif
 #ifdef SIGPROF
-    x = PyLong_FromLong(SIGPROF);
-    PyDict_SetItemString(d, "SIGPROF", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGPROF))
+         goto finally;
 #endif
 #ifdef SIGXCPU
-    x = PyLong_FromLong(SIGXCPU);
-    PyDict_SetItemString(d, "SIGXCPU", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGXCPU))
+         goto finally;
 #endif
 #ifdef SIGXFSZ
-    x = PyLong_FromLong(SIGXFSZ);
-    PyDict_SetItemString(d, "SIGXFSZ", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGXFSZ))
+         goto finally;
 #endif
 #ifdef SIGRTMIN
-    x = PyLong_FromLong(SIGRTMIN);
-    PyDict_SetItemString(d, "SIGRTMIN", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGRTMIN))
+         goto finally;
 #endif
 #ifdef SIGRTMAX
-    x = PyLong_FromLong(SIGRTMAX);
-    PyDict_SetItemString(d, "SIGRTMAX", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGRTMAX))
+         goto finally;
 #endif
 #ifdef SIGINFO
-    x = PyLong_FromLong(SIGINFO);
-    PyDict_SetItemString(d, "SIGINFO", x);
-    Py_XDECREF(x);
+    if (PyModule_AddIntMacro(m, SIGINFO))
+         goto finally;
 #endif
 
 #ifdef ITIMER_REAL
-    x = PyLong_FromLong(ITIMER_REAL);
-    PyDict_SetItemString(d, "ITIMER_REAL", x);
-    Py_DECREF(x);
+    if (PyModule_AddIntMacro(m, ITIMER_REAL))
+         goto finally;
 #endif
 #ifdef ITIMER_VIRTUAL
-    x = PyLong_FromLong(ITIMER_VIRTUAL);
-    PyDict_SetItemString(d, "ITIMER_VIRTUAL", x);
-    Py_DECREF(x);
+    if (PyModule_AddIntMacro(m, ITIMER_VIRTUAL))
+         goto finally;
 #endif
 #ifdef ITIMER_PROF
-    x = PyLong_FromLong(ITIMER_PROF);
-    PyDict_SetItemString(d, "ITIMER_PROF", x);
-    Py_DECREF(x);
+    if (PyModule_AddIntMacro(m, ITIMER_PROF))
+         goto finally;
 #endif
 
 #if defined (HAVE_SETITIMER) || defined (HAVE_GETITIMER)
     ItimerError = PyErr_NewException("signal.ItimerError",
-     PyExc_IOError, NULL);
+            PyExc_IOError, NULL);
     if (ItimerError != NULL)
-    PyDict_SetItemString(d, "ItimerError", ItimerError);
+        PyDict_SetItemString(d, "ItimerError", ItimerError);
 #endif
 
 #ifdef CTRL_C_EVENT
-    x = PyLong_FromLong(CTRL_C_EVENT);
-    PyDict_SetItemString(d, "CTRL_C_EVENT", x);
-    Py_DECREF(x);
+    if (PyModule_AddIntMacro(m, CTRL_C_EVENT))
+         goto finally;
 #endif
 
 #ifdef CTRL_BREAK_EVENT
-    x = PyLong_FromLong(CTRL_BREAK_EVENT);
-    PyDict_SetItemString(d, "CTRL_BREAK_EVENT", x);
-    Py_DECREF(x);
+    if (PyModule_AddIntMacro(m, CTRL_BREAK_EVENT))
+         goto finally;
 #endif
 
 #ifdef MS_WINDOWS

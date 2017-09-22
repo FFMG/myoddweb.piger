@@ -1,6 +1,6 @@
 /* stringlib: bytes joining implementation */
 
-#if STRINGLIB_SIZEOF_CHAR != 1
+#if STRINGLIB_IS_UNICODE
 #error join.h only compatible with byte-wise strings
 #endif
 
@@ -107,7 +107,7 @@ STRINGLIB(bytes_join)(PyObject *sep, PyObject *iterable)
         for (i = 0; i < nbufs; i++) {
             Py_ssize_t n = buffers[i].len;
             char *q = buffers[i].buf;
-            Py_MEMCPY(p, q, n);
+            memcpy(p, q, n);
             p += n;
         }
         goto done;
@@ -116,12 +116,12 @@ STRINGLIB(bytes_join)(PyObject *sep, PyObject *iterable)
         Py_ssize_t n;
         char *q;
         if (i) {
-            Py_MEMCPY(p, sepstr, seplen);
+            memcpy(p, sepstr, seplen);
             p += seplen;
         }
         n = buffers[i].len;
         q = buffers[i].buf;
-        Py_MEMCPY(p, q, n);
+        memcpy(p, q, n);
         p += n;
     }
     goto done;

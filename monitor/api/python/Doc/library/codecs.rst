@@ -224,6 +224,10 @@ wider range of codecs when working with binary files:
    The *errors* argument (as well as any
    other keyword argument) is passed through to the incremental encoder.
 
+   This function requires that the codec accept text :class:`str` objects
+   to encode. Therefore it does not support bytes-to-bytes encoders such as
+   ``base64_codec``.
+
 
 .. function:: iterdecode(iterator, encoding, errors='strict', **kwargs)
 
@@ -231,6 +235,11 @@ wider range of codecs when working with binary files:
    *iterator*. This function is a :term:`generator`.
    The *errors* argument (as well as any
    other keyword argument) is passed through to the incremental decoder.
+
+   This function requires that the codec accept :class:`bytes` objects
+   to decode. Therefore it does not support text-to-text encoders such as
+   ``rot_13``, although ``rot_13`` may be used equivalently with
+   :func:`iterencode`.
 
 
 The module also provides the following constants which are useful for reading
@@ -849,7 +858,7 @@ Encodings and Unicode
 ---------------------
 
 Strings are stored internally as sequences of code points in
-range ``0x0``-``0x10FFFF``.  (See :pep:`393` for
+range ``0x0``--``0x10FFFF``.  (See :pep:`393` for
 more details about the implementation.)
 Once a string object is used outside of CPU and memory, endianness
 and how these arrays are stored as bytes become an issue.  As with other
@@ -859,7 +868,7 @@ There are a variety of different text serialisation codecs, which are
 collectivity referred to as :term:`text encodings <text encoding>`.
 
 The simplest text encoding (called ``'latin-1'`` or ``'iso-8859-1'``) maps
-the code points 0-255 to the bytes ``0x0``-``0xff``, which means that a string
+the code points 0--255 to the bytes ``0x0``--``0xff``, which means that a string
 object that contains code points above ``U+00FF`` can't be encoded with this
 codec. Doing so will raise a :exc:`UnicodeEncodeError` that looks
 like the following (although the details of the error message may differ):
@@ -868,7 +877,7 @@ position 3: ordinal not in range(256)``.
 
 There's another group of encodings (the so called charmap encodings) that choose
 a different subset of all Unicode code points and how these code points are
-mapped to the bytes ``0x0``-``0xff``. To see how this is done simply open
+mapped to the bytes ``0x0``--``0xff``. To see how this is done simply open
 e.g. :file:`encodings/cp1252.py` (which is an encoding that is used primarily on
 Windows). There's a string constant with 256 characters that shows you which
 character is mapped to which byte value.
@@ -1254,9 +1263,15 @@ encodings.
 |                    |         | Only ``errors='strict'``  |
 |                    |         | is supported.             |
 +--------------------+---------+---------------------------+
-| mbcs               | dbcs    | Windows only: Encode      |
-|                    |         | operand according to the  |
+| mbcs               | ansi,   | Windows only: Encode      |
+|                    | dbcs    | operand according to the  |
 |                    |         | ANSI codepage (CP_ACP)    |
++--------------------+---------+---------------------------+
+| oem                |         | Windows only: Encode      |
+|                    |         | operand according to the  |
+|                    |         | OEM codepage (CP_OEMCP)   |
+|                    |         |                           |
+|                    |         | .. versionadded:: 3.6     |
 +--------------------+---------+---------------------------+
 | palmos             |         | Encoding of PalmOS 3.5    |
 +--------------------+---------+---------------------------+

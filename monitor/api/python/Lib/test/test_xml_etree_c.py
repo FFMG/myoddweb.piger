@@ -1,5 +1,5 @@
 # xml.etree test for cElementTree
-import sys, struct
+import struct
 from test import support
 from test.support import import_fresh_module
 import types
@@ -11,6 +11,7 @@ cET_alias = import_fresh_module('xml.etree.cElementTree',
                                 fresh=['_elementtree', 'xml.etree'])
 
 
+@unittest.skipUnless(cET, 'requires _elementtree')
 class MiscTests(unittest.TestCase):
     # Issue #8651.
     @support.bigmemtest(size=support._2G + 100, memuse=1, dry_run=False)
@@ -53,6 +54,15 @@ class MiscTests(unittest.TestCase):
         with self.assertRaises(AttributeError):
             del element.attrib
         self.assertEqual(element.attrib, {'A': 'B', 'C': 'D'})
+
+    def test_trashcan(self):
+        # If this test fails, it will most likely die via segfault.
+        e = root = cET.Element('root')
+        for i in range(200000):
+            e = cET.SubElement(e, 'x')
+        del e
+        del root
+        support.gc_collect()
 
 
 @unittest.skipUnless(cET, 'requires _elementtree')
@@ -108,7 +118,7 @@ class SizeofTest(unittest.TestCase):
                              struct.calcsize('8P'))
 
 def test_main():
-    from test import test_xml_etree, test_xml_etree_c
+    from test import test_xml_etree
 
     # Run the tests specific to the C implementation
     support.run_unittest(

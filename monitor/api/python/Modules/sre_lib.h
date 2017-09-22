@@ -367,14 +367,12 @@ SRE(info)(SRE_STATE* state, SRE_CODE* pattern)
 #define RETURN_ON_FAILURE(i) \
     do { RETURN_ON_ERROR(i); if (i == 0) RETURN_FAILURE; } while (0)
 
-#define SFY(x) #x
-
 #define DATA_STACK_ALLOC(state, type, ptr) \
 do { \
     alloc_pos = state->data_stack_base; \
     TRACE(("allocating %s in %" PY_FORMAT_SIZE_T "d " \
            "(%" PY_FORMAT_SIZE_T "d)\n", \
-           SFY(type), alloc_pos, sizeof(type))); \
+           Py_STRINGIFY(type), alloc_pos, sizeof(type))); \
     if (sizeof(type) > state->data_stack_size - alloc_pos) { \
         int j = data_stack_grow(state, sizeof(type)); \
         if (j < 0) return j; \
@@ -387,7 +385,7 @@ do { \
 
 #define DATA_STACK_LOOKUP_AT(state, type, ptr, pos) \
 do { \
-    TRACE(("looking up %s at %" PY_FORMAT_SIZE_T "d\n", SFY(type), pos)); \
+    TRACE(("looking up %s at %" PY_FORMAT_SIZE_T "d\n", Py_STRINGIFY(type), pos)); \
     ptr = (type*)(state->data_stack+pos); \
 } while (0)
 
@@ -531,7 +529,7 @@ entrance:
     if (ctx->pattern[0] == SRE_OP_INFO) {
         /* optimization info block */
         /* <INFO> <1=skip> <2=flags> <3=min> ... */
-        if (ctx->pattern[3] && (Py_uintptr_t)(end - ctx->ptr) < ctx->pattern[3]) {
+        if (ctx->pattern[3] && (uintptr_t)(end - ctx->ptr) < ctx->pattern[3]) {
             TRACE(("reject (got %" PY_FORMAT_SIZE_T "d chars, "
                    "need %" PY_FORMAT_SIZE_T "d)\n",
                    end - ctx->ptr, (Py_ssize_t) ctx->pattern[3]));
@@ -1256,7 +1254,32 @@ SRE(search)(SRE_STATE* state, SRE_CODE* pattern)
            prefix, prefix_len, prefix_skip));
     TRACE(("charset = %p\n", charset));
 
-#if defined(USE_FAST_SEARCH)
+    if (prefix_len == 1) {
+        /* pattern starts with a literal character */
+        SRE_CHAR c = (SRE_CHAR) prefix[0];
+#if SIZEOF_SRE_CHAR < 4
+        if ((SRE_CODE) c != prefix[0])
+            return 0; /* literal can't match: doesn't fit in char width */
+#endif
+        end = (SRE_CHAR *)state->end;
+        while (ptr < end) {
+            while (*ptr != c) {
+                if (++ptr >= end)
+                    return 0;
+            }
+            TRACE(("|%p|%p|SEARCH LITERAL\n", pattern, ptr));
+            state->start = ptr;
+            state->ptr = ptr + prefix_skip;
+            if (flags & SRE_INFO_LITERAL)
+                return 1; /* we got all of it */
+            status = SRE(match)(state, pattern + 2*prefix_skip, 0);
+            if (status != 0)
+                return status;
+            ++ptr;
+        }
+        return 0;
+    }
+
     if (prefix_len > 1) {
         /* pattern starts with a known prefix.  use the overlap
            table to skip forward as fast as we possibly can */
@@ -1305,32 +1328,8 @@ SRE(search)(SRE_STATE* state, SRE_CODE* pattern)
         }
         return 0;
     }
-#endif
 
-    if (pattern[0] == SRE_OP_LITERAL) {
-        /* pattern starts with a literal character.  this is used
-           for short prefixes, and if fast search is disabled */
-        SRE_CHAR c = (SRE_CHAR) pattern[1];
-#if SIZEOF_SRE_CHAR < 4
-        if ((SRE_CODE) c != pattern[1])
-            return 0; /* literal can't match: doesn't fit in char width */
-#endif
-        end = (SRE_CHAR *)state->end;
-        while (ptr < end) {
-            while (*ptr != c) {
-                if (++ptr >= end)
-                    return 0;
-            }
-            TRACE(("|%p|%p|SEARCH LITERAL\n", pattern, ptr));
-            state->start = ptr;
-            state->ptr = ++ptr;
-            if (flags & SRE_INFO_LITERAL)
-                return 1; /* we got all of it */
-            status = SRE(match)(state, pattern + 2, 0);
-            if (status != 0)
-                break;
-        }
-    } else if (charset) {
+    if (charset) {
         /* pattern starts with a character from a known set */
         end = (SRE_CHAR *)state->end;
         for (;;) {

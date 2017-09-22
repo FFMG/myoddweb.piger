@@ -183,7 +183,7 @@ Module functions and constants
    parameter is 5.0 (five seconds).
 
    For the *isolation_level* parameter, please see the
-   :attr:`Connection.isolation_level` property of :class:`Connection` objects.
+   :attr:`~Connection.isolation_level` property of :class:`Connection` objects.
 
    SQLite natively supports only the types TEXT, INTEGER, REAL, BLOB and NULL. If
    you want to use other types you must add support for them yourself. The
@@ -285,11 +285,11 @@ Connection Objects
 
       .. versionadded:: 3.2
 
-   .. method:: cursor([cursorClass])
+   .. method:: cursor(factory=Cursor)
 
-      The cursor method accepts a single optional parameter *cursorClass*. If
-      supplied, this must be a custom cursor class that extends
-      :class:`sqlite3.Cursor`.
+      The cursor method accepts a single optional parameter *factory*. If
+      supplied, this must be a callable returning an instance of :class:`Cursor`
+      or its subclasses.
 
    .. method:: commit()
 
@@ -309,25 +309,26 @@ Connection Objects
       call :meth:`commit`. If you just close your database connection without
       calling :meth:`commit` first, your changes will be lost!
 
-   .. method:: execute(sql, [parameters])
+   .. method:: execute(sql[, parameters])
 
-      This is a nonstandard shortcut that creates an intermediate cursor object by
-      calling the cursor method, then calls the cursor's :meth:`execute
-      <Cursor.execute>` method with the parameters given.
+      This is a nonstandard shortcut that creates a cursor object by calling
+      the :meth:`~Connection.cursor` method, calls the cursor's
+      :meth:`~Cursor.execute` method with the *parameters* given, and returns
+      the cursor.
 
+   .. method:: executemany(sql[, parameters])
 
-   .. method:: executemany(sql, [parameters])
-
-      This is a nonstandard shortcut that creates an intermediate cursor object by
-      calling the cursor method, then calls the cursor's :meth:`executemany
-      <Cursor.executemany>` method with the parameters given.
+      This is a nonstandard shortcut that creates a cursor object by
+      calling the :meth:`~Connection.cursor` method, calls the cursor's
+      :meth:`~Cursor.executemany` method with the *parameters* given, and
+      returns the cursor.
 
    .. method:: executescript(sql_script)
 
-      This is a nonstandard shortcut that creates an intermediate cursor object by
-      calling the cursor method, then calls the cursor's :meth:`executescript
-      <Cursor.executescript>` method with the parameters given.
-
+      This is a nonstandard shortcut that creates a cursor object by
+      calling the :meth:`~Connection.cursor` method, calls the cursor's
+      :meth:`~Cursor.executescript` method with the given *sql_script*, and
+      returns the cursor.
 
    .. method:: create_function(name, num_params, func)
 
@@ -338,7 +339,7 @@ Connection Objects
       called as the SQL function.
 
       The function can return any of the types supported by SQLite: bytes, str, int,
-      float and None.
+      float and ``None``.
 
       Example:
 
@@ -355,7 +356,7 @@ Connection Objects
       final result of the aggregate.
 
       The ``finalize`` method can return any of the types supported by SQLite:
-      bytes, str, int, float and None.
+      bytes, str, int, float and ``None``.
 
       Example:
 
@@ -377,7 +378,7 @@ Connection Objects
 
       .. literalinclude:: ../includes/sqlite3/collation_reverse.py
 
-      To remove a collation, call ``create_collation`` with None as callable::
+      To remove a collation, call ``create_collation`` with ``None`` as callable::
 
          con.create_collation("reverse", None)
 
@@ -488,10 +489,6 @@ Connection Objects
       :mod:`sqlite3` module will return Unicode objects for ``TEXT``. If you want to
       return bytestrings instead, you can set it to :class:`bytes`.
 
-      For efficiency reasons, there's also a way to return :class:`str` objects
-      only for non-ASCII data, and :class:`bytes` otherwise. To activate it, set
-      this attribute to :const:`sqlite3.OptimizedUnicode`.
-
       You can also set it to any other callable that accepts a single bytestring
       parameter and returns the resulting object.
 
@@ -533,7 +530,7 @@ Cursor Objects
 
    A :class:`Cursor` instance has the following attributes and methods.
 
-   .. method:: execute(sql, [parameters])
+   .. method:: execute(sql[, parameters])
 
       Executes an SQL statement. The SQL statement may be parameterized (i. e.
       placeholders instead of SQL literals). The :mod:`sqlite3` module supports two
@@ -545,7 +542,7 @@ Cursor Objects
       .. literalinclude:: ../includes/sqlite3/execute_1.py
 
       :meth:`execute` will only execute a single SQL statement. If you try to execute
-      more than one statement with it, it will raise a Warning. Use
+      more than one statement with it, it will raise a :exc:`.Warning`. Use
       :meth:`executescript` if you want to execute multiple SQL statements with one
       call.
 
@@ -553,8 +550,8 @@ Cursor Objects
    .. method:: executemany(sql, seq_of_parameters)
 
       Executes an SQL command against all parameter sequences or mappings found in
-      the sequence *sql*.  The :mod:`sqlite3` module also allows using an
-      :term:`iterator` yielding parameters instead of a sequence.
+      the sequence *seq_of_parameters*.  The :mod:`sqlite3` module also allows
+      using an :term:`iterator` yielding parameters instead of a sequence.
 
       .. literalinclude:: ../includes/sqlite3/executemany_1.py
 
@@ -569,7 +566,7 @@ Cursor Objects
       at once. It issues a ``COMMIT`` statement first, then executes the SQL script it
       gets as a parameter.
 
-      *sql_script* can be an instance of :class:`str` or :class:`bytes`.
+      *sql_script* can be an instance of :class:`str`.
 
       Example:
 
@@ -608,7 +605,7 @@ Cursor Objects
 
       Close the cursor now (rather than whenever ``__del__`` is called).
 
-      The cursor will be unusable from this point forward; a ``ProgrammingError``
+      The cursor will be unusable from this point forward; a :exc:`ProgrammingError`
       exception will be raised if any operation is attempted with the cursor.
 
    .. attribute:: rowcount
@@ -632,9 +629,21 @@ Cursor Objects
    .. attribute:: lastrowid
 
       This read-only attribute provides the rowid of the last modified row. It is
-      only set if you issued an ``INSERT`` statement using the :meth:`execute`
-      method. For operations other than ``INSERT`` or when :meth:`executemany` is
-      called, :attr:`lastrowid` is set to :const:`None`.
+      only set if you issued an ``INSERT`` or a ``REPLACE`` statement using the
+      :meth:`execute` method.  For operations other than ``INSERT`` or
+      ``REPLACE`` or when :meth:`executemany` is called, :attr:`lastrowid` is
+      set to :const:`None`.
+
+      If the ``INSERT`` or ``REPLACE`` statement failed to insert the previous
+      successful rowid is returned.
+
+      .. versionchanged:: 3.6
+         Added support for the ``REPLACE`` statement.
+
+   .. attribute:: arraysize
+
+      Read/write attribute that controls the number of rows returned by :meth:`fetchmany`.
+      The default value is 1 which means a single row would be fetched per call.
 
    .. attribute:: description
 
@@ -720,6 +729,36 @@ Now we plug :class:`Row` in::
    RHAT
    100.0
    35.14
+
+
+.. _sqlite3-exceptions:
+
+Exceptions
+----------
+
+.. exception:: Warning
+
+   A subclass of :exc:`Exception`.
+
+.. exception:: Error
+
+   The base class of the other exceptions in this module.  It is a subclass
+   of :exc:`Exception`.
+
+.. exception:: DatabaseError
+
+   Exception raised for errors that are related to the database.
+
+.. exception:: IntegrityError
+
+   Exception raised when the relational integrity of the database is affected,
+   e.g. a foreign key check fails.  It is a subclass of :exc:`DatabaseError`.
+
+.. exception:: ProgrammingError
+
+   Exception raised for programming errors, e.g. table not found or already
+   exists, syntax error in the SQL statement, wrong number of parameters
+   specified, etc.  It is a subclass of :exc:`DatabaseError`.
 
 
 .. _sqlite3-types:
@@ -891,28 +930,24 @@ Controlling Transactions
 
 By default, the :mod:`sqlite3` module opens transactions implicitly before a
 Data Modification Language (DML)  statement (i.e.
-``INSERT``/``UPDATE``/``DELETE``/``REPLACE``), and commits transactions
-implicitly before a non-DML, non-query statement (i. e.
-anything other than ``SELECT`` or the aforementioned).
-
-So if you are within a transaction and issue a command like ``CREATE TABLE
-...``, ``VACUUM``, ``PRAGMA``, the :mod:`sqlite3` module will commit implicitly
-before executing that command. There are two reasons for doing that. The first
-is that some of these commands don't work within transactions. The other reason
-is that sqlite3 needs to keep track of the transaction state (if a transaction
-is active or not).  The current transaction state is exposed through the
-:attr:`Connection.in_transaction` attribute of the connection object.
+``INSERT``/``UPDATE``/``DELETE``/``REPLACE``).
 
 You can control which kind of ``BEGIN`` statements sqlite3 implicitly executes
 (or none at all) via the *isolation_level* parameter to the :func:`connect`
 call, or via the :attr:`isolation_level` property of connections.
 
-If you want **autocommit mode**, then set :attr:`isolation_level` to None.
+If you want **autocommit mode**, then set :attr:`isolation_level` to ``None``.
 
 Otherwise leave it at its default, which will result in a plain "BEGIN"
 statement, or set it to one of SQLite's supported isolation levels: "DEFERRED",
 "IMMEDIATE" or "EXCLUSIVE".
 
+The current transaction state is exposed through the
+:attr:`Connection.in_transaction` attribute of the connection object.
+
+.. versionchanged:: 3.6
+   :mod:`sqlite3` used to implicitly commit an open transaction before DDL
+   statements.  This is no longer the case.
 
 
 Using :mod:`sqlite3` efficiently

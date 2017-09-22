@@ -20,6 +20,7 @@ Data members:
 #include "pythread.h"
 
 #include "osdefs.h"
+#include <locale.h>
 
 #ifdef MS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
@@ -33,7 +34,6 @@ extern const char *PyWin_DLLVersionString;
 #endif
 
 #ifdef HAVE_LANGINFO_H
-#include <locale.h>
 #include <langinfo.h>
 #endif
 
@@ -114,7 +114,7 @@ sys_displayhook_unencodable(PyObject *outf, PyObject *o)
     stdout_encoding = _PyObject_GetAttrId(outf, &PyId_encoding);
     if (stdout_encoding == NULL)
         goto error;
-    stdout_encoding_str = _PyUnicode_AsString(stdout_encoding);
+    stdout_encoding_str = PyUnicode_AsUTF8(stdout_encoding);
     if (stdout_encoding_str == NULL)
         goto error;
 
@@ -311,6 +311,23 @@ operating system filenames."
 );
 
 static PyObject *
+sys_getfilesystemencodeerrors(PyObject *self)
+{
+    if (Py_FileSystemDefaultEncodeErrors)
+        return PyUnicode_FromString(Py_FileSystemDefaultEncodeErrors);
+    PyErr_SetString(PyExc_RuntimeError,
+        "filesystem encoding is not initialized");
+    return NULL;
+}
+
+PyDoc_STRVAR(getfilesystemencodeerrors_doc,
+    "getfilesystemencodeerrors() -> string\n\
+\n\
+Return the error mode used to convert Unicode filenames in\n\
+operating system filenames."
+);
+
+static PyObject *
 sys_intern(PyObject *self, PyObject *args)
 {
     PyObject *s;
@@ -346,8 +363,10 @@ static PyObject *whatstrings[7] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 static int
 trace_init(void)
 {
-    static char *whatnames[7] = {"call", "exception", "line", "return",
-                                    "c_call", "c_exception", "c_return"};
+    static const char * const whatnames[7] = {
+        "call", "exception", "line", "return",
+        "c_call", "c_exception", "c_return"
+    };
     PyObject *name;
     int i;
     for (i = 0; i < 7; ++i) {
@@ -366,34 +385,25 @@ static PyObject *
 call_trampoline(PyObject* callback,
                 PyFrameObject *frame, int what, PyObject *arg)
 {
-    PyObject *args;
-    PyObject *whatstr;
     PyObject *result;
+    PyObject *stack[3];
 
-    args = PyTuple_New(3);
-    if (args == NULL)
+    if (PyFrame_FastToLocalsWithError(frame) < 0) {
         return NULL;
-    if (PyFrame_FastToLocalsWithError(frame) < 0)
-        return NULL;
+    }
 
-    Py_INCREF(frame);
-    whatstr = whatstrings[what];
-    Py_INCREF(whatstr);
-    if (arg == NULL)
-        arg = Py_None;
-    Py_INCREF(arg);
-    PyTuple_SET_ITEM(args, 0, (PyObject *)frame);
-    PyTuple_SET_ITEM(args, 1, whatstr);
-    PyTuple_SET_ITEM(args, 2, arg);
+    stack[0] = (PyObject *)frame;
+    stack[1] = whatstrings[what];
+    stack[2] = (arg != NULL) ? arg : Py_None;
 
     /* call the Python-level function */
-    result = PyEval_CallObject(callback, args);
-    PyFrame_LocalsToFast(frame, 1);
-    if (result == NULL)
-        PyTraceBack_Here(frame);
+    result = _PyObject_FastCall(callback, stack, 3);
 
-    /* cleanup */
-    Py_DECREF(args);
+    PyFrame_LocalsToFast(frame, 1);
+    if (result == NULL) {
+        PyTraceBack_Here(frame);
+    }
+
     return result;
 }
 
@@ -434,10 +444,7 @@ trace_trampoline(PyObject *self, PyFrameObject *frame,
         return -1;
     }
     if (result != Py_None) {
-        PyObject *temp = frame->f_trace;
-        frame->f_trace = NULL;
-        Py_XDECREF(temp);
-        frame->f_trace = result;
+        Py_XSETREF(frame->f_trace, result);
     }
     else {
         Py_DECREF(result);
@@ -602,33 +609,6 @@ PyDoc_STRVAR(getswitchinterval_doc,
 
 #endif /* WITH_THREAD */
 
-#ifdef WITH_TSC
-static PyObject *
-sys_settscdump(PyObject *self, PyObject *args)
-{
-    int bool;
-    PyThreadState *tstate = PyThreadState_Get();
-
-    if (!PyArg_ParseTuple(args, "i:settscdump", &bool))
-        return NULL;
-    if (bool)
-        tstate->interp->tscdump = 1;
-    else
-        tstate->interp->tscdump = 0;
-    Py_INCREF(Py_None);
-    return Py_None;
-
-}
-
-PyDoc_STRVAR(settscdump_doc,
-"settscdump(bool)\n\
-\n\
-If true, tell the Python interpreter to dump VM measurements to\n\
-stderr.  If false, turn off dump.  The measurements are based on the\n\
-processor's time-stamp counter."
-);
-#endif /* TSC */
-
 static PyObject *
 sys_setrecursionlimit(PyObject *self, PyObject *args)
 {
@@ -707,6 +687,113 @@ PyDoc_STRVAR(get_coroutine_wrapper_doc,
 "get_coroutine_wrapper()\n\
 \n\
 Return the wrapper for coroutine objects set by sys.set_coroutine_wrapper."
+);
+
+
+static PyTypeObject AsyncGenHooksType;
+
+PyDoc_STRVAR(asyncgen_hooks_doc,
+"asyncgen_hooks\n\
+\n\
+A struct sequence providing information about asynhronous\n\
+generators hooks.  The attributes are read only.");
+
+static PyStructSequence_Field asyncgen_hooks_fields[] = {
+    {"firstiter", "Hook to intercept first iteration"},
+    {"finalizer", "Hook to intercept finalization"},
+    {0}
+};
+
+static PyStructSequence_Desc asyncgen_hooks_desc = {
+    "asyncgen_hooks",          /* name */
+    asyncgen_hooks_doc,        /* doc */
+    asyncgen_hooks_fields ,    /* fields */
+    2
+};
+
+
+static PyObject *
+sys_set_asyncgen_hooks(PyObject *self, PyObject *args, PyObject *kw)
+{
+    static char *keywords[] = {"firstiter", "finalizer", NULL};
+    PyObject *firstiter = NULL;
+    PyObject *finalizer = NULL;
+
+    if (!PyArg_ParseTupleAndKeywords(
+            args, kw, "|OO", keywords,
+            &firstiter, &finalizer)) {
+        return NULL;
+    }
+
+    if (finalizer && finalizer != Py_None) {
+        if (!PyCallable_Check(finalizer)) {
+            PyErr_Format(PyExc_TypeError,
+                         "callable finalizer expected, got %.50s",
+                         Py_TYPE(finalizer)->tp_name);
+            return NULL;
+        }
+        _PyEval_SetAsyncGenFinalizer(finalizer);
+    }
+    else if (finalizer == Py_None) {
+        _PyEval_SetAsyncGenFinalizer(NULL);
+    }
+
+    if (firstiter && firstiter != Py_None) {
+        if (!PyCallable_Check(firstiter)) {
+            PyErr_Format(PyExc_TypeError,
+                         "callable firstiter expected, got %.50s",
+                         Py_TYPE(firstiter)->tp_name);
+            return NULL;
+        }
+        _PyEval_SetAsyncGenFirstiter(firstiter);
+    }
+    else if (firstiter == Py_None) {
+        _PyEval_SetAsyncGenFirstiter(NULL);
+    }
+
+    Py_RETURN_NONE;
+}
+
+PyDoc_STRVAR(set_asyncgen_hooks_doc,
+"set_asyncgen_hooks(*, firstiter=None, finalizer=None)\n\
+\n\
+Set a finalizer for async generators objects."
+);
+
+static PyObject *
+sys_get_asyncgen_hooks(PyObject *self, PyObject *args)
+{
+    PyObject *res;
+    PyObject *firstiter = _PyEval_GetAsyncGenFirstiter();
+    PyObject *finalizer = _PyEval_GetAsyncGenFinalizer();
+
+    res = PyStructSequence_New(&AsyncGenHooksType);
+    if (res == NULL) {
+        return NULL;
+    }
+
+    if (firstiter == NULL) {
+        firstiter = Py_None;
+    }
+
+    if (finalizer == NULL) {
+        finalizer = Py_None;
+    }
+
+    Py_INCREF(firstiter);
+    PyStructSequence_SET_ITEM(res, 0, firstiter);
+
+    Py_INCREF(finalizer);
+    PyStructSequence_SET_ITEM(res, 1, finalizer);
+
+    return res;
+}
+
+PyDoc_STRVAR(get_asyncgen_hooks_doc,
+"get_asyncgen_hooks()\n\
+\n\
+Return a namedtuple of installed asynchronous generators hooks \
+(firstiter, finalizer)."
 );
 
 
@@ -807,10 +894,11 @@ Return information about the running version of Windows as a named tuple.\n\
 The members are named: major, minor, build, platform, service_pack,\n\
 service_pack_major, service_pack_minor, suite_mask, and product_type. For\n\
 backward compatibility, only the first 5 items are available by indexing.\n\
-All elements are numbers, except service_pack which is a string. Platform\n\
-may be 0 for win32s, 1 for Windows 9x/ME, 2 for Windows NT/2000/XP/Vista/7,\n\
-3 for Windows CE. Product_type may be 1 for a workstation, 2 for a domain\n\
-controller, 3 for a server."
+All elements are numbers, except service_pack and platform_type which are\n\
+strings, and platform_version which is a 3-tuple. Platform is always 2.\n\
+Product_type may be 1 for a workstation, 2 for a domain controller, 3 for a\n\
+server. Platform_version is a 3-tuple containing a version number that is\n\
+intended for identifying the OS rather than feature detection."
 );
 
 static PyTypeObject WindowsVersionType = {0, 0, 0, 0, 0, 0};
@@ -825,6 +913,7 @@ static PyStructSequence_Field windows_version_fields[] = {
     {"service_pack_minor", "Service Pack minor version number"},
     {"suite_mask", "Bit mask identifying available product suites"},
     {"product_type", "System product type"},
+    {"platform_version", "Diagnostic version number"},
     {0}
 };
 
@@ -849,6 +938,12 @@ sys_getwindowsversion(PyObject *self)
     PyObject *version;
     int pos = 0;
     OSVERSIONINFOEX ver;
+    DWORD realMajor, realMinor, realBuild;
+    HANDLE hKernel32;
+    wchar_t kernel32_path[MAX_PATH];
+    LPVOID verblock;
+    DWORD verblock_size;
+
     ver.dwOSVersionInfoSize = sizeof(ver);
     if (!GetVersionEx((OSVERSIONINFO*) &ver))
         return PyErr_SetFromWindowsErr(0);
@@ -867,14 +962,62 @@ sys_getwindowsversion(PyObject *self)
     PyStructSequence_SET_ITEM(version, pos++, PyLong_FromLong(ver.wSuiteMask));
     PyStructSequence_SET_ITEM(version, pos++, PyLong_FromLong(ver.wProductType));
 
+    realMajor = ver.dwMajorVersion;
+    realMinor = ver.dwMinorVersion;
+    realBuild = ver.dwBuildNumber;
+
+    // GetVersion will lie if we are running in a compatibility mode.
+    // We need to read the version info from a system file resource
+    // to accurately identify the OS version. If we fail for any reason,
+    // just return whatever GetVersion said.
+    hKernel32 = GetModuleHandleW(L"kernel32.dll");
+    if (hKernel32 && GetModuleFileNameW(hKernel32, kernel32_path, MAX_PATH) &&
+        (verblock_size = GetFileVersionInfoSizeW(kernel32_path, NULL)) &&
+        (verblock = PyMem_RawMalloc(verblock_size))) {
+        VS_FIXEDFILEINFO *ffi;
+        UINT ffi_len;
+
+        if (GetFileVersionInfoW(kernel32_path, 0, verblock_size, verblock) &&
+            VerQueryValueW(verblock, L"", (LPVOID)&ffi, &ffi_len)) {
+            realMajor = HIWORD(ffi->dwProductVersionMS);
+            realMinor = LOWORD(ffi->dwProductVersionMS);
+            realBuild = HIWORD(ffi->dwProductVersionLS);
+        }
+        PyMem_RawFree(verblock);
+    }
+    PyStructSequence_SET_ITEM(version, pos++, Py_BuildValue("(kkk)",
+        realMajor,
+        realMinor,
+        realBuild
+    ));
+
     if (PyErr_Occurred()) {
         Py_DECREF(version);
         return NULL;
     }
+
     return version;
 }
 
 #pragma warning(pop)
+
+PyDoc_STRVAR(enablelegacywindowsfsencoding_doc,
+"_enablelegacywindowsfsencoding()\n\
+\n\
+Changes the default filesystem encoding to mbcs:replace for consistency\n\
+with earlier versions of Python. See PEP 529 for more information.\n\
+\n\
+This is equivalent to defining the PYTHONLEGACYWINDOWSFSENCODING \n\
+environment variable before launching Python."
+);
+
+static PyObject *
+sys_enablelegacywindowsfsencoding(PyObject *self)
+{
+    Py_FileSystemDefaultEncoding = "mbcs";
+    Py_FileSystemDefaultEncodeErrors = "replace";
+    Py_RETURN_NONE;
+}
 
 #endif /* MS_WINDOWS */
 
@@ -1152,8 +1295,10 @@ static PyObject *
 sys_debugmallocstats(PyObject *self, PyObject *args)
 {
 #ifdef WITH_PYMALLOC
-    _PyObject_DebugMallocStats(stderr);
-    fputc('\n', stderr);
+    if (_PyMem_PymallocEnabled()) {
+        _PyObject_DebugMallocStats(stderr);
+        fputc('\n', stderr);
+    }
 #endif
     _PyObject_DebugTypeStats(stderr);
 
@@ -1233,6 +1378,8 @@ static PyMethodDef sys_methods[] = {
 #endif
     {"getfilesystemencoding", (PyCFunction)sys_getfilesystemencoding,
      METH_NOARGS, getfilesystemencoding_doc},
+    { "getfilesystemencodeerrors", (PyCFunction)sys_getfilesystemencodeerrors,
+     METH_NOARGS, getfilesystemencodeerrors_doc },
 #ifdef Py_TRACE_REFS
     {"getobjects",      _Py_GetObjects, METH_VARARGS},
 #endif
@@ -1248,6 +1395,8 @@ static PyMethodDef sys_methods[] = {
 #ifdef MS_WINDOWS
     {"getwindowsversion", (PyCFunction)sys_getwindowsversion, METH_NOARGS,
      getwindowsversion_doc},
+    {"_enablelegacywindowsfsencoding", (PyCFunction)sys_enablelegacywindowsfsencoding,
+     METH_NOARGS, enablelegacywindowsfsencoding_doc },
 #endif /* MS_WINDOWS */
     {"intern",          sys_intern,     METH_VARARGS, intern_doc},
     {"is_finalizing",   sys_is_finalizing, METH_NOARGS, is_finalizing_doc},
@@ -1272,9 +1421,6 @@ static PyMethodDef sys_methods[] = {
     {"getprofile",      sys_getprofile, METH_NOARGS, getprofile_doc},
     {"setrecursionlimit", sys_setrecursionlimit, METH_VARARGS,
      setrecursionlimit_doc},
-#ifdef WITH_TSC
-    {"settscdump", sys_settscdump, METH_VARARGS, settscdump_doc},
-#endif
     {"settrace",        sys_settrace, METH_O, settrace_doc},
     {"gettrace",        sys_gettrace, METH_NOARGS, gettrace_doc},
     {"call_tracing", sys_call_tracing, METH_VARARGS, call_tracing_doc},
@@ -1284,6 +1430,10 @@ static PyMethodDef sys_methods[] = {
      set_coroutine_wrapper_doc},
     {"get_coroutine_wrapper", sys_get_coroutine_wrapper, METH_NOARGS,
      get_coroutine_wrapper_doc},
+    {"set_asyncgen_hooks", (PyCFunction)sys_set_asyncgen_hooks,
+     METH_VARARGS | METH_KEYWORDS, set_asyncgen_hooks_doc},
+    {"get_asyncgen_hooks", sys_get_asyncgen_hooks, METH_NOARGS,
+     get_asyncgen_hooks_doc},
     {NULL,              NULL}           /* sentinel */
 };
 
@@ -1464,14 +1614,21 @@ version -- the version of this interpreter as a string\n\
 version_info -- version information as a named tuple\n\
 "
 )
-#ifdef MS_WINDOWS
+#ifdef MS_COREDLL
 /* concatenating string here */
 PyDoc_STR(
 "dllhandle -- [Windows only] integer handle of the Python DLL\n\
 winver -- [Windows only] version number of the Python DLL\n\
 "
 )
-#endif /* MS_WINDOWS */
+#endif /* MS_COREDLL */
+#ifdef MS_WINDOWS
+/* concatenating string here */
+PyDoc_STR(
+"_enablelegacywindowsfsencoding -- [Windows only] \n\
+"
+)
+#endif
 PyDoc_STR(
 "__stdin__ -- the original stdin; don't touch!\n\
 __stdout__ -- the original stdout; don't touch!\n\
@@ -1582,7 +1739,7 @@ static PyStructSequence_Field version_info_fields[] = {
     {"major", "Major release number"},
     {"minor", "Minor release number"},
     {"micro", "Patch release number"},
-    {"releaselevel", "'alpha', 'beta', 'candidate', or 'release'"},
+    {"releaselevel", "'alpha', 'beta', 'candidate', or 'final'"},
     {"serial", "Serial release number"},
     {0}
 };
@@ -1643,15 +1800,11 @@ make_version_info(void)
 /* sys.implementation values */
 #define NAME "cpython"
 const char *_PySys_ImplName = NAME;
-#define QUOTE(arg) #arg
-#define STRIFY(name) QUOTE(name)
-#define MAJOR STRIFY(PY_MAJOR_VERSION)
-#define MINOR STRIFY(PY_MINOR_VERSION)
+#define MAJOR Py_STRINGIFY(PY_MAJOR_VERSION)
+#define MINOR Py_STRINGIFY(PY_MINOR_VERSION)
 #define TAG NAME "-" MAJOR MINOR
 const char *_PySys_ImplCacheTag = TAG;
 #undef NAME
-#undef QUOTE
-#undef STRIFY
 #undef MAJOR
 #undef MINOR
 #undef TAG
@@ -1695,6 +1848,16 @@ make_impl_info(PyObject *version_info)
     Py_DECREF(value);
     if (res < 0)
         goto error;
+
+#ifdef MULTIARCH
+    value = PyUnicode_FromString(MULTIARCH);
+    if (value == NULL)
+        goto error;
+    res = PyDict_SetItemString(impl_info, "_multiarch", value);
+    Py_DECREF(value);
+    if (res < 0)
+        goto error;
+#endif
 
     /* dict ready */
 
@@ -1779,9 +1942,9 @@ _PySys_Init(void)
                          PyUnicode_FromString(Py_GetVersion()));
     SET_SYS_FROM_STRING("hexversion",
                          PyLong_FromLong(PY_VERSION_HEX));
-    SET_SYS_FROM_STRING("_mercurial",
-                        Py_BuildValue("(szz)", "CPython", _Py_hgidentifier(),
-                                      _Py_hgversion()));
+    SET_SYS_FROM_STRING("_git",
+                        Py_BuildValue("(szz)", "CPython", _Py_gitidentifier(),
+                                      _Py_gitversion()));
     SET_SYS_FROM_STRING("dont_write_bytecode",
                          PyBool_FromLong(Py_DontWriteBytecodeFlag));
     SET_SYS_FROM_STRING("api_version",
@@ -1906,6 +2069,14 @@ _PySys_Init(void)
     SET_SYS_FROM_STRING("thread_info", PyThread_GetInfo());
 #endif
 
+    /* initialize asyncgen_hooks */
+    if (AsyncGenHooksType.tp_name == NULL) {
+        if (PyStructSequence_InitType2(
+                &AsyncGenHooksType, &asyncgen_hooks_desc) < 0) {
+            return NULL;
+        }
+    }
+
 #undef SET_SYS_FROM_STRING
 #undef SET_SYS_FROM_STRING_BORROW
     if (PyErr_Occurred())
@@ -2002,7 +2173,7 @@ sys_update_path(int argc, wchar_t **argv)
 #endif
 #if defined(HAVE_REALPATH)
     wchar_t fullpath[MAXPATHLEN];
-#elif defined(MS_WINDOWS) && !defined(MS_WINCE)
+#elif defined(MS_WINDOWS)
     wchar_t fullpath[MAX_PATH];
 #endif
 
@@ -2041,10 +2212,8 @@ sys_update_path(int argc, wchar_t **argv)
 #if SEP == '\\' /* Special case for MS filename syntax */
     if (_HAVE_SCRIPT_ARGUMENT(argc, argv)) {
         wchar_t *q;
-#if defined(MS_WINDOWS) && !defined(MS_WINCE)
-        /* This code here replaces the first element in argv with the full
-        path that it represents. Under CE, there are no relative paths so
-        the argument must be the full path anyway. */
+#if defined(MS_WINDOWS)
+        /* Replace the first element in argv with the full path. */
         wchar_t *ptemp;
         if (GetFullPathNameW(argv0,
                            Py_ARRAY_LENGTH(fullpath),
@@ -2114,7 +2283,7 @@ PySys_SetArgv(int argc, wchar_t **argv)
 static int
 sys_pyfile_write_unicode(PyObject *unicode, PyObject *file)
 {
-    PyObject *writer = NULL, *args = NULL, *result = NULL;
+    PyObject *writer = NULL, *result = NULL;
     int err;
 
     if (file == NULL)
@@ -2124,11 +2293,7 @@ sys_pyfile_write_unicode(PyObject *unicode, PyObject *file)
     if (writer == NULL)
         goto error;
 
-    args = PyTuple_Pack(1, unicode);
-    if (args == NULL)
-        goto error;
-
-    result = PyEval_CallObject(writer, args);
+    result = _PyObject_CallArg1(writer, unicode);
     if (result == NULL) {
         goto error;
     } else {
@@ -2140,7 +2305,6 @@ error:
     err = -1;
 finally:
     Py_XDECREF(writer);
-    Py_XDECREF(args);
     Py_XDECREF(result);
     return err;
 }
@@ -2247,7 +2411,7 @@ sys_format(_Py_Identifier *key, FILE *fp, const char *format, va_list va)
     if (message != NULL) {
         if (sys_pyfile_write_unicode(message, file) != 0) {
             PyErr_Clear();
-            utf8 = _PyUnicode_AsString(message);
+            utf8 = PyUnicode_AsUTF8(message);
             if (utf8 != NULL)
                 fputs(utf8, fp);
         }

@@ -143,7 +143,7 @@ class TestGeneratorBase:
     def test_set_mangle_from_via_policy(self):
         source = textwrap.dedent("""\
             Subject: test that
-             from is mangeld in the body!
+             from is mangled in the body!
 
             From time to time I write a rhyme.
             """)
@@ -161,6 +161,13 @@ class TestGeneratorBase:
                 g = self.genclass(s, policy=p)
                 g.flatten(msg)
                 self.assertEqual(s.getvalue(), self.typ(expected))
+
+    def test_compat32_max_line_length_does_not_fold_when_none(self):
+        msg = self.msgmaker(self.typ(self.refold_long_expected[0]))
+        s = self.ioclass()
+        g = self.genclass(s, policy=policy.compat32.clone(max_line_length=None))
+        g.flatten(msg)
+        self.assertEqual(s.getvalue(), self.typ(self.refold_long_expected[0]))
 
 
 class TestGenerator(TestGeneratorBase, TestEmailBase):

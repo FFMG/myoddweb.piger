@@ -296,7 +296,7 @@ is the module's name in the Python package namespace.
 
    Finds the caller's source filename and line number. Returns the filename, line
    number, function name and stack information as a 4-element tuple. The stack
-   information is returned as *None* unless *stack_info* is *True*.
+   information is returned as ``None`` unless *stack_info* is ``True``.
 
 
 .. method:: Logger.handle(record)
@@ -318,7 +318,7 @@ is the module's name in the Python package namespace.
    looking for handlers in this logger and its parents in the logger hierarchy.
    Returns ``True`` if a handler was found, else ``False``. The method stops searching
    up the hierarchy whenever a logger with the 'propagate' attribute set to
-   False is found - that will be the last logger which is checked for the
+   false is found - that will be the last logger which is checked for the
    existence of handlers.
 
    .. versionadded:: 3.2
@@ -561,7 +561,7 @@ The useful mapping keys in a :class:`LogRecord` are given in the section on
          handled by a strptime format string (``'%Y-%m-%d %H:%M:%S'``), and the
          part after the comma is a millisecond value. Because strptime does not
          have a format placeholder for milliseconds, the millisecond value is
-         appended using another format string, ``'%s,%03d'`` – and both of these
+         appended using another format string, ``'%s,%03d'`` --- and both of these
          format strings have been hardcoded into this method. With the change,
          these strings are defined as class-level attributes which can be
          overridden at the instance level when desired. The names of the
@@ -672,7 +672,7 @@ wire).
    :param args: Variable data to merge into the *msg* argument to obtain the
                 event description.
    :param exc_info: An exception tuple with the current exception information,
-                    or *None* if no exception information is available.
+                    or ``None`` if no exception information is available.
    :param func: The name of the function or method from which the logging call
                 was invoked.
    :param sinfo: A text string representing stack information from the base of
@@ -754,7 +754,7 @@ the options available to you.
 |                |                         | (as returned by :func:`time.time`).           |
 +----------------+-------------------------+-----------------------------------------------+
 | exc_info       | You shouldn't need to   | Exception tuple (à la ``sys.exc_info``) or,   |
-|                | format this yourself.   | if no exception has occurred, *None*.         |
+|                | format this yourself.   | if no exception has occurred, ``None``.       |
 +----------------+-------------------------+-----------------------------------------------+
 | filename       | ``%(filename)s``        | Filename portion of ``pathname``.             |
 +----------------+-------------------------+-----------------------------------------------+
@@ -1187,7 +1187,7 @@ functions.
       :lno: The line number in the file where the logging call was made.
       :msg: The logging message.
       :args: The arguments for the logging message.
-      :exc_info: An exception tuple, or None.
+      :exc_info: An exception tuple, or ``None``.
       :func: The name of the function or method which invoked the logging
              call.
       :sinfo: A stack traceback such as is provided by

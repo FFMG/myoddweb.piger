@@ -26,6 +26,7 @@ import sys
 import sysconfig
 import tempfile
 import time
+import types
 import unittest
 import urllib.error
 import warnings
@@ -89,10 +90,13 @@ __all__ = [
     "bigmemtest", "bigaddrspacetest", "cpython_only", "get_attribute",
     "requires_IEEE_754", "skip_unless_xattr", "requires_zlib",
     "anticipate_failure", "load_package_tests", "detect_api_mismatch",
+    "check__all__", "requires_android_level", "requires_multiprocessing_queue",
     # sys
-    "is_jython", "check_impl_detail",
+    "is_jython", "is_android", "check_impl_detail", "unix_shell",
+    "setswitchinterval", "android_not_root",
     # network
     "HOST", "IPV6_ENABLED", "find_unused_port", "bind_port", "open_urlresource",
+    "bind_unix_socket",
     # processes
     'temp_umask', "reap_children",
     # logging
@@ -103,7 +107,7 @@ __all__ = [
     "check_warnings", "check_no_resource_warning", "EnvironmentVarGuard",
     "run_with_locale", "swap_item",
     "swap_attr", "Matcher", "set_memlimit", "SuppressCrashReport", "sortdict",
-    "run_with_tz",
+    "run_with_tz", "PGO", "missing_compiler_executable",
     ]
 
 class Error(Exception):
@@ -296,6 +300,16 @@ def unload(name):
     except KeyError:
         pass
 
+def _force_run(path, func, *args):
+    try:
+        return func(*args)
+    except OSError as err:
+        if verbose >= 2:
+            print('%s: %s' % (err.__class__.__name__, err))
+            print('re-run %s%r' % (func.__name__, args))
+        os.chmod(path, stat.S_IRWXU)
+        return func(*args)
+
 if sys.platform.startswith("win"):
     def _waitfor(func, pathname, waitall=False):
         # Perform the operation
@@ -338,7 +352,7 @@ if sys.platform.startswith("win"):
 
     def _rmtree(path):
         def _rmtree_inner(path):
-            for name in os.listdir(path):
+            for name in _force_run(path, os.listdir, path):
                 fullname = os.path.join(path, name)
                 try:
                     mode = os.lstat(fullname).st_mode
@@ -348,15 +362,36 @@ if sys.platform.startswith("win"):
                     mode = 0
                 if stat.S_ISDIR(mode):
                     _waitfor(_rmtree_inner, fullname, waitall=True)
-                    os.rmdir(fullname)
+                    _force_run(fullname, os.rmdir, fullname)
                 else:
-                    os.unlink(fullname)
+                    _force_run(fullname, os.unlink, fullname)
         _waitfor(_rmtree_inner, path, waitall=True)
-        _waitfor(os.rmdir, path)
+        _waitfor(lambda p: _force_run(p, os.rmdir, p), path)
 else:
     _unlink = os.unlink
     _rmdir = os.rmdir
-    _rmtree = shutil.rmtree
+
+    def _rmtree(path):
+        try:
+            shutil.rmtree(path)
+            return
+        except OSError:
+            pass
+
+        def _rmtree_inner(path):
+            for name in _force_run(path, os.listdir, path):
+                fullname = os.path.join(path, name)
+                try:
+                    mode = os.lstat(fullname).st_mode
+                except OSError:
+                    mode = 0
+                if stat.S_ISDIR(mode):
+                    _rmtree_inner(fullname)
+                    _force_run(path, os.rmdir, fullname)
+                else:
+                    _force_run(path, os.unlink, fullname)
+        _rmtree_inner(path)
+        os.rmdir(path)
 
 def unlink(filename):
     try:
@@ -464,6 +499,7 @@ def _is_gui_available():
         try:
             from tkinter import Tk
             root = Tk()
+            root.withdraw()
             root.update()
             root.destroy()
         except Exception as e:
@@ -488,12 +524,12 @@ def is_resource_enabled(resource):
 
 def requires(resource, msg=None):
     """Raise ResourceDenied if the specified resource is not available."""
-    if resource == 'gui' and not _is_gui_available():
-        raise ResourceDenied(_is_gui_available.reason)
     if not is_resource_enabled(resource):
         if msg is None:
             msg = "Use of the %r resource not enabled" % resource
         raise ResourceDenied(msg)
+    if resource == 'gui' and not _is_gui_available():
+        raise ResourceDenied(_is_gui_available.reason)
 
 def _requires_unix_version(sysname, min_version):
     """Decorator raising SkipTest if the OS is `sysname` and the version is less
@@ -673,6 +709,15 @@ def bind_port(sock, host=HOST):
     port = sock.getsockname()[1]
     return port
 
+def bind_unix_socket(sock, addr):
+    """Bind a unix socket, raising SkipTest if PermissionError is raised."""
+    assert sock.family == socket.AF_UNIX
+    try:
+        sock.bind(addr)
+    except PermissionError:
+        sock.close()
+        raise unittest.SkipTest('cannot bind AF_UNIX sockets')
+
 def _is_ipv6_enabled():
     """Check whether IPv6 is enabled on this host."""
     if socket.has_ipv6:
@@ -731,6 +776,15 @@ requires_bz2 = unittest.skipUnless(bz2, 'requires bz2')
 requires_lzma = unittest.skipUnless(lzma, 'requires lzma')
 
 is_jython = sys.platform.startswith('java')
+
+_ANDROID_API_LEVEL = sysconfig.get_config_var('ANDROID_API_LEVEL')
+is_android = (_ANDROID_API_LEVEL is not None and _ANDROID_API_LEVEL > 0)
+android_not_root = (is_android and os.geteuid() != 0)
+
+if sys.platform != 'win32':
+    unix_shell = '/system/bin/sh' if is_android else '/bin/sh'
+else:
+    unix_shell = None
 
 # Filename used for testing
 if os.name == 'java':
@@ -801,7 +855,7 @@ TESTFN_ENCODING = sys.getfilesystemencoding()
 # encoded by the filesystem encoding (in strict mode). It can be None if we
 # cannot generate such filename.
 TESTFN_UNENCODABLE = None
-if os.name in ('nt', 'ce'):
+if os.name == 'nt':
     # skip win32s (0) or Windows 9x/ME (1)
     if sys.getwindowsversion().platform >= 2:
         # Different kinds of characters from various languages to minimize the
@@ -868,6 +922,10 @@ else:
 # Save the initial cwd
 SAVEDCWD = os.getcwd()
 
+# Set by libregrtest/main.py so we can skip tests that are not
+# useful for PGO
+PGO = False
+
 @contextlib.contextmanager
 def temp_dir(path=None, quiet=False):
     """Return a context manager that creates a temporary directory.
@@ -900,7 +958,7 @@ def temp_dir(path=None, quiet=False):
         yield path
     finally:
         if dir_created:
-            shutil.rmtree(path)
+            rmtree(path)
 
 @contextlib.contextmanager
 def change_cwd(path, quiet=False):
@@ -1008,9 +1066,16 @@ def make_bad_fd():
         file.close()
         unlink(TESTFN)
 
-def check_syntax_error(testcase, statement):
-    testcase.assertRaises(SyntaxError, compile, statement,
-                          '<test string>', 'exec')
+def check_syntax_error(testcase, statement, *, lineno=None, offset=None):
+    with testcase.assertRaises(SyntaxError) as cm:
+        compile(statement, '<test string>', 'exec')
+    err = cm.exception
+    testcase.assertIsNotNone(err.lineno)
+    if lineno is not None:
+        testcase.assertEqual(err.lineno, lineno)
+    testcase.assertIsNotNone(err.offset)
+    if offset is not None:
+        testcase.assertEqual(err.offset, offset)
 
 def open_urlresource(url, *args, **kw):
     import urllib.request, urllib.parse
@@ -1349,7 +1414,8 @@ def transient_internet(resource_name, *, timeout=30.0, errnos=()):
              500 <= err.code <= 599) or
             (isinstance(err, urllib.error.URLError) and
                  (("ConnectionRefusedError" in err.reason) or
-                  ("TimeoutError" in err.reason))) or
+                  ("TimeoutError" in err.reason) or
+                  ("EOFError" in err.reason))) or
             n in captured_errnos):
             if not verbose:
                 sys.stderr.write(denied.args[0] + "\n")
@@ -1710,6 +1776,13 @@ def requires_resource(resource):
     else:
         return unittest.skip("resource {0!r} is not enabled".format(resource))
 
+def requires_android_level(level, reason):
+    if is_android and _ANDROID_API_LEVEL < level:
+        return unittest.skip('%s at Android API level %d' %
+                             (reason, _ANDROID_API_LEVEL))
+    else:
+        return _id
+
 def cpython_only(test):
     """
     Decorator for tests only applicable on CPython.
@@ -1728,6 +1801,22 @@ def impl_detail(msg=None, **guards):
         guardnames = sorted(guardnames.keys())
         msg = msg.format(' or '.join(guardnames))
     return unittest.skip(msg)
+
+_have_mp_queue = None
+def requires_multiprocessing_queue(test):
+    """Skip decorator for tests that use multiprocessing.Queue."""
+    global _have_mp_queue
+    if _have_mp_queue is None:
+        import multiprocessing
+        # Without a functioning shared semaphore implementation attempts to
+        # instantiate a Queue will result in an ImportError (issue #3770).
+        try:
+            multiprocessing.Queue()
+            _have_mp_queue = True
+        except ImportError:
+            _have_mp_queue = False
+    msg = "requires a functioning shared semaphore implementation"
+    return test if _have_mp_queue else unittest.skip(msg)(test)
 
 def _parse_guards(guards):
     # Returns a tuple ({platform_name: run_me}, default_value)
@@ -1826,9 +1915,15 @@ def run_unittest(*classes):
     def case_pred(test):
         if match_tests is None:
             return True
-        for name in test.id().split("."):
-            if fnmatch.fnmatchcase(name, match_tests):
+        test_id = test.id()
+
+        for match_test in match_tests:
+            if fnmatch.fnmatchcase(test_id, match_test):
                 return True
+
+            for name in test_id.split("."):
+                if fnmatch.fnmatchcase(name, match_test):
+                    return True
         return False
     _filter_suite(suite, case_pred)
     _run_suite(suite)
@@ -2016,12 +2111,15 @@ def swap_attr(obj, attr, new_val):
         restoring the old value at the end of the block. If `attr` doesn't
         exist on `obj`, it will be created and then deleted at the end of the
         block.
+
+        The old value (or None if it doesn't exist) will be assigned to the
+        target of the "as" clause, if there is one.
     """
     if hasattr(obj, attr):
         real_val = getattr(obj, attr)
         setattr(obj, attr, new_val)
         try:
-            yield
+            yield real_val
         finally:
             setattr(obj, attr, real_val)
     else:
@@ -2029,7 +2127,8 @@ def swap_attr(obj, attr, new_val):
         try:
             yield
         finally:
-            delattr(obj, attr)
+            if hasattr(obj, attr):
+                delattr(obj, attr)
 
 @contextlib.contextmanager
 def swap_item(obj, item, new_val):
@@ -2043,12 +2142,15 @@ def swap_item(obj, item, new_val):
         restoring the old value at the end of the block. If `item` doesn't
         exist on `obj`, it will be created and then deleted at the end of the
         block.
+
+        The old value (or None if it doesn't exist) will be assigned to the
+        target of the "as" clause, if there is one.
     """
     if item in obj:
         real_val = obj[item]
         obj[item] = new_val
         try:
-            yield
+            yield real_val
         finally:
             obj[item] = real_val
     else:
@@ -2056,7 +2158,8 @@ def swap_item(obj, item, new_val):
         try:
             yield
         finally:
-            del obj[item]
+            if item in obj:
+                del obj[item]
 
 def strip_python_stderr(stderr):
     """Strip the stderr of a Python process from potential debug output
@@ -2068,10 +2171,18 @@ def strip_python_stderr(stderr):
     stderr = re.sub(br"\[\d+ refs, \d+ blocks\]\r?\n?", b"", stderr).strip()
     return stderr
 
+requires_type_collecting = unittest.skipIf(hasattr(sys, 'getcounts'),
+                        'types are immortal if COUNT_ALLOCS is defined')
+
 def args_from_interpreter_flags():
     """Return a list of command-line arguments reproducing the current
     settings in sys.flags and sys.warnoptions."""
     return subprocess._args_from_interpreter_flags()
+
+def optim_args_from_interpreter_flags():
+    """Return a list of command-line arguments reproducing the current
+    optimization settings in sys.flags."""
+    return subprocess._optim_args_from_interpreter_flags()
 
 #============================================================
 # Support for assertions about logging.
@@ -2179,7 +2290,7 @@ def can_xattr():
                     os.setxattr(fp.fileno(), b"user.test", b"")
                     # Kernels < 2.6.39 don't respect setxattr flags.
                     kernel_version = platform.release()
-                    m = re.match("2.6.(\d{1,2})", kernel_version)
+                    m = re.match(r"2.6.(\d{1,2})", kernel_version)
                     can = m is None or int(m.group(1)) >= 39
                 except OSError:
                     can = False
@@ -2222,6 +2333,65 @@ def detect_api_mismatch(ref_api, other_api, *, ignore=()):
     missing_items = set(m for m in missing_items
                         if not m.startswith('_') or m.endswith('__'))
     return missing_items
+
+
+def check__all__(test_case, module, name_of_module=None, extra=(),
+                 blacklist=()):
+    """Assert that the __all__ variable of 'module' contains all public names.
+
+    The module's public names (its API) are detected automatically based on
+    whether they match the public name convention and were defined in
+    'module'.
+
+    The 'name_of_module' argument can specify (as a string or tuple thereof)
+    what module(s) an API could be defined in in order to be detected as a
+    public API. One case for this is when 'module' imports part of its public
+    API from other modules, possibly a C backend (like 'csv' and its '_csv').
+
+    The 'extra' argument can be a set of names that wouldn't otherwise be
+    automatically detected as "public", like objects without a proper
+    '__module__' attriubute. If provided, it will be added to the
+    automatically detected ones.
+
+    The 'blacklist' argument can be a set of names that must not be treated
+    as part of the public API even though their names indicate otherwise.
+
+    Usage:
+        import bar
+        import foo
+        import unittest
+        from test import support
+
+        class MiscTestCase(unittest.TestCase):
+            def test__all__(self):
+                support.check__all__(self, foo)
+
+        class OtherTestCase(unittest.TestCase):
+            def test__all__(self):
+                extra = {'BAR_CONST', 'FOO_CONST'}
+                blacklist = {'baz'}  # Undocumented name.
+                # bar imports part of its API from _bar.
+                support.check__all__(self, bar, ('bar', '_bar'),
+                                     extra=extra, blacklist=blacklist)
+
+    """
+
+    if name_of_module is None:
+        name_of_module = (module.__name__, )
+    elif isinstance(name_of_module, str):
+        name_of_module = (name_of_module, )
+
+    expected = set(extra)
+
+    for name in dir(module):
+        if name.startswith('_') or name in blacklist:
+            continue
+        obj = getattr(module, name)
+        if (getattr(obj, '__module__', None) in name_of_module or
+                (not hasattr(obj, '__module__') and
+                 not isinstance(obj, types.ModuleType))):
+            expected.add(name)
+    test_case.assertCountEqual(module.__all__, expected)
 
 
 class SuppressCrashReport:
@@ -2277,6 +2447,7 @@ class SuppressCrashReport:
                                        (0, self.old_value[1]))
                 except (ValueError, OSError):
                     pass
+
             if sys.platform == 'darwin':
                 # Check if the 'Crash Reporter' on OSX was configured
                 # in 'Developer' mode and warn that it will get triggered
@@ -2284,10 +2455,14 @@ class SuppressCrashReport:
                 #
                 # This assumes that this context manager is used in tests
                 # that might trigger the next manager.
-                value = subprocess.Popen(['/usr/bin/defaults', 'read',
-                        'com.apple.CrashReporter', 'DialogType'],
-                        stdout=subprocess.PIPE).communicate()[0]
-                if value.strip() == b'developer':
+                cmd = ['/usr/bin/defaults', 'read',
+                       'com.apple.CrashReporter', 'DialogType']
+                proc = subprocess.Popen(cmd,
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE)
+                with proc:
+                    stdout = proc.communicate()[0]
+                if stdout.strip() == b'developer':
                     print("this test triggers the Crash Reporter, "
                           "that is intentional", end='', flush=True)
 
@@ -2385,3 +2560,59 @@ def check_free_after_iterating(test, iter, cls, args=()):
     # The sequence should be deallocated just after the end of iterating
     gc_collect()
     test.assertTrue(done)
+
+
+def missing_compiler_executable(cmd_names=[]):
+    """Check if the compiler components used to build the interpreter exist.
+
+    Check for the existence of the compiler executables whose names are listed
+    in 'cmd_names' or all the compiler executables when 'cmd_names' is empty
+    and return the first missing executable or None when none is found
+    missing.
+
+    """
+    from distutils import ccompiler, sysconfig, spawn
+    compiler = ccompiler.new_compiler()
+    sysconfig.customize_compiler(compiler)
+    for name in compiler.executables:
+        if cmd_names and name not in cmd_names:
+            continue
+        cmd = getattr(compiler, name)
+        if cmd_names:
+            assert cmd is not None, \
+                    "the '%s' executable is not configured" % name
+        elif cmd is None:
+            continue
+        if spawn.find_executable(cmd[0]) is None:
+            return cmd[0]
+
+
+_is_android_emulator = None
+def setswitchinterval(interval):
+    # Setting a very low gil interval on the Android emulator causes python
+    # to hang (issue #26939).
+    minimum_interval = 1e-5
+    if is_android and interval < minimum_interval:
+        global _is_android_emulator
+        if _is_android_emulator is None:
+            _is_android_emulator = (subprocess.check_output(
+                               ['getprop', 'ro.kernel.qemu']).strip() == b'1')
+        if _is_android_emulator:
+            interval = minimum_interval
+    return sys.setswitchinterval(interval)
+
+
+@contextlib.contextmanager
+def disable_faulthandler():
+    # use sys.__stderr__ instead of sys.stderr, since regrtest replaces
+    # sys.stderr with a StringIO which has no file descriptor when a test
+    # is run with -W/--verbose3.
+    fd = sys.__stderr__.fileno()
+
+    is_enabled = faulthandler.is_enabled()
+    try:
+        faulthandler.disable()
+        yield
+    finally:
+        if is_enabled:
+            faulthandler.enable(file=fd, all_threads=True)

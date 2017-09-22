@@ -21,7 +21,7 @@ future_check_features(PyFutureFeatures *ff, stmt_ty s, PyObject *filename)
     names = s->v.ImportFrom.names;
     for (i = 0; i < asdl_seq_LEN(names); i++) {
         alias_ty name = (alias_ty)asdl_seq_GET(names, i);
-        const char *feature = _PyUnicode_AsString(name->name);
+        const char *feature = PyUnicode_AsUTF8(name->name);
         if (!feature)
             return 0;
         if (strcmp(feature, FUTURE_NESTED_SCOPES) == 0) {
@@ -79,7 +79,10 @@ future_parse(PyFutureFeatures *ff, mod_ty mod, PyObject *filename)
 
     i = 0;
     first = (stmt_ty)asdl_seq_GET(mod->v.Module.body, i);
-    if (first->kind == Expr_kind && first->v.Expr.value->kind == Str_kind)
+    if (first->kind == Expr_kind
+        && (first->v.Expr.value->kind == Str_kind
+            || (first->v.Expr.value->kind == Constant_kind
+                && PyUnicode_CheckExact(first->v.Expr.value->v.Constant.value))))
         i++;
 
 
@@ -99,7 +102,7 @@ future_parse(PyFutureFeatures *ff, mod_ty mod, PyObject *filename)
         if (s->kind == ImportFrom_kind) {
             identifier modname = s->v.ImportFrom.module;
             if (modname &&
-                !PyUnicode_CompareWithASCIIString(modname, "__future__")) {
+                _PyUnicode_EqualToASCIIString(modname, "__future__")) {
                 if (done) {
                     PyErr_SetString(PyExc_SyntaxError,
                                     ERR_LATE_FUTURE);

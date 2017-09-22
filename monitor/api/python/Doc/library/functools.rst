@@ -52,11 +52,11 @@ The :mod:`functools` module defines the following functions:
    Since a dictionary is used to cache results, the positional and keyword
    arguments to the function must be hashable.
 
-   If *maxsize* is set to None, the LRU feature is disabled and the cache can
+   If *maxsize* is set to ``None``, the LRU feature is disabled and the cache can
    grow without bound.  The LRU feature performs best when *maxsize* is a
    power-of-two.
 
-   If *typed* is set to True, function arguments of different types will be
+   If *typed* is set to true, function arguments of different types will be
    cached separately.  For example, ``f(3)`` and ``f(3.0)`` will be treated
    as distinct calls with distinct results.
 
@@ -474,7 +474,7 @@ have three read-only attributes:
 
 :class:`partial` objects are like :class:`function` objects in that they are
 callable, weak referencable, and can have attributes.  There are some important
-differences.  For instance, the :attr:`__name__` and :attr:`__doc__` attributes
+differences.  For instance, the :attr:`~definition.__name__` and :attr:`__doc__` attributes
 are not created automatically.  Also, :class:`partial` objects defined in
 classes behave like static methods and do not transform into bound methods
 during instance attribute look-up.

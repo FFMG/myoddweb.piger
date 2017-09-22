@@ -35,12 +35,6 @@ Pure paths are useful in some special cases; for example:
    accessing the OS. In this case, instantiating one of the pure classes may be
    useful since those simply don't have any OS-accessing operations.
 
-.. note::
-   This module has been included in the standard library on a
-   :term:`provisional basis <provisional package>`. Backwards incompatible
-   changes (up to and including removal of the package) may occur if deemed
-   necessary by the core developers.
-
 .. seealso::
    :pep:`428`: The pathlib module -- object-oriented filesystem paths.
 
@@ -111,7 +105,8 @@ we also call *flavours*:
       PurePosixPath('setup.py')
 
    Each element of *pathsegments* can be either a string representing a
-   path segment, or another path object::
+   path segment, an object implementing the :class:`os.PathLike` interface
+   which returns a string, or another path object::
 
       >>> PurePath('foo', 'some/path', 'bar')
       PurePosixPath('foo/some/path/bar')
@@ -151,6 +146,12 @@ we also call *flavours*:
    (a naïve approach would make ``PurePosixPath('foo/../bar')`` equivalent
    to ``PurePosixPath('bar')``, which is wrong if ``foo`` is a symbolic link
    to another directory)
+
+   Pure path objects implement the :class:`os.PathLike` interface, allowing them
+   to be used anywhere the interface is accepted.
+
+   .. versionchanged:: 3.6
+      Added support for the :class:`os.PathLike` interface.
 
 .. class:: PurePosixPath(*pathsegments)
 
@@ -199,7 +200,7 @@ Paths of a different flavour compare unequal and cannot be ordered::
    >>> PureWindowsPath('foo') < PurePosixPath('foo')
    Traceback (most recent call last):
      File "<stdin>", line 1, in <module>
-   TypeError: unorderable types: PureWindowsPath() < PurePosixPath()
+   TypeError: '<' not supported between instances of 'PureWindowsPath' and 'PurePosixPath'
 
 
 Operators
@@ -215,6 +216,14 @@ The slash operator helps create child paths, similarly to :func:`os.path.join`::
    >>> q = PurePath('bin')
    >>> '/usr' / q
    PurePosixPath('/usr/bin')
+
+A path object can be used anywhere an object implementing :class:`os.PathLike`
+is accepted::
+
+   >>> import os
+   >>> p = PurePath('/etc')
+   >>> os.fspath(p)
+   '/etc'
 
 The string representation of a path is the raw filesystem path itself
 (in native form, e.g. with backslashes under Windows), which you can
@@ -832,7 +841,7 @@ call fails (for example because the path doesn't exist):
    If *parents* is false (the default), a missing parent raises
    :exc:`FileNotFoundError`.
 
-   If *exist_ok* is false (the default), an :exc:`FileExistsError` is
+   If *exist_ok* is false (the default), :exc:`FileExistsError` is
    raised if the target directory already exists.
 
    If *exist_ok* is true, :exc:`FileExistsError` exceptions will be
@@ -891,8 +900,9 @@ call fails (for example because the path doesn't exist):
 
 .. method:: Path.rename(target)
 
-   Rename this file or directory to the given *target*.  *target* can be
-   either a string or another path object::
+   Rename this file or directory to the given *target*.  On Unix, if
+   *target* exists and is a file, it will be replaced silently if the user
+   has permission.  *target* can be either a string or another path object::
 
       >>> p = Path('foo')
       >>> p.open('w').write('some text')
@@ -909,7 +919,7 @@ call fails (for example because the path doesn't exist):
    to an existing file or directory, it will be unconditionally replaced.
 
 
-.. method:: Path.resolve()
+.. method:: Path.resolve(strict=False)
 
    Make the path absolute, resolving any symlinks.  A new path object is
    returned::
@@ -920,20 +930,24 @@ call fails (for example because the path doesn't exist):
       >>> p.resolve()
       PosixPath('/home/antoine/pathlib')
 
-   `".."` components are also eliminated (this is the only method to do so)::
+   "``..``" components are also eliminated (this is the only method to do so)::
 
       >>> p = Path('docs/../setup.py')
       >>> p.resolve()
       PosixPath('/home/antoine/pathlib/setup.py')
 
-   If the path doesn't exist, :exc:`FileNotFoundError` is raised.  If an
-   infinite loop is encountered along the resolution path,
-   :exc:`RuntimeError` is raised.
+   If the path doesn't exist and *strict* is ``True``, :exc:`FileNotFoundError`
+   is raised.  If *strict* is ``False``, the path is resolved as far as possible
+   and any remainder is appended without checking whether it exists.  If an
+   infinite loop is encountered along the resolution path, :exc:`RuntimeError`
+   is raised.
 
+   .. versionadded:: 3.6
+      The *strict* argument.
 
 .. method:: Path.rglob(pattern)
 
-   This is like calling :meth:`glob` with "``**``" added in front of the
+   This is like calling :meth:`Path.glob` with "``**``" added in front of the
    given *pattern*:
 
       >>> sorted(Path().rglob("*.py"))
@@ -988,7 +1002,7 @@ call fails (for example because the path doesn't exist):
       of :func:`os.symlink`'s.
 
 
-.. method:: Path.touch(mode=0o777, exist_ok=True)
+.. method:: Path.touch(mode=0o666, exist_ok=True)
 
    Create a file at this given path.  If *mode* is given, it is combined
    with the process' ``umask`` value to determine the file mode and access

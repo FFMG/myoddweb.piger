@@ -72,24 +72,26 @@ PyDoc_STRVAR(_sha1_sha1__doc__,
 "Return a new SHA1 hash object; optionally initialized with a string.");
 
 #define _SHA1_SHA1_METHODDEF    \
-    {"sha1", (PyCFunction)_sha1_sha1, METH_VARARGS|METH_KEYWORDS, _sha1_sha1__doc__},
+    {"sha1", (PyCFunction)_sha1_sha1, METH_FASTCALL, _sha1_sha1__doc__},
 
 static PyObject *
-_sha1_sha1_impl(PyModuleDef *module, PyObject *string);
+_sha1_sha1_impl(PyObject *module, PyObject *string);
 
 static PyObject *
-_sha1_sha1(PyModuleDef *module, PyObject *args, PyObject *kwargs)
+_sha1_sha1(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"string", NULL};
+    static const char * const _keywords[] = {"string", NULL};
+    static _PyArg_Parser _parser = {"|O:sha1", _keywords, 0};
     PyObject *string = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|O:sha1", _keywords,
-        &string))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &string)) {
         goto exit;
+    }
     return_value = _sha1_sha1_impl(module, string);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=be19102f3120490a input=a9049054013a1b77]*/
+/*[clinic end generated code: output=1430450f3f806895 input=a9049054013a1b77]*/

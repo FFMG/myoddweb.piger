@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -13,7 +13,6 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}</ProjectGuid>
     <RootNamespace>pythoncore</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="python.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -25,7 +24,6 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <PropertyGroup>
-    <MakeVersionInfoBeforeTarget>ClCompile</MakeVersionInfoBeforeTarget>
     <KillPython>true</KillPython>
   </PropertyGroup>
   <ImportGroup Label="PropertySheets">
@@ -57,7 +55,7 @@
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;shlwapi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <BaseAddress>0x1e000000</BaseAddress>
     </Link>
     <PostBuildEvent>
@@ -119,6 +117,7 @@ xcopy "$(SolutionDir)includes\python86d\*.*" "$(OutDir)python\" /Y </Command>
     <ClInclude Include="..\Include\odictobject.h" />
     <ClInclude Include="..\Include\opcode.h" />
     <ClInclude Include="..\Include\osdefs.h" />
+    <ClInclude Include="..\Include\osmodule.h" />
     <ClInclude Include="..\Include\parsetok.h" />
     <ClInclude Include="..\Include\patchlevel.h" />
     <ClInclude Include="..\Include\pgen.h" />
@@ -204,9 +203,13 @@ xcopy "$(SolutionDir)includes\python86d\*.*" "$(OutDir)python\" /Y </Command>
     <ClInclude Include="..\Python\condvar.h" />
     <ClInclude Include="..\Python\importdl.h" />
     <ClInclude Include="..\Python\thread_nt.h" />
+    <ClInclude Include="..\Python\wordcode_helpers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Modules\_bisectmodule.c" />
+    <ClCompile Include="..\Modules\_blake2\blake2module.c" />
+    <ClCompile Include="..\Modules\_blake2\blake2b_impl.c" />
+    <ClCompile Include="..\Modules\_blake2\blake2s_impl.c" />
     <ClCompile Include="..\Modules\_codecsmodule.c" />
     <ClCompile Include="..\Modules\_collectionsmodule.c" />
     <ClCompile Include="..\Modules\_csv.c" />
@@ -218,6 +221,7 @@ xcopy "$(SolutionDir)includes\python86d\*.*" "$(OutDir)python\" /Y </Command>
     <ClCompile Include="..\Modules\_math.c" />
     <ClCompile Include="..\Modules\_pickle.c" />
     <ClCompile Include="..\Modules\_randommodule.c" />
+    <ClCompile Include="..\Modules\_sha3\sha3module.c" />
     <ClCompile Include="..\Modules\_sre.c" />
     <ClCompile Include="..\Modules\_stat.c" />
     <ClCompile Include="..\Modules\_struct.c" />
@@ -259,6 +263,7 @@ xcopy "$(SolutionDir)includes\python86d\*.*" "$(OutDir)python\" /Y </Command>
     <ClCompile Include="..\Modules\_io\bufferedio.c" />
     <ClCompile Include="..\Modules\_io\iobase.c" />
     <ClCompile Include="..\Modules\_io\textio.c" />
+    <ClCompile Include="..\Modules\_io\winconsoleio.c" />
     <ClCompile Include="..\Modules\_io\_iomodule.c" />
     <ClCompile Include="..\Modules\zlib\adler32.c" />
     <ClCompile Include="..\Modules\zlib\compress.c" />
@@ -394,17 +399,25 @@ xcopy "$(SolutionDir)includes\python86d\*.*" "$(OutDir)python\" /Y </Command>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="_GetBuildInfo" BeforeTargets="PrepareForBuild">
-    <Exec Command="hg id -b &gt; &quot;$(IntDir)hgbranch.txt&quot;" ContinueOnError="true" />
-    <Exec Command="hg id -i &gt; &quot;$(IntDir)hgversion.txt&quot;" ContinueOnError="true" />
-    <Exec Command="hg id -t &gt; &quot;$(IntDir)hgtag.txt&quot;" ContinueOnError="true" />
     <PropertyGroup>
-      <HgBranch Condition="Exists('$(IntDir)hgbranch.txt')">$([System.IO.File]::ReadAllText('$(IntDir)hgbranch.txt').Trim())</HgBranch>
-      <HgVersion Condition="Exists('$(IntDir)hgversion.txt')">$([System.IO.File]::ReadAllText('$(IntDir)hgversion.txt').Trim())</HgVersion>
-      <HgTag Condition="Exists('$(IntDir)hgtag.txt')">$([System.IO.File]::ReadAllText('$(IntDir)hgtag.txt').Trim())</HgTag>
+      <GIT Condition="$(GIT) == ''">git</GIT>
+      <_GIT>$(GIT)</_GIT>
+      <_GIT Condition="$(GIT.Contains(` `))">"$(GIT)"</_GIT>
     </PropertyGroup>
+    <Message Text="Getting build info from $(_GIT)" Importance="high" />
+    <MakeDir Directories="$(IntDir)" Condition="!Exists($(IntDir))" />
+    <Exec Command="$(_GIT) name-rev --name-only HEAD &gt; &quot;$(IntDir)gitbranch.txt&quot;" ContinueOnError="true" />
+    <Exec Command="$(_GIT) rev-parse --short HEAD &gt; &quot;$(IntDir)gitversion.txt&quot;" ContinueOnError="true" />
+    <Exec Command="$(_GIT) describe --all --always --dirty &gt; &quot;$(IntDir)gittag.txt&quot;" ContinueOnError="true" />
+    <PropertyGroup>
+      <GitBranch Condition="Exists('$(IntDir)gitbranch.txt')">$([System.IO.File]::ReadAllText('$(IntDir)gitbranch.txt').Trim())</GitBranch>
+      <GitVersion Condition="Exists('$(IntDir)gitversion.txt')">$([System.IO.File]::ReadAllText('$(IntDir)gitversion.txt').Trim())</GitVersion>
+      <GitTag Condition="Exists('$(IntDir)gittag.txt')">$([System.IO.File]::ReadAllText('$(IntDir)gittag.txt').Trim())</GitTag>
+    </PropertyGroup>
+    <Message Text="Building $(GitTag):$(GitVersion) $(GitBranch)" Importance="high" />
     <ItemGroup>
       <ClCompile Include="..\Modules\getbuildinfo.c">
-        <PreprocessorDefinitions>HGVERSION="$(HgVersion)";HGTAG="$(HgTag)";HGBRANCH="$(HgBranch)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+        <PreprocessorDefinitions>GITVERSION="$(GitVersion)";GITTAG="$(GitTag)";GITBRANCH="$(GitBranch)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       </ClCompile>
     </ItemGroup>
   </Target>

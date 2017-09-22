@@ -22,7 +22,7 @@ descr_name(PyDescrObject *descr)
 }
 
 static PyObject *
-descr_repr(PyDescrObject *descr, char *format)
+descr_repr(PyDescrObject *descr, const char *format)
 {
     PyObject *name = NULL;
     if (descr->d_name != NULL && PyUnicode_Check(descr->d_name))
@@ -213,7 +213,7 @@ static PyObject *
 methoddescr_call(PyMethodDescrObject *descr, PyObject *args, PyObject *kwds)
 {
     Py_ssize_t argc;
-    PyObject *self, *func, *result;
+    PyObject *self, *func, *result, **stack;
 
     /* Make sure that the first argument is acceptable as 'self' */
     assert(PyTuple_Check(args));
@@ -242,13 +242,8 @@ methoddescr_call(PyMethodDescrObject *descr, PyObject *args, PyObject *kwds)
     func = PyCFunction_NewEx(descr->d_method, self, NULL);
     if (func == NULL)
         return NULL;
-    args = PyTuple_GetSlice(args, 1, argc);
-    if (args == NULL) {
-        Py_DECREF(func);
-        return NULL;
-    }
-    result = PyEval_CallObjectWithKeywords(func, args, kwds);
-    Py_DECREF(args);
+    stack = &PyTuple_GET_ITEM(args, 1);
+    result = _PyObject_FastCallDict(func, stack, argc - 1, kwds);
     Py_DECREF(func);
     return result;
 }
@@ -258,7 +253,7 @@ classmethoddescr_call(PyMethodDescrObject *descr, PyObject *args,
                       PyObject *kwds)
 {
     Py_ssize_t argc;
-    PyObject *self, *func, *result;
+    PyObject *self, *func, *result, **stack;
 
     /* Make sure that the first argument is acceptable as 'self' */
     assert(PyTuple_Check(args));
@@ -295,14 +290,9 @@ classmethoddescr_call(PyMethodDescrObject *descr, PyObject *args,
     func = PyCFunction_NewEx(descr->d_method, self, NULL);
     if (func == NULL)
         return NULL;
-    args = PyTuple_GetSlice(args, 1, argc);
-    if (args == NULL) {
-        Py_DECREF(func);
-        return NULL;
-    }
-    result = PyEval_CallObjectWithKeywords(func, args, kwds);
+    stack = &PyTuple_GET_ITEM(args, 1);
+    result = _PyObject_FastCallDict(func, stack, argc - 1, kwds);
     Py_DECREF(func);
-    Py_DECREF(args);
     return result;
 }
 
@@ -310,7 +300,7 @@ static PyObject *
 wrapperdescr_call(PyWrapperDescrObject *descr, PyObject *args, PyObject *kwds)
 {
     Py_ssize_t argc;
-    PyObject *self, *func, *result;
+    PyObject *self, *func, *result, **stack;
 
     /* Make sure that the first argument is acceptable as 'self' */
     assert(PyTuple_Check(args));
@@ -339,13 +329,9 @@ wrapperdescr_call(PyWrapperDescrObject *descr, PyObject *args, PyObject *kwds)
     func = PyWrapper_New((PyObject *)descr, self);
     if (func == NULL)
         return NULL;
-    args = PyTuple_GetSlice(args, 1, argc);
-    if (args == NULL) {
-        Py_DECREF(func);
-        return NULL;
-    }
-    result = PyEval_CallObjectWithKeywords(func, args, kwds);
-    Py_DECREF(args);
+
+    stack = &PyTuple_GET_ITEM(args, 1);
+    result = _PyObject_FastCallDict(func, stack, argc - 1, kwds);
     Py_DECREF(func);
     return result;
 }
@@ -1033,7 +1019,7 @@ wrapper_dealloc(wrapperobject *wp)
 static PyObject *
 wrapper_richcompare(PyObject *a, PyObject *b, int op)
 {
-    Py_intptr_t result;
+    intptr_t result;
     PyObject *v;
     PyWrapperDescrObject *a_descr, *b_descr;
 

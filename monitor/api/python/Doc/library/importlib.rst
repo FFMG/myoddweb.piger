@@ -1,5 +1,5 @@
-:mod:`importlib` -- The implementation of :keyword:`import`
-===========================================================
+:mod:`importlib` --- The implementation of :keyword:`import`
+============================================================
 
 .. module:: importlib
    :synopsis: The implementation of the import machinery.
@@ -118,7 +118,7 @@ Functions
    :exc:`ValueError` is raised). Otherwise a search using :attr:`sys.meta_path`
    is done. ``None`` is returned if no loader is found.
 
-   A dotted name does not have its parent's implicitly imported as that requires
+   A dotted name does not have its parents implicitly imported as that requires
    loading them and that may not be desired. To properly import a submodule you
    will need to import all parent packages of the submodule and use the correct
    argument to *path*.
@@ -211,6 +211,11 @@ Functions
 .. module:: importlib.abc
     :synopsis: Abstract base classes related to import
 
+**Source code:** :source:`Lib/importlib/abc.py`
+
+--------------
+
+
 The :mod:`importlib.abc` module contains all of the core abstract base classes
 used by :keyword:`import`. Some subclasses of the core abstract base classes
 are also provided to help in implementing the core ABCs.
@@ -262,7 +267,7 @@ ABC hierarchy::
       module and *path* will be the value of :attr:`__path__` from the
       parent package. If a spec cannot be found, ``None`` is returned.
       When passed in, ``target`` is a module object that the finder may
-      use to make a more educated about what spec to return.
+      use to make a more educated guess about what spec to return.
 
       .. versionadded:: 3.4
 
@@ -312,7 +317,7 @@ ABC hierarchy::
       within the :term:`path entry` to which it is assigned.  If a spec
       cannot be found, ``None`` is returned.  When passed in, ``target``
       is a module object that the finder may use to make a more educated
-      about what spec to return.
+      guess about what spec to return.
 
       .. versionadded:: 3.4
 
@@ -374,9 +379,13 @@ ABC hierarchy::
 
        An abstract method that executes the module in its own namespace
        when a module is imported or reloaded.  The module should already
-       be initialized when exec_module() is called.
+       be initialized when ``exec_module()`` is called. When this method exists,
+       :meth:`~importlib.abc.Loader.create_module` must be defined.
 
        .. versionadded:: 3.4
+
+       .. versionchanged:: 3.6
+          :meth:`~importlib.abc.Loader.create_module` must also be defined.
 
     .. method:: load_module(fullname)
 
@@ -624,7 +633,7 @@ ABC hierarchy::
     .. method:: path_stats(path)
 
         Optional abstract method which returns a :class:`dict` containing
-        metadata about the specifed path.  Supported dictionary keys are:
+        metadata about the specified path.  Supported dictionary keys are:
 
         - ``'mtime'`` (mandatory): an integer or floating-point number
           representing the modification time of the source code;
@@ -699,6 +708,10 @@ ABC hierarchy::
 
 .. module:: importlib.machinery
     :synopsis: Importers and path hooks
+
+**Source code:** :source:`Lib/importlib/machinery.py`
+
+--------------
 
 This module contains the various objects that help :keyword:`import`
 find and load modules.
@@ -792,6 +805,10 @@ find and load modules.
    instantiation.
 
    .. versionadded:: 3.3
+
+   .. deprecated:: 3.6
+      Use :mod:`site` configuration instead. Future versions of Python may
+      not enable this finder by default.
 
 
 .. class:: PathFinder
@@ -927,6 +944,10 @@ find and load modules.
       Concrete implementation of :meth:`importlib.abc.Loader.load_module` where
       specifying the name of the module to load is optional.
 
+      .. deprecated:: 3.6
+
+         Use :meth:`importlib.abc.Loader.exec_module` instead.
+
 
 .. class:: SourcelessFileLoader(fullname, path)
 
@@ -965,6 +986,10 @@ find and load modules.
 
    Concrete implementation of :meth:`importlib.abc.Loader.load_module` where
    specifying the name of the module to load is optional.
+
+   .. deprecated:: 3.6
+
+      Use :meth:`importlib.abc.Loader.exec_module` instead.
 
 
 .. class:: ExtensionFileLoader(fullname, path)
@@ -1035,7 +1060,7 @@ find and load modules.
    (``__loader__``)
 
    The loader to use for loading.  For namespace packages this should be
-   set to None.
+   set to ``None``.
 
    .. attribute:: origin
 
@@ -1043,33 +1068,33 @@ find and load modules.
 
    Name of the place from which the module is loaded, e.g. "builtin" for
    built-in modules and the filename for modules loaded from source.
-   Normally "origin" should be set, but it may be None (the default)
+   Normally "origin" should be set, but it may be ``None`` (the default)
    which indicates it is unspecified.
 
    .. attribute:: submodule_search_locations
 
    (``__path__``)
 
-   List of strings for where to find submodules, if a package (None
+   List of strings for where to find submodules, if a package (``None``
    otherwise).
 
    .. attribute:: loader_state
 
    Container of extra module-specific data for use during loading (or
-   None).
+   ``None``).
 
    .. attribute:: cached
 
    (``__cached__``)
 
-   String for where the compiled module should be stored (or None).
+   String for where the compiled module should be stored (or ``None``).
 
    .. attribute:: parent
 
    (``__package__``)
 
    (Read-only) Fully-qualified name of the package to which the module
-   belongs as a submodule (or None).
+   belongs as a submodule (or ``None``).
 
    .. attribute:: has_location
 
@@ -1081,6 +1106,11 @@ find and load modules.
 
 .. module:: importlib.util
     :synopsis: Utility code for importers
+
+
+**Source code:** :source:`Lib/importlib/util.py`
+
+--------------
 
 This module contains the various objects that help in the construction of
 an :term:`importer`.
@@ -1123,6 +1153,9 @@ an :term:`importer`.
       The *optimization* parameter was added and the *debug_override* parameter
       was deprecated.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: source_from_cache(path)
 
@@ -1135,6 +1168,9 @@ an :term:`importer`.
    :exc:`NotImplementedError` is raised.
 
    .. versionadded:: 3.4
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 .. function:: decode_source(source_bytes)
 
@@ -1178,12 +1214,13 @@ an :term:`importer`.
 
 .. function:: module_from_spec(spec)
 
-   Create a new module based on **spec** and ``spec.loader.create_module()``.
+   Create a new module based on **spec** and
+   :meth:`spec.loader.create_module <importlib.abc.Loader.create_module>`.
 
-   If ``spec.loader.create_module()`` does not return ``None``, then any
-   pre-existing attributes will not be reset. Also, no :exc:`AttributeError`
-   will be raised if triggered while accessing **spec** or setting an attribute
-   on the module.
+   If :meth:`spec.loader.create_module <importlib.abc.Loader.create_module>`
+   does not return ``None``, then any pre-existing attributes will not be reset.
+   Also, no :exc:`AttributeError` will be raised if triggered while accessing
+   **spec** or setting an attribute on the module.
 
    This function is preferred over using :class:`types.ModuleType` to create a
    new module as **spec** is used to set as many import-controlled attributes on
@@ -1245,7 +1282,8 @@ an :term:`importer`.
 
 .. decorator:: set_package
 
-   A :term:`decorator` for :meth:`importlib.abc.Loader.load_module` to set the :attr:`__package__` attribute on the returned module. If :attr:`__package__`
+   A :term:`decorator` for :meth:`importlib.abc.Loader.load_module` to set the
+   :attr:`__package__` attribute on the returned module. If :attr:`__package__`
    is set and has a value other than ``None`` it will not be changed.
 
    .. deprecated:: 3.4
@@ -1270,6 +1308,9 @@ an :term:`importer`.
 
    .. versionadded:: 3.4
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 .. class:: LazyLoader(loader)
 
    A class which postpones the execution of the loader of a module until the
@@ -1278,13 +1319,12 @@ an :term:`importer`.
    This class **only** works with loaders that define
    :meth:`~importlib.abc.Loader.exec_module` as control over what module type
    is used for the module is required. For those same reasons, the loader's
-   :meth:`~importlib.abc.Loader.create_module` method will be ignored (i.e., the
-   loader's method should only return ``None``; this excludes
-   :class:`BuiltinImporter` and :class:`ExtensionFileLoader`). Finally,
-   modules which substitute the object placed into :attr:`sys.modules` will
-   not work as there is no way to properly replace the module references
-   throughout the interpreter safely; :exc:`ValueError` is raised if such a
-   substitution is detected.
+   :meth:`~importlib.abc.Loader.create_module` method must return ``None`` or a
+   type for which its ``__class__`` attribute can be mutated along with not
+   using :term:`slots <__slots__>`. Finally, modules which substitute the object
+   placed into :attr:`sys.modules` will not work as there is no way to properly
+   replace the module references throughout the interpreter safely;
+   :exc:`ValueError` is raised if such a substitution is detected.
 
    .. note::
       For projects where startup time is critical, this class allows for
@@ -1294,6 +1334,11 @@ an :term:`importer`.
       postponed and thus occurring out of context.
 
    .. versionadded:: 3.5
+
+   .. versionchanged:: 3.6
+      Began calling :meth:`~importlib.abc.Loader.create_module`, removing the
+      compatibility warning for :class:`importlib.machinery.BuiltinImporter` and
+      :class:`importlib.machinery.ExtensionFileLoader`.
 
    .. classmethod:: factory(loader)
 
@@ -1306,3 +1351,139 @@ an :term:`importer`.
         loader = importlib.machinery.SourceFileLoader
         lazy_loader = importlib.util.LazyLoader.factory(loader)
         finder = importlib.machinery.FileFinder(path, (lazy_loader, suffixes))
+
+.. _importlib-examples:
+
+Examples
+--------
+
+Importing programmatically
+''''''''''''''''''''''''''
+
+To programmatically import a module, use :func:`importlib.import_module`.
+::
+
+  import importlib
+
+  itertools = importlib.import_module('itertools')
+
+
+Checking if a module can be imported
+''''''''''''''''''''''''''''''''''''
+
+If you need to find out if a module can be imported without actually doing the
+import, then you should use :func:`importlib.util.find_spec`.
+::
+
+  import importlib.util
+  import sys
+
+  # For illustrative purposes.
+  name = 'itertools'
+
+  spec = importlib.util.find_spec(name)
+  if spec is None:
+      print("can't find the itertools module")
+  else:
+      # If you chose to perform the actual import ...
+      module = importlib.util.module_from_spec(spec)
+      spec.loader.exec_module(module)
+      # Adding the module to sys.modules is optional.
+      sys.modules[name] = module
+
+
+Importing a source file directly
+''''''''''''''''''''''''''''''''
+
+To import a Python source file directly, use the following recipe
+(Python 3.4 and newer only)::
+
+  import importlib.util
+  import sys
+
+  # For illustrative purposes.
+  import tokenize
+  file_path = tokenize.__file__
+  module_name = tokenize.__name__
+
+  spec = importlib.util.spec_from_file_location(module_name, file_path)
+  module = importlib.util.module_from_spec(spec)
+  spec.loader.exec_module(module)
+  # Optional; only necessary if you want to be able to import the module
+  # by name later.
+  sys.modules[module_name] = module
+
+
+Setting up an importer
+''''''''''''''''''''''
+
+For deep customizations of import, you typically want to implement an
+:term:`importer`. This means managing both the :term:`finder` and :term:`loader`
+side of things. For finders there are two flavours to choose from depending on
+your needs: a :term:`meta path finder` or a :term:`path entry finder`. The
+former is what you would put on :attr:`sys.meta_path` while the latter is what
+you create using a :term:`path entry hook` on :attr:`sys.path_hooks` which works
+with :attr:`sys.path` entries to potentially create a finder. This example will
+show you how to register your own importers so that import will use them (for
+creating an importer for yourself, read the documentation for the appropriate
+classes defined within this package)::
+
+  import importlib.machinery
+  import sys
+
+  # For illustrative purposes only.
+  SpamMetaPathFinder = importlib.machinery.PathFinder
+  SpamPathEntryFinder = importlib.machinery.FileFinder
+  loader_details = (importlib.machinery.SourceFileLoader,
+                    importlib.machinery.SOURCE_SUFFIXES)
+
+  # Setting up a meta path finder.
+  # Make sure to put the finder in the proper location in the list in terms of
+  # priority.
+  sys.meta_path.append(SpamMetaPathFinder)
+
+  # Setting up a path entry finder.
+  # Make sure to put the path hook in the proper location in the list in terms
+  # of priority.
+  sys.path_hooks.append(SpamPathEntryFinder.path_hook(loader_details))
+
+
+Approximating :func:`importlib.import_module`
+'''''''''''''''''''''''''''''''''''''''''''''
+
+Import itself is implemented in Python code, making it possible to
+expose most of the import machinery through importlib. The following
+helps illustrate the various APIs that importlib exposes by providing an
+approximate implementation of
+:func:`importlib.import_module` (Python 3.4 and newer for the importlib usage,
+Python 3.6 and newer for other parts of the code).
+::
+
+  import importlib.util
+  import sys
+
+  def import_module(name, package=None):
+      """An approximate implementation of import."""
+      absolute_name = importlib.util.resolve_name(name, package)
+      try:
+          return sys.modules[absolute_name]
+      except KeyError:
+          pass
+
+      path = None
+      if '.' in absolute_name:
+          parent_name, _, child_name = absolute_name.rpartition('.')
+          parent_module = import_module(parent_name)
+          path = parent_module.spec.submodule_search_locations
+      for finder in sys.meta_path:
+          spec = finder.find_spec(absolute_name, path)
+          if spec is not None:
+              break
+      else:
+          raise ImportError(f'No module named {absolute_name!r}')
+      module = importlib.util.module_from_spec(spec)
+      spec.loader.exec_module(module)
+      sys.modules[absolute_name] = module
+      if path is not None:
+          setattr(parent_module, child_name, module)
+      return module

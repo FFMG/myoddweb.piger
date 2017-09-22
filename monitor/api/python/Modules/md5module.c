@@ -30,7 +30,7 @@ class MD5Type "MD5object *" "&PyType_Type"
 
 #if SIZEOF_INT == 4
 typedef unsigned int MD5_INT32; /* 32-bit integer */
-typedef PY_LONG_LONG MD5_INT64; /* 64-bit integer */
+typedef long long MD5_INT64; /* 64-bit integer */
 #else
 /* not defined. compilation will die. */
 #endif
@@ -509,8 +509,8 @@ Return a new MD5 hash object; optionally initialized with a string.
 [clinic start generated code]*/
 
 static PyObject *
-_md5_md5_impl(PyModuleDef *module, PyObject *string)
-/*[clinic end generated code: output=3527436a2090b956 input=d12ef8f72d684f7b]*/
+_md5_md5_impl(PyObject *module, PyObject *string)
+/*[clinic end generated code: output=2cfd0f8c091b97e6 input=d12ef8f72d684f7b]*/
 {
     MD5object *new;
     Py_buffer buf;

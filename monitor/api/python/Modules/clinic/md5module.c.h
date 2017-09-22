@@ -72,24 +72,26 @@ PyDoc_STRVAR(_md5_md5__doc__,
 "Return a new MD5 hash object; optionally initialized with a string.");
 
 #define _MD5_MD5_METHODDEF    \
-    {"md5", (PyCFunction)_md5_md5, METH_VARARGS|METH_KEYWORDS, _md5_md5__doc__},
+    {"md5", (PyCFunction)_md5_md5, METH_FASTCALL, _md5_md5__doc__},
 
 static PyObject *
-_md5_md5_impl(PyModuleDef *module, PyObject *string);
+_md5_md5_impl(PyObject *module, PyObject *string);
 
 static PyObject *
-_md5_md5(PyModuleDef *module, PyObject *args, PyObject *kwargs)
+_md5_md5(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"string", NULL};
+    static const char * const _keywords[] = {"string", NULL};
+    static _PyArg_Parser _parser = {"|O:md5", _keywords, 0};
     PyObject *string = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|O:md5", _keywords,
-        &string))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &string)) {
         goto exit;
+    }
     return_value = _md5_md5_impl(module, string);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=0f803ded701aca54 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=54cd50db050f2589 input=a9049054013a1b77]*/

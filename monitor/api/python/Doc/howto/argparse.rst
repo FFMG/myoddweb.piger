@@ -221,7 +221,7 @@ before proceeding.
 Introducing Optional arguments
 ==============================
 
-So far we, have been playing with positional arguments. Let us
+So far we have been playing with positional arguments. Let us
 have a look on how to add optional ones::
 
    import argparse
@@ -503,8 +503,8 @@ to count the number of occurrences of a specific optional arguments:
 * Now here's a demonstration of what the "count" action gives. You've probably
   seen this sort of usage before.
 
-* And, just like the "store_true" action, if you don't specify the ``-v`` flag,
-  that flag is considered to have ``None`` value.
+* And if you don't specify the ``-v`` flag, that flag is considered to have
+  ``None`` value.
 
 * As should be expected, specifying the long form of the flag, we should get
   the same output.
@@ -547,7 +547,8 @@ And this is what it gives:
    Traceback (most recent call last):
      File "prog.py", line 11, in <module>
        if args.verbosity >= 2:
-   TypeError: unorderable types: NoneType() >= int()
+   TypeError: '>=' not supported between instances of 'NoneType' and 'int'
+
 
 * First output went well, and fixes the bug we had before.
   That is, we want any value >= 2 to be as verbose as possible.

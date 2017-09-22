@@ -2,9 +2,11 @@ Quick Start Guide
 -----------------
 
 1.  Install Microsoft Visual Studio 2015, any edition.
-2.  Install Subversion, and make sure 'svn.exe' is on your PATH.
-3.  Run "build.bat -e" to build Python in 32-bit Release configuration.
-4.  (Optional, but recommended) Run the test suite with "rt.bat -q".
+1a. Optionally install Python 3.6 or later.  If not installed,
+    get_externals.bat (build.bat -e) will download and use Python via
+    NuGet.
+2.  Run "build.bat -e" to build Python in 32-bit Release configuration.
+3.  (Optional, but recommended) Run the test suite with "rt.bat -q".
 
 
 Building Python using Microsoft Visual C++
@@ -48,7 +50,7 @@ Debug
     Used to build Python with extra debugging capabilities, equivalent
     to using ./configure --with-pydebug on UNIX.  All binaries built
     using this configuration have "_d" added to their name:
-    python35_d.dll, python_d.exe, parser_d.pyd, and so on.  Both the
+    python36_d.dll, python_d.exe, parser_d.pyd, and so on.  Both the
     build and rt (run test) batch files in this directory accept a -d
     option for debug builds.  If you are building Python to help with
     development of CPython, you will most likely use this configuration.
@@ -164,12 +166,11 @@ _bz2
     Homepage:
         http://www.bzip.org/
 _lzma
-    Python wrapper for the liblzma compression library, using pre-built
-    binaries of XZ Utils version 5.0.5
+    Python wrapper for version 5.2.2 of the liblzma compression library
     Homepage:
         http://tukaani.org/xz/
 _ssl
-    Python wrapper for version 1.0.2h of the OpenSSL secure sockets
+    Python wrapper for version 1.0.2k of the OpenSSL secure sockets
     library, which is built by ssl.vcxproj
     Homepage:
         http://www.openssl.org/
@@ -204,11 +205,11 @@ _ssl
     functionality to _ssl or _hashlib. They will not clean up their output
     with the normal Clean target; CleanAll should be used instead.
 _sqlite3
-    Wraps SQLite 3.8.11.0, which is itself built by sqlite3.vcxproj
+    Wraps SQLite 3.14.2.0, which is itself built by sqlite3.vcxproj
     Homepage:
         http://www.sqlite.org/
 _tkinter
-    Wraps version 8.6.4 of the Tk windowing system.
+    Wraps version 8.6.6 of the Tk windowing system.
     Homepage:
         http://www.tcl.tk/
 
@@ -236,9 +237,16 @@ order to download the relevant source files for each project before they
 can be built.  However, a simple script is provided to make this as
 painless as possible, called "get_externals.bat" and located in this
 directory.  This script extracts all the external sub-projects from
-    http://svn.python.org/projects/external
-via Subversion (so you'll need svn.exe on your PATH) and places them
-in ..\externals (relative to this directory).
+    https://github.com/python/cpython-source-deps
+and
+    https://github.com/python/cpython-bin-deps
+via a Python script called "get_external.py", located in this directory.
+If Python 3.6 or later is not available via the "py.exe" launcher, the
+path or command to use for Python can be provided in the PYTHON_FOR_BUILD
+environment variable, or get_externals.bat will download the latest
+version of NuGet and use it to download the latest "pythonx86" package
+for use with get_external.py.  Everything downloaded by these scripts is
+stored in ..\externals (relative to this directory).
 
 It is also possible to download sources from each project's homepage,
 though you may have to change folder names or pass the names to MSBuild

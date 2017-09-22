@@ -108,7 +108,7 @@ packages.  Their concept and implementation are inspired by the popular
 with the interpreter core.
 
 This PEP adds the :mod:`venv` module for programmatic access, and the
-:ref:`pyvenv <scripts-pyvenv>` script for command-line access and
+``pyvenv`` script for command-line access and
 administration.  The Python interpreter checks for a ``pyvenv.cfg``,
 file whose existence signals the base of a virtual environment's directory
 tree.
@@ -182,7 +182,7 @@ API changes
 * The maximum number of dimensions is officially limited to 64.
 
 * The representation of empty shape, strides and suboffsets is now
-  an empty tuple instead of None.
+  an empty tuple instead of ``None``.
 
 * Accessing a memoryview element with format 'B' (unsigned bytes)
   now returns an integer (in accordance with the struct module syntax).
@@ -871,7 +871,9 @@ signal. Call :func:`faulthandler.enable` to install fault handlers for the
 :envvar:`PYTHONFAULTHANDLER` environment variable or by using :option:`-X`
 ``faulthandler`` command line option.
 
-Example of a segmentation fault on Linux: ::
+Example of a segmentation fault on Linux:
+
+.. code-block:: shell-session
 
     $ python -q -X faulthandler
     >>> import ctypes
@@ -999,7 +1001,6 @@ byte of an invalid byte sequence. For example, ``b'\xff\n'.decode('gb2312',
 Incremental CJK codec encoders are no longer reset at each call to their
 encode() methods. For example::
 
-    $ ./python -q
     >>> import codecs
     >>> encoder = codecs.getincrementalencoder('hz')('strict')
     >>> b''.join(encoder.encode(x) for x in '\u52ff\u65bd\u65bc\u4eba\u3002 Bye.')
@@ -1741,7 +1742,7 @@ sched
 -----
 
 * :meth:`~sched.scheduler.run` now accepts a *blocking* parameter which when
-  set to False makes the method execute the scheduled events due to expire
+  set to false makes the method execute the scheduled events due to expire
   soonest (if any) and then return immediately.
   This is useful in case you want to use the :class:`~sched.scheduler` in
   non-blocking applications.  (Contributed by Giampaolo Rodolà in :issue:`13449`.)
@@ -1953,7 +1954,7 @@ ssl
   :attr:`~ssl.OP_NO_COMPRESSION` can be used to disable compression.
   (Contributed by Antoine Pitrou in :issue:`13634`.)
 
-* Support has been added for the Next Procotol Negotiation extension using
+* Support has been added for the Next Protocol Negotiation extension using
   the :meth:`ssl.SSLContext.set_npn_protocols` method.
   (Contributed by Colin Marc in :issue:`14204`.)
 

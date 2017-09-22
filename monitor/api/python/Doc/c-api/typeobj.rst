@@ -111,12 +111,13 @@ type objects) *must* have the :attr:`ob_size` field.
    For statically allocated type objects, the tp_name field should contain a dot.
    Everything before the last dot is made accessible as the :attr:`__module__`
    attribute, and everything after the last dot is made accessible as the
-   :attr:`__name__` attribute.
+   :attr:`~definition.__name__` attribute.
 
    If no dot is present, the entire :c:member:`~PyTypeObject.tp_name` field is made accessible as the
-   :attr:`__name__` attribute, and the :attr:`__module__` attribute is undefined
+   :attr:`~definition.__name__` attribute, and the :attr:`__module__` attribute is undefined
    (unless explicitly set in the dictionary, as explained above).  This means your
-   type will be impossible to pickle.
+   type will be impossible to pickle.  Additionally, it will not be listed in
+   module documentations created with pydoc.
 
    This field is not inherited by subtypes.
 
@@ -198,8 +199,9 @@ type objects) *must* have the :attr:`ob_size` field.
 
    This field is deprecated.  When it is defined, it should point to a function
    that acts the same as the :c:member:`~PyTypeObject.tp_getattro` function, but taking a C string
-   instead of a Python string object to give the attribute name.  The signature is
-   the same as for :c:func:`PyObject_GetAttrString`.
+   instead of a Python string object to give the attribute name.  The signature is ::
+
+      PyObject * tp_getattr(PyObject *o, char *attr_name);
 
    This field is inherited by subtypes together with :c:member:`~PyTypeObject.tp_getattro`: a subtype
    inherits both :c:member:`~PyTypeObject.tp_getattr` and :c:member:`~PyTypeObject.tp_getattro` from its base type when
@@ -212,10 +214,11 @@ type objects) *must* have the :attr:`ob_size` field.
 
    This field is deprecated.  When it is defined, it should point to a function
    that acts the same as the :c:member:`~PyTypeObject.tp_setattro` function, but taking a C string
-   instead of a Python string object to give the attribute name.  The signature is
-   the same as for :c:func:`PyObject_SetAttrString`, but setting
-   *v* to *NULL* to delete an attribute must be supported.
+   instead of a Python string object to give the attribute name.  The signature is ::
 
+      PyObject * tp_setattr(PyObject *o, char *attr_name, PyObject *v);
+
+   The *v* argument is set to *NULL* to delete the attribute.
    This field is inherited by subtypes together with :c:member:`~PyTypeObject.tp_setattro`: a subtype
    inherits both :c:member:`~PyTypeObject.tp_setattr` and :c:member:`~PyTypeObject.tp_setattro` from its base type when
    the subtype's :c:member:`~PyTypeObject.tp_setattr` and :c:member:`~PyTypeObject.tp_setattro` are both *NULL*.
@@ -1277,7 +1280,7 @@ Buffer Object Structures
    steps:
 
    (1) Check if the request can be met. If not, raise :c:data:`PyExc_BufferError`,
-       set :c:data:`view->obj` to *NULL* and return -1.
+       set :c:data:`view->obj` to *NULL* and return ``-1``.
 
    (2) Fill in the requested fields.
 
@@ -1285,7 +1288,7 @@ Buffer Object Structures
 
    (4) Set :c:data:`view->obj` to *exporter* and increment :c:data:`view->obj`.
 
-   (5) Return 0.
+   (5) Return ``0``.
 
    If *exporter* is part of a chain or tree of buffer providers, two main
    schemes can be used:
@@ -1328,7 +1331,7 @@ Buffer Object Structures
 
    (1) Decrement an internal counter for the number of exports.
 
-   (2) If the counter is 0, free all memory associated with *view*.
+   (2) If the counter is ``0``, free all memory associated with *view*.
 
    The exporter MUST use the :c:member:`~Py_buffer.internal` field to keep
    track of buffer-specific resources. This field is guaranteed to remain

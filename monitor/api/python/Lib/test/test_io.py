@@ -350,7 +350,10 @@ class IOTest(unittest.TestCase):
     def large_file_ops(self, f):
         assert f.readable()
         assert f.writable()
-        self.assertEqual(f.seek(self.LARGE), self.LARGE)
+        try:
+            self.assertEqual(f.seek(self.LARGE), self.LARGE)
+        except (OverflowError, ValueError):
+            self.skipTest("no largefile support")
         self.assertEqual(f.tell(), self.LARGE)
         self.assertEqual(f.write(b"xxx"), 3)
         self.assertEqual(f.tell(), self.LARGE + 3)
@@ -496,7 +499,11 @@ class IOTest(unittest.TestCase):
     def test_open_handles_NUL_chars(self):
         fn_with_NUL = 'foo\0bar'
         self.assertRaises(ValueError, self.open, fn_with_NUL, 'w')
-        self.assertRaises(ValueError, self.open, bytes(fn_with_NUL, 'ascii'), 'w')
+
+        bytes_fn = bytes(fn_with_NUL, 'ascii')
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            self.assertRaises(ValueError, self.open, bytes_fn, 'w')
 
     def test_raw_file_io(self):
         with self.open(support.TESTFN, "wb", buffering=0) as f:
@@ -535,6 +542,22 @@ class IOTest(unittest.TestCase):
             self.assertRaises(TypeError, f.readline, 5.3)
         with self.open(support.TESTFN, "r") as f:
             self.assertRaises(TypeError, f.readline, 5.3)
+
+    def test_readline_nonsizeable(self):
+        # Issue #30061
+        # Crash when readline() returns an object without __len__
+        class R(self.IOBase):
+            def readline(self):
+                return None
+        self.assertRaises((TypeError, StopIteration), next, R())
+
+    def test_next_nonsizeable(self):
+        # Issue #30061
+        # Crash when __next__() returns an object without __len__
+        class R(self.IOBase):
+            def __next__(self):
+                return None
+        self.assertRaises(TypeError, R().readlines, 1)
 
     def test_raw_bytes_io(self):
         f = self.BytesIO()
@@ -856,6 +879,32 @@ class IOTest(unittest.TestCase):
                 self.assertEqual(getattr(stream, method)(buffer), 5)
                 self.assertEqual(bytes(buffer), b"12345")
 
+    def test_fspath_support(self):
+        class PathLike:
+            def __init__(self, path):
+                self.path = path
+
+            def __fspath__(self):
+                return self.path
+
+        def check_path_succeeds(path):
+            with self.open(path, "w") as f:
+                f.write("egg\n")
+
+            with self.open(path, "r") as f:
+                self.assertEqual(f.read(), "egg\n")
+
+        check_path_succeeds(PathLike(support.TESTFN))
+        check_path_succeeds(PathLike(support.TESTFN.encode('utf-8')))
+
+        bad_path = PathLike(TypeError)
+        with self.assertRaises(TypeError):
+            self.open(bad_path, 'w')
+
+        # ensure that refcounting is correct with some error conditions
+        with self.assertRaisesRegex(ValueError, 'read/write/append mode'):
+            self.open(PathLike(support.TESTFN), 'rwxa')
+
 
 class CIOTest(IOTest):
 
@@ -980,6 +1029,16 @@ class CommonBufferedTests:
         self.assertEqual(repr(b), "<%s name='dummy'>" % clsname)
         raw.name = b"dummy"
         self.assertEqual(repr(b), "<%s name=b'dummy'>" % clsname)
+
+    def test_recursive_repr(self):
+        # Issue #25455
+        raw = self.MockRawIO()
+        b = self.tp(raw)
+        with support.swap_attr(raw, 'name', b):
+            try:
+                repr(b)  # Should not crash
+            except RuntimeError:
+                pass
 
     def test_flush_error_on_close(self):
         # Test that buffered file is closed despite failed flush
@@ -1782,7 +1841,7 @@ class BufferedRWPairTest(unittest.TestCase):
             with self.subTest(method):
                 pair = self.tp(self.BytesIO(b"abcdef"), self.MockRawIO())
 
-                data = byteslike(5)
+                data = byteslike(b'\0' * 5)
                 self.assertEqual(getattr(pair, method)(data), 5)
                 self.assertEqual(bytes(data), b"abcde")
 
@@ -2390,6 +2449,16 @@ class TextIOWrapperTest(unittest.TestCase):
 
         t.buffer.detach()
         repr(t)  # Should not raise an exception
+
+    def test_recursive_repr(self):
+        # Issue #25455
+        raw = self.BytesIO()
+        t = self.TextIOWrapper(raw)
+        with support.swap_attr(raw, 'name', t):
+            try:
+                repr(t)  # Should not crash
+            except RuntimeError:
+                pass
 
     def test_line_buffering(self):
         r = self.BytesIO()
@@ -3135,6 +3204,7 @@ class TextIOWrapperTest(unittest.TestCase):
             """.format(iomod=iomod, kwargs=kwargs)
         return assert_python_ok("-c", code)
 
+    @support.requires_type_collecting
     def test_create_at_shutdown_without_encoding(self):
         rc, out, err = self._check_create_at_shutdown()
         if err:
@@ -3144,6 +3214,7 @@ class TextIOWrapperTest(unittest.TestCase):
         else:
             self.assertEqual("ok", out.decode().strip())
 
+    @support.requires_type_collecting
     def test_create_at_shutdown_with_encoding(self):
         rc, out, err = self._check_create_at_shutdown(encoding='utf-8',
                                                       errors='strict')
@@ -3244,8 +3315,7 @@ class CTextIOWrapperTest(TextIOWrapperTest):
 
 class PyTextIOWrapperTest(TextIOWrapperTest):
     io = pyio
-    #shutdown_error = "LookupError: unknown encoding: ascii"
-    shutdown_error = "TypeError: 'NoneType' object is not iterable"
+    shutdown_error = "LookupError: unknown encoding: ascii"
 
 
 class IncrementalNewlineDecoderTest(unittest.TestCase):
@@ -3444,6 +3514,7 @@ class MiscIOTest(unittest.TestCase):
                 self.assertRaises(ValueError, f.readinto1, bytearray(1024))
             self.assertRaises(ValueError, f.readline)
             self.assertRaises(ValueError, f.readlines)
+            self.assertRaises(ValueError, f.readlines, 1)
             self.assertRaises(ValueError, f.seek, 0)
             self.assertRaises(ValueError, f.tell)
             self.assertRaises(ValueError, f.truncate)
@@ -3649,6 +3720,7 @@ class CMiscIOTest(MiscIOTest):
             import sys
             import time
             import threading
+            from test.support import SuppressCrashReport
 
             file = sys.{stream_name}
 
@@ -3656,6 +3728,10 @@ class CMiscIOTest(MiscIOTest):
                 while True:
                     file.write('.')
                     file.flush()
+
+            crash = SuppressCrashReport()
+            crash.__enter__()
+            # don't call __exit__(): the crash occurs at Python shutdown
 
             thread = threading.Thread(target=run)
             thread.daemon = True

@@ -875,7 +875,7 @@ math_1_to_int(PyObject *arg, double (*func) (double), int can_overflow)
 }
 
 static PyObject *
-math_2(PyObject *args, double (*func) (double, double), char *funcname)
+math_2(PyObject *args, double (*func) (double, double), const char *funcname)
 {
     PyObject *ox, *oy;
     double x, y, r;
@@ -1274,7 +1274,7 @@ count_set_bits(unsigned long n)
 
 /* Divide-and-conquer factorial algorithm
  *
- * Based on the formula and psuedo-code provided at:
+ * Based on the formula and pseudo-code provided at:
  * http://www.luschny.de/math/factorial/binarysplitfact.html
  *
  * Faster algorithms exist, but they're more complicated and depend on
@@ -1672,7 +1672,7 @@ PyDoc_STRVAR(math_modf_doc,
    in that int is larger than PY_SSIZE_T_MAX. */
 
 static PyObject*
-loghelper(PyObject* arg, double (*func)(double), char *funcname)
+loghelper(PyObject* arg, double (*func)(double), const char *funcname)
 {
     /* If it is int, do it ourselves. */
     if (PyLong_Check(arg)) {
@@ -2144,6 +2144,7 @@ PyInit_math(void)
 
     PyModule_AddObject(m, "pi", PyFloat_FromDouble(Py_MATH_PI));
     PyModule_AddObject(m, "e", PyFloat_FromDouble(Py_MATH_E));
+    PyModule_AddObject(m, "tau", PyFloat_FromDouble(Py_MATH_TAU));  /* 2pi */
     PyModule_AddObject(m, "inf", PyFloat_FromDouble(m_inf()));
 #if !defined(PY_NO_SHORT_FLOAT_REPR) || defined(Py_NAN)
     PyModule_AddObject(m, "nan", PyFloat_FromDouble(m_nan()));

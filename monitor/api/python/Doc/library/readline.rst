@@ -104,7 +104,9 @@ The following functions operate on a history file:
 
    Append the last *nelements* items of history to a file.  The default filename is
    :file:`~/.history`.  The file must already exist.  This calls
-   :c:func:`append_history` in the underlying library.
+   :c:func:`append_history` in the underlying library.  This function
+   only exists if Python was compiled for a version of the library
+   that supports it.
 
    .. versionadded:: 3.5
 
@@ -165,6 +167,20 @@ The following functions operate on a global history list:
    This calls :c:func:`add_history` in the underlying library.
 
 
+.. function:: set_auto_history(enabled)
+
+   Enable or disable automatic calls to :c:func:`add_history` when reading
+   input via readline.  The *enabled* argument should be a Boolean value
+   that when true, enables auto history, and that when false, disables
+   auto history.
+
+   .. versionadded:: 3.6
+
+   .. impl-detail::
+      Auto history is enabled by default, and changes to this do not persist
+      across multiple sessions.
+
+
 Startup hooks
 -------------
 
@@ -185,7 +201,8 @@ Startup hooks
    be used as the new hook function; if omitted or ``None``, any
    function already installed is removed.  The hook is called
    with no arguments after the first prompt has been printed and just before
-   readline starts reading input characters.
+   readline starts reading input characters.  This function only exists
+   if Python was compiled for a version of the library that supports it.
 
 
 Completion

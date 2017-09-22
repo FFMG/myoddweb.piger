@@ -11,7 +11,7 @@ Transports
 
 Transports are classes provided by :mod:`asyncio` in order to abstract
 various kinds of communication channels.  You generally won't instantiate
-a transport yourself; instead, you will call a :class:`BaseEventLoop` method
+a transport yourself; instead, you will call an :class:`AbstractEventLoop` method
 which will create the transport and try to initiate the underlying
 communication channel, calling you back when it succeeds.
 
@@ -25,6 +25,9 @@ the transport's kind.
 
 The transport classes are :ref:`not thread safe <asyncio-multithreading>`.
 
+.. versionchanged:: 3.6
+   The socket option ``TCP_NODELAY`` is now set by default.
+
 
 BaseTransport
 -------------
@@ -33,7 +36,7 @@ BaseTransport
 
    Base class for transports.
 
-   .. method:: close(self)
+   .. method:: close()
 
       Close the transport.  If the transport has a buffer for outgoing
       data, buffered data will be flushed asynchronously.  No more data
@@ -41,7 +44,7 @@ BaseTransport
       protocol's :meth:`connection_lost` method will be called with
       :const:`None` as its argument.
 
-   .. method:: is_closing(self)
+   .. method:: is_closing()
 
       Return ``True`` if the transport is closing or is closed.
 
@@ -86,6 +89,19 @@ BaseTransport
       * subprocess:
 
         - ``'subprocess'``: :class:`subprocess.Popen` instance
+
+   .. method:: set_protocol(protocol)
+
+      Set a new protocol.  Switching protocol should only be done when both
+      protocols are documented to support the switch.
+
+      .. versionadded:: 3.5.3
+
+   .. method:: get_protocol
+
+      Return the current protocol.
+
+      .. versionadded:: 3.5.3
 
    .. versionchanged:: 3.5.1
       ``'ssl_object'`` info was added to SSL sockets.
@@ -235,7 +251,7 @@ BaseSubprocessTransport
       if it hasn't returned, similarly to the
       :attr:`subprocess.Popen.returncode` attribute.
 
-   .. method:: kill(self)
+   .. method:: kill()
 
       Kill the subprocess, as in :meth:`subprocess.Popen.kill`.
 
@@ -368,14 +384,14 @@ The following callbacks are called on :class:`Protocol` instances:
 
 .. method:: Protocol.eof_received()
 
-   Calls when the other end signals it won't send any more data
+   Called when the other end signals it won't send any more data
    (for example by calling :meth:`write_eof`, if the other end also uses
    asyncio).
 
-   This method may return a false value (including None), in which case
+   This method may return a false value (including ``None``), in which case
    the transport will close itself.  Conversely, if this method returns a
    true value, closing the transport is up to the protocol.  Since the
-   default implementation returns None, it implicitly closes the connection.
+   default implementation returns ``None``, it implicitly closes the connection.
 
    .. note::
       Some transports such as SSL don't support half-closed connections,
@@ -475,7 +491,7 @@ Protocol examples
 TCP echo client protocol
 ------------------------
 
-TCP echo client  using the :meth:`BaseEventLoop.create_connection` method, send
+TCP echo client  using the :meth:`AbstractEventLoop.create_connection` method, send
 data and wait until the connection is closed::
 
     import asyncio
@@ -506,10 +522,10 @@ data and wait until the connection is closed::
     loop.close()
 
 The event loop is running twice. The
-:meth:`~BaseEventLoop.run_until_complete` method is preferred in this short
+:meth:`~AbstractEventLoop.run_until_complete` method is preferred in this short
 example to raise an exception if the server is not listening, instead of
 having to write a short coroutine to handle the exception and stop the
-running loop. At :meth:`~BaseEventLoop.run_until_complete` exit, the loop is
+running loop. At :meth:`~AbstractEventLoop.run_until_complete` exit, the loop is
 no longer running, so there is no need to stop the loop in case of an error.
 
 .. seealso::
@@ -523,7 +539,7 @@ no longer running, so there is no need to stop the loop in case of an error.
 TCP echo server protocol
 ------------------------
 
-TCP echo server using the :meth:`BaseEventLoop.create_server` method, send back
+TCP echo server using the :meth:`AbstractEventLoop.create_server` method, send back
 received data and close the connection::
 
     import asyncio
@@ -577,7 +593,7 @@ methods are not coroutines.
 UDP echo client protocol
 ------------------------
 
-UDP echo client using the :meth:`BaseEventLoop.create_datagram_endpoint`
+UDP echo client using the :meth:`AbstractEventLoop.create_datagram_endpoint`
 method, send data and close the transport when we received the answer::
 
     import asyncio
@@ -623,7 +639,7 @@ method, send data and close the transport when we received the answer::
 UDP echo server protocol
 ------------------------
 
-UDP echo server using the :meth:`BaseEventLoop.create_datagram_endpoint`
+UDP echo server using the :meth:`AbstractEventLoop.create_datagram_endpoint`
 method, send back received data::
 
     import asyncio
@@ -660,7 +676,7 @@ Register an open socket to wait for data using a protocol
 ---------------------------------------------------------
 
 Wait until a socket receives data using the
-:meth:`BaseEventLoop.create_connection` method with a protocol, and then close
+:meth:`AbstractEventLoop.create_connection` method with a protocol, and then close
 the event loop ::
 
     import asyncio
@@ -708,7 +724,7 @@ the event loop ::
 
    The :ref:`watch a file descriptor for read events
    <asyncio-watch-read-event>` example uses the low-level
-   :meth:`BaseEventLoop.add_reader` method to register the file descriptor of a
+   :meth:`AbstractEventLoop.add_reader` method to register the file descriptor of a
    socket.
 
    The :ref:`register an open socket to wait for data using streams

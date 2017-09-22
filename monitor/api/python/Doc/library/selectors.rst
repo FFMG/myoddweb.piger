@@ -1,5 +1,5 @@
-:mod:`selectors` -- High-level I/O multiplexing
-===============================================
+:mod:`selectors` --- High-level I/O multiplexing
+================================================
 
 .. module:: selectors
    :synopsis: High-level I/O multiplexing.
@@ -68,7 +68,7 @@ constants below:
 .. class:: SelectorKey
 
    A :class:`SelectorKey` is a :class:`~collections.namedtuple` used to
-   associate a file object to its underlying file decriptor, selected event
+   associate a file object to its underlying file descriptor, selected event
    mask and attached data. It is returned by several :class:`BaseSelector`
    methods.
 

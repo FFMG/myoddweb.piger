@@ -130,7 +130,7 @@ w_string(const char *s, Py_ssize_t n, WFILE *p)
     m = p->end - p->ptr;
     if (p->fp != NULL) {
         if (n <= m) {
-            Py_MEMCPY(p->ptr, s, n);
+            memcpy(p->ptr, s, n);
             p->ptr += n;
         }
         else {
@@ -140,7 +140,7 @@ w_string(const char *s, Py_ssize_t n, WFILE *p)
     }
     else {
         if (n <= m || w_reserve(p, n - m)) {
-            Py_MEMCPY(p->ptr, s, n);
+            memcpy(p->ptr, s, n);
             p->ptr += n;
         }
     }
@@ -263,10 +263,10 @@ w_ref(PyObject *v, char *flag, WFILE *p)
     if (Py_REFCNT(v) == 1)
         return 0;
 
-    entry = _Py_hashtable_get_entry(p->hashtable, v);
+    entry = _Py_HASHTABLE_GET_ENTRY(p->hashtable, v);
     if (entry != NULL) {
         /* write the reference index to the stream */
-        _Py_HASHTABLE_ENTRY_READ_DATA(p->hashtable, &w, sizeof(w), entry);
+        _Py_HASHTABLE_ENTRY_READ_DATA(p->hashtable, entry, w);
         /* we don't store "long" indices in the dict */
         assert(0 <= w && w <= 0x7fffffff);
         w_byte(TYPE_REF, p);
@@ -549,7 +549,7 @@ w_complex_object(PyObject *v, char flag, WFILE *p)
         w_object(co->co_lnotab, p);
     }
     else if (PyObject_CheckBuffer(v)) {
-        /* Write unknown bytes-like objects as a byte string */
+        /* Write unknown bytes-like objects as a bytes object */
         Py_buffer view;
         if (PyObject_GetBuffer(v, &view, PyBUF_SIMPLE) != 0) {
             w_byte(TYPE_UNKNOWN, p);
@@ -571,7 +571,8 @@ static int
 w_init_refs(WFILE *wf, int version)
 {
     if (version >= 3) {
-        wf->hashtable = _Py_hashtable_new(sizeof(int), _Py_hashtable_hash_ptr,
+        wf->hashtable = _Py_hashtable_new(sizeof(PyObject *), sizeof(int),
+                                          _Py_hashtable_hash_ptr,
                                           _Py_hashtable_compare_direct);
         if (wf->hashtable == NULL) {
             PyErr_NoMemory();
@@ -582,9 +583,13 @@ w_init_refs(WFILE *wf, int version)
 }
 
 static int
-w_decref_entry(_Py_hashtable_entry_t *entry, void *Py_UNUSED(data))
+w_decref_entry(_Py_hashtable_t *ht, _Py_hashtable_entry_t *entry,
+               void *Py_UNUSED(data))
 {
-    Py_XDECREF(entry->key);
+    PyObject *entry_key;
+
+    _Py_HASHTABLE_ENTRY_READ_KEY(ht, entry, entry_key);
+    Py_XDECREF(entry_key);
     return 0;
 }
 
@@ -643,7 +648,7 @@ typedef struct {
     PyObject *refs;  /* a list */
 } RFILE;
 
-static char *
+static const char *
 r_string(Py_ssize_t n, RFILE *p)
 {
     Py_ssize_t read = -1;
@@ -729,7 +734,7 @@ r_byte(RFILE *p)
         c = getc(p->fp);
     }
     else {
-        char *ptr = r_string(1, p);
+        const char *ptr = r_string(1, p);
         if (ptr != NULL)
             c = *(unsigned char *) ptr;
     }
@@ -740,9 +745,9 @@ static int
 r_short(RFILE *p)
 {
     short x = -1;
-    unsigned char *buffer;
+    const unsigned char *buffer;
 
-    buffer = (unsigned char *) r_string(2, p);
+    buffer = (const unsigned char *) r_string(2, p);
     if (buffer != NULL) {
         x = buffer[0];
         x |= buffer[1] << 8;
@@ -756,9 +761,9 @@ static long
 r_long(RFILE *p)
 {
     long x = -1;
-    unsigned char *buffer;
+    const unsigned char *buffer;
 
-    buffer = (unsigned char *) r_string(4, p);
+    buffer = (const unsigned char *) r_string(4, p);
     if (buffer != NULL) {
         x = buffer[0];
         x |= (long)buffer[1] << 8;
@@ -978,7 +983,8 @@ r_object(RFILE *p)
 
     case TYPE_FLOAT:
         {
-            char buf[256], *ptr;
+            char buf[256];
+            const char *ptr;
             double dx;
             n = r_byte(p);
             if (n == EOF) {
@@ -1001,9 +1007,9 @@ r_object(RFILE *p)
 
     case TYPE_BINARY_FLOAT:
         {
-            unsigned char *buf;
+            const unsigned char *buf;
             double x;
-            buf = (unsigned char *) r_string(8, p);
+            buf = (const unsigned char *) r_string(8, p);
             if (buf == NULL)
                 break;
             x = _PyFloat_Unpack8(buf, 1);
@@ -1016,7 +1022,8 @@ r_object(RFILE *p)
 
     case TYPE_COMPLEX:
         {
-            char buf[256], *ptr;
+            char buf[256];
+            const char *ptr;
             Py_complex c;
             n = r_byte(p);
             if (n == EOF) {
@@ -1053,15 +1060,15 @@ r_object(RFILE *p)
 
     case TYPE_BINARY_COMPLEX:
         {
-            unsigned char *buf;
+            const unsigned char *buf;
             Py_complex c;
-            buf = (unsigned char *) r_string(8, p);
+            buf = (const unsigned char *) r_string(8, p);
             if (buf == NULL)
                 break;
             c.real = _PyFloat_Unpack8(buf, 1);
             if (c.real == -1.0 && PyErr_Occurred())
                 break;
-            buf = (unsigned char *) r_string(8, p);
+            buf = (const unsigned char *) r_string(8, p);
             if (buf == NULL)
                 break;
             c.imag = _PyFloat_Unpack8(buf, 1);
@@ -1074,12 +1081,12 @@ r_object(RFILE *p)
 
     case TYPE_STRING:
         {
-            char *ptr;
+            const char *ptr;
             n = r_long(p);
             if (PyErr_Occurred())
                 break;
             if (n < 0 || n > SIZE32_MAX) {
-                PyErr_SetString(PyExc_ValueError, "bad marshal data (string size out of range)");
+                PyErr_SetString(PyExc_ValueError, "bad marshal data (bytes object size out of range)");
                 break;
             }
             v = PyBytes_FromStringAndSize((char *)NULL, n);
@@ -1103,7 +1110,7 @@ r_object(RFILE *p)
         if (PyErr_Occurred())
             break;
         if (n < 0 || n > SIZE32_MAX) {
-            PyErr_SetString(PyExc_ValueError, "bad marshal data (unicode size out of range)");
+            PyErr_SetString(PyExc_ValueError, "bad marshal data (string size out of range)");
             break;
         }
         goto _read_ascii;
@@ -1119,7 +1126,7 @@ r_object(RFILE *p)
         }
     _read_ascii:
         {
-            char *ptr;
+            const char *ptr;
             ptr = r_string(n, p);
             if (ptr == NULL)
                 break;
@@ -1137,13 +1144,13 @@ r_object(RFILE *p)
         is_interned = 1;
     case TYPE_UNICODE:
         {
-        char *buffer;
+        const char *buffer;
 
         n = r_long(p);
         if (PyErr_Occurred())
             break;
         if (n < 0 || n > SIZE32_MAX) {
-            PyErr_SetString(PyExc_ValueError, "bad marshal data (unicode size out of range)");
+            PyErr_SetString(PyExc_ValueError, "bad marshal data (string size out of range)");
             break;
         }
         if (n != 0) {
@@ -1264,41 +1271,52 @@ r_object(RFILE *p)
             PyErr_SetString(PyExc_ValueError, "bad marshal data (set size out of range)");
             break;
         }
-        v = (type == TYPE_SET) ? PySet_New(NULL) : PyFrozenSet_New(NULL);
-        if (type == TYPE_SET) {
-            R_REF(v);
-        } else {
-            /* must use delayed registration of frozensets because they must
-             * be init with a refcount of 1
-             */
-            idx = r_ref_reserve(flag, p);
-            if (idx < 0)
-                Py_CLEAR(v); /* signal error */
-        }
-        if (v == NULL)
-            break;
 
-        for (i = 0; i < n; i++) {
-            v2 = r_object(p);
-            if ( v2 == NULL ) {
-                if (!PyErr_Occurred())
-                    PyErr_SetString(PyExc_TypeError,
-                        "NULL object in marshal data for set");
-                Py_DECREF(v);
-                v = NULL;
+        if (n == 0 && type == TYPE_FROZENSET) {
+            /* call frozenset() to get the empty frozenset singleton */
+            v = PyObject_CallFunction((PyObject*)&PyFrozenSet_Type, NULL);
+            if (v == NULL)
                 break;
-            }
-            if (PySet_Add(v, v2) == -1) {
-                Py_DECREF(v);
-                Py_DECREF(v2);
-                v = NULL;
-                break;
-            }
-            Py_DECREF(v2);
+            R_REF(v);
+            retval = v;
         }
-        if (type != TYPE_SET)
-            v = r_ref_insert(v, idx, flag, p);
-        retval = v;
+        else {
+            v = (type == TYPE_SET) ? PySet_New(NULL) : PyFrozenSet_New(NULL);
+            if (type == TYPE_SET) {
+                R_REF(v);
+            } else {
+                /* must use delayed registration of frozensets because they must
+                 * be init with a refcount of 1
+                 */
+                idx = r_ref_reserve(flag, p);
+                if (idx < 0)
+                    Py_CLEAR(v); /* signal error */
+            }
+            if (v == NULL)
+                break;
+
+            for (i = 0; i < n; i++) {
+                v2 = r_object(p);
+                if ( v2 == NULL ) {
+                    if (!PyErr_Occurred())
+                        PyErr_SetString(PyExc_TypeError,
+                            "NULL object in marshal data for set");
+                    Py_DECREF(v);
+                    v = NULL;
+                    break;
+                }
+                if (PySet_Add(v, v2) == -1) {
+                    Py_DECREF(v);
+                    Py_DECREF(v2);
+                    v = NULL;
+                    break;
+                }
+                Py_DECREF(v2);
+            }
+            if (type != TYPE_SET)
+                v = r_ref_insert(v, idx, flag, p);
+            retval = v;
+        }
         break;
 
     case TYPE_CODE:
@@ -1594,7 +1612,7 @@ PyMarshal_WriteObjectToString(PyObject *x, int version)
         if (wf.ptr - base > PY_SSIZE_T_MAX) {
             Py_DECREF(wf.str);
             PyErr_SetString(PyExc_OverflowError,
-                            "too much marshal data for a string");
+                            "too much marshal data for a bytes object");
             return NULL;
         }
         if (_PyBytes_Resize(&wf.str, (Py_ssize_t)(wf.ptr - base)) < 0)
@@ -1640,8 +1658,7 @@ PyDoc_STRVAR(dump_doc,
 "dump(value, file[, version])\n\
 \n\
 Write the value on the open file. The value must be a supported type.\n\
-The file must be an open file object such as sys.stdout or returned by\n\
-open() or os.popen(). It must be opened in binary mode ('wb' or 'w+b').\n\
+The file must be a writeable binary file.\n\
 \n\
 If the value has (or contains an object that has) an unsupported type, a\n\
 ValueError exception is raised - but garbage data will also be written\n\
@@ -1697,8 +1714,7 @@ PyDoc_STRVAR(load_doc,
 Read one value from the open file and return it. If no valid value is\n\
 read (e.g. because the data has a different Python version's\n\
 incompatible marshal format), raise EOFError, ValueError or TypeError.\n\
-The file must be an open file object opened in binary mode ('rb' or\n\
-'r+b').\n\
+The file must be a readable binary file.\n\
 \n\
 Note: If an object containing an unsupported type was marshalled with\n\
 dump(), load() will substitute None for the unmarshallable type.");
@@ -1717,7 +1733,7 @@ marshal_dumps(PyObject *self, PyObject *args)
 PyDoc_STRVAR(dumps_doc,
 "dumps(value[, version])\n\
 \n\
-Return the string that would be written to a file by dump(value, file).\n\
+Return the bytes object that would be written to a file by dump(value, file).\n\
 The value must be a supported type. Raise a ValueError exception if\n\
 value has (or contains an object that has) an unsupported type.\n\
 \n\
@@ -1753,8 +1769,8 @@ marshal_loads(PyObject *self, PyObject *args)
 PyDoc_STRVAR(loads_doc,
 "loads(bytes)\n\
 \n\
-Convert the bytes object to a value. If no valid value is found, raise\n\
-EOFError, ValueError or TypeError. Extra characters in the input are\n\
+Convert the bytes-like object to a value. If no valid value is found,\n\
+raise EOFError, ValueError or TypeError. Extra bytes in the input are\n\
 ignored.");
 
 static PyMethodDef marshal_methods[] = {
@@ -1792,8 +1808,8 @@ Functions:\n\
 \n\
 dump() -- write value to a file\n\
 load() -- read value from a file\n\
-dumps() -- write value to a string\n\
-loads() -- read value from a string");
+dumps() -- marshal value as a bytes object\n\
+loads() -- read value from a bytes-like object");
 
 
 

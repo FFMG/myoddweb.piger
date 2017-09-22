@@ -742,7 +742,9 @@ publicized, either at the time or since.
 
 With the new module, bundling your application is as simple as putting all
 the files, including a ``__main__.py`` file, into a directory ``myapp``
-and running::
+and running:
+
+.. code-block:: shell-session
 
     $ python -m zipapp myapp
     $ python myapp.pyz
@@ -802,11 +804,12 @@ Notable changes in the :mod:`asyncio` module since Python 3.4.0:
   :func:`~asyncio.ensure_future`.
   (Contributed by Yury Selivanov.)
 
-* New :meth:`loop.set_task_factory() <asyncio.BaseEventLoop.set_task_factory>`
-  and :meth:`loop.set_task_factory() <asyncio.BaseEventLoop.get_task_factory>`
-  methods to customize the task factory that
-  :meth:`loop.create_task() <asyncio.BaseEventLoop.create_task>` method uses.
-  (Contributed by Yury Selivanov.)
+* New :meth:`loop.set_task_factory()
+  <asyncio.AbstractEventLoop.set_task_factory>` and
+  :meth:`loop.get_task_factory() <asyncio.AbstractEventLoop.get_task_factory>`
+  methods to customize the task factory that :meth:`loop.create_task()
+  <asyncio.BaseEventLoop.create_task>` method uses.  (Contributed by Yury
+  Selivanov.)
 
 * New :meth:`Queue.join() <asyncio.Queue.join>` and
   :meth:`Queue.task_done() <asyncio.Queue.task_done>` queue methods.
@@ -1889,7 +1892,7 @@ to request exclusive creation.  (Contributed by Berker Peksag in :issue:`21717`.
 
 The :meth:`TarFile.extractall() <tarfile.TarFile.extractall>` and
 :meth:`TarFile.extract() <tarfile.TarFile.extract>` methods now take a keyword
-argument *numeric_only*.  If set to ``True``, the extracted files and
+argument *numeric_owner*.  If set to ``True``, the extracted files and
 directories will be owned by the numeric ``uid`` and ``gid`` from the tarfile.
 If set to ``False`` (the default, and the behavior in versions prior to 3.5),
 they will be owned by the named user and group in the tarfile.
@@ -2127,8 +2130,8 @@ Many operations on :class:`io.BytesIO` are now 50% to 100% faster.
 (Contributed by Serhiy Storchaka in :issue:`15381` and David Wilson in
 :issue:`22003`.)
 
-The :func:`marshal.dumps` function is now faster: 65-85% with versions 3
-and 4, 20-25% with versions 0 to 2 on typical data, and up to 5 times in
+The :func:`marshal.dumps` function is now faster: 65--85% with versions 3
+and 4, 20--25% with versions 0 to 2 on typical data, and up to 5 times in
 best cases.
 (Contributed by Serhiy Storchaka in :issue:`20416` and :issue:`23344`.)
 
@@ -2173,8 +2176,7 @@ New ``calloc`` functions were added:
 
 * :c:func:`PyMem_RawCalloc`,
 * :c:func:`PyMem_Calloc`,
-* :c:func:`PyObject_Calloc`,
-* :c:func:`_PyObject_GC_Calloc`.
+* :c:func:`PyObject_Calloc`.
 
 (Contributed by Victor Stinner in :issue:`21233`.)
 
@@ -2325,11 +2327,12 @@ The :func:`inspect.getargspec` function is deprecated and scheduled to be
 removed in Python 3.6.  (See :issue:`20438` for details.)
 
 The :mod:`inspect` :func:`~inspect.getfullargspec`,
-:func:`~inspect.getargvalues`, :func:`~inspect.getcallargs`,
-:func:`~inspect.getargvalues`, :func:`~inspect.formatargspec`, and
-:func:`~inspect.formatargvalues` functions are deprecated in favor of
-the :func:`inspect.signature` API.
-(Contributed by Yury Selivanov in :issue:`20438`.)
+:func:`~inspect.getcallargs`, and :func:`~inspect.formatargspec` functions are
+deprecated in favor of the :func:`inspect.signature` API. (Contributed by Yury
+Selivanov in :issue:`20438`.)
+
+:func:`~inspect.getargvalues` and :func:`~inspect.formatargvalues` functions
+were inadvertently marked as deprecated with the release of Python 3.5.0.
 
 Use of :const:`re.LOCALE` flag with str patterns or :const:`re.ASCII` is now
 deprecated.  (Contributed by Serhiy Storchaka in :issue:`22407`.)

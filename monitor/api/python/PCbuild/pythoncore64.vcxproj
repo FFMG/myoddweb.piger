@@ -57,7 +57,7 @@
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;shlwapi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <BaseAddress>0x1e000000</BaseAddress>
     </Link>
     <PostBuildEvent />
@@ -120,6 +120,7 @@ xcopy "$(SolutionDir)includes\python64d\*.*" "$(OutDir)python\" /Y </Command>
     <ClInclude Include="..\Include\odictobject.h" />
     <ClInclude Include="..\Include\opcode.h" />
     <ClInclude Include="..\Include\osdefs.h" />
+    <ClInclude Include="..\Include\osmodule.h" />
     <ClInclude Include="..\Include\parsetok.h" />
     <ClInclude Include="..\Include\patchlevel.h" />
     <ClInclude Include="..\Include\pgen.h" />
@@ -205,20 +206,27 @@ xcopy "$(SolutionDir)includes\python64d\*.*" "$(OutDir)python\" /Y </Command>
     <ClInclude Include="..\Python\condvar.h" />
     <ClInclude Include="..\Python\importdl.h" />
     <ClInclude Include="..\Python\thread_nt.h" />
+    <ClInclude Include="..\Python\wordcode_helpers.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Modules\_asynciomodule.c" />
     <ClCompile Include="..\Modules\_bisectmodule.c" />
+    <ClCompile Include="..\Modules\_blake2\blake2b_impl.c" />
+    <ClCompile Include="..\Modules\_blake2\blake2module.c" />
+    <ClCompile Include="..\Modules\_blake2\blake2s_impl.c" />
     <ClCompile Include="..\Modules\_codecsmodule.c" />
     <ClCompile Include="..\Modules\_collectionsmodule.c" />
     <ClCompile Include="..\Modules\_csv.c" />
     <ClCompile Include="..\Modules\_functoolsmodule.c" />
     <ClCompile Include="..\Modules\_heapqmodule.c" />
+    <ClCompile Include="..\Modules\_io\winconsoleio.c" />
     <ClCompile Include="..\Modules\_json.c" />
     <ClCompile Include="..\Modules\_localemodule.c" />
     <ClCompile Include="..\Modules\_lsprof.c" />
     <ClCompile Include="..\Modules\_math.c" />
     <ClCompile Include="..\Modules\_pickle.c" />
     <ClCompile Include="..\Modules\_randommodule.c" />
+    <ClCompile Include="..\Modules\_sha3\sha3module.c" />
     <ClCompile Include="..\Modules\_sre.c" />
     <ClCompile Include="..\Modules\_stat.c" />
     <ClCompile Include="..\Modules\_struct.c" />

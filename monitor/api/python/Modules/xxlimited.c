@@ -31,7 +31,7 @@ static XxoObject *
 newXxoObject(PyObject *arg)
 {
     XxoObject *self;
-    self = PyObject_New(XxoObject, (PyTypeObject*)Xxo_Type);
+    self = PyObject_GC_New(XxoObject, (PyTypeObject*)Xxo_Type);
     if (self == NULL)
         return NULL;
     self->x_attr = NULL;
@@ -89,7 +89,7 @@ Xxo_getattro(XxoObject *self, PyObject *name)
 }
 
 static int
-Xxo_setattr(XxoObject *self, char *name, PyObject *v)
+Xxo_setattr(XxoObject *self, const char *name, PyObject *v)
 {
     if (self->x_attr == NULL) {
         self->x_attr = PyDict_New();

@@ -57,7 +57,7 @@
     }
 
 
-Py_LOCAL_INLINE(_PyManagedBufferObject *)
+static inline _PyManagedBufferObject *
 mbuf_alloc(void)
 {
     _PyManagedBufferObject *mbuf;
@@ -221,7 +221,7 @@ PyTypeObject _PyManagedBuffer_Type = {
 
 
 PyDoc_STRVAR(memory_doc,
-"memoryview($module, object)\n--\n\
+"memoryview(object)\n--\n\
 \n\
 Create a new memoryview object which references the given object.");
 
@@ -243,7 +243,7 @@ Create a new memoryview object which references the given object.");
 #define HAVE_SUBOFFSETS_IN_LAST_DIM(view) \
     (view->suboffsets && view->suboffsets[dest->ndim-1] >= 0)
 
-Py_LOCAL_INLINE(int)
+static inline int
 last_dim_is_contiguous(const Py_buffer *dest, const Py_buffer *src)
 {
     assert(dest->ndim > 0 && src->ndim > 0);
@@ -259,7 +259,7 @@ last_dim_is_contiguous(const Py_buffer *dest, const Py_buffer *src)
    assignments, where the lvalue is already known to have a single character
    format. This is a performance hack that could be rewritten (if properly
    benchmarked). */
-Py_LOCAL_INLINE(int)
+static inline int
 equiv_format(const Py_buffer *dest, const Py_buffer *src)
 {
     const char *dfmt, *sfmt;
@@ -279,7 +279,7 @@ equiv_format(const Py_buffer *dest, const Py_buffer *src)
 /* Two shapes are equivalent if they are either equal or identical up
    to a zero element at the same position. For example, in NumPy arrays
    the shapes [1, 0, 5] and [1, 0, 7] are equivalent. */
-Py_LOCAL_INLINE(int)
+static inline int
 equiv_shape(const Py_buffer *dest, const Py_buffer *src)
 {
     int i;
@@ -438,7 +438,7 @@ copy_buffer(Py_buffer *dest, Py_buffer *src)
 }
 
 /* Initialize strides for a C-contiguous array. */
-Py_LOCAL_INLINE(void)
+static inline void
 init_strides_from_shape(Py_buffer *view)
 {
     Py_ssize_t i;
@@ -451,7 +451,7 @@ init_strides_from_shape(Py_buffer *view)
 }
 
 /* Initialize strides for a Fortran-contiguous array. */
-Py_LOCAL_INLINE(void)
+static inline void
 init_fortran_strides_from_shape(Py_buffer *view)
 {
     Py_ssize_t i;
@@ -513,7 +513,7 @@ buffer_to_contiguous(char *mem, Py_buffer *src, char order)
 /****************************************************************************/
 
 /* Initialize values that are shared with the managed buffer. */
-Py_LOCAL_INLINE(void)
+static inline void
 init_shared_values(Py_buffer *dest, const Py_buffer *src)
 {
     dest->obj = src->obj;
@@ -553,7 +553,7 @@ init_shape_strides(Py_buffer *dest, const Py_buffer *src)
     }
 }
 
-Py_LOCAL_INLINE(void)
+static inline void
 init_suboffsets(Py_buffer *dest, const Py_buffer *src)
 {
     Py_ssize_t i;
@@ -567,7 +567,7 @@ init_suboffsets(Py_buffer *dest, const Py_buffer *src)
 }
 
 /* len = product(shape) * itemsize */
-Py_LOCAL_INLINE(void)
+static inline void
 init_len(Py_buffer *view)
 {
     Py_ssize_t i, len;
@@ -614,7 +614,7 @@ init_flags(PyMemoryViewObject *mv)
 
 /* Allocate a new memoryview and perform basic initialization. New memoryviews
    are exclusively created through the mbuf_add functions. */
-Py_LOCAL_INLINE(PyMemoryViewObject *)
+static inline PyMemoryViewObject *
 memory_alloc(int ndim)
 {
     PyMemoryViewObject *mv;
@@ -1099,7 +1099,7 @@ memory_exit(PyObject *self, PyObject *args)
 
 #define IS_BYTE_FORMAT(f) (f == 'b' || f == 'B' || f == 'c')
 
-Py_LOCAL_INLINE(Py_ssize_t)
+static inline Py_ssize_t
 get_native_fmtchar(char *result, const char *fmt)
 {
     Py_ssize_t size = -1;
@@ -1111,17 +1111,11 @@ get_native_fmtchar(char *result, const char *fmt)
     case 'h': case 'H': size = sizeof(short); break;
     case 'i': case 'I': size = sizeof(int); break;
     case 'l': case 'L': size = sizeof(long); break;
-    #ifdef HAVE_LONG_LONG
-    case 'q': case 'Q': size = sizeof(PY_LONG_LONG); break;
-    #endif
+    case 'q': case 'Q': size = sizeof(long long); break;
     case 'n': case 'N': size = sizeof(Py_ssize_t); break;
     case 'f': size = sizeof(float); break;
     case 'd': size = sizeof(double); break;
-    #ifdef HAVE_C99_BOOL
     case '?': size = sizeof(_Bool); break;
-    #else
-    case '?': size = sizeof(char); break;
-    #endif
     case 'P': size = sizeof(void *); break;
     }
 
@@ -1133,7 +1127,7 @@ get_native_fmtchar(char *result, const char *fmt)
     return -1;
 }
 
-Py_LOCAL_INLINE(char *)
+static inline const char *
 get_native_fmtstr(const char *fmt)
 {
     int at = 0;
@@ -1158,19 +1152,13 @@ get_native_fmtstr(const char *fmt)
     case 'I': RETURN("I");
     case 'l': RETURN("l");
     case 'L': RETURN("L");
-    #ifdef HAVE_LONG_LONG
     case 'q': RETURN("q");
     case 'Q': RETURN("Q");
-    #endif
     case 'n': RETURN("n");
     case 'N': RETURN("N");
     case 'f': RETURN("f");
     case 'd': RETURN("d");
-    #ifdef HAVE_C99_BOOL
     case '?': RETURN("?");
-    #else
-    case '?': RETURN("?");
-    #endif
     case 'P': RETURN("P");
     }
 
@@ -1221,7 +1209,7 @@ cast_to_1D(PyMemoryViewObject *mv, PyObject *format)
         goto out;
     }
 
-    view->format = get_native_fmtstr(PyBytes_AS_STRING(asciifmt));
+    view->format = (char *)get_native_fmtstr(PyBytes_AS_STRING(asciifmt));
     if (view->format == NULL) {
         /* NOT_REACHED: get_native_fmtchar() already validates the format. */
         PyErr_SetString(PyExc_RuntimeError,
@@ -1581,12 +1569,11 @@ pylong_as_lu(PyObject *item)
     return lu;
 }
 
-#ifdef HAVE_LONG_LONG
-static PY_LONG_LONG
+static long long
 pylong_as_lld(PyObject *item)
 {
     PyObject *tmp;
-    PY_LONG_LONG lld;
+    long long lld;
 
     tmp = PyNumber_Index(item);
     if (tmp == NULL)
@@ -1597,21 +1584,20 @@ pylong_as_lld(PyObject *item)
     return lld;
 }
 
-static unsigned PY_LONG_LONG
+static unsigned long long
 pylong_as_llu(PyObject *item)
 {
     PyObject *tmp;
-    unsigned PY_LONG_LONG llu;
+    unsigned long long llu;
 
     tmp = PyNumber_Index(item);
     if (tmp == NULL)
-        return (unsigned PY_LONG_LONG)-1;
+        return (unsigned long long)-1;
 
     llu = PyLong_AsUnsignedLongLong(tmp);
     Py_DECREF(tmp);
     return llu;
 }
-#endif
 
 static Py_ssize_t
 pylong_as_zd(PyObject *item)
@@ -1656,13 +1642,13 @@ pylong_as_zu(PyObject *item)
 /* Unpack a single item. 'fmt' can be any native format character in struct
    module syntax. This function is very sensitive to small changes. With this
    layout gcc automatically generates a fast jump table. */
-Py_LOCAL_INLINE(PyObject *)
+static inline PyObject *
 unpack_single(const char *ptr, const char *fmt)
 {
-    unsigned PY_LONG_LONG llu;
+    unsigned long long llu;
     unsigned long lu;
     size_t zu;
-    PY_LONG_LONG lld;
+    long long lld;
     long ld;
     Py_ssize_t zd;
     double d;
@@ -1679,11 +1665,7 @@ unpack_single(const char *ptr, const char *fmt)
     case 'l': UNPACK_SINGLE(ld, ptr, long); goto convert_ld;
 
     /* boolean */
-    #ifdef HAVE_C99_BOOL
     case '?': UNPACK_SINGLE(ld, ptr, _Bool); goto convert_bool;
-    #else
-    case '?': UNPACK_SINGLE(ld, ptr, char); goto convert_bool;
-    #endif
 
     /* unsigned integers */
     case 'H': UNPACK_SINGLE(lu, ptr, unsigned short); goto convert_lu;
@@ -1691,10 +1673,8 @@ unpack_single(const char *ptr, const char *fmt)
     case 'L': UNPACK_SINGLE(lu, ptr, unsigned long); goto convert_lu;
 
     /* native 64-bit */
-    #ifdef HAVE_LONG_LONG
-    case 'q': UNPACK_SINGLE(lld, ptr, PY_LONG_LONG); goto convert_lld;
-    case 'Q': UNPACK_SINGLE(llu, ptr, unsigned PY_LONG_LONG); goto convert_llu;
-    #endif
+    case 'q': UNPACK_SINGLE(lld, ptr, long long); goto convert_lld;
+    case 'Q': UNPACK_SINGLE(llu, ptr, unsigned long long); goto convert_llu;
 
     /* ssize_t and size_t */
     case 'n': UNPACK_SINGLE(zd, ptr, Py_ssize_t); goto convert_zd;
@@ -1755,10 +1735,10 @@ err_format:
 static int
 pack_single(char *ptr, PyObject *item, const char *fmt)
 {
-    unsigned PY_LONG_LONG llu;
+    unsigned long long llu;
     unsigned long lu;
     size_t zu;
-    PY_LONG_LONG lld;
+    long long lld;
     long ld;
     Py_ssize_t zd;
     double d;
@@ -1806,20 +1786,18 @@ pack_single(char *ptr, PyObject *item, const char *fmt)
         break;
 
     /* native 64-bit */
-    #ifdef HAVE_LONG_LONG
     case 'q':
         lld = pylong_as_lld(item);
         if (lld == -1 && PyErr_Occurred())
             goto err_occurred;
-        PACK_SINGLE(ptr, lld, PY_LONG_LONG);
+        PACK_SINGLE(ptr, lld, long long);
         break;
     case 'Q':
         llu = pylong_as_llu(item);
-        if (llu == (unsigned PY_LONG_LONG)-1 && PyErr_Occurred())
+        if (llu == (unsigned long long)-1 && PyErr_Occurred())
             goto err_occurred;
-        PACK_SINGLE(ptr, llu, unsigned PY_LONG_LONG);
+        PACK_SINGLE(ptr, llu, unsigned long long);
         break;
-    #endif
 
     /* ssize_t and size_t */
     case 'n':
@@ -1853,11 +1831,7 @@ pack_single(char *ptr, PyObject *item, const char *fmt)
         ld = PyObject_IsTrue(item);
         if (ld < 0)
             return -1; /* preserve original error */
-    #ifdef HAVE_C99_BOOL
         PACK_SINGLE(ptr, ld, _Bool);
-    #else
-        PACK_SINGLE(ptr, ld, char);
-    #endif
          break;
 
     /* bytes object */
@@ -2024,7 +1998,7 @@ struct_unpack_single(const char *ptr, struct unpacker *x)
 /****************************************************************************/
 
 /* allow explicit form of native format */
-Py_LOCAL_INLINE(const char *)
+static inline const char *
 adjust_fmt(const Py_buffer *view)
 {
     const char *fmt;
@@ -2306,15 +2280,15 @@ memory_item_multi(PyMemoryViewObject *self, PyObject *tup)
     return unpack_single(ptr, fmt);
 }
 
-Py_LOCAL_INLINE(int)
+static inline int
 init_slice(Py_buffer *base, PyObject *key, int dim)
 {
     Py_ssize_t start, stop, step, slicelength;
 
-    if (PySlice_GetIndicesEx(key, base->shape[dim],
-                             &start, &stop, &step, &slicelength) < 0) {
+    if (PySlice_Unpack(key, &start, &stop, &step) < 0) {
         return -1;
     }
+    slicelength = PySlice_AdjustIndices(base->shape[dim], &start, &stop, step);
 
 
     if (base->suboffsets == NULL || dim == 0) {
@@ -2628,7 +2602,7 @@ struct_unpack_cmp(const char *p, const char *q,
         equal = (x == y);                \
     } while (0)
 
-Py_LOCAL_INLINE(int)
+static inline int
 unpack_cmp(const char *p, const char *q, char fmt,
            struct unpacker *unpack_p, struct unpacker *unpack_q)
 {
@@ -2644,11 +2618,7 @@ unpack_cmp(const char *p, const char *q, char fmt,
     case 'l': CMP_SINGLE(p, q, long); return equal;
 
     /* boolean */
-    #ifdef HAVE_C99_BOOL
     case '?': CMP_SINGLE(p, q, _Bool); return equal;
-    #else
-    case '?': CMP_SINGLE(p, q, char); return equal;
-    #endif
 
     /* unsigned integers */
     case 'H': CMP_SINGLE(p, q, unsigned short); return equal;
@@ -2656,10 +2626,8 @@ unpack_cmp(const char *p, const char *q, char fmt,
     case 'L': CMP_SINGLE(p, q, unsigned long); return equal;
 
     /* native 64-bit */
-    #ifdef HAVE_LONG_LONG
-    case 'q': CMP_SINGLE(p, q, PY_LONG_LONG); return equal;
-    case 'Q': CMP_SINGLE(p, q, unsigned PY_LONG_LONG); return equal;
-    #endif
+    case 'q': CMP_SINGLE(p, q, long long); return equal;
+    case 'Q': CMP_SINGLE(p, q, unsigned long long); return equal;
 
     /* ssize_t and size_t */
     case 'n': CMP_SINGLE(p, q, Py_ssize_t); return equal;

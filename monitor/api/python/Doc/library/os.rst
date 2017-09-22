@@ -57,7 +57,7 @@ Notes on the availability of these functions:
 
    The name of the operating system dependent module imported.  The following
    names have currently been registered: ``'posix'``, ``'nt'``,
-   ``'ce'``, ``'java'``.
+   ``'java'``.
 
    .. seealso::
       :attr:`sys.platform` has a finer granularity.  :func:`os.uname` gives
@@ -171,22 +171,59 @@ process and user.
 
 .. function:: fsencode(filename)
 
-   Encode *filename* to the filesystem encoding with ``'surrogateescape'``
-   error handler, or ``'strict'`` on Windows; return :class:`bytes` unchanged.
+   Encode :term:`path-like <path-like object>` *filename* to the filesystem
+   encoding with ``'surrogateescape'`` error handler, or ``'strict'`` on
+   Windows; return :class:`bytes` unchanged.
 
    :func:`fsdecode` is the reverse function.
 
    .. versionadded:: 3.2
 
+   .. versionchanged:: 3.6
+      Support added to accept objects implementing the :class:`os.PathLike`
+      interface.
+
 
 .. function:: fsdecode(filename)
 
-   Decode *filename* from the filesystem encoding with ``'surrogateescape'``
-   error handler, or ``'strict'`` on Windows; return :class:`str` unchanged.
+   Decode the :term:`path-like <path-like object>` *filename* from the
+   filesystem encoding with ``'surrogateescape'`` error handler, or ``'strict'``
+   on Windows; return :class:`str` unchanged.
 
    :func:`fsencode` is the reverse function.
 
    .. versionadded:: 3.2
+
+   .. versionchanged:: 3.6
+      Support added to accept objects implementing the :class:`os.PathLike`
+      interface.
+
+
+.. function:: fspath(path)
+
+   Return the file system representation of the path.
+
+   If :class:`str` or :class:`bytes` is passed in, it is returned unchanged.
+   Otherwise :meth:`~os.PathLike.__fspath__` is called and its value is
+   returned as long as it is a :class:`str` or :class:`bytes` object.
+   In all other cases, :exc:`TypeError` is raised.
+
+   .. versionadded:: 3.6
+
+
+.. class:: PathLike
+
+   An :term:`abstract base class` for objects representing a file system path,
+   e.g. :class:`pathlib.PurePath`.
+
+   .. versionadded:: 3.6
+
+   .. abstractmethod:: __fspath__()
+
+      Return the file system path representation of the object.
+
+      The method should only return a :class:`str` or :class:`bytes` object,
+      with the preference being for :class:`str`.
 
 
 .. function:: getenv(key, default=None)
@@ -206,6 +243,9 @@ process and user.
    Return the value of the environment variable *key* if it exists, or
    *default* if it doesn't. *key*, *default* and the result are bytes.
 
+   :func:`getenvb` is only available if :data:`supports_bytes_environ`
+   is True.
+
    Availability: most flavors of Unix.
 
    .. versionadded:: 3.2
@@ -217,7 +257,7 @@ process and user.
    executable, similar to a shell, when launching a process.
    *env*, when specified, should be an environment variable dictionary
    to lookup the PATH in.
-   By default, when *env* is None, :data:`environ` is used.
+   By default, when *env* is ``None``, :data:`environ` is used.
 
    .. versionadded:: 3.2
 
@@ -893,6 +933,9 @@ as internal buffering of data.
       exception, the function now retries the system call instead of raising an
       :exc:`InterruptedError` exception (see :pep:`475` for the rationale).
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 The following constants are options for the *flags* parameter to the
 :func:`~os.open` function.  They can be combined using the bitwise OR operator
 ``|``.  Some of them are not available on all platforms.  For descriptions of
@@ -908,7 +951,7 @@ or `the MSDN <https://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windo
           O_EXCL
           O_TRUNC
 
-   These constants are available on Unix and Windows.
+   The above constants are available on Unix and Windows.
 
 
 .. data:: O_DSYNC
@@ -917,11 +960,9 @@ or `the MSDN <https://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windo
           O_NDELAY
           O_NONBLOCK
           O_NOCTTY
-          O_SHLOCK
-          O_EXLOCK
           O_CLOEXEC
 
-   These constants are only available on Unix.
+   The above constants are only available on Unix.
 
    .. versionchanged:: 3.3
       Add :data:`O_CLOEXEC` constant.
@@ -934,7 +975,7 @@ or `the MSDN <https://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windo
           O_SEQUENTIAL
           O_TEXT
 
-   These constants are only available on Windows.
+   The above constants are only available on Windows.
 
 
 .. data:: O_ASYNC
@@ -944,8 +985,10 @@ or `the MSDN <https://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windo
           O_NOATIME
           O_PATH
           O_TMPFILE
+          O_SHLOCK
+          O_EXLOCK
 
-   These constants are GNU extensions and not present if they are not defined by
+   The above constants are extensions and not present if they are not defined by
    the C library.
 
    .. versionchanged:: 3.4
@@ -1195,7 +1238,11 @@ or `the MSDN <https://msdn.microsoft.com/en-us/library/z0kc8e3z.aspx>`_ on Windo
 .. function:: writev(fd, buffers)
 
    Write the contents of *buffers* to file descriptor *fd*. *buffers* must be a
-   sequence of :term:`bytes-like objects <bytes-like object>`.
+   sequence of :term:`bytes-like objects <bytes-like object>`. Buffers are
+   processed in array order. Entire contents of first buffer is written before
+   proceeding to second, and so on. The operating system may set a limit
+   (sysconf() value SC_IOV_MAX) on the number of buffers that can be used.
+
    :func:`~os.writev` writes the contents of each object to the file descriptor
    and returns the total number of bytes written.
 
@@ -1385,6 +1432,9 @@ features:
    .. versionchanged:: 3.3
       Added the *dir_fd*, *effective_ids*, and *follow_symlinks* parameters.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. data:: F_OK
           R_OK
@@ -1408,6 +1458,9 @@ features:
    .. versionadded:: 3.3
       Added support for specifying *path* as a file descriptor
       on some platforms.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: chflags(path, flags, *, follow_symlinks=True)
@@ -1434,6 +1487,9 @@ features:
 
    .. versionadded:: 3.3
       The *follow_symlinks* argument.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: chmod(path, mode, *, dir_fd=None, follow_symlinks=True)
@@ -1476,6 +1532,9 @@ features:
       Added support for specifying *path* as an open file descriptor,
       and the *dir_fd* and *follow_symlinks* arguments.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: chown(path, uid, gid, *, dir_fd=None, follow_symlinks=True)
 
@@ -1495,12 +1554,18 @@ features:
       Added support for specifying an open file descriptor for *path*,
       and the *dir_fd* and *follow_symlinks* arguments.
 
+   .. versionchanged:: 3.6
+      Supports a :term:`path-like object`.
+
 
 .. function:: chroot(path)
 
    Change the root directory of the current process to *path*.
 
    Availability: Unix.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: fchdir(fd)
@@ -1530,6 +1595,9 @@ features:
 
    Availability: Unix.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: lchmod(path, mode)
 
@@ -1540,6 +1608,8 @@ features:
 
    Availability: Unix.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 .. function:: lchown(path, uid, gid)
 
@@ -1548,6 +1618,9 @@ features:
    to ``os.chown(path, uid, gid, follow_symlinks=False)``.
 
    Availability: Unix.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: link(src, dst, *, src_dir_fd=None, dst_dir_fd=None, follow_symlinks=True)
@@ -1566,6 +1639,9 @@ features:
    .. versionadded:: 3.3
       Added the *src_dir_fd*, *dst_dir_fd*, and *follow_symlinks* arguments.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *src* and *dst*.
+
 
 .. function:: listdir(path='.')
 
@@ -1573,8 +1649,9 @@ features:
    *path*.  The list is in arbitrary order, and does not include the special
    entries ``'.'`` and ``'..'`` even if they are present in the directory.
 
-   *path* may be either of type ``str`` or of type ``bytes``.  If *path*
-   is of type ``bytes``, the filenames returned will also be of type ``bytes``;
+   *path* may be a :term:`path-like object`.  If *path* is of type ``bytes``
+   (directly or indirectly through the :class:`PathLike` interface),
+   the filenames returned will also be of type ``bytes``;
    in all other circumstances, they will be of type ``str``.
 
    This function can also support :ref:`specifying a file descriptor
@@ -1594,6 +1671,9 @@ features:
 
    .. versionadded:: 3.3
       Added support for specifying an open file descriptor for *path*.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: lstat(path, \*, dir_fd=None)
@@ -1621,6 +1701,9 @@ features:
    .. versionchanged:: 3.3
       Added the *dir_fd* parameter.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *src* and *dst*.
+
 
 .. function:: mkdir(path, mode=0o777, *, dir_fd=None)
 
@@ -1644,6 +1727,9 @@ features:
 
    .. versionadded:: 3.3
       The *dir_fd* argument.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: makedirs(name, mode=0o777, exist_ok=False)
@@ -1678,6 +1764,9 @@ features:
       mode of the existing directory. Since this behavior was impossible to
       implement safely, it was removed in Python 3.4.1. See :issue:`21082`.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: mkfifo(path, mode=0o666, *, dir_fd=None)
 
@@ -1698,6 +1787,9 @@ features:
    .. versionadded:: 3.3
       The *dir_fd* argument.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: mknod(path, mode=0o600, device=0, *, dir_fd=None)
 
@@ -1712,8 +1804,13 @@ features:
    This function can also support :ref:`paths relative to directory descriptors
    <dir_fd>`.
 
+   Availability: Unix.
+
    .. versionadded:: 3.3
       The *dir_fd* argument.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: major(device)
@@ -1753,6 +1850,9 @@ features:
 
    Availability: Unix.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. data:: pathconf_names
 
@@ -1770,9 +1870,10 @@ features:
    may be converted to an absolute pathname using
    ``os.path.join(os.path.dirname(path), result)``.
 
-   If the *path* is a string object, the result will also be a string object,
+   If the *path* is a string object (directly or indirectly through a
+   :class:`PathLike` interface), the result will also be a string object,
    and the call may raise a UnicodeDecodeError. If the *path* is a bytes
-   object, the result will be a bytes object.
+   object (direct or indirectly), the result will be a bytes object.
 
    This function can also support :ref:`paths relative to directory descriptors
    <dir_fd>`.
@@ -1784,6 +1885,9 @@ features:
 
    .. versionadded:: 3.3
       The *dir_fd* argument.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: remove(path, *, dir_fd=None)
@@ -1803,6 +1907,9 @@ features:
    .. versionadded:: 3.3
       The *dir_fd* argument.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: removedirs(name)
 
@@ -1816,6 +1923,9 @@ features:
    the directory ``'foo/bar/baz'``, and then remove ``'foo/bar'`` and ``'foo'`` if
    they are empty. Raises :exc:`OSError` if the leaf directory could not be
    successfully removed.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: rename(src, dst, *, src_dir_fd=None, dst_dir_fd=None)
@@ -1836,6 +1946,9 @@ features:
    .. versionadded:: 3.3
       The *src_dir_fd* and *dst_dir_fd* arguments.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *src* and *dst*.
+
 
 .. function:: renames(old, new)
 
@@ -1848,6 +1961,9 @@ features:
 
       This function can fail with the new directory structure made if you lack
       permissions needed to remove the leaf directory or file.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *old* and *new*.
 
 
 .. function:: replace(src, dst, *, src_dir_fd=None, dst_dir_fd=None)
@@ -1863,6 +1979,9 @@ features:
 
    .. versionadded:: 3.3
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *src* and *dst*.
+
 
 .. function:: rmdir(path, *, dir_fd=None)
 
@@ -1876,38 +1995,56 @@ features:
    .. versionadded:: 3.3
       The *dir_fd* parameter.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: scandir(path='.')
 
-   Return an iterator of :class:`DirEntry` objects corresponding to the entries
-   in the directory given by *path*. The entries are yielded in arbitrary
-   order, and the special entries ``'.'`` and ``'..'`` are not included.
+   Return an iterator of :class:`os.DirEntry` objects corresponding to the
+   entries in the directory given by *path*. The entries are yielded in
+   arbitrary order, and the special entries ``'.'`` and ``'..'`` are not
+   included.
 
    Using :func:`scandir` instead of :func:`listdir` can significantly
    increase the performance of code that also needs file type or file
-   attribute information, because :class:`DirEntry` objects expose this
+   attribute information, because :class:`os.DirEntry` objects expose this
    information if the operating system provides it when scanning a directory.
-   All :class:`DirEntry` methods may perform a system call, but
-   :func:`~DirEntry.is_dir` and :func:`~DirEntry.is_file` usually only
-   require a system call for symbolic links; :func:`DirEntry.stat`
+   All :class:`os.DirEntry` methods may perform a system call, but
+   :func:`~os.DirEntry.is_dir` and :func:`~os.DirEntry.is_file` usually only
+   require a system call for symbolic links; :func:`os.DirEntry.stat`
    always requires a system call on Unix but only requires one for
    symbolic links on Windows.
 
-   On Unix, *path* can be of type :class:`str` or :class:`bytes` (use
-   :func:`~os.fsencode` and :func:`~os.fsdecode` to encode and decode
-   :class:`bytes` paths). On Windows, *path* must be of type :class:`str`.
-   On both sytems, the type of the :attr:`~DirEntry.name` and
-   :attr:`~DirEntry.path` attributes of each :class:`DirEntry` will be of
-   the same type as *path*.
+   *path* may be a :term:`path-like object`.  If *path* is of type ``bytes``
+   (directly or indirectly through the :class:`PathLike` interface),
+   the type of the :attr:`~os.DirEntry.name` and :attr:`~os.DirEntry.path`
+   attributes of each :class:`os.DirEntry` will be ``bytes``; in all other
+   circumstances, they will be of type ``str``.
+
+   The :func:`scandir` iterator supports the :term:`context manager` protocol
+   and has the following method:
+
+   .. method:: scandir.close()
+
+      Close the iterator and free acquired resources.
+
+      This is called automatically when the iterator is exhausted or garbage
+      collected, or when an error happens during iterating.  However it
+      is advisable to call it explicitly or use the :keyword:`with`
+      statement.
+
+      .. versionadded:: 3.6
 
    The following example shows a simple use of :func:`scandir` to display all
    the files (excluding directories) in the given *path* that don't start with
    ``'.'``. The ``entry.is_file()`` call will generally not make an additional
    system call::
 
-      for entry in os.scandir(path):
-         if not entry.name.startswith('.') and entry.is_file():
-             print(entry.name)
+      with os.scandir(path) as it:
+          for entry in it:
+              if not entry.name.startswith('.') and entry.is_file():
+                  print(entry.name)
 
    .. note::
 
@@ -1923,6 +2060,14 @@ features:
 
    .. versionadded:: 3.5
 
+   .. versionadded:: 3.6
+      Added support for the :term:`context manager` protocol and the
+      :func:`~scandir.close()` method.  If a :func:`scandir` iterator is neither
+      exhausted nor explicitly closed a :exc:`ResourceWarning` will be emitted
+      in its destructor.
+
+      The function accepts a :term:`path-like object`.
+
 
 .. class:: DirEntry
 
@@ -1931,27 +2076,30 @@ features:
 
    :func:`scandir` will provide as much of this information as possible without
    making additional system calls. When a ``stat()`` or ``lstat()`` system call
-   is made, the ``DirEntry`` object will cache the result.
+   is made, the ``os.DirEntry`` object will cache the result.
 
-   ``DirEntry`` instances are not intended to be stored in long-lived data
+   ``os.DirEntry`` instances are not intended to be stored in long-lived data
    structures; if you know the file metadata has changed or if a long time has
    elapsed since calling :func:`scandir`, call ``os.stat(entry.path)`` to fetch
    up-to-date information.
 
-   Because the ``DirEntry`` methods can make operating system calls, they may
+   Because the ``os.DirEntry`` methods can make operating system calls, they may
    also raise :exc:`OSError`. If you need very fine-grained
    control over errors, you can catch :exc:`OSError` when calling one of the
-   ``DirEntry`` methods and handle as appropriate.
+   ``os.DirEntry`` methods and handle as appropriate.
 
-   Attributes and methods on a ``DirEntry`` instance are as follows:
+   To be directly usable as a :term:`path-like object`, ``os.DirEntry``
+   implements the :class:`PathLike` interface.
+
+   Attributes and methods on a ``os.DirEntry`` instance are as follows:
 
    .. attribute:: name
 
       The entry's base filename, relative to the :func:`scandir` *path*
       argument.
 
-      The :attr:`name` attribute will be of the same type (``str`` or
-      ``bytes``) as the :func:`scandir` *path* argument. Use
+      The :attr:`name` attribute will be ``bytes`` if the :func:`scandir`
+      *path* argument is of type ``bytes`` and ``str`` otherwise.  Use
       :func:`~os.fsdecode` to decode byte filenames.
 
    .. attribute:: path
@@ -1961,16 +2109,17 @@ features:
       argument.  The path is only absolute if the :func:`scandir` *path*
       argument was absolute.
 
-      The :attr:`path` attribute will be of the same type (``str`` or
-      ``bytes``) as the :func:`scandir` *path* argument. Use
+      The :attr:`path` attribute will be ``bytes`` if the :func:`scandir`
+      *path* argument is of type ``bytes`` and ``str`` otherwise.  Use
       :func:`~os.fsdecode` to decode byte filenames.
 
    .. method:: inode()
 
       Return the inode number of the entry.
 
-      The result is cached on the ``DirEntry`` object. Use ``os.stat(entry.path,
-      follow_symlinks=False).st_ino`` to fetch up-to-date information.
+      The result is cached on the ``os.DirEntry`` object. Use
+      ``os.stat(entry.path, follow_symlinks=False).st_ino`` to fetch up-to-date
+      information.
 
       On the first, uncached call, a system call is required on Windows but
       not on Unix.
@@ -1985,7 +2134,7 @@ features:
       is a directory (without following symlinks); return ``False`` if the
       entry is any other kind of file or if it doesn't exist anymore.
 
-      The result is cached on the ``DirEntry`` object, with a separate cache
+      The result is cached on the ``os.DirEntry`` object, with a separate cache
       for *follow_symlinks* ``True`` and ``False``. Call :func:`os.stat` along
       with :func:`stat.S_ISDIR` to fetch up-to-date information.
 
@@ -2009,8 +2158,8 @@ features:
       is a file (without following symlinks); return ``False`` if the entry is
       a directory or other non-file entry, or if it doesn't exist anymore.
 
-      The result is cached on the ``DirEntry`` object. Caching, system calls
-      made, and exceptions raised are as per :func:`~DirEntry.is_dir`.
+      The result is cached on the ``os.DirEntry`` object. Caching, system calls
+      made, and exceptions raised are as per :func:`~os.DirEntry.is_dir`.
 
    .. method:: is_symlink()
 
@@ -2018,7 +2167,7 @@ features:
       return ``False`` if the entry points to a directory or any kind of file,
       or if it doesn't exist anymore.
 
-      The result is cached on the ``DirEntry`` object. Call
+      The result is cached on the ``os.DirEntry`` object. Call
       :func:`os.path.islink` to fetch up-to-date information.
 
       On the first, uncached call, no system call is required in most cases.
@@ -2043,24 +2192,29 @@ features:
       :class:`stat_result` are always set to zero. Call :func:`os.stat` to
       get these attributes.
 
-      The result is cached on the ``DirEntry`` object, with a separate cache
+      The result is cached on the ``os.DirEntry`` object, with a separate cache
       for *follow_symlinks* ``True`` and ``False``. Call :func:`os.stat` to
       fetch up-to-date information.
 
    Note that there is a nice correspondence between several attributes
-   and methods of ``DirEntry`` and of :class:`pathlib.Path`.  In
-   particular, the ``name`` and ``path`` attributes have the same
+   and methods of ``os.DirEntry`` and of :class:`pathlib.Path`.  In
+   particular, the ``name`` attribute has the same
    meaning, as do the ``is_dir()``, ``is_file()``, ``is_symlink()``
    and ``stat()`` methods.
 
    .. versionadded:: 3.5
+
+   .. versionchanged:: 3.6
+      Added support for the :class:`~os.PathLike` interface.  Added support
+      for :class:`bytes` paths on Windows.
 
 
 .. function:: stat(path, \*, dir_fd=None, follow_symlinks=True)
 
    Get the status of a file or a file descriptor. Perform the equivalent of a
    :c:func:`stat` system call on the given path. *path* may be specified as
-   either a string or as an open file descriptor. Return a :class:`stat_result`
+   either a string or bytes -- directly or indirectly through the :class:`PathLike`
+   interface -- or as an open file descriptor. Return a :class:`stat_result`
    object.
 
    This function normally follows symlinks; to stat a symlink add the argument
@@ -2089,6 +2243,9 @@ features:
    .. versionadded:: 3.3
       Added the *dir_fd* and *follow_symlinks* arguments, specifying a file
       descriptor instead of a path.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. class:: stat_result
@@ -2311,8 +2468,13 @@ features:
 
    This function can support :ref:`specifying a file descriptor <path_fd>`.
 
+   Availability: Unix.
+
    .. versionchanged:: 3.2
       The :const:`ST_RDONLY` and :const:`ST_NOSUID` constants were added.
+
+   .. versionadded:: 3.3
+      Added support for specifying an open file descriptor for *path*.
 
    .. versionchanged:: 3.4
       The :const:`ST_NODEV`, :const:`ST_NOEXEC`, :const:`ST_SYNCHRONOUS`,
@@ -2320,10 +2482,8 @@ features:
       :const:`ST_IMMUTABLE`, :const:`ST_NOATIME`, :const:`ST_NODIRATIME`,
       and :const:`ST_RELATIME` constants were added.
 
-   Availability: Unix.
-
-   .. versionadded:: 3.3
-      Added support for specifying an open file descriptor for *path*.
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. data:: supports_dir_fd
@@ -2444,6 +2604,9 @@ features:
       Added the *dir_fd* argument, and now allow *target_is_directory*
       on non-Windows platforms.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *src* and *dst*.
+
 
 .. function:: sync()
 
@@ -2468,6 +2631,10 @@ features:
    .. versionchanged:: 3.5
       Added support for Windows
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
+
 .. function:: unlink(path, *, dir_fd=None)
 
    Remove (delete) the file *path*.  This function is semantically
@@ -2477,6 +2644,9 @@ features:
 
    .. versionadded:: 3.3
       The *dir_fd* parameter.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: utime(path, times=None, *[, ns], dir_fd=None, follow_symlinks=True)
@@ -2514,6 +2684,9 @@ features:
    .. versionadded:: 3.3
       Added support for specifying an open file descriptor for *path*,
       and the *dir_fd*, *follow_symlinks*, and *ns* parameters.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. function:: walk(top, topdown=True, onerror=None, followlinks=False)
@@ -2605,6 +2778,9 @@ features:
       This function now calls :func:`os.scandir` instead of :func:`os.listdir`,
       making it faster by reducing the number of calls to :func:`os.stat`.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: fwalk(top='.', topdown=True, onerror=None, *, follow_symlinks=False, dir_fd=None)
 
@@ -2661,6 +2837,9 @@ features:
 
    .. versionadded:: 3.3
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 Linux extended attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2672,11 +2851,15 @@ These functions are all available on Linux only.
 .. function:: getxattr(path, attribute, *, follow_symlinks=True)
 
    Return the value of the extended filesystem attribute *attribute* for
-   *path*. *attribute* can be bytes or str. If it is str, it is encoded
-   with the filesystem encoding.
+   *path*. *attribute* can be bytes or str (directly or indirectly through the
+   :class:`PathLike` interface). If it is str, it is encoded with the filesystem
+   encoding.
 
    This function can support :ref:`specifying a file descriptor <path_fd>` and
    :ref:`not following symlinks <follow_symlinks>`.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *path* and *attribute*.
 
 
 .. function:: listxattr(path=None, *, follow_symlinks=True)
@@ -2689,21 +2872,29 @@ These functions are all available on Linux only.
    This function can support :ref:`specifying a file descriptor <path_fd>` and
    :ref:`not following symlinks <follow_symlinks>`.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
+
 
 .. function:: removexattr(path, attribute, *, follow_symlinks=True)
 
    Removes the extended filesystem attribute *attribute* from *path*.
-   *attribute* should be bytes or str. If it is a string, it is encoded
+   *attribute* should be bytes or str (directly or indirectly through the
+   :class:`PathLike` interface). If it is a string, it is encoded
    with the filesystem encoding.
 
    This function can support :ref:`specifying a file descriptor <path_fd>` and
    :ref:`not following symlinks <follow_symlinks>`.
 
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *path* and *attribute*.
+
 
 .. function:: setxattr(path, attribute, value, flags=0, *, follow_symlinks=True)
 
    Set the extended filesystem attribute *attribute* on *path* to *value*.
-   *attribute* must be a bytes or str with no embedded NULs. If it is a str,
+   *attribute* must be a bytes or str with no embedded NULs (directly or
+   indirectly through the :class:`PathLike` interface). If it is a str,
    it is encoded with the filesystem encoding.  *flags* may be
    :data:`XATTR_REPLACE` or :data:`XATTR_CREATE`. If :data:`XATTR_REPLACE` is
    given and the attribute does not exist, ``EEXISTS`` will be raised.
@@ -2717,6 +2908,9 @@ These functions are all available on Linux only.
 
       A bug in Linux kernel versions less than 2.6.39 caused the flags argument
       to be ignored on some filesystems.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object` for *path* and *attribute*.
 
 
 .. data:: XATTR_SIZE_MAX
@@ -2818,6 +3012,9 @@ to be ignored.
    .. versionadded:: 3.3
       Added support for specifying an open file descriptor for *path*
       for :func:`execve`.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 .. function:: _exit(n)
 
@@ -3128,6 +3325,9 @@ written in Python, such as a mail server's external command delivery program.
    and :func:`spawnvpe` are not available on Windows.  :func:`spawnle` and
    :func:`spawnve` are not thread-safe on Windows; we advise you to use the
    :mod:`subprocess` module instead.
+
+   .. versionchanged:: 3.6
+      Accepts a :term:`path-like object`.
 
 
 .. data:: P_NOWAIT
@@ -3613,7 +3813,12 @@ Miscellaneous System Information
 
 .. function:: cpu_count()
 
-   Return the number of CPUs in the system. Returns None if undetermined.
+   Return the number of CPUs in the system. Returns ``None`` if undetermined.
+
+   This number is not equivalent to the number of CPUs the current process can
+   use.  The number of usable CPUs can be obtained with
+   ``len(os.sched_getaffinity(0))``
+
 
    .. versionadded:: 3.4
 
@@ -3730,35 +3935,89 @@ Higher-level operations on pathnames are defined in the :mod:`os.path` module.
 
    .. versionadded:: 3.3
 
-.. _os-miscfunc:
 
-Miscellaneous Functions
------------------------
+Random numbers
+--------------
 
 
-.. function:: urandom(n)
+.. function:: getrandom(size, flags=0)
 
-   Return a string of *n* random bytes suitable for cryptographic use.
+   Get up to *size* random bytes. The function can return less bytes than
+   requested.
+
+   These bytes can be used to seed user-space random number generators or for
+   cryptographic purposes.
+
+   ``getrandom()`` relies on entropy gathered from device drivers and other
+   sources of environmental noise. Unnecessarily reading large quantities of
+   data will have a negative impact on  other users  of the ``/dev/random`` and
+   ``/dev/urandom`` devices.
+
+   The flags argument is a bit mask that can contain zero or more of the
+   following values ORed together: :py:data:`os.GRND_RANDOM` and
+   :py:data:`GRND_NONBLOCK`.
+
+   See also the `Linux getrandom() manual page
+   <http://man7.org/linux/man-pages/man2/getrandom.2.html>`_.
+
+   Availability: Linux 3.17 and newer.
+
+   .. versionadded:: 3.6
+
+.. function:: urandom(size)
+
+   Return a string of *size* random bytes suitable for cryptographic use.
 
    This function returns random bytes from an OS-specific randomness source.  The
    returned data should be unpredictable enough for cryptographic applications,
    though its exact quality depends on the OS implementation.
 
-   On Linux, ``getrandom()`` syscall is used if available and the urandom
-   entropy pool is initialized (``getrandom()`` does not block).
-   On a Unix-like system this will query ``/dev/urandom``. On Windows, it
-   will use ``CryptGenRandom()``.  If a randomness source is not found,
-   :exc:`NotImplementedError` will be raised.
+   On Linux, if the ``getrandom()`` syscall is available, it is used in
+   blocking mode: block until the system urandom entropy pool is initialized
+   (128 bits of entropy are collected by the kernel). See the :pep:`524` for
+   the rationale. On Linux, the :func:`getrandom` function can be used to get
+   random bytes in non-blocking mode (using the :data:`GRND_NONBLOCK` flag) or
+   to poll until the system urandom entropy pool is initialized.
 
-   For an easy-to-use interface to the random number generator
-   provided by your platform, please see :class:`random.SystemRandom`.
+   On a Unix-like system, random bytes are read from the ``/dev/urandom``
+   device. If the ``/dev/urandom`` device is not available or not readable, the
+   :exc:`NotImplementedError` exception is raised.
+
+   On Windows, it will use ``CryptGenRandom()``.
+
+   .. seealso::
+      The :mod:`secrets` module provides higher level functions. For an
+      easy-to-use interface to the random number generator provided by your
+      platform, please see :class:`random.SystemRandom`.
+
+   .. versionchanged:: 3.6.0
+      On Linux, ``getrandom()`` is now used in blocking mode to increase the
+      security.
 
    .. versionchanged:: 3.5.2
-      On Linux, if ``getrandom()`` blocks (the urandom entropy pool is not
-      initialized yet), fall back on reading ``/dev/urandom``.
+      On Linux, if the ``getrandom()`` syscall blocks (the urandom entropy pool
+      is not initialized yet), fall back on reading ``/dev/urandom``.
 
    .. versionchanged:: 3.5
       On Linux 3.17 and newer, the ``getrandom()`` syscall is now used
       when available.  On OpenBSD 5.6 and newer, the C ``getentropy()``
       function is now used. These functions avoid the usage of an internal file
       descriptor.
+
+.. data:: GRND_NONBLOCK
+
+   By  default, when reading from ``/dev/random``, :func:`getrandom` blocks if
+   no random bytes are available, and when reading from ``/dev/urandom``, it blocks
+   if the entropy pool has not yet been initialized.
+
+   If the :py:data:`GRND_NONBLOCK` flag is set, then :func:`getrandom` does not
+   block in these cases, but instead immediately raises :exc:`BlockingIOError`.
+
+   .. versionadded:: 3.6
+
+.. data:: GRND_RANDOM
+
+   If  this  bit  is  set,  then  random bytes are drawn from the
+   ``/dev/random`` pool instead of the ``/dev/urandom`` pool.
+
+   .. versionadded:: 3.6

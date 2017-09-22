@@ -549,7 +549,7 @@ Py2Reg(PyObject *value, DWORD typ, BYTE **retDataBuf, DWORD *retDataSize)
             if (value != Py_None && !PyLong_Check(value))
                 return FALSE;
             *retDataBuf = (BYTE *)PyMem_NEW(DWORD, 1);
-            if (*retDataBuf==NULL){
+            if (*retDataBuf == NULL){
                 PyErr_NoMemory();
                 return FALSE;
             }
@@ -561,6 +561,24 @@ Py2Reg(PyObject *value, DWORD typ, BYTE **retDataBuf, DWORD *retDataSize)
             else {
                 DWORD d = PyLong_AsUnsignedLong(value);
                 memcpy(*retDataBuf, &d, sizeof(DWORD));
+            }
+            break;
+        case REG_QWORD:
+          if (value != Py_None && !PyLong_Check(value))
+                return FALSE;
+            *retDataBuf = (BYTE *)PyMem_NEW(DWORD64, 1);
+            if (*retDataBuf == NULL){
+                PyErr_NoMemory();
+                return FALSE;
+            }
+            *retDataSize = sizeof(DWORD64);
+            if (value == Py_None) {
+                DWORD64 zero = 0;
+                memcpy(*retDataBuf, &zero, sizeof(DWORD64));
+            }
+            else {
+                DWORD64 d = PyLong_AsUnsignedLongLong(value);
+                memcpy(*retDataBuf, &d, sizeof(DWORD64));
             }
             break;
         case REG_SZ:
@@ -619,7 +637,7 @@ Py2Reg(PyObject *value, DWORD typ, BYTE **retDataBuf, DWORD *retDataSize)
                 *retDataSize = size + 2;
                 *retDataBuf = (BYTE *)PyMem_NEW(char,
                                                 *retDataSize);
-                if (*retDataBuf==NULL){
+                if (*retDataBuf == NULL){
                     PyErr_NoMemory();
                     return FALSE;
                 }
@@ -665,7 +683,7 @@ Py2Reg(PyObject *value, DWORD typ, BYTE **retDataBuf, DWORD *retDataSize)
                     return FALSE;
 
                 *retDataBuf = (BYTE *)PyMem_NEW(char, view.len);
-                if (*retDataBuf==NULL){
+                if (*retDataBuf == NULL){
                     PyBuffer_Release(&view);
                     PyErr_NoMemory();
                     return FALSE;
@@ -690,19 +708,24 @@ Reg2Py(BYTE *retDataBuf, DWORD retDataSize, DWORD typ)
             if (retDataSize == 0)
                 obData = PyLong_FromUnsignedLong(0);
             else
-                obData = PyLong_FromUnsignedLong(*(int *)retDataBuf);
+                obData = PyLong_FromUnsignedLong(*(DWORD *)retDataBuf);
+            break;
+        case REG_QWORD:
+            if (retDataSize == 0)
+                obData = PyLong_FromUnsignedLongLong(0);
+            else
+                obData = PyLong_FromUnsignedLongLong(*(DWORD64 *)retDataBuf);
             break;
         case REG_SZ:
         case REG_EXPAND_SZ:
             {
-                /* the buffer may or may not have a trailing NULL */
+                /* REG_SZ should be a NUL terminated string, but only by
+                 * convention. The buffer may have been saved without a NUL
+                 * or with embedded NULs. To be consistent with reg.exe and
+                 * regedit.exe, consume only up to the first NUL. */
                 wchar_t *data = (wchar_t *)retDataBuf;
-                int len = retDataSize / 2;
-                if (retDataSize && data[len-1] == '\0')
-                    retDataSize -= 2;
-                if (retDataSize <= 0)
-                    data = L"";
-                obData = PyUnicode_FromWideChar(data, retDataSize/2);
+                size_t len = wcsnlen(data, retDataSize / sizeof(wchar_t));
+                obData = PyUnicode_FromWideChar(data, len);
                 break;
             }
         case REG_MULTI_SZ:
@@ -774,8 +797,8 @@ closed when the hkey object is destroyed by Python.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_CloseKey(PyModuleDef *module, PyObject *hkey)
-/*[clinic end generated code: output=d96f73439403a064 input=5b1aac65ba5127ad]*/
+winreg_CloseKey(PyObject *module, PyObject *hkey)
+/*[clinic end generated code: output=a4fa537019a80d15 input=5b1aac65ba5127ad]*/
 {
     if (!PyHKEY_Close(hkey))
         return NULL;
@@ -799,9 +822,9 @@ If the function fails, an OSError exception is raised.
 [clinic start generated code]*/
 
 static HKEY
-winreg_ConnectRegistry_impl(PyModuleDef *module, Py_UNICODE *computer_name,
+winreg_ConnectRegistry_impl(PyObject *module, Py_UNICODE *computer_name,
                             HKEY key)
-/*[clinic end generated code: output=5c52f6f7ba6e7b46 input=5f98a891a347e68e]*/
+/*[clinic end generated code: output=5ab79d02aa3167b4 input=5f98a891a347e68e]*/
 {
     HKEY retKey;
     long rc;
@@ -836,8 +859,8 @@ If the function fails, an OSError exception is raised.
 [clinic start generated code]*/
 
 static HKEY
-winreg_CreateKey_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key)
-/*[clinic end generated code: output=cd6843f30a73fc0e input=3cdd1622488acea2]*/
+winreg_CreateKey_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key)
+/*[clinic end generated code: output=9c81d4095527c927 input=3cdd1622488acea2]*/
 {
     HKEY retKey;
     long rc;
@@ -875,9 +898,9 @@ If the function fails, an OSError exception is raised.
 [clinic start generated code]*/
 
 static HKEY
-winreg_CreateKeyEx_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key,
+winreg_CreateKeyEx_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key,
                         int reserved, REGSAM access)
-/*[clinic end generated code: output=db835d5be84e72b2 input=42c2b03f98406b66]*/
+/*[clinic end generated code: output=b9fce6dc5c4e39b1 input=42c2b03f98406b66]*/
 {
     HKEY retKey;
     long rc;
@@ -910,8 +933,8 @@ is removed.  If the function fails, an OSError exception is raised.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_DeleteKey_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key)
-/*[clinic end generated code: output=875c8917dacbc99d input=b31d225b935e4211]*/
+winreg_DeleteKey_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key)
+/*[clinic end generated code: output=7734b1e431991ae4 input=b31d225b935e4211]*/
 {
     long rc;
     rc = RegDeleteKeyW(key, sub_key );
@@ -945,9 +968,9 @@ On unsupported Windows versions, NotImplementedError is raised.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_DeleteKeyEx_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key,
+winreg_DeleteKeyEx_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key,
                         REGSAM access, int reserved)
-/*[clinic end generated code: output=0362a0ac6502379f input=711d9d89e7ecbed7]*/
+/*[clinic end generated code: output=01378d86ad3eb936 input=711d9d89e7ecbed7]*/
 {
     HMODULE hMod;
     typedef LONG (WINAPI *RDKEFunc)(HKEY, const wchar_t*, REGSAM, int);
@@ -987,8 +1010,8 @@ Removes a named value from a registry key.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_DeleteValue_impl(PyModuleDef *module, HKEY key, Py_UNICODE *value)
-/*[clinic end generated code: output=308550b8cdcfd8e1 input=a78d3407a4197b21]*/
+winreg_DeleteValue_impl(PyObject *module, HKEY key, Py_UNICODE *value)
+/*[clinic end generated code: output=67e7e9a514f84951 input=a78d3407a4197b21]*/
 {
     long rc;
     Py_BEGIN_ALLOW_THREADS
@@ -1017,8 +1040,8 @@ raised, indicating no more values are available.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_EnumKey_impl(PyModuleDef *module, HKEY key, int index)
-/*[clinic end generated code: output=58074ffabbc67896 input=fad9a7c00ab0e04b]*/
+winreg_EnumKey_impl(PyObject *module, HKEY key, int index)
+/*[clinic end generated code: output=25a6ec52cd147bc4 input=fad9a7c00ab0e04b]*/
 {
     long rc;
     PyObject *retStr;
@@ -1068,8 +1091,8 @@ The result is a tuple of 3 items:
 [clinic start generated code]*/
 
 static PyObject *
-winreg_EnumValue_impl(PyModuleDef *module, HKEY key, int index)
-/*[clinic end generated code: output=4570367ebaf0e979 input=4414f47a6fb238b5]*/
+winreg_EnumValue_impl(PyObject *module, HKEY key, int index)
+/*[clinic end generated code: output=d363b5a06f8789ac input=4414f47a6fb238b5]*/
 {
     long rc;
     wchar_t *retValueBuf;
@@ -1155,8 +1178,8 @@ Expand environment vars.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_ExpandEnvironmentStrings_impl(PyModuleDef *module, Py_UNICODE *string)
-/*[clinic end generated code: output=4cb6914065a8663c input=b2a9714d2b751aa6]*/
+winreg_ExpandEnvironmentStrings_impl(PyObject *module, Py_UNICODE *string)
+/*[clinic end generated code: output=cba46ac293a8af1a input=b2a9714d2b751aa6]*/
 {
     wchar_t *retValue = NULL;
     DWORD retValueSize;
@@ -1205,8 +1228,8 @@ a FlushKey() call is required, it probably isn't.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_FlushKey_impl(PyModuleDef *module, HKEY key)
-/*[clinic end generated code: output=b9a7a6e405466420 input=f57457c12297d82f]*/
+winreg_FlushKey_impl(PyObject *module, HKEY key)
+/*[clinic end generated code: output=e6fc230d4c5dc049 input=f57457c12297d82f]*/
 {
     long rc;
     Py_BEGIN_ALLOW_THREADS
@@ -1248,9 +1271,9 @@ tree.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_LoadKey_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key,
+winreg_LoadKey_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key,
                     Py_UNICODE *file_name)
-/*[clinic end generated code: output=b8b700e39c695b90 input=e3b5b45ade311582]*/
+/*[clinic end generated code: output=87344005c5905cde input=e3b5b45ade311582]*/
 {
     long rc;
 
@@ -1282,9 +1305,9 @@ If the function fails, an OSError exception is raised.
 [clinic start generated code]*/
 
 static HKEY
-winreg_OpenKey_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key,
+winreg_OpenKey_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key,
                     int reserved, REGSAM access)
-/*[clinic end generated code: output=79818ea356490a55 input=098505ac36a9ae28]*/
+/*[clinic end generated code: output=a905f1b947f3ce85 input=098505ac36a9ae28]*/
 {
     HKEY retKey;
     long rc;
@@ -1309,9 +1332,9 @@ If the function fails, an OSError exception is raised.
 [clinic start generated code]*/
 
 static HKEY
-winreg_OpenKeyEx_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key,
+winreg_OpenKeyEx_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key,
                       int reserved, REGSAM access)
-/*[clinic end generated code: output=2dd9f29e84ea2dbc input=c6c4972af8622959]*/
+/*[clinic end generated code: output=226042593b37e940 input=c6c4972af8622959]*/
 {
     return winreg_OpenKey_impl(module, key, sub_key, reserved, access);
 }
@@ -1333,8 +1356,8 @@ as 100's of nanoseconds since Jan 1, 1600.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_QueryInfoKey_impl(PyModuleDef *module, HKEY key)
-/*[clinic end generated code: output=ae885222fe966a34 input=c3593802390cde1f]*/
+winreg_QueryInfoKey_impl(PyObject *module, HKEY key)
+/*[clinic end generated code: output=dc657b8356a4f438 input=c3593802390cde1f]*/
 {
   long rc;
   DWORD nSubKeys, nValues;
@@ -1379,8 +1402,8 @@ completeness.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_QueryValue_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key)
-/*[clinic end generated code: output=f91cb6f623c3b65a input=41cafbbf423b21d6]*/
+winreg_QueryValue_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key)
+/*[clinic end generated code: output=2bb8d1e02c10d0b6 input=41cafbbf423b21d6]*/
 {
     long rc;
     PyObject *retStr;
@@ -1446,8 +1469,8 @@ The return value is a tuple of the value and the type_id.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_QueryValueEx_impl(PyModuleDef *module, HKEY key, Py_UNICODE *name)
-/*[clinic end generated code: output=a4b07f7807194f23 input=cf366cada4836891]*/
+winreg_QueryValueEx_impl(PyObject *module, HKEY key, Py_UNICODE *name)
+/*[clinic end generated code: output=5b4fa3e33d6d3e8f input=cf366cada4836891]*/
 {
     long rc;
     BYTE *retBuf, *tmp;
@@ -1519,8 +1542,8 @@ to the API.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_SaveKey_impl(PyModuleDef *module, HKEY key, Py_UNICODE *file_name)
-/*[clinic end generated code: output=33109b96bfabef8f input=da735241f91ac7a2]*/
+winreg_SaveKey_impl(PyObject *module, HKEY key, Py_UNICODE *file_name)
+/*[clinic end generated code: output=1dda1502bd4c30d8 input=da735241f91ac7a2]*/
 {
     LPSECURITY_ATTRIBUTES pSA = NULL;
 
@@ -1565,10 +1588,10 @@ KEY_SET_VALUE access.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_SetValue_impl(PyModuleDef *module, HKEY key, Py_UNICODE *sub_key,
+winreg_SetValue_impl(PyObject *module, HKEY key, Py_UNICODE *sub_key,
                      DWORD type, Py_UNICODE *value,
                      Py_ssize_clean_t value_length)
-/*[clinic end generated code: output=3c9c7c2769e8f953 input=2cd2adab79339c53]*/
+/*[clinic end generated code: output=1e31931174820631 input=2cd2adab79339c53]*/
 {
     long rc;
 
@@ -1599,7 +1622,7 @@ winreg.SetValueEx
         An integer that specifies the type of the data, one of:
         REG_BINARY -- Binary data in any form.
         REG_DWORD -- A 32-bit number.
-        REG_DWORD_LITTLE_ENDIAN -- A 32-bit number in little-endian format.
+        REG_DWORD_LITTLE_ENDIAN -- A 32-bit number in little-endian format. Equivalent to REG_DWORD
         REG_DWORD_BIG_ENDIAN -- A 32-bit number in big-endian format.
         REG_EXPAND_SZ -- A null-terminated string that contains unexpanded
                          references to environment variables (for example,
@@ -1609,6 +1632,8 @@ winreg.SetValueEx
                         by two null characters.  Note that Python handles
                         this termination automatically.
         REG_NONE -- No defined value type.
+        REG_QWORD -- A 64-bit number.
+        REG_QWORD_LITTLE_ENDIAN -- A 64-bit number in little-endian format. Equivalent to REG_QWORD.
         REG_RESOURCE_LIST -- A device-driver resource list.
         REG_SZ -- A null-terminated string.
     value: object
@@ -1629,9 +1654,9 @@ the configuration registry to help the registry perform efficiently.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_SetValueEx_impl(PyModuleDef *module, HKEY key, Py_UNICODE *value_name,
+winreg_SetValueEx_impl(PyObject *module, HKEY key, Py_UNICODE *value_name,
                        PyObject *reserved, DWORD type, PyObject *value)
-/*[clinic end generated code: output=ea092a935c361582 input=f1b16cbcc3ed4101]*/
+/*[clinic end generated code: output=c88c8426b6c00ec7 input=900a9e3990bfb196]*/
 {
     BYTE *data;
     DWORD len;
@@ -1672,8 +1697,8 @@ of any subkeys.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_DisableReflectionKey_impl(PyModuleDef *module, HKEY key)
-/*[clinic end generated code: output=50fe6e2604324cdd input=a6c9e5ca5410193c]*/
+winreg_DisableReflectionKey_impl(PyObject *module, HKEY key)
+/*[clinic end generated code: output=830cce504cc764b4 input=a6c9e5ca5410193c]*/
 {
     HMODULE hMod;
     typedef LONG (WINAPI *RDRKFunc)(HKEY);
@@ -1715,8 +1740,8 @@ subkeys.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_EnableReflectionKey_impl(PyModuleDef *module, HKEY key)
-/*[clinic end generated code: output=e3f23edb414f24a4 input=7748abbacd1e166a]*/
+winreg_EnableReflectionKey_impl(PyObject *module, HKEY key)
+/*[clinic end generated code: output=86fa1385fdd9ce57 input=7748abbacd1e166a]*/
 {
     HMODULE hMod;
     typedef LONG (WINAPI *RERKFunc)(HKEY);
@@ -1756,8 +1781,8 @@ Will generally raise NotImplemented if executed on a 32bit OS.
 [clinic start generated code]*/
 
 static PyObject *
-winreg_QueryReflectionKey_impl(PyModuleDef *module, HKEY key)
-/*[clinic end generated code: output=2a49c564ca162e50 input=9f325eacb5a65d88]*/
+winreg_QueryReflectionKey_impl(PyObject *module, HKEY key)
+/*[clinic end generated code: output=4e774af288c3ebb9 input=9f325eacb5a65d88]*/
 {
     HMODULE hMod;
     typedef LONG (WINAPI *RQRKFunc)(HKEY, BOOL *);
@@ -1918,6 +1943,8 @@ PyMODINIT_FUNC PyInit_winreg(void)
     ADD_INT(REG_DWORD);
     ADD_INT(REG_DWORD_LITTLE_ENDIAN);
     ADD_INT(REG_DWORD_BIG_ENDIAN);
+    ADD_INT(REG_QWORD);
+    ADD_INT(REG_QWORD_LITTLE_ENDIAN);
     ADD_INT(REG_LINK);
     ADD_INT(REG_MULTI_SZ);
     ADD_INT(REG_RESOURCE_LIST);

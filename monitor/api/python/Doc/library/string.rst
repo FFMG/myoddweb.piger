@@ -188,7 +188,9 @@ Format String Syntax
 
 The :meth:`str.format` method and the :class:`Formatter` class share the same
 syntax for format strings (although in the case of :class:`Formatter`,
-subclasses can define their own format string syntax).
+subclasses can define their own format string syntax).  The syntax is
+related to that of :ref:`formatted string literals <f-strings>`, but
+there are differences.
 
 Format strings contain "replacement fields" surrounded by curly braces ``{}``.
 Anything that is not contained in braces is considered literal text, which is
@@ -283,7 +285,8 @@ Format Specification Mini-Language
 
 "Format specifications" are used within replacement fields contained within a
 format string to define how individual values are presented (see
-:ref:`formatstrings`).  They can also be passed directly to the built-in
+:ref:`formatstrings` and :ref:`f-strings`).
+They can also be passed directly to the built-in
 :func:`format` function.  Each formattable type may define how the format
 specification is to be interpreted.
 
@@ -297,18 +300,20 @@ non-empty format string typically modifies the result.
 The general form of a *standard format specifier* is:
 
 .. productionlist:: sf
-   format_spec: [[`fill`]`align`][`sign`][#][0][`width`][,][.`precision`][`type`]
+   format_spec: [[`fill`]`align`][`sign`][#][0][`width`][`grouping_option`][.`precision`][`type`]
    fill: <any character>
    align: "<" | ">" | "=" | "^"
    sign: "+" | "-" | " "
    width: `integer`
+   grouping_option: "_" | ","
    precision: `integer`
    type: "b" | "c" | "d" | "e" | "E" | "f" | "F" | "g" | "G" | "n" | "o" | "s" | "x" | "X" | "%"
 
 If a valid *align* value is specified, it can be preceded by a *fill*
 character that can be any character and defaults to a space if omitted.
 It is not possible to use a literal curly brace ("``{``" or "``}``") as
-the *fill* character when using the :meth:`str.format`
+the *fill* character in a :ref:`formatted string literal
+<f-strings>` or when using the :meth:`str.format`
 method.  However, it is possible to insert a curly brace
 with a nested replacement field.  This limitation doesn't
 affect the :func:`format` function.
@@ -374,6 +379,16 @@ instead.
 .. versionchanged:: 3.1
    Added the ``','`` option (see also :pep:`378`).
 
+The ``'_'`` option signals the use of an underscore for a thousands
+separator for floating point presentation types and for integer
+presentation type ``'d'``.  For integer presentation types ``'b'``,
+``'o'``, ``'x'``, and ``'X'``, underscores will be inserted every 4
+digits.  For other presentation types, specifying this option is an
+error.
+
+.. versionchanged:: 3.6
+   Added the ``'_'`` option (see also :pep:`515`).
+
 *width* is a decimal integer defining the minimum field width.  If not
 specified, then the field width will be determined by the content.
 
@@ -431,7 +446,7 @@ The available integer presentation types are:
 
 In addition to the above presentation types, integers can be formatted
 with the floating point presentation types listed below (except
-``'n'`` and None). When doing so, :func:`float` is used to convert the
+``'n'`` and ``None``). When doing so, :func:`float` is used to convert the
 integer to a floating point number before formatting.
 
 The available presentation types for floating point and decimal values are:

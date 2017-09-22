@@ -166,7 +166,7 @@ class Lock(_ContextManagerMixin):
         This method blocks until the lock is unlocked, then sets it to
         locked and returns True.
         """
-        if not self._waiters and not self._locked:
+        if not self._locked and all(w.cancelled() for w in self._waiters):
             self._locked = True
             return True
 
@@ -176,6 +176,10 @@ class Lock(_ContextManagerMixin):
             yield from fut
             self._locked = True
             return True
+        except futures.CancelledError:
+            if not self._locked:
+                self._wake_up_first()
+            raise
         finally:
             self._waiters.remove(fut)
 
@@ -192,13 +196,16 @@ class Lock(_ContextManagerMixin):
         """
         if self._locked:
             self._locked = False
-            # Wake up the first waiter who isn't cancelled.
-            for fut in self._waiters:
-                if not fut.done():
-                    fut.set_result(True)
-                    break
+            self._wake_up_first()
         else:
             raise RuntimeError('Lock is not acquired.')
+
+    def _wake_up_first(self):
+        """Wake up the first waiter who isn't cancelled."""
+        for fut in self._waiters:
+            if not fut.done():
+                fut.set_result(True)
+                break
 
 
 class Event:

@@ -19,8 +19,9 @@ _tkinter_tkapp_eval(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *script;
 
-    if (!PyArg_Parse(arg, "s:eval", &script))
+    if (!PyArg_Parse(arg, "s:eval", &script)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_eval_impl(self, script);
 
 exit:
@@ -44,8 +45,9 @@ _tkinter_tkapp_evalfile(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *fileName;
 
-    if (!PyArg_Parse(arg, "s:evalfile", &fileName))
+    if (!PyArg_Parse(arg, "s:evalfile", &fileName)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_evalfile_impl(self, fileName);
 
 exit:
@@ -69,8 +71,9 @@ _tkinter_tkapp_record(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *script;
 
-    if (!PyArg_Parse(arg, "s:record", &script))
+    if (!PyArg_Parse(arg, "s:record", &script)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_record_impl(self, script);
 
 exit:
@@ -94,8 +97,9 @@ _tkinter_tkapp_adderrinfo(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *msg;
 
-    if (!PyArg_Parse(arg, "s:adderrinfo", &msg))
+    if (!PyArg_Parse(arg, "s:adderrinfo", &msg)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_adderrinfo_impl(self, msg);
 
 exit:
@@ -143,8 +147,9 @@ _tkinter_tkapp_exprstring(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *s;
 
-    if (!PyArg_Parse(arg, "s:exprstring", &s))
+    if (!PyArg_Parse(arg, "s:exprstring", &s)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_exprstring_impl(self, s);
 
 exit:
@@ -168,8 +173,9 @@ _tkinter_tkapp_exprlong(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *s;
 
-    if (!PyArg_Parse(arg, "s:exprlong", &s))
+    if (!PyArg_Parse(arg, "s:exprlong", &s)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_exprlong_impl(self, s);
 
 exit:
@@ -193,8 +199,9 @@ _tkinter_tkapp_exprdouble(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *s;
 
-    if (!PyArg_Parse(arg, "s:exprdouble", &s))
+    if (!PyArg_Parse(arg, "s:exprdouble", &s)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_exprdouble_impl(self, s);
 
 exit:
@@ -218,8 +225,9 @@ _tkinter_tkapp_exprboolean(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *s;
 
-    if (!PyArg_Parse(arg, "s:exprboolean", &s))
+    if (!PyArg_Parse(arg, "s:exprboolean", &s)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_exprboolean_impl(self, s);
 
 exit:
@@ -262,8 +270,9 @@ _tkinter_tkapp_createcommand(TkappObject *self, PyObject *args)
     PyObject *func;
 
     if (!PyArg_ParseTuple(args, "sO:createcommand",
-        &name, &func))
+        &name, &func)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_createcommand_impl(self, name, func);
 
 exit:
@@ -287,8 +296,9 @@ _tkinter_tkapp_deletecommand(TkappObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     const char *name;
 
-    if (!PyArg_Parse(arg, "s:deletecommand", &name))
+    if (!PyArg_Parse(arg, "s:deletecommand", &name)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_deletecommand_impl(self, name);
 
 exit:
@@ -318,8 +328,9 @@ _tkinter_tkapp_createfilehandler(TkappObject *self, PyObject *args)
     PyObject *func;
 
     if (!PyArg_ParseTuple(args, "OiO:createfilehandler",
-        &file, &mask, &func))
+        &file, &mask, &func)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_createfilehandler_impl(self, file, mask, func);
 
 exit:
@@ -377,8 +388,9 @@ _tkinter_tkapp_createtimerhandler(TkappObject *self, PyObject *args)
     PyObject *func;
 
     if (!PyArg_ParseTuple(args, "iO:createtimerhandler",
-        &milliseconds, &func))
+        &milliseconds, &func)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_createtimerhandler_impl(self, milliseconds, func);
 
 exit:
@@ -403,8 +415,9 @@ _tkinter_tkapp_mainloop(TkappObject *self, PyObject *args)
     int threshold = 0;
 
     if (!PyArg_ParseTuple(args, "|i:mainloop",
-        &threshold))
+        &threshold)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_mainloop_impl(self, threshold);
 
 exit:
@@ -429,8 +442,9 @@ _tkinter_tkapp_dooneevent(TkappObject *self, PyObject *args)
     int flags = 0;
 
     if (!PyArg_ParseTuple(args, "|i:dooneevent",
-        &flags))
+        &flags)) {
         goto exit;
+    }
     return_value = _tkinter_tkapp_dooneevent_impl(self, flags);
 
 exit:
@@ -532,13 +546,13 @@ PyDoc_STRVAR(_tkinter_create__doc__,
     {"create", (PyCFunction)_tkinter_create, METH_VARARGS, _tkinter_create__doc__},
 
 static PyObject *
-_tkinter_create_impl(PyModuleDef *module, const char *screenName,
+_tkinter_create_impl(PyObject *module, const char *screenName,
                      const char *baseName, const char *className,
                      int interactive, int wantobjects, int wantTk, int sync,
                      const char *use);
 
 static PyObject *
-_tkinter_create(PyModuleDef *module, PyObject *args)
+_tkinter_create(PyObject *module, PyObject *args)
 {
     PyObject *return_value = NULL;
     const char *screenName = NULL;
@@ -551,8 +565,9 @@ _tkinter_create(PyModuleDef *module, PyObject *args)
     const char *use = NULL;
 
     if (!PyArg_ParseTuple(args, "|zssiiiiz:create",
-        &screenName, &baseName, &className, &interactive, &wantobjects, &wantTk, &sync, &use))
+        &screenName, &baseName, &className, &interactive, &wantobjects, &wantTk, &sync, &use)) {
         goto exit;
+    }
     return_value = _tkinter_create_impl(module, screenName, baseName, className, interactive, wantobjects, wantTk, sync, use);
 
 exit:
@@ -571,16 +586,17 @@ PyDoc_STRVAR(_tkinter_setbusywaitinterval__doc__,
     {"setbusywaitinterval", (PyCFunction)_tkinter_setbusywaitinterval, METH_O, _tkinter_setbusywaitinterval__doc__},
 
 static PyObject *
-_tkinter_setbusywaitinterval_impl(PyModuleDef *module, int new_val);
+_tkinter_setbusywaitinterval_impl(PyObject *module, int new_val);
 
 static PyObject *
-_tkinter_setbusywaitinterval(PyModuleDef *module, PyObject *arg)
+_tkinter_setbusywaitinterval(PyObject *module, PyObject *arg)
 {
     PyObject *return_value = NULL;
     int new_val;
 
-    if (!PyArg_Parse(arg, "i:setbusywaitinterval", &new_val))
+    if (!PyArg_Parse(arg, "i:setbusywaitinterval", &new_val)) {
         goto exit;
+    }
     return_value = _tkinter_setbusywaitinterval_impl(module, new_val);
 
 exit:
@@ -597,17 +613,18 @@ PyDoc_STRVAR(_tkinter_getbusywaitinterval__doc__,
     {"getbusywaitinterval", (PyCFunction)_tkinter_getbusywaitinterval, METH_NOARGS, _tkinter_getbusywaitinterval__doc__},
 
 static int
-_tkinter_getbusywaitinterval_impl(PyModuleDef *module);
+_tkinter_getbusywaitinterval_impl(PyObject *module);
 
 static PyObject *
-_tkinter_getbusywaitinterval(PyModuleDef *module, PyObject *Py_UNUSED(ignored))
+_tkinter_getbusywaitinterval(PyObject *module, PyObject *Py_UNUSED(ignored))
 {
     PyObject *return_value = NULL;
     int _return_value;
 
     _return_value = _tkinter_getbusywaitinterval_impl(module);
-    if ((_return_value == -1) && PyErr_Occurred())
+    if ((_return_value == -1) && PyErr_Occurred()) {
         goto exit;
+    }
     return_value = PyLong_FromLong((long)_return_value);
 
 exit:
@@ -621,4 +638,4 @@ exit:
 #ifndef _TKINTER_TKAPP_DELETEFILEHANDLER_METHODDEF
     #define _TKINTER_TKAPP_DELETEFILEHANDLER_METHODDEF
 #endif /* !defined(_TKINTER_TKAPP_DELETEFILEHANDLER_METHODDEF) */
-/*[clinic end generated code: output=6dd667b91cf8addd input=a9049054013a1b77]*/
+/*[clinic end generated code: output=836c578b71d69097 input=a9049054013a1b77]*/

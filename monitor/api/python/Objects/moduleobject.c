@@ -130,6 +130,34 @@ check_api_version(const char *name, int module_api_version)
     return 1;
 }
 
+static int
+_add_methods_to_object(PyObject *module, PyObject *name, PyMethodDef *functions)
+{
+    PyObject *func;
+    PyMethodDef *fdef;
+
+    for (fdef = functions; fdef->ml_name != NULL; fdef++) {
+        if ((fdef->ml_flags & METH_CLASS) ||
+            (fdef->ml_flags & METH_STATIC)) {
+            PyErr_SetString(PyExc_ValueError,
+                            "module functions cannot set"
+                            " METH_CLASS or METH_STATIC");
+            return -1;
+        }
+        func = PyCFunction_NewEx(fdef, (PyObject*)module, name);
+        if (func == NULL) {
+            return -1;
+        }
+        if (PyObject_SetAttrString(module, fdef->ml_name, func) != 0) {
+            Py_DECREF(func);
+            return -1;
+        }
+        Py_DECREF(func);
+    }
+
+    return 0;
+}
+
 PyObject *
 PyModule_Create2(struct PyModuleDef* module, int module_api_version)
 {
@@ -269,7 +297,7 @@ PyModule_FromDefAndSpec2(struct PyModuleDef* def, PyObject *spec, int module_api
             }
         }
     } else {
-        m = PyModule_New(name);
+        m = PyModule_NewObject(nameobj);
         if (m == NULL) {
             goto error;
         }
@@ -297,7 +325,7 @@ PyModule_FromDefAndSpec2(struct PyModuleDef* def, PyObject *spec, int module_api
     }
 
     if (def->m_methods != NULL) {
-        ret = PyModule_AddFunctions(m, def->m_methods);
+        ret = _add_methods_to_object(m, nameobj, def->m_methods);
         if (ret != 0) {
             goto error;
         }
@@ -331,7 +359,7 @@ PyModule_ExecDef(PyObject *module, PyModuleDef *def)
         return -1;
     }
 
-    if (PyModule_Check(module) && def->m_size >= 0) {
+    if (def->m_size >= 0) {
         PyModuleObject *md = (PyModuleObject*)module;
         if (md->md_state == NULL) {
             /* Always set a state pointer; this serves as a marker to skip
@@ -352,7 +380,7 @@ PyModule_ExecDef(PyObject *module, PyModuleDef *def)
     for (cur_slot = def->m_slots; cur_slot && cur_slot->slot; cur_slot++) {
         switch (cur_slot->slot) {
             case Py_mod_create:
-                /* handled in PyModule_CreateFromSlots */
+                /* handled in PyModule_FromDefAndSpec2 */
                 break;
             case Py_mod_exec:
                 ret = ((int (*)(PyObject *))cur_slot->value)(module);
@@ -387,37 +415,15 @@ PyModule_ExecDef(PyObject *module, PyModuleDef *def)
 int
 PyModule_AddFunctions(PyObject *m, PyMethodDef *functions)
 {
-    PyObject *name, *func;
-    PyMethodDef *fdef;
-
-    name = PyModule_GetNameObject(m);
+    int res;
+    PyObject *name = PyModule_GetNameObject(m);
     if (name == NULL) {
         return -1;
     }
 
-    for (fdef = functions; fdef->ml_name != NULL; fdef++) {
-        if ((fdef->ml_flags & METH_CLASS) ||
-            (fdef->ml_flags & METH_STATIC)) {
-            PyErr_SetString(PyExc_ValueError,
-                            "module functions cannot set"
-                            " METH_CLASS or METH_STATIC");
-            Py_DECREF(name);
-            return -1;
-        }
-        func = PyCFunction_NewEx(fdef, (PyObject*)m, name);
-        if (func == NULL) {
-            Py_DECREF(name);
-            return -1;
-        }
-        if (PyObject_SetAttrString(m, fdef->ml_name, func) != 0) {
-            Py_DECREF(func);
-            Py_DECREF(name);
-            return -1;
-        }
-        Py_DECREF(func);
-    }
+    res = _add_methods_to_object(m, name, functions);
     Py_DECREF(name);
-    return 0;
+    return res;
 }
 
 int
@@ -444,8 +450,7 @@ PyModule_GetDict(PyObject *m)
         return NULL;
     }
     d = ((PyModuleObject *)m) -> md_dict;
-    if (d == NULL)
-        ((PyModuleObject *)m) -> md_dict = d = PyDict_New();
+    assert(d != NULL);
     return d;
 }
 
@@ -478,7 +483,7 @@ PyModule_GetName(PyObject *m)
     if (name == NULL)
         return NULL;
     Py_DECREF(name);   /* module dict has still a reference */
-    return _PyUnicode_AsString(name);
+    return PyUnicode_AsUTF8(name);
 }
 
 PyObject*
@@ -511,7 +516,7 @@ PyModule_GetFilename(PyObject *m)
     fileobj = PyModule_GetFilenameObject(m);
     if (fileobj == NULL)
         return NULL;
-    utf8 = _PyUnicode_AsString(fileobj);
+    utf8 = PyUnicode_AsUTF8(fileobj);
     Py_DECREF(fileobj);   /* module dict has still a reference */
     return utf8;
 }
@@ -564,7 +569,7 @@ _PyModule_ClearDict(PyObject *d)
             if (PyUnicode_READ_CHAR(key, 0) == '_' &&
                 PyUnicode_READ_CHAR(key, 1) != '_') {
                 if (Py_VerboseFlag > 1) {
-                    const char *s = _PyUnicode_AsString(key);
+                    const char *s = PyUnicode_AsUTF8(key);
                     if (s != NULL)
                         PySys_WriteStderr("#   clear[1] %s\n", s);
                     else
@@ -581,10 +586,10 @@ _PyModule_ClearDict(PyObject *d)
     while (PyDict_Next(d, &pos, &key, &value)) {
         if (value != Py_None && PyUnicode_Check(key)) {
             if (PyUnicode_READ_CHAR(key, 0) != '_' ||
-                PyUnicode_CompareWithASCIIString(key, "__builtins__") != 0)
+                !_PyUnicode_EqualToASCIIString(key, "__builtins__"))
             {
                 if (Py_VerboseFlag > 1) {
-                    const char *s = _PyUnicode_AsString(key);
+                    const char *s = PyUnicode_AsUTF8(key);
                     if (s != NULL)
                         PySys_WriteStderr("#   clear[2] %s\n", s);
                     else

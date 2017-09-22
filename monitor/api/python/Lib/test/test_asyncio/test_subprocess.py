@@ -35,6 +35,7 @@ class TestSubprocessTransport(base_subprocess.BaseSubprocessTransport):
 
 class SubprocessTransportTests(test_utils.TestCase):
     def setUp(self):
+        super().setUp()
         self.loop = self.new_test_loop()
         self.set_event_loop(self.loop)
 
@@ -433,6 +434,13 @@ class SubprocessMixin:
         # the transport was not notified yet
         self.assertFalse(killed)
 
+        # Unlike SafeChildWatcher, FastChildWatcher does not pop the
+        # callbacks if waitpid() is called elsewhere. Let's clear them
+        # manually to avoid a warning when the watcher is detached.
+        if sys.platform != 'win32' and \
+           isinstance(self, SubprocessFastWatcherTests):
+            asyncio.get_child_watcher()._callbacks.clear()
+
     def test_popen_error(self):
         # Issue #24763: check that the subprocess transport is closed
         # when BaseSubprocessTransport fails
@@ -451,6 +459,30 @@ class SubprocessMixin:
                     self.loop.run_until_complete(create)
                 self.assertEqual(warns, [])
 
+    def test_read_stdout_after_process_exit(self):
+        @asyncio.coroutine
+        def execute():
+            code = '\n'.join(['import sys',
+                              'for _ in range(64):',
+                              '    sys.stdout.write("x" * 4096)',
+                              'sys.stdout.flush()',
+                              'sys.exit(1)'])
+
+            fut = asyncio.create_subprocess_exec(
+                sys.executable, '-c', code,
+                stdout=asyncio.subprocess.PIPE,
+                loop=self.loop)
+
+            process = yield from fut
+            while True:
+                data = yield from process.stdout.read(65536)
+                if data:
+                    yield from asyncio.sleep(0.3, loop=self.loop)
+                else:
+                    break
+
+        self.loop.run_until_complete(execute())
+
 
 if sys.platform != 'win32':
     # Unix
@@ -459,6 +491,7 @@ if sys.platform != 'win32':
         Watcher = None
 
         def setUp(self):
+            super().setUp()
             policy = asyncio.get_event_loop_policy()
             self.loop = policy.new_event_loop()
             self.set_event_loop(self.loop)
@@ -483,6 +516,7 @@ else:
     class SubprocessProactorTests(SubprocessMixin, test_utils.TestCase):
 
         def setUp(self):
+            super().setUp()
             self.loop = asyncio.ProactorEventLoop()
             self.set_event_loop(self.loop)
 

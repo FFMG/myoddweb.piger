@@ -53,13 +53,14 @@ The :mod:`binascii` module defines the following functions:
    than one line may be passed at a time.
 
 
-.. function:: b2a_base64(data)
+.. function:: b2a_base64(data, \*, newline=True)
 
    Convert binary data to a line of ASCII characters in base64 coding. The return
-   value is the converted line, including a newline char.  The newline is
-   added because the original use case for this function was to feed it a
-   series of 57 byte input lines to get output lines that conform to the
-   MIME-base64 standard.  Otherwise the output conforms to :rfc:`3548`.
+   value is the converted line, including a newline char if *newline* is
+   true.  The output of this function conforms to :rfc:`3548`.
+
+   .. versionchanged:: 3.6
+      Added the *newline* parameter.
 
 
 .. function:: a2b_qp(data, header=False)
@@ -115,8 +116,10 @@ The :mod:`binascii` module defines the following functions:
 
 .. function:: crc_hqx(data, value)
 
-   Compute the binhex4 crc value of *data*, starting with *value* as the
-   initial crc, and return the result.
+   Compute a 16-bit CRC value of *data*, starting with *value* as the
+   initial CRC, and return the result.  This uses the CRC-CCITT polynomial
+   *x*:sup:`16` + *x*:sup:`12` + *x*:sup:`5` + 1, often represented as
+   0x1021.  This CRC is used in the binhex4 format.
 
 
 .. function:: crc32(data[, value])

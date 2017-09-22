@@ -34,8 +34,8 @@ can be customized by end users easily.
 .. seealso::
 
    Module :mod:`shlex`
-      Support for a creating Unix shell-like mini-languages which can be used
-      as an alternate format for application configuration files.
+      Support for creating Unix shell-like mini-languages which can be used as
+      an alternate format for application configuration files.
 
    Module :mod:`json`
       The json module implements a subset of JavaScript syntax which can also
@@ -66,7 +66,7 @@ The structure of INI files is described `in the following section
 <#supported-ini-file-structure>`_.  Essentially, the file
 consists of sections, each of which contains keys with values.
 :mod:`configparser` classes can read and write such files.  Let's start by
-creating the above configuration file programatically.
+creating the above configuration file programmatically.
 
 .. doctest::
 
@@ -150,8 +150,8 @@ Since this task is so common, config parsers provide a range of handy getter
 methods to handle integers, floats and booleans.  The last one is the most
 interesting because simply passing the value to ``bool()`` would do no good
 since ``bool('False')`` is still ``True``.  This is why config parsers also
-provide :meth:`getboolean`.  This method is case-insensitive and recognizes
-Boolean values from ``'yes'``/``'no'``, ``'on'``/``'off'``,
+provide :meth:`~ConfigParser.getboolean`.  This method is case-insensitive and
+recognizes Boolean values from ``'yes'``/``'no'``, ``'on'``/``'off'``,
 ``'true'``/``'false'`` and ``'1'``/``'0'`` [1]_.  For example:
 
 .. doctest::
@@ -163,8 +163,9 @@ Boolean values from ``'yes'``/``'no'``, ``'on'``/``'off'``,
    >>> config.getboolean('bitbucket.org', 'Compression')
    True
 
-Apart from :meth:`getboolean`, config parsers also provide equivalent
-:meth:`getint` and :meth:`getfloat` methods.  You can register your own
+Apart from :meth:`~ConfigParser.getboolean`, config parsers also
+provide equivalent :meth:`~ConfigParser.getint` and
+:meth:`~ConfigParser.getfloat` methods.  You can register your own
 converters and customize the provided ones. [1]_
 
 Fallback Values
@@ -205,8 +206,9 @@ the ``fallback`` keyword-only argument:
    ...            fallback='No such things as monsters')
    'No such things as monsters'
 
-The same ``fallback`` argument can be used with the :meth:`getint`,
-:meth:`getfloat` and :meth:`getboolean` methods, for example:
+The same ``fallback`` argument can be used with the
+:meth:`~ConfigParser.getint`, :meth:`~ConfigParser.getfloat` and
+:meth:`~ConfigParser.getboolean` methods, for example:
 
 .. doctest::
 
@@ -670,14 +672,15 @@ the :meth:`__init__` options:
 * *converters*, default value: not set
 
   Config parsers provide option value getters that perform type conversion.  By
-  default :meth:`getint`, :meth:`getfloat`, and :meth:`getboolean` are
-  implemented.  Should other getters be desirable, users may define them in
-  a subclass or pass a dictionary where each key is a name of the converter and
-  each value is a callable implementing said conversion.  For instance, passing
-  ``{'decimal': decimal.Decimal}`` would add :meth:`getdecimal` on both the
-  parser object and all section proxies.  In other words, it will be possible
-  to write both ``parser_instance.getdecimal('section', 'key', fallback=0)``
-  and ``parser_instance['section'].getdecimal('key', 0)``.
+  default :meth:`~ConfigParser.getint`, :meth:`~ConfigParser.getfloat`, and
+  :meth:`~ConfigParser.getboolean` are implemented.  Should other getters be
+  desirable, users may define them in a subclass or pass a dictionary where each
+  key is a name of the converter and each value is a callable implementing said
+  conversion.  For instance, passing ``{'decimal': decimal.Decimal}`` would add
+  :meth:`getdecimal` on both the parser object and all section proxies.  In
+  other words, it will be possible to write both
+  ``parser_instance.getdecimal('section', 'key', fallback=0)`` and
+  ``parser_instance['section'].getdecimal('key', 0)``.
 
   If the converter needs to access the state of the parser, it can be
   implemented as a method on a config parser subclass.  If the name of this
@@ -690,11 +693,11 @@ be overridden by subclasses or by attribute assignment.
 
 .. attribute:: BOOLEAN_STATES
 
-  By default when using :meth:`getboolean`, config parsers consider the
-  following values ``True``: ``'1'``, ``'yes'``, ``'true'``, ``'on'`` and the
-  following values ``False``: ``'0'``, ``'no'``, ``'false'``, ``'off'``.  You
-  can override this by specifying a custom dictionary of strings and their
-  Boolean outcomes. For example:
+  By default when using :meth:`~ConfigParser.getboolean`, config parsers
+  consider the following values ``True``: ``'1'``, ``'yes'``, ``'true'``,
+  ``'on'`` and the following values ``False``: ``'0'``, ``'no'``, ``'false'``,
+  ``'off'``.  You can override this by specifying a custom dictionary of strings
+  and their Boolean outcomes. For example:
 
   .. doctest::
 
@@ -980,13 +983,16 @@ ConfigParser Objects
    .. method:: read(filenames, encoding=None)
 
       Attempt to read and parse a list of filenames, returning a list of
-      filenames which were successfully parsed.  If *filenames* is a string, it
-      is treated as a single filename.  If a file named in *filenames* cannot
-      be opened, that file will be ignored.  This is designed so that you can
-      specify a list of potential configuration file locations (for example,
-      the current directory, the user's home directory, and some system-wide
-      directory), and all existing configuration files in the list will be
-      read.  If none of the named files exist, the :class:`ConfigParser`
+      filenames which were successfully parsed.
+
+      If *filenames* is a string or :term:`path-like object`, it is treated as
+      a single filename.  If a file named in *filenames* cannot be opened, that
+      file will be ignored.  This is designed so that you can specify a list of
+      potential configuration file locations (for example, the current
+      directory, the user's home directory, and some system-wide directory),
+      and all existing configuration files in the list will be read.
+
+      If none of the named files exist, the :class:`ConfigParser`
       instance will contain an empty dataset.  An application which requires
       initial values to be loaded from a file should load the required file or
       files using :meth:`read_file` before calling :meth:`read` for any
@@ -1002,6 +1008,9 @@ ConfigParser Objects
       .. versionadded:: 3.2
          The *encoding* parameter.  Previously, all files were read using the
          default encoding for :func:`open`.
+
+      .. versionadded:: 3.6.1
+         The *filenames* parameter accepts a :term:`path-like object`.
 
 
    .. method:: read_file(f, source=None)
@@ -1158,20 +1167,20 @@ ConfigParser Objects
          Use :meth:`read_file` instead.
 
       .. versionchanged:: 3.2
-         :meth:`readfp` now iterates on *f* instead of calling ``f.readline()``.
+         :meth:`readfp` now iterates on *fp* instead of calling ``fp.readline()``.
 
       For existing code calling :meth:`readfp` with arguments which don't
       support iteration, the following generator may be used as a wrapper
       around the file-like object::
 
-         def readline_generator(f):
-             line = f.readline()
+         def readline_generator(fp):
+             line = fp.readline()
              while line:
                  yield line
-                 line = f.readline()
+                 line = fp.readline()
 
-      Instead of ``parser.readfp(f)`` use
-      ``parser.read_file(readline_generator(f))``.
+      Instead of ``parser.readfp(fp)`` use
+      ``parser.read_file(readline_generator(fp))``.
 
 
 .. data:: MAX_INTERPOLATION_DEPTH

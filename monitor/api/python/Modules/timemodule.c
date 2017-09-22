@@ -160,7 +160,9 @@ PyDoc_STRVAR(clock_gettime_doc,
 "clock_gettime(clk_id) -> floating point number\n\
 \n\
 Return the time of the specified clock clk_id.");
+#endif   /* HAVE_CLOCK_GETTIME */
 
+#ifdef HAVE_CLOCK_SETTIME
 static PyObject *
 time_clock_settime(PyObject *self, PyObject *args)
 {
@@ -191,7 +193,9 @@ PyDoc_STRVAR(clock_settime_doc,
 "clock_settime(clk_id, time)\n\
 \n\
 Set the time of the specified clock clk_id.");
+#endif   /* HAVE_CLOCK_SETTIME */
 
+#ifdef HAVE_CLOCK_GETRES
 static PyObject *
 time_clock_getres(PyObject *self, PyObject *args)
 {
@@ -215,7 +219,7 @@ PyDoc_STRVAR(clock_getres_doc,
 "clock_getres(clk_id) -> floating point number\n\
 \n\
 Return the resolution (precision) of the specified clock clk_id.");
-#endif   /* HAVE_CLOCK_GETTIME */
+#endif   /* HAVE_CLOCK_GETRES */
 
 static PyObject *
 time_sleep(PyObject *self, PyObject *obj)
@@ -250,10 +254,8 @@ static PyStructSequence_Field struct_time_type_fields[] = {
     {"tm_wday", "day of week, range [0, 6], Monday is 0"},
     {"tm_yday", "day of year, range [1, 366]"},
     {"tm_isdst", "1 if summer time is in effect, 0 if not, and -1 if unknown"},
-#ifdef HAVE_STRUCT_TM_TM_ZONE
     {"tm_zone", "abbreviation of timezone name"},
     {"tm_gmtoff", "offset from UTC in seconds"},
-#endif /* HAVE_STRUCT_TM_TM_ZONE */
     {0}
 };
 
@@ -275,7 +277,11 @@ static PyTypeObject StructTimeType;
 
 
 static PyObject *
-tmtotuple(struct tm *p)
+tmtotuple(struct tm *p
+#ifndef HAVE_STRUCT_TM_TM_ZONE
+        , const char *zone, time_t gmtoff
+#endif
+)
 {
     PyObject *v = PyStructSequence_New(&StructTimeType);
     if (v == NULL)
@@ -296,6 +302,10 @@ tmtotuple(struct tm *p)
     PyStructSequence_SET_ITEM(v, 9,
         PyUnicode_DecodeLocale(p->tm_zone, "surrogateescape"));
     SET(10, p->tm_gmtoff);
+#else
+    PyStructSequence_SET_ITEM(v, 9,
+        PyUnicode_DecodeLocale(zone, "surrogateescape"));
+    PyStructSequence_SET_ITEM(v, 10, _PyLong_FromTime_t(gmtoff));
 #endif /* HAVE_STRUCT_TM_TM_ZONE */
 #undef SET
     if (PyErr_Occurred()) {
@@ -311,7 +321,7 @@ tmtotuple(struct tm *p)
    Returns non-zero on success (parallels PyArg_ParseTuple).
 */
 static int
-parse_time_t_args(PyObject *args, char *format, time_t *pwhen)
+parse_time_t_args(PyObject *args, const char *format, time_t *pwhen)
 {
     PyObject *ot = NULL;
     time_t whent;
@@ -333,23 +343,33 @@ static PyObject *
 time_gmtime(PyObject *self, PyObject *args)
 {
     time_t when;
-    struct tm buf, *local;
+    struct tm buf;
 
     if (!parse_time_t_args(args, "|O:gmtime", &when))
         return NULL;
 
     errno = 0;
-    local = gmtime(&when);
-    if (local == NULL) {
-#ifdef EINVAL
-        if (errno == 0)
-            errno = EINVAL;
-#endif
-        return PyErr_SetFromErrno(PyExc_OSError);
-    }
-    buf = *local;
+    if (_PyTime_gmtime(when, &buf) != 0)
+        return NULL;
+#ifdef HAVE_STRUCT_TM_TM_ZONE
     return tmtotuple(&buf);
+#else
+    return tmtotuple(&buf, "UTC", 0);
+#endif
 }
+
+#ifndef HAVE_TIMEGM
+static time_t
+timegm(struct tm *p)
+{
+    /* XXX: the following implementation will not work for tm_year < 1970.
+       but it is likely that platforms that don't have timegm do not support
+       negative timestamps anyways. */
+    return p->tm_sec + p->tm_min*60 + p->tm_hour*3600 + p->tm_yday*86400 +
+        (p->tm_year-70)*31536000 + ((p->tm_year-69)/4)*86400 -
+        ((p->tm_year-1)/100)*86400 + ((p->tm_year+299)/400)*86400;
+}
+#endif
 
 PyDoc_STRVAR(gmtime_doc,
 "gmtime([seconds]) -> (tm_year, tm_mon, tm_mday, tm_hour, tm_min,\n\
@@ -361,26 +381,6 @@ GMT).  When 'seconds' is not passed in, convert the current time instead.\n\
 If the platform supports the tm_gmtoff and tm_zone, they are available as\n\
 attributes only.");
 
-static int
-pylocaltime(time_t *timep, struct tm *result)
-{
-    struct tm *local;
-
-    assert (timep != NULL);
-    local = localtime(timep);
-    if (local == NULL) {
-        /* unconvertible time */
-#ifdef EINVAL
-        if (errno == 0)
-            errno = EINVAL;
-#endif
-        PyErr_SetFromErrno(PyExc_OSError);
-        return -1;
-    }
-    *result = *local;
-    return 0;
-}
-
 static PyObject *
 time_localtime(PyObject *self, PyObject *args)
 {
@@ -389,9 +389,20 @@ time_localtime(PyObject *self, PyObject *args)
 
     if (!parse_time_t_args(args, "|O:localtime", &when))
         return NULL;
-    if (pylocaltime(&when, &buf) == -1)
+    if (_PyTime_localtime(when, &buf) != 0)
         return NULL;
+#ifdef HAVE_STRUCT_TM_TM_ZONE
     return tmtotuple(&buf);
+#else
+    {
+        struct tm local = buf;
+        char zone[100];
+        time_t gmtoff;
+        strftime(zone, sizeof(zone), "%Z", &buf);
+        gmtoff = timegm(&buf) - when;
+        return tmtotuple(&local, zone, gmtoff);
+    }
+#endif
 }
 
 PyDoc_STRVAR(localtime_doc,
@@ -430,7 +441,7 @@ gettmarg(PyObject *args, struct tm *p)
     if (Py_TYPE(args) == &StructTimeType) {
         PyObject *item;
         item = PyTuple_GET_ITEM(args, 9);
-        p->tm_zone = item == Py_None ? NULL : _PyUnicode_AsString(item);
+        p->tm_zone = item == Py_None ? NULL : PyUnicode_AsUTF8(item);
         item = PyTuple_GET_ITEM(args, 10);
         p->tm_gmtoff = item == Py_None ? 0 : PyLong_AsLong(item);
         if (PyErr_Occurred())
@@ -573,7 +584,7 @@ time_strftime(PyObject *self, PyObject *args)
 
     if (tup == NULL) {
         time_t tt = time(NULL);
-        if (pylocaltime(&tt, &buf) == -1)
+        if (_PyTime_localtime(tt, &buf) != 0)
             return NULL;
     }
     else if (!gettmarg(tup, &buf) || !checktm(&buf))
@@ -732,10 +743,10 @@ _asctime(struct tm *timeptr)
 {
     /* Inspired by Open Group reference implementation available at
      * http://pubs.opengroup.org/onlinepubs/009695399/functions/asctime.html */
-    static char wday_name[7][4] = {
+    static const char wday_name[7][4] = {
         "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
     };
-    static char mon_name[12][4] = {
+    static const char mon_name[12][4] = {
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
@@ -758,7 +769,7 @@ time_asctime(PyObject *self, PyObject *args)
         return NULL;
     if (tup == NULL) {
         time_t tt = time(NULL);
-        if (pylocaltime(&tt, &buf) == -1)
+        if (_PyTime_localtime(tt, &buf) != 0)
             return NULL;
 
     } else if (!gettmarg(tup, &buf) || !checktm(&buf))
@@ -780,7 +791,7 @@ time_ctime(PyObject *self, PyObject *args)
     struct tm buf;
     if (!parse_time_t_args(args, "|O:ctime", &tt))
         return NULL;
-    if (pylocaltime(&tt, &buf) == -1)
+    if (_PyTime_localtime(tt, &buf) != 0)
         return NULL;
     return _asctime(&buf);
 }
@@ -1034,6 +1045,7 @@ py_process_time(_Py_clock_info_t *info)
     }
 #endif
 
+    /* Currently, Python 3 requires clock() to build: see issue #22624 */
     return floatclock(info);
 #endif
 }
@@ -1145,6 +1157,27 @@ PyDoc_STRVAR(get_clock_info_doc,
 Get information of the specified clock.");
 
 static void
+get_zone(char *zone, int n, struct tm *p)
+{
+#ifdef HAVE_STRUCT_TM_TM_ZONE
+    strncpy(zone, p->tm_zone ? p->tm_zone : "   ", n);
+#else
+    tzset();
+    strftime(zone, n, "%Z", p);
+#endif
+}
+
+static int
+get_gmtoff(time_t t, struct tm *p)
+{
+#ifdef HAVE_STRUCT_TM_TM_ZONE
+    return p->tm_gmtoff;
+#else
+    return timegm(p) - t;
+#endif
+}
+
+static void
 PyInit_timezone(PyObject *m) {
     /* This code moved from PyInit_time wholesale to allow calling it from
     time_tzset. In the future, some parts of it can be moved back
@@ -1176,22 +1209,21 @@ PyInit_timezone(PyObject *m) {
     otz1 = PyUnicode_DecodeLocale(tzname[1], "surrogateescape");
     PyModule_AddObject(m, "tzname", Py_BuildValue("(NN)", otz0, otz1));
 #else /* !HAVE_TZNAME || __GLIBC__ || __CYGWIN__*/
-#ifdef HAVE_STRUCT_TM_TM_ZONE
     {
 #define YEAR ((time_t)((365 * 24 + 6) * 3600))
         time_t t;
-        struct tm *p;
+        struct tm p;
         long janzone, julyzone;
         char janname[10], julyname[10];
         t = (time((time_t *)0) / YEAR) * YEAR;
-        p = localtime(&t);
-        janzone = -p->tm_gmtoff;
-        strncpy(janname, p->tm_zone ? p->tm_zone : "   ", 9);
+        _PyTime_localtime(t, &p);
+        get_zone(janname, 9, &p);
+        janzone = -get_gmtoff(t, &p);
         janname[9] = '\0';
         t += YEAR/2;
-        p = localtime(&t);
-        julyzone = -p->tm_gmtoff;
-        strncpy(julyname, p->tm_zone ? p->tm_zone : "   ", 9);
+        _PyTime_localtime(t, &p);
+        get_zone(julyname, 9, &p);
+        julyzone = -get_gmtoff(t, &p);
         julyname[9] = '\0';
 
         if( janzone < julyzone ) {
@@ -1213,8 +1245,6 @@ PyInit_timezone(PyObject *m) {
                                              janname, julyname));
         }
     }
-#else
-#endif /* HAVE_STRUCT_TM_TM_ZONE */
 #ifdef __CYGWIN__
     tzset();
     PyModule_AddIntConstant(m, "timezone", _timezone);
@@ -1224,25 +1254,6 @@ PyInit_timezone(PyObject *m) {
                        Py_BuildValue("(zz)", _tzname[0], _tzname[1]));
 #endif /* __CYGWIN__ */
 #endif /* !HAVE_TZNAME || __GLIBC__ || __CYGWIN__*/
-
-#if defined(HAVE_CLOCK_GETTIME)
-    PyModule_AddIntMacro(m, CLOCK_REALTIME);
-#ifdef CLOCK_MONOTONIC
-    PyModule_AddIntMacro(m, CLOCK_MONOTONIC);
-#endif
-#ifdef CLOCK_MONOTONIC_RAW
-    PyModule_AddIntMacro(m, CLOCK_MONOTONIC_RAW);
-#endif
-#ifdef CLOCK_HIGHRES
-    PyModule_AddIntMacro(m, CLOCK_HIGHRES);
-#endif
-#ifdef CLOCK_PROCESS_CPUTIME_ID
-    PyModule_AddIntMacro(m, CLOCK_PROCESS_CPUTIME_ID);
-#endif
-#ifdef CLOCK_THREAD_CPUTIME_ID
-    PyModule_AddIntMacro(m, CLOCK_THREAD_CPUTIME_ID);
-#endif
-#endif /* HAVE_CLOCK_GETTIME */
 }
 
 
@@ -1253,7 +1264,11 @@ static PyMethodDef time_methods[] = {
 #endif
 #ifdef HAVE_CLOCK_GETTIME
     {"clock_gettime",   time_clock_gettime, METH_VARARGS, clock_gettime_doc},
+#endif
+#ifdef HAVE_CLOCK_SETTIME
     {"clock_settime",   time_clock_settime, METH_VARARGS, clock_settime_doc},
+#endif
+#ifdef HAVE_CLOCK_GETRES
     {"clock_getres",    time_clock_getres, METH_VARARGS, clock_getres_doc},
 #endif
     {"sleep",           time_sleep, METH_O, sleep_doc},
@@ -1349,17 +1364,32 @@ PyInit_time(void)
     /* Set, or reset, module variables like time.timezone */
     PyInit_timezone(m);
 
+#ifdef CLOCK_REALTIME
+    PyModule_AddIntMacro(m, CLOCK_REALTIME);
+#endif
+#ifdef CLOCK_MONOTONIC
+    PyModule_AddIntMacro(m, CLOCK_MONOTONIC);
+#endif
+#ifdef CLOCK_MONOTONIC_RAW
+    PyModule_AddIntMacro(m, CLOCK_MONOTONIC_RAW);
+#endif
+#ifdef CLOCK_HIGHRES
+    PyModule_AddIntMacro(m, CLOCK_HIGHRES);
+#endif
+#ifdef CLOCK_PROCESS_CPUTIME_ID
+    PyModule_AddIntMacro(m, CLOCK_PROCESS_CPUTIME_ID);
+#endif
+#ifdef CLOCK_THREAD_CPUTIME_ID
+    PyModule_AddIntMacro(m, CLOCK_THREAD_CPUTIME_ID);
+#endif
+
     if (!initialized) {
         if (PyStructSequence_InitType2(&StructTimeType,
                                        &struct_time_type_desc) < 0)
             return NULL;
     }
     Py_INCREF(&StructTimeType);
-#ifdef HAVE_STRUCT_TM_TM_ZONE
     PyModule_AddIntConstant(m, "_STRUCT_TM_ITEMS", 11);
-#else
-    PyModule_AddIntConstant(m, "_STRUCT_TM_ITEMS", 9);
-#endif
     PyModule_AddObject(m, "struct_time", (PyObject*) &StructTimeType);
     initialized = 1;
     return m;

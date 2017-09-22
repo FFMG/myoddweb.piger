@@ -45,6 +45,7 @@ typedef struct change_record {
     const unsigned char category_changed;
     const unsigned char decimal_changed;
     const unsigned char mirrored_changed;
+    const unsigned char east_asian_width_changed;
     const double numeric_changed;
 } change_record;
 
@@ -375,6 +376,8 @@ unicodedata_UCD_east_asian_width_impl(PyObject *self, int chr)
         const change_record *old = get_old_record(self, c);
         if (old->category_changed == 0)
             index = 0; /* unassigned */
+        else if (old->east_asian_width_changed != 0xFF)
+            index = old->east_asian_width_changed;
     }
     return PyUnicode_FromString(_PyUnicode_EastAsianWidthNames[index]);
 }
@@ -884,7 +887,7 @@ _gethash(const char *s, int len, int scale)
     return h;
 }
 
-static char *hangul_syllables[][3] = {
+static const char * const hangul_syllables[][3] = {
     { "G",  "A",   ""   },
     { "GG", "AE",  "G"  },
     { "N",  "YA",  "GG" },
@@ -1041,8 +1044,8 @@ _cmpname(PyObject *self, int code, const char* name, int namelen)
 {
     /* check if code corresponds to the given name */
     int i;
-    char buffer[NAME_MAXLEN];
-    if (!_getucname(self, code, buffer, sizeof(buffer), 1))
+    char buffer[NAME_MAXLEN+1];
+    if (!_getucname(self, code, buffer, NAME_MAXLEN, 1))
         return 0;
     for (i = 0; i < namelen; i++) {
         if (Py_TOUPPER(Py_CHARMASK(name[i])) != buffer[i])
@@ -1057,7 +1060,7 @@ find_syllable(const char *str, int *len, int *pos, int count, int column)
     int i, len1;
     *len = -1;
     for (i = 0; i < count; i++) {
-        char *s = hangul_syllables[i][column];
+        const char *s = hangul_syllables[i][column];
         len1 = Py_SAFE_DOWNCAST(strlen(s), size_t, int);
         if (len1 <= *len)
             continue;
@@ -1195,10 +1198,10 @@ static PyObject *
 unicodedata_UCD_name_impl(PyObject *self, int chr, PyObject *default_value)
 /*[clinic end generated code: output=6bbb37a326407707 input=3e0367f534de56d9]*/
 {
-    char name[NAME_MAXLEN];
+    char name[NAME_MAXLEN+1];
     Py_UCS4 c = (Py_UCS4)chr;
 
-    if (!_getucname(self, c, name, sizeof(name), 0)) {
+    if (!_getucname(self, c, name, NAME_MAXLEN, 0)) {
         if (default_value == NULL) {
             PyErr_SetString(PyExc_ValueError, "no such name");
             return NULL;
@@ -1232,7 +1235,7 @@ unicodedata_UCD_lookup_impl(PyObject *self, const char *name,
 {
     Py_UCS4 code;
     unsigned int index;
-    if (name_length > INT_MAX) {
+    if (name_length > NAME_MAXLEN) {
         PyErr_SetString(PyExc_KeyError, "name too long");
         return NULL;
     }

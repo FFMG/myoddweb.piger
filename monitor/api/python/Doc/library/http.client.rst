@@ -20,7 +20,7 @@ HTTPS protocols.  It is normally not used directly --- the module
 
 .. seealso::
 
-    The `Requests package <https://requests.readthedocs.org/>`_
+    The `Requests package <http://docs.python-requests.org/>`_
     is recommended for a higher-level HTTP client interface.
 
 .. note::
@@ -31,8 +31,7 @@ HTTPS protocols.  It is normally not used directly --- the module
 The module provides the following classes:
 
 
-.. class:: HTTPConnection(host, port=None[, timeout], \
-                          source_address=None)
+.. class:: HTTPConnection(host, port=None[, timeout], source_address=None)
 
    An :class:`HTTPConnection` instance represents one transaction with an HTTP
    server.  It should be instantiated passing it a host and optional port
@@ -70,13 +69,6 @@ The module provides the following classes:
    must be a :class:`ssl.SSLContext` instance describing the various SSL
    options.
 
-   *key_file* and *cert_file* are deprecated, please use
-   :meth:`ssl.SSLContext.load_cert_chain` instead, or let
-   :func:`ssl.create_default_context` select the system's trusted CA
-   certificates for you.  The *check_hostname* parameter is also deprecated; the
-   :attr:`ssl.SSLContext.check_hostname` attribute of *context* should be used
-   instead.
-
    Please read :ref:`ssl-security` for more information on best practices.
 
    .. versionchanged:: 3.2
@@ -95,6 +87,17 @@ The module provides the following classes:
       by default. To revert to the previous, unverified, behavior
       :func:`ssl._create_unverified_context` can be passed to the *context*
       parameter.
+
+   .. deprecated:: 3.6
+
+       *key_file* and *cert_file* are deprecated in favor of *context*.
+       Please use :meth:`ssl.SSLContext.load_cert_chain` instead, or let
+       :func:`ssl.create_default_context` select the system's trusted CA
+       certificates for you.
+
+       The *check_hostname* parameter is also deprecated; the
+       :attr:`ssl.SSLContext.check_hostname` attribute of *context* should
+       be used instead.
 
 
 .. class:: HTTPResponse(sock, debuglevel=0, method=None, url=None)
@@ -196,7 +199,6 @@ The constants defined in this module are:
 
    The default port for the HTTP protocol (always ``80``).
 
-
 .. data:: HTTPS_PORT
 
    The default port for the HTTPS protocol (always ``443``).
@@ -219,38 +221,60 @@ HTTPConnection Objects
 :class:`HTTPConnection` instances have the following methods:
 
 
-.. method:: HTTPConnection.request(method, url, body=None, headers={})
+.. method:: HTTPConnection.request(method, url, body=None, headers={}, *, \
+            encode_chunked=False)
 
    This will send a request to the server using the HTTP request
    method *method* and the selector *url*.
 
    If *body* is specified, the specified data is sent after the headers are
-   finished.  It may be a string, a :term:`bytes-like object`, an open
-   :term:`file object`, or an iterable of :term:`bytes-like object`\s.  If
-   *body* is a string, it is encoded as ISO-8851-1, the default for HTTP.  If
-   it is a bytes-like object the bytes are sent as is.  If it is a :term:`file
-   object`, the contents of the file is sent; this file object should support
-   at least the ``read()`` method.  If the file object has a ``mode``
-   attribute, the data returned by the ``read()`` method will be encoded as
-   ISO-8851-1 unless the ``mode`` attribute contains the substring ``b``,
-   otherwise the data returned by ``read()`` is sent as is.  If *body* is an
-   iterable, the elements of the iterable are sent as is until the iterable is
-   exhausted.
+   finished.  It may be a :class:`str`, a :term:`bytes-like object`, an
+   open :term:`file object`, or an iterable of :class:`bytes`.  If *body*
+   is a string, it is encoded as ISO-8859-1, the default for HTTP.  If it
+   is a bytes-like object, the bytes are sent as is.  If it is a :term:`file
+   object`, the contents of the file is sent; this file object should
+   support at least the ``read()`` method.  If the file object is an
+   instance of :class:`io.TextIOBase`, the data returned by the ``read()``
+   method will be encoded as ISO-8859-1, otherwise the data returned by
+   ``read()`` is sent as is.  If *body* is an iterable, the elements of the
+   iterable are sent as is until the iterable is exhausted.
 
-   The *headers* argument should be a mapping of extra HTTP
-   headers to send with the request.
+   The *headers* argument should be a mapping of extra HTTP headers to send
+   with the request.
 
-   If *headers* does not contain a Content-Length item, one is added
-   automatically if possible.  If *body* is ``None``, the Content-Length header
-   is set to ``0`` for methods that expect a body (``PUT``, ``POST``, and
-   ``PATCH``).  If *body* is a string or bytes object, the Content-Length
-   header is set to its length.  If *body* is a :term:`file object` and it
-   works to call :func:`~os.fstat` on the result of its ``fileno()`` method,
-   then the Content-Length header is set to the ``st_size`` reported by the
-   ``fstat`` call.  Otherwise no Content-Length header is added.
+   If *headers* contains neither Content-Length nor Transfer-Encoding,
+   but there is a request body, one of those
+   header fields will be added automatically.  If
+   *body* is ``None``, the Content-Length header is set to ``0`` for
+   methods that expect a body (``PUT``, ``POST``, and ``PATCH``).  If
+   *body* is a string or a bytes-like object that is not also a
+   :term:`file <file object>`, the Content-Length header is
+   set to its length.  Any other type of *body* (files
+   and iterables in general) will be chunk-encoded, and the
+   Transfer-Encoding header will automatically be set instead of
+   Content-Length.
+
+   The *encode_chunked* argument is only relevant if Transfer-Encoding is
+   specified in *headers*.  If *encode_chunked* is ``False``, the
+   HTTPConnection object assumes that all encoding is handled by the
+   calling code.  If it is ``True``, the body will be chunk-encoded.
+
+   .. note::
+      Chunked transfer encoding has been added to the HTTP protocol
+      version 1.1.  Unless the HTTP server is known to handle HTTP 1.1,
+      the caller must either specify the Content-Length, or must pass a
+      :class:`str` or bytes-like object that is not also a file as the
+      body representation.
 
    .. versionadded:: 3.2
       *body* can now be an iterable.
+
+   .. versionchanged:: 3.6
+      If neither Content-Length nor Transfer-Encoding are set in
+      *headers*, file and iterable *body* objects are now chunk-encoded.
+      The *encode_chunked* argument was added.
+      No attempt is made to determine the Content-Length for file
+      objects.
 
 .. method:: HTTPConnection.getresponse()
 
@@ -318,14 +342,15 @@ As an alternative to using the :meth:`request` method described above, you can
 also send your request step by step, by using the four functions below.
 
 
-.. method:: HTTPConnection.putrequest(request, selector, skip_host=False, skip_accept_encoding=False)
+.. method:: HTTPConnection.putrequest(method, url, skip_host=False, \
+                                      skip_accept_encoding=False)
 
-   This should be the first call after the connection to the server has been made.
-   It sends a line to the server consisting of the *request* string, the *selector*
-   string, and the HTTP version (``HTTP/1.1``).  To disable automatic sending of
-   ``Host:`` or ``Accept-Encoding:`` headers (for example to accept additional
-   content encodings), specify *skip_host* or *skip_accept_encoding* with non-False
-   values.
+   This should be the first call after the connection to the server has been
+   made. It sends a line to the server consisting of the *method* string,
+   the *url* string, and the HTTP version (``HTTP/1.1``).  To disable automatic
+   sending of ``Host:`` or ``Accept-Encoding:`` headers (for example to accept
+   additional content encodings), specify *skip_host* or *skip_accept_encoding*
+   with non-False values.
 
 
 .. method:: HTTPConnection.putheader(header, argument[, ...])
@@ -336,13 +361,32 @@ also send your request step by step, by using the four functions below.
    an argument.
 
 
-.. method:: HTTPConnection.endheaders(message_body=None)
+.. method:: HTTPConnection.endheaders(message_body=None, *, encode_chunked=False)
 
    Send a blank line to the server, signalling the end of the headers. The
    optional *message_body* argument can be used to pass a message body
-   associated with the request.  The message body will be sent in the same
-   packet as the message headers if it is string, otherwise it is sent in a
-   separate packet.
+   associated with the request.
+
+   If *encode_chunked* is ``True``, the result of each iteration of
+   *message_body* will be chunk-encoded as specified in :rfc:`7230`,
+   Section 3.3.1.  How the data is encoded is dependent on the type of
+   *message_body*.  If *message_body* implements the :ref:`buffer interface
+   <bufferobjects>` the encoding will result in a single chunk.
+   If *message_body* is a :class:`collections.Iterable`, each iteration
+   of *message_body* will result in a chunk.  If *message_body* is a
+   :term:`file object`, each call to ``.read()`` will result in a chunk.
+   The method automatically signals the end of the chunk-encoded data
+   immediately after *message_body*.
+
+   .. note:: Due to the chunked encoding specification, empty chunks
+      yielded by an iterator body will be ignored by the chunk-encoder.
+      This is to avoid premature termination of the read of the request by
+      the target server due to malformed encoding.
+
+   .. versionadded:: 3.6
+      Chunked encoding support.  The *encode_chunked* parameter was
+      added.
+
 
 .. method:: HTTPConnection.send(data)
 
@@ -384,7 +428,6 @@ statement.
    return all of the values joined by ', '.  If 'default' is any iterable other
    than a single string, its elements are similarly returned joined by commas.
 
-
 .. method:: HTTPResponse.getheaders()
 
    Return a list of (header, value) tuples.
@@ -399,21 +442,17 @@ statement.
    headers.  :class:`http.client.HTTPMessage` is a subclass of
    :class:`email.message.Message`.
 
-
 .. attribute:: HTTPResponse.version
 
    HTTP protocol version used by server.  10 for HTTP/1.0, 11 for HTTP/1.1.
-
 
 .. attribute:: HTTPResponse.status
 
    Status code returned by server.
 
-
 .. attribute:: HTTPResponse.reason
 
    Reason phrase returned by server.
-
 
 .. attribute:: HTTPResponse.debuglevel
 

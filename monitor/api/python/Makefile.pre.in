@@ -20,6 +20,7 @@
 
 # === Variables set by makesetup ===
 
+MODNAMES=       _MODNAMES_
 MODOBJS=        _MODOBJS_
 MODLIBS=        _MODLIBS_
 
@@ -40,14 +41,18 @@ RANLIB=		@RANLIB@
 READELF=	@READELF@
 SOABI=		@SOABI@
 LDVERSION=	@LDVERSION@
-HGVERSION=	@HGVERSION@
-HGTAG=		@HGTAG@
-HGBRANCH=	@HGBRANCH@
+GITVERSION=	@GITVERSION@
+GITTAG=		@GITTAG@
+GITBRANCH=	@GITBRANCH@
 PGO_PROF_GEN_FLAG=@PGO_PROF_GEN_FLAG@
 PGO_PROF_USE_FLAG=@PGO_PROF_USE_FLAG@
 LLVM_PROF_MERGER=@LLVM_PROF_MERGER@
 LLVM_PROF_FILE=@LLVM_PROF_FILE@
 LLVM_PROF_ERR=@LLVM_PROF_ERR@
+DTRACE=         @DTRACE@
+DFLAGS=         @DFLAGS@
+DTRACE_HEADERS= @DTRACE_HEADERS@
+DTRACE_OBJS=    @DTRACE_OBJS@
 
 GNULD=		@GNULD@
 
@@ -90,7 +95,7 @@ PY_CFLAGS_NODIST=$(CONFIGURE_CFLAGS_NODIST) $(CFLAGS_NODIST)
 # Both CPPFLAGS and LDFLAGS need to contain the shell's value for setup.py to
 # be able to build extension modules using the directories specified in the
 # environment variables
-PY_CPPFLAGS=	$(BASECPPFLAGS) -I. -IInclude -I$(srcdir)/Include $(CONFIGURE_CPPFLAGS) $(CPPFLAGS)
+PY_CPPFLAGS=	$(BASECPPFLAGS) -I. -I$(srcdir)/Include $(CONFIGURE_CPPFLAGS) $(CPPFLAGS)
 PY_LDFLAGS=	$(CONFIGURE_LDFLAGS) $(LDFLAGS)
 NO_AS_NEEDED=	@NO_AS_NEEDED@
 LDLAST=		@LDLAST@
@@ -102,6 +107,8 @@ ARFLAGS=	@ARFLAGS@
 CFLAGSFORSHARED=@CFLAGSFORSHARED@
 # C flags used for building the interpreter object files
 PY_CORE_CFLAGS=	$(PY_CFLAGS) $(PY_CFLAGS_NODIST) $(PY_CPPFLAGS) $(CFLAGSFORSHARED) -DPy_BUILD_CORE
+# Strict or non-strict aliasing flags used to compile dtoa.c, see above
+CFLAGS_ALIASING=@CFLAGS_ALIASING@
 
 
 # Machine-dependent subdirectories
@@ -109,6 +116,7 @@ MACHDEP=	@MACHDEP@
 
 # Multiarch directory (may be empty)
 MULTIARCH=	@MULTIARCH@
+MULTIARCH_CPPFLAGS = @MULTIARCH_CPPFLAGS@
 
 # Install prefix for architecture-independent files
 prefix=		@prefix@
@@ -221,7 +229,7 @@ LIBOBJS=	@LIBOBJS@
 PYTHON=		python$(EXE)
 BUILDPYTHON=	python$(BUILDEXE)
 
-cross_compiling=@cross_compiling@
+PYTHON_FOR_REGEN=@PYTHON_FOR_REGEN@
 PYTHON_FOR_BUILD=@PYTHON_FOR_BUILD@
 _PYTHON_HOST_PLATFORM=@_PYTHON_HOST_PLATFORM@
 BUILD_GNU_TYPE=	@build@
@@ -234,7 +242,7 @@ TCLTK_LIBS=	@TCLTK_LIBS@
 # The task to run while instrumented when building the profile-opt target.
 # We exclude unittests with -x that take a rediculious amount of time to
 # run in the instrumented training build or do not provide much value.
-PROFILE_TASK=-m test.regrtest --pgo -x test_asyncore test_gdb test_multiprocessing_fork test_multiprocessing_forkserver test_multiprocessing_main_handling test_multiprocessing_spawn test_subprocess
+PROFILE_TASK=-m test.regrtest --pgo
 
 # report files for gcov / lcov coverage report
 COVERAGE_INFO=	$(abs_builddir)/coverage.info
@@ -253,9 +261,6 @@ MODULE_OBJS=	\
 		Modules/main.o \
 		Modules/gcmodule.o
 
-# Used of signalmodule.o is not available
-SIGNAL_OBJS=	@SIGNAL_OBJS@
-
 IO_H=		Modules/_io/_iomodule.h
 
 IO_OBJS=	\
@@ -268,29 +273,12 @@ IO_OBJS=	\
 		Modules/_io/stringio.o
 
 ##########################################################################
-# Grammar
-GRAMMAR_H=	Include/graminit.h
-GRAMMAR_C=	Python/graminit.c
-GRAMMAR_INPUT=	$(srcdir)/Grammar/Grammar
-
 
 LIBFFI_INCLUDEDIR=	@LIBFFI_INCLUDEDIR@
 
 ##########################################################################
 # Parser
 PGEN=		Parser/pgen$(EXE)
-
-PSRCS=		\
-		Parser/acceler.c \
-		Parser/grammar1.c \
-		Parser/listnode.c \
-		Parser/node.c \
-		Parser/parser.c \
-		Parser/bitset.c \
-		Parser/metagrammar.c \
-		Parser/firstsets.c \
-		Parser/grammar.c \
-		Parser/pgen.c
 
 POBJS=		\
 		Parser/acceler.o \
@@ -305,16 +293,6 @@ POBJS=		\
 		Parser/pgen.o
 
 PARSER_OBJS=	$(POBJS) Parser/myreadline.o Parser/parsetok.o Parser/tokenizer.o
-
-PGSRCS=		\
-		Objects/obmalloc.c \
-		Python/dynamic_annotations.c \
-		Python/mysnprintf.c \
-		Python/pyctype.c \
-		Parser/tokenizer_pgen.c \
-		Parser/printgrammar.c \
-		Parser/parsetok_pgen.c \
-		Parser/pgenmain.c
 
 PGOBJS=		\
 		Objects/obmalloc.o \
@@ -331,40 +309,10 @@ PARSER_HEADERS= \
 		$(srcdir)/Include/parsetok.h \
 		$(srcdir)/Parser/tokenizer.h
 
-PGENSRCS=	$(PSRCS) $(PGSRCS)
 PGENOBJS=	$(POBJS) $(PGOBJS)
 
 ##########################################################################
-# opcode.h generation
-OPCODE_H_DIR= 	$(srcdir)/Include
-OPCODE_H_SCRIPT= $(srcdir)/Tools/scripts/generate_opcode_h.py
-OPCODE_H=	$(OPCODE_H_DIR)/opcode.h
-OPCODE_H_GEN=	@OPCODEHGEN@  $(OPCODE_H_SCRIPT) $(srcdir)/Lib/opcode.py $(OPCODE_H)
-#
-##########################################################################
-# AST
-AST_H_DIR=	Include
-AST_H=		$(AST_H_DIR)/Python-ast.h
-AST_C_DIR=	Python
-AST_C=		$(AST_C_DIR)/Python-ast.c
-AST_ASDL=	$(srcdir)/Parser/Python.asdl
-
-ASDLGEN_FILES=	$(srcdir)/Parser/asdl.py $(srcdir)/Parser/asdl_c.py
-# Note that a build now requires Python to exist before the build starts.
-# Use "hg touch" to fix up screwed up file mtimes in a checkout.
-ASDLGEN=	@ASDLGEN@ $(srcdir)/Parser/asdl_c.py
-
-##########################################################################
 # Python
-
-OPCODETARGETS_H= \
-		Python/opcode_targets.h
-
-OPCODETARGETGEN= \
-		$(srcdir)/Python/makeopcodetargets.py
-
-OPCODETARGETGEN_FILES= \
-		$(OPCODETARGETGEN) $(srcdir)/Lib/opcode.py
 
 PYTHON_OBJS=	\
 		Python/_warnings.o \
@@ -416,7 +364,8 @@ PYTHON_OBJS=	\
 		Python/$(DYNLOADFILE) \
 		$(LIBOBJS) \
 		$(MACHDEP_OBJS) \
-		$(THREADOBJ)
+		$(THREADOBJ) \
+		$(DTRACE_OBJS)
 
 
 ##########################################################################
@@ -470,18 +419,26 @@ LIBRARY_OBJS_OMIT_FROZEN=	\
 		$(OBJECT_OBJS) \
 		$(PYTHON_OBJS) \
 		$(MODULE_OBJS) \
-		$(SIGNAL_OBJS) \
 		$(MODOBJS)
 
 LIBRARY_OBJS=	\
 		$(LIBRARY_OBJS_OMIT_FROZEN) \
 		Python/frozen.o
 
+##########################################################################
+# DTrace
+
+# On some systems, object files that reference DTrace probes need to be modified
+# in-place by dtrace(1).
+DTRACE_DEPS = \
+	Python/ceval.o
+# XXX: should gcmodule, etc. be here, too?
+
 #########################################################################
 # Rules
 
 # Default target
-all:		build_all
+all:		@DEF_MAKE_ALL_RULE@
 build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks Programs/_testembed python-config
 
 # Compile a binary with profile guided optimization.
@@ -505,7 +462,7 @@ profile-opt:
 	$(MAKE) profile-removal
 
 build_all_generate_profile:
-	$(MAKE) all CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_GEN_FLAG) @LTOFLAGS@" LDFLAGS="$(LDFLAGS) $(PGO_PROF_GEN_FLAG) @LTOFLAGS@" LIBS="$(LIBS)"
+	$(MAKE) @DEF_MAKE_RULE@ CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_GEN_FLAG) @LTOFLAGS@" LDFLAGS="$(LDFLAGS) $(PGO_PROF_GEN_FLAG) @LTOFLAGS@" LIBS="$(LIBS)"
 
 run_profile_task:
 	: # FIXME: can't run for a cross build
@@ -515,14 +472,14 @@ build_all_merge_profile:
 	$(LLVM_PROF_MERGER)
 
 build_all_use_profile:
-	$(MAKE) all CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_USE_FLAG) @LTOFLAGS@" LDFLAGS="$(LDFLAGS) @LTOFLAGS@"
+	$(MAKE) @DEF_MAKE_RULE@ CFLAGS_NODIST="$(CFLAGS) $(PGO_PROF_USE_FLAG) @LTOFLAGS@" LDFLAGS="$(LDFLAGS) @LTOFLAGS@"
 
 # Compile and run with gcov
 .PHONY=coverage coverage-lcov coverage-report
 coverage:
 	@echo "Building with support for coverage checking:"
 	$(MAKE) clean profile-removal
-	$(MAKE) all CFLAGS="$(CFLAGS) -O0 -pg -fprofile-arcs -ftest-coverage" LIBS="$(LIBS) -lgcov"
+	$(MAKE) @DEF_MAKE_RULE@ CFLAGS="$(CFLAGS) -O0 -pg -fprofile-arcs -ftest-coverage" LIBS="$(LIBS) -lgcov"
 
 coverage-lcov:
 	@echo "Creating Coverage HTML report with LCOV:"
@@ -532,15 +489,23 @@ coverage-lcov:
 	    --base-directory $(realpath $(abs_builddir)) \
 	    --path $(realpath $(abs_srcdir)) \
 	    --output-file $(COVERAGE_INFO)
-	: # remove 3rd party modules and system headers
+	: # remove 3rd party modules, system headers and internal files with
+	: # debug, test or dummy functions.
 	@lcov --remove $(COVERAGE_INFO) \
+	    '*/Modules/_blake2/impl/*' \
 	    '*/Modules/_ctypes/libffi*/*' \
 	    '*/Modules/_decimal/libmpdec/*' \
+	    '*/Modules/_sha3/kcp/*' \
 	    '*/Modules/expat/*' \
 	    '*/Modules/zlib/*' \
 	    '*/Include/*' \
+	    '*/Modules/xx*.c' \
+	    '*/Parser/listnode.c' \
+	    '*/Python/pyfpe.c' \
+	    '*/Python/pystrcmp.c' \
 	    '/usr/include/*' \
 	    '/usr/local/include/*' \
+	    '/usr/lib/gcc/*' \
 	    --output-file $(COVERAGE_INFO)
 	@genhtml $(COVERAGE_INFO) --output-directory $(COVERAGE_REPORT) \
 	    $(COVERAGE_REPORT_OPTIONS)
@@ -548,7 +513,8 @@ coverage-lcov:
 	@echo "lcov report at $(COVERAGE_REPORT)/index.html"
 	@echo
 
-coverage-report:
+# Force regeneration of parser and importlib
+coverage-report: regen-grammar regen-importlib
 	: # force rebuilding of parser and importlib
 	@touch $(GRAMMAR_INPUT)
 	@touch $(srcdir)/Lib/importlib/_bootstrap.py
@@ -563,7 +529,7 @@ coverage-report:
 # Run "Argument Clinic" over all source files
 # (depends on python having already been built)
 .PHONY=clinic
-clinic: $(BUILDPYTHON)
+clinic: $(BUILDPYTHON) $(srcdir)/Modules/_blake2/blake2s_impl.c
 	$(RUNSHARED) $(PYTHON_FOR_BUILD) ./Tools/clinic/clinic.py --make
 
 # Build the interpreter
@@ -571,7 +537,7 @@ $(BUILDPYTHON):	Programs/python.o $(LIBRARY) $(LDLIBRARY) $(PY3LIBRARY)
 	$(LINKCC) $(PY_LDFLAGS) $(LINKFORSHARED) -o $@ Programs/python.o $(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
 
 platform: $(BUILDPYTHON) pybuilddir.txt
-	$(RUNSHARED) $(PYTHON_FOR_BUILD) -c 'import sys ; from sysconfig import get_platform ; print(get_platform()+"-"+sys.version[0:3])' >platform
+	$(RUNSHARED) $(PYTHON_FOR_BUILD) -c 'import sys ; from sysconfig import get_platform ; print("%s-%d.%d" % (get_platform(), *sys.version_info[:2]))' >platform
 
 # Create build directory and generate the sysconfig build-time data there.
 # pybuilddir.txt contains the name of the build dir and is used for
@@ -593,6 +559,11 @@ pybuilddir.txt: $(BUILDPYTHON)
 Modules/_math.o: Modules/_math.c Modules/_math.h
 	$(CC) -c $(CCSHARED) $(PY_CORE_CFLAGS) -o $@ $<
 
+# blake2s is auto-generated from blake2b
+$(srcdir)/Modules/_blake2/blake2s_impl.c: $(BUILDPYTHON) $(srcdir)/Modules/_blake2/blake2b_impl.c $(srcdir)/Modules/_blake2/blake2b2s.py
+	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/Modules/_blake2/blake2b2s.py
+	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/Tools/clinic/clinic.py -f $@
+
 # Build the shared modules
 # Under GNU make, MAKEFLAGS are sorted and normalized; the 's' for
 # -s, --silent or --quiet is always the first char.
@@ -606,6 +577,7 @@ sharedmods: $(BUILDPYTHON) pybuilddir.txt Modules/_math.o
 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
 
+
 # Build static library
 # avoid long command lines, same as LIBRARY_OBJS
 $(LIBRARY): $(LIBRARY_OBJS)
@@ -614,7 +586,7 @@ $(LIBRARY): $(LIBRARY_OBJS)
 	$(AR) $(ARFLAGS) $@ $(PARSER_OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJECT_OBJS)
 	$(AR) $(ARFLAGS) $@ $(PYTHON_OBJS) Python/frozen.o
-	$(AR) $(ARFLAGS) $@ $(MODULE_OBJS) $(SIGNAL_OBJS)
+	$(AR) $(ARFLAGS) $@ $(MODULE_OBJS)
 	$(AR) $(ARFLAGS) $@ $(MODOBJS)
 	$(RANLIB) $@
 
@@ -718,18 +690,24 @@ Programs/_freeze_importlib.o: Programs/_freeze_importlib.c Makefile
 Programs/_freeze_importlib: Programs/_freeze_importlib.o $(LIBRARY_OBJS_OMIT_FROZEN)
 	$(LINKCC) $(PY_LDFLAGS) -o $@ Programs/_freeze_importlib.o $(LIBRARY_OBJS_OMIT_FROZEN) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
 
-Python/importlib_external.h: $(srcdir)/Lib/importlib/_bootstrap_external.py Programs/_freeze_importlib
-	if test "$(cross_compiling)" != "yes"; then \
-	    ./Programs/_freeze_importlib \
-	        $(srcdir)/Lib/importlib/_bootstrap_external.py Python/importlib_external.h; \
-	fi
+.PHONY: regen-importlib
+regen-importlib: Programs/_freeze_importlib
+	# Regenerate Python/importlib_external.h
+	# from Lib/importlib/_bootstrap_external.py using _freeze_importlib
+	./Programs/_freeze_importlib \
+	    $(srcdir)/Lib/importlib/_bootstrap_external.py \
+	    $(srcdir)/Python/importlib_external.h
+	# Regenerate Python/importlib.h from Lib/importlib/_bootstrap.py
+	# using _freeze_importlib
+	./Programs/_freeze_importlib \
+	    $(srcdir)/Lib/importlib/_bootstrap.py \
+	    $(srcdir)/Python/importlib.h
 
-Python/importlib.h: $(srcdir)/Lib/importlib/_bootstrap.py Programs/_freeze_importlib
-	if test "$(cross_compiling)" != "yes"; then \
-	    ./Programs/_freeze_importlib \
-	        $(srcdir)/Lib/importlib/_bootstrap.py Python/importlib.h; \
-	fi
 
+############################################################################
+# Regenerate all generated files
+
+regen-all: regen-opcode regen-opcode-targets regen-typeslots regen-grammar regen-ast regen-importlib
 
 ############################################################################
 # Special rules for object files
@@ -738,13 +716,12 @@ Modules/getbuildinfo.o: $(PARSER_OBJS) \
 		$(OBJECT_OBJS) \
 		$(PYTHON_OBJS) \
 		$(MODULE_OBJS) \
-		$(SIGNAL_OBJS) \
 		$(MODOBJS) \
 		$(srcdir)/Modules/getbuildinfo.c
 	$(CC) -c $(PY_CORE_CFLAGS) \
-	      -DHGVERSION="\"`LC_ALL=C $(HGVERSION)`\"" \
-	      -DHGTAG="\"`LC_ALL=C $(HGTAG)`\"" \
-	      -DHGBRANCH="\"`LC_ALL=C $(HGBRANCH)`\"" \
+	      -DGITVERSION="\"`LC_ALL=C $(GITVERSION)`\"" \
+	      -DGITTAG="\"`LC_ALL=C $(GITTAG)`\"" \
+	      -DGITBRANCH="\"`LC_ALL=C $(GITBRANCH)`\"" \
 	      -o $@ $(srcdir)/Modules/getbuildinfo.c
 
 Modules/getpath.o: $(srcdir)/Modules/getpath.c Makefile
@@ -784,29 +761,22 @@ Python/dynload_hpux.o: $(srcdir)/Python/dynload_hpux.c Makefile
 Python/sysmodule.o: $(srcdir)/Python/sysmodule.c Makefile
 	$(CC) -c $(PY_CORE_CFLAGS) \
 		-DABIFLAGS='"$(ABIFLAGS)"' \
+		$(MULTIARCH_CPPFLAGS) \
 		-o $@ $(srcdir)/Python/sysmodule.c
 
 $(IO_OBJS): $(IO_H)
 
-$(GRAMMAR_H): $(GRAMMAR_INPUT) $(PGEN)
-	@$(MKDIR_P) Include
-	# Avoid copying the file onto itself for an in-tree build
-	if test "$(cross_compiling)" != "yes"; then \
-		$(PGEN) $(GRAMMAR_INPUT) $(GRAMMAR_H) $(GRAMMAR_C); \
-	else \
-		cp $(srcdir)/Include/graminit.h $(GRAMMAR_H).tmp; \
-		mv $(GRAMMAR_H).tmp $(GRAMMAR_H); \
-	fi
-$(GRAMMAR_C): $(GRAMMAR_H)
-	if test "$(cross_compiling)" != "yes"; then \
-		touch $(GRAMMAR_C); \
-	else \
-		cp $(srcdir)/Python/graminit.c $(GRAMMAR_C).tmp; \
-		mv $(GRAMMAR_C).tmp $(GRAMMAR_C); \
-	fi
-
 $(PGEN): $(PGENOBJS)
 		$(CC) $(OPT) $(PY_LDFLAGS) $(PGENOBJS) $(LIBS) -o $(PGEN)
+
+.PHONY: regen-grammar
+regen-grammar: $(PGEN)
+	# Regenerate Include/graminit.h and Python/graminit.c
+	# from Grammar/Grammar using pgen
+	@$(MKDIR_P) Include
+	$(PGEN) $(srcdir)/Grammar/Grammar \
+		$(srcdir)/Include/graminit.h \
+		$(srcdir)/Python/graminit.c
 
 Parser/grammar.o:	$(srcdir)/Parser/grammar.c \
 				$(srcdir)/Include/token.h \
@@ -819,18 +789,28 @@ Parser/printgrammar.o: $(srcdir)/Parser/printgrammar.c
 
 Parser/pgenmain.o:	$(srcdir)/Include/parsetok.h
 
-$(AST_H): $(AST_ASDL) $(ASDLGEN_FILES)
-	$(MKDIR_P) $(AST_H_DIR)
-	$(ASDLGEN) -h $(AST_H_DIR) $(AST_ASDL)
+.PHONY=regen-ast
+regen-ast:
+	# Regenerate Include/Python-ast.h using Parser/asdl_c.py -h
+	$(MKDIR_P) $(srcdir)/Include
+	$(PYTHON_FOR_REGEN) $(srcdir)/Parser/asdl_c.py \
+		-h $(srcdir)/Include \
+		$(srcdir)/Parser/Python.asdl
+	# Regenerate Python/Python-ast.c using Parser/asdl_c.py -c
+	$(MKDIR_P) $(srcdir)/Python
+	$(PYTHON_FOR_REGEN) $(srcdir)/Parser/asdl_c.py \
+		-c $(srcdir)/Python \
+		$(srcdir)/Parser/Python.asdl
 
-$(AST_C): $(AST_H) $(AST_ASDL) $(ASDLGEN_FILES)
-	$(MKDIR_P) $(AST_C_DIR)
-	$(ASDLGEN) -c $(AST_C_DIR) $(AST_ASDL)
+.PHONY: regen-opcode
+regen-opcode:
+	# Regenerate Include/opcode.h from Lib/opcode.py
+	# using Tools/scripts/generate_opcode_h.py
+	$(PYTHON_FOR_REGEN) $(srcdir)/Tools/scripts/generate_opcode_h.py \
+		$(srcdir)/Lib/opcode.py \
+		$(srcdir)/Include/opcode.h
 
-$(OPCODE_H): $(srcdir)/Lib/opcode.py $(OPCODE_H_SCRIPT)
-	$(OPCODE_H_GEN)
-
-Python/compile.o Python/symtable.o Python/ast.o: $(GRAMMAR_H) $(AST_H)
+Python/compile.o Python/symtable.o Python/ast.o: $(srcdir)/Include/graminit.h $(srcdir)/Include/Python-ast.h
 
 Python/getplatform.o: $(srcdir)/Python/getplatform.c
 		$(CC) -c $(PY_CORE_CFLAGS) -DPLATFORM='"$(MACHDEP)"' -o $@ $(srcdir)/Python/getplatform.c
@@ -870,25 +850,49 @@ UNICODE_DEPS = \
 		$(srcdir)/Objects/stringlib/unicode_format.h \
 		$(srcdir)/Objects/stringlib/unicodedefs.h
 
+Objects/bytes_methods.o: $(srcdir)/Objects/bytes_methods.c $(BYTESTR_DEPS)
 Objects/bytesobject.o: $(srcdir)/Objects/bytesobject.c $(BYTESTR_DEPS)
-
 Objects/bytearrayobject.o: $(srcdir)/Objects/bytearrayobject.c $(BYTESTR_DEPS)
 
 Objects/unicodeobject.o: $(srcdir)/Objects/unicodeobject.c $(UNICODE_DEPS)
 
-Objects/dictobject.o: $(srcdir)/Objects/stringlib/eq.h
+Objects/odictobject.o: $(srcdir)/Objects/dict-common.h
+Objects/dictobject.o: $(srcdir)/Objects/stringlib/eq.h $(srcdir)/Objects/dict-common.h
 Objects/setobject.o: $(srcdir)/Objects/stringlib/eq.h
 
-$(OPCODETARGETS_H): $(OPCODETARGETGEN_FILES)
-	$(OPCODETARGETGEN) $(OPCODETARGETS_H)
+.PHONY: regen-opcode-targets
+regen-opcode-targets:
+	# Regenerate Python/opcode_targets.h from Lib/opcode.py
+	# using Python/makeopcodetargets.py
+	$(PYTHON_FOR_REGEN) $(srcdir)/Python/makeopcodetargets.py \
+		$(srcdir)/Python/opcode_targets.h
 
-Python/ceval.o: $(OPCODETARGETS_H) $(srcdir)/Python/ceval_gil.h
+Python/ceval.o: $(srcdir)/Python/opcode_targets.h $(srcdir)/Python/ceval_gil.h
 
-Python/frozen.o: Python/importlib.h Python/importlib_external.h
+Python/frozen.o: $(srcdir)/Python/importlib.h $(srcdir)/Python/importlib_external.h
+
+# Generate DTrace probe macros, then rename them (PYTHON_ -> PyDTrace_) to
+# follow our naming conventions. dtrace(1) uses the output filename to generate
+# an include guard, so we can't use a pipeline to transform its output.
+Include/pydtrace_probes.h: $(srcdir)/Include/pydtrace.d
+	$(MKDIR_P) Include
+	$(DTRACE) $(DFLAGS) -o $@ -h -s $<
+	: sed in-place edit with POSIX-only tools
+	sed 's/PYTHON_/PyDTrace_/' $@ > $@.tmp
+	mv $@.tmp $@
+
+Python/pydtrace.o: $(srcdir)/Include/pydtrace.d $(DTRACE_DEPS)
+	$(DTRACE) $(DFLAGS) -o $@ -G -s $< $(DTRACE_DEPS)
 
 Objects/typeobject.o: Objects/typeslots.inc
-Objects/typeslots.inc: $(srcdir)/Include/typeslots.h $(srcdir)/Objects/typeslots.py
-	$(PYTHON) $(srcdir)/Objects/typeslots.py < $(srcdir)/Include/typeslots.h > Objects/typeslots.inc
+
+.PHONY: regen-typeslots
+regen-typeslots:
+	# Regenerate Objects/typeslots.inc from Include/typeslotsh
+	# using Objects/typeslots.py
+	$(PYTHON_FOR_REGEN) $(srcdir)/Objects/typeslots.py \
+		< $(srcdir)/Include/typeslots.h \
+		$(srcdir)/Objects/typeslots.inc
 
 ############################################################################
 # Header files
@@ -941,8 +945,9 @@ PYTHON_HEADERS= \
 		$(srcdir)/Include/node.h \
 		$(srcdir)/Include/object.h \
 		$(srcdir)/Include/objimpl.h \
-		$(OPCODE_H) \
+		$(srcdir)/Include/opcode.h \
 		$(srcdir)/Include/osdefs.h \
+		$(srcdir)/Include/osmodule.h \
 		$(srcdir)/Include/patchlevel.h \
 		$(srcdir)/Include/pgen.h \
 		$(srcdir)/Include/pgenheaders.h \
@@ -951,6 +956,7 @@ PYTHON_HEADERS= \
 		$(srcdir)/Include/pycapsule.h \
 		$(srcdir)/Include/pyctype.h \
 		$(srcdir)/Include/pydebug.h \
+		$(srcdir)/Include/pydtrace.h \
 		$(srcdir)/Include/pyerrors.h \
 		$(srcdir)/Include/pyfpe.h \
 		$(srcdir)/Include/pyhash.h \
@@ -982,7 +988,8 @@ PYTHON_HEADERS= \
 		$(srcdir)/Include/weakrefobject.h \
 		pyconfig.h \
 		$(PARSER_HEADERS) \
-		$(AST_H)
+		$(srcdir)/Include/Python-ast.h \
+		$(DTRACE_HEADERS)
 
 $(LIBRARY_OBJS) $(MODOBJS) Programs/python.o: $(PYTHON_HEADERS)
 
@@ -992,11 +999,11 @@ $(LIBRARY_OBJS) $(MODOBJS) Programs/python.o: $(PYTHON_HEADERS)
 TESTOPTS=	$(EXTRATESTOPTS)
 TESTPYTHON=	$(RUNSHARED) ./$(BUILDPYTHON) $(TESTPYTHONOPTS)
 TESTRUNNER=	$(TESTPYTHON) $(srcdir)/Tools/scripts/run_tests.py
-TESTTIMEOUT=	3600
+TESTTIMEOUT=	1200
 
 # Run a basic set of regression tests.
 # This excludes some tests that are particularly resource-intensive.
-test:		all platform
+test:		@DEF_MAKE_RULE@ platform
 		$(TESTRUNNER) $(TESTOPTS)
 
 # Run the full test suite twice - once without .pyc files, and once with.
@@ -1006,7 +1013,7 @@ test:		all platform
 # the bytecode read from a .pyc file had the bug, sometimes the directly
 # generated bytecode.  This is sometimes a very shy bug needing a lot of
 # sample data.
-testall:	all platform
+testall:	@DEF_MAKE_RULE@ platform
 		-find $(srcdir)/Lib -name '*.py[co]' -print | xargs rm -f
 		$(TESTPYTHON) -E $(srcdir)/Lib/compileall.py
 		-find $(srcdir)/Lib -name '*.py[co]' -print | xargs rm -f
@@ -1015,7 +1022,7 @@ testall:	all platform
 
 # Run the test suite for both architectures in a Universal build on OSX.
 # Must be run on an Intel box.
-testuniversal:	all platform
+testuniversal:	@DEF_MAKE_RULE@ platform
 		if [ `arch` != 'i386' ];then \
 			echo "This can only be used on OSX/i386" ;\
 			exit 1 ;\
@@ -1026,11 +1033,11 @@ testuniversal:	all platform
 
 # Like testall, but with only one pass and without multiple processes.
 # Run an optional script to include information about the build environment.
-buildbottest:	all platform
+buildbottest:	build_all platform
 		-@if which pybuildbot.identify >/dev/null 2>&1; then \
 			pybuildbot.identify "CC='$(CC)'" "CXX='$(CXX)'"; \
 		fi
-		$(TESTRUNNER) -j 1 -u all -W --timeout=$(TESTTIMEOUT) $(TESTOPTS)
+		$(TESTRUNNER) -j 1 -u all -W --slowest --timeout=$(TESTTIMEOUT) $(TESTOPTS)
 
 QUICKTESTOPTS=	$(TESTOPTS) -x test_subprocess test_io test_lib2to3 \
 		test_multibytecodec test_urllib2_localnet test_itertools \
@@ -1038,7 +1045,7 @@ QUICKTESTOPTS=	$(TESTOPTS) -x test_subprocess test_io test_lib2to3 \
 		test_multiprocessing_forkserver \
 		test_mailbox test_socket test_poll \
 		test_select test_zipfile test_concurrent_futures
-quicktest:	all platform
+quicktest:	@DEF_MAKE_RULE@ platform
 		$(TESTRUNNER) $(QUICKTESTOPTS)
 
 
@@ -1183,16 +1190,16 @@ maninstall:	altmaninstall
 	(cd $(DESTDIR)$(MANDIR)/man1; $(LN) -s python$(VERSION).1 python3.1)
 
 # Install the library
-PLATDIR=	@PLATDIR@
-MACHDEPS=	$(PLATDIR)
 XMLLIBSUBDIRS=  xml xml/dom xml/etree xml/parsers xml/sax
 LIBSUBDIRS=	tkinter tkinter/test tkinter/test/test_tkinter \
 		tkinter/test/test_ttk site-packages test \
 		test/audiodata \
 		test/capath test/data \
 		test/cjkencodings test/decimaltestdata test/xmltestdata \
+		test/dtracedata \
 		test/eintrdata \
 		test/imghdrdata \
+		test/libregrtest \
 		test/subprocessdata test/sndhdrdata test/support \
 		test/tracedmodules test/encoded_modules \
 		test/test_import \
@@ -1236,12 +1243,13 @@ LIBSUBDIRS=	tkinter tkinter/test tkinter/test/test_tkinter \
 		importlib test/test_importlib test/test_importlib/builtin \
 		test/test_importlib/extension test/test_importlib/frozen \
 		test/test_importlib/import_ test/test_importlib/source \
+		test/test_tools test/test_warnings test/test_warnings/data \
 		turtledemo \
 		multiprocessing multiprocessing/dummy \
 		unittest unittest/test unittest/test/testmock \
-		venv venv/scripts venv/scripts/posix \
-		curses pydoc_data $(MACHDEPS)
-libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+		venv venv/scripts venv/scripts/common venv/scripts/posix \
+		curses pydoc_data
+libinstall:	build_all $(srcdir)/Modules/xxmodule.c
 	@for i in $(SCRIPTDIR) $(LIBDEST); \
 	do \
 		if test ! -d $(DESTDIR)$$i; then \
@@ -1261,7 +1269,7 @@ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
 		else	true; \
 		fi; \
 	done
-	@for i in $(srcdir)/Lib/*.py `cat pybuilddir.txt`/_sysconfigdata.py; \
+	@for i in $(srcdir)/Lib/*.py; \
 	do \
 		if test -x $$i; then \
 			$(INSTALL_SCRIPT) $$i $(DESTDIR)$(LIBDEST); \
@@ -1296,6 +1304,8 @@ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
 			esac; \
 		done; \
 	done
+	$(INSTALL_DATA) `cat pybuilddir.txt`/_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH).py \
+		$(DESTDIR)$(LIBDEST); \
 	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(LIBDEST)/LICENSE.txt
 	if test -d $(DESTDIR)$(LIBDEST)/distutils/tests; then \
 		$(INSTALL_DATA) $(srcdir)/Modules/xxmodule.c \
@@ -1333,29 +1343,12 @@ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
 		$(PYTHON_FOR_BUILD) -m lib2to3.pgen2.driver $(DESTDIR)$(LIBDEST)/lib2to3/PatternGrammar.txt
 
-# Create the PLATDIR source directory, if one wasn't distributed..
-$(srcdir)/Lib/$(PLATDIR):
-	mkdir $(srcdir)/Lib/$(PLATDIR)
-	cp $(srcdir)/Lib/plat-generic/regen $(srcdir)/Lib/$(PLATDIR)/regen
-	export PATH; PATH="`pwd`:$$PATH"; \
-	export PYTHONPATH; PYTHONPATH="`pwd`/Lib"; \
-	export DYLD_FRAMEWORK_PATH; DYLD_FRAMEWORK_PATH="`pwd`"; \
-	export EXE; EXE="$(BUILDEXE)"; \
-	if [ -n "$(MULTIARCH)" ]; then export MULTIARCH; MULTIARCH=$(MULTIARCH); fi; \
-	export PYTHON_FOR_BUILD; \
-	if [ "$(BUILD_GNU_TYPE)" = "$(HOST_GNU_TYPE)" ]; then \
-	  PYTHON_FOR_BUILD="$(BUILDPYTHON)"; \
-	else \
-	  PYTHON_FOR_BUILD="$(PYTHON_FOR_BUILD)"; \
-	fi; \
-	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
-
 python-config: $(srcdir)/Misc/python-config.in Misc/python-config.sh
 	# Substitution happens here, as the completely-expanded BINDIR
 	# is not available in configure
 	sed -e "s,@EXENAME@,$(BINDIR)/python$(LDVERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config.py
 	# Replace makefile compat. variable references with shell script compat. ones; $(VAR) -> ${VAR}
-	sed -e 's,\$$(\([A-Za-z0-9_]*\)),\$$\{\1\},g' < Misc/python-config.sh >python-config
+	LC_ALL=C sed -e 's,\$$(\([A-Za-z0-9_]*\)),\$$\{\1\},g' < Misc/python-config.sh >python-config
 	# On Darwin, always use the python version of the script, the shell
 	# version doesn't use the compiler customizations that are provided
 	# in python (_osx_support.py).
@@ -1389,7 +1382,7 @@ LIBPL=		@LIBPL@
 # pkgconfig directory
 LIBPC=		$(LIBDIR)/pkgconfig
 
-libainstall:	all python-config
+libainstall:	@DEF_MAKE_RULE@ python-config
 	@for i in $(LIBDIR) $(LIBPL) $(LIBPC); \
 	do \
 		if test ! -d $(DESTDIR)$$i; then \
@@ -1422,16 +1415,16 @@ libainstall:	all python-config
 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
 	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
 	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
-	@if [ -s Programs/python.exp -a \
+	@if [ -s Modules/python.exp -a \
 		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
 		echo; echo "Installing support files for building shared extension modules on AIX:"; \
-		$(INSTALL_DATA) Programs/python.exp		\
+		$(INSTALL_DATA) Modules/python.exp		\
 				$(DESTDIR)$(LIBPL)/python.exp;		\
 		echo; echo "$(LIBPL)/python.exp";		\
 		$(INSTALL_SCRIPT) $(srcdir)/Modules/makexp_aix	\
 				$(DESTDIR)$(LIBPL)/makexp_aix;		\
 		echo "$(LIBPL)/makexp_aix";			\
-		$(INSTALL_SCRIPT) $(srcdir)/Modules/ld_so_aix	\
+		$(INSTALL_SCRIPT) Modules/ld_so_aix	\
 				$(DESTDIR)$(LIBPL)/ld_so_aix;		\
 		echo "$(LIBPL)/ld_so_aix";			\
 		echo; echo "See Misc/AIX-NOTES for details.";	\
@@ -1446,7 +1439,7 @@ sharedinstall: sharedmods
 		--install-scripts=$(BINDIR) \
 		--install-platlib=$(DESTSHARED) \
 		--root=$(DESTDIR)/
-	-rm $(DESTDIR)$(DESTSHARED)/_sysconfigdata.py
+	-rm $(DESTDIR)$(DESTSHARED)/_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH).py
 	-rm -r $(DESTDIR)$(DESTSHARED)/__pycache__
 
 # Here are a couple of targets for MacOSX again, to install a full
@@ -1492,10 +1485,10 @@ frameworkinstallstructure:	$(LDLIBRARY)
 # Install a number of symlinks to keep software that expects a normal unix
 # install (which includes python-config) happy.
 frameworkinstallmaclib:
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/python$(VERSION)/config-$(LDVERSION)/libpython$(LDVERSION).a"
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/python$(VERSION)/config-$(LDVERSION)/libpython$(LDVERSION).dylib"
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/python$(VERSION)/config-$(LDVERSION)/libpython$(VERSION).a"
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/python$(VERSION)/config-$(LDVERSION)/libpython$(VERSION).dylib"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(LDVERSION).a"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(LDVERSION).dylib"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(VERSION).a"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(VERSION).dylib"
 	$(LN) -fs "../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/libpython$(LDVERSION).dylib"
 	$(LN) -fs "../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/libpython$(VERSION).dylib"
 
@@ -1545,6 +1538,13 @@ config.status:	$(srcdir)/configure
 .c.o:
 	$(CC) -c $(PY_CORE_CFLAGS) -o $@ $<
 
+# bpo-30104: dtoa.c uses union to cast double to unsigned long[2]. clang 4.0
+# with -O2 or higher and strict aliasing miscompiles the ratio() function
+# causing rounding issues. Compile dtoa.c using -fno-strict-aliasing on clang.
+# https://bugs.llvm.org//show_bug.cgi?id=31928
+Python/dtoa.o: Python/dtoa.c
+	$(CC) -c $(PY_CORE_CFLAGS) $(CFLAGS_ALIASING) -o $@ $<
+
 # Run reindent on the library
 reindent:
 	./$(BUILDPYTHON) $(srcdir)/Tools/scripts/reindent.py -r $(srcdir)/Lib
@@ -1555,32 +1555,27 @@ recheck:
 	$(SHELL) config.status --recheck
 	$(SHELL) config.status
 
-# Rebuild the configure script from configure.ac; also rebuild pyconfig.h.in
+# Regenerate configure and pyconfig.h.in
+.PHONY: autoconf
 autoconf:
+	# Regenerate the configure script from configure.ac using autoconf
 	(cd $(srcdir); autoconf -Wall)
+	# Regenerate pyconfig.h.in from configure.ac using autoheader
 	(cd $(srcdir); autoheader -Wall)
 
 # Create a tags file for vi
 tags::
 	cd $(srcdir); \
-	ctags -w -t Include/*.h; \
-	for i in $(SRCDIRS); do ctags -w -t -a $$i/*.[ch]; \
+	ctags -w Include/*.h; \
+	for i in $(SRCDIRS); do ctags -w -a $$i/*.[ch]; \
 	done; \
-	sort -o tags tags
+	LC_ALL=C sort -o tags tags
 
 # Create a tags file for GNU Emacs
 TAGS::
 	cd $(srcdir); \
 	etags Include/*.h; \
 	for i in $(SRCDIRS); do etags -a $$i/*.[ch]; done
-
-# This fixes up the mtimes of checked-in generated files, assuming that they
-# only *appear* to be outdated because of checkout order.
-# This is run while preparing a source release tarball, and can be run manually
-# to avoid bootstrap issues.
-touch:
-	cd $(srcdir); \
-	hg --config extensions.touch=Tools/hg/hgtouch.py touch -v
 
 # Sanitation targets -- clean leaves libraries, executables and tags
 # files, which clobber removes as well
@@ -1609,7 +1604,8 @@ clean: pycremoval
 	-rm -f pybuilddir.txt
 	-rm -f Lib/lib2to3/*Grammar*.pickle
 	-rm -f Programs/_testembed Programs/_freeze_importlib
-	-rm -rf build
+	-find build -type f -a ! -name '*.gc??' -exec rm -f {} ';'
+	-rm -f Include/pydtrace_probes.h
 
 profile-removal:
 	find . -name '*.gc??' -exec rm -f {} ';'
@@ -1635,16 +1631,21 @@ distclean: clobber
 	done
 	-rm -f core Makefile Makefile.pre config.status \
 		Modules/Setup Modules/Setup.local Modules/Setup.config \
-		Modules/ld_so_aix Programs/python.exp Misc/python.pc
+		Modules/ld_so_aix Modules/python.exp Misc/python.pc \
+		Misc/python-config.sh
 	-rm -f python*-gdb.py
-	find $(srcdir)/[a-zA-Z]* '(' -name '*.fdc' -o -name '*~' \
+	# Issue #28258: set LC_ALL to avoid issues with Estonian locale.
+	# Expansion is performed here by shell (spawned by make) itself before
+	# arguments are passed to find. So LC_ALL=C must be set as a separate
+	# command.
+	LC_ALL=C; find $(srcdir)/[a-zA-Z]* '(' -name '*.fdc' -o -name '*~' \
 				     -o -name '[@,#]*' -o -name '*.old' \
 				     -o -name '*.orig' -o -name '*.rej' \
 				     -o -name '*.bak' ')' \
 				     -exec rm -f {} ';'
 
 # Check for smelly exported symbols (not starting with Py/_Py)
-smelly: all
+smelly: @DEF_MAKE_RULE@
 	nm -p $(LIBRARY) | \
 		sed -n "/ [TDB] /s/.* //p" | grep -v "^_*Py" | sort -u; \
 
@@ -1670,7 +1671,6 @@ funny:
 		-o -name '*.tmSnippet' \
 		-o -name 'Setup' \
 		-o -name 'Setup.*' \
-		-o -name regen \
 		-o -name README \
 		-o -name NEWS \
 		-o -name HISTORY \
@@ -1682,7 +1682,7 @@ funny:
 		-o -print
 
 # Perform some verification checks on any modified files.
-patchcheck: all
+patchcheck: @DEF_MAKE_RULE@
 	$(RUNSHARED) ./$(BUILDPYTHON) $(srcdir)/Tools/scripts/patchcheck.py
 
 # Dependencies
@@ -1695,7 +1695,7 @@ Python/thread.o: @THREADHEADERS@
 .PHONY: maninstall libinstall inclinstall libainstall sharedinstall
 .PHONY: frameworkinstall frameworkinstallframework frameworkinstallstructure
 .PHONY: frameworkinstallmaclib frameworkinstallapps frameworkinstallunixtools
-.PHONY: frameworkaltinstallunixtools recheck autoconf clean clobber distclean
+.PHONY: frameworkaltinstallunixtools recheck clean clobber distclean
 .PHONY: smelly funny patchcheck touch altmaninstall commoninstall
 .PHONY: gdbhooks
 

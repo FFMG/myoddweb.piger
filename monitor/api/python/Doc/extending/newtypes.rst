@@ -52,11 +52,15 @@ The first bit that will be new is::
    } noddy_NoddyObject;
 
 This is what a Noddy object will contain---in this case, nothing more than what
-every Python object contains---a refcount and a pointer to a type object.
-These are the fields the ``PyObject_HEAD`` macro brings in.  The reason for the
-macro is to standardize the layout and to enable special debugging fields in
-debug builds.  Note that there is no semicolon after the ``PyObject_HEAD``
-macro; one is included in the macro definition.  Be wary of adding one by
+every Python object contains---a field called ``ob_base`` of type
+:c:type:`PyObject`.  :c:type:`PyObject` in turn, contains an ``ob_refcnt``
+field and a pointer to a type object.  These can be accessed using the macros
+:c:macro:`Py_REFCNT` and :c:macro:`Py_TYPE` respectively.  These are the fields
+the :c:macro:`PyObject_HEAD` macro brings in.  The reason for the macro is to
+standardize the layout and to enable special debugging fields in debug builds.
+
+Note that there is no semicolon after the :c:macro:`PyObject_HEAD` macro;
+one is included in the macro definition.  Be wary of adding one by
 accident; it's easy to do from habit, and your compiler might not complain,
 but someone else's probably will!  (On Windows, MSVC is known to call this an
 error and refuse to compile the code.)
@@ -120,12 +124,14 @@ our objects and in some error messages, for example::
 
    >>> "" + noddy.new_noddy()
    Traceback (most recent call last):
-     File "<stdin>", line 1, in ?
+     File "<stdin>", line 1, in <module>
    TypeError: cannot add type "noddy.Noddy" to string
 
 Note that the name is a dotted name that includes both the module name and the
 name of the type within the module. The module in this case is :mod:`noddy` and
-the type is :class:`Noddy`, so we set the type name to :class:`noddy.Noddy`. ::
+the type is :class:`Noddy`, so we set the type name to :class:`noddy.Noddy`.
+One side effect of using an undotted name is that the pydoc documentation tool
+will not list the new type in the module documentation. ::
 
    sizeof(noddy_NoddyObject),  /* tp_basicsize */
 
@@ -209,7 +215,9 @@ That's it!  All that remains is to build it; put the above code in a file called
    setup(name="noddy", version="1.0",
          ext_modules=[Extension("noddy", ["noddy.c"])])
 
-in a file called :file:`setup.py`; then typing ::
+in a file called :file:`setup.py`; then typing
+
+.. code-block:: shell-session
 
    $ python setup.py build
 
@@ -1114,10 +1122,10 @@ If :c:member:`~PyTypeObject.tp_methods` is not *NULL*, it must refer to an array
 structure::
 
    typedef struct PyMethodDef {
-       char        *ml_name;       /* method name */
+       const char  *ml_name;       /* method name */
        PyCFunction  ml_meth;       /* implementation function */
        int          ml_flags;      /* flags */
-       char        *ml_doc;        /* docstring */
+       const char  *ml_doc;        /* docstring */
    } PyMethodDef;
 
 One entry should be defined for each method provided by the type; no entries are
@@ -1513,4 +1521,3 @@ might be something like the following::
 .. [#] Even in the third version, we aren't guaranteed to avoid cycles.  Instances of
    string subclasses are allowed and string subclasses could allow cycles even if
    normal strings don't.
-

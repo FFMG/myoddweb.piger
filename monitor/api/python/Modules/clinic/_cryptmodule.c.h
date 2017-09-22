@@ -17,21 +17,22 @@ PyDoc_STRVAR(crypt_crypt__doc__,
     {"crypt", (PyCFunction)crypt_crypt, METH_VARARGS, crypt_crypt__doc__},
 
 static PyObject *
-crypt_crypt_impl(PyModuleDef *module, const char *word, const char *salt);
+crypt_crypt_impl(PyObject *module, const char *word, const char *salt);
 
 static PyObject *
-crypt_crypt(PyModuleDef *module, PyObject *args)
+crypt_crypt(PyObject *module, PyObject *args)
 {
     PyObject *return_value = NULL;
     const char *word;
     const char *salt;
 
     if (!PyArg_ParseTuple(args, "ss:crypt",
-        &word, &salt))
+        &word, &salt)) {
         goto exit;
+    }
     return_value = crypt_crypt_impl(module, word, salt);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=22c295c9bce018c4 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=8dfc88264e662df4 input=a9049054013a1b77]*/

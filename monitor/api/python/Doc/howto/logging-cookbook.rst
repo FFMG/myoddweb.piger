@@ -377,7 +377,9 @@ An example of using these two classes follows (imports omitted)::
     root.warning('Look out!')
     listener.stop()
 
-which, when run, will produce::
+which, when run, will produce:
+
+.. code-block:: none
 
     MainThread: Look out!
 
@@ -1086,7 +1088,7 @@ $-formatting to be used to build the actual "message" part which appears in the
 formatted log output in place of "%(message)s" or "{message}" or "$message".
 It's a little unwieldy to use the class names whenever you want to log
 something, but it's quite palatable if you use an alias such as __ (double
-underscore – not to be confused with _, the single underscore used as a
+underscore --- not to be confused with _, the single underscore used as a
 synonym/alias for :func:`gettext.gettext` or its brethren).
 
 The above classes are not included in Python, though they're easy enough to
@@ -1207,7 +1209,7 @@ do simply by adding new packages or modules and doing ::
 at module level). It's probably one too many things to think about. Developers
 could also add the filter to a :class:`~logging.NullHandler` attached to their
 top-level logger, but this would not be invoked if an application developer
-attached a handler to a lower-level library logger – so output from that
+attached a handler to a lower-level library logger --- so output from that
 handler would not reflect the intentions of the library developer.
 
 In Python 3.2 and later, :class:`~logging.LogRecord` creation is done through a
@@ -1681,7 +1683,7 @@ Implementing structured logging
 -------------------------------
 
 Although most logging messages are intended for reading by humans, and thus not
-readily machine-parseable, there might be cirumstances where you want to output
+readily machine-parseable, there might be circumstances where you want to output
 messages in a structured format which *is* capable of being parsed by a program
 (without needing complex regular expressions to parse the log message). This is
 straightforward to achieve using the logging package. There are a number of
@@ -1860,7 +1862,9 @@ script, ``chowntest.py``::
     logger = logging.getLogger('mylogger')
     logger.debug('A debug message')
 
-To run this, you will probably need to run as ``root``::
+To run this, you will probably need to run as ``root``:
+
+.. code-block:: shell-session
 
     $ sudo python3.3 chowntest.py
     $ cat chowntest.log
@@ -2161,8 +2165,8 @@ Speaking logging messages
 -------------------------
 
 There might be situations when it is desirable to have logging messages rendered
-in an audible rather than a visible format. This is easy to do if you have text-
-to-speech (TTS) functionality available in your system, even if it doesn't have
+in an audible rather than a visible format. This is easy to do if you have
+text-to-speech (TTS) functionality available in your system, even if it doesn't have
 a Python binding. Most TTS systems have a command line program you can run, and
 this can be invoked from a handler using :mod:`subprocess`. It's assumed here
 that TTS command line programs won't expect to interact with users or take a
@@ -2485,7 +2489,9 @@ via ``stderr`` and once via ``stdout``). After the ``with`` statement's
 completion, the status is as it was before so message #6 appears (like message
 #1) whereas message #7 doesn't (just like message #2).
 
-If we run the resulting script, the result is as follows::
+If we run the resulting script, the result is as follows:
+
+.. code-block:: shell-session
 
     $ python logctx.py
     1. This should appear just once on stderr.
@@ -2495,12 +2501,16 @@ If we run the resulting script, the result is as follows::
     6. This should appear just once on stderr.
 
 If we run it again, but pipe ``stderr`` to ``/dev/null``, we see the following,
-which is the only message written to ``stdout``::
+which is the only message written to ``stdout``:
+
+.. code-block:: shell-session
 
     $ python logctx.py 2>/dev/null
     5. This should appear twice - once on stderr and once on stdout.
 
-Once again, but piping ``stdout`` to ``/dev/null``, we get::
+Once again, but piping ``stdout`` to ``/dev/null``, we get:
+
+.. code-block:: shell-session
 
     $ python logctx.py >/dev/null
     1. This should appear just once on stderr.
