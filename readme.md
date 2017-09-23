@@ -162,7 +162,7 @@ import module, **import am**, (only usable within Piger of course).
 #### Calculator.py
 
     # import the action monitor, (am), module.
-    import am
+    import am;
 
     # give a message
     am.say( "Run - calc ...", 400, 10 );
@@ -170,7 +170,7 @@ import module, **import am**, (only usable within Piger of course).
     # Launch the application
     # use the second parameter for arguments and 
     # the third, (true|false), is to elevate the process.
-    am.execute( "%SystemRoot%\\system32\\calc.exe", "", true );
+    am.execute( "%SystemRoot%\\system32\\calc.exe", "", True );
 
     # log that all is good.
     am.log( 1, "Launched calculator" );
