@@ -67,5 +67,13 @@ Installing the debug symbols is a little trickier
   - gtest_main.cc
   - gtest-all.cc
 - Make sure that the files don't use 'precompiled headers', (Properties > C/C++ > Precompiled headers)
-- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor).    
+- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.    
 Make sure that the setting is for both debug and release version. 
+
+### Project
+
+- Update `myoddtest` and `myoddtest64` to point to the folder you unpacked the files above, \myoddweb.piger\myodd\gtest\gtest-x.y.z    
+Properties > C/C++ > General > Additional Include directories 
+  - `.\..\gtest\gtest-1.8.1\include;`
+  - `.\..\gtest\gtest-1.8.1\`
+- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.
