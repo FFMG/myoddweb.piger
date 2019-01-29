@@ -273,7 +273,7 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::desc desc;
   desc.add_options()
 #ifdef UNICODE
-    ("c", myodd::po::wvalue<std::wstring>(), "the oath of the config file.")
+    ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
     ("d", myodd::po::wvalue<std::wstring>(), "the full path of the root commands.")
 #else
     ("c", myodd::po::wvalue<std::string>(), "the oath of the config file.")
