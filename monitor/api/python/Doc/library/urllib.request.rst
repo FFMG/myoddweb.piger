@@ -18,7 +18,7 @@ authentication, redirections, cookies and more.
 
 .. seealso::
 
-    The `Requests package <https://requests.readthedocs.org/>`_
+    The `Requests package <http://docs.python-requests.org/>`_
     is recommended for a higher-level HTTP client interface.
 
 
@@ -30,18 +30,9 @@ The :mod:`urllib.request` module defines the following functions:
    Open the URL *url*, which can be either a string or a
    :class:`Request` object.
 
-   *data* must be a bytes object specifying additional data to be sent to the
-   server, or ``None`` if no such data is needed. *data* may also be an
-   iterable object and in that case Content-Length value must be specified in
-   the headers. Currently HTTP requests are the only ones that use *data*; the
-   HTTP request will be a POST instead of a GET when the *data* parameter is
-   provided.
-
-   *data* should be a buffer in the standard
-   :mimetype:`application/x-www-form-urlencoded` format.  The
-   :func:`urllib.parse.urlencode` function takes a mapping or sequence of
-   2-tuples and returns an ASCII text string in this format. It should
-   be encoded to bytes before being used as the *data* parameter.
+   *data* must be an object specifying additional data to be sent to the
+   server, or ``None`` if no such data is needed.  See :class:`Request`
+   for details.
 
    urllib.request module uses HTTP/1.1 and includes ``Connection:close`` header
    in its HTTP requests.
@@ -120,6 +111,12 @@ The :mod:`urllib.request` module defines the following functions:
    .. versionchanged:: 3.4.3
       *context* was added.
 
+   .. deprecated:: 3.6
+
+       *cafile*, *capath* and *cadefault* are deprecated in favor of *context*.
+       Please use :meth:`ssl.SSLContext.load_cert_chain` instead, or let
+       :func:`ssl.create_default_context` select the system's trusted CA
+       certificates for you.
 
 .. function:: install_opener(opener)
 
@@ -173,6 +170,16 @@ The :mod:`urllib.request` module defines the following functions:
    If both lowercase and uppercase environment variables exist (and disagree),
    lowercase is preferred.
 
+   .. note::
+
+      If the environment variable ``REQUEST_METHOD`` is set, which usually
+      indicates your script is running in a CGI environment, the environment
+      variable ``HTTP_PROXY`` (uppercase ``_PROXY``) will be ignored. This is
+      because that variable can be injected by a client using the "Proxy:" HTTP
+      header. If you need to use an HTTP proxy in a CGI environment, either use
+      ``ProxyHandler`` explicitly, or make sure the variable name is in
+      lowercase (or at least the ``_proxy`` suffix).
+
 
 The following classes are provided:
 
@@ -182,14 +189,21 @@ The following classes are provided:
 
    *url* should be a string containing a valid URL.
 
-   *data* must be a bytes object specifying additional data to send to the
-   server, or ``None`` if no such data is needed.  Currently HTTP requests are
-   the only ones that use *data*; the HTTP request will be a POST instead of a
-   GET when the *data* parameter is provided.  *data* should be a buffer in the
-   standard :mimetype:`application/x-www-form-urlencoded` format.
-   The :func:`urllib.parse.urlencode` function takes a mapping or sequence of
-   2-tuples and returns an ASCII string in this format. It should be
-   encoded to bytes before being used as the *data* parameter.
+   *data* must be an object specifying additional data to send to the
+   server, or ``None`` if no such data is needed.  Currently HTTP
+   requests are the only ones that use *data*.  The supported object
+   types include bytes, file-like objects, and iterables.  If no
+   ``Content-Length`` nor ``Transfer-Encoding`` header field
+   has been provided, :class:`HTTPHandler` will set these headers according
+   to the type of *data*.  ``Content-Length`` will be used to send
+   bytes objects, while ``Transfer-Encoding: chunked`` as specified in
+   :rfc:`7230`, Section 3.3.1 will be used to send files and other iterables.
+
+   For an HTTP POST request method, *data* should be a buffer in the
+   standard :mimetype:`application/x-www-form-urlencoded` format.  The
+   :func:`urllib.parse.urlencode` function takes a mapping or sequence
+   of 2-tuples and returns an ASCII string in this format. It should
+   be encoded to bytes before being used as the *data* parameter.
 
    *headers* should be a dictionary, and will be treated as if
    :meth:`add_header` was called with each key and value as arguments.
@@ -201,8 +215,10 @@ The following classes are provided:
    :mod:`urllib`'s default user agent string is
    ``"Python-urllib/2.6"`` (on Python 2.6).
 
-   An example of using ``Content-Type`` header with *data* argument would be
-   sending a dictionary like ``{"Content-Type": "application/x-www-form-urlencoded"}``.
+   An appropriate ``Content-Type`` header should be included if the *data*
+   argument is present.  If this header has not been provided and *data*
+   is not None, ``Content-Type: application/x-www-form-urlencoded`` will
+   be added as a default.
 
    The final two arguments are only of interest for correct handling
    of third-party HTTP cookies:
@@ -225,8 +241,17 @@ The following classes are provided:
    *method* should be a string that indicates the HTTP request method that
    will be used (e.g. ``'HEAD'``).  If provided, its value is stored in the
    :attr:`~Request.method` attribute and is used by :meth:`get_method()`.
-   Subclasses may indicate a default method by setting the
+   The default is ``'GET'`` if *data* is ``None`` or ``'POST'`` otherwise.
+   Subclasses may indicate a different default method by setting the
    :attr:`~Request.method` attribute in the class itself.
+
+   .. note::
+      The request will not work as expected if the data object is unable
+      to deliver its content more than once (e.g. a file or an iterable
+      that can produce the content only once) and the request is retried
+      for HTTP redirects or authentication.  The *data* is sent to the
+      HTTP server right away after the headers.  There is no support for
+      a 100-continue expectation in the library.
 
    .. versionchanged:: 3.3
       :attr:`Request.method` argument is added to the Request class.
@@ -234,6 +259,10 @@ The following classes are provided:
    .. versionchanged:: 3.4
       Default :attr:`Request.method` may be indicated at the class level.
 
+   .. versionchanged:: 3.6
+      Do not raise an error if the ``Content-Length`` has not been
+      provided and *data* is neither ``None`` nor a bytes object.
+      Fall back to use chunked transfer encoding instead.
 
 .. class:: OpenerDirector()
 
@@ -279,6 +308,11 @@ The following classes are provided:
    which shouldn't be reached via proxy; if set, it should be a comma-separated
    list of hostname suffixes, optionally with ``:port`` appended, for example
    ``cern.ch,ncsa.uiuc.edu,some.host:8080``.
+
+    .. note::
+
+       ``HTTP_PROXY`` will be ignored if a variable ``REQUEST_METHOD`` is set;
+       see the documentation on :func:`~urllib.request.getproxies`.
 
 
 .. class:: HTTPPasswordMgr()
@@ -461,7 +495,7 @@ request.
 
 .. attribute:: Request.data
 
-   The entity body for the request, or None if not specified.
+   The entity body for the request, or ``None`` if not specified.
 
    .. versionchanged:: 3.4
       Changing value of :attr:`Request.data` now deletes "Content-Length"
@@ -1138,7 +1172,7 @@ the returned bytes object to string once it determines or guesses
 the appropriate encoding.
 
 The following W3C document, https://www.w3.org/International/O-charset\ , lists
-the various ways in which a (X)HTML or a XML document could have specified its
+the various ways in which an (X)HTML or an XML document could have specified its
 encoding information.
 
 As the python.org website uses *utf-8* encoding as specified in its meta tag, we
@@ -1373,48 +1407,48 @@ some point in the future.
    :class:`URLopener` objects will raise an :exc:`OSError` exception if the server
    returns an error code.
 
-    .. method:: open(fullurl, data=None)
+   .. method:: open(fullurl, data=None)
 
-       Open *fullurl* using the appropriate protocol.  This method sets up cache and
-       proxy information, then calls the appropriate open method with its input
-       arguments.  If the scheme is not recognized, :meth:`open_unknown` is called.
-       The *data* argument has the same meaning as the *data* argument of
-       :func:`urlopen`.
-
-
-    .. method:: open_unknown(fullurl, data=None)
-
-       Overridable interface to open unknown URL types.
+      Open *fullurl* using the appropriate protocol.  This method sets up cache and
+      proxy information, then calls the appropriate open method with its input
+      arguments.  If the scheme is not recognized, :meth:`open_unknown` is called.
+      The *data* argument has the same meaning as the *data* argument of
+      :func:`urlopen`.
 
 
-    .. method:: retrieve(url, filename=None, reporthook=None, data=None)
+   .. method:: open_unknown(fullurl, data=None)
 
-       Retrieves the contents of *url* and places it in *filename*.  The return value
-       is a tuple consisting of a local filename and either an
-       :class:`email.message.Message` object containing the response headers (for remote
-       URLs) or ``None`` (for local URLs).  The caller must then open and read the
-       contents of *filename*.  If *filename* is not given and the URL refers to a
-       local file, the input filename is returned.  If the URL is non-local and
-       *filename* is not given, the filename is the output of :func:`tempfile.mktemp`
-       with a suffix that matches the suffix of the last path component of the input
-       URL.  If *reporthook* is given, it must be a function accepting three numeric
-       parameters: A chunk number, the maximum size chunks are read in and the total size of the download
-       (-1 if unknown).  It will be called once at the start and after each chunk of data is read from the
-       network.  *reporthook* is ignored for local URLs.
-
-       If the *url* uses the :file:`http:` scheme identifier, the optional *data*
-       argument may be given to specify a ``POST`` request (normally the request type
-       is ``GET``).  The *data* argument must in standard
-       :mimetype:`application/x-www-form-urlencoded` format; see the
-       :func:`urllib.parse.urlencode` function.
+      Overridable interface to open unknown URL types.
 
 
-    .. attribute:: version
+   .. method:: retrieve(url, filename=None, reporthook=None, data=None)
 
-       Variable that specifies the user agent of the opener object.  To get
-       :mod:`urllib` to tell servers that it is a particular user agent, set this in a
-       subclass as a class variable or in the constructor before calling the base
-       constructor.
+      Retrieves the contents of *url* and places it in *filename*.  The return value
+      is a tuple consisting of a local filename and either an
+      :class:`email.message.Message` object containing the response headers (for remote
+      URLs) or ``None`` (for local URLs).  The caller must then open and read the
+      contents of *filename*.  If *filename* is not given and the URL refers to a
+      local file, the input filename is returned.  If the URL is non-local and
+      *filename* is not given, the filename is the output of :func:`tempfile.mktemp`
+      with a suffix that matches the suffix of the last path component of the input
+      URL.  If *reporthook* is given, it must be a function accepting three numeric
+      parameters: A chunk number, the maximum size chunks are read in and the total size of the download
+      (-1 if unknown).  It will be called once at the start and after each chunk of data is read from the
+      network.  *reporthook* is ignored for local URLs.
+
+      If the *url* uses the :file:`http:` scheme identifier, the optional *data*
+      argument may be given to specify a ``POST`` request (normally the request type
+      is ``GET``).  The *data* argument must in standard
+      :mimetype:`application/x-www-form-urlencoded` format; see the
+      :func:`urllib.parse.urlencode` function.
+
+
+   .. attribute:: version
+
+      Variable that specifies the user agent of the opener object.  To get
+      :mod:`urllib` to tell servers that it is a particular user agent, set this in a
+      subclass as a class variable or in the constructor before calling the base
+      constructor.
 
 
 .. class:: FancyURLopener(...)

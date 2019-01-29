@@ -170,8 +170,9 @@ The following exceptions are the exceptions that are usually raised.
 
 .. exception:: ImportError
 
-   Raised when an :keyword:`import` statement fails to find the module definition
-   or when a ``from ... import`` fails to find a name that is to be imported.
+   Raised when the :keyword:`import` statement has troubles trying to
+   load a module.  Also raised when the "from list" in ``from ... import``
+   has a name that cannot be found.
 
    The :attr:`name` and :attr:`path` attributes can be set using keyword-only
    arguments to the constructor. When set they represent the name of the module
@@ -180,6 +181,14 @@ The following exceptions are the exceptions that are usually raised.
 
    .. versionchanged:: 3.3
       Added the :attr:`name` and :attr:`path` attributes.
+
+.. exception:: ModuleNotFoundError
+
+   A subclass of :exc:`ImportError` which is raised by :keyword:`import`
+   when a module could not be located.  It is also raised when ``None``
+   is found in :data:`sys.modules`.
+
+   .. versionadded:: 3.6
 
 
 .. exception:: IndexError
@@ -228,9 +237,21 @@ The following exceptions are the exceptions that are usually raised.
 .. exception:: NotImplementedError
 
    This exception is derived from :exc:`RuntimeError`.  In user defined base
-   classes, abstract methods should raise this exception when they require derived
-   classes to override the method.
+   classes, abstract methods should raise this exception when they require
+   derived classes to override the method, or while the class is being
+   developed to indicate that the real implementation still needs to be added.
 
+   .. note::
+
+      It should not be used to indicate that an operator or method is not
+      meant to be supported at all -- in that case either leave the operator /
+      method undefined or, if a subclass, set it to :data:`None`.
+
+   .. note::
+
+      ``NotImplementedError`` and ``NotImplemented`` are not interchangeable,
+      even though they have similar names and purposes.  See
+      :data:`NotImplemented` for details on when to use it.
 
 .. exception:: OSError([arg])
                OSError(errno, strerror[, filename[, winerror[, filename2]]])
@@ -436,6 +457,15 @@ The following exceptions are the exceptions that are usually raised.
    Raised when an operation or function is applied to an object of inappropriate
    type.  The associated value is a string giving details about the type mismatch.
 
+   This exception may be raised by user code to indicate that an attempted
+   operation on an object is not supported, and is not meant to be. If an object
+   is meant to support a given operation but has not yet provided an
+   implementation, :exc:`NotImplementedError` is the proper exception to raise.
+
+   Passing arguments of the wrong type (e.g. passing a :class:`list` when an
+   :class:`int` is expected) should result in a :exc:`TypeError`, but passing
+   arguments with the wrong value (e.g. a number outside expected boundaries)
+   should result in a :exc:`ValueError`.
 
 .. exception:: UnboundLocalError
 

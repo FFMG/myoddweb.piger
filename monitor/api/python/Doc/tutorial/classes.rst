@@ -374,11 +374,11 @@ Surely Python raises an exception when a function that requires an argument is
 called without any --- even if the argument isn't actually used...
 
 Actually, you may have guessed the answer: the special thing about methods is
-that the object is passed as the first argument of the function.  In our
+that the instance object is passed as the first argument of the function.  In our
 example, the call ``x.f()`` is exactly equivalent to ``MyClass.f(x)``.  In
 general, calling a method with a list of *n* arguments is equivalent to calling
 the corresponding function with an argument list that is created by inserting
-the method's object before the first argument.
+the method's instance object before the first argument.
 
 If you still don't understand how methods work, a look at the implementation can
 perhaps clarify matters.  When an instance attribute is referenced that isn't a
@@ -744,55 +744,6 @@ object with the method :meth:`m`, and ``m.__func__`` is the function object
 corresponding to the method.
 
 
-.. _tut-exceptionclasses:
-
-Exceptions Are Classes Too
-==========================
-
-User-defined exceptions are identified by classes as well.  Using this mechanism
-it is possible to create extensible hierarchies of exceptions.
-
-There are two new valid (semantic) forms for the :keyword:`raise` statement::
-
-   raise Class
-
-   raise Instance
-
-In the first form, ``Class`` must be an instance of :class:`type` or of a
-class derived from it.  The first form is a shorthand for::
-
-   raise Class()
-
-A class in an :keyword:`except` clause is compatible with an exception if it is
-the same class or a base class thereof (but not the other way around --- an
-except clause listing a derived class is not compatible with a base class).  For
-example, the following code will print B, C, D in that order::
-
-   class B(Exception):
-       pass
-   class C(B):
-       pass
-   class D(C):
-       pass
-
-   for cls in [B, C, D]:
-       try:
-           raise cls()
-       except D:
-           print("D")
-       except C:
-           print("C")
-       except B:
-           print("B")
-
-Note that if the except clauses were reversed (with ``except B`` first), it
-would have printed B, B, B --- the first matching except clause is triggered.
-
-When an error message is printed for an unhandled exception, the exception's
-class name is printed, then a colon and a space, and finally the instance
-converted to a string using the built-in function :func:`str`.
-
-
 .. _tut-iterators:
 
 Iterators
@@ -833,7 +784,7 @@ using the :func:`next` built-in function; this example shows how it all works::
    'c'
    >>> next(it)
    Traceback (most recent call last):
-     File "<stdin>", line 1, in ?
+     File "<stdin>", line 1, in <module>
        next(it)
    StopIteration
 
@@ -951,8 +902,7 @@ Examples::
 .. rubric:: Footnotes
 
 .. [#] Except for one thing.  Module objects have a secret read-only attribute called
-   :attr:`__dict__` which returns the dictionary used to implement the module's
-   namespace; the name :attr:`__dict__` is an attribute but not a global name.
+   :attr:`~object.__dict__` which returns the dictionary used to implement the module's
+   namespace; the name :attr:`~object.__dict__` is an attribute but not a global name.
    Obviously, using this violates the abstraction of namespace implementation, and
    should be restricted to things like post-mortem debuggers.
-

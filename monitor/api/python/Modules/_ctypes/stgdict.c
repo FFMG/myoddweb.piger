@@ -391,9 +391,11 @@ PyCStructUnionType_update_stgdict(PyObject *type, PyObject *fields, int isStruct
         }
         memset(stgdict->ffi_type_pointer.elements, 0,
                sizeof(ffi_type *) * (basedict->length + len + 1));
-        memcpy(stgdict->ffi_type_pointer.elements,
-               basedict->ffi_type_pointer.elements,
-               sizeof(ffi_type *) * (basedict->length));
+        if (basedict->length > 0) {
+            memcpy(stgdict->ffi_type_pointer.elements,
+                   basedict->ffi_type_pointer.elements,
+                   sizeof(ffi_type *) * (basedict->length));
+        }
         ffi_ofs = basedict->length;
     } else {
         offset = 0;
@@ -487,7 +489,7 @@ PyCStructUnionType_update_stgdict(PyObject *type, PyObject *fields, int isStruct
 
         if (isStruct && !isPacked) {
             char *fieldfmt = dict->format ? dict->format : "B";
-            char *fieldname = _PyUnicode_AsString(name);
+            char *fieldname = PyUnicode_AsUTF8(name);
             char *ptr;
             Py_ssize_t len;
             char *buf;

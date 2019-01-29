@@ -17,22 +17,24 @@ PyDoc_STRVAR(bytes_split__doc__,
 "    -1 (the default value) means no limit.");
 
 #define BYTES_SPLIT_METHODDEF    \
-    {"split", (PyCFunction)bytes_split, METH_VARARGS|METH_KEYWORDS, bytes_split__doc__},
+    {"split", (PyCFunction)bytes_split, METH_FASTCALL, bytes_split__doc__},
 
 static PyObject *
-bytes_split_impl(PyBytesObject*self, PyObject *sep, Py_ssize_t maxsplit);
+bytes_split_impl(PyBytesObject *self, PyObject *sep, Py_ssize_t maxsplit);
 
 static PyObject *
-bytes_split(PyBytesObject*self, PyObject *args, PyObject *kwargs)
+bytes_split(PyBytesObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"sep", "maxsplit", NULL};
+    static const char * const _keywords[] = {"sep", "maxsplit", NULL};
+    static _PyArg_Parser _parser = {"|On:split", _keywords, 0};
     PyObject *sep = Py_None;
     Py_ssize_t maxsplit = -1;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|On:split", _keywords,
-        &sep, &maxsplit))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &sep, &maxsplit)) {
         goto exit;
+    }
     return_value = bytes_split_impl(self, sep, maxsplit);
 
 exit:
@@ -64,14 +66,16 @@ bytes_partition(PyBytesObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     Py_buffer sep = {NULL, NULL};
 
-    if (!PyArg_Parse(arg, "y*:partition", &sep))
+    if (!PyArg_Parse(arg, "y*:partition", &sep)) {
         goto exit;
+    }
     return_value = bytes_partition_impl(self, &sep);
 
 exit:
     /* Cleanup for sep */
-    if (sep.obj)
+    if (sep.obj) {
        PyBuffer_Release(&sep);
+    }
 
     return return_value;
 }
@@ -101,14 +105,16 @@ bytes_rpartition(PyBytesObject *self, PyObject *arg)
     PyObject *return_value = NULL;
     Py_buffer sep = {NULL, NULL};
 
-    if (!PyArg_Parse(arg, "y*:rpartition", &sep))
+    if (!PyArg_Parse(arg, "y*:rpartition", &sep)) {
         goto exit;
+    }
     return_value = bytes_rpartition_impl(self, &sep);
 
 exit:
     /* Cleanup for sep */
-    if (sep.obj)
+    if (sep.obj) {
        PyBuffer_Release(&sep);
+    }
 
     return return_value;
 }
@@ -130,22 +136,24 @@ PyDoc_STRVAR(bytes_rsplit__doc__,
 "Splitting is done starting at the end of the bytes and working to the front.");
 
 #define BYTES_RSPLIT_METHODDEF    \
-    {"rsplit", (PyCFunction)bytes_rsplit, METH_VARARGS|METH_KEYWORDS, bytes_rsplit__doc__},
+    {"rsplit", (PyCFunction)bytes_rsplit, METH_FASTCALL, bytes_rsplit__doc__},
 
 static PyObject *
-bytes_rsplit_impl(PyBytesObject*self, PyObject *sep, Py_ssize_t maxsplit);
+bytes_rsplit_impl(PyBytesObject *self, PyObject *sep, Py_ssize_t maxsplit);
 
 static PyObject *
-bytes_rsplit(PyBytesObject*self, PyObject *args, PyObject *kwargs)
+bytes_rsplit(PyBytesObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"sep", "maxsplit", NULL};
+    static const char * const _keywords[] = {"sep", "maxsplit", NULL};
+    static _PyArg_Parser _parser = {"|On:rsplit", _keywords, 0};
     PyObject *sep = Py_None;
     Py_ssize_t maxsplit = -1;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|On:rsplit", _keywords,
-        &sep, &maxsplit))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &sep, &maxsplit)) {
         goto exit;
+    }
     return_value = bytes_rsplit_impl(self, sep, maxsplit);
 
 exit:
@@ -189,8 +197,9 @@ bytes_strip(PyBytesObject *self, PyObject *args)
 
     if (!PyArg_UnpackTuple(args, "strip",
         0, 1,
-        &bytes))
+        &bytes)) {
         goto exit;
+    }
     return_value = bytes_strip_impl(self, bytes);
 
 exit:
@@ -219,8 +228,9 @@ bytes_lstrip(PyBytesObject *self, PyObject *args)
 
     if (!PyArg_UnpackTuple(args, "lstrip",
         0, 1,
-        &bytes))
+        &bytes)) {
         goto exit;
+    }
     return_value = bytes_lstrip_impl(self, bytes);
 
 exit:
@@ -249,8 +259,9 @@ bytes_rstrip(PyBytesObject *self, PyObject *args)
 
     if (!PyArg_UnpackTuple(args, "rstrip",
         0, 1,
-        &bytes))
+        &bytes)) {
         goto exit;
+    }
     return_value = bytes_rstrip_impl(self, bytes);
 
 exit:
@@ -258,45 +269,38 @@ exit:
 }
 
 PyDoc_STRVAR(bytes_translate__doc__,
-"translate(table, [deletechars])\n"
+"translate($self, table, /, delete=b\'\')\n"
+"--\n"
+"\n"
 "Return a copy with each character mapped by the given translation table.\n"
 "\n"
 "  table\n"
 "    Translation table, which must be a bytes object of length 256.\n"
 "\n"
-"All characters occurring in the optional argument deletechars are removed.\n"
+"All characters occurring in the optional argument delete are removed.\n"
 "The remaining characters are mapped through the given translation table.");
 
 #define BYTES_TRANSLATE_METHODDEF    \
-    {"translate", (PyCFunction)bytes_translate, METH_VARARGS, bytes_translate__doc__},
+    {"translate", (PyCFunction)bytes_translate, METH_FASTCALL, bytes_translate__doc__},
 
 static PyObject *
-bytes_translate_impl(PyBytesObject *self, PyObject *table, int group_right_1,
+bytes_translate_impl(PyBytesObject *self, PyObject *table,
                      PyObject *deletechars);
 
 static PyObject *
-bytes_translate(PyBytesObject *self, PyObject *args)
+bytes_translate(PyBytesObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
+    static const char * const _keywords[] = {"", "delete", NULL};
+    static _PyArg_Parser _parser = {"O|O:translate", _keywords, 0};
     PyObject *table;
-    int group_right_1 = 0;
     PyObject *deletechars = NULL;
 
-    switch (PyTuple_GET_SIZE(args)) {
-        case 1:
-            if (!PyArg_ParseTuple(args, "O:translate", &table))
-                goto exit;
-            break;
-        case 2:
-            if (!PyArg_ParseTuple(args, "OO:translate", &table, &deletechars))
-                goto exit;
-            group_right_1 = 1;
-            break;
-        default:
-            PyErr_SetString(PyExc_TypeError, "bytes.translate requires 1 to 2 arguments");
-            goto exit;
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &table, &deletechars)) {
+        goto exit;
     }
-    return_value = bytes_translate_impl(self, table, group_right_1, deletechars);
+    return_value = bytes_translate_impl(self, table, deletechars);
 
 exit:
     return return_value;
@@ -327,17 +331,20 @@ bytes_maketrans(void *null, PyObject *args)
     Py_buffer to = {NULL, NULL};
 
     if (!PyArg_ParseTuple(args, "y*y*:maketrans",
-        &frm, &to))
+        &frm, &to)) {
         goto exit;
+    }
     return_value = bytes_maketrans_impl(&frm, &to);
 
 exit:
     /* Cleanup for frm */
-    if (frm.obj)
+    if (frm.obj) {
        PyBuffer_Release(&frm);
+    }
     /* Cleanup for to */
-    if (to.obj)
+    if (to.obj) {
        PyBuffer_Release(&to);
+    }
 
     return return_value;
 }
@@ -359,11 +366,11 @@ PyDoc_STRVAR(bytes_replace__doc__,
     {"replace", (PyCFunction)bytes_replace, METH_VARARGS, bytes_replace__doc__},
 
 static PyObject *
-bytes_replace_impl(PyBytesObject*self, Py_buffer *old, Py_buffer *new,
+bytes_replace_impl(PyBytesObject *self, Py_buffer *old, Py_buffer *new,
                    Py_ssize_t count);
 
 static PyObject *
-bytes_replace(PyBytesObject*self, PyObject *args)
+bytes_replace(PyBytesObject *self, PyObject *args)
 {
     PyObject *return_value = NULL;
     Py_buffer old = {NULL, NULL};
@@ -371,17 +378,20 @@ bytes_replace(PyBytesObject*self, PyObject *args)
     Py_ssize_t count = -1;
 
     if (!PyArg_ParseTuple(args, "y*y*|n:replace",
-        &old, &new, &count))
+        &old, &new, &count)) {
         goto exit;
+    }
     return_value = bytes_replace_impl(self, &old, &new, count);
 
 exit:
     /* Cleanup for old */
-    if (old.obj)
+    if (old.obj) {
        PyBuffer_Release(&old);
+    }
     /* Cleanup for new */
-    if (new.obj)
+    if (new.obj) {
        PyBuffer_Release(&new);
+    }
 
     return return_value;
 }
@@ -402,23 +412,25 @@ PyDoc_STRVAR(bytes_decode__doc__,
 "    can handle UnicodeDecodeErrors.");
 
 #define BYTES_DECODE_METHODDEF    \
-    {"decode", (PyCFunction)bytes_decode, METH_VARARGS|METH_KEYWORDS, bytes_decode__doc__},
+    {"decode", (PyCFunction)bytes_decode, METH_FASTCALL, bytes_decode__doc__},
 
 static PyObject *
-bytes_decode_impl(PyBytesObject*self, const char *encoding,
+bytes_decode_impl(PyBytesObject *self, const char *encoding,
                   const char *errors);
 
 static PyObject *
-bytes_decode(PyBytesObject*self, PyObject *args, PyObject *kwargs)
+bytes_decode(PyBytesObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"encoding", "errors", NULL};
+    static const char * const _keywords[] = {"encoding", "errors", NULL};
+    static _PyArg_Parser _parser = {"|ss:decode", _keywords, 0};
     const char *encoding = NULL;
     const char *errors = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|ss:decode", _keywords,
-        &encoding, &errors))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &encoding, &errors)) {
         goto exit;
+    }
     return_value = bytes_decode_impl(self, encoding, errors);
 
 exit:
@@ -435,21 +447,23 @@ PyDoc_STRVAR(bytes_splitlines__doc__,
 "true.");
 
 #define BYTES_SPLITLINES_METHODDEF    \
-    {"splitlines", (PyCFunction)bytes_splitlines, METH_VARARGS|METH_KEYWORDS, bytes_splitlines__doc__},
+    {"splitlines", (PyCFunction)bytes_splitlines, METH_FASTCALL, bytes_splitlines__doc__},
 
 static PyObject *
-bytes_splitlines_impl(PyBytesObject*self, int keepends);
+bytes_splitlines_impl(PyBytesObject *self, int keepends);
 
 static PyObject *
-bytes_splitlines(PyBytesObject*self, PyObject *args, PyObject *kwargs)
+bytes_splitlines(PyBytesObject *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"keepends", NULL};
+    static const char * const _keywords[] = {"keepends", NULL};
+    static _PyArg_Parser _parser = {"|i:splitlines", _keywords, 0};
     int keepends = 0;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|i:splitlines", _keywords,
-        &keepends))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &keepends)) {
         goto exit;
+    }
     return_value = bytes_splitlines_impl(self, keepends);
 
 exit:
@@ -477,11 +491,12 @@ bytes_fromhex(PyTypeObject *type, PyObject *arg)
     PyObject *return_value = NULL;
     PyObject *string;
 
-    if (!PyArg_Parse(arg, "U:fromhex", &string))
+    if (!PyArg_Parse(arg, "U:fromhex", &string)) {
         goto exit;
+    }
     return_value = bytes_fromhex_impl(type, string);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=bd0ce8f25d7e18f4 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=2dc3c93cfd2dc440 input=a9049054013a1b77]*/

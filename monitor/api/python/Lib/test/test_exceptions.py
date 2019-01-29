@@ -1,5 +1,6 @@
 # Python test set -- part 5, built-in exceptions
 
+import copy
 import os
 import sys
 import unittest
@@ -1096,12 +1097,47 @@ class ImportErrorTests(unittest.TestCase):
         self.assertEqual(exc.name, 'somename')
         self.assertEqual(exc.path, 'somepath')
 
+        msg = "'invalid' is an invalid keyword argument for this function"
+        with self.assertRaisesRegex(TypeError, msg):
+            ImportError('test', invalid='keyword')
+
+        with self.assertRaisesRegex(TypeError, msg):
+            ImportError('test', name='name', invalid='keyword')
+
+        with self.assertRaisesRegex(TypeError, msg):
+            ImportError('test', path='path', invalid='keyword')
+
+        with self.assertRaisesRegex(TypeError, msg):
+            ImportError(invalid='keyword')
+
+        with self.assertRaisesRegex(TypeError, msg):
+            ImportError('test', invalid='keyword', another=True)
+
     def test_non_str_argument(self):
         # Issue #15778
         with check_warnings(('', BytesWarning), quiet=True):
             arg = b'abc'
             exc = ImportError(arg)
             self.assertEqual(str(arg), str(exc))
+
+    def test_copy_pickle(self):
+        for kwargs in (dict(),
+                       dict(name='somename'),
+                       dict(path='somepath'),
+                       dict(name='somename', path='somepath')):
+            orig = ImportError('test', **kwargs)
+            for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+                exc = pickle.loads(pickle.dumps(orig, proto))
+                self.assertEqual(exc.args, ('test',))
+                self.assertEqual(exc.msg, 'test')
+                self.assertEqual(exc.name, orig.name)
+                self.assertEqual(exc.path, orig.path)
+            for c in copy.copy, copy.deepcopy:
+                exc = c(orig)
+                self.assertEqual(exc.args, ('test',))
+                self.assertEqual(exc.msg, 'test')
+                self.assertEqual(exc.name, orig.name)
+                self.assertEqual(exc.path, orig.path)
 
 
 if __name__ == '__main__':

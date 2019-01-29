@@ -13,7 +13,7 @@ sphinx-build and the current versions of Sphinx now require at least
 Python 2.6.
 
 In addition to what is supplied with OS X 10.5+ and Xcode 3+, the script
-requires an installed version of hg and a third-party version of
+requires an installed third-party version of
 Tcl/Tk 8.4 (for OS X 10.4 and 10.5 deployment targets) or Tcl/TK 8.5
 (for 10.6 or later) installed in /Library/Frameworks.  When installed,
 the Python built by this script will attempt to dynamically link first to
@@ -23,7 +23,7 @@ installing the most recent ActiveTcl 8.4 or 8.5 version.
 
 32-bit-only installer builds are still possible on OS X 10.4 with Xcode 2.5
 and the installation of additional components, such as a newer Python
-(2.5 is needed for Python parser updates), hg, and for the documentation
+(2.5 is needed for Python parser updates) and for the documentation
 build either svn (pre-3.4.1) or sphinx-build (3.4.1 and later).
 
 Usage: see USAGE variable in the script.
@@ -101,6 +101,7 @@ def getFullVersion():
 
 FW_PREFIX = ["Library", "Frameworks", "Python.framework"]
 FW_VERSION_PREFIX = "--undefined--" # initialized in parseOptions
+FW_SSL_DIRECTORY = "--undefined--" # initialized in parseOptions
 
 # The directory we'll use to create the build (will be erased and recreated)
 WORKDIR = "/tmp/_py"
@@ -206,45 +207,15 @@ def library_recipes():
 
     LT_10_5 = bool(getDeptargetTuple() < (10, 5))
 
-    if not (10, 5) < getDeptargetTuple() < (10, 10):
-        # The OpenSSL libs shipped with OS X 10.5 and earlier are
-        # hopelessly out-of-date and do not include Apple's tie-in to
-        # the root certificates in the user and system keychains via TEA
-        # that was introduced in OS X 10.6.  Note that this applies to
-        # programs built and linked with a 10.5 SDK even when run on
-        # newer versions of OS X.
-        #
-        # Dealing with CAs is messy.  For now, just supply a
-        # local libssl and libcrypto for the older installer variants
-        # (e.g. the python.org 10.5+ 32-bit-only installer) that use the
-        # same default ssl certfile location as the system libs do:
-        #   /System/Library/OpenSSL/cert.pem
-        # Then at least TLS connections can be negotiated with sites that
-        # use sha-256 certs like python.org, assuming the proper CA certs
-        # have been supplied.  The default CA cert management issues for
-        # 10.5 and earlier builds are the same as before, other than it is
-        # now more obvious with cert checking enabled by default in the
-        # standard library.
-        #
-        # For builds with 10.6 through 10.9 SDKs,
-        # continue to use the deprecated but
-        # less out-of-date Apple 0.9.8 libs for now.  While they are less
-        # secure than using an up-to-date 1.0.1 version, doing so
-        # avoids the big problems of forcing users to have to manage
-        # default CAs themselves, thanks to the Apple libs using private TEA
-        # APIs for cert validation from keychains if validation using the
-        # standard OpenSSL locations (/System/Library/OpenSSL, normally empty)
-        # fails.
-        #
-        # Since Apple removed the header files for the deprecated system
-        # OpenSSL as of the Xcode 7 release (for OS X 10.10+), we do not
-        # have much choice but to build our own copy here, too.
+    # Since Apple removed the header files for the deprecated system
+    # OpenSSL as of the Xcode 7 release (for OS X 10.10+), we do not
+    # have much choice but to build our own copy here, too.
 
-        result.extend([
+    result.extend([
           dict(
-              name="OpenSSL 1.0.2h",
-              url="https://www.openssl.org/source/openssl-1.0.2h.tar.gz",
-              checksum='9392e65072ce4b614c1392eefc1f23d0',
+              name="OpenSSL 1.0.2k",
+              url="https://www.openssl.org/source/openssl-1.0.2k.tar.gz",
+              checksum='f965fc0bf01bf882b31314b61391ae65',
               patches=[
                   "openssl_sdk_makedepend.patch",
                    ],
@@ -252,7 +223,7 @@ def library_recipes():
               configure=None,
               install=None,
           ),
-        ])
+    ])
 
 #   Disable for now
     if False:   # if getDeptargetTuple() > (10, 5):
@@ -299,9 +270,9 @@ def library_recipes():
     if PYTHON_3:
         result.extend([
           dict(
-              name="XZ 5.0.5",
-              url="http://tukaani.org/xz/xz-5.0.5.tar.gz",
-              checksum='19d924e066b6fff0bc9d1981b4e53196',
+              name="XZ 5.2.2",
+              url="http://tukaani.org/xz/xz-5.2.2.tar.gz",
+              checksum='7cf6a8544a7dae8e8106fdf7addfa28c',
               configure_pre=[
                     '--disable-dependency-tracking',
               ]
@@ -344,10 +315,11 @@ def library_recipes():
                   ),
           ),
           dict(
-              name="SQLite 3.8.11",
-              url="https://www.sqlite.org/2015/sqlite-autoconf-3081100.tar.gz",
-              checksum='77b451925121028befbddbf45ea2bc49',
+              name="SQLite 3.14.2",
+              url="https://www.sqlite.org/2016/sqlite-autoconf-3140200.tar.gz",
+              checksum='90c53cacb811db27f990b8292bd96159',
               extra_cflags=('-Os '
+                            '-DSQLITE_ENABLE_FTS5 '
                             '-DSQLITE_ENABLE_FTS4 '
                             '-DSQLITE_ENABLE_FTS3_PARENTHESIS '
                             '-DSQLITE_ENABLE_RTREE '
@@ -663,9 +635,8 @@ def checkEnvironment():
         base_path = base_path + ':' + OLD_DEVELOPER_TOOLS
     os.environ['PATH'] = base_path
     print("Setting default PATH: %s"%(os.environ['PATH']))
-    # Ensure ws have access to hg and to sphinx-build.
-    # You may have to create links in /usr/bin for them.
-    runCommand('hg --version')
+    # Ensure we have access to sphinx-build.
+    # You may have to create a link in /usr/bin for it.
     runCommand('sphinx-build --version')
 
 def parseOptions(args=None):
@@ -675,6 +646,7 @@ def parseOptions(args=None):
     global WORKDIR, DEPSRC, SDKPATH, SRCDIR, DEPTARGET
     global UNIVERSALOPTS, UNIVERSALARCHS, ARCHLIST, CC, CXX
     global FW_VERSION_PREFIX
+    global FW_SSL_DIRECTORY
 
     if args is None:
         args = sys.argv[1:]
@@ -735,6 +707,7 @@ def parseOptions(args=None):
     CC, CXX = getTargetCompilers()
 
     FW_VERSION_PREFIX = FW_PREFIX[:] + ["Versions", getVersion()]
+    FW_SSL_DIRECTORY = FW_VERSION_PREFIX[:] + ["etc", "openssl"]
 
     print("-- Settings:")
     print("   * Source directory:    %s" % SRCDIR)
@@ -876,7 +849,7 @@ def build_universal_openssl(basedir, archList):
             "shared",
             "--install_prefix=%s"%shellQuote(archbase),
             "--prefix=%s"%os.path.join("/", *FW_VERSION_PREFIX),
-            "--openssldir=/System/Library/OpenSSL",
+            "--openssldir=%s"%os.path.join("/", *FW_SSL_DIRECTORY),
         ]
         if no_asm:
             configure_opts.append("no-asm")
@@ -1168,11 +1141,25 @@ def buildPython():
         shellQuote(WORKDIR)[1:-1],
         shellQuote(WORKDIR)[1:-1]))
 
-    print("Running make touch")
-    runCommand("make touch")
+    # Look for environment value BUILDINSTALLER_BUILDPYTHON_MAKE_EXTRAS
+    # and, if defined, append its value to the make command.  This allows
+    # us to pass in version control tags, like GITTAG, to a build from a
+    # tarball rather than from a vcs checkout, thus eliminating the need
+    # to have a working copy of the vcs program on the build machine.
+    #
+    # A typical use might be:
+    #      export BUILDINSTALLER_BUILDPYTHON_MAKE_EXTRAS=" \
+    #                         GITVERSION='echo 123456789a' \
+    #                         GITTAG='echo v3.6.0' \
+    #                         GITBRANCH='echo 3.6'"
 
-    print("Running make")
-    runCommand("make")
+    make_extras = os.getenv("BUILDINSTALLER_BUILDPYTHON_MAKE_EXTRAS")
+    if make_extras:
+        make_cmd = "make " + make_extras
+    else:
+        make_cmd = "make"
+    print("Running " + make_cmd)
+    runCommand(make_cmd)
 
     print("Running make install")
     runCommand("make install DESTDIR=%s"%(
@@ -1194,12 +1181,14 @@ def buildPython():
                 'Python.framework', 'Versions', getVersion(),
                 'lib'))))
 
-    path_to_lib = os.path.join(rootDir, 'Library', 'Frameworks',
-                                'Python.framework', 'Versions',
-                                version, 'lib', 'python%s'%(version,))
+    frmDir = os.path.join(rootDir, 'Library', 'Frameworks', 'Python.framework')
+    frmDirVersioned = os.path.join(frmDir, 'Versions', version)
+    path_to_lib = os.path.join(frmDirVersioned, 'lib', 'python%s'%(version,))
+    # create directory for OpenSSL certificates
+    sslDir = os.path.join(frmDirVersioned, 'etc', 'openssl')
+    os.makedirs(sslDir)
 
     print("Fix file modes")
-    frmDir = os.path.join(rootDir, 'Library', 'Frameworks', 'Python.framework')
     gid = grp.getgrnam('admin').gr_gid
 
     shared_lib_error = False
@@ -1249,6 +1238,8 @@ def buildPython():
         LDVERSION = LDVERSION.replace('$(VERSION)', VERSION)
         LDVERSION = LDVERSION.replace('$(ABIFLAGS)', ABIFLAGS)
         config_suffix = '-' + LDVERSION
+        if getVersionMajorMinor() >= (3, 6):
+            config_suffix = config_suffix + '-darwin'
     else:
         config_suffix = ''      # Python 2.x
 
@@ -1274,7 +1265,7 @@ def buildPython():
     fp.write(data)
     fp.close()
 
-    # fix _sysconfigdata if it exists
+    # fix _sysconfigdata
     #
     # TODO: make this more robust!  test_sysconfig_module of
     # distutils.tests.test_sysconfig.SysconfigTestCase tests that
@@ -1288,28 +1279,31 @@ def buildPython():
     # _sysconfigdata.py).
 
     import pprint
-    path = os.path.join(path_to_lib, '_sysconfigdata.py')
-    if os.path.exists(path):
-        fp = open(path, 'r')
-        data = fp.read()
-        fp.close()
-        # create build_time_vars dict
-        exec(data)
-        vars = {}
-        for k, v in build_time_vars.items():
-            if type(v) == type(''):
-                for p in (include_path, lib_path):
-                    v = v.replace(' ' + p, '')
-                    v = v.replace(p + ' ', '')
-            vars[k] = v
+    if getVersionMajorMinor() >= (3, 6):
+        # XXX this is extra-fragile
+        path = os.path.join(path_to_lib, '_sysconfigdata_m_darwin_darwin.py')
+    else:
+        path = os.path.join(path_to_lib, '_sysconfigdata.py')
+    fp = open(path, 'r')
+    data = fp.read()
+    fp.close()
+    # create build_time_vars dict
+    exec(data)
+    vars = {}
+    for k, v in build_time_vars.items():
+        if type(v) == type(''):
+            for p in (include_path, lib_path):
+                v = v.replace(' ' + p, '')
+                v = v.replace(p + ' ', '')
+        vars[k] = v
 
-        fp = open(path, 'w')
-        # duplicated from sysconfig._generate_posix_vars()
-        fp.write('# system configuration generated and used by'
-                    ' the sysconfig module\n')
-        fp.write('build_time_vars = ')
-        pprint.pprint(vars, stream=fp)
-        fp.close()
+    fp = open(path, 'w')
+    # duplicated from sysconfig._generate_posix_vars()
+    fp.write('# system configuration generated and used by'
+                ' the sysconfig module\n')
+    fp.write('build_time_vars = ')
+    pprint.pprint(vars, stream=fp)
+    fp.close()
 
     # Add symlinks in /usr/local/bin, using relative links
     usr_local_bin = os.path.join(rootDir, 'usr', 'local', 'bin')
@@ -1636,6 +1630,8 @@ def main():
     patchFile("resources/ReadMe.rtf",  fn)
     fn = os.path.join(folder, "Update Shell Profile.command")
     patchScript("scripts/postflight.patch-profile",  fn)
+    fn = os.path.join(folder, "Install Certificates.command")
+    patchScript("resources/install_certificates.command",  fn)
     os.chmod(folder, STAT_0o755)
     setIcon(folder, "../Icons/Python Folder.icns")
 

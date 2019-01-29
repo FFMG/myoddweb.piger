@@ -1,8 +1,8 @@
 .. _tut-brieftourtwo:
 
-*********************************************
-Brief Tour of the Standard Library -- Part II
-*********************************************
+**********************************************
+Brief Tour of the Standard Library --- Part II
+**********************************************
 
 This second tour covers more advanced modules that support professional
 programming needs.  These modules rarely occur in small scripts.
@@ -278,7 +278,7 @@ applications include caching objects that are expensive to create::
    Traceback (most recent call last):
      File "<stdin>", line 1, in <module>
        d['primary']                # entry was automatically removed
-     File "C:/python35/lib/weakref.py", line 46, in __getitem__
+     File "C:/python36/lib/weakref.py", line 46, in __getitem__
        o = self.data[key]()
    KeyError: 'primary'
 

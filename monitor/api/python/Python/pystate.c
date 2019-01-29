@@ -6,7 +6,7 @@
 #define GET_TSTATE() \
     ((PyThreadState*)_Py_atomic_load_relaxed(&_PyThreadState_Current))
 #define SET_TSTATE(value) \
-    _Py_atomic_store_relaxed(&_PyThreadState_Current, (Py_uintptr_t)(value))
+    _Py_atomic_store_relaxed(&_PyThreadState_Current, (uintptr_t)(value))
 #define GET_INTERP_STATE() \
     (GET_TSTATE()->interp)
 
@@ -25,7 +25,7 @@ to avoid the expense of doing their own locking).
 #ifdef HAVE_DLFCN_H
 #include <dlfcn.h>
 #endif
-#ifndef RTLD_LAZY
+#if !HAVE_DECL_RTLD_LAZY
 #define RTLD_LAZY 1
 #endif
 #endif
@@ -33,6 +33,8 @@ to avoid the expense of doing their own locking).
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+int _PyGILState_check_enabled = 1;
 
 #ifdef WITH_THREAD
 #include "pythread.h"
@@ -45,7 +47,7 @@ static PyThread_type_lock head_mutex = NULL; /* Protects interp->tstate_head */
    GILState implementation
 */
 static PyInterpreterState *autoInterpreterState = NULL;
-static int autoTLSkey = 0;
+static int autoTLSkey = -1;
 #else
 #define HEAD_INIT() /* Nothing */
 #define HEAD_LOCK() /* Nothing */
@@ -53,6 +55,7 @@ static int autoTLSkey = 0;
 #endif
 
 static PyInterpreterState *interp_head = NULL;
+static __PyCodeExtraState *coextra_head = NULL;
 
 /* Assuming the current thread holds the GIL, this is the
    PyThreadState for the current thread. */
@@ -71,6 +74,12 @@ PyInterpreterState_New(void)
                                  PyMem_RawMalloc(sizeof(PyInterpreterState));
 
     if (interp != NULL) {
+        __PyCodeExtraState* coextra = PyMem_RawMalloc(sizeof(__PyCodeExtraState));
+        if (coextra == NULL) {
+            PyMem_RawFree(interp);
+            return NULL;
+        }
+
         HEAD_INIT();
 #ifdef WITH_THREAD
         if (head_mutex == NULL)
@@ -88,20 +97,23 @@ PyInterpreterState_New(void)
         interp->codecs_initialized = 0;
         interp->fscodec_initialized = 0;
         interp->importlib = NULL;
+        interp->import_func = NULL;
+        interp->eval_frame = _PyEval_EvalFrameDefault;
+        coextra->co_extra_user_count = 0;
+        coextra->interp = interp;
 #ifdef HAVE_DLOPEN
-#ifdef RTLD_NOW
+#if HAVE_DECL_RTLD_NOW
         interp->dlopenflags = RTLD_NOW;
 #else
         interp->dlopenflags = RTLD_LAZY;
 #endif
 #endif
-#ifdef WITH_TSC
-        interp->tscdump = 0;
-#endif
 
         HEAD_LOCK();
         interp->next = interp_head;
         interp_head = interp;
+        coextra->next = coextra_head;
+        coextra_head = coextra;
         HEAD_UNLOCK();
     }
 
@@ -126,6 +138,7 @@ PyInterpreterState_Clear(PyInterpreterState *interp)
     Py_CLEAR(interp->builtins);
     Py_CLEAR(interp->builtins_copy);
     Py_CLEAR(interp->importlib);
+    Py_CLEAR(interp->import_func);
 }
 
 
@@ -145,9 +158,10 @@ void
 PyInterpreterState_Delete(PyInterpreterState *interp)
 {
     PyInterpreterState **p;
+    __PyCodeExtraState **pextra;
     zapthreads(interp);
     HEAD_LOCK();
-    for (p = &interp_head; ; p = &(*p)->next) {
+    for (p = &interp_head; /* N/A */; p = &(*p)->next) {
         if (*p == NULL)
             Py_FatalError(
                 "PyInterpreterState_Delete: invalid interp");
@@ -157,6 +171,18 @@ PyInterpreterState_Delete(PyInterpreterState *interp)
     if (interp->tstate_head != NULL)
         Py_FatalError("PyInterpreterState_Delete: remaining threads");
     *p = interp->next;
+
+    for (pextra = &coextra_head; ; pextra = &(*pextra)->next) {
+        if (*pextra == NULL)
+            Py_FatalError(
+                "PyInterpreterState_Delete: invalid extra");
+        __PyCodeExtraState* extra = *pextra;
+        if (extra->interp == interp) {
+            *pextra = extra->next;
+            PyMem_RawFree(extra);
+            break;
+        }
+    }
     HEAD_UNLOCK();
     PyMem_RawFree(interp);
 #ifdef WITH_THREAD
@@ -223,6 +249,9 @@ new_threadstate(PyInterpreterState *interp, int init)
         tstate->coroutine_wrapper = NULL;
         tstate->in_coroutine_wrapper = 0;
 
+        tstate->async_gen_firstiter = NULL;
+        tstate->async_gen_finalizer = NULL;
+
         if (init)
             _PyThreadState_Init(tstate);
 
@@ -281,14 +310,16 @@ int
 _PyState_AddModule(PyObject* module, struct PyModuleDef* def)
 {
     PyInterpreterState *state;
+    if (!def) {
+        assert(PyErr_Occurred());
+        return -1;
+    }
     if (def->m_slots) {
         PyErr_SetString(PyExc_SystemError,
                         "PyState_AddModule called on module with slots");
         return -1;
     }
     state = GET_INTERP_STATE();
-    if (!def)
-        return -1;
     if (!state->modules_by_index) {
         state->modules_by_index = PyList_New(0);
         if (!state->modules_by_index)
@@ -400,6 +431,8 @@ PyThreadState_Clear(PyThreadState *tstate)
     Py_CLEAR(tstate->c_traceobj);
 
     Py_CLEAR(tstate->coroutine_wrapper);
+    Py_CLEAR(tstate->async_gen_firstiter);
+    Py_CLEAR(tstate->async_gen_finalizer);
 }
 
 
@@ -449,10 +482,10 @@ PyThreadState_DeleteCurrent()
     if (tstate == NULL)
         Py_FatalError(
             "PyThreadState_DeleteCurrent: no current tstate");
-    SET_TSTATE(NULL);
+    tstate_delete_common(tstate);
     if (autoInterpreterState && PyThread_get_key_value(autoTLSkey) == tstate)
         PyThread_delete_key_value(autoTLSkey);
-    tstate_delete_common(tstate);
+    SET_TSTATE(NULL);
     PyEval_ReleaseLock();
 }
 #endif /* WITH_THREAD */
@@ -536,6 +569,23 @@ PyThreadState_Swap(PyThreadState *newts)
     }
 #endif
     return oldts;
+}
+
+__PyCodeExtraState*
+__PyCodeExtraState_Get(void) {
+    PyInterpreterState* interp = PyThreadState_Get()->interp;
+
+    HEAD_LOCK();
+    for (__PyCodeExtraState* cur = coextra_head; cur != NULL; cur = cur->next) {
+        if (cur->interp == interp) {
+            HEAD_UNLOCK();
+            return cur;
+        }
+    }
+    HEAD_UNLOCK();
+
+    Py_FatalError("__PyCodeExtraState_Get: no code state for interpreter");
+    return NULL;
 }
 
 /* An extension mechanism to store arbitrary additional per-thread state.
@@ -696,7 +746,7 @@ PyThreadState_IsCurrent(PyThreadState *tstate)
 }
 
 /* Internal initialization/finalization functions called by
-   Py_Initialize/Py_Finalize
+   Py_Initialize/Py_FinalizeEx
 */
 void
 _PyGILState_Init(PyInterpreterState *i, PyThreadState *t)
@@ -712,10 +762,17 @@ _PyGILState_Init(PyInterpreterState *i, PyThreadState *t)
     _PyGILState_NoteThreadState(t);
 }
 
+PyInterpreterState *
+_PyGILState_GetInterpreterStateUnsafe(void)
+{
+    return autoInterpreterState;
+}
+
 void
 _PyGILState_Fini(void)
 {
     PyThread_delete_key(autoTLSkey);
+    autoTLSkey = -1;
     autoInterpreterState = NULL;
 }
 
@@ -726,6 +783,10 @@ _PyGILState_Fini(void)
 void
 _PyGILState_Reinit(void)
 {
+#ifdef WITH_THREAD
+    head_mutex = NULL;
+    HEAD_INIT();
+#endif
     PyThreadState *tstate = PyGILState_GetThisThreadState();
     PyThread_delete_key(autoTLSkey);
     if ((autoTLSkey = PyThread_create_key()) == -1)
@@ -784,8 +845,19 @@ PyGILState_GetThisThreadState(void)
 int
 PyGILState_Check(void)
 {
-    PyThreadState *tstate = GET_TSTATE();
-    return tstate && (tstate == PyGILState_GetThisThreadState());
+    PyThreadState *tstate;
+
+    if (!_PyGILState_check_enabled)
+        return 1;
+
+    if (autoTLSkey == -1)
+        return 1;
+
+    tstate = GET_TSTATE();
+    if (tstate == NULL)
+        return 0;
+
+    return (tstate == PyGILState_GetThisThreadState());
 }
 
 PyGILState_STATE

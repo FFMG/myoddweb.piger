@@ -3,11 +3,11 @@ Tests for the threading module.
 """
 
 import test.support
-from test.support import verbose, strip_python_stderr, import_module, cpython_only
+from test.support import (verbose, import_module, cpython_only,
+                          requires_type_collecting)
 from test.support.script_helper import assert_python_ok, assert_python_failure
 
 import random
-import re
 import sys
 _thread = import_module('_thread')
 threading = import_module('threading')
@@ -18,6 +18,7 @@ import os
 import subprocess
 
 from test import lock_tests
+from test import support
 
 
 # Between fork() and exec(), only async-safe functions are allowed (issues
@@ -169,6 +170,9 @@ class ThreadTests(BaseTestCase):
         mutex.acquire()
         self.assertIn(tid, threading._active)
         self.assertIsInstance(threading._active[tid], threading._DummyThread)
+        #Issue 29376
+        self.assertTrue(threading._active[tid].is_alive())
+        self.assertRegex(repr(threading._active[tid]), '_DummyThread')
         del threading._active[tid]
 
     # PyThreadState_SetAsyncExc() is a CPython-only gimmick, not (currently)
@@ -461,18 +465,20 @@ class ThreadTests(BaseTestCase):
         self.addCleanup(sys.setswitchinterval, old_interval)
 
         # Make the bug more likely to manifest.
-        sys.setswitchinterval(1e-6)
+        test.support.setswitchinterval(1e-6)
 
         for i in range(20):
             t = threading.Thread(target=lambda: None)
             t.start()
-            self.addCleanup(t.join)
             pid = os.fork()
             if pid == 0:
-                os._exit(1 if t.is_alive() else 0)
+                os._exit(11 if t.is_alive() else 10)
             else:
+                t.join()
+
                 pid, status = os.waitpid(pid, 0)
-                self.assertEqual(0, status)
+                self.assertTrue(os.WIFEXITED(status))
+                self.assertEqual(10, os.WEXITSTATUS(status))
 
     def test_main_thread(self):
         main = threading.main_thread()
@@ -987,6 +993,7 @@ class ThreadingExceptionTests(BaseTestCase):
         self.assertIn("ZeroDivisionError", err)
         self.assertNotIn("Unhandled exception", err)
 
+    @requires_type_collecting
     def test_print_exception_stderr_is_none_1(self):
         script = r"""if True:
             import sys
@@ -1041,6 +1048,24 @@ class ThreadingExceptionTests(BaseTestCase):
         self.assertEqual(out, b'')
         self.assertNotIn("Unhandled exception", err.decode())
 
+    def test_bare_raise_in_brand_new_thread(self):
+        def bare_raise():
+            raise
+
+        class Issue27558(threading.Thread):
+            exc = None
+
+            def run(self):
+                try:
+                    bare_raise()
+                except Exception as exc:
+                    self.exc = exc
+
+        thread = Issue27558()
+        thread.start()
+        thread.join()
+        self.assertIsNotNone(thread.exc)
+        self.assertIsInstance(thread.exc, RuntimeError)
 
 class TimerTests(BaseTestCase):
 
@@ -1096,6 +1121,13 @@ class BoundedSemaphoreTests(lock_tests.BoundedSemaphoreTests):
 
 class BarrierTests(lock_tests.BarrierTests):
     barriertype = staticmethod(threading.Barrier)
+
+class MiscTestCase(unittest.TestCase):
+    def test__all__(self):
+        extra = {"ThreadError"}
+        blacklist = {'currentThread', 'activeCount'}
+        support.check__all__(self, threading, ('threading', '_thread'),
+                             extra=extra, blacklist=blacklist)
 
 if __name__ == "__main__":
     unittest.main()

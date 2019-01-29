@@ -7,6 +7,7 @@ import pickle
 import sys
 import types
 import unittest
+import warnings
 import weakref
 
 from copy import deepcopy
@@ -876,7 +877,7 @@ class ClassPropertiesAndMethods(unittest.TestCase):
         self.assertEqual(Frag().__int__(), 42)
         self.assertEqual(int(Frag()), 42)
 
-    def test_diamond_inheritence(self):
+    def test_diamond_inheritance(self):
         # Testing multiple inheritance special cases...
         class A(object):
             def spam(self): return "A"
@@ -1660,6 +1661,77 @@ order (MRO) for bases """
         b = D()
         self.assertEqual(b.foo, 3)
         self.assertEqual(b.__class__, D)
+
+    @unittest.expectedFailure
+    def test_bad_new(self):
+        self.assertRaises(TypeError, object.__new__)
+        self.assertRaises(TypeError, object.__new__, '')
+        self.assertRaises(TypeError, list.__new__, object)
+        self.assertRaises(TypeError, object.__new__, list)
+        class C(object):
+            __new__ = list.__new__
+        self.assertRaises(TypeError, C)
+        class C(list):
+            __new__ = object.__new__
+        self.assertRaises(TypeError, C)
+
+    def test_object_new(self):
+        class A(object):
+            pass
+        object.__new__(A)
+        self.assertRaises(TypeError, object.__new__, A, 5)
+        object.__init__(A())
+        self.assertRaises(TypeError, object.__init__, A(), 5)
+
+        class A(object):
+            def __init__(self, foo):
+                self.foo = foo
+        object.__new__(A)
+        object.__new__(A, 5)
+        object.__init__(A(3))
+        self.assertRaises(TypeError, object.__init__, A(3), 5)
+
+        class A(object):
+            def __new__(cls, foo):
+                return object.__new__(cls)
+        object.__new__(A)
+        self.assertRaises(TypeError, object.__new__, A, 5)
+        object.__init__(A(3))
+        object.__init__(A(3), 5)
+
+        class A(object):
+            def __new__(cls, foo):
+                return object.__new__(cls)
+            def __init__(self, foo):
+                self.foo = foo
+        object.__new__(A)
+        self.assertRaises(TypeError, object.__new__, A, 5)
+        object.__init__(A(3))
+        self.assertRaises(TypeError, object.__init__, A(3), 5)
+
+    @unittest.expectedFailure
+    def test_restored_object_new(self):
+        class A(object):
+            def __new__(cls, *args, **kwargs):
+                raise AssertionError
+        self.assertRaises(AssertionError, A)
+        class B(A):
+            __new__ = object.__new__
+            def __init__(self, foo):
+                self.foo = foo
+        with warnings.catch_warnings():
+            warnings.simplefilter('error', DeprecationWarning)
+            b = B(3)
+        self.assertEqual(b.foo, 3)
+        self.assertEqual(b.__class__, B)
+        del B.__new__
+        self.assertRaises(AssertionError, B)
+        del A.__new__
+        with warnings.catch_warnings():
+            warnings.simplefilter('error', DeprecationWarning)
+            b = B(3)
+        self.assertEqual(b.foo, 3)
+        self.assertEqual(b.__class__, B)
 
     def test_altmro(self):
         # Testing mro() and overriding it...
@@ -3522,6 +3594,24 @@ order (MRO) for bases """
         self.assertIsInstance(d, D)
         self.assertEqual(d.foo, 1)
 
+        class C(object):
+            @staticmethod
+            def __new__(*args):
+                return args
+        self.assertEqual(C(1, 2), (C, 1, 2))
+        class D(C):
+            pass
+        self.assertEqual(D(1, 2), (D, 1, 2))
+
+        class C(object):
+            @classmethod
+            def __new__(*args):
+                return args
+        self.assertEqual(C(1, 2), (C, C, 1, 2))
+        class D(C):
+            pass
+        self.assertEqual(D(1, 2), (D, D, 1, 2))
+
     def test_imul_bug(self):
         # Testing for __imul__ problems...
         # SF bug 544647
@@ -4738,11 +4828,8 @@ class PicklingTests(unittest.TestCase):
                 return (args, kwargs)
         obj = C3()
         for proto in protocols:
-            if proto >= 4:
+            if proto >= 2:
                 self._check_reduce(proto, obj, args, kwargs)
-            elif proto >= 2:
-                with self.assertRaises(ValueError):
-                    obj.__reduce_ex__(proto)
 
         class C4:
             def __getnewargs_ex__(self):
@@ -5061,10 +5148,6 @@ class PicklingTests(unittest.TestCase):
                 kwargs = getattr(cls, 'KWARGS', {})
                 obj = cls(*cls.ARGS, **kwargs)
                 proto = pickle_copier.proto
-                if 2 <= proto < 4 and hasattr(cls, '__getnewargs_ex__'):
-                    with self.assertRaises(ValueError):
-                        pickle_copier.dumps(obj, proto)
-                    continue
                 objcopy = pickle_copier.copy(obj)
                 self._assert_is_copy(obj, objcopy)
                 # For test classes that supports this, make sure we didn't go
@@ -5123,12 +5206,14 @@ class SharedKeyTests(unittest.TestCase):
         a, b = A(), B()
         self.assertEqual(sys.getsizeof(vars(a)), sys.getsizeof(vars(b)))
         self.assertLess(sys.getsizeof(vars(a)), sys.getsizeof({}))
-        a.x, a.y, a.z, a.w = range(4)
+        # Initial hash table can contain at most 5 elements.
+        # Set 6 attributes to cause internal resizing.
+        a.x, a.y, a.z, a.w, a.v, a.u = range(6)
         self.assertNotEqual(sys.getsizeof(vars(a)), sys.getsizeof(vars(b)))
         a2 = A()
         self.assertEqual(sys.getsizeof(vars(a)), sys.getsizeof(vars(a2)))
         self.assertLess(sys.getsizeof(vars(a)), sys.getsizeof({}))
-        b.u, b.v, b.w, b.t = range(4)
+        b.u, b.v, b.w, b.t, b.s, b.r = range(6)
         self.assertLess(sys.getsizeof(vars(b)), sys.getsizeof({}))
 
 

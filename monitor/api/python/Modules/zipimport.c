@@ -907,10 +907,8 @@ read_directory(PyObject *archive)
     fp = _Py_fopen_obj(archive, "rb");
     if (fp == NULL) {
         if (PyErr_ExceptionMatches(PyExc_OSError)) {
-            PyObject *exc, *val, *tb;
-            PyErr_Fetch(&exc, &val, &tb);
-            PyErr_Format(ZipImportError, "can't open Zip file: %R", archive);
-            _PyErr_ChainExceptions(exc, val, tb);
+            _PyErr_FormatFromCause(ZipImportError,
+                                   "can't open Zip file: %R", archive);
         }
         return NULL;
     }
@@ -1104,7 +1102,7 @@ get_decompress_func(void)
     _Py_IDENTIFIER(decompress);
 
     if (importing_zlib != 0)
-        /* Someone has a zlib.py[co] in their Zip file;
+        /* Someone has a zlib.pyc in their Zip file;
            let's avoid a stack overflow. */
         return NULL;
     importing_zlib = 1;
@@ -1263,7 +1261,7 @@ eq_mtime(time_t t1, time_t t2)
     return d <= 1;
 }
 
-/* Given the contents of a .py[co] file in a buffer, unmarshal the data
+/* Given the contents of a .pyc file in a buffer, unmarshal the data
    and return the code object. Return None if it the magic word doesn't
    match (we do this instead of raising an exception as we fall back
    to .py if available and we don't want to mask other errors).
@@ -1315,7 +1313,7 @@ unmarshal_code(PyObject *pathname, PyObject *data, time_t mtime)
     return code;
 }
 
-/* Replace any occurances of "\r\n?" in the input string with "\n".
+/* Replace any occurrences of "\r\n?" in the input string with "\n".
    This converts DOS and Mac line endings to Unix line endings.
    Also append a trailing "\n" to be compatible with
    PyParser_SimpleParseFile(). Returns a new reference. */
@@ -1362,22 +1360,16 @@ normalize_line_endings(PyObject *source)
 static PyObject *
 compile_source(PyObject *pathname, PyObject *source)
 {
-    PyObject *code, *fixed_source, *pathbytes;
-
-    pathbytes = PyUnicode_EncodeFSDefault(pathname);
-    if (pathbytes == NULL)
-        return NULL;
+    PyObject *code, *fixed_source;
 
     fixed_source = normalize_line_endings(source);
     if (fixed_source == NULL) {
-        Py_DECREF(pathbytes);
         return NULL;
     }
 
-    code = Py_CompileString(PyBytes_AsString(fixed_source),
-                            PyBytes_AsString(pathbytes),
-                            Py_file_input);
-    Py_DECREF(pathbytes);
+    code = Py_CompileStringObject(PyBytes_AsString(fixed_source),
+                                  pathname, Py_file_input, NULL, -1);
+
     Py_DECREF(fixed_source);
     return code;
 }
@@ -1411,7 +1403,7 @@ get_mtime_of_source(ZipImporter *self, PyObject *path)
     PyObject *toc_entry, *stripped;
     time_t mtime;
 
-    /* strip 'c' or 'o' from *.py[co] */
+    /* strip 'c' from *.pyc */
     if (PyUnicode_READY(path) == -1)
         return (time_t)-1;
     stripped = PyUnicode_FromKindAndData(PyUnicode_KIND(path),

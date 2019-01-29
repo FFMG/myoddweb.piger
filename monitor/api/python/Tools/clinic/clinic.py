@@ -644,7 +644,7 @@ class CLanguage(Language):
         default_return_converter = (not f.return_converter or
             f.return_converter.type == 'PyObject *')
 
-        positional = parameters and (parameters[-1].kind == inspect.Parameter.POSITIONAL_ONLY)
+        positional = parameters and parameters[-1].is_positional_only()
         all_boring_objects = False # yes, this will be false if there are 0 parameters, it's fine
         first_optional = len(parameters)
         for i, p in enumerate(parameters):
@@ -661,7 +661,7 @@ class CLanguage(Language):
         new_or_init = f.kind in (METHOD_NEW, METHOD_INIT)
 
         meth_o = (len(parameters) == 1 and
-              parameters[0].kind == inspect.Parameter.POSITIONAL_ONLY and
+              parameters[0].is_positional_only() and
               not converters[0].is_optional() and
               not new_or_init)
 
@@ -705,6 +705,11 @@ class CLanguage(Language):
             {c_basename}({self_type}{self_name}, PyObject *args, PyObject *kwargs)
             """)
 
+        parser_prototype_fastcall = normalize_snippet("""
+            static PyObject *
+            {c_basename}({self_type}{self_name}, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
+            """)
+
         parser_prototype_varargs = normalize_snippet("""
             static PyObject *
             {c_basename}({self_type}{self_name}, PyObject *args)
@@ -743,7 +748,10 @@ class CLanguage(Language):
             return output()
 
         def insert_keywords(s):
-            return linear_format(s, declarations="static char *_keywords[] = {{{keywords}, NULL}};\n{declarations}")
+            return linear_format(s, declarations=
+                'static const char * const _keywords[] = {{{keywords}, NULL}};\n'
+                'static _PyArg_Parser _parser = {{"{format_units}:{name}", _keywords, 0}};\n'
+                '{declarations}')
 
         if not parameters:
             # no parameters, METH_NOARGS
@@ -797,8 +805,9 @@ class CLanguage(Language):
                     """ % argname)
 
                 parser_definition = parser_body(parser_prototype, normalize_snippet("""
-                    if (!PyArg_Parse(%s, "{format_units}:{name}", {parse_arguments}))
+                    if (!PyArg_Parse(%s, "{format_units}:{name}", {parse_arguments})) {{
                         goto exit;
+                    }}
                     """ % argname, indent=4))
 
         elif has_option_groups:
@@ -822,8 +831,9 @@ class CLanguage(Language):
             parser_definition = parser_body(parser_prototype, normalize_snippet("""
                 if (!PyArg_UnpackTuple(args, "{name}",
                     {unpack_min}, {unpack_max},
-                    {parse_arguments}))
+                    {parse_arguments})) {{
                     goto exit;
+                }}
                 """, indent=4))
 
         elif positional:
@@ -835,10 +845,24 @@ class CLanguage(Language):
 
             parser_definition = parser_body(parser_prototype, normalize_snippet("""
                 if (!PyArg_ParseTuple(args, "{format_units}:{name}",
-                    {parse_arguments}))
+                    {parse_arguments})) {{
                     goto exit;
+                }}
                 """, indent=4))
 
+        elif not new_or_init:
+            flags = "METH_FASTCALL"
+
+            parser_prototype = parser_prototype_fastcall
+
+            body = normalize_snippet("""
+                if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+                    {parse_arguments})) {{
+                    goto exit;
+                }}
+                """, indent=4)
+            parser_definition = parser_body(parser_prototype, body)
+            parser_definition = insert_keywords(parser_definition)
         else:
             # positional-or-keyword arguments
             flags = "METH_VARARGS|METH_KEYWORDS"
@@ -846,15 +870,12 @@ class CLanguage(Language):
             parser_prototype = parser_prototype_keyword
 
             body = normalize_snippet("""
-                if (!PyArg_ParseTupleAndKeywords(args, kwargs, "{format_units}:{name}", _keywords,
-                    {parse_arguments}))
+                if (!_PyArg_ParseTupleAndKeywordsFast(args, kwargs, &_parser,
+                    {parse_arguments})) {{
                     goto exit;
-            """, indent=4)
-            parser_definition = parser_body(parser_prototype, normalize_snippet("""
-                if (!PyArg_ParseTupleAndKeywords(args, kwargs, "{format_units}:{name}", _keywords,
-                    {parse_arguments}))
-                    goto exit;
-                """, indent=4))
+                }}
+                """, indent=4)
+            parser_definition = parser_body(parser_prototype, body)
             parser_definition = insert_keywords(parser_definition)
 
 
@@ -878,13 +899,15 @@ class CLanguage(Language):
 
             if not parses_keywords:
                 fields.insert(0, normalize_snippet("""
-                    if ({self_type_check}!_PyArg_NoKeywords("{name}", kwargs))
+                    if ({self_type_check}!_PyArg_NoKeywords("{name}", kwargs)) {{
                         goto exit;
+                    }}
                     """, indent=4))
                 if not parses_positional:
                     fields.insert(0, normalize_snippet("""
-                        if ({self_type_check}!_PyArg_NoPositional("{name}", args))
+                        if ({self_type_check}!_PyArg_NoPositional("{name}", args)) {{
                             goto exit;
+                        }}
                         """, indent=4))
 
             parser_definition = parser_body(parser_prototype, *fields)
@@ -1032,8 +1055,9 @@ class CLanguage(Language):
 
             s = """
     case {count}:
-        if (!PyArg_ParseTuple(args, "{format_units}:{name}", {parse_arguments}))
+        if (!PyArg_ParseTuple(args, "{format_units}:{name}", {parse_arguments})) {{
             goto exit;
+        }}
         {group_booleans}
         break;
 """[1:]
@@ -1067,7 +1091,7 @@ class CLanguage(Language):
 
         last_group = 0
         first_optional = len(selfless)
-        positional = selfless and selfless[-1].kind == inspect.Parameter.POSITIONAL_ONLY
+        positional = selfless and selfless[-1].is_positional_only()
         new_or_init = f.kind in (METHOD_NEW, METHOD_INIT)
         default_return_converter = (not f.return_converter or
             f.return_converter.type == 'PyObject *')
@@ -1216,7 +1240,7 @@ def OverrideStdioWith(stdout):
 
 def create_regex(before, after, word=True, whole_line=True):
     """Create an re object for matching marker lines."""
-    group_re = "\w+" if word else ".+"
+    group_re = r"\w+" if word else ".+"
     pattern = r'{}({}){}'
     if whole_line:
         pattern = '^' + pattern + '$'
@@ -2359,7 +2383,10 @@ class CConverter(metaclass=CConverterAutoRegister):
             data.modifications.append('/* modifications for ' + name + ' */\n' + modifications.rstrip())
 
         # keywords
-        data.keywords.append(parameter.name)
+        if parameter.is_positional_only():
+            data.keywords.append('')
+        else:
+            data.keywords.append(parameter.name)
 
         # format_units
         if self.is_optional() and '|' not in data.format_units:
@@ -2572,21 +2599,21 @@ class unsigned_long_converter(CConverter):
         if not bitwise:
             fail("Unsigned longs must be bitwise (for now).")
 
-class PY_LONG_LONG_converter(CConverter):
-    type = 'PY_LONG_LONG'
+class long_long_converter(CConverter):
+    type = 'long long'
     default_type = int
     format_unit = 'L'
     c_ignored_default = "0"
 
-class unsigned_PY_LONG_LONG_converter(CConverter):
-    type = 'unsigned PY_LONG_LONG'
+class unsigned_long_long_converter(CConverter):
+    type = 'unsigned long long'
     default_type = int
     format_unit = 'K'
     c_ignored_default = "0"
 
     def converter_init(self, *, bitwise=False):
         if not bitwise:
-            fail("Unsigned PY_LONG_LONGs must be bitwise (for now).")
+            fail("Unsigned long long must be bitwise (for now).")
 
 class Py_ssize_t_converter(CConverter):
     type = 'Py_ssize_t'
@@ -2676,7 +2703,7 @@ class str_converter(CConverter):
     def cleanup(self):
         if self.encoding:
             name = ensure_legal_c_identifier(self.name)
-            return "".join(["if (", name, ")\n   PyMem_FREE(", name, ");\n"])
+            return "".join(["if (", name, ") {\n   PyMem_FREE(", name, ");\n}\n"])
 
 #
 # This is the fourth or fifth rewrite of registering all the
@@ -2786,14 +2813,14 @@ class Py_buffer_converter(CConverter):
 
     def cleanup(self):
         name = ensure_legal_c_identifier(self.name)
-        return "".join(["if (", name, ".obj)\n   PyBuffer_Release(&", name, ");\n"])
+        return "".join(["if (", name, ".obj) {\n   PyBuffer_Release(&", name, ");\n}\n"])
 
 
 def correct_name_for_self(f):
     if f.kind in (CALLABLE, METHOD_INIT):
         if f.cls:
             return "PyObject *", "self"
-        return "PyModuleDef *", "module"
+        return "PyObject *", "module"
     if f.kind == STATIC_METHOD:
         return "void *", "null"
     if f.kind in (CLASS_METHOD, METHOD_NEW):
@@ -2959,10 +2986,10 @@ class CReturnConverter(metaclass=CReturnConverterAutoRegister):
         data.return_value = name
 
     def err_occurred_if(self, expr, data):
-        data.return_conversion.append('if (({}) && PyErr_Occurred())\n    goto exit;\n'.format(expr))
+        data.return_conversion.append('if (({}) && PyErr_Occurred()) {{\n    goto exit;\n}}\n'.format(expr))
 
     def err_occurred_if_null_pointer(self, variable, data):
-        data.return_conversion.append('if ({} == NULL)\n    goto exit;\n'.format(variable))
+        data.return_conversion.append('if ({} == NULL) {{\n    goto exit;\n}}\n'.format(variable))
 
     def render(self, function, data):
         """
@@ -2977,8 +3004,9 @@ class NoneType_return_converter(CReturnConverter):
     def render(self, function, data):
         self.declare(data)
         data.return_conversion.append('''
-if (_return_value != Py_None)
+if (_return_value != Py_None) {
     goto exit;
+}
 return_value = Py_None;
 Py_INCREF(Py_None);
 '''.strip())
@@ -3183,6 +3211,7 @@ class DSLParser:
         self.state = self.state_dsl_start
         self.parameter_indent = None
         self.keyword_only = False
+        self.positional_only = False
         self.group = 0
         self.parameter_state = self.ps_start
         self.seen_positional_with_default = False
@@ -3561,8 +3590,8 @@ class DSLParser:
     # "parameter_state".  (Previously the code was a miasma of ifs and
     # separate boolean state variables.)  The states are:
     #
-    #  [ [ a, b, ] c, ] d, e, f=3, [ g, h, [ i ] ] /   <- line
-    # 01   2          3       4    5           6   7   <- state transitions
+    #  [ [ a, b, ] c, ] d, e, f=3, [ g, h, [ i ] ]   <- line
+    # 01   2          3       4    5           6     <- state transitions
     #
     # 0: ps_start.  before we've seen anything.  legal transitions are to 1 or 3.
     # 1: ps_left_square_before.  left square brackets before required parameters.
@@ -3573,9 +3602,8 @@ class DSLParser:
     #    now must have default values.
     # 5: ps_group_after.  in a group, after required parameters.
     # 6: ps_right_square_after.  right square brackets after required parameters.
-    # 7: ps_seen_slash.  seen slash.
     ps_start, ps_left_square_before, ps_group_before, ps_required, \
-    ps_optional, ps_group_after, ps_right_square_after, ps_seen_slash = range(8)
+    ps_optional, ps_group_after, ps_right_square_after = range(7)
 
     def state_parameters_start(self, line):
         if self.ignore_line(line):
@@ -3854,9 +3882,6 @@ class DSLParser:
         return name, False, kwargs
 
     def parse_special_symbol(self, symbol):
-        if self.parameter_state == self.ps_seen_slash:
-            fail("Function " + self.function.name + " specifies " + symbol + " after /, which is unsupported.")
-
         if symbol == '*':
             if self.keyword_only:
                 fail("Function " + self.function.name + " uses '*' more than once.")
@@ -3883,13 +3908,15 @@ class DSLParser:
             else:
                 fail("Function " + self.function.name + " has an unsupported group configuration. (Unexpected state " + str(self.parameter_state) + ".c)")
         elif symbol == '/':
+            if self.positional_only:
+                fail("Function " + self.function.name + " uses '/' more than once.")
+            self.positional_only = True
             # ps_required and ps_optional are allowed here, that allows positional-only without option groups
             # to work (and have default values!)
             if (self.parameter_state not in (self.ps_required, self.ps_optional, self.ps_right_square_after, self.ps_group_before)) or self.group:
                 fail("Function " + self.function.name + " has an unsupported group configuration. (Unexpected state " + str(self.parameter_state) + ".d)")
             if self.keyword_only:
                 fail("Function " + self.function.name + " mixes keyword-only and positional-only parameters, which is unsupported.")
-            self.parameter_state = self.ps_seen_slash
             # fixup preceding parameters
             for p in self.function.parameters.values():
                 if (p.kind != inspect.Parameter.POSITIONAL_OR_KEYWORD and not isinstance(p.converter, self_converter)):
@@ -3977,23 +4004,20 @@ class DSLParser:
         # populate "right_bracket_count" field for every parameter
         assert parameters, "We should always have a self parameter. " + repr(f)
         assert isinstance(parameters[0].converter, self_converter)
+        # self is always positional-only.
+        assert parameters[0].is_positional_only()
         parameters[0].right_bracket_count = 0
-        parameters_after_self = parameters[1:]
-        if parameters_after_self:
-            # for now, the only way Clinic supports positional-only parameters
-            # is if all of them are positional-only...
-            #
-            # ... except for self!  self is always positional-only.
-
-            positional_only_parameters = [p.kind == inspect.Parameter.POSITIONAL_ONLY for p in parameters_after_self]
-            if parameters_after_self[0].kind == inspect.Parameter.POSITIONAL_ONLY:
-                assert all(positional_only_parameters)
-                for p in parameters:
-                    p.right_bracket_count = abs(p.group)
+        positional_only = True
+        for p in parameters[1:]:
+            if not p.is_positional_only():
+                positional_only = False
+            else:
+                assert positional_only
+            if positional_only:
+                p.right_bracket_count = abs(p.group)
             else:
                 # don't put any right brackets around non-positional-only parameters, ever.
-                for p in parameters_after_self:
-                    p.right_bracket_count = 0
+                p.right_bracket_count = 0
 
         right_bracket_count = 0
 

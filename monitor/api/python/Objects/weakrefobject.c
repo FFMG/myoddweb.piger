@@ -24,6 +24,8 @@ init_weakref(PyWeakReference *self, PyObject *ob, PyObject *callback)
 {
     self->hash = -1;
     self->wr_object = ob;
+    self->wr_prev = NULL;
+    self->wr_next = NULL;
     Py_XINCREF(callback);
     self->wr_callback = callback;
 }
@@ -265,7 +267,7 @@ insert_head(PyWeakReference *newref, PyWeakReference **list)
 }
 
 static int
-parse_weakref_init_args(char *funcname, PyObject *args, PyObject *kwargs,
+parse_weakref_init_args(const char *funcname, PyObject *args, PyObject *kwargs,
                         PyObject **obp, PyObject **callbackp)
 {
     return PyArg_UnpackTuple(args, funcname, 1, 2, obp, callbackp);
@@ -453,7 +455,7 @@ proxy_checkref(PyWeakReference *proxy)
     method(PyObject *proxy) { \
             _Py_IDENTIFIER(special); \
             UNWRAP(proxy); \
-                return _PyObject_CallMethodId(proxy, &PyId_##special, ""); \
+                return _PyObject_CallMethodId(proxy, &PyId_##special, NULL); \
         }
 
 

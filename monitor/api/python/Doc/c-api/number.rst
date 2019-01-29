@@ -266,7 +266,7 @@ Number Protocol
 .. c:function:: Py_ssize_t PyNumber_AsSsize_t(PyObject *o, PyObject *exc)
 
    Returns *o* converted to a Py_ssize_t value if *o* can be interpreted as an
-   integer.  If the call fails, an exception is raised and -1 is returned.
+   integer.  If the call fails, an exception is raised and ``-1`` is returned.
 
    If *o* can be converted to a Python int but the attempt to
    convert to a Py_ssize_t value would raise an :exc:`OverflowError`, then the
@@ -278,5 +278,5 @@ Number Protocol
 
 .. c:function:: int PyIndex_Check(PyObject *o)
 
-   Returns True if *o* is an index integer (has the nb_index slot of  the
-   tp_as_number structure filled in).
+   Returns ``1`` if *o* is an index integer (has the nb_index slot of  the
+   tp_as_number structure filled in), and ``0`` otherwise.

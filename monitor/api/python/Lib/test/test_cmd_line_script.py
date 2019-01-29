@@ -10,6 +10,7 @@ import os
 import os.path
 import py_compile
 import subprocess
+import io
 
 import textwrap
 from test import support
@@ -138,9 +139,8 @@ class CmdLineTest(unittest.TestCase):
                             expected_argv0, expected_path0,
                             expected_package, expected_loader,
                             *cmd_line_switches):
-        if not __debug__:
-            cmd_line_switches += ('-' + 'O' * sys.flags.optimize,)
-        run_args = cmd_line_switches + (script_name,) + tuple(example_args)
+        run_args = [*support.optim_args_from_interpreter_flags(),
+                    *cmd_line_switches, script_name, *example_args]
         rc, out, err = assert_python_ok(*run_args, __isolated=False)
         self._check_output(script_name, rc, out + err, expected_file,
                            expected_argv0, expected_path0,
@@ -426,9 +426,10 @@ class CmdLineTest(unittest.TestCase):
         # Exercise error reporting for various invalid package executions
         tests = (
             ('builtins', br'No code object available'),
-            ('builtins.x', br'Error while finding spec.*AttributeError'),
-            ('builtins.x.y', br'Error while finding spec.*'
-                br'ImportError.*No module named.*not a package'),
+            ('builtins.x', br'Error while finding module specification.*'
+                br'AttributeError'),
+            ('builtins.x.y', br'Error while finding module specification.*'
+                br'ModuleNotFoundError.*No module named.*not a package'),
             ('os.path', br'loader.*cannot handle'),
             ('importlib', br'No module named.*'
                 br'is a package and cannot be directly executed'),
@@ -450,7 +451,8 @@ class CmdLineTest(unittest.TestCase):
             with open('test_pkg/__init__.pyc', 'wb'):
                 pass
             err = self.check_dash_m_failure('test_pkg')
-            self.assertRegex(err, br'Error while finding spec.*'
+            self.assertRegex(err,
+                br'Error while finding module specification.*'
                 br'ImportError.*bad magic number')
             self.assertNotIn(b'is a package', err)
             self.assertNotIn(b'Traceback', err)
@@ -538,6 +540,105 @@ class CmdLineTest(unittest.TestCase):
             text = stderr.decode('ascii')
             self.assertEqual(text, "some text")
 
+    def test_syntaxerror_unindented_caret_position(self):
+        script = "1 + 1 = 2\n"
+        with support.temp_dir() as script_dir:
+            script_name = _make_test_script(script_dir, 'script', script)
+            exitcode, stdout, stderr = assert_python_failure(script_name)
+            text = io.TextIOWrapper(io.BytesIO(stderr), 'ascii').read()
+            # Confirm that the caret is located under the first 1 character
+            self.assertIn("\n    1 + 1 = 2\n    ^", text)
+
+    def test_syntaxerror_indented_caret_position(self):
+        script = textwrap.dedent("""\
+            if True:
+                1 + 1 = 2
+            """)
+        with support.temp_dir() as script_dir:
+            script_name = _make_test_script(script_dir, 'script', script)
+            exitcode, stdout, stderr = assert_python_failure(script_name)
+            text = io.TextIOWrapper(io.BytesIO(stderr), 'ascii').read()
+            # Confirm that the caret is located under the first 1 character
+            self.assertIn("\n    1 + 1 = 2\n    ^", text)
+
+            # Try the same with a form feed at the start of the indented line
+            script = (
+                "if True:\n"
+                "\f    1 + 1 = 2\n"
+            )
+            script_name = _make_test_script(script_dir, "script", script)
+            exitcode, stdout, stderr = assert_python_failure(script_name)
+            text = io.TextIOWrapper(io.BytesIO(stderr), "ascii").read()
+            self.assertNotIn("\f", text)
+            self.assertIn("\n    1 + 1 = 2\n    ^", text)
+
+    def test_consistent_sys_path_for_direct_execution(self):
+        # This test case ensures that the following all give the same
+        # sys.path configuration:
+        #
+        #    ./python -s script_dir/__main__.py
+        #    ./python -s script_dir
+        #    ./python -I script_dir
+        script = textwrap.dedent("""\
+            import sys
+            for entry in sys.path:
+                print(entry)
+            """)
+        # Always show full path diffs on errors
+        self.maxDiff = None
+        with support.temp_dir() as work_dir, support.temp_dir() as script_dir:
+            script_name = _make_test_script(script_dir, '__main__', script)
+            # Reference output comes from directly executing __main__.py
+            # We omit PYTHONPATH and user site to align with isolated mode
+            p = spawn_python("-Es", script_name, cwd=work_dir)
+            out_by_name = kill_python(p).decode().splitlines()
+            self.assertEqual(out_by_name[0], script_dir)
+            self.assertNotIn(work_dir, out_by_name)
+            # Directory execution should give the same output
+            p = spawn_python("-Es", script_dir, cwd=work_dir)
+            out_by_dir = kill_python(p).decode().splitlines()
+            self.assertEqual(out_by_dir, out_by_name)
+            # As should directory execution in isolated mode
+            p = spawn_python("-I", script_dir, cwd=work_dir)
+            out_by_dir_isolated = kill_python(p).decode().splitlines()
+            self.assertEqual(out_by_dir_isolated, out_by_dir, out_by_name)
+
+    def test_consistent_sys_path_for_module_execution(self):
+        # This test case ensures that the following both give the same
+        # sys.path configuration:
+        #    ./python -sm script_pkg.__main__
+        #    ./python -sm script_pkg
+        #
+        # And that this fails as unable to find the package:
+        #    ./python -Im script_pkg
+        script = textwrap.dedent("""\
+            import sys
+            for entry in sys.path:
+                print(entry)
+            """)
+        # Always show full path diffs on errors
+        self.maxDiff = None
+        with support.temp_dir() as work_dir:
+            script_dir = os.path.join(work_dir, "script_pkg")
+            os.mkdir(script_dir)
+            script_name = _make_test_script(script_dir, '__main__', script)
+            # Reference output comes from `-m script_pkg.__main__`
+            # We omit PYTHONPATH and user site to better align with the
+            # direct execution test cases
+            p = spawn_python("-sm", "script_pkg.__main__", cwd=work_dir)
+            out_by_module = kill_python(p).decode().splitlines()
+            self.assertEqual(out_by_module[0], '')
+            self.assertNotIn(script_dir, out_by_module)
+            # Package execution should give the same output
+            p = spawn_python("-sm", "script_pkg", cwd=work_dir)
+            out_by_package = kill_python(p).decode().splitlines()
+            self.assertEqual(out_by_package, out_by_module)
+            # Isolated mode should fail with an import error
+            exitcode, stdout, stderr = assert_python_failure(
+                "-Im", "script_pkg", cwd=work_dir
+            )
+            traceback_lines = stderr.decode().splitlines()
+            self.assertIn("No module named script_pkg", traceback_lines[-1])
 
 def test_main():
     support.run_unittest(CmdLineTest)

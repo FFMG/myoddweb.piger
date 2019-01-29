@@ -136,7 +136,7 @@ static int get_addr(const char *, int, struct addrinfo **,
                         struct addrinfo *, int);
 static int str_isnumber(const char *);
 
-static char *ai_errlist[] = {
+static const char * const ai_errlist[] = {
     "success.",
     "address family for hostname not supported.",       /* EAI_ADDRFAMILY */
     "temporary failure in name resolution.",            /* EAI_AGAIN      */
@@ -198,7 +198,7 @@ if (pai->ai_flags & AI_CANONNAME) {\
 
 #define ERR(err) { error = (err); goto bad; }
 
-char *
+const char *
 gai_strerror(int ecode)
 {
     if (ecode < 0 || ecode > EAI_MAX)

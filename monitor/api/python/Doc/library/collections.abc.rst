@@ -41,13 +41,16 @@ ABC                        Inherits from          Abstract Methods        Mixin 
 :class:`Hashable`                                 ``__hash__``
 :class:`Iterable`                                 ``__iter__``
 :class:`Iterator`          :class:`Iterable`      ``__next__``            ``__iter__``
+:class:`Reversible`        :class:`Iterable`      ``__reversed__``
 :class:`Generator`         :class:`Iterator`      ``send``, ``throw``     ``close``, ``__iter__``, ``__next__``
 :class:`Sized`                                    ``__len__``
 :class:`Callable`                                 ``__call__``
+:class:`Collection`        :class:`Sized`,        ``__contains__``,
+                           :class:`Iterable`,     ``__iter__``,
+                           :class:`Container`     ``__len__``
 
-:class:`Sequence`          :class:`Sized`,        ``__getitem__``,        ``__contains__``, ``__iter__``, ``__reversed__``,
-                           :class:`Iterable`,     ``__len__``             ``index``, and ``count``
-                           :class:`Container`
+:class:`Sequence`          :class:`Reversible`,   ``__getitem__``,        ``__contains__``, ``__iter__``, ``__reversed__``,
+                           :class:`Collection`    ``__len__``             ``index``, and ``count``
 
 :class:`MutableSequence`   :class:`Sequence`      ``__getitem__``,        Inherited :class:`Sequence` methods and
                                                   ``__setitem__``,        ``append``, ``reverse``, ``extend``, ``pop``,
@@ -55,9 +58,12 @@ ABC                        Inherits from          Abstract Methods        Mixin 
                                                   ``__len__``,
                                                   ``insert``
 
-:class:`Set`               :class:`Sized`,        ``__contains__``,       ``__le__``, ``__lt__``, ``__eq__``, ``__ne__``,
-                           :class:`Iterable`,     ``__iter__``,           ``__gt__``, ``__ge__``, ``__and__``, ``__or__``,
-                           :class:`Container`     ``__len__``             ``__sub__``, ``__xor__``, and ``isdisjoint``
+:class:`ByteString`        :class:`Sequence`      ``__getitem__``,        Inherited :class:`Sequence` methods
+                                                  ``__len__``
+
+:class:`Set`               :class:`Collection`    ``__contains__``,       ``__le__``, ``__lt__``, ``__eq__``, ``__ne__``,
+                                                  ``__iter__``,           ``__gt__``, ``__ge__``, ``__and__``, ``__or__``,
+                                                  ``__len__``             ``__sub__``, ``__xor__``, and ``isdisjoint``
 
 :class:`MutableSet`        :class:`Set`           ``__contains__``,       Inherited :class:`Set` methods and
                                                   ``__iter__``,           ``clear``, ``pop``, ``remove``, ``__ior__``,
@@ -65,9 +71,9 @@ ABC                        Inherits from          Abstract Methods        Mixin 
                                                   ``add``,
                                                   ``discard``
 
-:class:`Mapping`           :class:`Sized`,        ``__getitem__``,        ``__contains__``, ``keys``, ``items``, ``values``,
-                           :class:`Iterable`,     ``__iter__``,           ``get``, ``__eq__``, and ``__ne__``
-                           :class:`Container`     ``__len__``
+:class:`Mapping`           :class:`Collection`    ``__getitem__``,        ``__contains__``, ``keys``, ``items``, ``values``,
+                                                  ``__iter__``,           ``get``, ``__eq__``, and ``__ne__``
+                                                  ``__len__``
 
 :class:`MutableMapping`    :class:`Mapping`       ``__getitem__``,        Inherited :class:`Mapping` methods and
                                                   ``__setitem__``,        ``pop``, ``popitem``, ``clear``, ``update``,
@@ -86,6 +92,7 @@ ABC                        Inherits from          Abstract Methods        Mixin 
 :class:`Coroutine`         :class:`Awaitable`     ``send``, ``throw``     ``close``
 :class:`AsyncIterable`                            ``__aiter__``
 :class:`AsyncIterator`     :class:`AsyncIterable` ``__anext__``           ``__aiter__``
+:class:`AsyncGenerator`    :class:`AsyncIterator` ``asend``, ``athrow``   ``aclose``, ``__aiter__``, ``__anext__``
 ========================== ====================== ======================= ====================================================
 
 
@@ -102,11 +109,24 @@ ABC                        Inherits from          Abstract Methods        Mixin 
    ABC for classes that provide the :meth:`__iter__` method.
    See also the definition of :term:`iterable`.
 
+.. class:: Collection
+
+   ABC for sized iterable container classes.
+
+   .. versionadded:: 3.6
+
 .. class:: Iterator
 
    ABC for classes that provide the :meth:`~iterator.__iter__` and
    :meth:`~iterator.__next__` methods.  See also the definition of
    :term:`iterator`.
+
+.. class:: Reversible
+
+   ABC for iterable classes that also provide the :meth:`__reversed__`
+   method.
+
+   .. versionadded:: 3.6
 
 .. class:: Generator
 
@@ -119,6 +139,7 @@ ABC                        Inherits from          Abstract Methods        Mixin 
 
 .. class:: Sequence
            MutableSequence
+           ByteString
 
    ABCs for read-only and mutable :term:`sequences <sequence>`.
 
@@ -134,7 +155,6 @@ ABC                        Inherits from          Abstract Methods        Mixin 
    .. versionchanged:: 3.5
       The index() method added support for *stop* and *start*
       arguments.
-
 
 .. class:: Set
            MutableSet
@@ -202,6 +222,13 @@ ABC                        Inherits from          Abstract Methods        Mixin 
    methods.  See also the definition of :term:`asynchronous iterator`.
 
    .. versionadded:: 3.5
+
+.. class:: AsyncGenerator
+
+   ABC for asynchronous generator classes that implement the protocol
+   defined in :pep:`525` and :pep:`492`.
+
+   .. versionadded:: 3.6
 
 
 These ABCs allow us to ask classes or instances if they provide

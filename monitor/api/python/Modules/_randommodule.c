@@ -2,7 +2,7 @@
 
 /* ------------------------------------------------------------------
    The code in this module was based on a download from:
-      http://www.math.keio.ac.jp/~matumoto/MT2002/emt19937ar.html
+      http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/emt19937ar.html
 
    It was modified in 2002 by Raymond Hettinger as follows:
 
@@ -60,17 +60,16 @@
 
 
    Any feedback is very welcome.
-   http://www.math.keio.ac.jp/matumoto/emt.html
-   email: matumoto@math.keio.ac.jp
+   http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+   email: m-mat @ math.sci.hiroshima-u.ac.jp (remove space)
 */
 
 /* ---------------------------------------------------------------*/
 
 #include "Python.h"
 #include <time.h>               /* for seeding to current time */
-
-#ifndef PY_UINT32_T
-#  error "Failed to find an exact-width 32-bit integer type"
+#ifdef HAVE_PROCESS_H
+#  include <process.h>          /* needed for getpid() */
 #endif
 
 /* Period parameters -- These are all magic.  Don't change. */
@@ -83,7 +82,7 @@
 typedef struct {
     PyObject_HEAD
     int index;
-    PY_UINT32_T state[N];
+    uint32_t state[N];
 } RandomObject;
 
 static PyTypeObject Random_Type;
@@ -95,13 +94,13 @@ static PyTypeObject Random_Type;
 
 
 /* generates a random number on [0,0xffffffff]-interval */
-static PY_UINT32_T
+static uint32_t
 genrand_int32(RandomObject *self)
 {
-    PY_UINT32_T y;
-    static PY_UINT32_T mag01[2]={0x0U, MATRIX_A};
+    uint32_t y;
+    static const uint32_t mag01[2] = {0x0U, MATRIX_A};
     /* mag01[x] = x * MATRIX_A  for x=0,1 */
-    PY_UINT32_T *mt;
+    uint32_t *mt;
 
     mt = self->state;
     if (self->index >= N) { /* generate N words at one time */
@@ -136,21 +135,21 @@ genrand_int32(RandomObject *self)
  * optimize the division away at compile-time.  67108864 is 2**26.  In
  * effect, a contains 27 random bits shifted left 26, and b fills in the
  * lower 26 bits of the 53-bit numerator.
- * The orginal code credited Isaku Wada for this algorithm, 2002/01/09.
+ * The original code credited Isaku Wada for this algorithm, 2002/01/09.
  */
 static PyObject *
 random_random(RandomObject *self)
 {
-    PY_UINT32_T a=genrand_int32(self)>>5, b=genrand_int32(self)>>6;
+    uint32_t a=genrand_int32(self)>>5, b=genrand_int32(self)>>6;
     return PyFloat_FromDouble((a*67108864.0+b)*(1.0/9007199254740992.0));
 }
 
 /* initializes mt[N] with a seed */
 static void
-init_genrand(RandomObject *self, PY_UINT32_T s)
+init_genrand(RandomObject *self, uint32_t s)
 {
     int mti;
-    PY_UINT32_T *mt;
+    uint32_t *mt;
 
     mt = self->state;
     mt[0]= s;
@@ -169,11 +168,11 @@ init_genrand(RandomObject *self, PY_UINT32_T s)
 /* initialize by an array with array-length */
 /* init_key is the array for initializing keys */
 /* key_length is its length */
-static PyObject *
-init_by_array(RandomObject *self, PY_UINT32_T init_key[], size_t key_length)
+static void
+init_by_array(RandomObject *self, uint32_t init_key[], size_t key_length)
 {
     size_t i, j, k;       /* was signed in the original code. RDH 12/16/2002 */
-    PY_UINT32_T *mt;
+    uint32_t *mt;
 
     mt = self->state;
     init_genrand(self, 19650218U);
@@ -181,21 +180,19 @@ init_by_array(RandomObject *self, PY_UINT32_T init_key[], size_t key_length)
     k = (N>key_length ? N : key_length);
     for (; k; k--) {
         mt[i] = (mt[i] ^ ((mt[i-1] ^ (mt[i-1] >> 30)) * 1664525U))
-                 + init_key[j] + (PY_UINT32_T)j; /* non linear */
+                 + init_key[j] + (uint32_t)j; /* non linear */
         i++; j++;
         if (i>=N) { mt[0] = mt[N-1]; i=1; }
         if (j>=key_length) j=0;
     }
     for (k=N-1; k; k--) {
         mt[i] = (mt[i] ^ ((mt[i-1] ^ (mt[i-1] >> 30)) * 1566083941U))
-                 - (PY_UINT32_T)i; /* non linear */
+                 - (uint32_t)i; /* non linear */
         i++;
         if (i>=N) { mt[0] = mt[N-1]; i=1; }
     }
 
     mt[0] = 0x80000000U; /* MSB is 1; assuring non-zero initial array */
-    Py_INCREF(Py_None);
-    return Py_None;
 }
 
 /*
@@ -203,12 +200,43 @@ init_by_array(RandomObject *self, PY_UINT32_T init_key[], size_t key_length)
  * Twister download.
  */
 
+static int
+random_seed_urandom(RandomObject *self)
+{
+    PY_UINT32_T key[N];
+
+    if (_PyOS_URandomNonblock(key, sizeof(key)) < 0) {
+        return -1;
+    }
+    init_by_array(self, key, Py_ARRAY_LENGTH(key));
+    return 0;
+}
+
+static void
+random_seed_time_pid(RandomObject *self)
+{
+    _PyTime_t now;
+    uint32_t key[5];
+
+    now = _PyTime_GetSystemClock();
+    key[0] = (PY_UINT32_T)(now & 0xffffffffU);
+    key[1] = (PY_UINT32_T)(now >> 32);
+
+    key[2] = (PY_UINT32_T)getpid();
+
+    now = _PyTime_GetMonotonicClock();
+    key[3] = (PY_UINT32_T)(now & 0xffffffffU);
+    key[4] = (PY_UINT32_T)(now >> 32);
+
+    init_by_array(self, key, Py_ARRAY_LENGTH(key));
+}
+
 static PyObject *
 random_seed(RandomObject *self, PyObject *args)
 {
     PyObject *result = NULL;            /* guilty until proved innocent */
     PyObject *n = NULL;
-    PY_UINT32_T *key = NULL;
+    uint32_t *key = NULL;
     size_t bits, keyused;
     int res;
     PyObject *arg = NULL;
@@ -216,14 +244,17 @@ random_seed(RandomObject *self, PyObject *args)
     if (!PyArg_UnpackTuple(args, "seed", 0, 1, &arg))
         return NULL;
 
-    if (arg == NULL || arg == Py_None) {
-        time_t now;
+     if (arg == NULL || arg == Py_None) {
+        if (random_seed_urandom(self) < 0) {
+            PyErr_Clear();
 
-        time(&now);
-        init_genrand(self, (PY_UINT32_T)now);
-        Py_INCREF(Py_None);
-        return Py_None;
+            /* Reading system entropy failed, fall back on the worst entropy:
+               use the current time and process identifier. */
+            random_seed_time_pid(self);
+        }
+        Py_RETURN_NONE;
     }
+
     /* This algorithm relies on the number being unsigned.
      * So: if the arg is a PyLong, use its absolute value.
      * Otherwise use its hash value, cast to unsigned.
@@ -248,7 +279,7 @@ random_seed(RandomObject *self, PyObject *args)
     keyused = bits == 0 ? 1 : (bits - 1) / 32 + 1;
 
     /* Convert seed to byte sequence. */
-    key = (PY_UINT32_T *)PyMem_Malloc((size_t)4 * keyused);
+    key = (uint32_t *)PyMem_Malloc((size_t)4 * keyused);
     if (key == NULL) {
         PyErr_NoMemory();
         goto Done;
@@ -267,13 +298,17 @@ random_seed(RandomObject *self, PyObject *args)
         size_t i, j;
         /* Reverse an array. */
         for (i = 0, j = keyused - 1; i < j; i++, j--) {
-            PY_UINT32_T tmp = key[i];
+            uint32_t tmp = key[i];
             key[i] = key[j];
             key[j] = tmp;
         }
     }
 #endif
-    result = init_by_array(self, key, keyused);
+    init_by_array(self, key, keyused);
+
+    Py_INCREF(Py_None);
+    result = Py_None;
+
 Done:
     Py_XDECREF(n);
     PyMem_Free(key);
@@ -313,6 +348,7 @@ random_setstate(RandomObject *self, PyObject *state)
     int i;
     unsigned long element;
     long index;
+    uint32_t new_state[N];
 
     if (!PyTuple_Check(state)) {
         PyErr_SetString(PyExc_TypeError,
@@ -329,7 +365,7 @@ random_setstate(RandomObject *self, PyObject *state)
         element = PyLong_AsUnsignedLong(PyTuple_GET_ITEM(state, i));
         if (element == (unsigned long)-1 && PyErr_Occurred())
             return NULL;
-        self->state[i] = (PY_UINT32_T)element;
+        new_state[i] = (uint32_t)element;
     }
 
     index = PyLong_AsLong(PyTuple_GET_ITEM(state, i));
@@ -340,6 +376,8 @@ random_setstate(RandomObject *self, PyObject *state)
         return NULL;
     }
     self->index = (int)index;
+    for (i = 0; i < N; i++)
+        self->state[i] = new_state[i];
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -349,8 +387,8 @@ static PyObject *
 random_getrandbits(RandomObject *self, PyObject *args)
 {
     int k, i, words;
-    PY_UINT32_T r;
-    PY_UINT32_T *wordarray;
+    uint32_t r;
+    uint32_t *wordarray;
     PyObject *result;
 
     if (!PyArg_ParseTuple(args, "i:getrandbits", &k))
@@ -366,7 +404,7 @@ random_getrandbits(RandomObject *self, PyObject *args)
         return PyLong_FromUnsignedLong(genrand_int32(self) >> (32 - k));
 
     words = (k - 1) / 32 + 1;
-    wordarray = (PY_UINT32_T *)PyMem_Malloc(words * 4);
+    wordarray = (uint32_t *)PyMem_Malloc(words * 4);
     if (wordarray == NULL) {
         PyErr_NoMemory();
         return NULL;

@@ -22,7 +22,6 @@
 #define assert(op) /* empty */
 typedef int sdigit;
 typedef long Py_ssize_t;
-typedef long long PY_LONG_LONG;
 typedef unsigned short wchar_t;
 typedef struct {} PyObject;
 typedef struct {} grammar;
@@ -30,7 +29,7 @@ typedef struct {} DIR;
 typedef struct {} RFILE;
 
 /* Python/pythonrun.c
- * resourece leak false positive */
+ * resource leak false positive */
 
 void Py_FatalError(const char *msg) {
     __coverity_panic__();
@@ -63,7 +62,7 @@ PyObject *PyLong_FromLong(long ival)
         return NULL;
 }
 
-PyObject *PyLong_FromLongLong(PY_LONG_LONG ival)
+PyObject *PyLong_FromLongLong(long long ival)
 {
     return PyLong_FromLong((long)ival);
 }
@@ -94,7 +93,7 @@ wchar_t *Py_DecodeLocale(const char* arg, size_t *size)
 }
 
 /* Parser/pgenmain.c */
-grammar *getgrammar(char *filename)
+grammar *getgrammar(const char *filename)
 {
     grammar *g;
     __coverity_tainted_data_sink__(filename);
@@ -140,7 +139,7 @@ static PyObject *
 build_struct_time(int y, int m, int d, int hh, int mm, int ss, int dstflag)
 {
     PyObject *result;
-    
+
     __coverity_tainted_data_sanitize__(y);
     __coverity_tainted_data_sanitize__(m);
     __coverity_tainted_data_sanitize__(d);

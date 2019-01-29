@@ -25,7 +25,7 @@ Resource Locators. It supports the following URL schemes: ``file``, ``ftp``,
 ``gopher``, ``hdl``, ``http``, ``https``, ``imap``, ``mailto``, ``mms``,
 ``news``, ``nntp``, ``prospero``, ``rsync``, ``rtsp``, ``rtspu``, ``sftp``,
 ``shttp``, ``sip``, ``sips``, ``snews``, ``svn``, ``svn+ssh``, ``telnet``,
-``wais``.
+``wais``, ``ws``, ``wss``.
 
 The :mod:`urllib.parse` module defines functions that fall into two broad
 categories: URL parsing and URL quoting. These are covered in detail in
@@ -114,8 +114,12 @@ or on combining URL components into a URL string.
    |                  |       | if present               |                      |
    +------------------+-------+--------------------------+----------------------+
 
-   See section :ref:`urlparse-result-object` for more information on the result
-   object.
+   Reading the :attr:`port` attribute will raise a :exc:`ValueError` if
+   an invalid port is specified in the URL.  See section
+   :ref:`urlparse-result-object` for more information on the result object.
+
+   Unmatched square brackets in the :attr:`netloc` attribute will raise a
+   :exc:`ValueError`.
 
    .. versionchanged:: 3.2
       Added IPv6 URL parsing capabilities.
@@ -124,6 +128,10 @@ or on combining URL components into a URL string.
       The fragment is now parsed for all URL schemes (unless *allow_fragment* is
       false), in accordance with :rfc:`3986`.  Previously, a whitelist of
       schemes that support fragments existed.
+
+   .. versionchanged:: 3.6
+      Out-of-range port numbers now raise :exc:`ValueError`, instead of
+      returning :const:`None`.
 
 
 .. function:: parse_qs(qs, keep_blank_values=False, strict_parsing=False, encoding='utf-8', errors='replace')
@@ -227,8 +235,16 @@ or on combining URL components into a URL string.
    |                  |       | if present              |                      |
    +------------------+-------+-------------------------+----------------------+
 
-   See section :ref:`urlparse-result-object` for more information on the result
-   object.
+   Reading the :attr:`port` attribute will raise a :exc:`ValueError` if
+   an invalid port is specified in the URL.  See section
+   :ref:`urlparse-result-object` for more information on the result object.
+
+   Unmatched square brackets in the :attr:`netloc` attribute will raise a
+   :exc:`ValueError`.
+
+   .. versionchanged:: 3.6
+      Out-of-range port numbers now raise :exc:`ValueError`, instead of
+      returning :const:`None`.
 
 
 .. function:: urlunsplit(parts)
@@ -543,7 +559,7 @@ task isn't already covered by the URL parsing functions above.
    When a sequence of two-element tuples is used as the *query*
    argument, the first element of each tuple is a key and the second is a
    value. The value element in itself can be a sequence and in that case, if
-   the optional parameter *doseq* is evaluates to *True*, individual
+   the optional parameter *doseq* is evaluates to ``True``, individual
    ``key=value`` pairs separated by ``'&'`` are generated for each element of
    the value sequence for the key.  The order of parameters in the encoded
    string will match the order of parameter tuples in the sequence.

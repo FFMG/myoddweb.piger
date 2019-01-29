@@ -25,23 +25,27 @@
     -->
     <ArchName Condition="'$(ArchName)' == '' and $(Platform) == 'x64'">amd64</ArchName>
     <ArchName Condition="'$(ArchName)' == ''">win32</ArchName>
-    <ArchName Condition="$(Configuration) == 'PGInstrument' or $(Configuration) == 'PGUpdate'">$(ArchName)-pgo</ArchName>
     
     <!-- Root directory of the repository -->
     <PySourcePath Condition="'$(PySourcePath)' == ''">$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)\..\))</PySourcePath>
     <PySourcePath Condition="!HasTrailingSlash($(PySourcePath))">$(PySourcePath)\</PySourcePath>
     
     <!-- Directory where build outputs are put -->
-    <BuildPath Condition="'$(PyBuildPath)' == ''">$(PySourcePath)PCBuild\$(ArchName)\</BuildPath>
-    <BuildPath Condition="'$(PyBuildPath)' != ''">$(PyBuildPath)</BuildPath>
+    <BuildPath32 Condition="'$(Py_OutDir)' == ''">$(PySourcePath)PCBuild\win32\</BuildPath32>
+    <BuildPath32 Condition="'$(Py_OutDir)' != ''">$(Py_OutDir)\win32\</BuildPath32>
+    <BuildPath64 Condition="'$(Py_OutDir)' == ''">$(PySourcePath)PCBuild\amd64\</BuildPath64>
+    <BuildPath64 Condition="'$(Py_OutDir)' != ''">$(Py_OutDir)\amd64\</BuildPath64>
+    <BuildPath Condition="'$(ArchName)' == 'win32'">$(BuildPath32)</BuildPath>
+    <BuildPath Condition="'$(ArchName)' == 'amd64'">$(BuildPath64)</BuildPath>
+    <BuildPath Condition="'$(BuildPath)' == ''">$(PySourcePath)PCBuild\$(ArchName)\</BuildPath>
     <BuildPath Condition="!HasTrailingSlash($(BuildPath))">$(BuildPath)\</BuildPath>
     
     <!-- Directories of external projects. tcltk is handled in tcltk.props -->
     <ExternalsDir>$([System.IO.Path]::GetFullPath(`$(PySourcePath)externals\`))</ExternalsDir>
-    <sqlite3Dir>$(ExternalsDir)sqlite-3.8.11.0\</sqlite3Dir>
+    <sqlite3Dir>$(ExternalsDir)sqlite-3.14.2.0\</sqlite3Dir>
     <bz2Dir>$(ExternalsDir)bzip2-1.0.6\</bz2Dir>
-    <lzmaDir>$(ExternalsDir)xz-5.0.5\</lzmaDir>
-    <opensslDir>$(ExternalsDir)openssl-1.0.2h\</opensslDir>
+    <lzmaDir>$(ExternalsDir)xz-5.2.2\</lzmaDir>
+    <opensslDir>$(ExternalsDir)openssl-1.0.2k\</opensslDir>
     <opensslIncludeDir>$(opensslDir)include32</opensslIncludeDir>
     <opensslIncludeDir Condition="'$(ArchName)' == 'amd64'">$(opensslDir)include64</opensslIncludeDir>
     <nasmDir>$(ExternalsDir)\nasm-2.11.06\</nasmDir>

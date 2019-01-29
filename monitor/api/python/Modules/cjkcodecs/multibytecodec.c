@@ -85,7 +85,7 @@ call_error_callback(PyObject *errors, PyObject *exc)
     const char *str;
 
     assert(PyUnicode_Check(errors));
-    str = _PyUnicode_AsString(errors);
+    str = PyUnicode_AsUTF8(errors);
     if (str == NULL)
         return NULL;
     cb = PyCodec_LookupError(str);
@@ -138,7 +138,7 @@ codecctx_errors_set(MultibyteStatefulCodecContext *self, PyObject *value,
         return -1;
     }
 
-    str = _PyUnicode_AsString(value);
+    str = PyUnicode_AsUTF8(value);
     if (str == NULL)
         return -1;
 
@@ -1670,6 +1670,9 @@ _multibytecodec_MultibyteStreamWriter_writelines(MultibyteStreamWriterObject *se
         if (r == -1)
             return NULL;
     }
+    /* PySequence_Length() can fail */
+    if (PyErr_Occurred())
+        return NULL;
 
     Py_RETURN_NONE;
 }
@@ -1847,8 +1850,8 @@ _multibytecodec.__create_codec
 [clinic start generated code]*/
 
 static PyObject *
-_multibytecodec___create_codec(PyModuleDef *module, PyObject *arg)
-/*[clinic end generated code: output=fbe74f6510640163 input=6840b2a6b183fcfa]*/
+_multibytecodec___create_codec(PyObject *module, PyObject *arg)
+/*[clinic end generated code: output=cfa3dce8260e809d input=6840b2a6b183fcfa]*/
 {
     MultibyteCodecObject *self;
     MultibyteCodec *codec;

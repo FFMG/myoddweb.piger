@@ -58,7 +58,7 @@ main(int argc, char *argv[])
         fprintf(stderr, "cannot fstat '%s'\n", inpath);
         goto error;
     }
-    text_size = status.st_size;
+    text_size = (size_t)status.st_size;
     text = (char *) malloc(text_size + 1);
     if (text == NULL) {
         fprintf(stderr, "could not allocate %ld bytes\n", (long) text_size);
@@ -77,6 +77,7 @@ main(int argc, char *argv[])
     Py_NoUserSiteDirectory++;
     Py_NoSiteFlag++;
     Py_IgnoreEnvironmentFlag++;
+    Py_FrozenFlag++;
 
     Py_SetProgramName(L"./_freeze_importlib");
     /* Don't install importlib, since it could execute outdated bytecode. */

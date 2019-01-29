@@ -522,7 +522,7 @@ objects are considered to be true.
 
 Instance methods:
 
-.. method:: date.replace(year, month, day)
+.. method:: date.replace(year=self.year, month=self.month, day=self.day)
 
    Return a date with the same value, except for those parameters given new
    values by whichever keyword arguments are specified.  For example, if ``d ==
@@ -610,7 +610,8 @@ Instance methods:
 .. method:: date.__format__(format)
 
    Same as :meth:`.date.strftime`. This makes it possible to specify a format
-   string for a :class:`.date` object when using :meth:`str.format`. For a
+   string for a :class:`.date` object in :ref:`formatted string
+   literals <f-strings>` and when using :meth:`str.format`. For a
    complete list of formatting directives, see
    :ref:`strftime-strptime-behavior`.
 
@@ -682,21 +683,25 @@ both directions; like a time object, :class:`.datetime` assumes there are exactl
 
 Constructor:
 
-.. class:: datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None)
+.. class:: datetime(year, month, day, hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)
 
    The year, month and day arguments are required.  *tzinfo* may be ``None``, or an
    instance of a :class:`tzinfo` subclass.  The remaining arguments may be integers,
    in the following ranges:
 
-   * ``MINYEAR <= year <= MAXYEAR``
-   * ``1 <= month <= 12``
-   * ``1 <= day <= number of days in the given month and year``
-   * ``0 <= hour < 24``
-   * ``0 <= minute < 60``
-   * ``0 <= second < 60``
-   * ``0 <= microsecond < 1000000``
+   * ``MINYEAR <= year <= MAXYEAR``,
+   * ``1 <= month <= 12``,
+   * ``1 <= day <= number of days in the given month and year``,
+   * ``0 <= hour < 24``,
+   * ``0 <= minute < 60``,
+   * ``0 <= second < 60``,
+   * ``0 <= microsecond < 1000000``,
+   * ``fold in [0, 1]``.
 
    If an argument outside those ranges is given, :exc:`ValueError` is raised.
+
+   .. versionadded:: 3.6
+      Added the ``fold`` argument.
 
 Other constructors, all class methods:
 
@@ -757,6 +762,8 @@ Other constructors, all class methods:
       instead of :exc:`ValueError` on :c:func:`localtime` or :c:func:`gmtime`
       failure.
 
+   .. versionchanged:: 3.6
+      :meth:`fromtimestamp` may return instances with :attr:`.fold` set to 1.
 
 .. classmethod:: datetime.utcfromtimestamp(timestamp)
 
@@ -793,15 +800,22 @@ Other constructors, all class methods:
    microsecond of the result are all 0, and :attr:`.tzinfo` is ``None``.
 
 
-.. classmethod:: datetime.combine(date, time)
+.. classmethod:: datetime.combine(date, time, tzinfo=self.tzinfo)
 
    Return a new :class:`.datetime` object whose date components are equal to the
-   given :class:`date` object's, and whose time components and :attr:`.tzinfo`
-   attributes are equal to the given :class:`.time` object's. For any
-   :class:`.datetime` object *d*,
-   ``d == datetime.combine(d.date(), d.timetz())``.  If date is a
+   given :class:`date` object's, and whose time components
+   are equal to the given :class:`.time` object's.  If the *tzinfo*
+   argument is provided, its value is used to set the :attr:`.tzinfo` attribute
+   of the result, otherwise the :attr:`~.time.tzinfo` attribute of the *time* argument
+   is used.
+
+   For any :class:`.datetime` object *d*,
+   ``d == datetime.combine(d.date(), d.time(), d.tzinfo)``.  If date is a
    :class:`.datetime` object, its time components and :attr:`.tzinfo` attributes
    are ignored.
+
+   .. versionchanged:: 3.6
+      Added the *tzinfo* argument.
 
 
 .. classmethod:: datetime.strptime(date_string, format)
@@ -877,6 +891,16 @@ Instance attributes (read-only):
    The object passed as the *tzinfo* argument to the :class:`.datetime` constructor,
    or ``None`` if none was passed.
 
+
+.. attribute:: datetime.fold
+
+   In ``[0, 1]``.  Used to disambiguate wall times during a repeated interval.  (A
+   repeated interval occurs when clocks are rolled back at the end of daylight saving
+   time or when the UTC offset for the current zone is decreased for political reasons.)
+   The value 0 (1) represents the earlier (later) of the two moments with the same wall
+   time representation.
+
+   .. versionadded:: 3.6
 
 Supported operations:
 
@@ -966,22 +990,33 @@ Instance methods:
 
 .. method:: datetime.time()
 
-   Return :class:`.time` object with same hour, minute, second and microsecond.
+   Return :class:`.time` object with same hour, minute, second, microsecond and fold.
    :attr:`.tzinfo` is ``None``.  See also method :meth:`timetz`.
+
+   .. versionchanged:: 3.6
+      The fold value is copied to the returned :class:`.time` object.
 
 
 .. method:: datetime.timetz()
 
-   Return :class:`.time` object with same hour, minute, second, microsecond, and
+   Return :class:`.time` object with same hour, minute, second, microsecond, fold, and
    tzinfo attributes.  See also method :meth:`time`.
 
+   .. versionchanged:: 3.6
+      The fold value is copied to the returned :class:`.time` object.
 
-.. method:: datetime.replace([year[, month[, day[, hour[, minute[, second[, microsecond[, tzinfo]]]]]]]])
+
+.. method:: datetime.replace(year=self.year, month=self.month, day=self.day, \
+   hour=self.hour, minute=self.minute, second=self.second, microsecond=self.microsecond, \
+   tzinfo=self.tzinfo, * fold=0)
 
    Return a datetime with the same attributes, except for those attributes given
    new values by whichever keyword arguments are specified.  Note that
    ``tzinfo=None`` can be specified to create a naive datetime from an aware
    datetime with no conversion of date and time data.
+
+   .. versionadded:: 3.6
+      Added the ``fold`` argument.
 
 
 .. method:: datetime.astimezone(tz=None)
@@ -991,23 +1026,20 @@ Instance methods:
    *self*, but in *tz*'s local time.
 
    If provided, *tz* must be an instance of a :class:`tzinfo` subclass, and its
-   :meth:`utcoffset` and :meth:`dst` methods must not return ``None``.  *self* must
-   be aware (``self.tzinfo`` must not be ``None``, and ``self.utcoffset()`` must
-   not return ``None``).
+   :meth:`utcoffset` and :meth:`dst` methods must not return ``None``.  If *self*
+   is naive (``self.tzinfo is None``), it is presumed to represent time in the
+   system timezone.
 
    If called without arguments (or with ``tz=None``) the system local
-   timezone is assumed.  The ``.tzinfo`` attribute of the converted
+   timezone is assumed for the target timezone.  The ``.tzinfo`` attribute of the converted
    datetime instance will be set to an instance of :class:`timezone`
    with the zone name and offset obtained from the OS.
 
    If ``self.tzinfo`` is *tz*, ``self.astimezone(tz)`` is equal to *self*:  no
    adjustment of date or time data is performed. Else the result is local
-   time in time zone *tz*, representing the same UTC time as *self*:  after
-   ``astz = dt.astimezone(tz)``, ``astz - astz.utcoffset()`` will usually have
-   the same date and time data as ``dt - dt.utcoffset()``. The discussion
-   of class :class:`tzinfo` explains the cases at Daylight Saving Time transition
-   boundaries where this cannot be achieved (an issue only if *tz* models both
-   standard and daylight time).
+   time in the timezone *tz*, representing the same UTC time as *self*:  after
+   ``astz = dt.astimezone(tz)``, ``astz - astz.utcoffset()`` will have
+   the same date and time data as ``dt - dt.utcoffset()``.
 
    If you merely want to attach a time zone object *tz* to a datetime *dt* without
    adjustment of date and time data, use ``dt.replace(tzinfo=tz)``.  If you
@@ -1028,6 +1060,10 @@ Instance methods:
 
    .. versionchanged:: 3.3
       *tz* now can be omitted.
+
+   .. versionchanged:: 3.6
+      The :meth:`astimezone` method can now be called on naive instances that
+      are presumed to represent system local time.
 
 
 .. method:: datetime.utcoffset()
@@ -1105,6 +1141,10 @@ Instance methods:
 
    .. versionadded:: 3.3
 
+   .. versionchanged:: 3.6
+      The :meth:`timestamp` method uses the :attr:`.fold` attribute to
+      disambiguate the times during a repeated interval.
+
    .. note::
 
       There is no method to obtain the POSIX timestamp directly from a
@@ -1138,7 +1178,7 @@ Instance methods:
    ``self.date().isocalendar()``.
 
 
-.. method:: datetime.isoformat(sep='T')
+.. method:: datetime.isoformat(sep='T', timespec='auto')
 
    Return a string representing the date and time in ISO 8601 format,
    YYYY-MM-DDTHH:MM:SS.mmmmmm or, if :attr:`microsecond` is 0,
@@ -1158,6 +1198,37 @@ Instance methods:
       ...
       >>> datetime(2002, 12, 25, tzinfo=TZ()).isoformat(' ')
       '2002-12-25 00:00:00-06:39'
+
+   The optional argument *timespec* specifies the number of additional
+   components of the time to include (the default is ``'auto'``).
+   It can be one of the following:
+
+   - ``'auto'``: Same as ``'seconds'`` if :attr:`microsecond` is 0,
+     same as ``'microseconds'`` otherwise.
+   - ``'hours'``: Include the :attr:`hour` in the two-digit HH format.
+   - ``'minutes'``: Include :attr:`hour` and :attr:`minute` in HH:MM format.
+   - ``'seconds'``: Include :attr:`hour`, :attr:`minute`, and :attr:`second`
+     in HH:MM:SS format.
+   - ``'milliseconds'``: Include full time, but truncate fractional second
+     part to milliseconds. HH:MM:SS.sss format.
+   - ``'microseconds'``: Include full time in HH:MM:SS.mmmmmm format.
+
+   .. note::
+
+      Excluded time components are truncated, not rounded.
+
+   :exc:`ValueError` will be raised on an invalid *timespec* argument.
+
+
+      >>> from datetime import datetime
+      >>> datetime.now().isoformat(timespec='minutes')
+      '2002-12-25T00:00'
+      >>> dt = datetime(2015, 1, 1, 12, 30, 59, 0)
+      >>> dt.isoformat(timespec='microseconds')
+      '2015-01-01T12:30:59.000000'
+
+   .. versionadded:: 3.6
+      Added the *timespec* argument.
 
 
 .. method:: datetime.__str__()
@@ -1185,7 +1256,8 @@ Instance methods:
 .. method:: datetime.__format__(format)
 
    Same as :meth:`.datetime.strftime`.  This makes it possible to specify a format
-   string for a :class:`.datetime` object when using :meth:`str.format`.  For a
+   string for a :class:`.datetime` object in :ref:`formatted string
+   literals <f-strings>` and when using :meth:`str.format`.  For a
    complete list of formatting directives, see
    :ref:`strftime-strptime-behavior`.
 
@@ -1296,22 +1368,23 @@ Using datetime with tzinfo:
 
 .. _datetime-time:
 
-:class:`time` Objects
----------------------
+:class:`.time` Objects
+----------------------
 
 A time object represents a (local) time of day, independent of any particular
 day, and subject to adjustment via a :class:`tzinfo` object.
 
-.. class:: time(hour=0, minute=0, second=0, microsecond=0, tzinfo=None)
+.. class:: time(hour=0, minute=0, second=0, microsecond=0, tzinfo=None, *, fold=0)
 
    All arguments are optional.  *tzinfo* may be ``None``, or an instance of a
    :class:`tzinfo` subclass.  The remaining arguments may be integers, in the
    following ranges:
 
-   * ``0 <= hour < 24``
-   * ``0 <= minute < 60``
-   * ``0 <= second < 60``
-   * ``0 <= microsecond < 1000000``.
+   * ``0 <= hour < 24``,
+   * ``0 <= minute < 60``,
+   * ``0 <= second < 60``,
+   * ``0 <= microsecond < 1000000``,
+   * ``fold in [0, 1]``.
 
    If an argument outside those ranges is given, :exc:`ValueError` is raised.  All
    default to ``0`` except *tzinfo*, which defaults to :const:`None`.
@@ -1364,6 +1437,17 @@ Instance attributes (read-only):
    ``None`` if none was passed.
 
 
+.. attribute:: time.fold
+
+   In ``[0, 1]``.  Used to disambiguate wall times during a repeated interval.  (A
+   repeated interval occurs when clocks are rolled back at the end of daylight saving
+   time or when the UTC offset for the current zone is decreased for political reasons.)
+   The value 0 (1) represents the earlier (later) of the two moments with the same wall
+   time representation.
+
+   .. versionadded:: 3.6
+
+
 Supported operations:
 
 * comparison of :class:`.time` to :class:`.time`, where *a* is considered less
@@ -1382,7 +1466,7 @@ Supported operations:
   ``!=``.  The latter cases return :const:`False` or :const:`True`, respectively.
 
   .. versionchanged:: 3.3
-     Equality comparisons between naive and aware :class:`time` instances
+     Equality comparisons between naive and aware :class:`~datetime.time` instances
      don't raise :exc:`TypeError`.
 
 * hash, use as dict key
@@ -1399,20 +1483,57 @@ In boolean contexts, a :class:`.time` object is always considered to be true.
 
 Instance methods:
 
-.. method:: time.replace([hour[, minute[, second[, microsecond[, tzinfo]]]]])
+.. method:: time.replace(hour=self.hour, minute=self.minute, second=self.second, \
+   microsecond=self.microsecond, tzinfo=self.tzinfo, * fold=0)
 
    Return a :class:`.time` with the same value, except for those attributes given
    new values by whichever keyword arguments are specified.  Note that
    ``tzinfo=None`` can be specified to create a naive :class:`.time` from an
    aware :class:`.time`, without conversion of the time data.
 
+   .. versionadded:: 3.6
+      Added the ``fold`` argument.
 
-.. method:: time.isoformat()
+
+.. method:: time.isoformat(timespec='auto')
 
    Return a string representing the time in ISO 8601 format, HH:MM:SS.mmmmmm or, if
-   self.microsecond is 0, HH:MM:SS If :meth:`utcoffset` does not return ``None``, a
+   :attr:`microsecond` is 0, HH:MM:SS If :meth:`utcoffset` does not return ``None``, a
    6-character string is appended, giving the UTC offset in (signed) hours and
    minutes: HH:MM:SS.mmmmmm+HH:MM or, if self.microsecond is 0, HH:MM:SS+HH:MM
+
+   The optional argument *timespec* specifies the number of additional
+   components of the time to include (the default is ``'auto'``).
+   It can be one of the following:
+
+   - ``'auto'``: Same as ``'seconds'`` if :attr:`microsecond` is 0,
+     same as ``'microseconds'`` otherwise.
+   - ``'hours'``: Include the :attr:`hour` in the two-digit HH format.
+   - ``'minutes'``: Include :attr:`hour` and :attr:`minute` in HH:MM format.
+   - ``'seconds'``: Include :attr:`hour`, :attr:`minute`, and :attr:`second`
+     in HH:MM:SS format.
+   - ``'milliseconds'``: Include full time, but truncate fractional second
+     part to milliseconds. HH:MM:SS.sss format.
+   - ``'microseconds'``: Include full time in HH:MM:SS.mmmmmm format.
+
+   .. note::
+
+      Excluded time components are truncated, not rounded.
+
+   :exc:`ValueError` will be raised on an invalid *timespec* argument.
+
+
+      >>> from datetime import time
+      >>> time(hour=12, minute=34, second=56, microsecond=123456).isoformat(timespec='minutes')
+      '12:34'
+      >>> dt = time(hour=12, minute=34, second=56, microsecond=0)
+      >>> dt.isoformat(timespec='microseconds')
+      '12:34:56.000000'
+      >>> dt.isoformat(timespec='auto')
+      '12:34:56'
+
+   .. versionadded:: 3.6
+      Added the *timespec* argument.
 
 
 .. method:: time.__str__()
@@ -1430,7 +1551,8 @@ Instance methods:
 .. method:: time.__format__(format)
 
    Same as :meth:`.time.strftime`. This makes it possible to specify a format string
-   for a :class:`.time` object when using :meth:`str.format`.  For a
+   for a :class:`.time` object in :ref:`formatted string
+   literals <f-strings>` and when using :meth:`str.format`.  For a
    complete list of formatting directives, see
    :ref:`strftime-strptime-behavior`.
 
@@ -1460,7 +1582,7 @@ Instance methods:
 
 Example:
 
-    >>> from datetime import time, tzinfo
+    >>> from datetime import time, tzinfo, timedelta
     >>> class GMT1(tzinfo):
     ...     def utcoffset(self, dt):
     ...         return timedelta(hours=1)
@@ -1680,9 +1802,19 @@ minute after 1:59 (EST) on the second Sunday in March, and ends the minute after
 When DST starts (the "start" line), the local wall clock leaps from 1:59 to
 3:00.  A wall time of the form 2:MM doesn't really make sense on that day, so
 ``astimezone(Eastern)`` won't deliver a result with ``hour == 2`` on the day DST
-begins.  In order for :meth:`astimezone` to make this guarantee, the
-:meth:`tzinfo.dst` method must consider times in the "missing hour" (2:MM for
-Eastern) to be in daylight time.
+begins.  For example, at the Spring forward transition of 2016, we get
+
+    >>> u0 = datetime(2016, 3, 13, 5, tzinfo=timezone.utc)
+    >>> for i in range(4):
+    ...     u = u0 + i*HOUR
+    ...     t = u.astimezone(Eastern)
+    ...     print(u.time(), 'UTC =', t.time(), t.tzname())
+    ...
+    05:00:00 UTC = 00:00:00 EST
+    06:00:00 UTC = 01:00:00 EST
+    07:00:00 UTC = 03:00:00 EDT
+    08:00:00 UTC = 04:00:00 EDT
+
 
 When DST ends (the "end" line), there's a potentially worse problem: there's an
 hour that can't be spelled unambiguously in local wall time: the last hour of
@@ -1691,28 +1823,41 @@ daylight time ends.  The local wall clock leaps from 1:59 (daylight time) back
 to 1:00 (standard time) again. Local times of the form 1:MM are ambiguous.
 :meth:`astimezone` mimics the local clock's behavior by mapping two adjacent UTC
 hours into the same local hour then.  In the Eastern example, UTC times of the
-form 5:MM and 6:MM both map to 1:MM when converted to Eastern.  In order for
-:meth:`astimezone` to make this guarantee, the :meth:`tzinfo.dst` method must
-consider times in the "repeated hour" to be in standard time.  This is easily
-arranged, as in the example, by expressing DST switch times in the time zone's
-standard local time.
+form 5:MM and 6:MM both map to 1:MM when converted to Eastern, but earlier times
+have the :attr:`~datetime.fold` attribute set to 0 and the later times have it set to 1.
+For example, at the Fall back transition of 2016, we get
 
-Applications that can't bear such ambiguities should avoid using hybrid
+    >>> u0 = datetime(2016, 11, 6, 4, tzinfo=timezone.utc)
+    >>> for i in range(4):
+    ...     u = u0 + i*HOUR
+    ...     t = u.astimezone(Eastern)
+    ...     print(u.time(), 'UTC =', t.time(), t.tzname(), t.fold)
+    ...
+    04:00:00 UTC = 00:00:00 EDT 0
+    05:00:00 UTC = 01:00:00 EDT 0
+    06:00:00 UTC = 01:00:00 EST 1
+    07:00:00 UTC = 02:00:00 EST 0
+
+Note that the :class:`datetime` instances that differ only by the value of the
+:attr:`~datetime.fold` attribute are considered equal in comparisons.
+
+Applications that can't bear wall-time ambiguities should explicitly check the
+value of the :attr:`~datetime.fold` attribute or avoid using hybrid
 :class:`tzinfo` subclasses; there are no ambiguities when using :class:`timezone`,
 or any other fixed-offset :class:`tzinfo` subclass (such as a class representing
 only EST (fixed offset -5 hours), or only EDT (fixed offset -4 hours)).
 
 .. seealso::
 
-   `pytz <https://pypi.python.org/pypi/pytz/>`_
+   `dateutil.tz <https://dateutil.readthedocs.io/en/stable/tz.html>`_
       The standard library has :class:`timezone` class for handling arbitrary
       fixed offsets from UTC and :attr:`timezone.utc` as UTC timezone instance.
 
-      *pytz* library brings the *IANA timezone database* (also known as the
+      *dateutil.tz* library brings the *IANA timezone database* (also known as the
       Olson database) to Python and its usage is recommended.
 
    `IANA timezone database <https://www.iana.org/time-zones>`_
-      The Time Zone Database (often called tz or zoneinfo) contains code and
+      The Time Zone Database (often called tz, tzdata or zoneinfo) contains code and
       data that represent the history of local time for many representative
       locations around the globe. It is updated periodically to reflect changes
       made by political bodies to time zone boundaries, UTC offsets, and
@@ -1732,7 +1877,7 @@ in different days of the year or where historical changes have been
 made to civil time.
 
 
-.. class:: timezone(offset[, name])
+.. class:: timezone(offset, name=None)
 
   The *offset* argument must be specified as a :class:`timedelta`
   object representing the difference between the local time and UTC.  It must
@@ -1741,10 +1886,7 @@ made to civil time.
   otherwise :exc:`ValueError` is raised.
 
   The *name* argument is optional.  If specified it must be a string that
-  is used as the value returned by the ``tzname(dt)`` method.  Otherwise,
-  ``tzname(dt)`` returns a string 'UTCsHH:MM', where s is the sign of
-  *offset*, HH and MM are two digits of ``offset.hours`` and
-  ``offset.minutes`` respectively.
+  will be used as the value returned by the :meth:`datetime.tzname` method.
 
   .. versionadded:: 3.2
 
@@ -1757,10 +1899,18 @@ made to civil time.
 
 .. method:: timezone.tzname(dt)
 
-  Return the fixed value specified when the :class:`timezone` instance is
-  constructed or a string 'UTCsHH:MM', where s is the sign of
-  *offset*, HH and MM are two digits of ``offset.hours`` and
+  Return the fixed value specified when the :class:`timezone` instance
+  is constructed.  If *name* is not provided in the constructor, the
+  name returned by ``tzname(dt)`` is generated from the value of the
+  ``offset`` as follows.  If *offset* is ``timedelta(0)``, the name
+  is "UTC", otherwise it is a string 'UTC±HH:MM', where ± is the sign
+  of ``offset``, HH and MM are two digits of ``offset.hours`` and
   ``offset.minutes`` respectively.
+
+  .. versionchanged:: 3.6
+     Name generated from ``offset=timedelta(0)`` is now plain 'UTC', not
+     'UTC+00:00'.
+
 
 .. method:: timezone.dst(dt)
 
@@ -1911,6 +2061,34 @@ format codes.
 | ``%%``    | A literal ``'%'`` character.   | %                      |       |
 +-----------+--------------------------------+------------------------+-------+
 
+Several additional directives not required by the C89 standard are included for
+convenience. These parameters all correspond to ISO 8601 date values. These
+may not be available on all platforms when used with the :meth:`strftime`
+method. The ISO 8601 year and ISO 8601 week directives are not interchangeable
+with the year and week number directives above. Calling :meth:`strptime` with
+incomplete or ambiguous ISO 8601 directives will raise a :exc:`ValueError`.
+
++-----------+--------------------------------+------------------------+-------+
+| Directive | Meaning                        | Example                | Notes |
++===========+================================+========================+=======+
+| ``%G``    | ISO 8601 year with century     | 0001, 0002, ..., 2013, | \(8)  |
+|           | representing the year that     | 2014, ..., 9998, 9999  |       |
+|           | contains the greater part of   |                        |       |
+|           | the ISO week (``%V``).         |                        |       |
++-----------+--------------------------------+------------------------+-------+
+| ``%u``    | ISO 8601 weekday as a decimal  | 1, 2, ..., 7           |       |
+|           | number where 1 is Monday.      |                        |       |
++-----------+--------------------------------+------------------------+-------+
+| ``%V``    | ISO 8601 week as a decimal     | 01, 02, ..., 53        | \(8)  |
+|           | number with Monday as          |                        |       |
+|           | the first day of the week.     |                        |       |
+|           | Week 01 is the week containing |                        |       |
+|           | Jan 4.                         |                        |       |
++-----------+--------------------------------+------------------------+-------+
+
+.. versionadded:: 3.6
+   ``%G``, ``%u`` and ``%V`` were added.
+
 Notes:
 
 (1)
@@ -1975,7 +2153,14 @@ Notes:
 
 (7)
    When used with the :meth:`strptime` method, ``%U`` and ``%W`` are only used
-   in calculations when the day of the week and the year are specified.
+   in calculations when the day of the week and the calendar year (``%Y``)
+   are specified.
+
+(8)
+   Similar to ``%U`` and ``%W``, ``%V`` is only used in calculations when the
+   day of the week and the ISO year (``%G``) are specified in a
+   :meth:`strptime` format string. Also note that ``%G`` and ``%Y`` are not
+   interchangeable.
 
 .. rubric:: Footnotes
 

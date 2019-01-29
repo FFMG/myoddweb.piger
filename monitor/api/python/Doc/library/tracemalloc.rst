@@ -66,7 +66,7 @@ Example of output of the Python test suite::
     <string>:5: size=49.7 KiB, count=148, average=344 B
     /usr/lib/python3.4/sysconfig.py:411: size=48.0 KiB, count=1, average=48.0 KiB
 
-We can see that Python loaded ``4.8 MiB`` data (bytecode and constants) from
+We can see that Python loaded ``4855 KiB`` data (bytecode and constants) from
 modules and that the :mod:`collections` module allocated ``244 KiB`` to build
 :class:`~collections.namedtuple` types.
 
@@ -106,8 +106,8 @@ Example of output before/after running some tests of the Python test suite::
     /usr/lib/python3.4/urllib/parse.py:476: size=71.8 KiB (+71.8 KiB), count=969 (+969), average=76 B
     /usr/lib/python3.4/contextlib.py:38: size=67.2 KiB (+67.2 KiB), count=126 (+126), average=546 B
 
-We can see that Python has loaded ``8.2 MiB`` of module data (bytecode and
-constants), and that this is ``4.4 MiB`` more than had been loaded before the
+We can see that Python has loaded ``8173 KiB`` of module data (bytecode and
+constants), and that this is ``4428 KiB`` more than had been loaded before the
 tests, when the previous snapshot was taken. Similarly, the :mod:`linecache`
 module has cached ``940 KiB`` of Python source code to format tracebacks, all
 of it since the previous snapshot.
@@ -176,7 +176,7 @@ Example of output of the Python test suite (traceback limited to 25 frames)::
         "__main__", fname, loader, pkg_name)
 
 We can see that the most memory was allocated in the :mod:`importlib` module to
-load data (bytecode and constants) from modules: ``870 KiB``. The traceback is
+load data (bytecode and constants) from modules: ``870.1 KiB``. The traceback is
 where the :mod:`importlib` loaded data most recently: on the ``import pdb``
 line of the :mod:`doctest` module. The traceback may change if a new module is
 loaded.
@@ -192,12 +192,12 @@ ignoring ``<frozen importlib._bootstrap>`` and ``<unknown>`` files::
     import os
     import tracemalloc
 
-    def display_top(snapshot, group_by='lineno', limit=10):
+    def display_top(snapshot, key_type='lineno', limit=10):
         snapshot = snapshot.filter_traces((
             tracemalloc.Filter(False, "<frozen importlib._bootstrap>"),
             tracemalloc.Filter(False, "<unknown>"),
         ))
-        top_stats = snapshot.statistics(group_by)
+        top_stats = snapshot.statistics(key_type)
 
         print("Top %s lines" % limit)
         for index, stat in enumerate(top_stats[:limit], 1):
@@ -359,10 +359,32 @@ Functions
    See also the :func:`get_object_traceback` function.
 
 
+DomainFilter
+^^^^^^^^^^^^
+
+.. class:: DomainFilter(inclusive: bool, domain: int)
+
+   Filter traces of memory blocks by their address space (domain).
+
+   .. versionadded:: 3.6
+
+   .. attribute:: inclusive
+
+      If *inclusive* is ``True`` (include), match memory blocks allocated
+      in the address space :attr:`domain`.
+
+      If *inclusive* is ``False`` (exclude), match memory blocks not allocated
+      in the address space :attr:`domain`.
+
+   .. attribute:: domain
+
+      Address space of a memory block (``int``). Read-only property.
+
+
 Filter
 ^^^^^^
 
-.. class:: Filter(inclusive: bool, filename_pattern: str, lineno: int=None, all_frames: bool=False)
+.. class:: Filter(inclusive: bool, filename_pattern: str, lineno: int=None, all_frames: bool=False, domain: int=None)
 
    Filter on traces of memory blocks.
 
@@ -382,9 +404,17 @@ Filter
    .. versionchanged:: 3.5
       The ``'.pyo'`` file extension is no longer replaced with ``'.py'``.
 
+   .. versionchanged:: 3.6
+      Added the :attr:`domain` attribute.
+
+
+   .. attribute:: domain
+
+      Address space of a memory block (``int`` or ``None``).
+
    .. attribute:: inclusive
 
-      If *inclusive* is ``True`` (include), only trace memory blocks allocated
+      If *inclusive* is ``True`` (include), only match memory blocks allocated
       in a file with a name matching :attr:`filename_pattern` at line number
       :attr:`lineno`.
 
@@ -399,7 +429,7 @@ Filter
 
    .. attribute:: filename_pattern
 
-      Filename pattern of the filter (``str``).
+      Filename pattern of the filter (``str``). Read-only property.
 
    .. attribute:: all_frames
 
@@ -438,12 +468,12 @@ Snapshot
 
    The :func:`take_snapshot` function creates a snapshot instance.
 
-   .. method:: compare_to(old_snapshot: Snapshot, group_by: str, cumulative: bool=False)
+   .. method:: compare_to(old_snapshot: Snapshot, key_type: str, cumulative: bool=False)
 
       Compute the differences with an old snapshot. Get statistics as a sorted
-      list of :class:`StatisticDiff` instances grouped by *group_by*.
+      list of :class:`StatisticDiff` instances grouped by *key_type*.
 
-      See the :meth:`Snapshot.statistics` method for *group_by* and *cumulative*
+      See the :meth:`Snapshot.statistics` method for *key_type* and *cumulative*
       parameters.
 
       The result is sorted from the biggest to the smallest by: absolute value
@@ -462,13 +492,16 @@ Snapshot
    .. method:: filter_traces(filters)
 
       Create a new :class:`Snapshot` instance with a filtered :attr:`traces`
-      sequence, *filters* is a list of :class:`Filter` instances.  If *filters*
-      is an empty list, return a new :class:`Snapshot` instance with a copy of
-      the traces.
+      sequence, *filters* is a list of :class:`DomainFilter` and
+      :class:`Filter` instances.  If *filters* is an empty list, return a new
+      :class:`Snapshot` instance with a copy of the traces.
 
       All inclusive filters are applied at once, a trace is ignored if no
       inclusive filters match it. A trace is ignored if at least one exclusive
       filter matches it.
+
+      .. versionchanged:: 3.6
+         :class:`DomainFilter` instances are now also accepted in *filters*.
 
 
    .. classmethod:: load(filename)
@@ -478,13 +511,13 @@ Snapshot
       See also :meth:`dump`.
 
 
-   .. method:: statistics(group_by: str, cumulative: bool=False)
+   .. method:: statistics(key_type: str, cumulative: bool=False)
 
       Get statistics as a sorted list of :class:`Statistic` instances grouped
-      by *group_by*:
+      by *key_type*:
 
       =====================  ========================
-      group_by               description
+      key_type               description
       =====================  ========================
       ``'filename'``         filename
       ``'lineno'``           filename and line number
@@ -493,7 +526,7 @@ Snapshot
 
       If *cumulative* is ``True``, cumulate size and count of memory blocks of
       all frames of the traceback of a trace, not only the most recent frame.
-      The cumulative mode can only be used with *group_by* equals to
+      The cumulative mode can only be used with *key_type* equals to
       ``'filename'`` and ``'lineno'``.
 
       The result is sorted from the biggest to the smallest by:

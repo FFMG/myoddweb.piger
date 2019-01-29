@@ -16,7 +16,7 @@ Here are some of the useful functions provided by this module:
     getmodule() - determine the module that an object came from
     getclasstree() - arrange classes so as to represent their hierarchy
 
-    getargspec(), getargvalues(), getcallargs() - get info about function arguments
+    getargvalues(), getcallargs() - get info about function arguments
     getfullargspec() - same, with support for Python 3 features
     formatargspec(), formatargvalues() - format an argument spec
     getouterframes(), getinnerframes() - get info about frames
@@ -31,6 +31,7 @@ Here are some of the useful functions provided by this module:
 __author__ = ('Ka-Ping Yee <ping@lfw.org>',
               'Yury Selivanov <yselivanov@sprymix.com>')
 
+import abc
 import ast
 import dis
 import collections.abc
@@ -171,20 +172,31 @@ def isfunction(object):
 def isgeneratorfunction(object):
     """Return true if the object is a user-defined generator function.
 
-    Generator function objects provides same attributes as functions.
-
-    See help(isfunction) for attributes listing."""
+    Generator function objects provide the same attributes as functions.
+    See help(isfunction) for a list of attributes."""
     return bool((isfunction(object) or ismethod(object)) and
                 object.__code__.co_flags & CO_GENERATOR)
 
 def iscoroutinefunction(object):
     """Return true if the object is a coroutine function.
 
-    Coroutine functions are defined with "async def" syntax,
-    or generators decorated with "types.coroutine".
+    Coroutine functions are defined with "async def" syntax.
     """
     return bool((isfunction(object) or ismethod(object)) and
                 object.__code__.co_flags & CO_COROUTINE)
+
+def isasyncgenfunction(object):
+    """Return true if the object is an asynchronous generator function.
+
+    Asynchronous generator functions are defined with "async def"
+    syntax and have "yield" expressions in their body.
+    """
+    return bool((isfunction(object) or ismethod(object)) and
+                object.__code__.co_flags & CO_ASYNC_GENERATOR)
+
+def isasyncgen(object):
+    """Return true if the object is an asynchronous generator."""
+    return isinstance(object, types.AsyncGeneratorType)
 
 def isgenerator(object):
     """Return true if the object is a generator.
@@ -208,10 +220,10 @@ def iscoroutine(object):
     return isinstance(object, types.CoroutineType)
 
 def isawaitable(object):
-    """Return true is object can be passed to an ``await`` expression."""
+    """Return true if object can be passed to an ``await`` expression."""
     return (isinstance(object, types.CoroutineType) or
             isinstance(object, types.GeneratorType) and
-                object.gi_code.co_flags & CO_ITERABLE_COROUTINE or
+                bool(object.gi_code.co_flags & CO_ITERABLE_COROUTINE) or
             isinstance(object, collections.abc.Awaitable))
 
 def istraceback(object):
@@ -242,18 +254,24 @@ def iscode(object):
     """Return true if the object is a code object.
 
     Code objects provide these attributes:
-        co_argcount     number of arguments (not including * or ** args)
-        co_code         string of raw compiled bytecode
-        co_consts       tuple of constants used in the bytecode
-        co_filename     name of file in which this code object was created
-        co_firstlineno  number of first line in Python source code
-        co_flags        bitmap: 1=optimized | 2=newlocals | 4=*arg | 8=**arg
-        co_lnotab       encoded mapping of line numbers to bytecode indices
-        co_name         name with which this code object was defined
-        co_names        tuple of names of local variables
-        co_nlocals      number of local variables
-        co_stacksize    virtual machine stack space required
-        co_varnames     tuple of names of arguments and local variables"""
+        co_argcount         number of arguments (not including *, ** args
+                            or keyword only arguments)
+        co_code             string of raw compiled bytecode
+        co_cellvars         tuple of names of cell variables
+        co_consts           tuple of constants used in the bytecode
+        co_filename         name of file in which this code object was created
+        co_firstlineno      number of first line in Python source code
+        co_flags            bitmap: 1=optimized | 2=newlocals | 4=*arg | 8=**arg
+                            | 16=nested | 32=generator | 64=nofree | 128=coroutine
+                            | 256=iterable_coroutine | 512=async_generator
+        co_freevars         tuple of names of free variables
+        co_kwonlyargcount   number of keyword only arguments (not including ** arg)
+        co_lnotab           encoded mapping of line numbers to bytecode indices
+        co_name             name with which this code object was defined
+        co_names            tuple of names of local variables
+        co_nlocals          number of local variables
+        co_stacksize        virtual machine stack space required
+        co_varnames         tuple of names of arguments and local variables"""
     return isinstance(object, types.CodeType)
 
 def isbuiltin(object):
@@ -274,7 +292,27 @@ def isroutine(object):
 
 def isabstract(object):
     """Return true if the object is an abstract base class (ABC)."""
-    return bool(isinstance(object, type) and object.__flags__ & TPFLAGS_IS_ABSTRACT)
+    if not isinstance(object, type):
+        return False
+    if object.__flags__ & TPFLAGS_IS_ABSTRACT:
+        return True
+    if not issubclass(type(object), abc.ABCMeta):
+        return False
+    if hasattr(object, '__abstractmethods__'):
+        # It looks like ABCMeta.__new__ has finished running;
+        # TPFLAGS_IS_ABSTRACT should have been accurate.
+        return False
+    # It looks like ABCMeta.__new__ has not finished running yet; we're
+    # probably in __init_subclass__. We'll look for abstractmethods manually.
+    for name, value in object.__dict__.items():
+        if getattr(value, "__isabstractmethod__", False):
+            return True
+    for base in object.__bases__:
+        for name in getattr(base, "__abstractmethods__", ()):
+            value = getattr(object, name, None)
+            if getattr(value, "__isabstractmethod__", False):
+                return True
+    return False
 
 def getmembers(object, predicate=None):
     """Return all members of an object as (name, value) pairs sorted by name.
@@ -623,23 +661,6 @@ def getfile(object):
         return object.co_filename
     raise TypeError('{!r} is not a module, class, method, '
                     'function, traceback, frame, or code object'.format(object))
-
-ModuleInfo = namedtuple('ModuleInfo', 'name suffix mode module_type')
-
-def getmoduleinfo(path):
-    """Get the module name, suffix, mode, and module type for a given file."""
-    warnings.warn('inspect.getmoduleinfo() is deprecated', DeprecationWarning,
-                  2)
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore', PendingDeprecationWarning)
-        import imp
-    filename = os.path.basename(path)
-    suffixes = [(-len(suffix), suffix, mode, mtype)
-                    for suffix, mode, mtype in imp.get_suffixes()]
-    suffixes.sort() # try longest suffixes first, in case they overlap
-    for neglen, suffix, mode, mtype in suffixes:
-        if filename[neglen:] == suffix:
-            return ModuleInfo(filename[:neglen], suffix, mode, mtype)
 
 def getmodulename(path):
     """Return the module name for a given file, or None."""
@@ -1025,24 +1046,30 @@ def _getfullargs(co):
 ArgSpec = namedtuple('ArgSpec', 'args varargs keywords defaults')
 
 def getargspec(func):
-    """Get the names and default values of a function's arguments.
+    """Get the names and default values of a function's parameters.
 
     A tuple of four things is returned: (args, varargs, keywords, defaults).
     'args' is a list of the argument names, including keyword-only argument names.
-    'varargs' and 'keywords' are the names of the * and ** arguments or None.
-    'defaults' is an n-tuple of the default values of the last n arguments.
+    'varargs' and 'keywords' are the names of the * and ** parameters or None.
+    'defaults' is an n-tuple of the default values of the last n parameters.
 
-    Use the getfullargspec() API for Python 3 code, as annotations
-    and keyword arguments are supported. getargspec() will raise ValueError
-    if the func has either annotations or keyword arguments.
+    This function is deprecated, as it does not support annotations or
+    keyword-only parameters and will raise ValueError if either is present
+    on the supplied callable.
+
+    For a more structured introspection API, use inspect.signature() instead.
+
+    Alternatively, use getfullargspec() for an API with a similar namedtuple
+    based interface, but full support for annotations and keyword-only
+    parameters.
     """
     warnings.warn("inspect.getargspec() is deprecated, "
-                  "use inspect.signature() instead", DeprecationWarning,
-                  stacklevel=2)
+                  "use inspect.signature() or inspect.getfullargspec()",
+                  DeprecationWarning, stacklevel=2)
     args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, ann = \
         getfullargspec(func)
     if kwonlyargs or ann:
-        raise ValueError("Function has keyword-only arguments or annotations"
+        raise ValueError("Function has keyword-only parameters or annotations"
                          ", use getfullargspec() API which can support them")
     return ArgSpec(args, varargs, varkw, defaults)
 
@@ -1050,20 +1077,20 @@ FullArgSpec = namedtuple('FullArgSpec',
     'args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations')
 
 def getfullargspec(func):
-    """Get the names and default values of a callable object's arguments.
+    """Get the names and default values of a callable object's parameters.
 
     A tuple of seven things is returned:
-    (args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults annotations).
-    'args' is a list of the argument names.
-    'varargs' and 'varkw' are the names of the * and ** arguments or None.
-    'defaults' is an n-tuple of the default values of the last n arguments.
-    'kwonlyargs' is a list of keyword-only argument names.
+    (args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, annotations).
+    'args' is a list of the parameter names.
+    'varargs' and 'varkw' are the names of the * and ** parameters or None.
+    'defaults' is an n-tuple of the default values of the last n parameters.
+    'kwonlyargs' is a list of keyword-only parameter names.
     'kwonlydefaults' is a dictionary mapping names from kwonlyargs to defaults.
-    'annotations' is a dictionary mapping argument names to annotations.
+    'annotations' is a dictionary mapping parameter names to annotations.
 
-    The first four items in the tuple correspond to getargspec().
-
-    This function is deprecated, use inspect.signature() instead.
+    Notable differences from inspect.signature():
+      - the "self" parameter is always reported, even for bound methods
+      - wrapper chains defined by __wrapped__ *not* unwrapped automatically
     """
 
     try:
@@ -1153,6 +1180,8 @@ def getargvalues(frame):
     return ArgInfo(args, varargs, varkw, frame.f_locals)
 
 def formatannotation(annotation, base_module=None):
+    if getattr(annotation, '__module__', None) == 'typing':
+        return repr(annotation).replace('typing.', '')
     if isinstance(annotation, type):
         if annotation.__module__ in ('builtins', base_module):
             return annotation.__qualname__
@@ -1173,8 +1202,7 @@ def formatargspec(args, varargs=None, varkw=None, defaults=None,
                   formatvalue=lambda value: '=' + repr(value),
                   formatreturns=lambda text: ' -> ' + text,
                   formatannotation=formatannotation):
-    """Format an argument spec from the values returned by getargspec
-    or getfullargspec.
+    """Format an argument spec from the values returned by getfullargspec.
 
     The first seven arguments are (args, varargs, varkw, defaults,
     kwonlyargs, kwonlydefaults, annotations).  The other five arguments
@@ -1415,7 +1443,6 @@ def getframeinfo(frame, context=1):
         except OSError:
             lines = index = None
         else:
-            start = max(start, 1)
             start = max(0, min(start, len(lines) - context))
             lines = lines[start:start+context]
             index = lineno - 1 - start
@@ -2214,11 +2241,16 @@ def _signature_from_callable(obj, *,
                 sigcls=sigcls)
 
             sig = _signature_get_partial(wrapped_sig, partialmethod, (None,))
-
             first_wrapped_param = tuple(wrapped_sig.parameters.values())[0]
-            new_params = (first_wrapped_param,) + tuple(sig.parameters.values())
-
-            return sig.replace(parameters=new_params)
+            if first_wrapped_param.kind is Parameter.VAR_POSITIONAL:
+                # First argument of the wrapped callable is `*args`, as in
+                # `partialmethod(lambda *args)`.
+                return sig
+            else:
+                sig_params = tuple(sig.parameters.values())
+                assert first_wrapped_param is not sig_params[0]
+                new_params = (first_wrapped_param,) + sig_params
+                return sig.replace(parameters=new_params)
 
     if isfunction(obj) or _signature_is_functionlike(obj):
         # If it's a pure Python function, or an object that is duck type
@@ -2415,6 +2447,20 @@ class Parameter:
 
         if not isinstance(name, str):
             raise TypeError("name must be a str, not a {!r}".format(name))
+
+        if name[0] == '.' and name[1:].isdigit():
+            # These are implicit arguments generated by comprehensions. In
+            # order to provide a friendlier interface to users, we recast
+            # their name as "implicitN" and treat them as positional-only.
+            # See issue 19611.
+            if kind != _POSITIONAL_OR_KEYWORD:
+                raise ValueError(
+                    'implicit arguments must be passed in as {}'.format(
+                        _POSITIONAL_OR_KEYWORD
+                    )
+                )
+            self._kind = _POSITIONAL_ONLY
+            name = 'implicit{}'.format(name[1:])
 
         if not name.isidentifier():
             raise ValueError('{!r} is not a valid parameter name'.format(name))

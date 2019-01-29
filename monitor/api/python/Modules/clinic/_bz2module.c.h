@@ -25,14 +25,16 @@ _bz2_BZ2Compressor_compress(BZ2Compressor *self, PyObject *arg)
     PyObject *return_value = NULL;
     Py_buffer data = {NULL, NULL};
 
-    if (!PyArg_Parse(arg, "y*:compress", &data))
+    if (!PyArg_Parse(arg, "y*:compress", &data)) {
         goto exit;
+    }
     return_value = _bz2_BZ2Compressor_compress_impl(self, &data);
 
 exit:
     /* Cleanup for data */
-    if (data.obj)
+    if (data.obj) {
        PyBuffer_Release(&data);
+    }
 
     return return_value;
 }
@@ -80,11 +82,13 @@ _bz2_BZ2Compressor___init__(PyObject *self, PyObject *args, PyObject *kwargs)
     int compresslevel = 9;
 
     if ((Py_TYPE(self) == &BZ2Compressor_Type) &&
-        !_PyArg_NoKeywords("BZ2Compressor", kwargs))
+        !_PyArg_NoKeywords("BZ2Compressor", kwargs)) {
         goto exit;
+    }
     if (!PyArg_ParseTuple(args, "|i:BZ2Compressor",
-        &compresslevel))
+        &compresslevel)) {
         goto exit;
+    }
     return_value = _bz2_BZ2Compressor___init___impl((BZ2Compressor *)self, compresslevel);
 
 exit:
@@ -111,29 +115,32 @@ PyDoc_STRVAR(_bz2_BZ2Decompressor_decompress__doc__,
 "the unused_data attribute.");
 
 #define _BZ2_BZ2DECOMPRESSOR_DECOMPRESS_METHODDEF    \
-    {"decompress", (PyCFunction)_bz2_BZ2Decompressor_decompress, METH_VARARGS|METH_KEYWORDS, _bz2_BZ2Decompressor_decompress__doc__},
+    {"decompress", (PyCFunction)_bz2_BZ2Decompressor_decompress, METH_FASTCALL, _bz2_BZ2Decompressor_decompress__doc__},
 
 static PyObject *
 _bz2_BZ2Decompressor_decompress_impl(BZ2Decompressor *self, Py_buffer *data,
                                      Py_ssize_t max_length);
 
 static PyObject *
-_bz2_BZ2Decompressor_decompress(BZ2Decompressor *self, PyObject *args, PyObject *kwargs)
+_bz2_BZ2Decompressor_decompress(BZ2Decompressor *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"data", "max_length", NULL};
+    static const char * const _keywords[] = {"data", "max_length", NULL};
+    static _PyArg_Parser _parser = {"y*|n:decompress", _keywords, 0};
     Py_buffer data = {NULL, NULL};
     Py_ssize_t max_length = -1;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y*|n:decompress", _keywords,
-        &data, &max_length))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &data, &max_length)) {
         goto exit;
+    }
     return_value = _bz2_BZ2Decompressor_decompress_impl(self, &data, max_length);
 
 exit:
     /* Cleanup for data */
-    if (data.obj)
+    if (data.obj) {
        PyBuffer_Release(&data);
+    }
 
     return return_value;
 }
@@ -155,14 +162,16 @@ _bz2_BZ2Decompressor___init__(PyObject *self, PyObject *args, PyObject *kwargs)
     int return_value = -1;
 
     if ((Py_TYPE(self) == &BZ2Decompressor_Type) &&
-        !_PyArg_NoPositional("BZ2Decompressor", args))
+        !_PyArg_NoPositional("BZ2Decompressor", args)) {
         goto exit;
+    }
     if ((Py_TYPE(self) == &BZ2Decompressor_Type) &&
-        !_PyArg_NoKeywords("BZ2Decompressor", kwargs))
+        !_PyArg_NoKeywords("BZ2Decompressor", kwargs)) {
         goto exit;
+    }
     return_value = _bz2_BZ2Decompressor___init___impl((BZ2Decompressor *)self);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=fef29b76b3314fc7 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=7e57af0b368d3e55 input=a9049054013a1b77]*/

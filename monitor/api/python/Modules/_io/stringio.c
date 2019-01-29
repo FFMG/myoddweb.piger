@@ -438,7 +438,7 @@ stringio_iternext(stringio *self)
                                            _PyIO_str_readline, NULL);
         if (line && !PyUnicode_Check(line)) {
             PyErr_Format(PyExc_IOError,
-                         "readline() should have returned an str object, "
+                         "readline() should have returned a str object, "
                          "not '%.200s'", Py_TYPE(line)->tp_name);
             Py_DECREF(line);
             return NULL;
@@ -708,7 +708,7 @@ _io_StringIO___init___impl(stringio *self, PyObject *value,
                          Py_TYPE(newline_obj)->tp_name);
             return -1;
         }
-        newline = _PyUnicode_AsString(newline_obj);
+        newline = PyUnicode_AsUTF8(newline_obj);
         if (newline == NULL)
             return -1;
     }

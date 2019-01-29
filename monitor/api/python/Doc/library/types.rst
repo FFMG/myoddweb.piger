@@ -55,6 +55,12 @@ Dynamic Type Creation
 
    .. versionadded:: 3.3
 
+   .. versionchanged:: 3.6
+
+      The default value for the ``namespace`` element of the returned
+      tuple has changed.  Now an insertion-order-preserving mapping is
+      used when the metaclass does not have a ``__prepare__`` method,
+
 .. seealso::
 
    :ref:`metaclasses`
@@ -96,6 +102,14 @@ Standard names are defined for the following types:
    :keyword:`async def` functions.
 
    .. versionadded:: 3.5
+
+
+.. data:: AsyncGeneratorType
+
+   The type of :term:`asynchronous generator`-iterator objects, created by
+   asynchronous generator functions.
+
+   .. versionadded:: 3.6
 
 
 .. data:: CodeType

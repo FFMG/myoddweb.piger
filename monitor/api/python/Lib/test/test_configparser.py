@@ -2,12 +2,13 @@ import collections
 import configparser
 import io
 import os
-import sys
+import pathlib
 import textwrap
 import unittest
 import warnings
 
 from test import support
+
 
 class SortedDict(collections.UserDict):
 
@@ -63,6 +64,7 @@ class CfgParserTestCaseClass:
         cf = self.newconfig(defaults)
         cf.read_string(string)
         return cf
+
 
 class BasicTestCase(CfgParserTestCaseClass):
 
@@ -719,6 +721,16 @@ boolean {0[0]} NO
         parsed_files = cf.read(file1)
         self.assertEqual(parsed_files, [file1])
         self.assertEqual(cf.get("Foo Bar", "foo"), "newbar")
+        # check when we pass only a Path object:
+        cf = self.newconfig()
+        parsed_files = cf.read(pathlib.Path(file1))
+        self.assertEqual(parsed_files, [file1])
+        self.assertEqual(cf.get("Foo Bar", "foo"), "newbar")
+        # check when we passed both a filename and a Path object:
+        cf = self.newconfig()
+        parsed_files = cf.read([pathlib.Path(file1), file1])
+        self.assertEqual(parsed_files, [file1, file1])
+        self.assertEqual(cf.get("Foo Bar", "foo"), "newbar")
         # check when we pass only missing files:
         cf = self.newconfig()
         parsed_files = cf.read(["nonexistent-file"])
@@ -827,6 +839,21 @@ boolean {0[0]} NO
         self.assertEqual(set(cf['section2'].keys()), {'name22'})
         self.assertEqual(set(cf['section3'].keys()), set())
         self.assertEqual(cf.sections(), ['section1', 'section2', 'section3'])
+
+    def test_invalid_multiline_value(self):
+        if self.allow_no_value:
+            self.skipTest('if no_value is allowed, ParsingError is not raised')
+
+        invalid = textwrap.dedent("""\
+            [DEFAULT]
+            test {0} test
+            invalid""".format(self.delimiters[0])
+        )
+        cf = self.newconfig()
+        with self.assertRaises(configparser.ParsingError):
+            cf.read_string(invalid)
+        self.assertEqual(cf.get('DEFAULT', 'test'), 'test')
+        self.assertEqual(cf['DEFAULT']['test'], 'test')
 
 
 class StrictTestCase(BasicTestCase, unittest.TestCase):
@@ -981,13 +1008,16 @@ class ConfigParserTestCaseLegacyInterpolation(ConfigParserTestCase):
         cf.set("sect", "option2", "foo%%bar")
         self.assertEqual(cf.get("sect", "option2"), "foo%%bar")
 
+
 class ConfigParserTestCaseNonStandardDelimiters(ConfigParserTestCase):
     delimiters = (':=', '$')
     comment_prefixes = ('//', '"')
     inline_comment_prefixes = ('//', '"')
 
+
 class ConfigParserTestCaseNonStandardDefaultSection(ConfigParserTestCase):
     default_section = 'general'
+
 
 class MultilineValuesTestCase(BasicTestCase, unittest.TestCase):
     config_class = configparser.ConfigParser
@@ -1016,6 +1046,7 @@ class MultilineValuesTestCase(BasicTestCase, unittest.TestCase):
             cf_from_file.read_file(f)
         self.assertEqual(cf_from_file.get('section8', 'lovely_spam4'),
                          self.wonderful_spam.replace('\t\n', '\n'))
+
 
 class RawConfigParserTestCase(BasicTestCase, unittest.TestCase):
     config_class = configparser.RawConfigParser
@@ -1059,10 +1090,12 @@ class RawConfigParserTestCase(BasicTestCase, unittest.TestCase):
             cf.set('non-string', 1, 1)
             self.assertEqual(cf.get('non-string', 1), 1)
 
+
 class RawConfigParserTestCaseNonStandardDelimiters(RawConfigParserTestCase):
     delimiters = (':=', '$')
     comment_prefixes = ('//', '"')
     inline_comment_prefixes = ('//', '"')
+
 
 class RawConfigParserTestSambaConf(CfgParserTestCaseClass, unittest.TestCase):
     config_class = configparser.RawConfigParser
@@ -1257,6 +1290,7 @@ class ConfigParserTestCaseExtendedInterpolation(BasicTestCase, unittest.TestCase
 
 class ConfigParserTestCaseNoValue(ConfigParserTestCase):
     allow_no_value = True
+
 
 class ConfigParserTestCaseTrickyFile(CfgParserTestCaseClass, unittest.TestCase):
     config_class = configparser.ConfigParser
@@ -2050,6 +2084,12 @@ class BlatantOverrideConvertersTestCase(unittest.TestCase):
             self.assertEqual(cfg['one'].getlen('one'), 5)
         with self.assertRaises(AttributeError):
             self.assertEqual(cfg['two'].getlen('one'), 5)
+
+
+class MiscTestCase(unittest.TestCase):
+    def test__all__(self):
+        blacklist = {"Error"}
+        support.check__all__(self, configparser, blacklist=blacklist)
 
 
 if __name__ == '__main__':

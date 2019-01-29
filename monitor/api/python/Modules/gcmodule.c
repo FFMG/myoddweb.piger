@@ -25,6 +25,7 @@
 
 #include "Python.h"
 #include "frameobject.h"        /* for PyFrame_ClearFreeList */
+#include "pydtrace.h"
 #include "pytime.h"             /* for _PyTime_GetMonotonicClock() */
 
 /* Get an object's GC head */
@@ -738,7 +739,7 @@ handle_weakrefs(PyGC_Head *unreachable, PyGC_Head *old)
 }
 
 static void
-debug_cycle(char *msg, PyObject *op)
+debug_cycle(const char *msg, PyObject *op)
 {
     PySys_FormatStderr("gc: %s <%s %p>\n",
                        msg, Py_TYPE(op)->tp_name, op);
@@ -892,6 +893,7 @@ clear_freelists(void)
     (void)PyList_ClearFreeList();
     (void)PyDict_ClearFreeList();
     (void)PySet_ClearFreeList();
+    (void)PyAsyncGen_ClearFreeLists();
 }
 
 /* This is the main function.  Read this to understand how the
@@ -923,6 +925,9 @@ collect(int generation, Py_ssize_t *n_collected, Py_ssize_t *n_uncollectable,
 
         PySys_WriteStderr("\n");
     }
+
+    if (PyDTrace_GC_START_ENABLED())
+        PyDTrace_GC_START(generation);
 
     /* update collection and allocation counters */
     if (generation+1 < NUM_GENERATIONS)
@@ -1068,6 +1073,10 @@ collect(int generation, Py_ssize_t *n_collected, Py_ssize_t *n_uncollectable,
     stats->collections++;
     stats->collected += m;
     stats->uncollectable += n;
+
+    if (PyDTrace_GC_DONE_ENABLED())
+        PyDTrace_GC_DONE(n+m);
+
     return n+m;
 }
 
@@ -1585,6 +1594,15 @@ PyGC_Collect(void)
     }
 
     return n;
+}
+
+Py_ssize_t
+_PyGC_CollectIfEnabled(void)
+{
+    if (!enabled)
+        return 0;
+
+    return PyGC_Collect();
 }
 
 Py_ssize_t

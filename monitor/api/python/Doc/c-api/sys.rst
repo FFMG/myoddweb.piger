@@ -5,6 +5,17 @@
 Operating System Utilities
 ==========================
 
+.. c:function:: PyObject* PyOS_FSPath(PyObject *path)
+
+   Return the file system representation for *path*. If the object is a
+   :class:`str` or :class:`bytes` object, then its reference count is
+   incremented. If the object implements the :class:`os.PathLike` interface,
+   then :meth:`~os.PathLike.__fspath__` is returned as long as it is a
+   :class:`str` or :class:`bytes` object. Otherwise :exc:`TypeError` is raised
+   and ``NULL`` is returned.
+
+   .. versionadded:: 3.6
+
 
 .. c:function:: int Py_FdIsInteractive(FILE *fp, const char *filename)
 
@@ -212,20 +223,24 @@ Process Control
 .. c:function:: void Py_Exit(int status)
 
    .. index::
-      single: Py_Finalize()
+      single: Py_FinalizeEx()
       single: exit()
 
-   Exit the current process.  This calls :c:func:`Py_Finalize` and then calls the
-   standard C library function ``exit(status)``.
+   Exit the current process.  This calls :c:func:`Py_FinalizeEx` and then calls the
+   standard C library function ``exit(status)``.  If :c:func:`Py_FinalizeEx`
+   indicates an error, the exit status is set to 120.
+
+   .. versionchanged:: 3.6
+      Errors from finalization no longer ignored.
 
 
 .. c:function:: int Py_AtExit(void (*func) ())
 
    .. index::
-      single: Py_Finalize()
+      single: Py_FinalizeEx()
       single: cleanup functions
 
-   Register a cleanup function to be called by :c:func:`Py_Finalize`.  The cleanup
+   Register a cleanup function to be called by :c:func:`Py_FinalizeEx`.  The cleanup
    function will be called with no arguments and should return no value.  At most
    32 cleanup functions can be registered.  When the registration is successful,
    :c:func:`Py_AtExit` returns ``0``; on failure, it returns ``-1``.  The cleanup

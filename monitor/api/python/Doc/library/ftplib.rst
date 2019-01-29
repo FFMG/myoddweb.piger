@@ -57,7 +57,7 @@ The module defines the following items:
     >>> with FTP("ftp1.at.proftpd.org") as ftp:
     ...     ftp.login()
     ...     ftp.dir()
-    ...
+    ... # doctest: +SKIP
     '230 Anonymous login ok, restrictions apply.'
     dr-xr-xr-x   9 ftp      ftp           154 May  6 10:43 .
     dr-xr-xr-x   9 ftp      ftp           154 May  6 10:43 ..
@@ -96,6 +96,13 @@ The module defines the following items:
       The class now supports hostname check with
       :attr:`ssl.SSLContext.check_hostname` and *Server Name Indication* (see
       :data:`ssl.HAS_SNI`).
+
+   .. deprecated:: 3.6
+
+       *keyfile* and *certfile* are deprecated in favor of *context*.
+       Please use :meth:`ssl.SSLContext.load_cert_chain` instead, or let
+       :func:`ssl.create_default_context` select the system's trusted CA
+       certificates for you.
 
    Here's a sample session using the :class:`FTP_TLS` class::
 
@@ -228,7 +235,7 @@ followed by ``lines`` for the text version or ``binary`` for the binary version.
 
    Retrieve a file in binary transfer mode.  *cmd* should be an appropriate
    ``RETR`` command: ``'RETR filename'``. The *callback* function is called for
-   each block of data received, with a single string argument giving the data
+   each block of data received, with a single bytes argument giving the data
    block. The optional *blocksize* argument specifies the maximum chunk size to
    read on the low-level socket object created to do the actual transfer (which
    will also be the largest size of the data blocks passed to *callback*).  A
@@ -248,9 +255,9 @@ followed by ``lines`` for the text version or ``binary`` for the binary version.
    prints the line to ``sys.stdout``.
 
 
-.. method:: FTP.set_pasv(boolean)
+.. method:: FTP.set_pasv(val)
 
-   Enable "passive" mode if *boolean* is true, other disable passive mode.
+   Enable "passive" mode if *val* is true, otherwise disable passive mode.
    Passive mode is on by default.
 
 

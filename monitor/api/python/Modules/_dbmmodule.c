@@ -14,16 +14,16 @@
  */
 #if defined(HAVE_NDBM_H)
 #include <ndbm.h>
-static char *which_dbm = "GNU gdbm";  /* EMX port of GDBM */
+static const char which_dbm[] = "GNU gdbm";  /* EMX port of GDBM */
 #elif defined(HAVE_GDBM_NDBM_H)
 #include <gdbm/ndbm.h>
-static char *which_dbm = "GNU gdbm";
+static const char which_dbm[] = "GNU gdbm";
 #elif defined(HAVE_GDBM_DASH_NDBM_H)
 #include <gdbm-ndbm.h>
-static char *which_dbm = "GNU gdbm";
+static const char which_dbm[] = "GNU gdbm";
 #elif defined(HAVE_BERKDB_H)
 #include <db.h>
-static char *which_dbm = "Berkeley DB";
+static const char which_dbm[] = "Berkeley DB";
 #else
 #error "No ndbm.h available!"
 #endif
@@ -430,9 +430,9 @@ Return a database object.
 [clinic start generated code]*/
 
 static PyObject *
-dbmopen_impl(PyModuleDef *module, const char *filename, const char *flags,
+dbmopen_impl(PyObject *module, const char *filename, const char *flags,
              int mode)
-/*[clinic end generated code: output=e8d4b36f25c733fd input=226334bade5764e6]*/
+/*[clinic end generated code: output=5fade8cf16e0755f input=226334bade5764e6]*/
 {
     int iflags;
 

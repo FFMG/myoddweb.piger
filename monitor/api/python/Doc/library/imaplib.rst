@@ -103,6 +103,14 @@ There's also a subclass for secure connections:
       :attr:`ssl.SSLContext.check_hostname` and *Server Name Indication* (see
       :data:`ssl.HAS_SNI`).
 
+   .. deprecated:: 3.6
+
+       *keyfile* and *certfile* are deprecated in favor of *ssl_context*.
+       Please use :meth:`ssl.SSLContext.load_cert_chain` instead, or let
+       :func:`ssl.create_default_context` select the system's trusted CA
+       certificates for you.
+
+
 The second subclass allows for connections created by a child process:
 
 
@@ -120,7 +128,7 @@ The following utility functions are defined:
 
    Parse an IMAP4 ``INTERNALDATE`` string and return corresponding local
    time.  The return value is a :class:`time.struct_time` tuple or
-   None if the string has wrong format.
+   ``None`` if the string has wrong format.
 
 .. function:: Int2AP(num)
 
@@ -500,6 +508,17 @@ An :class:`IMAP4` instance has the following methods:
          M.store(num, '+FLAGS', '\\Deleted')
       M.expunge()
 
+   .. note::
+
+      Creating flags containing ']' (for example: "[test]") violates
+      :rfc:`3501` (the IMAP protocol).  However, imaplib has historically
+      allowed creation of such tags, and popular IMAP servers, such as Gmail,
+      accept and produce such flags.  There are non-Python programs which also
+      create such tags.  Although it is an RFC violation and IMAP clients and
+      servers are supposed to be strict, imaplib nonetheless continues to allow
+      such tags to be created for backward compatibility reasons, and as of
+      python 3.6, handles them if they are sent from the server, since this
+      improves real-world compatibility.
 
 .. method:: IMAP4.subscribe(mailbox)
 

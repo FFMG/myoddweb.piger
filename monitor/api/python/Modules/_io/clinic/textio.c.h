@@ -24,14 +24,16 @@ static int
 _io_IncrementalNewlineDecoder___init__(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     int return_value = -1;
-    static char *_keywords[] = {"decoder", "translate", "errors", NULL};
+    static const char * const _keywords[] = {"decoder", "translate", "errors", NULL};
+    static _PyArg_Parser _parser = {"Oi|O:IncrementalNewlineDecoder", _keywords, 0};
     PyObject *decoder;
     int translate;
     PyObject *errors = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "Oi|O:IncrementalNewlineDecoder", _keywords,
-        &decoder, &translate, &errors))
+    if (!_PyArg_ParseTupleAndKeywordsFast(args, kwargs, &_parser,
+        &decoder, &translate, &errors)) {
         goto exit;
+    }
     return_value = _io_IncrementalNewlineDecoder___init___impl((nldecoder_object *)self, decoder, translate, errors);
 
 exit:
@@ -44,23 +46,25 @@ PyDoc_STRVAR(_io_IncrementalNewlineDecoder_decode__doc__,
 "\n");
 
 #define _IO_INCREMENTALNEWLINEDECODER_DECODE_METHODDEF    \
-    {"decode", (PyCFunction)_io_IncrementalNewlineDecoder_decode, METH_VARARGS|METH_KEYWORDS, _io_IncrementalNewlineDecoder_decode__doc__},
+    {"decode", (PyCFunction)_io_IncrementalNewlineDecoder_decode, METH_FASTCALL, _io_IncrementalNewlineDecoder_decode__doc__},
 
 static PyObject *
 _io_IncrementalNewlineDecoder_decode_impl(nldecoder_object *self,
                                           PyObject *input, int final);
 
 static PyObject *
-_io_IncrementalNewlineDecoder_decode(nldecoder_object *self, PyObject *args, PyObject *kwargs)
+_io_IncrementalNewlineDecoder_decode(nldecoder_object *self, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"input", "final", NULL};
+    static const char * const _keywords[] = {"input", "final", NULL};
+    static _PyArg_Parser _parser = {"O|i:decode", _keywords, 0};
     PyObject *input;
     int final = 0;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|i:decode", _keywords,
-        &input, &final))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &input, &final)) {
         goto exit;
+    }
     return_value = _io_IncrementalNewlineDecoder_decode_impl(self, input, final);
 
 exit:
@@ -153,7 +157,8 @@ static int
 _io_TextIOWrapper___init__(PyObject *self, PyObject *args, PyObject *kwargs)
 {
     int return_value = -1;
-    static char *_keywords[] = {"buffer", "encoding", "errors", "newline", "line_buffering", "write_through", NULL};
+    static const char * const _keywords[] = {"buffer", "encoding", "errors", "newline", "line_buffering", "write_through", NULL};
+    static _PyArg_Parser _parser = {"O|zzzii:TextIOWrapper", _keywords, 0};
     PyObject *buffer;
     const char *encoding = NULL;
     const char *errors = NULL;
@@ -161,9 +166,10 @@ _io_TextIOWrapper___init__(PyObject *self, PyObject *args, PyObject *kwargs)
     int line_buffering = 0;
     int write_through = 0;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|zzzii:TextIOWrapper", _keywords,
-        &buffer, &encoding, &errors, &newline, &line_buffering, &write_through))
+    if (!_PyArg_ParseTupleAndKeywordsFast(args, kwargs, &_parser,
+        &buffer, &encoding, &errors, &newline, &line_buffering, &write_through)) {
         goto exit;
+    }
     return_value = _io_TextIOWrapper___init___impl((textio *)self, buffer, encoding, errors, newline, line_buffering, write_through);
 
 exit:
@@ -204,8 +210,9 @@ _io_TextIOWrapper_write(textio *self, PyObject *arg)
     PyObject *return_value = NULL;
     PyObject *text;
 
-    if (!PyArg_Parse(arg, "U:write", &text))
+    if (!PyArg_Parse(arg, "U:write", &text)) {
         goto exit;
+    }
     return_value = _io_TextIOWrapper_write_impl(self, text);
 
 exit:
@@ -230,8 +237,9 @@ _io_TextIOWrapper_read(textio *self, PyObject *args)
     Py_ssize_t n = -1;
 
     if (!PyArg_ParseTuple(args, "|O&:read",
-        _PyIO_ConvertSsize_t, &n))
+        _PyIO_ConvertSsize_t, &n)) {
         goto exit;
+    }
     return_value = _io_TextIOWrapper_read_impl(self, n);
 
 exit:
@@ -256,8 +264,9 @@ _io_TextIOWrapper_readline(textio *self, PyObject *args)
     Py_ssize_t size = -1;
 
     if (!PyArg_ParseTuple(args, "|n:readline",
-        &size))
+        &size)) {
         goto exit;
+    }
     return_value = _io_TextIOWrapper_readline_impl(self, size);
 
 exit:
@@ -283,8 +292,9 @@ _io_TextIOWrapper_seek(textio *self, PyObject *args)
     int whence = 0;
 
     if (!PyArg_ParseTuple(args, "O|i:seek",
-        &cookieObj, &whence))
+        &cookieObj, &whence)) {
         goto exit;
+    }
     return_value = _io_TextIOWrapper_seek_impl(self, cookieObj, whence);
 
 exit:
@@ -327,8 +337,9 @@ _io_TextIOWrapper_truncate(textio *self, PyObject *args)
 
     if (!PyArg_UnpackTuple(args, "truncate",
         0, 1,
-        &pos))
+        &pos)) {
         goto exit;
+    }
     return_value = _io_TextIOWrapper_truncate_impl(self, pos);
 
 exit:
@@ -453,4 +464,4 @@ _io_TextIOWrapper_close(textio *self, PyObject *Py_UNUSED(ignored))
 {
     return _io_TextIOWrapper_close_impl(self);
 }
-/*[clinic end generated code: output=690608f85aab8ba5 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=78ad14eba1667254 input=a9049054013a1b77]*/

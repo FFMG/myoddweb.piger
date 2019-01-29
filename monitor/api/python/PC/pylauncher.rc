@@ -7,9 +7,13 @@
 #include <winuser.h>
 1 RT_MANIFEST "python.manifest"
 
-1 ICON DISCARDABLE "launcher.ico" 
-2 ICON DISCARDABLE "py.ico" 
-3 ICON DISCARDABLE "pyc.ico" 
+1 ICON DISCARDABLE "icons\launcher.ico" 
+2 ICON DISCARDABLE "icons\py.ico" 
+3 ICON DISCARDABLE "icons\pyc.ico" 
+4 ICON DISCARDABLE "icons\pyd.ico" 
+5 ICON DISCARDABLE "icons\python.ico"
+6 ICON DISCARDABLE "icons\pythonw.ico"
+7 ICON DISCARDABLE "icons\setup.ico" 
 
 /////////////////////////////////////////////////////////////////////////////
 //

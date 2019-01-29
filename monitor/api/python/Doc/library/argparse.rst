@@ -45,7 +45,9 @@ produces either the sum or the max::
    print(args.accumulate(args.integers))
 
 Assuming the Python code above is saved into a file called ``prog.py``, it can
-be run at the command line and provides useful help messages::
+be run at the command line and provides useful help messages:
+
+.. code-block:: shell-session
 
    $ python prog.py -h
    usage: prog.py [-h] [--sum] N [N ...]
@@ -60,7 +62,9 @@ be run at the command line and provides useful help messages::
     --sum       sum the integers (default: find the max)
 
 When run with the appropriate arguments, it prints either the sum or the max of
-the command-line integers::
+the command-line integers:
+
+.. code-block:: shell-session
 
    $ python prog.py 1 2 3 4
    4
@@ -68,7 +72,9 @@ the command-line integers::
    $ python prog.py 1 2 3 4 --sum
    10
 
-If invalid arguments are passed in, it will issue an error::
+If invalid arguments are passed in, it will issue an error:
+
+.. code-block:: shell-session
 
    $ python prog.py a b c
    usage: prog.py [-h] [--sum] N [N ...]
@@ -168,7 +174,7 @@ ArgumentParser objects
    * conflict_handler_ - The strategy for resolving conflicting optionals
      (usually unnecessary)
 
-   * add_help_ - Add a -h/--help option to the parser (default: ``True``)
+   * add_help_ - Add a ``-h/--help`` option to the parser (default: ``True``)
 
    * allow_abbrev_ - Allows long options to be abbreviated if the
      abbreviation is unambiguous. (default: ``True``)
@@ -182,7 +188,7 @@ The following sections describe how each of these are used.
 prog
 ^^^^
 
-By default, :class:`ArgumentParser` objects uses ``sys.argv[0]`` to determine
+By default, :class:`ArgumentParser` objects use ``sys.argv[0]`` to determine
 how to display the name of the program in help messages.  This default is almost
 always desirable because it will make the help messages match how the program was
 invoked on the command line.  For example, consider a file named
@@ -194,7 +200,9 @@ invoked on the command line.  For example, consider a file named
    args = parser.parse_args()
 
 The help for this program will display ``myprogram.py`` as the program name
-(regardless of where the program was invoked from)::
+(regardless of where the program was invoked from):
+
+.. code-block:: shell-session
 
    $ python myprogram.py --help
    usage: myprogram.py [-h] [--foo FOO]
@@ -203,7 +211,7 @@ The help for this program will display ``myprogram.py`` as the program name
     -h, --help  show this help message and exit
     --foo FOO   foo help
    $ cd ..
-   $ python subdir\myprogram.py --help
+   $ python subdir/myprogram.py --help
    usage: myprogram.py [-h] [--foo FOO]
 
    optional arguments:
@@ -550,7 +558,7 @@ conflict_handler
 ^^^^^^^^^^^^^^^^
 
 :class:`ArgumentParser` objects do not allow two actions with the same option
-string.  By default, :class:`ArgumentParser` objects raises an exception if an
+string.  By default, :class:`ArgumentParser` objects raise an exception if an
 attempt is made to create an argument with an option string that is already in
 use::
 
@@ -596,7 +604,9 @@ the parser's help message. For example, consider a file named
    args = parser.parse_args()
 
 If ``-h`` or ``--help`` is supplied at the command line, the ArgumentParser
-help will be printed::
+help will be printed:
+
+.. code-block:: shell-session
 
    $ python myprogram.py --help
    usage: myprogram.py [-h] [--foo FOO]
@@ -1542,7 +1552,7 @@ Sub-commands
      positional arguments
 
    * description - description for the sub-parser group in help output, by
-     default None
+     default ``None``
 
    * prog - usage information that will be displayed with sub-command help,
      by default the name of the program and any positional arguments before the
@@ -1555,12 +1565,12 @@ Sub-commands
      encountered at the command line
 
    * dest_ - name of the attribute under which sub-command name will be
-     stored; by default None and no value is stored
+     stored; by default ``None`` and no value is stored
 
-   * help_ - help for sub-parser group in help output, by default None
+   * help_ - help for sub-parser group in help output, by default ``None``
 
    * metavar_ - string presenting available sub-commands in help; by default it
-     is None and presents sub-commands in form {cmd1, cmd2, ..}
+     is ``None`` and presents sub-commands in form {cmd1, cmd2, ..}
 
    Some example usage::
 
@@ -1948,10 +1958,11 @@ Customizing file parsing
    The method is called once per line read from the argument file, in order.
 
    A useful override of this method is one that treats each space-separated word
-   as an argument::
+   as an argument.  The following example demonstrates how to do this::
 
-    def convert_arg_line_to_args(self, arg_line):
-        return arg_line.split()
+    class MyArgumentParser(argparse.ArgumentParser):
+        def convert_arg_line_to_args(self, arg_line):
+            return arg_line.split()
 
 
 Exiting methods

@@ -64,19 +64,19 @@ Some facts and figures:
    | ``'x'`` or       | Create a tarfile exclusively without        |
    | ``'x:'``         | compression.                                |
    |                  | Raise an :exc:`FileExistsError` exception   |
-   |                  | if it is already exists.                    |
+   |                  | if it already exists.                       |
    +------------------+---------------------------------------------+
    | ``'x:gz'``       | Create a tarfile with gzip compression.     |
    |                  | Raise an :exc:`FileExistsError` exception   |
-   |                  | if it is already exists.                    |
+   |                  | if it already exists.                       |
    +------------------+---------------------------------------------+
    | ``'x:bz2'``      | Create a tarfile with bzip2 compression.    |
    |                  | Raise an :exc:`FileExistsError` exception   |
-   |                  | if it is already exists.                    |
+   |                  | if it already exists.                       |
    +------------------+---------------------------------------------+
    | ``'x:xz'``       | Create a tarfile with lzma compression.     |
    |                  | Raise an :exc:`FileExistsError` exception   |
-   |                  | if it is already exists.                    |
+   |                  | if it already exists.                       |
    +------------------+---------------------------------------------+
    | ``'a' or 'a:'``  | Open for appending with no compression. The |
    |                  | file is created if it does not exist.       |
@@ -146,10 +146,14 @@ Some facts and figures:
    .. versionchanged:: 3.5
       The ``'x'`` (exclusive creation) mode was added.
 
+   .. versionchanged:: 3.6
+      The *name* parameter accepts a :term:`path-like object`.
+
+
 .. class:: TarFile
 
-   Class for reading and writing tar archives. Do not use this class directly,
-   better use :func:`tarfile.open` instead. See :ref:`tarfile-objects`.
+   Class for reading and writing tar archives. Do not use this class directly:
+   use :func:`tarfile.open` instead. See :ref:`tarfile-objects`.
 
 
 .. function:: is_tarfile(name)
@@ -266,12 +270,13 @@ be finalized; only the internally used file object will be closed. See the
    All following arguments are optional and can be accessed as instance attributes
    as well.
 
-   *name* is the pathname of the archive. It can be omitted if *fileobj* is given.
+   *name* is the pathname of the archive. *name* may be a :term:`path-like object`.
+   It can be omitted if *fileobj* is given.
    In this case, the file object's :attr:`name` attribute is used if it exists.
 
    *mode* is either ``'r'`` to read from an existing archive, ``'a'`` to append
    data to an existing file, ``'w'`` to create a new file overwriting an existing
-   one or ``'x'`` to create a new file only if it's not exists.
+   one, or ``'x'`` to create a new file only if it does not already exist.
 
    If *fileobj* is given, it is used for reading or writing data. If it can be
    determined, *mode* is overridden by *fileobj*'s mode. *fileobj* will be used
@@ -318,6 +323,10 @@ be finalized; only the internally used file object will be closed. See the
 
    .. versionchanged:: 3.5
       The ``'x'`` (exclusive creation) mode was added.
+
+   .. versionchanged:: 3.6
+      The *name* parameter accepts a :term:`path-like object`.
+
 
 .. classmethod:: TarFile.open(...)
 
@@ -388,7 +397,10 @@ be finalized; only the internally used file object will be closed. See the
       dots ``".."``.
 
    .. versionchanged:: 3.5
-      Added the *numeric_only* parameter.
+      Added the *numeric_owner* parameter.
+
+   .. versionchanged:: 3.6
+      The *path* parameter accepts a :term:`path-like object`.
 
 
 .. method:: TarFile.extract(member, path="", set_attrs=True, *, numeric_owner=False)
@@ -396,8 +408,8 @@ be finalized; only the internally used file object will be closed. See the
    Extract a member from the archive to the current working directory, using its
    full name. Its file information is extracted as accurately as possible. *member*
    may be a filename or a :class:`TarInfo` object. You can specify a different
-   directory using *path*. File attributes (owner, mtime, mode) are set unless
-   *set_attrs* is false.
+   directory using *path*. *path* may be a :term:`path-like object`.
+   File attributes (owner, mtime, mode) are set unless *set_attrs* is false.
 
    If *numeric_owner* is :const:`True`, the uid and gid numbers from the tarfile
    are used to set the owner/group for the extracted files. Otherwise, the named
@@ -416,7 +428,11 @@ be finalized; only the internally used file object will be closed. See the
       Added the *set_attrs* parameter.
 
    .. versionchanged:: 3.5
-      Added the *numeric_only* parameter.
+      Added the *numeric_owner* parameter.
+
+   .. versionchanged:: 3.6
+      The *path* parameter accepts a :term:`path-like object`.
+
 
 .. method:: TarFile.extractfile(member)
 
@@ -464,7 +480,8 @@ be finalized; only the internally used file object will be closed. See the
 
    Create a :class:`TarInfo` object from the result of :func:`os.stat` or
    equivalent on an existing file.  The file is either named by *name*, or
-   specified as a :term:`file object` *fileobj* with a file descriptor.  If
+   specified as a :term:`file object` *fileobj* with a file descriptor.
+   *name* may be a :term:`path-like object`.  If
    given, *arcname* specifies an alternative name for the file in the
    archive, otherwise, the name is taken from *fileobj*’s
    :attr:`~io.FileIO.name` attribute, or the *name* argument.  The name
@@ -477,6 +494,9 @@ be finalized; only the internally used file object will be closed. See the
    modifying.  This is the case for objects such as :class:`~gzip.GzipFile`.
    The :attr:`~TarInfo.name` may also be modified, in which case *arcname*
    could be a dummy string.
+
+   .. versionchanged:: 3.6
+      The *name* parameter accepts a :term:`path-like object`.
 
 
 .. method:: TarFile.close()
@@ -644,40 +664,51 @@ A :class:`TarInfo` object also provides some convenient query methods:
 
 
 .. _tarfile-commandline:
+.. program:: tarfile
 
-Command Line Interface
+Command-Line Interface
 ----------------------
 
 .. versionadded:: 3.4
 
-The :mod:`tarfile` module provides a simple command line interface to interact
+The :mod:`tarfile` module provides a simple command-line interface to interact
 with tar archives.
 
 If you want to create a new tar archive, specify its name after the :option:`-c`
-option and then list the filename(s) that should be included::
+option and then list the filename(s) that should be included:
+
+.. code-block:: shell-session
 
     $ python -m tarfile -c monty.tar  spam.txt eggs.txt
 
-Passing a directory is also acceptable::
+Passing a directory is also acceptable:
+
+.. code-block:: shell-session
 
     $ python -m tarfile -c monty.tar life-of-brian_1979/
 
 If you want to extract a tar archive into the current directory, use
-the :option:`-e` option::
+the :option:`-e` option:
+
+.. code-block:: shell-session
 
     $ python -m tarfile -e monty.tar
 
 You can also extract a tar archive into a different directory by passing the
-directory's name::
+directory's name:
+
+.. code-block:: shell-session
 
     $ python -m tarfile -e monty.tar  other-dir/
 
-For a list of the files in a tar archive, use the :option:`-l` option::
+For a list of the files in a tar archive, use the :option:`-l` option:
+
+.. code-block:: shell-session
 
     $ python -m tarfile -l monty.tar
 
 
-Command line options
+Command-line options
 ~~~~~~~~~~~~~~~~~~~~
 
 .. cmdoption:: -l <tarfile>
@@ -685,8 +716,8 @@ Command line options
 
    List files in a tarfile.
 
-.. cmdoption:: -c <tarfile> <source1> <sourceN>
-               --create <tarfile> <source1> <sourceN>
+.. cmdoption:: -c <tarfile> <source1> ... <sourceN>
+               --create <tarfile> <source1> ... <sourceN>
 
    Create tarfile from source files.
 
@@ -702,7 +733,7 @@ Command line options
 
 .. cmdoption:: -v, --verbose
 
-   Verbose output
+   Verbose output.
 
 .. _tar-examples:
 

@@ -94,7 +94,7 @@ document: the one that holds all others.  Here is an example program::
 
 When you are finished with a DOM tree, you may optionally call the
 :meth:`unlink` method to encourage early cleanup of the now-unneeded
-objects.  :meth:`unlink` is a :mod:`xml.dom.minidom`\ -specific
+objects.  :meth:`unlink` is an :mod:`xml.dom.minidom`\ -specific
 extension to the DOM API that renders the node and its descendants are
 essentially useless.  Otherwise, Python's garbage collector will
 eventually take care of the objects in the tree.
@@ -248,7 +248,7 @@ utility to most DOM users.
 
 .. rubric:: Footnotes
 
-.. [#] The encoding name included in the XML output should conform to
+.. [1] The encoding name included in the XML output should conform to
    the appropriate standards. For example, "UTF-8" is valid, but
    "UTF8" is not valid in an XML document's declaration, even though
    Python accepts it as an encoding name.

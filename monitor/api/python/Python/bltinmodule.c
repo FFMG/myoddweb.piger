@@ -21,16 +21,18 @@
    Don't forget to modify PyUnicode_DecodeFSDefault() if you touch any of the
    values for Py_FileSystemDefaultEncoding!
 */
-#ifdef HAVE_MBCS
-const char *Py_FileSystemDefaultEncoding = "mbcs";
+#if defined(__APPLE__)
+const char *Py_FileSystemDefaultEncoding = "utf-8";
 int Py_HasFileSystemDefaultEncoding = 1;
-#elif defined(__APPLE__)
+#elif defined(MS_WINDOWS)
+/* may be changed by initfsencoding(), but should never be free()d */
 const char *Py_FileSystemDefaultEncoding = "utf-8";
 int Py_HasFileSystemDefaultEncoding = 1;
 #else
 const char *Py_FileSystemDefaultEncoding = NULL; /* set by initfsencoding() */
 int Py_HasFileSystemDefaultEncoding = 0;
 #endif
+const char *Py_FileSystemDefaultEncodeErrors = "surrogateescape";
 
 _Py_IDENTIFIER(__builtins__);
 _Py_IDENTIFIER(__dict__);
@@ -52,8 +54,8 @@ _Py_IDENTIFIER(stderr);
 static PyObject *
 builtin___build_class__(PyObject *self, PyObject *args, PyObject *kwds)
 {
-    PyObject *func, *name, *bases, *mkw, *meta, *winner, *prep, *ns, *cell;
-    PyObject *cls = NULL;
+    PyObject *func, *name, *bases, *mkw, *meta, *winner, *prep, *ns;
+    PyObject *cls = NULL, *cell = NULL;
     Py_ssize_t nargs;
     int isclass = 0;   /* initialize to prevent gcc warning */
 
@@ -155,16 +157,8 @@ builtin___build_class__(PyObject *self, PyObject *args, PyObject *kwds)
         }
     }
     else {
-        PyObject *pargs = PyTuple_Pack(2, name, bases);
-        if (pargs == NULL) {
-            Py_DECREF(prep);
-            Py_DECREF(meta);
-            Py_XDECREF(mkw);
-            Py_DECREF(bases);
-            return NULL;
-        }
-        ns = PyEval_CallObjectWithKeywords(prep, pargs, mkw);
-        Py_DECREF(pargs);
+        PyObject *pargs[2] = {name, bases};
+        ns = _PyObject_FastCallDict(prep, pargs, 2, mkw);
         Py_DECREF(prep);
     }
     if (ns == NULL) {
@@ -177,16 +171,40 @@ builtin___build_class__(PyObject *self, PyObject *args, PyObject *kwds)
                              NULL, 0, NULL, 0, NULL, 0, NULL,
                              PyFunction_GET_CLOSURE(func));
     if (cell != NULL) {
-        PyObject *margs;
-        margs = PyTuple_Pack(3, name, bases, ns);
-        if (margs != NULL) {
-            cls = PyEval_CallObjectWithKeywords(meta, margs, mkw);
-            Py_DECREF(margs);
+        PyObject *margs[3] = {name, bases, ns};
+        cls = _PyObject_FastCallDict(meta, margs, 3, mkw);
+        if (cls != NULL && PyType_Check(cls) && PyCell_Check(cell)) {
+            PyObject *cell_cls = PyCell_GET(cell);
+            if (cell_cls != cls) {
+                /* TODO: In 3.7, DeprecationWarning will become RuntimeError.
+                 *       At that point, cell_error won't be needed.
+                 */
+                int cell_error;
+                if (cell_cls == NULL) {
+                    const char *msg =
+                        "__class__ not set defining %.200R as %.200R. "
+                        "Was __classcell__ propagated to type.__new__?";
+                    cell_error = PyErr_WarnFormat(
+                        PyExc_DeprecationWarning, 1, msg, name, cls);
+                } else {
+                    const char *msg =
+                        "__class__ set to %.200R defining %.200R as %.200R";
+                    PyErr_Format(PyExc_TypeError, msg, cell_cls, name, cls);
+                    cell_error = 1;
+                }
+                if (cell_error) {
+                    Py_DECREF(cls);
+                    cls = NULL;
+                    goto error;
+                } else {
+                    /* Fill in the cell, since type.__new__ didn't do it */
+                    PyCell_Set(cell, cls);
+                }
+            }
         }
-        if (cls != NULL && PyCell_Check(cell))
-            PyCell_Set(cell, cls);
-        Py_DECREF(cell);
     }
+error:
+    Py_XDECREF(cell);
     Py_DECREF(ns);
     Py_DECREF(meta);
     Py_XDECREF(mkw);
@@ -242,8 +260,8 @@ Return the absolute value of the argument.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_abs(PyModuleDef *module, PyObject *x)
-/*[clinic end generated code: output=6833047c493ecea2 input=bed4ca14e29c20d1]*/
+builtin_abs(PyObject *module, PyObject *x)
+/*[clinic end generated code: output=b1b433b9e51356f5 input=bed4ca14e29c20d1]*/
 {
     return PyNumber_Absolute(x);
 }
@@ -260,8 +278,8 @@ If the iterable is empty, return True.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_all(PyModuleDef *module, PyObject *iterable)
-/*[clinic end generated code: output=089e6d1b7bde27b1 input=1a7c5d1bc3438a21]*/
+builtin_all(PyObject *module, PyObject *iterable)
+/*[clinic end generated code: output=ca2a7127276f79b3 input=1a7c5d1bc3438a21]*/
 {
     PyObject *it, *item;
     PyObject *(*iternext)(PyObject *);
@@ -309,8 +327,8 @@ If the iterable is empty, return False.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_any(PyModuleDef *module, PyObject *iterable)
-/*[clinic end generated code: output=1be994b2c2307492 input=41d7451c23384f24]*/
+builtin_any(PyObject *module, PyObject *iterable)
+/*[clinic end generated code: output=fa65684748caa60e input=41d7451c23384f24]*/
 {
     PyObject *it, *item;
     PyObject *(*iternext)(PyObject *);
@@ -331,7 +349,7 @@ builtin_any(PyModuleDef *module, PyObject *iterable)
             Py_DECREF(it);
             return NULL;
         }
-        if (cmp == 1) {
+        if (cmp > 0) {
             Py_DECREF(it);
             Py_RETURN_TRUE;
         }
@@ -361,8 +379,8 @@ to that returned by repr() in Python 2.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_ascii(PyModuleDef *module, PyObject *obj)
-/*[clinic end generated code: output=d4e862c48af2a933 input=4c62732e1b3a3cc9]*/
+builtin_ascii(PyObject *module, PyObject *obj)
+/*[clinic end generated code: output=6d37b3f0984c7eb9 input=4c62732e1b3a3cc9]*/
 {
     return PyObject_ASCII(obj);
 }
@@ -381,8 +399,8 @@ Return the binary representation of an integer.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_bin(PyModuleDef *module, PyObject *number)
-/*[clinic end generated code: output=25ee26c6cf3bbb54 input=53f8a0264bacaf90]*/
+builtin_bin(PyObject *module, PyObject *number)
+/*[clinic end generated code: output=b6fc4ad5e649f4f7 input=53f8a0264bacaf90]*/
 {
     return PyNumber_ToBase(number, 2);
 }
@@ -401,8 +419,8 @@ __call__() method.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_callable(PyModuleDef *module, PyObject *obj)
-/*[clinic end generated code: output=f4df2ce92364b656 input=1423bab99cc41f58]*/
+builtin_callable(PyObject *module, PyObject *obj)
+/*[clinic end generated code: output=2b095d59d934cb7e input=1423bab99cc41f58]*/
 {
     return PyBool_FromLong((long)PyCallable_Check(obj));
 }
@@ -469,6 +487,7 @@ filter_next(filterobject *lz)
     PyObject *it = lz->it;
     long ok;
     PyObject *(*iternext)(PyObject *);
+    int checktrue = lz->func == Py_None || lz->func == (PyObject *)&PyBool_Type;
 
     iternext = *Py_TYPE(it)->tp_iternext;
     for (;;) {
@@ -476,12 +495,11 @@ filter_next(filterobject *lz)
         if (item == NULL)
             return NULL;
 
-        if (lz->func == Py_None || lz->func == (PyObject *)&PyBool_Type) {
+        if (checktrue) {
             ok = PyObject_IsTrue(item);
         } else {
             PyObject *good;
-            good = PyObject_CallFunctionObjArgs(lz->func,
-                                                item, NULL);
+            good = PyObject_CallFunctionObjArgs(lz->func, item, NULL);
             if (good == NULL) {
                 Py_DECREF(item);
                 return NULL;
@@ -574,9 +592,8 @@ format_spec defaults to the empty string
 [clinic start generated code]*/
 
 static PyObject *
-builtin_format_impl(PyModuleDef *module, PyObject *value,
-                    PyObject *format_spec)
-/*[clinic end generated code: output=4341fd78a5f01764 input=6325e751a1b29b86]*/
+builtin_format_impl(PyObject *module, PyObject *value, PyObject *format_spec)
+/*[clinic end generated code: output=2f40bdfa4954b077 input=6325e751a1b29b86]*/
 {
     return PyObject_Format(value, format_spec);
 }
@@ -591,8 +608,8 @@ Return a Unicode string of one character with ordinal i; 0 <= i <= 0x10ffff.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_chr_impl(PyModuleDef *module, int i)
-/*[clinic end generated code: output=67fe4d87e690f373 input=3f604ef45a70750d]*/
+builtin_chr_impl(PyObject *module, int i)
+/*[clinic end generated code: output=c733afcd200afcb7 input=3f604ef45a70750d]*/
 {
     return PyUnicode_FromOrdinal(i);
 }
@@ -672,10 +689,10 @@ in addition to any features explicitly specified.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_compile_impl(PyModuleDef *module, PyObject *source,
-                     PyObject *filename, const char *mode, int flags,
-                     int dont_inherit, int optimize)
-/*[clinic end generated code: output=31881762c1bb90c4 input=9d53e8cfb3c86414]*/
+builtin_compile_impl(PyObject *module, PyObject *source, PyObject *filename,
+                     const char *mode, int flags, int dont_inherit,
+                     int optimize)
+/*[clinic end generated code: output=1fa176e33452bb63 input=9d53e8cfb3c86414]*/
 {
     PyObject *source_copy;
     const char *str;
@@ -800,8 +817,8 @@ Return the tuple (x//y, x%y).  Invariant: div*y + mod == x.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_divmod_impl(PyModuleDef *module, PyObject *x, PyObject *y)
-/*[clinic end generated code: output=9ad0076120ebf9ac input=175ad9c84ff41a85]*/
+builtin_divmod_impl(PyObject *module, PyObject *x, PyObject *y)
+/*[clinic end generated code: output=b06d8a5f6e0c745e input=175ad9c84ff41a85]*/
 {
     return PyNumber_Divmod(x, y);
 }
@@ -825,9 +842,9 @@ If only globals is given, locals defaults to it.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_eval_impl(PyModuleDef *module, PyObject *source, PyObject *globals,
+builtin_eval_impl(PyObject *module, PyObject *source, PyObject *globals,
                   PyObject *locals)
-/*[clinic end generated code: output=7284501fb7b4d666 input=11ee718a8640e527]*/
+/*[clinic end generated code: output=0a0824aa70093116 input=11ee718a8640e527]*/
 {
     PyObject *result, *source_copy;
     const char *str;
@@ -908,9 +925,9 @@ If only globals is given, locals defaults to it.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_exec_impl(PyModuleDef *module, PyObject *source, PyObject *globals,
+builtin_exec_impl(PyObject *module, PyObject *source, PyObject *globals,
                   PyObject *locals)
-/*[clinic end generated code: output=83d574ef9d5d0b46 input=01ca3e1c01692829]*/
+/*[clinic end generated code: output=3c90efc6ab68ef5d input=01ca3e1c01692829]*/
 {
     PyObject *v;
 
@@ -1024,8 +1041,8 @@ global scope and vice-versa.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_globals_impl(PyModuleDef *module)
-/*[clinic end generated code: output=4958645e96dd8138 input=9327576f92bb48ba]*/
+builtin_globals_impl(PyObject *module)
+/*[clinic end generated code: output=e5dd1527067b94d2 input=9327576f92bb48ba]*/
 {
     PyObject *d;
 
@@ -1048,8 +1065,8 @@ This is done by calling getattr(obj, name) and catching AttributeError.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_hasattr_impl(PyModuleDef *module, PyObject *obj, PyObject *name)
-/*[clinic end generated code: output=81154fdd63634696 input=0faec9787d979542]*/
+builtin_hasattr_impl(PyObject *module, PyObject *obj, PyObject *name)
+/*[clinic end generated code: output=a7aff2090a4151e5 input=0faec9787d979542]*/
 {
     PyObject *v;
 
@@ -1169,26 +1186,43 @@ map_traverse(mapobject *lz, visitproc visit, void *arg)
 static PyObject *
 map_next(mapobject *lz)
 {
-    PyObject *val;
-    PyObject *argtuple;
-    PyObject *result;
-    Py_ssize_t numargs, i;
+    PyObject *small_stack[5];
+    PyObject **stack;
+    Py_ssize_t niters, nargs, i;
+    PyObject *result = NULL;
 
-    numargs = PyTuple_Size(lz->iters);
-    argtuple = PyTuple_New(numargs);
-    if (argtuple == NULL)
-        return NULL;
-
-    for (i=0 ; i<numargs ; i++) {
-        val = PyIter_Next(PyTuple_GET_ITEM(lz->iters, i));
-        if (val == NULL) {
-            Py_DECREF(argtuple);
+    niters = PyTuple_GET_SIZE(lz->iters);
+    if (niters <= (Py_ssize_t)Py_ARRAY_LENGTH(small_stack)) {
+        stack = small_stack;
+    }
+    else {
+        stack = PyMem_Malloc(niters * sizeof(stack[0]));
+        if (stack == NULL) {
+            PyErr_NoMemory();
             return NULL;
         }
-        PyTuple_SET_ITEM(argtuple, i, val);
     }
-    result = PyObject_Call(lz->func, argtuple, NULL);
-    Py_DECREF(argtuple);
+
+    nargs = 0;
+    for (i=0; i < niters; i++) {
+        PyObject *it = PyTuple_GET_ITEM(lz->iters, i);
+        PyObject *val = Py_TYPE(it)->tp_iternext(it);
+        if (val == NULL) {
+            goto exit;
+        }
+        stack[i] = val;
+        nargs++;
+    }
+
+    result = _PyObject_FastCall(lz->func, stack, nargs);
+
+exit:
+    for (i=0; i < nargs; i++) {
+        Py_DECREF(stack[i]);
+    }
+    if (stack != small_stack) {
+        PyMem_Free(stack);
+    }
     return result;
 }
 
@@ -1324,9 +1358,9 @@ setattr(x, 'y', v) is equivalent to ``x.y = v''
 [clinic start generated code]*/
 
 static PyObject *
-builtin_setattr_impl(PyModuleDef *module, PyObject *obj, PyObject *name,
+builtin_setattr_impl(PyObject *module, PyObject *obj, PyObject *name,
                      PyObject *value)
-/*[clinic end generated code: output=d881c655c0f7e34f input=bd2b7ca6875a1899]*/
+/*[clinic end generated code: output=dc2ce1d1add9acb4 input=bd2b7ca6875a1899]*/
 {
     if (PyObject_SetAttr(obj, name, value) != 0)
         return NULL;
@@ -1348,8 +1382,8 @@ delattr(x, 'y') is equivalent to ``del x.y''
 [clinic start generated code]*/
 
 static PyObject *
-builtin_delattr_impl(PyModuleDef *module, PyObject *obj, PyObject *name)
-/*[clinic end generated code: output=ef653e698a0b4187 input=db16685d6b4b9410]*/
+builtin_delattr_impl(PyObject *module, PyObject *obj, PyObject *name)
+/*[clinic end generated code: output=85134bc58dff79fa input=db16685d6b4b9410]*/
 {
     if (PyObject_SetAttr(obj, name, (PyObject *)NULL) != 0)
         return NULL;
@@ -1371,8 +1405,8 @@ reverse is not necessarily true.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_hash(PyModuleDef *module, PyObject *obj)
-/*[clinic end generated code: output=1f32ff154c1f751a input=58c48be822bf9c54]*/
+builtin_hash(PyObject *module, PyObject *obj)
+/*[clinic end generated code: output=237668e9d7688db7 input=58c48be822bf9c54]*/
 {
     Py_hash_t x;
 
@@ -1396,8 +1430,8 @@ Return the hexadecimal representation of an integer.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_hex(PyModuleDef *module, PyObject *number)
-/*[clinic end generated code: output=618489ce3cbc5858 input=e645aff5fc7d540e]*/
+builtin_hex(PyObject *module, PyObject *number)
+/*[clinic end generated code: output=e46b612169099408 input=e645aff5fc7d540e]*/
 {
     return PyNumber_ToBase(number, 16);
 }
@@ -1440,8 +1474,8 @@ Return the number of items in a container.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_len(PyModuleDef *module, PyObject *obj)
-/*[clinic end generated code: output=8e5837b6f81d915b input=bc55598da9e9c9b5]*/
+builtin_len(PyObject *module, PyObject *obj)
+/*[clinic end generated code: output=fa7a270d314dfb6c input=bc55598da9e9c9b5]*/
 {
     Py_ssize_t res;
 
@@ -1463,8 +1497,8 @@ covered by any backwards compatibility guarantees.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_locals_impl(PyModuleDef *module)
-/*[clinic end generated code: output=8b5a41f12e19d13a input=7874018d478d5c4b]*/
+builtin_locals_impl(PyObject *module)
+/*[clinic end generated code: output=b46c94015ce11448 input=7874018d478d5c4b]*/
 {
     PyObject *d;
 
@@ -1622,8 +1656,8 @@ Return the octal representation of an integer.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_oct(PyModuleDef *module, PyObject *number)
-/*[clinic end generated code: output=18f701bc6d8f804a input=ad6b274af4016c72]*/
+builtin_oct(PyObject *module, PyObject *number)
+/*[clinic end generated code: output=40a34656b6875352 input=ad6b274af4016c72]*/
 {
     return PyNumber_ToBase(number, 8);
 }
@@ -1639,8 +1673,8 @@ Return the Unicode code point for a one-character string.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_ord(PyModuleDef *module, PyObject *c)
-/*[clinic end generated code: output=04fd27272d9462f6 input=3064e5d6203ad012]*/
+builtin_ord(PyObject *module, PyObject *c)
+/*[clinic end generated code: output=4fa5e87a323bae71 input=3064e5d6203ad012]*/
 {
     long ord;
     Py_ssize_t size;
@@ -1699,8 +1733,8 @@ invoked using the three argument form.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_pow_impl(PyModuleDef *module, PyObject *x, PyObject *y, PyObject *z)
-/*[clinic end generated code: output=1fba268adba9b45f input=653d57d38d41fc07]*/
+builtin_pow_impl(PyObject *module, PyObject *x, PyObject *y, PyObject *z)
+/*[clinic end generated code: output=50a14d5d130d404b input=653d57d38d41fc07]*/
 {
     return PyNumber_Power(x, y, z);
 }
@@ -1780,7 +1814,7 @@ builtin_print(PyObject *self, PyObject *args, PyObject *kwds)
         if (do_flush == -1)
             return NULL;
         else if (do_flush) {
-            tmp = _PyObject_CallMethodId(file, &PyId_flush, "");
+            tmp = _PyObject_CallMethodId(file, &PyId_flush, NULL);
             if (tmp == NULL)
                 return NULL;
             else
@@ -1818,8 +1852,8 @@ On *nix systems, readline is used if available.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_input_impl(PyModuleDef *module, PyObject *prompt)
-/*[clinic end generated code: output=b77731f59e1515c4 input=5e8bb70c2908fe3c]*/
+builtin_input_impl(PyObject *module, PyObject *prompt)
+/*[clinic end generated code: output=83db5a191e7a0d60 input=5e8bb70c2908fe3c]*/
 {
     PyObject *fin = _PySys_GetObjectId(&PyId_stdin);
     PyObject *fout = _PySys_GetObjectId(&PyId_stdout);
@@ -1846,7 +1880,7 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
     }
 
     /* First of all, flush stderr */
-    tmp = _PyObject_CallMethodId(ferr, &PyId_flush, "");
+    tmp = _PyObject_CallMethodId(ferr, &PyId_flush, NULL);
     if (tmp == NULL)
         PyErr_Clear();
     else
@@ -1855,7 +1889,7 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
     /* We should only use (GNU) readline if Python's sys.stdin and
        sys.stdout are the same as C's stdin and stdout, because we
        need to pass it those. */
-    tmp = _PyObject_CallMethodId(fin, &PyId_fileno, "");
+    tmp = _PyObject_CallMethodId(fin, &PyId_fileno, NULL);
     if (tmp == NULL) {
         PyErr_Clear();
         tty = 0;
@@ -1868,7 +1902,7 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
         tty = fd == fileno(stdin) && isatty(fd);
     }
     if (tty) {
-        tmp = _PyObject_CallMethodId(fout, &PyId_fileno, "");
+        tmp = _PyObject_CallMethodId(fout, &PyId_fileno, NULL);
         if (tmp == NULL) {
             PyErr_Clear();
             tty = 0;
@@ -1893,17 +1927,20 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
         PyObject *result;
         size_t len;
 
+        /* stdin is a text stream, so it must have an encoding. */
         stdin_encoding = _PyObject_GetAttrId(fin, &PyId_encoding);
         stdin_errors = _PyObject_GetAttrId(fin, &PyId_errors);
-        if (!stdin_encoding || !stdin_errors)
-            /* stdin is a text stream, so it must have an
-               encoding. */
+        if (!stdin_encoding || !stdin_errors ||
+                !PyUnicode_Check(stdin_encoding) ||
+                !PyUnicode_Check(stdin_errors)) {
+            tty = 0;
             goto _readline_errors;
-        stdin_encoding_str = _PyUnicode_AsString(stdin_encoding);
-        stdin_errors_str = _PyUnicode_AsString(stdin_errors);
+        }
+        stdin_encoding_str = PyUnicode_AsUTF8(stdin_encoding);
+        stdin_errors_str = PyUnicode_AsUTF8(stdin_errors);
         if (!stdin_encoding_str || !stdin_errors_str)
             goto _readline_errors;
-        tmp = _PyObject_CallMethodId(fout, &PyId_flush, "");
+        tmp = _PyObject_CallMethodId(fout, &PyId_flush, NULL);
         if (tmp == NULL)
             PyErr_Clear();
         else
@@ -1914,10 +1951,14 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
             PyObject *stringpo;
             stdout_encoding = _PyObject_GetAttrId(fout, &PyId_encoding);
             stdout_errors = _PyObject_GetAttrId(fout, &PyId_errors);
-            if (!stdout_encoding || !stdout_errors)
+            if (!stdout_encoding || !stdout_errors ||
+                    !PyUnicode_Check(stdout_encoding) ||
+                    !PyUnicode_Check(stdout_errors)) {
+                tty = 0;
                 goto _readline_errors;
-            stdout_encoding_str = _PyUnicode_AsString(stdout_encoding);
-            stdout_errors_str = _PyUnicode_AsString(stdout_errors);
+            }
+            stdout_encoding_str = PyUnicode_AsUTF8(stdout_encoding);
+            stdout_errors_str = PyUnicode_AsUTF8(stdout_errors);
             if (!stdout_encoding_str || !stdout_errors_str)
                 goto _readline_errors;
             stringpo = PyObject_Str(prompt);
@@ -1930,9 +1971,8 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
             Py_CLEAR(stringpo);
             if (po == NULL)
                 goto _readline_errors;
-            promptstr = PyBytes_AsString(po);
-            if (promptstr == NULL)
-                goto _readline_errors;
+            assert(PyBytes_Check(po));
+            promptstr = PyBytes_AS_STRING(po);
         }
         else {
             po = NULL;
@@ -1970,13 +2010,17 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
         Py_XDECREF(po);
         PyMem_FREE(s);
         return result;
+
     _readline_errors:
         Py_XDECREF(stdin_encoding);
         Py_XDECREF(stdout_encoding);
         Py_XDECREF(stdin_errors);
         Py_XDECREF(stdout_errors);
         Py_XDECREF(po);
-        return NULL;
+        if (tty)
+            return NULL;
+
+        PyErr_Clear();
     }
 
     /* Fallback if we're not interactive */
@@ -1984,7 +2028,7 @@ builtin_input_impl(PyModuleDef *module, PyObject *prompt)
         if (PyFile_WriteObject(prompt, fout, Py_PRINT_RAW) != 0)
             return NULL;
     }
-    tmp = _PyObject_CallMethodId(fout, &PyId_flush, "");
+    tmp = _PyObject_CallMethodId(fout, &PyId_flush, NULL);
     if (tmp == NULL)
         PyErr_Clear();
     else
@@ -2005,8 +2049,8 @@ For many object types, including most builtins, eval(repr(obj)) == obj.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_repr(PyModuleDef *module, PyObject *obj)
-/*[clinic end generated code: output=dc41784fa4341834 input=1c9e6d66d3e3be04]*/
+builtin_repr(PyObject *module, PyObject *obj)
+/*[clinic end generated code: output=7ed3778c44fd0194 input=1c9e6d66d3e3be04]*/
 {
     return PyObject_Repr(obj);
 }
@@ -2040,7 +2084,7 @@ builtin_round(PyObject *self, PyObject *args, PyObject *kwds)
         return NULL;
     }
 
-    if (ndigits == NULL)
+    if (ndigits == NULL || ndigits == Py_None)
         result = PyObject_CallFunctionObjArgs(round, NULL);
     else
         result = PyObject_CallFunctionObjArgs(round, ndigits, NULL);
@@ -2069,17 +2113,17 @@ sorted as builtin_sorted
 
 Return a new list containing all items from the iterable in ascending order.
 
-A custom key function can be supplied to customise the sort order, and the
+A custom key function can be supplied to customize the sort order, and the
 reverse flag can be set to request the result in descending order.
 [end disabled clinic input]*/
 
 PyDoc_STRVAR(builtin_sorted__doc__,
-"sorted($module, iterable, key=None, reverse=False)\n"
+"sorted($module, iterable, /, *, key=None, reverse=False)\n"
 "--\n"
 "\n"
 "Return a new list containing all items from the iterable in ascending order.\n"
 "\n"
-"A custom key function can be supplied to customise the sort order, and the\n"
+"A custom key function can be supplied to customize the sort order, and the\n"
 "reverse flag can be set to request the result in descending order.");
 
 #define BUILTIN_SORTED_METHODDEF    \
@@ -2088,10 +2132,11 @@ PyDoc_STRVAR(builtin_sorted__doc__,
 static PyObject *
 builtin_sorted(PyObject *self, PyObject *args, PyObject *kwds)
 {
-    PyObject *newlist, *v, *seq, *keyfunc=NULL, *newargs;
+    PyObject *newlist, *v, *seq, *keyfunc=NULL, **newargs;
     PyObject *callable;
-    static char *kwlist[] = {"iterable", "key", "reverse", 0};
+    static char *kwlist[] = {"", "key", "reverse", 0};
     int reverse;
+    Py_ssize_t nargs;
 
     /* args 1-3 should match listsort in Objects/listobject.c */
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|Oi:sorted",
@@ -2108,15 +2153,10 @@ builtin_sorted(PyObject *self, PyObject *args, PyObject *kwds)
         return NULL;
     }
 
-    newargs = PyTuple_GetSlice(args, 1, 4);
-    if (newargs == NULL) {
-        Py_DECREF(newlist);
-        Py_DECREF(callable);
-        return NULL;
-    }
-
-    v = PyObject_Call(callable, newargs, kwds);
-    Py_DECREF(newargs);
+    assert(PyTuple_GET_SIZE(args) >= 1);
+    newargs = &PyTuple_GET_ITEM(args, 1);
+    nargs = PyTuple_GET_SIZE(args) - 1;
+    v = _PyObject_FastCallDict(callable, newargs, nargs, kwds);
     Py_DECREF(callable);
     if (v == NULL) {
         Py_DECREF(newlist);
@@ -2175,8 +2215,8 @@ reject non-numeric types.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_sum_impl(PyModuleDef *module, PyObject *iterable, PyObject *start)
-/*[clinic end generated code: output=33655b248b21d581 input=3b5b7a9d7611c73a]*/
+builtin_sum_impl(PyObject *module, PyObject *iterable, PyObject *start)
+/*[clinic end generated code: output=df758cec7d1d302f input=3b5b7a9d7611c73a]*/
 {
     PyObject *result = start;
     PyObject *temp, *item, *iter;
@@ -2352,9 +2392,9 @@ or ...`` etc.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_isinstance_impl(PyModuleDef *module, PyObject *obj,
+builtin_isinstance_impl(PyObject *module, PyObject *obj,
                         PyObject *class_or_tuple)
-/*[clinic end generated code: output=f960b7c12dbbeda0 input=ffa743db1daf7549]*/
+/*[clinic end generated code: output=6faf01472c13b003 input=ffa743db1daf7549]*/
 {
     int retval;
 
@@ -2380,9 +2420,9 @@ or ...`` etc.
 [clinic start generated code]*/
 
 static PyObject *
-builtin_issubclass_impl(PyModuleDef *module, PyObject *cls,
+builtin_issubclass_impl(PyObject *module, PyObject *cls,
                         PyObject *class_or_tuple)
-/*[clinic end generated code: output=8b012a151940bbf2 input=af5f35e9ceaddaf6]*/
+/*[clinic end generated code: output=358412410cd7a250 input=af5f35e9ceaddaf6]*/
 {
     int retval;
 
@@ -2711,10 +2751,10 @@ _PyBuiltin_Init(void)
     SETBUILTIN("zip",                   &PyZip_Type);
     debug = PyBool_FromLong(Py_OptimizeFlag == 0);
     if (PyDict_SetItemString(dict, "__debug__", debug) < 0) {
-        Py_XDECREF(debug);
+        Py_DECREF(debug);
         return NULL;
     }
-    Py_XDECREF(debug);
+    Py_DECREF(debug);
 
     return mod;
 #undef ADD_TO_ALL

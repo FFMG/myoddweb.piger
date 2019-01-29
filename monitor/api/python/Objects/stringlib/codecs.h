@@ -1,6 +1,8 @@
 /* stringlib: codec implementations */
 
-#if STRINGLIB_IS_UNICODE
+#if !STRINGLIB_IS_UNICODE
+# error "codecs.h is specific to Unicode"
+#endif
 
 /* Mask to quickly check whether a C 'long' contains a
    non-ASCII, UTF8-encoded char. */
@@ -260,52 +262,34 @@ STRINGLIB(utf8_encoder)(PyObject *unicode,
                         Py_ssize_t size,
                         const char *errors)
 {
-#define MAX_SHORT_UNICHARS 300  /* largest size we'll do on the stack */
-
-    Py_ssize_t i;                /* index into s of next input byte */
-    PyObject *result;            /* result string object */
+    Py_ssize_t i;                /* index into data of next input character */
     char *p;                     /* next free byte in output buffer */
-    Py_ssize_t nallocated;      /* number of result bytes allocated */
-    Py_ssize_t nneeded;            /* number of result bytes needed */
 #if STRINGLIB_SIZEOF_CHAR > 1
-    PyObject *errorHandler = NULL;
+    PyObject *error_handler_obj = NULL;
     PyObject *exc = NULL;
     PyObject *rep = NULL;
+    _Py_error_handler error_handler = _Py_ERROR_UNKNOWN;
 #endif
 #if STRINGLIB_SIZEOF_CHAR == 1
     const Py_ssize_t max_char_size = 2;
-    char stackbuf[MAX_SHORT_UNICHARS * 2];
 #elif STRINGLIB_SIZEOF_CHAR == 2
     const Py_ssize_t max_char_size = 3;
-    char stackbuf[MAX_SHORT_UNICHARS * 3];
 #else /*  STRINGLIB_SIZEOF_CHAR == 4 */
     const Py_ssize_t max_char_size = 4;
-    char stackbuf[MAX_SHORT_UNICHARS * 4];
 #endif
+    _PyBytesWriter writer;
 
     assert(size >= 0);
+    _PyBytesWriter_Init(&writer);
 
-    if (size <= MAX_SHORT_UNICHARS) {
-        /* Write into the stack buffer; nallocated can't overflow.
-         * At the end, we'll allocate exactly as much heap space as it
-         * turns out we need.
-         */
-        nallocated = Py_SAFE_DOWNCAST(sizeof(stackbuf), size_t, int);
-        result = NULL;   /* will allocate after we're done */
-        p = stackbuf;
+    if (size > PY_SSIZE_T_MAX / max_char_size) {
+        /* integer overflow */
+        return PyErr_NoMemory();
     }
-    else {
-        if (size > PY_SSIZE_T_MAX / max_char_size) {
-            /* integer overflow */
-            return PyErr_NoMemory();
-        }
-        /* Overallocate on the heap, and give the excess back at the end. */
-        nallocated = size * max_char_size;
-        result = PyBytes_FromStringAndSize(NULL, nallocated);
-        if (result == NULL)
-            return NULL;
-        p = PyBytes_AS_STRING(result);
-    }
+
+    p = _PyBytesWriter_Alloc(&writer, size * max_char_size);
+    if (p == NULL)
+        return NULL;
 
     for (i = 0; i < size;) {
         Py_UCS4 ch = data[i++];
@@ -326,72 +310,117 @@ STRINGLIB(utf8_encoder)(PyObject *unicode,
         }
 #if STRINGLIB_SIZEOF_CHAR > 1
         else if (Py_UNICODE_IS_SURROGATE(ch)) {
-            Py_ssize_t newpos;
-            Py_ssize_t repsize, k, startpos;
-            startpos = i-1;
-            rep = unicode_encode_call_errorhandler(
-                  errors, &errorHandler, "utf-8", "surrogates not allowed",
-                  unicode, &exc, startpos, startpos+1, &newpos);
-            if (!rep)
-                goto error;
-
-            if (PyBytes_Check(rep))
-                repsize = PyBytes_GET_SIZE(rep);
-            else
-                repsize = PyUnicode_GET_LENGTH(rep);
-
-            if (repsize > max_char_size) {
-                Py_ssize_t offset;
-
-                if (result == NULL)
-                    offset = p - stackbuf;
-                else
-                    offset = p - PyBytes_AS_STRING(result);
-
-                if (nallocated > PY_SSIZE_T_MAX - repsize + max_char_size) {
-                    /* integer overflow */
-                    PyErr_NoMemory();
-                    goto error;
-                }
-                nallocated += repsize - max_char_size;
-                if (result != NULL) {
-                    if (_PyBytes_Resize(&result, nallocated) < 0)
-                        goto error;
-                } else {
-                    result = PyBytes_FromStringAndSize(NULL, nallocated);
-                    if (result == NULL)
-                        goto error;
-                    Py_MEMCPY(PyBytes_AS_STRING(result), stackbuf, offset);
-                }
-                p = PyBytes_AS_STRING(result) + offset;
+            Py_ssize_t startpos, endpos, newpos;
+            Py_ssize_t k;
+            if (error_handler == _Py_ERROR_UNKNOWN) {
+                error_handler = get_error_handler(errors);
             }
 
-            if (PyBytes_Check(rep)) {
-                char *prep = PyBytes_AS_STRING(rep);
-                for(k = repsize; k > 0; k--)
-                    *p++ = *prep++;
-            } else /* rep is unicode */ {
-                enum PyUnicode_Kind repkind;
-                void *repdata;
+            startpos = i-1;
+            endpos = startpos+1;
 
-                if (PyUnicode_READY(rep) < 0)
+            while ((endpos < size) && Py_UNICODE_IS_SURROGATE(data[endpos]))
+                endpos++;
+
+            /* Only overallocate the buffer if it's not the last write */
+            writer.overallocate = (endpos < size);
+
+            switch (error_handler)
+            {
+            case _Py_ERROR_REPLACE:
+                memset(p, '?', endpos - startpos);
+                p += (endpos - startpos);
+                /* fall through the ignore handler */
+            case _Py_ERROR_IGNORE:
+                i += (endpos - startpos - 1);
+                break;
+
+            case _Py_ERROR_SURROGATEPASS:
+                for (k=startpos; k<endpos; k++) {
+                    ch = data[k];
+                    *p++ = (char)(0xe0 | (ch >> 12));
+                    *p++ = (char)(0x80 | ((ch >> 6) & 0x3f));
+                    *p++ = (char)(0x80 | (ch & 0x3f));
+                }
+                i += (endpos - startpos - 1);
+                break;
+
+            case _Py_ERROR_BACKSLASHREPLACE:
+                /* subtract preallocated bytes */
+                writer.min_size -= max_char_size * (endpos - startpos);
+                p = backslashreplace(&writer, p,
+                                     unicode, startpos, endpos);
+                if (p == NULL)
                     goto error;
-                repkind = PyUnicode_KIND(rep);
-                repdata = PyUnicode_DATA(rep);
+                i += (endpos - startpos - 1);
+                break;
 
-                for(k=0; k<repsize; k++) {
-                    Py_UCS4 c = PyUnicode_READ(repkind, repdata, k);
-                    if (0x80 <= c) {
-                        raise_encode_exception(&exc, "utf-8",
-                                               unicode,
-                                               i-1, i,
+            case _Py_ERROR_XMLCHARREFREPLACE:
+                /* subtract preallocated bytes */
+                writer.min_size -= max_char_size * (endpos - startpos);
+                p = xmlcharrefreplace(&writer, p,
+                                      unicode, startpos, endpos);
+                if (p == NULL)
+                    goto error;
+                i += (endpos - startpos - 1);
+                break;
+
+            case _Py_ERROR_SURROGATEESCAPE:
+                for (k=startpos; k<endpos; k++) {
+                    ch = data[k];
+                    if (!(0xDC80 <= ch && ch <= 0xDCFF))
+                        break;
+                    *p++ = (char)(ch & 0xff);
+                }
+                if (k >= endpos) {
+                    i += (endpos - startpos - 1);
+                    break;
+                }
+                startpos = k;
+                assert(startpos < endpos);
+                /* fall through the default handler */
+            default:
+                rep = unicode_encode_call_errorhandler(
+                      errors, &error_handler_obj, "utf-8", "surrogates not allowed",
+                      unicode, &exc, startpos, endpos, &newpos);
+                if (!rep)
+                    goto error;
+
+                /* subtract preallocated bytes */
+                writer.min_size -= max_char_size * (newpos - startpos);
+
+                if (PyBytes_Check(rep)) {
+                    p = _PyBytesWriter_WriteBytes(&writer, p,
+                                                  PyBytes_AS_STRING(rep),
+                                                  PyBytes_GET_SIZE(rep));
+                }
+                else {
+                    /* rep is unicode */
+                    if (PyUnicode_READY(rep) < 0)
+                        goto error;
+
+                    if (!PyUnicode_IS_ASCII(rep)) {
+                        raise_encode_exception(&exc, "utf-8", unicode,
+                                               startpos, endpos,
                                                "surrogates not allowed");
                         goto error;
                     }
-                    *p++ = (char)c;
+
+                    p = _PyBytesWriter_WriteBytes(&writer, p,
+                                                  PyUnicode_DATA(rep),
+                                                  PyUnicode_GET_LENGTH(rep));
                 }
+
+                if (p == NULL)
+                    goto error;
+                Py_CLEAR(rep);
+
+                i = newpos;
             }
-            Py_CLEAR(rep);
+
+            /* If overallocation was disabled, ensure that it was the last
+               write. Otherwise, we missed an optimization */
+            assert(writer.overallocate || i == size);
         }
         else
 #if STRINGLIB_SIZEOF_CHAR > 2
@@ -416,35 +445,20 @@ STRINGLIB(utf8_encoder)(PyObject *unicode,
 #endif /* STRINGLIB_SIZEOF_CHAR > 1 */
     }
 
-    if (result == NULL) {
-        /* This was stack allocated. */
-        nneeded = p - stackbuf;
-        assert(nneeded <= nallocated);
-        result = PyBytes_FromStringAndSize(stackbuf, nneeded);
-    }
-    else {
-        /* Cut back to size actually needed. */
-        nneeded = p - PyBytes_AS_STRING(result);
-        assert(nneeded <= nallocated);
-        _PyBytes_Resize(&result, nneeded);
-    }
-
 #if STRINGLIB_SIZEOF_CHAR > 1
-    Py_XDECREF(errorHandler);
+    Py_XDECREF(error_handler_obj);
     Py_XDECREF(exc);
 #endif
-    return result;
+    return _PyBytesWriter_Finish(&writer, p);
 
 #if STRINGLIB_SIZEOF_CHAR > 1
  error:
     Py_XDECREF(rep);
-    Py_XDECREF(errorHandler);
+    Py_XDECREF(error_handler_obj);
     Py_XDECREF(exc);
-    Py_XDECREF(result);
+    _PyBytesWriter_Dealloc(&writer);
     return NULL;
 #endif
-
-#undef MAX_SHORT_UNICHARS
 }
 
 /* The pattern for constructing UCS2-repeated masks. */
@@ -806,5 +820,3 @@ STRINGLIB(utf32_encode)(const STRINGLIB_CHAR *in,
 #undef SWAB4
 
 #endif
-
-#endif /* STRINGLIB_IS_UNICODE */

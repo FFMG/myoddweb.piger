@@ -117,6 +117,7 @@ _operator _operator.c	        # operator.add() and similar goodies
 _collections _collectionsmodule.c # Container types
 itertools itertoolsmodule.c    # Functions creating iterators for efficient looping
 atexit atexitmodule.c      # Register functions to be run at interpreter-shutdown
+_signal signalmodule.c
 _stat _stat.c			# stat.h interface
 time timemodule.c	# -lm # time operations and variables
 
@@ -180,6 +181,7 @@ _symtable symtablemodule.c
 #_datetime _datetimemodule.c	# datetime accelerator
 #_bisect _bisectmodule.c	# Bisection algorithms
 #_heapq _heapqmodule.c	# Heap queue algorithm
+#_asyncio _asynciomodule.c  # Fast asyncio Future
 
 #unicodedata unicodedata.c    # static Unicode character database
 
@@ -249,6 +251,8 @@ _symtable symtablemodule.c
 #_sha256 sha256module.c
 #_sha512 sha512module.c
 
+# _blake module
+#_blake2 _blake2/blake2module.c _blake2/blake2b_impl.c _blake2/blake2s_impl.c
 
 # The _tkinter module.
 #

@@ -29,15 +29,15 @@ Supported Versions
 
 As specified in :pep:`11`, a Python release only supports a Windows platform
 while Microsoft considers the platform under extended support. This means that
-Python 3.5 supports Windows Vista and newer. If you require Windows XP support
-then please install Python 3.4.
+Python |version| supports Windows Vista and newer. If you require Windows XP
+support then please install Python 3.4.
 
 Installation Steps
 ------------------
 
-Four Python 3.5 installers are available for download - two each for the 32-bit
-and 64-bit versions of the interpreter. The *web installer* is a small initial
-download, and it will automatically download the required components as
+Four Python |version| installers are available for download - two each for the
+32-bit and 64-bit versions of the interpreter. The *web installer* is a small
+initial download, and it will automatically download the required components as
 necessary. The *offline installer* includes the components necessary for a
 default installation and only requires an internet connection for optional
 features. See :ref:`install-layout-option` for other ways to avoid downloading
@@ -54,7 +54,7 @@ If you select "Install Now":
   users)
 * Python will be installed into your user directory
 * The :ref:`launcher` will be installed according to the option at the bottom
-  of the first pace
+  of the first page
 * The standard library, test suite, launcher and pip will be installed
 * If selected, the install directory will be added to your :envvar:`PATH`
 * Shortcuts will only be visible for the current user
@@ -73,6 +73,31 @@ installation". In this case:
 * The standard library can be pre-compiled to bytecode
 * If selected, the install directory will be added to the system :envvar:`PATH`
 * Shortcuts are available for all users
+
+.. _max-path:
+
+Removing the MAX_PATH Limitation
+--------------------------------
+
+Windows historically has limited path lengths to 260 characters. This meant that
+paths longer than this would not resolve and errors would result.
+
+In the latest versions of Windows, this limitation can be expanded to
+approximately 32,000 characters. Your administrator will need to activate the
+"Enable Win32 long paths" group policy, or set the registry value
+``HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem@LongPathsEnabled``
+to ``1``.
+
+This allows the :func:`open` function, the :mod:`os` module and most other
+path functionality to accept and return paths longer than 260 characters when
+using strings. (Use of bytes as paths is deprecated on Windows, and this feature
+is not available when using bytes.)
+
+After changing the above option, no further configuration is required.
+
+.. versionchanged:: 3.6
+
+   Support for long paths was enabled in Python.
 
 .. _install-quiet-option:
 
@@ -168,13 +193,13 @@ of available options is shown below.
 For example, to silently install a default, system-wide Python installation,
 you could use the following command (from an elevated command prompt)::
 
-    python-3.5.0.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
+    python-3.6.0.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
 
 To allow users to easily install a personal copy of Python without the test
 suite, you could provide a shortcut with the following command. This will
 display a simplified initial page and disallow customization::
 
-    python-3.5.0.exe InstallAllUsers=0 Include_launcher=0 Include_test=0
+    python-3.6.0.exe InstallAllUsers=0 Include_launcher=0 Include_test=0
         SimpleInstall=1 SimpleInstallDescription="Just for me, no test suite."
 
 (Note that omitting the launcher also omits file associations, and is only
@@ -209,13 +234,13 @@ where a large number of installations are going to be performed it is very
 useful to have a locally cached copy.
 
 Execute the following command from Command Prompt to download all possible
-required files.  Remember to substitute ``python-3.5.0.exe`` for the actual
+required files.  Remember to substitute ``python-3.6.0.exe`` for the actual
 name of your installer, and to create layouts in their own directories to
 avoid collisions between files with the same name.
 
 ::
 
-    python-3.5.0.exe /layout [optional target directory]
+    python-3.6.0.exe /layout [optional target directory]
 
 You may also specify the ``/quiet`` option to hide the progress display.
 
@@ -320,7 +345,7 @@ User level and the System level, or temporarily in a command prompt.
 To temporarily set environment variables, open Command Prompt and use the
 :command:`set` command::
 
-    C:\>set PATH=C:\Program Files\Python 3.5;%PATH%
+    C:\>set PATH=C:\Program Files\Python 3.6;%PATH%
     C:\>set PYTHONPATH=%PYTHONPATH%;C:\My_python_lib
     C:\>python
 
@@ -376,13 +401,13 @@ Finding the Python executable
 
 Besides using the automatically created start menu entry for the Python
 interpreter, you might want to start Python in the command prompt. The
-installer for Python 3.5 and later has an option to set that up for you.
+installer has an option to set that up for you.
 
-On the first page of the installer, an option labelled "Add Python 3.5 to
-PATH" can be selected to have the installer add the install location into the
+On the first page of the installer, an option labelled "Add Python to PATH"
+may be selected to have the installer add the install location into the
 :envvar:`PATH`.  The location of the :file:`Scripts\\` folder is also added.
 This allows you to type :command:`python` to run the interpreter, and
-:command:`pip` or . Thus, you can also execute your
+:command:`pip` for the package installer. Thus, you can also execute your
 scripts with command line options, see :ref:`using-on-cmdline` documentation.
 
 If you don't enable this option at install time, you can always re-run the
@@ -393,7 +418,7 @@ of your Python installation, delimited by a semicolon from other entries.  An
 example variable could look like this (assuming the first two entries already
 existed)::
 
-    C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Python 3.5
+    C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Python 3.6
 
 .. _launcher:
 
@@ -418,6 +443,8 @@ Getting started
 From the command-line
 ^^^^^^^^^^^^^^^^^^^^^
 
+.. versionchanged:: 3.6
+
 System-wide installations of Python 3.3 and later will put the launcher on your
 :envvar:`PATH`. The launcher is compatible with all available versions of
 Python, so it does not matter which version is installed. To check that the
@@ -427,25 +454,26 @@ launcher is available, execute the following command in Command Prompt:
 
   py
 
-You should find that the latest version of Python 2.x you have installed is
+You should find that the latest version of Python you have installed is
 started - it can be exited as normal, and any additional command-line
 arguments specified will be sent directly to Python.
 
-If you have multiple versions of Python 2.x installed (e.g., 2.6 and 2.7) you
-will have noticed that Python 2.7 was started - to launch Python 2.6, try the
+If you have multiple versions of Python installed (e.g., 2.7 and |version|) you
+will have noticed that Python |version| was started - to launch Python 2.7, try
+the command:
+
+::
+
+  py -2.7
+
+If you want the latest version of Python 2.x you have installed, try the
 command:
 
 ::
 
-  py -2.6
+  py -2
 
-If you have a Python 3.x installed, try the command:
-
-::
-
-  py -3
-
-You should find the latest version of Python 3.x starts.
+You should find the latest version of Python 2.x starts.
 
 If you see the following error, you do not have the launcher installed:
 
@@ -500,6 +528,11 @@ version qualifier.  Assuming you have Python 2.6 installed, try changing the
 first line to ``#! python2.6`` and you should find the 2.6 version
 information printed.
 
+Note that unlike interactive use, a bare "python" will use the latest
+version of Python 2.x that you have installed.  This is for backward
+compatibility and for compatibility with Unix, where the command ``python``
+typically refers to Python 2.
+
 From file associations
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -517,9 +550,9 @@ Shebang Lines
 
 If the first line of a script file starts with ``#!``, it is known as a
 "shebang" line.  Linux and other Unix like operating systems have native
-support for such lines and are commonly used on such systems to indicate how
-a script should be executed.  This launcher allows the same facilities to be
-using with Python scripts on Windows and the examples above demonstrate their
+support for such lines and they are commonly used on such systems to indicate
+how a script should be executed.  This launcher allows the same facilities to
+be used with Python scripts on Windows and the examples above demonstrate their
 use.
 
 To allow shebang lines in Python scripts to be portable between Unix and
@@ -676,7 +709,7 @@ target Python.
 
 
 
-.. finding_modules:
+.. _finding_modules:
 
 Finding modules
 ===============
@@ -687,7 +720,24 @@ installation directory.  So, if you had installed Python to
 :file:`C:\\Python\\Lib\\` and third-party modules should be stored in
 :file:`C:\\Python\\Lib\\site-packages\\`.
 
-This is how :data:`sys.path` is populated on Windows:
+To completely override :data:`sys.path`, create a ``._pth`` file with the same
+name as the DLL (``python36._pth``) or the executable (``python._pth``) and
+specify one line for each path to add to :data:`sys.path`. The file based on the
+DLL name overrides the one based on the executable, which allows paths to be
+restricted for any program loading the runtime if desired.
+
+When the file exists, all registry and environment variables are ignored,
+isolated mode is enabled, and :mod:`site` is not imported unless one line in the
+file specifies ``import site``. Blank paths and lines starting with ``#`` are
+ignored. Each path may be absolute or relative to the location of the file.
+Import statements other than to ``site`` are not permitted, and arbitrary code
+cannot be specified.
+
+Note that ``.pth`` files (without leading underscore) will be processed normally
+by the :mod:`site` module.
+
+When no ``._pth`` file is found, this is how :data:`sys.path` is populated on
+Windows:
 
 * An empty entry is added at the start, which corresponds to the current
   directory.
@@ -706,10 +756,11 @@ This is how :data:`sys.path` is populated on Windows:
 
 * If the environment variable :envvar:`PYTHONHOME` is set, it is assumed as
   "Python Home".  Otherwise, the path of the main Python executable is used to
-  locate a "landmark file" (``Lib\os.py``) to deduce the "Python Home".  If a
-  Python home is found, the relevant sub-directories added to :data:`sys.path`
-  (``Lib``, ``plat-win``, etc) are based on that folder.  Otherwise, the core
-  Python path is constructed from the PythonPath stored in the registry.
+  locate a "landmark file" (either ``Lib\os.py`` or ``pythonXY.zip``) to deduce
+  the "Python Home".  If a Python home is found, the relevant sub-directories
+  added to :data:`sys.path` (``Lib``, ``plat-win``, etc) are based on that
+  folder.  Otherwise, the core Python path is constructed from the PythonPath
+  stored in the registry.
 
 * If the Python Home cannot be located, no :envvar:`PYTHONPATH` is specified in
   the environment, and no registry entries can be found, a default path with
@@ -721,10 +772,6 @@ directory one level above the executable, the following variations apply:
 * If ``home`` is an absolute path and :envvar:`PYTHONHOME` is not set, this
   path is used instead of the path to the main executable when deducing the
   home location.
-
-* If ``applocal`` is set to true, the ``home`` property or the main executable
-  is always used as the home path, and all environment variables or registry
-  values affecting the path are ignored. The landmark file is not checked.
 
 The end result of all this is:
 
@@ -744,13 +791,12 @@ The end result of all this is:
 For those who want to bundle Python into their application or distribution, the
 following advice will prevent conflicts with other installations:
 
-* Include a ``pyvenv.cfg`` file alongside your executable containing
-  ``applocal = true``. This will ensure that your own directory will be used to
-  resolve paths even if you have included the standard library in a ZIP file.
-  It will also ignore user site-packages and other paths listed in the
-  registry.
+* Include a ``._pth`` file alongside your executable containing the
+  directories to include. This will ignore paths listed in the registry and
+  environment variables, and also ignore :mod:`site` unless ``import site`` is
+  listed.
 
-* If you are loading :file:`python3.dll` or :file:`python35.dll` in your own
+* If you are loading :file:`python3.dll` or :file:`python36.dll` in your own
   executable, explicitly call :c:func:`Py_SetPath` or (at least)
   :c:func:`Py_SetProgramName` before :c:func:`Py_Initialize`.
 
@@ -760,13 +806,30 @@ following advice will prevent conflicts with other installations:
 * If you cannot use the previous suggestions (for example, you are a
   distribution that allows people to run :file:`python.exe` directly), ensure
   that the landmark file (:file:`Lib\\os.py`) exists in your install directory.
-  (Note that it will not be detected inside a ZIP file.)
+  (Note that it will not be detected inside a ZIP file, but a correctly named
+  ZIP file will be detected instead.)
 
 These will ensure that the files in a system-wide installation will not take
 precedence over the copy of the standard library bundled with your application.
 Otherwise, your users may experience problems using your application. Note that
 the first suggestion is the best, as the other may still be susceptible to
 non-standard paths in the registry and user site-packages.
+
+.. versionchanged::
+   3.6
+
+      * Adds ``._pth`` file support and removes ``applocal`` option from
+        ``pyvenv.cfg``.
+      * Adds ``pythonXX.zip`` as a potential landmark when directly adjacent
+        to the executable.
+
+.. deprecated::
+   3.6
+
+      Modules specified in the registry under ``Modules`` (not ``PythonPath``)
+      may be imported by :class:`importlib.machinery.WindowsRegistryFinder`.
+      This finder is enabled on Windows in 3.6.0 and earlier, but may need to
+      be explicitly added to :attr:`sys.meta_path` in the future.
 
 Additional modules
 ==================
@@ -867,7 +930,7 @@ directly accessed by end-users.
 When extracted, the embedded distribution is (almost) fully isolated from the
 user's system, including environment variables, system registry settings, and
 installed packages. The standard library is included as pre-compiled and
-optimized ``.pyc`` files in a ZIP, and ``python3.dll``, ``python35.dll``,
+optimized ``.pyc`` files in a ZIP, and ``python3.dll``, ``python36.dll``,
 ``python.exe`` and ``pythonw.exe`` are all provided. Tcl/tk (including all
 dependants, such as Idle), pip and the Python documentation are not included.
 

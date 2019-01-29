@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-    <?define exts=pyexpat;select;unicodedata;winsound;_bz2;_elementtree;_socket;_ssl;_msi;_ctypes;_hashlib;_multiprocessing;_lzma;_decimal;_overlapped;_sqlite3 ?>
+    <?define exts=pyexpat;select;unicodedata;winsound;_bz2;_elementtree;_socket;_ssl;_msi;_ctypes;_hashlib;_multiprocessing;_lzma;_decimal;_overlapped;_sqlite3;_asyncio ?>
     <Fragment>
         <ComponentGroup Id="lib_extensions">
             <?foreach ext in $(var.exts)?>
@@ -22,7 +22,6 @@
             <?foreach ext in $(var.exts)?>
             
             <Component Id="$(var.ext).pdb" Directory="DLLs" Guid="*">
-                <Condition>SYMBOLS=1</Condition>
                 <File Name="$(var.ext).pdb" />
             </Component>
             
@@ -64,16 +63,17 @@
                     <RegistryValue Key="PythonPath" Type="string" Value="[Lib];[DLLs]" />
                 </RegistryKey>
             </Component>
-            <Component Id="Lib_site_packages_README" Directory="Lib_site_packages" Guid="*">
-                <File Id="Lib_site_packages_README" Name="README.txt" Source="!(bindpath.src)Lib\site-packages\README" KeyPath="yes" />
-            </Component>
             <Component Id="Lib2to3_pickle_remove" Directory="Lib_lib2to3" Guid="$(var.RemoveLib2to3PickleComponentGuid)">
                 <RemoveFile Id="Lib2to3_pickle_remove_files" Name="*.pickle" On="uninstall" />
                 <RemoveFolder Id="Lib2to3_pickle_remove_folder" On="uninstall" />
             </Component>
         </ComponentGroup>
-        <DirectoryRef Id="Lib">
-            <Directory Id="Lib_site_packages" Name="site-packages" />
-        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="lib_cat">
+            <Component Id="lib_cat" Directory="Catalogs" Guid="*">
+                <File Name="python_lib.cat" KeyPath="yes" />
+            </Component>
+        </ComponentGroup>
     </Fragment>
 </Wix>

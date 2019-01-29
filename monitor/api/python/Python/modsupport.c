@@ -260,13 +260,12 @@ do_mkvalue(const char **p_format, va_list *p_va, int flags)
             return PyLong_FromUnsignedLong(n);
         }
 
-#ifdef HAVE_LONG_LONG
         case 'L':
-            return PyLong_FromLongLong((PY_LONG_LONG)va_arg(*p_va, PY_LONG_LONG));
+            return PyLong_FromLongLong((long long)va_arg(*p_va, long long));
 
         case 'K':
-            return PyLong_FromUnsignedLongLong((PY_LONG_LONG)va_arg(*p_va, unsigned PY_LONG_LONG));
-#endif
+            return PyLong_FromUnsignedLongLong((long long)va_arg(*p_va, unsigned long long));
+
         case 'u':
         {
             PyObject *v;
@@ -318,7 +317,7 @@ do_mkvalue(const char **p_format, va_list *p_va, int flags)
         case 'U':   /* XXX deprecated alias */
         {
             PyObject *v;
-            char *str = va_arg(*p_va, char *);
+            const char *str = va_arg(*p_va, const char *);
             Py_ssize_t n;
             if (**p_format == '#') {
                 ++*p_format;
@@ -351,7 +350,7 @@ do_mkvalue(const char **p_format, va_list *p_va, int flags)
         case 'y':
         {
             PyObject *v;
-            char *str = va_arg(*p_va, char *);
+            const char *str = va_arg(*p_va, const char *);
             Py_ssize_t n;
             if (**p_format == '#') {
                 ++*p_format;
@@ -468,8 +467,7 @@ va_build_value(const char *format, va_list va, int flags)
     const char *f = format;
     int n = countformat(f, '\0');
     va_list lva;
-
-        Py_VA_COPY(lva, va);
+    PyObject *retval;
 
     if (n < 0)
         return NULL;
@@ -477,9 +475,14 @@ va_build_value(const char *format, va_list va, int flags)
         Py_INCREF(Py_None);
         return Py_None;
     }
-    if (n == 1)
-        return do_mkvalue(&f, &lva, flags);
-    return do_mktuple(&f, &lva, '\0', n, flags);
+    va_copy(lva, va);
+    if (n == 1) {
+        retval = do_mkvalue(&f, &lva, flags);
+    } else {
+        retval = do_mktuple(&f, &lva, '\0', n, flags);
+    }
+    va_end(lva);
+    return retval;
 }
 
 

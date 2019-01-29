@@ -63,6 +63,8 @@ created.  Socket addresses are represented as follows:
    .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
 
+.. _host_port:
+
 - A pair ``(host, port)`` is used for the :const:`AF_INET` address family,
   where *host* is a string representing either a hostname in Internet domain
   notation like ``'daring.cwi.nl'`` or an IPv4 address like ``'100.50.200.5'``,
@@ -130,6 +132,22 @@ created.  Socket addresses are represented as follows:
     :class:`bytes` object containing the Bluetooth address in a
     string format. (ex. ``b'12:23:34:45:56:67'``) This protocol is not
     supported under FreeBSD.
+
+- :const:`AF_ALG` is a Linux-only socket based interface to Kernel
+  cryptography. An algorithm socket is configured with a tuple of two to four
+  elements ``(type, name [, feat [, mask]])``, where:
+
+  - *type* is the algorithm type as string, e.g. ``aead``, ``hash``,
+    ``skcipher`` or ``rng``.
+
+  - *name* is the algorithm name and operation mode as string, e.g.
+    ``sha256``, ``hmac(sha256)``, ``cbc(aes)`` or ``drbg_nopr_ctr_aes256``.
+
+  - *feat* and *mask* are unsigned 32bit integers.
+
+  Availability Linux 2.6.38, some algorithm types require more recent Kernels.
+
+  .. versionadded:: 3.6
 
 - Certain other address families (:const:`AF_PACKET`, :const:`AF_CAN`)
   support specific representations.
@@ -281,6 +299,10 @@ Constants
    in the Unix header files are defined; for a few symbols, default values are
    provided.
 
+   .. versionchanged:: 3.6
+      ``SO_DOMAIN``, ``SO_PROTOCOL``, ``SO_PEERSEC``, ``SO_PASSSEC``,
+      ``TCP_USER_TIMEOUT``, ``TCP_CONGESTION`` were added.
+
 .. data:: AF_CAN
           PF_CAN
           SOL_CAN_*
@@ -329,17 +351,32 @@ Constants
    .. versionadded:: 3.3
 
 
-.. data:: SIO_*
+.. data:: SIO_RCVALL
+          SIO_KEEPALIVE_VALS
+          SIO_LOOPBACK_FAST_PATH
           RCVALL_*
 
    Constants for Windows' WSAIoctl(). The constants are used as arguments to the
    :meth:`~socket.socket.ioctl` method of socket objects.
+
+   .. versionchanged:: 3.6
+      ``SIO_LOOPBACK_FAST_PATH`` was added.
 
 
 .. data:: TIPC_*
 
    TIPC related constants, matching the ones exported by the C socket API. See
    the TIPC documentation for more information.
+
+.. data:: AF_ALG
+          SOL_ALG
+          ALG_*
+
+   Constants for Linux Kernel cryptography.
+
+   Availability: Linux >= 2.6.38.
+
+   .. versionadded:: 3.6
 
 .. data:: AF_LINK
 
@@ -872,6 +909,10 @@ to sockets.
    it is recommended to :meth:`close` them explicitly, or to use a
    :keyword:`with` statement around them.
 
+   .. versionchanged:: 3.6
+      :exc:`OSError` is now raised if an error occurs when the underlying
+      :c:func:`close` call is made.
+
    .. note::
 
       :meth:`close()` releases the resource associated with a connection but
@@ -991,6 +1032,12 @@ to sockets.
 
    On other platforms, the generic :func:`fcntl.fcntl` and :func:`fcntl.ioctl`
    functions may be used; they accept a socket object as their first argument.
+
+   Currently only the following control codes are supported:
+   ``SIO_RCVALL``, ``SIO_KEEPALIVE_VALS``, and ``SIO_LOOPBACK_FAST_PATH``.
+
+   .. versionchanged:: 3.6
+      ``SIO_LOOPBACK_FAST_PATH`` was added.
 
 .. method:: socket.listen([backlog])
 
@@ -1211,7 +1258,7 @@ to sockets.
    much data, if any, was successfully sent.
 
    .. versionchanged:: 3.5
-      The socket timeout is no more reset each time data is sent successfuly.
+      The socket timeout is no more reset each time data is sent successfully.
       The socket timeout is now the maximum total duration to send all data.
 
    .. versionchanged:: 3.5
@@ -1275,6 +1322,15 @@ to sockets.
       an exception, the method now retries the system call instead of raising
       an :exc:`InterruptedError` exception (see :pep:`475` for the rationale).
 
+.. method:: socket.sendmsg_afalg([msg], *, op[, iv[, assoclen[, flags]]])
+
+   Specialized version of :meth:`~socket.sendmsg` for :const:`AF_ALG` socket.
+   Set mode, IV, AEAD associated data length and flags for :const:`AF_ALG` socket.
+
+   Availability: Linux >= 2.6.38
+
+   .. versionadded:: 3.6
+
 .. method:: socket.sendfile(file, offset=0, count=None)
 
    Send a file until EOF is reached by using high-performance
@@ -1286,8 +1342,8 @@ to sockets.
    to transmit as opposed to sending the file until EOF is reached. File
    position is updated on return or also in case of error in which case
    :meth:`file.tell() <io.IOBase.tell>` can be used to figure out the number of
-   bytes which were sent. The socket must be of :const:`SOCK_STREAM` type. Non-
-   blocking sockets are not supported.
+   bytes which were sent. The socket must be of :const:`SOCK_STREAM` type.
+   Non-blocking sockets are not supported.
 
    .. versionadded:: 3.5
 
@@ -1323,20 +1379,28 @@ to sockets.
    For further information, please consult the :ref:`notes on socket timeouts <socket-timeouts>`.
 
 
-.. method:: socket.setsockopt(level, optname, value)
+.. method:: socket.setsockopt(level, optname, value: int)
+.. method:: socket.setsockopt(level, optname, value: buffer)
+.. method:: socket.setsockopt(level, optname, None, optlen: int)
 
    .. index:: module: struct
 
    Set the value of the given socket option (see the Unix manual page
    :manpage:`setsockopt(2)`).  The needed symbolic constants are defined in the
-   :mod:`socket` module (:const:`SO_\*` etc.).  The value can be an integer or
-   a :term:`bytes-like object` representing a buffer.  In the latter case it is
-   up to the caller to
-   ensure that the bytestring contains the proper bits (see the optional built-in
-   module :mod:`struct` for a way to encode C structures as bytestrings).
+   :mod:`socket` module (:const:`SO_\*` etc.).  The value can be an integer,
+   ``None`` or a :term:`bytes-like object` representing a buffer. In the later
+   case it is up to the caller to ensure that the bytestring contains the
+   proper bits (see the optional built-in module :mod:`struct` for a way to
+   encode C structures as bytestrings). When value is set to ``None``,
+   optlen argument is required. It's equivalent to call setsockopt C
+   function with optval=NULL and optlen=optlen.
+
 
    .. versionchanged:: 3.5
       Writable :term:`bytes-like object` is now accepted.
+
+   .. versionchanged:: 3.6
+      setsockopt(level, optname, None, optlen: int) form added.
 
 
 .. method:: socket.shutdown(how)
@@ -1365,7 +1429,7 @@ Note that there are no methods :meth:`read` or :meth:`write`; use
 :meth:`~socket.recv` and :meth:`~socket.send` without *flags* argument instead.
 
 Socket objects also have these (read-only) attributes that correspond to the
-values given to the :class:`socket` constructor.
+values given to the :class:`~socket.socket` constructor.
 
 
 .. attribute:: socket.family

@@ -72,21 +72,23 @@ PyDoc_STRVAR(_sha256_sha256__doc__,
 "Return a new SHA-256 hash object; optionally initialized with a string.");
 
 #define _SHA256_SHA256_METHODDEF    \
-    {"sha256", (PyCFunction)_sha256_sha256, METH_VARARGS|METH_KEYWORDS, _sha256_sha256__doc__},
+    {"sha256", (PyCFunction)_sha256_sha256, METH_FASTCALL, _sha256_sha256__doc__},
 
 static PyObject *
-_sha256_sha256_impl(PyModuleDef *module, PyObject *string);
+_sha256_sha256_impl(PyObject *module, PyObject *string);
 
 static PyObject *
-_sha256_sha256(PyModuleDef *module, PyObject *args, PyObject *kwargs)
+_sha256_sha256(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"string", NULL};
+    static const char * const _keywords[] = {"string", NULL};
+    static _PyArg_Parser _parser = {"|O:sha256", _keywords, 0};
     PyObject *string = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|O:sha256", _keywords,
-        &string))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &string)) {
         goto exit;
+    }
     return_value = _sha256_sha256_impl(module, string);
 
 exit:
@@ -100,24 +102,26 @@ PyDoc_STRVAR(_sha256_sha224__doc__,
 "Return a new SHA-224 hash object; optionally initialized with a string.");
 
 #define _SHA256_SHA224_METHODDEF    \
-    {"sha224", (PyCFunction)_sha256_sha224, METH_VARARGS|METH_KEYWORDS, _sha256_sha224__doc__},
+    {"sha224", (PyCFunction)_sha256_sha224, METH_FASTCALL, _sha256_sha224__doc__},
 
 static PyObject *
-_sha256_sha224_impl(PyModuleDef *module, PyObject *string);
+_sha256_sha224_impl(PyObject *module, PyObject *string);
 
 static PyObject *
-_sha256_sha224(PyModuleDef *module, PyObject *args, PyObject *kwargs)
+_sha256_sha224(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    static char *_keywords[] = {"string", NULL};
+    static const char * const _keywords[] = {"string", NULL};
+    static _PyArg_Parser _parser = {"|O:sha224", _keywords, 0};
     PyObject *string = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwargs, "|O:sha224", _keywords,
-        &string))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &string)) {
         goto exit;
+    }
     return_value = _sha256_sha224_impl(module, string);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=354cedf3b632c7b2 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=19439d70db7ead5c input=a9049054013a1b77]*/

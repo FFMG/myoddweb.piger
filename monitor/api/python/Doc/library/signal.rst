@@ -306,8 +306,10 @@ The :mod:`signal` module defines the following functions:
    a library to wakeup a poll or select call, allowing the signal to be fully
    processed.
 
-   The old wakeup fd is returned.  *fd* must be non-blocking.  It is up to the
-   library to remove any bytes before calling poll or select again.
+   The old wakeup fd is returned (or -1 if file descriptor wakeup was not
+   enabled).  If *fd* is -1, file descriptor wakeup is disabled.
+   If not -1, *fd* must be non-blocking.  It is up to the library to remove
+   any bytes from *fd* before calling poll or select again.
 
    Use for example ``struct.unpack('%uB' % len(data), data)`` to decode the
    signal numbers list.
@@ -350,8 +352,9 @@ The :mod:`signal` module defines the following functions:
    attribute descriptions in the :mod:`inspect` module).
 
    On Windows, :func:`signal` can only be called with :const:`SIGABRT`,
-   :const:`SIGFPE`, :const:`SIGILL`, :const:`SIGINT`, :const:`SIGSEGV`, or
-   :const:`SIGTERM`. A :exc:`ValueError` will be raised in any other case.
+   :const:`SIGFPE`, :const:`SIGILL`, :const:`SIGINT`, :const:`SIGSEGV`,
+   :const:`SIGTERM`, or :const:`SIGBREAK`.
+   A :exc:`ValueError` will be raised in any other case.
    Note that not all systems define the same set of signal names; an
    :exc:`AttributeError` will be raised if a signal name is not defined as
    ``SIG*`` module level constant.

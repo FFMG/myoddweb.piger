@@ -253,6 +253,40 @@ Constants
 
    The mathematical constant *e*, as a float.
 
+.. data:: tau
+
+   The mathematical constant *τ*, as a float.
+
+   .. versionadded:: 3.6
+
+.. data:: inf
+
+   Floating-point positive infinity. Equivalent to ``float('inf')``.
+
+   .. versionadded:: 3.6
+
+.. data:: infj
+
+   Complex number with zero real part and positive infinity imaginary
+   part. Equivalent to ``complex(0.0, float('inf'))``.
+
+   .. versionadded:: 3.6
+
+.. data:: nan
+
+   A floating-point "not a number" (NaN) value.  Equivalent to
+   ``float('nan')``.
+
+   .. versionadded:: 3.6
+
+.. data:: nanj
+
+   Complex number with zero real part and NaN imaginary part. Equivalent to
+   ``complex(0.0, float('nan'))``.
+
+   .. versionadded:: 3.6
+
+
 .. index:: module: math
 
 Note that the selection of functions is similar, but not identical, to that in
@@ -275,6 +309,4 @@ cuts for numerical purposes, a good reference should be the following:
 
    Kahan, W:  Branch cuts for complex elementary functions; or, Much ado about
    nothing's sign bit.  In Iserles, A., and Powell, M. (eds.), The state of the art
-   in numerical analysis. Clarendon Press (1987) pp165-211.
-
-
+   in numerical analysis. Clarendon Press (1987) pp165--211.

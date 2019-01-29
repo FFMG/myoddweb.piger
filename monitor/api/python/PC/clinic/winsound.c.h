@@ -3,7 +3,7 @@ preserve
 [clinic start generated code]*/
 
 PyDoc_STRVAR(winsound_PlaySound__doc__,
-"PlaySound($module, sound, flags, /)\n"
+"PlaySound($module, /, sound, flags)\n"
 "--\n"
 "\n"
 "A wrapper around the Windows PlaySound API.\n"
@@ -14,21 +14,24 @@ PyDoc_STRVAR(winsound_PlaySound__doc__,
 "    Flag values, ored together.  See module documentation.");
 
 #define WINSOUND_PLAYSOUND_METHODDEF    \
-    {"PlaySound", (PyCFunction)winsound_PlaySound, METH_VARARGS, winsound_PlaySound__doc__},
+    {"PlaySound", (PyCFunction)winsound_PlaySound, METH_FASTCALL, winsound_PlaySound__doc__},
 
 static PyObject *
-winsound_PlaySound_impl(PyModuleDef *module, Py_UNICODE *sound, int flags);
+winsound_PlaySound_impl(PyObject *module, PyObject *sound, int flags);
 
 static PyObject *
-winsound_PlaySound(PyModuleDef *module, PyObject *args)
+winsound_PlaySound(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    Py_UNICODE *sound;
+    static const char * const _keywords[] = {"sound", "flags", NULL};
+    static _PyArg_Parser _parser = {"Oi:PlaySound", _keywords, 0};
+    PyObject *sound;
     int flags;
 
-    if (!PyArg_ParseTuple(args, "Zi:PlaySound",
-        &sound, &flags))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &sound, &flags)) {
         goto exit;
+    }
     return_value = winsound_PlaySound_impl(module, sound, flags);
 
 exit:
@@ -36,7 +39,7 @@ exit:
 }
 
 PyDoc_STRVAR(winsound_Beep__doc__,
-"Beep($module, frequency, duration, /)\n"
+"Beep($module, /, frequency, duration)\n"
 "--\n"
 "\n"
 "A wrapper around the Windows Beep API.\n"
@@ -48,21 +51,24 @@ PyDoc_STRVAR(winsound_Beep__doc__,
 "    How long the sound should play, in milliseconds.");
 
 #define WINSOUND_BEEP_METHODDEF    \
-    {"Beep", (PyCFunction)winsound_Beep, METH_VARARGS, winsound_Beep__doc__},
+    {"Beep", (PyCFunction)winsound_Beep, METH_FASTCALL, winsound_Beep__doc__},
 
 static PyObject *
-winsound_Beep_impl(PyModuleDef *module, int frequency, int duration);
+winsound_Beep_impl(PyObject *module, int frequency, int duration);
 
 static PyObject *
-winsound_Beep(PyModuleDef *module, PyObject *args)
+winsound_Beep(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
+    static const char * const _keywords[] = {"frequency", "duration", NULL};
+    static _PyArg_Parser _parser = {"ii:Beep", _keywords, 0};
     int frequency;
     int duration;
 
-    if (!PyArg_ParseTuple(args, "ii:Beep",
-        &frequency, &duration))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &frequency, &duration)) {
         goto exit;
+    }
     return_value = winsound_Beep_impl(module, frequency, duration);
 
 exit:
@@ -70,7 +76,7 @@ exit:
 }
 
 PyDoc_STRVAR(winsound_MessageBeep__doc__,
-"MessageBeep($module, x=MB_OK, /)\n"
+"MessageBeep($module, /, type=MB_OK)\n"
 "--\n"
 "\n"
 "Call Windows MessageBeep(x).\n"
@@ -78,23 +84,26 @@ PyDoc_STRVAR(winsound_MessageBeep__doc__,
 "x defaults to MB_OK.");
 
 #define WINSOUND_MESSAGEBEEP_METHODDEF    \
-    {"MessageBeep", (PyCFunction)winsound_MessageBeep, METH_VARARGS, winsound_MessageBeep__doc__},
+    {"MessageBeep", (PyCFunction)winsound_MessageBeep, METH_FASTCALL, winsound_MessageBeep__doc__},
 
 static PyObject *
-winsound_MessageBeep_impl(PyModuleDef *module, int x);
+winsound_MessageBeep_impl(PyObject *module, int type);
 
 static PyObject *
-winsound_MessageBeep(PyModuleDef *module, PyObject *args)
+winsound_MessageBeep(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject *kwnames)
 {
     PyObject *return_value = NULL;
-    int x = MB_OK;
+    static const char * const _keywords[] = {"type", NULL};
+    static _PyArg_Parser _parser = {"|i:MessageBeep", _keywords, 0};
+    int type = MB_OK;
 
-    if (!PyArg_ParseTuple(args, "|i:MessageBeep",
-        &x))
+    if (!_PyArg_ParseStack(args, nargs, kwnames, &_parser,
+        &type)) {
         goto exit;
-    return_value = winsound_MessageBeep_impl(module, x);
+    }
+    return_value = winsound_MessageBeep_impl(module, type);
 
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=c5b018ac9dc1f500 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=bfe16b2b8b490cb1 input=a9049054013a1b77]*/

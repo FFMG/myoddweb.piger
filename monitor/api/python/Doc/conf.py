@@ -37,7 +37,7 @@ highlight_language = 'python3'
 needs_sphinx = '1.2'
 
 # Ignore any .rst files in the venv/ directory.
-exclude_patterns = ['venv/*']
+exclude_patterns = ['venv/*', 'README.rst']
 
 
 # Options for HTML output
@@ -60,7 +60,10 @@ templates_path = ['tools/templates']
 
 # Custom sidebar templates, filenames relative to this file.
 html_sidebars = {
-    'index': 'indexsidebar.html',
+    # Defaults taken from http://www.sphinx-doc.org/en/stable/config.html#confval-html_sidebars
+    # Removes the quick search block
+    '**': ['localtoc.html', 'relations.html', 'customsourcelink.html'],
+    'index': ['indexsidebar.html'],
 }
 
 # Additional templates that should be rendered to pages.
@@ -85,11 +88,24 @@ html_split_index = True
 # Options for LaTeX output
 # ------------------------
 
+# Get LaTeX to handle Unicode correctly
+latex_elements = {'inputenc': r'\usepackage[utf8x]{inputenc}', 'utf8extra': ''}
+
+# Additional stuff for the LaTeX preamble.
+latex_elements['preamble'] = r'''
+\authoraddress{
+  \strong{Python Software Foundation}\\
+  Email: \email{docs@python.org}
+}
+\let\Verbatim=\OriginalVerbatim
+\let\endVerbatim=\endOriginalVerbatim
+'''
+
 # The paper size ('letter' or 'a4').
-latex_paper_size = 'a4'
+latex_elements['papersize'] = 'a4'
 
 # The font size ('10pt', '11pt' or '12pt').
-latex_font_size = '10pt'
+latex_elements['font_size'] = '10pt'
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
@@ -122,21 +138,8 @@ latex_documents.extend(('howto/' + fn[:-4], 'howto-' + fn[:-4] + '.tex',
                        for fn in os.listdir('howto')
                        if fn.endswith('.rst') and fn != 'index.rst')
 
-# Additional stuff for the LaTeX preamble.
-latex_preamble = r'''
-\authoraddress{
-  \strong{Python Software Foundation}\\
-  Email: \email{docs@python.org}
-}
-\let\Verbatim=\OriginalVerbatim
-\let\endVerbatim=\endOriginalVerbatim
-'''
-
 # Documents to append as an appendix to all manuals.
 latex_appendices = ['glossary', 'about', 'license', 'copyright']
-
-# Get LaTeX to handle Unicode correctly
-latex_elements = {'inputenc': r'\usepackage[utf8x]{inputenc}', 'utf8extra': ''}
 
 # Options for Epub output
 # -----------------------

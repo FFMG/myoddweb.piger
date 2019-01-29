@@ -30,7 +30,7 @@ class SHA1Type "SHA1object *" "&PyType_Type"
 
 #if SIZEOF_INT == 4
 typedef unsigned int SHA1_INT32;        /* 32-bit integer */
-typedef PY_LONG_LONG SHA1_INT64;        /* 64-bit integer */
+typedef long long SHA1_INT64;        /* 64-bit integer */
 #else
 /* not defined. compilation will die. */
 #endif
@@ -486,8 +486,8 @@ Return a new SHA1 hash object; optionally initialized with a string.
 [clinic start generated code]*/
 
 static PyObject *
-_sha1_sha1_impl(PyModuleDef *module, PyObject *string)
-/*[clinic end generated code: output=3e4e841386b9e8db input=27ea54281d995ec2]*/
+_sha1_sha1_impl(PyObject *module, PyObject *string)
+/*[clinic end generated code: output=e5982830d1dece51 input=27ea54281d995ec2]*/
 {
     SHA1object *new;
     Py_buffer buf;

@@ -74,7 +74,7 @@ and switch to DOM-related processing.
 .. function:: parse(stream_or_string, parser=None, bufsize=None)
 
    Return a :class:`DOMEventStream` from the given input. *stream_or_string* may be
-   either a file name, or a file-like object. *parser*, if given, must be a
+   either a file name, or a file-like object. *parser*, if given, must be an
    :class:`~xml.sax.xmlreader.XMLReader` object. This function will change the
    document handler of the
    parser and activate namespace support; other parser configuration (like
@@ -108,7 +108,7 @@ DOMEventStream Objects
       :class:`xml.dom.minidom.Element` if event equals :data:`START_ELEMENT` or
       :data:`END_ELEMENT` or :class:`xml.dom.minidom.Text` if event equals
       :data:`CHARACTERS`.
-      The current node does not contain informations about its children, unless
+      The current node does not contain information about its children, unless
       :func:`expandNode` is called.
 
    .. method:: expandNode(node)

@@ -526,6 +526,13 @@ class Obj2ModVisitor(PickleVisitor):
             self.emit("res = obj2ast_%s(PyList_GET_ITEM(tmp, i), &value, arena);" %
                       field.type, depth+2, reflow=False)
             self.emit("if (res != 0) goto failed;", depth+2)
+            self.emit("if (len != PyList_GET_SIZE(tmp)) {", depth+2)
+            self.emit("PyErr_SetString(PyExc_RuntimeError, \"%s field \\\"%s\\\" "
+                      "changed size during iteration\");" %
+                      (name, field.name),
+                      depth+3, reflow=False)
+            self.emit("goto failed;", depth+3)
+            self.emit("}", depth+2)
             self.emit("asdl_seq_SET(%s, i, value);" % field.name, depth+2)
             self.emit("}", depth+1)
         else:
@@ -834,6 +841,7 @@ static PyObject* ast2obj_object(void *o)
     return (PyObject*)o;
 }
 #define ast2obj_singleton ast2obj_object
+#define ast2obj_constant ast2obj_object
 #define ast2obj_identifier ast2obj_object
 #define ast2obj_string ast2obj_object
 #define ast2obj_bytes ast2obj_object
@@ -860,6 +868,19 @@ static int obj2ast_object(PyObject* obj, PyObject** out, PyArena* arena)
 {
     if (obj == Py_None)
         obj = NULL;
+    if (obj) {
+        if (PyArena_AddPyObject(arena, obj) < 0) {
+            *out = NULL;
+            return -1;
+        }
+        Py_INCREF(obj);
+    }
+    *out = obj;
+    return 0;
+}
+
+static int obj2ast_constant(PyObject* obj, PyObject** out, PyArena* arena)
+{
     if (obj) {
         if (PyArena_AddPyObject(arena, obj) < 0) {
             *out = NULL;
@@ -906,7 +927,7 @@ static int obj2ast_int(PyObject* obj, int* out, PyArena* arena)
         return 1;
     }
 
-    i = (int)PyLong_AsLong(obj);
+    i = _PyLong_AsInt(obj);
     if (i == -1 && PyErr_Occurred())
         return 1;
     *out = i;

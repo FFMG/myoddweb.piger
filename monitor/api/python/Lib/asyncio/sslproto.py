@@ -5,6 +5,7 @@ try:
 except ImportError:  # pragma: no cover
     ssl = None
 
+from . import base_events
 from . import compat
 from . import protocols
 from . import transports
@@ -304,6 +305,12 @@ class _SSLProtocolTransport(transports._FlowControlMixin,
         """Get optional transport information."""
         return self._ssl_protocol._get_extra_info(name, default)
 
+    def set_protocol(self, protocol):
+        self._app_protocol = protocol
+
+    def get_protocol(self):
+        return self._app_protocol
+
     def is_closing(self):
         return self._closed
 
@@ -324,7 +331,8 @@ class _SSLProtocolTransport(transports._FlowControlMixin,
     if compat.PY34:
         def __del__(self):
             if not self._closed:
-                warnings.warn("unclosed transport %r" % self, ResourceWarning)
+                warnings.warn("unclosed transport %r" % self, ResourceWarning,
+                              source=self)
                 self.close()
 
     def pause_reading(self):
@@ -403,7 +411,8 @@ class SSLProtocol(protocols.Protocol):
     """
 
     def __init__(self, loop, app_protocol, sslcontext, waiter,
-                 server_side=False, server_hostname=None):
+                 server_side=False, server_hostname=None,
+                 call_connection_made=True):
         if ssl is None:
             raise RuntimeError('stdlib ssl module not available')
 
@@ -436,6 +445,7 @@ class SSLProtocol(protocols.Protocol):
         self._in_shutdown = False
         # transport, ex: SelectorSocketTransport
         self._transport = None
+        self._call_connection_made = call_connection_made
 
     def _wakeup_waiter(self, exc=None):
         if self._waiter is None:
@@ -470,6 +480,7 @@ class SSLProtocol(protocols.Protocol):
             self._loop.call_soon(self._app_protocol.connection_lost, exc)
         self._transport = None
         self._app_transport = None
+        self._wakeup_waiter(exc)
 
     def pause_writing(self):
         """Called when the low-level transport's buffer goes over
@@ -532,14 +543,19 @@ class SSLProtocol(protocols.Protocol):
     def _get_extra_info(self, name, default=None):
         if name in self._extra:
             return self._extra[name]
-        else:
+        elif self._transport is not None:
             return self._transport.get_extra_info(name, default)
+        else:
+            return default
 
     def _start_shutdown(self):
         if self._in_shutdown:
             return
-        self._in_shutdown = True
-        self._write_appdata(b'')
+        if self._in_handshake:
+            self._abort()
+        else:
+            self._in_shutdown = True
+            self._write_appdata(b'')
 
     def _write_appdata(self, data):
         self._write_backlog.append((data, 0))
@@ -599,7 +615,8 @@ class SSLProtocol(protocols.Protocol):
                            compression=sslobj.compression(),
                            ssl_object=sslobj,
                            )
-        self._app_protocol.connection_made(self._app_transport)
+        if self._call_connection_made:
+            self._app_protocol.connection_made(self._app_transport)
         self._wakeup_waiter()
         self._session_established = True
         # In case transport.write() was already called. Don't call
@@ -669,12 +686,14 @@ class SSLProtocol(protocols.Protocol):
             self._transport._force_close(exc)
 
     def _finalize(self):
+        self._sslpipe = None
+
         if self._transport is not None:
             self._transport.close()
 
     def _abort(self):
-        if self._transport is not None:
-            try:
+        try:
+            if self._transport is not None:
                 self._transport.abort()
-            finally:
-                self._finalize()
+        finally:
+            self._finalize()

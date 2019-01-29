@@ -496,6 +496,9 @@ The :mod:`multiprocessing` package mostly replicates the API of the
       If the optional argument *timeout* is ``None`` (the default), the method
       blocks until the process whose :meth:`join` method is called terminates.
       If *timeout* is a positive number, it blocks at most *timeout* seconds.
+      Note that the method returns ``None`` if its process terminates or if the
+      method times out.  Check the process's :attr:`exitcode` to determine if
+      it terminated.
 
       A process can be joined many times.
 
@@ -647,8 +650,9 @@ primitives like locks.
 For passing messages one can use :func:`Pipe` (for a connection between two
 processes) or a queue (which allows multiple producers and consumers).
 
-The :class:`Queue`, :class:`SimpleQueue` and :class:`JoinableQueue` types are multi-producer,
-multi-consumer FIFO queues modelled on the :class:`queue.Queue` class in the
+The :class:`Queue`, :class:`SimpleQueue` and :class:`JoinableQueue` types
+are multi-producer, multi-consumer :abbr:`FIFO (first-in, first-out)`
+queues modelled on the :class:`queue.Queue` class in the
 standard library.  They differ in that :class:`Queue` lacks the
 :meth:`~queue.Queue.task_done` and :meth:`~queue.Queue.join` methods introduced
 into Python 2.5's :class:`queue.Queue` class.
@@ -886,8 +890,13 @@ Miscellaneous
 
 .. function:: cpu_count()
 
-   Return the number of CPUs in the system.  May raise
-   :exc:`NotImplementedError`.
+   Return the number of CPUs in the system.
+
+   This number is not equivalent to the number of CPUs the current process can
+   use.  The number of usable CPUs can be obtained with
+   ``len(os.sched_getaffinity(0))``
+
+   May raise :exc:`NotImplementedError`.
 
    .. seealso::
       :func:`os.cpu_count`
@@ -939,7 +948,7 @@ Miscellaneous
    Return a context object which has the same attributes as the
    :mod:`multiprocessing` module.
 
-   If *method* is *None* then the default context is returned.
+   If *method* is ``None`` then the default context is returned.
    Otherwise *method* should be ``'fork'``, ``'spawn'``,
    ``'forkserver'``.  :exc:`ValueError` is raised if the specified
    start method is not available.
@@ -953,10 +962,10 @@ Miscellaneous
    If the start method has not been fixed and *allow_none* is false,
    then the start method is fixed to the default and the name is
    returned.  If the start method has not been fixed and *allow_none*
-   is true then *None* is returned.
+   is true then ``None`` is returned.
 
    The return value can be ``'fork'``, ``'spawn'``, ``'forkserver'``
-   or *None*.  ``'fork'`` is the default on Unix, while ``'spawn'`` is
+   or ``None``.  ``'fork'`` is the default on Unix, while ``'spawn'`` is
    the default on Windows.
 
    .. versionadded:: 3.4
@@ -1010,7 +1019,7 @@ Connection objects are usually created using :func:`Pipe` -- see also
       using :meth:`recv`.
 
       The object must be picklable.  Very large pickles (approximately 32 MB+,
-      though it depends on the OS) may raise a ValueError exception.
+      though it depends on the OS) may raise a :exc:`ValueError` exception.
 
    .. method:: recv()
 
@@ -1676,7 +1685,9 @@ their parent process exits.  The manager classes are defined in the
    of processes.  Objects of this type are returned by
    :func:`multiprocessing.Manager`.
 
-   It also supports creation of shared lists and dictionaries.
+   Its methods create and return :ref:`multiprocessing-proxy_objects` for a
+   number of commonly used data types to be synchronized across processes.
+   This notably includes shared lists and dictionaries.
 
    .. method:: Barrier(parties[, action[, timeout]])
 
@@ -1739,31 +1750,17 @@ their parent process exits.  The manager classes are defined in the
                dict(mapping)
                dict(sequence)
 
-      Create a shared ``dict`` object and return a proxy for it.
+      Create a shared :class:`dict` object and return a proxy for it.
 
    .. method:: list()
                list(sequence)
 
-      Create a shared ``list`` object and return a proxy for it.
+      Create a shared :class:`list` object and return a proxy for it.
 
-   .. note::
-
-      Modifications to mutable values or items in dict and list proxies will not
-      be propagated through the manager, because the proxy has no way of knowing
-      when its values or items are modified.  To modify such an item, you can
-      re-assign the modified object to the container proxy::
-
-         # create a list proxy and append a mutable object (a dictionary)
-         lproxy = manager.list()
-         lproxy.append({})
-         # now mutate the dictionary
-         d = lproxy[0]
-         d['a'] = 1
-         d['b'] = 2
-         # at this point, the changes to d are not yet synced, but by
-         # reassigning the dictionary, the proxy is notified of the change
-         lproxy[0] = d
-
+   .. versionchanged:: 3.6
+      Shared objects are capable of being nested.  For example, a shared
+      container object such as a shared list can contain other shared objects
+      which will all be managed and synchronized by the :class:`SyncManager`.
 
 .. class:: Namespace
 
@@ -1875,6 +1872,8 @@ client to access it remotely::
     >>> s = m.get_server()
     >>> s.serve_forever()
 
+.. _multiprocessing-proxy_objects:
+
 Proxy Objects
 ~~~~~~~~~~~~~
 
@@ -1884,8 +1883,7 @@ proxy.  Multiple proxy objects may have the same referent.
 
 A proxy object has methods which invoke corresponding methods of its referent
 (although not every method of the referent will necessarily be available through
-the proxy).  A proxy can usually be used in most of the same ways that its
-referent can:
+the proxy).  In this way, a proxy can be used just like its referent can:
 
 .. doctest::
 
@@ -1906,9 +1904,9 @@ the referent, whereas applying :func:`repr` will return the representation of
 the proxy.
 
 An important feature of proxy objects is that they are picklable so they can be
-passed between processes.  Note, however, that if a proxy is sent to the
-corresponding manager's process then unpickling it will produce the referent
-itself.  This means, for example, that one shared object can contain a second:
+passed between processes.  As such, a referent can contain
+:ref:`multiprocessing-proxy_objects`.  This permits nesting of these managed
+lists, dicts, and other :ref:`multiprocessing-proxy_objects`:
 
 .. doctest::
 
@@ -1916,10 +1914,46 @@ itself.  This means, for example, that one shared object can contain a second:
    >>> b = manager.list()
    >>> a.append(b)         # referent of a now contains referent of b
    >>> print(a, b)
-   [[]] []
+   [<ListProxy object, typeid 'list' at ...>] []
    >>> b.append('hello')
-   >>> print(a, b)
-   [['hello']] ['hello']
+   >>> print(a[0], b)
+   ['hello'] ['hello']
+
+Similarly, dict and list proxies may be nested inside one another::
+
+   >>> l_outer = manager.list([ manager.dict() for i in range(2) ])
+   >>> d_first_inner = l_outer[0]
+   >>> d_first_inner['a'] = 1
+   >>> d_first_inner['b'] = 2
+   >>> l_outer[1]['c'] = 3
+   >>> l_outer[1]['z'] = 26
+   >>> print(l_outer[0])
+   {'a': 1, 'b': 2}
+   >>> print(l_outer[1])
+   {'c': 3, 'z': 26}
+
+If standard (non-proxy) :class:`list` or :class:`dict` objects are contained
+in a referent, modifications to those mutable values will not be propagated
+through the manager because the proxy has no way of knowing when the values
+contained within are modified.  However, storing a value in a container proxy
+(which triggers a ``__setitem__`` on the proxy object) does propagate through
+the manager and so to effectively modify such an item, one could re-assign the
+modified value to the container proxy::
+
+   # create a list proxy and append a mutable object (a dictionary)
+   lproxy = manager.list()
+   lproxy.append({})
+   # now mutate the dictionary
+   d = lproxy[0]
+   d['a'] = 1
+   d['b'] = 2
+   # at this point, the changes to d are not yet synced, but by
+   # updating the dictionary, the proxy is notified of the change
+   lproxy[0] = d
+
+This approach is perhaps less convenient than employing nested
+:ref:`multiprocessing-proxy_objects` for most use cases but also
+demonstrates a level of control over the synchronization.
 
 .. note::
 
@@ -2025,7 +2059,7 @@ with the :class:`Pool` class.
 
    *maxtasksperchild* is the number of tasks a worker process can complete
    before it will exit and be replaced with a fresh worker process, to enable
-   unused resources to be freed. The default *maxtasksperchild* is None, which
+   unused resources to be freed. The default *maxtasksperchild* is ``None``, which
    means worker processes will live as long as the pool.
 
    *context* can be used to specify the context used for starting
@@ -2295,7 +2329,7 @@ multiple connections at the same time.
    ``None`` then digest authentication is used.
 
    If *authkey* is a byte string then it will be used as the
-   authentication key; otherwise it must be *None*.
+   authentication key; otherwise it must be ``None``.
 
    If *authkey* is ``None`` and *authenticate* is ``True`` then
    ``current_process().authkey`` is used as the authentication key.  If
@@ -2723,12 +2757,7 @@ start method.
 
 More picklability
 
-    Ensure that all arguments to :meth:`Process.__init__` are
-    picklable.  This means, in particular, that bound or unbound
-    methods cannot be used directly as the ``target`` (unless you use
-    the *fork* start method) --- just define a function and use that
-    instead.
-
+    Ensure that all arguments to :meth:`Process.__init__` are picklable.
     Also, if you subclass :class:`~multiprocessing.Process` then make sure that
     instances will be picklable when the :meth:`Process.start
     <multiprocessing.Process.start>` method is called.

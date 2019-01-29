@@ -74,6 +74,34 @@ Glossary
       :keyword:`async with` statement by defining :meth:`__aenter__` and
       :meth:`__aexit__` methods.  Introduced by :pep:`492`.
 
+   asynchronous generator
+      A function which returns an :term:`asynchronous generator iterator`.  It
+      looks like a coroutine function defined with :keyword:`async def` except
+      that it contains :keyword:`yield` expressions for producing a series of
+      values usable in an :keyword:`async for` loop.
+
+      Usually refers to a asynchronous generator function, but may refer to an
+      *asynchronous generator iterator* in some contexts.  In cases where the
+      intended meaning isn't clear, using the full terms avoids ambiguity.
+
+      An asynchronous generator function may contain :keyword:`await`
+      expressions as well as :keyword:`async for`, and :keyword:`async with`
+      statements.
+
+   asynchronous generator iterator
+      An object created by a :term:`asynchronous generator` function.
+
+      This is an :term:`asynchronous iterator` which when called using the
+      :meth:`__anext__` method returns an awaitable object which will execute
+      that the body of the asynchronous generator function until the
+      next :keyword:`yield` expression.
+
+      Each :keyword:`yield` temporarily suspends processing, remembering the
+      location execution state (including local variables and pending
+      try-statements).  When the *asynchronous generator iterator* effectively
+      resumes with another awaitable returned by :meth:`__anext__`, it
+      picks-up where it left-off.  See :pep:`492` and :pep:`525`.
+
    asynchronous iterable
       An object, that can be used in an :keyword:`async for` statement.
       Must return an :term:`asynchronous iterator` from its
@@ -103,6 +131,10 @@ Glossary
    binary file
       A :term:`file object` able to read and write
       :term:`bytes-like objects <bytes-like object>`.
+      Examples of binary files are files opened in binary mode (``'rb'``,
+      ``'wb'`` or ``'rb+'``), :data:`sys.stdin.buffer`,
+      :data:`sys.stdout.buffer`, and instances of :class:`io.BytesIO` and
+      :class:`gzip.GzipFile`.
 
       .. seealso::
          A :term:`text file` reads and writes :class:`str` objects.
@@ -127,7 +159,7 @@ Glossary
    bytecode
       Python source code is compiled into bytecode, the internal representation
       of a Python program in the CPython interpreter.  The bytecode is also
-      cached in ``.pyc`` and ``.pyo`` files so that executing the same file is
+      cached in ``.pyc`` files so that executing the same file is
       faster the second time (recompilation from source to bytecode can be
       avoided).  This "intermediate language" is said to run on a
       :term:`virtual machine` that executes the machine code corresponding to
@@ -288,6 +320,11 @@ Glossary
       A module written in C or C++, using Python's C API to interact with the
       core and with user code.
 
+   f-string
+      String literals prefixed with ``'f'`` or ``'F'`` are commonly called
+      "f-strings" which is short for
+      :ref:`formatted string literals <f-strings>`.  See also :pep:`498`.
+
    file object
       An object exposing a file-oriented API (with methods such as
       :meth:`read()` or :meth:`write()`) to an underlying resource.  Depending
@@ -430,9 +467,9 @@ Glossary
       Hashability makes an object usable as a dictionary key and a set member,
       because these data structures use the hash value internally.
 
-      All of Python's immutable built-in objects are hashable, while no mutable
-      containers (such as lists or dictionaries) are.  Objects which are
-      instances of user-defined classes are hashable by default; they all
+      All of Python's immutable built-in objects are hashable; mutable
+      containers (such as lists or dictionaries) are not.  Objects which are
+      instances of user-defined classes are hashable by default.  They all
       compare unequal (except with themselves), and their hash value is derived
       from their :func:`id`.
 
@@ -718,6 +755,8 @@ Glossary
 
            def func(foo, bar=None): ...
 
+      .. _positional-only_parameter:
+
       * :dfn:`positional-only`: specifies an argument that can be supplied only
         by position.  Python has no syntax for defining positional-only
         parameters.  However, some built-in functions have positional-only
@@ -775,6 +814,16 @@ Glossary
    path based finder
       One of the default :term:`meta path finders <meta path finder>` which
       searches an :term:`import path` for modules.
+
+   path-like object
+      An object representing a file system path. A path-like object is either
+      a :class:`str` or :class:`bytes` object representing a path, or an object
+      implementing the :class:`os.PathLike` protocol. An object that supports
+      the :class:`os.PathLike` protocol can be converted to a :class:`str` or
+      :class:`bytes` file system path by calling the :func:`os.fspath` function;
+      :func:`os.fsdecode` and :func:`os.fsencode` can be used to guarantee a
+      :class:`str` or :class:`bytes` result instead, respectively. Introduced
+      by :pep:`519`.
 
    portion
       A set of files in a single directory (possibly stored in a zip file)
@@ -926,6 +975,9 @@ Glossary
       A :term:`file object` able to read and write :class:`str` objects.
       Often, a text file actually accesses a byte-oriented datastream
       and handles the :term:`text encoding` automatically.
+      Examples of text files are files opened in text mode (``'r'`` or ``'w'``),
+      :data:`sys.stdin`, :data:`sys.stdout`, and instances of
+      :class:`io.StringIO`.
 
       .. seealso::
          A :term:`binary file` reads and write :class:`bytes` objects.
@@ -952,13 +1004,25 @@ Glossary
       ``'\r'``.  See :pep:`278` and :pep:`3116`, as well as
       :func:`bytes.splitlines` for an additional use.
 
+   variable annotation
+      A type metadata value associated with a module global variable or
+      a class attribute. Its syntax is explained in section :ref:`annassign`.
+      Annotations are stored in the :attr:`__annotations__` special
+      attribute of a class or module object and can be accessed using
+      :func:`typing.get_type_hints`.
+
+      Python itself does not assign any particular meaning to variable
+      annotations. They are intended to be interpreted by third-party libraries
+      or type checking tools. See :pep:`526`, :pep:`484` which describe
+      some of their potential uses.
+
    virtual environment
       A cooperatively isolated runtime environment that allows Python users
       and applications to install and upgrade Python distribution packages
       without interfering with the behaviour of other Python applications
       running on the same system.
 
-      See also :ref:`scripts-pyvenv`.
+      See also :mod:`venv`.
 
    virtual machine
       A computer defined entirely in software.  Python's virtual machine

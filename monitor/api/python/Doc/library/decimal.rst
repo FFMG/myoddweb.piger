@@ -163,7 +163,7 @@ an exception::
    >>> c.traps[FloatOperation] = True
    >>> Decimal(3.14)
    Traceback (most recent call last):
-   File "<stdin>", line 1, in <module>
+     File "<stdin>", line 1, in <module>
    decimal.FloatOperation: [<class 'decimal.FloatOperation'>]
    >>> Decimal('3.5') < 3.7
    Traceback (most recent call last):
@@ -345,7 +345,7 @@ Decimal objects
    *value* can be an integer, string, tuple, :class:`float`, or another :class:`Decimal`
    object. If no *value* is given, returns ``Decimal('0')``.  If *value* is a
    string, it should conform to the decimal numeric string syntax after leading
-   and trailing whitespace characters are removed::
+   and trailing whitespace characters, as well as underscores throughout, are removed::
 
       sign           ::=  '+' | '-'
       digit          ::=  '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
@@ -393,6 +393,10 @@ Decimal objects
    .. versionchanged:: 3.3
       :class:`float` arguments raise an exception if the :exc:`FloatOperation`
       trap is set. By default the trap is off.
+
+   .. versionchanged:: 3.6
+      Underscores are allowed for grouping, as with integral and floating-point
+      literals in code.
 
    Decimal floating point objects share many properties with the other built-in
    numeric types such as :class:`float` and :class:`int`.  All of the usual math
@@ -447,6 +451,19 @@ Decimal objects
       ``Decimal('321e+5').adjusted()`` returns seven.  Used for determining the
       position of the most significant digit with respect to the decimal point.
 
+   .. method:: as_integer_ratio()
+
+      Return a pair ``(n, d)`` of integers that represent the given
+      :class:`Decimal` instance as a fraction, in lowest terms and
+      with a positive denominator::
+
+          >>> Decimal('-3.14').as_integer_ratio()
+          (-157, 50)
+
+      The conversion is exact.  Raise OverflowError on infinities and ValueError
+      on NaNs.
+
+   .. versionadded:: 3.6
 
    .. method:: as_tuple()
 
@@ -836,11 +853,13 @@ Decimal objects
 
    .. method:: to_eng_string(context=None)
 
-      Convert to an engineering-type string.
+      Convert to a string, using engineering notation if an exponent is needed.
 
-      Engineering notation has an exponent which is a multiple of 3, so there
-      are up to 3 digits left of the decimal place.  For example, converts
-      ``Decimal('123E+1')`` to ``Decimal('1.23E+3')``.
+      Engineering notation has an exponent which is a multiple of 3.  This
+      can leave up to 3 digits to the left of the decimal place and may
+      require the addition of either one or two trailing zeros.
+
+      For example, this converts ``Decimal('123E+1')`` to ``Decimal('1.23E+3')``.
 
    .. method:: to_integral(rounding=None, context=None)
 
@@ -1060,8 +1079,8 @@ In addition to the three supplied contexts, new contexts can be created with the
          Decimal('4.44')
 
       This method implements the to-number operation of the IBM specification.
-      If the argument is a string, no leading or trailing whitespace is
-      permitted.
+      If the argument is a string, no leading or trailing whitespace or
+      underscores are permitted.
 
    .. method:: create_decimal_from_float(f)
 
@@ -1410,7 +1429,11 @@ In addition to the three supplied contexts, new contexts can be created with the
 
    .. method:: to_eng_string(x)
 
-      Converts a number to a string, using scientific notation.
+      Convert to a string, using engineering notation if an exponent is needed.
+
+      Engineering notation has an exponent which is a multiple of 3.  This
+      can leave up to 3 digits to the left of the decimal place and may
+      require the addition of either one or two trailing zeros.
 
 
    .. method:: to_integral_exact(x)

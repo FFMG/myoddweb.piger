@@ -352,7 +352,7 @@ call for every single test we run::
 
    import unittest
 
-   class SimpleWidgetTestCase(unittest.TestCase):
+   class WidgetTestCase(unittest.TestCase):
        def setUp(self):
            self.widget = Widget('The widget')
 
@@ -379,7 +379,7 @@ after the test method has been run::
 
    import unittest
 
-   class SimpleWidgetTestCase(unittest.TestCase):
+   class WidgetTestCase(unittest.TestCase):
        def setUp(self):
            self.widget = Widget('The widget')
 
@@ -868,7 +868,7 @@ Test cases
    .. method:: assertIsNone(expr, msg=None)
                assertIsNotNone(expr, msg=None)
 
-      Test that *expr* is (or is not) None.
+      Test that *expr* is (or is not) ``None``.
 
       .. versionadded:: 3.1
 
@@ -1170,6 +1170,9 @@ Test cases
          :meth:`.assertRegex`.
       .. versionadded:: 3.2
          :meth:`.assertNotRegex`.
+      .. versionadded:: 3.5
+         The name ``assertNotRegexpMatches`` is a deprecated alias
+         for :meth:`.assertNotRegex`.
 
 
    .. method:: assertCountEqual(first, second, msg=None)
@@ -1316,19 +1319,17 @@ Test cases
 
    .. attribute:: longMessage
 
-      If set to ``True`` then any explicit failure message you pass in to the
-      :ref:`assert methods <assert-methods>` will be appended to the end of the
-      normal failure message.  The normal messages contain useful information
-      about the objects involved, for example the message from assertEqual
-      shows you the repr of the two unequal objects. Setting this attribute
-      to ``True`` allows you to have a custom error message in addition to the
-      normal one.
+      This class attribute determines what happens when a custom failure message
+      is passed as the msg argument to an assertXYY call that fails.
+      ``True`` is the default value. In this case, the custom message is appended
+      to the end of the standard failure message.
+      When set to ``False``, the custom message replaces the standard message.
 
-      This attribute defaults to ``True``. If set to False then a custom message
-      passed to an assert method will silence the normal message.
+      The class setting can be overridden in individual test methods by assigning
+      an instance attribute, self.longMessage, to ``True`` or ``False`` before
+      calling the assert methods.
 
-      The class setting can be overridden in individual tests by assigning an
-      instance attribute to ``True`` or ``False`` before calling the assert methods.
+      The class setting gets reset before each test call.
 
       .. versionadded:: 3.1
 
@@ -1342,7 +1343,7 @@ Test cases
       methods that delegate to it), :meth:`assertDictEqual` and
       :meth:`assertMultiLineEqual`.
 
-      Setting ``maxDiff`` to None means that there is no maximum length of
+      Setting ``maxDiff`` to ``None`` means that there is no maximum length of
       diffs.
 
       .. versionadded:: 3.2
@@ -1393,9 +1394,9 @@ Test cases
 
       Add a function to be called after :meth:`tearDown` to cleanup resources
       used during the test. Functions will be called in reverse order to the
-      order they are added (LIFO). They are called with any arguments and
-      keyword arguments passed into :meth:`addCleanup` when they are
-      added.
+      order they are added (:abbr:`LIFO (last-in, first-out)`).  They
+      are called with any arguments and keyword arguments passed into
+      :meth:`addCleanup` when they are added.
 
       If :meth:`setUp` fails, meaning that :meth:`tearDown` is not called,
       then any cleanup functions added will still be called.
@@ -1437,9 +1438,9 @@ For historical reasons, some of the :class:`TestCase` methods had one or more
 aliases that are now deprecated.  The following table lists the correct names
 along with their deprecated aliases:
 
-   ==============================  ====================== ======================
+   ==============================  ====================== =======================
     Method Name                     Deprecated alias       Deprecated alias
-   ==============================  ====================== ======================
+   ==============================  ====================== =======================
     :meth:`.assertEqual`            failUnlessEqual        assertEquals
     :meth:`.assertNotEqual`         failIfEqual            assertNotEquals
     :meth:`.assertTrue`             failUnless             assert\_
@@ -1448,8 +1449,9 @@ along with their deprecated aliases:
     :meth:`.assertAlmostEqual`      failUnlessAlmostEqual  assertAlmostEquals
     :meth:`.assertNotAlmostEqual`   failIfAlmostEqual      assertNotAlmostEquals
     :meth:`.assertRegex`                                   assertRegexpMatches
+    :meth:`.assertNotRegex`                                assertNotRegexpMatches
     :meth:`.assertRaisesRegex`                             assertRaisesRegexp
-   ==============================  ====================== ======================
+   ==============================  ====================== =======================
 
    .. deprecated:: 3.1
          the fail* aliases listed in the second column.
@@ -1457,8 +1459,9 @@ along with their deprecated aliases:
          the assert* aliases listed in the third column.
    .. deprecated:: 3.2
          ``assertRegexpMatches`` and ``assertRaisesRegexp`` have been renamed to
-         :meth:`.assertRegex` and :meth:`.assertRaisesRegex`
-
+         :meth:`.assertRegex` and :meth:`.assertRaisesRegex`.
+   .. deprecated:: 3.5
+         the ``assertNotRegexpMatches`` name in favor of :meth:`.assertNotRegex`.
 
 .. _testsuite-objects:
 
@@ -1467,7 +1470,7 @@ Grouping tests
 
 .. class:: TestSuite(tests=())
 
-   This class represents an aggregation of individual tests cases and test suites.
+   This class represents an aggregation of individual test cases and test suites.
    The class presents the interface needed by the test runner to allow it to be run
    as any other test case.  Running a :class:`TestSuite` instance is the same as
    iterating over the suite, running each test individually.
@@ -1575,7 +1578,7 @@ Loading and running tests
 
    .. method:: loadTestsFromTestCase(testCaseClass)
 
-      Return a suite of all tests cases contained in the :class:`TestCase`\ -derived
+      Return a suite of all test cases contained in the :class:`TestCase`\ -derived
       :class:`testCaseClass`.
 
       A test case instance is created for each method named by
@@ -1587,7 +1590,7 @@ Loading and running tests
 
    .. method:: loadTestsFromModule(module, pattern=None)
 
-      Return a suite of all tests cases contained in the given module. This
+      Return a suite of all test cases contained in the given module. This
       method searches *module* for classes derived from :class:`TestCase` and
       creates an instance of the class for each test method defined for the
       class.
@@ -1617,7 +1620,7 @@ Loading and running tests
 
    .. method:: loadTestsFromName(name, module=None)
 
-      Return a suite of all tests cases given a string specifier.
+      Return a suite of all test cases given a string specifier.
 
       The specifier *name* is a "dotted name" that may resolve either to a
       module, a test case class, a test method within a test case class, a
@@ -1639,11 +1642,11 @@ Loading and running tests
 
       The method optionally resolves *name* relative to the given *module*.
 
-   .. versionchanged:: 3.5
-      If an :exc:`ImportError` or :exc:`AttributeError` occurs while traversing
-      *name* then a synthetic test that raises that error when run will be
-      returned. These errors are included in the errors accumulated by
-      self.errors.
+      .. versionchanged:: 3.5
+         If an :exc:`ImportError` or :exc:`AttributeError` occurs while traversing
+         *name* then a synthetic test that raises that error when run will be
+         returned. These errors are included in the errors accumulated by
+         self.errors.
 
 
    .. method:: loadTestsFromNames(names, module=None)
@@ -1974,7 +1977,8 @@ Loading and running tests
    methods <deprecated-aliases>` are also special-cased and, when the warning
    filters are ``'default'`` or ``'always'``, they will appear only once
    per-module, in order to avoid too many warning messages.  This behavior can
-   be overridden using the :option:`-Wd` or :option:`-Wa` options and leaving
+   be overridden using Python's :option:`!-Wd` or :option:`!-Wa` options
+   (see :ref:`Warning control <using-on-warnings>`) and leaving
    *warnings* to ``None``.
 
    .. versionchanged:: 3.2
@@ -2053,9 +2057,10 @@ Loading and running tests
    The *failfast*, *catchbreak* and *buffer* parameters have the same
    effect as the same-name `command-line options`_.
 
-   The *warning* argument specifies the :ref:`warning filter <warning-filter>`
+   The *warnings* argument specifies the :ref:`warning filter <warning-filter>`
    that should be used while running the tests.  If it's not specified, it will
-   remain ``None`` if a :option:`-W` option is passed to :program:`python`,
+   remain ``None`` if a :option:`!-W` option is passed to :program:`python`
+   (see :ref:`Warning control <using-on-warnings>`),
    otherwise it will be set to ``'default'``.
 
    Calling ``main`` actually returns an instance of the ``TestProgram`` class.

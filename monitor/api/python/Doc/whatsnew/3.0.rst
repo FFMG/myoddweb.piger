@@ -117,7 +117,9 @@ You can also customize the separator between items, e.g.::
 
   print("There are <", 2**32, "> possibilities!", sep="")
 
-which produces::
+which produces:
+
+.. code-block:: none
 
   There are <4294967296> possibilities!
 
@@ -783,8 +785,8 @@ Operators And Special Methods
   :attr:`func_closure`, :attr:`func_code`, :attr:`func_defaults`,
   :attr:`func_dict`, :attr:`func_doc`, :attr:`func_globals`,
   :attr:`func_name` were renamed to :attr:`__closure__`,
-  :attr:`__code__`, :attr:`__defaults__`, :attr:`__dict__`,
-  :attr:`__doc__`, :attr:`__globals__`, :attr:`__name__`,
+  :attr:`__code__`, :attr:`__defaults__`, :attr:`~object.__dict__`,
+  :attr:`__doc__`, :attr:`__globals__`, :attr:`~definition.__name__`,
   respectively.
 
 * :meth:`__nonzero__` is now :meth:`__bool__`.
@@ -902,7 +904,7 @@ best strategy is the following:
    port from Python 2.x to Python 2.(x+1).  Make sure all your tests
    pass.
 
-2. (Still using 2.6:) Turn on the :option:`-3` command line switch.
+2. (Still using 2.6:) Turn on the :option:`!-3` command line switch.
    This enables warnings about features that will be removed (or
    change) in 3.0.  Run your test suite again, and fix code that you
    get warnings about until there are no warnings left, and all your

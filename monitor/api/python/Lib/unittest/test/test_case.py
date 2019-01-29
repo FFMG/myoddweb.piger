@@ -339,7 +339,7 @@ class Test_TestCase(unittest.TestCase, TestEquality, TestHashing):
         self._check_call_order__subtests(result, events, expected)
 
     def test_run_call_order__subtests_legacy(self):
-        # With a legacy result object (without a addSubTest method),
+        # With a legacy result object (without an addSubTest method),
         # text execution stops after the first subtest failure.
         events = []
         result = LegacyLoggingResult(events)
@@ -1272,6 +1272,19 @@ test case
             self.assertRaises((ValueError, 1))
         with self.assertRaises(TypeError):
             self.assertRaises((ValueError, object))
+
+    def testAssertRaisesRefcount(self):
+        # bpo-23890: assertRaises() must not keep objects alive longer
+        # than expected
+        def func() :
+            try:
+                raise ValueError
+            except ValueError:
+                raise ValueError
+
+        refcount = sys.getrefcount(func)
+        self.assertRaises(ValueError, func)
+        self.assertEqual(refcount, sys.getrefcount(func))
 
     def testAssertRaisesRegex(self):
         class ExceptionMock(Exception):

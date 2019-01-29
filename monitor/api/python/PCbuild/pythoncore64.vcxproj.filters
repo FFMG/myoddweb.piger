@@ -31,6 +31,12 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{c3e03a5c-56c7-45fd-8543-e5d2326b907d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules\_blake2">
+      <UniqueIdentifier>{157b7624-af93-461f-bea8-4a18b56cdec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\_sha3">
+      <UniqueIdentifier>{c590820f-da98-4c75-8dbf-ca3fccb95e25}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\abstract.h">
@@ -437,6 +443,12 @@
     </ClInclude>
     <ClInclude Include="..\Include\odictobject.h">
       <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\osmodule.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Python\wordcode_helpers.h">
+      <Filter>Python</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -973,6 +985,24 @@
     </ClCompile>
     <ClCompile Include="..\Objects\odictobject.c">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Modules\_asynciomodule.c">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Modules\_blake2\blake2b_impl.c">
+      <Filter>Modules\_blake2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Modules\_blake2\blake2module.c">
+      <Filter>Modules\_blake2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Modules\_blake2\blake2s_impl.c">
+      <Filter>Modules\_blake2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Modules\_sha3\sha3module.c">
+      <Filter>Modules\_sha3</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Modules\_io\winconsoleio.c">
+      <Filter>Modules\_io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -104,6 +104,19 @@ class Unparser:
         self.write(" "+self.binop[t.op.__class__.__name__]+"= ")
         self.dispatch(t.value)
 
+    def _AnnAssign(self, t):
+        self.fill()
+        if not t.simple and isinstance(t.target, ast.Name):
+            self.write('(')
+        self.dispatch(t.target)
+        if not t.simple and isinstance(t.target, ast.Name):
+            self.write(')')
+        self.write(": ")
+        self.dispatch(t.annotation)
+        if t.value:
+            self.write(" = ")
+            self.dispatch(t.value)
+
     def _Return(self, t):
         self.fill("return")
         if t.value:
@@ -322,8 +335,71 @@ class Unparser:
     def _Str(self, tree):
         self.write(repr(tree.s))
 
+    def _JoinedStr(self, t):
+        self.write("f")
+        string = io.StringIO()
+        self._fstring_JoinedStr(t, string.write)
+        self.write(repr(string.getvalue()))
+
+    def _FormattedValue(self, t):
+        self.write("f")
+        string = io.StringIO()
+        self._fstring_FormattedValue(t, string.write)
+        self.write(repr(string.getvalue()))
+
+    def _fstring_JoinedStr(self, t, write):
+        for value in t.values:
+            meth = getattr(self, "_fstring_" + type(value).__name__)
+            meth(value, write)
+
+    def _fstring_Str(self, t, write):
+        value = t.s.replace("{", "{{").replace("}", "}}")
+        write(value)
+
+    def _fstring_Constant(self, t, write):
+        assert isinstance(t.value, str)
+        value = t.value.replace("{", "{{").replace("}", "}}")
+        write(value)
+
+    def _fstring_FormattedValue(self, t, write):
+        write("{")
+        expr = io.StringIO()
+        Unparser(t.value, expr)
+        expr = expr.getvalue().rstrip("\n")
+        if expr.startswith("{"):
+            write(" ")  # Separate pair of opening brackets as "{ {"
+        write(expr)
+        if t.conversion != -1:
+            conversion = chr(t.conversion)
+            assert conversion in "sra"
+            write(f"!{conversion}")
+        if t.format_spec:
+            write(":")
+            meth = getattr(self, "_fstring_" + type(t.format_spec).__name__)
+            meth(t.format_spec, write)
+        write("}")
+
     def _Name(self, t):
         self.write(t.id)
+
+    def _write_constant(self, value):
+        if isinstance(value, (float, complex)):
+            self.write(repr(value).replace("inf", INFSTR))
+        else:
+            self.write(repr(value))
+
+    def _Constant(self, t):
+        value = t.value
+        if isinstance(value, tuple):
+            self.write("(")
+            if len(value) == 1:
+                self._write_constant(value[0])
+                self.write(",")
+            else:
+                interleave(lambda: self.write(", "), self._write_constant, value)
+            self.write(")")
+        else:
+            self._write_constant(t.value)
 
     def _NameConstant(self, t):
         self.write(repr(t.value))
@@ -368,7 +444,10 @@ class Unparser:
         self.write("}")
 
     def _comprehension(self, t):
-        self.write(" for ")
+        if t.is_async:
+            self.write(" async for ")
+        else:
+            self.write(" for ")
         self.dispatch(t.target)
         self.write(" in ")
         self.dispatch(t.iter)
@@ -413,7 +492,7 @@ class Unparser:
     def _Tuple(self, t):
         self.write("(")
         if len(t.elts) == 1:
-            (elt,) = t.elts
+            elt = t.elts[0]
             self.dispatch(elt)
             self.write(",")
         else:
@@ -460,7 +539,8 @@ class Unparser:
         # Special case: 3.__abs__() is a syntax error, so if t.value
         # is an integer literal then we need to either parenthesize
         # it or add an extra space to get 3 .__abs__().
-        if isinstance(t.value, ast.Num) and isinstance(t.value.n, int):
+        if ((isinstance(t.value, ast.Num) and isinstance(t.value.n, int))
+           or (isinstance(t.value, ast.Constant) and isinstance(t.value.value, int))):
             self.write(" ")
         self.write(".")
         self.write(t.attr)

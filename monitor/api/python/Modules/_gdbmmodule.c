@@ -562,9 +562,8 @@ when the database has to be created.  It defaults to octal 0o666.
 [clinic start generated code]*/
 
 static PyObject *
-dbmopen_impl(PyModuleDef *module, const char *name, const char *flags,
-             int mode)
-/*[clinic end generated code: output=365b31415c03ccd4 input=55563cd60e51984a]*/
+dbmopen_impl(PyObject *module, const char *name, const char *flags, int mode)
+/*[clinic end generated code: output=31aa1bafdf5da688 input=55563cd60e51984a]*/
 {
     int iflags;
 
@@ -615,7 +614,7 @@ dbmopen_impl(PyModuleDef *module, const char *name, const char *flags,
     return newdbmobject(name, iflags, mode);
 }
 
-static char dbmmodule_open_flags[] = "rwcn"
+static const char dbmmodule_open_flags[] = "rwcn"
 #ifdef GDBM_FAST
                                      "f"
 #endif

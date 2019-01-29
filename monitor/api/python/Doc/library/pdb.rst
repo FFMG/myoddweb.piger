@@ -76,7 +76,7 @@ The typical usage to inspect a crashed program is::
    >>> import mymodule
    >>> mymodule.test()
    Traceback (most recent call last):
-     File "<stdin>", line 1, in ?
+     File "<stdin>", line 1, in <module>
      File "./mymodule.py", line 4, in test
        test2()
      File "./mymodule.py", line 3, in test2
@@ -144,7 +144,7 @@ The ``run*`` functions and :func:`set_trace` are aliases for instantiating the
 access further features, you have to do this yourself:
 
 .. class:: Pdb(completekey='tab', stdin=None, stdout=None, skip=None, \
-               nosigint=False)
+               nosigint=False, readrc=True)
 
    :class:`Pdb` is the debugger class.
 
@@ -158,7 +158,10 @@ access further features, you have to do this yourself:
    By default, Pdb sets a handler for the SIGINT signal (which is sent when the
    user presses :kbd:`Ctrl-C` on the console) when you give a ``continue`` command.
    This allows you to break into the debugger again by pressing :kbd:`Ctrl-C`.  If you
-   want Pdb not to touch the SIGINT handler, set *nosigint* tot true.
+   want Pdb not to touch the SIGINT handler, set *nosigint* to true.
+
+   The *readrc* argument defaults to true and controls whether Pdb will load
+   .pdbrc files from the filesystem.
 
    Example call to enable tracing with *skip*::
 
@@ -170,6 +173,9 @@ access further features, you have to do this yourself:
    .. versionadded:: 3.2
       The *nosigint* argument.  Previously, a SIGINT handler was never set by
       Pdb.
+
+   .. versionchanged:: 3.6
+      The *readrc* argument.
 
    .. method:: run(statement, globals=None, locals=None)
                runeval(expression, globals=None, locals=None)
@@ -328,7 +334,7 @@ by the local file.
    return, jump, quit and their abbreviations) terminates the command list (as if
    that command was immediately followed by end). This is because any time you
    resume execution (even with a simple next or step), you may encounter another
-   breakpoint--which could have its own command list, leading to ambiguities about
+   breakpoint—which could have its own command list, leading to ambiguities about
    which list to execute.
 
    If you use the 'silent' command in the command list, the usual message about
@@ -449,7 +455,7 @@ by the local file.
 
 .. pdbcommand:: interact
 
-   Start an interative interpreter (using the :mod:`code` module) whose global
+   Start an interactive interpreter (using the :mod:`code` module) whose global
    namespace contains all the (global and local) names found in the current
    scope.
 

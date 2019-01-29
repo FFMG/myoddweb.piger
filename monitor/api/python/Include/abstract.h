@@ -7,7 +7,9 @@ extern "C" {
 #ifdef PY_SSIZE_T_CLEAN
 #define PyObject_CallFunction _PyObject_CallFunction_SizeT
 #define PyObject_CallMethod _PyObject_CallMethod_SizeT
+#ifndef Py_LIMITED_API
 #define _PyObject_CallMethodId _PyObject_CallMethodId_SizeT
+#endif /* !Py_LIMITED_API */
 #endif
 
 /* Abstract Object Interface (many thanks to Jim Fulton) */
@@ -264,19 +266,99 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
        */
 
      PyAPI_FUNC(PyObject *) PyObject_Call(PyObject *callable_object,
-                                          PyObject *args, PyObject *kw);
-
-#ifndef Py_LIMITED_API
-     PyAPI_FUNC(PyObject *) _Py_CheckFunctionResult(PyObject *func,
-                                                    PyObject *result,
-                                                    const char *where);
-#endif
+                                          PyObject *args, PyObject *kwargs);
 
        /*
      Call a callable Python object, callable_object, with
      arguments and keywords arguments.  The 'args' argument can not be
-     NULL, but the 'kw' argument can be NULL.
+     NULL.
        */
+
+#ifndef Py_LIMITED_API
+    PyAPI_FUNC(PyObject*) _PyStack_AsTuple(
+        PyObject **stack,
+        Py_ssize_t nargs);
+
+    /* Convert keyword arguments from the (stack, kwnames) format to a Python
+       dictionary.
+
+       kwnames must only contains str strings, no subclass, and all keys must
+       be unique. kwnames is not checked, usually these checks are done before or later
+       calling _PyStack_AsDict(). For example, _PyArg_ParseStack() raises an
+       error if a key is not a string. */
+    PyAPI_FUNC(PyObject *) _PyStack_AsDict(
+        PyObject **values,
+        PyObject *kwnames);
+
+    /* Convert (args, nargs, kwargs: dict) into (stack, nargs, kwnames: tuple).
+
+       Return 0 on success, raise an exception and return -1 on error.
+
+       Write the new stack into *p_stack. If *p_stack is differen than args, it
+       must be released by PyMem_Free().
+
+       The stack uses borrowed references.
+
+       The type of keyword keys is not checked, these checks should be done
+       later (ex: _PyArg_ParseStackAndKeywords). */
+    PyAPI_FUNC(int) _PyStack_UnpackDict(
+        PyObject **args,
+        Py_ssize_t nargs,
+        PyObject *kwargs,
+        PyObject ***p_stack,
+        PyObject **p_kwnames);
+
+    /* Call the callable object func with the "fast call" calling convention:
+       args is a C array for positional arguments (nargs is the number of
+       positional arguments), kwargs is a dictionary for keyword arguments.
+
+       If nargs is equal to zero, args can be NULL. kwargs can be NULL.
+       nargs must be greater or equal to zero.
+
+       Return the result on success. Raise an exception on return NULL on
+       error. */
+    PyAPI_FUNC(PyObject *) _PyObject_FastCallDict(PyObject *func,
+                                                  PyObject **args, Py_ssize_t nargs,
+                                                  PyObject *kwargs);
+
+    /* Call the callable object func with the "fast call" calling convention:
+       args is a C array for positional arguments followed by values of
+       keyword arguments. Keys of keyword arguments are stored as a tuple
+       of strings in kwnames. nargs is the number of positional parameters at
+       the beginning of stack. The size of kwnames gives the number of keyword
+       values in the stack after positional arguments.
+
+       kwnames must only contains str strings, no subclass, and all keys must
+       be unique.
+
+       If nargs is equal to zero and there is no keyword argument (kwnames is
+       NULL or its size is zero), args can be NULL.
+
+       Return the result on success. Raise an exception and return NULL on
+       error. */
+    PyAPI_FUNC(PyObject *) _PyObject_FastCallKeywords
+       (PyObject *func,
+        PyObject **args,
+        Py_ssize_t nargs,
+        PyObject *kwnames);
+
+#define _PyObject_FastCall(func, args, nargs) \
+    _PyObject_FastCallDict((func), (args), (nargs), NULL)
+
+#define _PyObject_CallNoArg(func) \
+    _PyObject_FastCall((func), NULL, 0)
+
+#define _PyObject_CallArg1(func, arg) \
+    _PyObject_FastCall((func), &(arg), 1)
+
+    PyAPI_FUNC(PyObject *) _PyObject_Call_Prepend(PyObject *func,
+                                                  PyObject *obj, PyObject *args,
+                                                  PyObject *kwargs);
+
+     PyAPI_FUNC(PyObject *) _Py_CheckFunctionResult(PyObject *func,
+                                                    PyObject *result,
+                                                    const char *where);
+#endif   /* Py_LIMITED_API */
 
      PyAPI_FUNC(PyObject *) PyObject_CallObject(PyObject *callable_object,
                                                 PyObject *args);
@@ -315,6 +397,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
      Python expression: o.method(args).
        */
 
+#ifndef Py_LIMITED_API
      PyAPI_FUNC(PyObject *) _PyObject_CallMethodId(PyObject *o,
                                                    _Py_Identifier *method,
                                                    const char *format, ...);
@@ -323,6 +406,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
          Like PyObject_CallMethod, but expect a _Py_Identifier* as the
          method name.
        */
+#endif /* !Py_LIMITED_API */
 
      PyAPI_FUNC(PyObject *) _PyObject_CallFunction_SizeT(PyObject *callable,
                                                          const char *format,
@@ -331,10 +415,12 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
                                                        const char *name,
                                                        const char *format,
                                                        ...);
+#ifndef Py_LIMITED_API
      PyAPI_FUNC(PyObject *) _PyObject_CallMethodId_SizeT(PyObject *o,
                                                        _Py_Identifier *name,
                                                        const char *format,
                                                        ...);
+#endif /* !Py_LIMITED_API */
 
      PyAPI_FUNC(PyObject *) PyObject_CallFunctionObjArgs(PyObject *callable,
                                                          ...);
@@ -350,9 +436,11 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
 
      PyAPI_FUNC(PyObject *) PyObject_CallMethodObjArgs(PyObject *o,
                                                        PyObject *method, ...);
+#ifndef Py_LIMITED_API
      PyAPI_FUNC(PyObject *) _PyObject_CallMethodIdObjArgs(PyObject *o,
                                                struct _Py_Identifier *method,
                                                ...);
+#endif /* !Py_LIMITED_API */
 
        /*
      Call the method named m of object o with a variable number of
@@ -458,7 +546,7 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
     /* old buffer API
        FIXME:  usage of these should all be replaced in Python itself
        but for backwards compatibility we will implement them.
-       Their usage without a corresponding "unlock" mechansim
+       Their usage without a corresponding "unlock" mechanism
        may create issues (but they would already be there). */
 
      PyAPI_FUNC(int) PyObject_AsCharBuffer(PyObject *obj,
@@ -664,11 +752,13 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
      o1*o2.
        */
 
+#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
      PyAPI_FUNC(PyObject *) PyNumber_MatrixMultiply(PyObject *o1, PyObject *o2);
 
        /*
      This is the equivalent of the Python expression: o1 @ o2.
        */
+#endif
 
      PyAPI_FUNC(PyObject *) PyNumber_FloorDivide(PyObject *o1, PyObject *o2);
 
@@ -844,11 +934,13 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
      o1 *= o2.
        */
 
+#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
      PyAPI_FUNC(PyObject *) PyNumber_InPlaceMatrixMultiply(PyObject *o1, PyObject *o2);
 
        /*
      This is the equivalent of the Python expression: o1 @= o2.
        */
+#endif
 
      PyAPI_FUNC(PyObject *) PyNumber_InPlaceFloorDivide(PyObject *o1,
                                                         PyObject *o2);
@@ -1216,23 +1308,23 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
      PyAPI_FUNC(PyObject *) PyMapping_Keys(PyObject *o);
 
        /*
-     On success, return a list, a tuple or a dictionary view in case of a dict,
-     of the keys in object o. On failure, return NULL.
+     On success, return a list or tuple of the keys in object o.
+     On failure, return NULL.
        */
 
      PyAPI_FUNC(PyObject *) PyMapping_Values(PyObject *o);
 
        /*
-     On success, return a list, a tuple or a dictionary view in case of a dict,
-     of the values in object o. On failure, return NULL.
+     On success, return a list or tuple of the values in object o.
+     On failure, return NULL.
        */
 
      PyAPI_FUNC(PyObject *) PyMapping_Items(PyObject *o);
 
        /*
-     On success, return a list, a tuple or a dictionary view in case of a dict,
-     of the items in object o, where each item is a tuple containing a key-value
-     pair. On failure, return NULL.
+     On success, return a list or tuple of the items in object o,
+     where each item is a tuple containing a key-value pair.
+     On failure, return NULL.
 
        */
 
@@ -1270,13 +1362,13 @@ PyAPI_FUNC(int) _PyObject_RealIsSubclass(PyObject *derived, PyObject *cls);
 PyAPI_FUNC(char *const *) _PySequence_BytesToCharpArray(PyObject* self);
 
 PyAPI_FUNC(void) _Py_FreeCharPArray(char *const array[]);
-#endif
 
 /* For internal use by buffer API functions */
 PyAPI_FUNC(void) _Py_add_one_to_index_F(int nd, Py_ssize_t *index,
                                         const Py_ssize_t *shape);
 PyAPI_FUNC(void) _Py_add_one_to_index_C(int nd, Py_ssize_t *index,
                                         const Py_ssize_t *shape);
+#endif /* !Py_LIMITED_API */
 
 
 #ifdef __cplusplus

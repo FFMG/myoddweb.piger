@@ -20,6 +20,9 @@
 #include <sys/stat.h>
 #endif /* HAVE_SYS_STAT_H */
 
+#ifdef MS_WINDOWS
+#include <consoleapi.h>
+#endif
 
 /* Various interned strings */
 
@@ -52,7 +55,6 @@ PyObject *_PyIO_empty_str;
 PyObject *_PyIO_empty_bytes;
 PyObject *_PyIO_zero;
 
-
 PyDoc_STRVAR(module_doc,
 "The io module provides the Python interfaces to stream handling. The\n"
 "builtin open function is defined in this module.\n"
@@ -227,10 +229,10 @@ opened in a binary mode.
 [clinic start generated code]*/
 
 static PyObject *
-_io_open_impl(PyModuleDef *module, PyObject *file, const char *mode,
+_io_open_impl(PyObject *module, PyObject *file, const char *mode,
               int buffering, const char *encoding, const char *errors,
               const char *newline, int closefd, PyObject *opener)
-/*[clinic end generated code: output=7615d0d746eb14d2 input=f4e1ca75223987bc]*/
+/*[clinic end generated code: output=aefafc4ce2b46dc0 input=f4e1ca75223987bc]*/
 {
     unsigned i;
 
@@ -238,20 +240,33 @@ _io_open_impl(PyModuleDef *module, PyObject *file, const char *mode,
     int text = 0, binary = 0, universal = 0;
 
     char rawmode[6], *m;
-    int line_buffering, isatty;
+    int line_buffering, is_number;
+    long isatty;
 
-    PyObject *raw, *modeobj = NULL, *buffer, *wrapper, *result = NULL;
+    PyObject *raw, *modeobj = NULL, *buffer, *wrapper, *result = NULL, *path_or_fd = NULL;
 
     _Py_IDENTIFIER(_blksize);
     _Py_IDENTIFIER(isatty);
     _Py_IDENTIFIER(mode);
     _Py_IDENTIFIER(close);
 
-    if (!PyUnicode_Check(file) &&
-	!PyBytes_Check(file) &&
-	!PyNumber_Check(file)) {
+    is_number = PyNumber_Check(file);
+
+    if (is_number) {
+        path_or_fd = file;
+        Py_INCREF(path_or_fd);
+    } else {
+        path_or_fd = PyOS_FSPath(file);
+        if (path_or_fd == NULL) {
+            return NULL;
+        }
+    }
+
+    if (!is_number &&
+        !PyUnicode_Check(path_or_fd) &&
+        !PyBytes_Check(path_or_fd)) {
         PyErr_Format(PyExc_TypeError, "invalid file: %R", file);
-        return NULL;
+        goto error;
     }
 
     /* Decode mode */
@@ -292,7 +307,7 @@ _io_open_impl(PyModuleDef *module, PyObject *file, const char *mode,
         if (strchr(mode+i+1, c)) {
           invalid_mode:
             PyErr_Format(PyExc_ValueError, "invalid mode: '%s'", mode);
-            return NULL;
+            goto error;
         }
 
     }
@@ -307,53 +322,66 @@ _io_open_impl(PyModuleDef *module, PyObject *file, const char *mode,
 
     /* Parameters validation */
     if (universal) {
-        if (writing || appending) {
+        if (creating || writing || appending || updating) {
             PyErr_SetString(PyExc_ValueError,
-                            "can't use U and writing mode at once");
-            return NULL;
+                            "mode U cannot be combined with x', 'w', 'a', or '+'");
+            goto error;
         }
         if (PyErr_WarnEx(PyExc_DeprecationWarning,
                          "'U' mode is deprecated", 1) < 0)
-            return NULL;
+            goto error;
         reading = 1;
     }
 
     if (text && binary) {
         PyErr_SetString(PyExc_ValueError,
                         "can't have text and binary mode at once");
-        return NULL;
+        goto error;
     }
 
     if (creating + reading + writing + appending > 1) {
         PyErr_SetString(PyExc_ValueError,
                         "must have exactly one of create/read/write/append mode");
-        return NULL;
+        goto error;
     }
 
     if (binary && encoding != NULL) {
         PyErr_SetString(PyExc_ValueError,
                         "binary mode doesn't take an encoding argument");
-        return NULL;
+        goto error;
     }
 
     if (binary && errors != NULL) {
         PyErr_SetString(PyExc_ValueError,
                         "binary mode doesn't take an errors argument");
-        return NULL;
+        goto error;
     }
 
     if (binary && newline != NULL) {
         PyErr_SetString(PyExc_ValueError,
                         "binary mode doesn't take a newline argument");
-        return NULL;
+        goto error;
     }
 
     /* Create the Raw file stream */
-    raw = PyObject_CallFunction((PyObject *)&PyFileIO_Type,
-                                "OsiO", file, rawmode, closefd, opener);
+    {
+        PyObject *RawIO_class = (PyObject *)&PyFileIO_Type;
+#ifdef MS_WINDOWS
+        if (!Py_LegacyWindowsStdioFlag && _PyIO_get_console_type(path_or_fd) != '\0') {
+            RawIO_class = (PyObject *)&PyWindowsConsoleIO_Type;
+            encoding = "utf-8";
+        }
+#endif
+        raw = PyObject_CallFunction(RawIO_class,
+                                    "OsiO", path_or_fd, rawmode, closefd, opener);
+    }
+
     if (raw == NULL)
-        return NULL;
+        goto error;
     result = raw;
+
+    Py_DECREF(path_or_fd);
+    path_or_fd = NULL;
 
     modeobj = PyUnicode_FromString(mode);
     if (modeobj == NULL)
@@ -437,10 +465,10 @@ _io_open_impl(PyModuleDef *module, PyObject *file, const char *mode,
 
     /* wraps into a TextIOWrapper */
     wrapper = PyObject_CallFunction((PyObject *)&PyTextIOWrapper_Type,
-				    "Osssi",
-				    buffer,
-				    encoding, errors, newline,
-				    line_buffering);
+                                    "Osssi",
+                                    buffer,
+                                    encoding, errors, newline,
+                                    line_buffering);
     if (wrapper == NULL)
         goto error;
     result = wrapper;
@@ -460,6 +488,7 @@ _io_open_impl(PyModuleDef *module, PyObject *file, const char *mode,
         Py_XDECREF(close_result);
         Py_DECREF(result);
     }
+    Py_XDECREF(path_or_fd);
     Py_XDECREF(modeobj);
     return NULL;
 }
@@ -654,7 +683,7 @@ PyInit__io(void)
     /* UnsupportedOperation inherits from ValueError and IOError */
     state->unsupported_operation = PyObject_CallFunction(
         (PyObject *)&PyType_Type, "s(OO){}",
-        "UnsupportedOperation", PyExc_ValueError, PyExc_IOError);
+        "UnsupportedOperation", PyExc_OSError, PyExc_ValueError);
     if (state->unsupported_operation == NULL)
         goto fail;
     Py_INCREF(state->unsupported_operation);
@@ -690,6 +719,12 @@ PyInit__io(void)
     /* StringIO */
     PyStringIO_Type.tp_base = &PyTextIOBase_Type;
     ADD_TYPE(&PyStringIO_Type, "StringIO");
+
+#ifdef MS_WINDOWS
+    /* WindowsConsoleIO */
+    PyWindowsConsoleIO_Type.tp_base = &PyRawIOBase_Type;
+    ADD_TYPE(&PyWindowsConsoleIO_Type, "_WindowsConsoleIO");
+#endif
 
     /* BufferedReader */
     PyBufferedReader_Type.tp_base = &PyBufferedIOBase_Type;
