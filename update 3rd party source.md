@@ -53,3 +53,19 @@ Installing the debug symbols is a little trickier
 - Uncheck every single option apart from the "*download debugging symbols*" and "*Download debug binaries (...)*", change the install location to somewhere more practical.
 - Go to that install library and in the sub directory "\DLLs\*" look for all the ***_d.pyd** files, copy all those files to "myoddweb.piger\includes\python64d\*.*"
 - Run the install again, but this time select "uninstall" and remove everything. Everything should be removed.
+
+## Google test
+
+- Download the latest version from [https://github.com/google/googletest/releases](https://github.com/google/googletest/releases), get the amalgamation file, (the file is normally called "sqlite-amalgamation-*.zip")
+- Unzip the files to *\myoddweb.piger\myodd\gtest\gtest-x.y.z\*.** where `xyz` is the new version number.     
+**NB:** In the zip file only unpack the `googletest` folder, `googletest-release-x.y.z\googletest` where x.y.z is the compressed file name.
+
+- In the x64 and x86 remove the 2 files that are pointing to the older version: 
+  - gtest_main.cc
+  - gtest-all.cc
+- Re-add the 2 files to point to the new folder.
+  - gtest_main.cc
+  - gtest-all.cc
+- Make sure that the files don't use 'precompiled headers', (Properties > C/C++ > Precompiled headers)
+- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor).    
+Make sure that the setting is for both debug and release version. 
