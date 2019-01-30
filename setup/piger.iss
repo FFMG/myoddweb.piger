@@ -73,6 +73,9 @@ Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\Sampl
 Type: files; Name: "{app}\python35.zip"
 Type: files; Name: "{app}\python6435.dll"
 
+Type: files; Name: "{app}\python36.zip"
+Type: files; Name: "{app}\python6435.dll"
+
 ; remove the powershell dll, in case the user removed powershell, (or something weird).
 ; that way we will not try and execute something that might not exist.
 Type: files; Name: "{app}\AMPowerShellCmdLets.dll"
@@ -111,13 +114,13 @@ Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinsta
 ; x86 App
 Source: {#APP_SOURCE86}ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}hook.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE86}python36.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
+Source: {#APP_SOURCE86}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64 and IsPowershell3Installed" 
 
 ; x64 App
 Source: {#APP_SOURCE64}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE64}python36.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+Source: {#APP_SOURCE64}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: (IsWin64 and IsPowershell3Installed)
 
 ; common
