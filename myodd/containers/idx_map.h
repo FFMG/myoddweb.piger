@@ -16,7 +16,7 @@ namespace myodd{
   template
     <class _Kty,
      class _Ty >
-  class idx_map : private std::map< _Kty, _Ty >
+  class idx_map : std::map< _Kty, _Ty >
   {
   public:
     /**
@@ -84,8 +84,8 @@ namespace myodd{
     }
 #endif // _DEBUG
 
-    typedef typename __super::iterator iterator;
-    typedef typename __super::const_iterator const_iterator;
+    typedef __super::iterator iterator;
+    typedef __super::const_iterator const_iterator;
 
     /**
      * get the beginning iterator
@@ -94,7 +94,7 @@ namespace myodd{
     iterator begin()
     {	
       _MYODD_IDX_MAP_INRANGE
-      return __super::begin();
+      return std::map< _Kty, _Ty >::begin();
     }
 
     /**
@@ -104,7 +104,7 @@ namespace myodd{
     const_iterator begin() const
     {	
       _MYODD_IDX_MAP_INRANGE
-      return __super::begin();
+      return std::map< _Kty, _Ty >::begin();
     }
 
     /**
@@ -114,7 +114,7 @@ namespace myodd{
     iterator end()
     {	
       _MYODD_IDX_MAP_INRANGE
-      return __super::end();
+      return std::map< _Kty, _Ty >::end();
     }
 
     /**
@@ -124,7 +124,7 @@ namespace myodd{
     const_iterator end() const
     {	
       _MYODD_IDX_MAP_INRANGE
-      return __super::end();
+      return std::map< _Kty, _Ty >::end();
     }
 
     /**
@@ -178,7 +178,7 @@ namespace myodd{
     void erase(const_iterator _Where)
     {
       //  we need to look for that guy in the the container as well.
-      for( map_vector::iterator it = _mapVector.begin();
+      for( MapVector::iterator it = _mapVector.begin();
            it != _mapVector.end();
            ++it )
       {
@@ -233,18 +233,18 @@ namespace myodd{
     iterator find(const _Kty& _Keyval)
     {
       _MYODD_IDX_MAP_INRANGE;
-      return __super::find( _Keyval );
+      return std::map< _Kty, _Ty >::find( _Keyval );
     }
 
     /**
-     * Find a the first iterator that matches the keytype
-     * @param const _Kty& the keytype we are looking for.
-     * @return const_iterator the matching iterator, (or end() )
+     * \brief Find a the first iterator that matches the keytype
+     * \param _Keyval the keytype we are looking for.
+     * \return const_iterator the matching iterator, (or end() )
      */
     const_iterator find(const _Kty& _Keyval) const
     {
       _MYODD_IDX_MAP_INRANGE
-      return __super::find( _Keyval );
+      return std::map< _Kty, _Ty >::find( _Keyval );
     }
 
     /**
@@ -280,19 +280,19 @@ namespace myodd{
 
     /**
      * erase at a certain index number.
-     * @param unsigned int the location of the item we are erasing.
+     * @param _idx the location of the item we are erasing.
      * @return none
      */
     void erase_at( unsigned int _idx )
     {
-      const_iterator it = at( _idx );
+      auto it = at( _idx );
       erase( it );
     }
 
     /**
      * Get an const_iteratror at a certain index number.
      * we return end() if the item does not exist.
-     * @param unsigned int the location of the item we are erasing.
+     * @param _idx the location of the item we are erasing.
      * @return const_iterator the item we are looking for.
      */
     const_iterator at( unsigned int _idx ) const
@@ -303,7 +303,7 @@ namespace myodd{
     /**
     * Get an const_iteratror at a certain index number.
     * we return end() if the item does not exist.
-    * @param unsigned int the location of the item we are erasing.
+    * @param _idx the location of the item we are erasing.
     * @return const_iterator the item we are looking for.
     */
     iterator at( unsigned int _idx )
@@ -312,16 +312,16 @@ namespace myodd{
       if( _idx >= _mapVector.size() )
         return end();
 
-      map_vector::iterator it = _mapVector.begin() + _idx;
+      auto it = _mapVector.begin() + _idx;
       return (*it);
     }
 
   protected:
     /**
-     * this is the vector that contains the index of all the map.
+     * \brief this is the vector that contains the index of all the map.
      */
-    typedef typename std::vector<iterator> map_vector;
-    map_vector _mapVector;
+    typedef std::vector<iterator> MapVector;
+    MapVector _mapVector;
   }; //  idx_map
 } //  myodd
 #endif // _Idx_map_h
