@@ -803,8 +803,6 @@
     <ClInclude Include="common\program_options.h" />
     <ClInclude Include="config\Config.h" />
     <ClInclude Include="config\data.h" />
-    <ClInclude Include="containers\idx_map.h" />
-    <ClInclude Include="containers\Matrix2D.h" />
     <ClInclude Include="dynamic\any.h" />
     <ClInclude Include="dynamic\types.h" />
     <ClInclude Include="files\files.h" />

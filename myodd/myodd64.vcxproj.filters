@@ -30,9 +30,6 @@
     <Filter Include="registry">
       <UniqueIdentifier>{af7d82dd-d1fb-40e0-b4ff-823dc83e8961}</UniqueIdentifier>
     </Filter>
-    <Filter Include="containers">
-      <UniqueIdentifier>{57d9dd2a-afcd-4c9f-9742-0351173d9b4e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sqlite">
       <UniqueIdentifier>{2f424b6e-1de6-413a-b361-e8220c5b417a}</UniqueIdentifier>
     </Filter>
@@ -395,12 +392,6 @@
     </ClInclude>
     <ClInclude Include="registry\registry.h">
       <Filter>registry</Filter>
-    </ClInclude>
-    <ClInclude Include="containers\idx_map.h">
-      <Filter>containers</Filter>
-    </ClInclude>
-    <ClInclude Include="containers\Matrix2D.h">
-      <Filter>containers</Filter>
     </ClInclude>
     <ClInclude Include="sqlite\sqlite.h">
       <Filter>sqlite</Filter>

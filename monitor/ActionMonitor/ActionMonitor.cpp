@@ -258,7 +258,6 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::geo::Test();
   myodd::math::Test();
   myodd::files::Test();
-  myodd::idx_map<int,int>::Test();
   
 	AfxEnableControlContainer();
 
