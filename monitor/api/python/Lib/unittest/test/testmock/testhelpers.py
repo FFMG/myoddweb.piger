@@ -1,3 +1,5 @@
+import time
+import types
 import unittest
 
 from unittest.mock import (
@@ -6,6 +8,7 @@ from unittest.mock import (
 )
 
 from datetime import datetime
+from functools import partial
 
 class SomeClass(object):
     def one(self, a, b):
@@ -265,6 +268,22 @@ class CallTest(unittest.TestCase):
         last_call = call.foo(1).bar()().baz.beep(a=6)
         self.assertEqual(mock.mock_calls[-1], last_call)
         self.assertEqual(mock.mock_calls, last_call.call_list())
+
+
+    def test_extended_not_equal(self):
+        a = call(x=1).foo
+        b = call(x=2).foo
+        self.assertEqual(a, a)
+        self.assertEqual(b, b)
+        self.assertNotEqual(a, b)
+
+
+    def test_nested_calls_not_equal(self):
+        a = call(x=1).foo().bar
+        b = call(x=2).foo().bar
+        self.assertEqual(a, a)
+        self.assertEqual(b, b)
+        self.assertNotEqual(a, b)
 
 
     def test_call_list(self):
@@ -854,6 +873,32 @@ class SpecSignatureTest(unittest.TestCase):
         check_data_descriptor(foo.slot)
         # plain data descriptor
         check_data_descriptor(foo.desc)
+
+
+    def test_autospec_on_bound_builtin_function(self):
+        meth = types.MethodType(time.ctime, time.time())
+        self.assertIsInstance(meth(), str)
+        mocked = create_autospec(meth)
+
+        # no signature, so no spec to check against
+        mocked()
+        mocked.assert_called_once_with()
+        mocked.reset_mock()
+        mocked(4, 5, 6)
+        mocked.assert_called_once_with(4, 5, 6)
+
+
+    def test_autospec_getattr_partial_function(self):
+        # bpo-32153 : getattr returning partial functions without
+        # __name__ should not create AttributeError in create_autospec
+        class Foo:
+
+            def __getattr__(self, attribute):
+                return partial(lambda name: name, attribute)
+
+        proxy = Foo()
+        autospec = create_autospec(proxy)
+        self.assertFalse(hasattr(autospec, '__name__'))
 
 
 class TestCallList(unittest.TestCase):
