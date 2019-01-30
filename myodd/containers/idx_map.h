@@ -151,16 +151,16 @@ namespace myodd{
 
     /**
      * Erase an item given a key type.
-     * @param const _Kty& the keytype
+     * \param keyval the keytype
      * @return size_type the number of matching items that where deleted.
      */
-    size_type erase(const _Kty& _Keyval)
+    size_type erase(const _Kty& keyval)
     {
-      // erase and count all that match _Keyval
+      // erase and count all that match keyval
       size_type num = 0;
       while( true )
       {
-        const_iterator _Where = find( _Keyval );
+        const_iterator _Where = find(keyval);
         if( _Where == end() )
           break;
         ++num;
@@ -227,24 +227,24 @@ namespace myodd{
 
     /**
      * Find a the first iterator that matches the keytype
-     * @param const _Kty& the keytype we are looking for.
-     * @return iterator the matching iterator, (or end() )
+     * \param keyval the keytype we are looking for.
+     * \return iterator the matching iterator, (or end() )
      */
-    iterator find(const _Kty& _Keyval)
+    iterator find(const _Kty& keyval)
     {
       _MYODD_IDX_MAP_INRANGE;
-      return std::map< _Kty, _Ty >::find( _Keyval );
+      return std::map< _Kty, _Ty >::find(keyval);
     }
 
     /**
      * \brief Find a the first iterator that matches the keytype
-     * \param _Keyval the keytype we are looking for.
+     * \param keyval the keytype we are looking for.
      * \return const_iterator the matching iterator, (or end() )
      */
-    const_iterator find(const _Kty& _Keyval) const
+    const_iterator find(const _Kty& keyval) const
     {
       _MYODD_IDX_MAP_INRANGE
-      return std::map< _Kty, _Ty >::find( _Keyval );
+      return std::map< _Kty, _Ty >::find(keyval);
     }
 
     /**
@@ -258,61 +258,61 @@ namespace myodd{
     }
 
     /**
-     * Add/Update a value in the container.
-     * We return the reference so the user can update the value then.
-     * @param const _Kty& the key type we are adding/replacing.
-     * @return _Ty& the second of the data.
+     * \brief Add/Update a value in the container.
+     *        We return the reference so the user can update the value then.
+     * \param keyval the key type we are adding/replacing.
+     * \return _Ty& the second of the data.
      */
-    _Ty& operator[](const _Kty& _Keyval)
+    _Ty& operator[](const _Kty& keyval)
     {
-      key_compare comp = this->key_comp();
+      auto comp = this->key_comp();
 
-      iterator _Where = this->lower_bound(_Keyval);
-      if(_Where == this->end() || comp(_Keyval, this->_Key(_Where._Mynode())))
+      auto where = this->lower_bound(keyval);
+      if(where == this->end() || comp(keyval, this->_Key(where._Mynode())))
       {
-        _Where = this->insert(_Where, value_type(_Keyval, mapped_type()));
-        _mapVector.push_back( _Where );
+        where = this->insert(where, value_type(keyval, mapped_type()));
+        _mapVector.push_back( where );
       }
 
       _MYODD_IDX_MAP_INRANGE
-      return ((*_Where).second);
+      return ((*where).second);
     }
 
     /**
-     * erase at a certain index number.
-     * @param _idx the location of the item we are erasing.
-     * @return none
+     * \brief erase at a certain index number.
+     * \param idx the location of the item we are erasing.
+     * \return none
      */
-    void erase_at( unsigned int _idx )
+    void erase_at( unsigned int idx)
     {
-      auto it = at( _idx );
+      auto it = at( idx );
       erase( it );
     }
 
     /**
-     * Get an const_iteratror at a certain index number.
-     * we return end() if the item does not exist.
-     * @param _idx the location of the item we are erasing.
-     * @return const_iterator the item we are looking for.
+     * \brief Get an const_iteratror at a certain index number.
+     *        we return end() if the item does not exist.
+     * \param idx the location of the item we are erasing.
+     * \return const_iterator the item we are looking for.
      */
-    const_iterator at( unsigned int _idx ) const
+    const_iterator at( unsigned int idx) const
     {
-      return const_cast<idx_map*>(this)->at( _idx );
+      return const_cast<idx_map*>(this)->at(idx);
     }
 
     /**
-    * Get an const_iteratror at a certain index number.
-    * we return end() if the item does not exist.
-    * @param _idx the location of the item we are erasing.
-    * @return const_iterator the item we are looking for.
+    * \brief Get an const_iteratror at a certain index number.
+    *        we return end() if the item does not exist.
+    * \param idx the location of the item we are erasing.
+    * \return const_iterator the item we are looking for.
     */
-    iterator at( unsigned int _idx )
+    iterator at( unsigned int idx)
     {
       _MYODD_IDX_MAP_INRANGE
-      if( _idx >= _mapVector.size() )
+      if(idx >= _mapVector.size() )
         return end();
 
-      auto it = _mapVector.begin() + _idx;
+      auto it = _mapVector.begin() + idx;
       return (*it);
     }
 
