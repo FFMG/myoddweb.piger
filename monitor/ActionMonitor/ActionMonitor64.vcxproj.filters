@@ -268,6 +268,9 @@
     <ClInclude Include="ActiveExeAction.h">
       <Filter>actions</Filter>
     </ClInclude>
+    <ClInclude Include="..\api\plugins.h">
+      <Filter>api</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ActionMonitor.ico">

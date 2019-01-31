@@ -16,9 +16,7 @@ BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 END_MESSAGE_MAP()
 
 /**
- * todo
- * @param void
- * @return void
+ *The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
   m_hMutex(nullptr),
