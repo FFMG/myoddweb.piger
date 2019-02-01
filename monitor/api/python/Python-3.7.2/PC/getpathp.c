@@ -40,7 +40,7 @@
 
    If a '._pth' file exists adjacent to the executable with the same base name
    (e.g. python._pth adjacent to python.exe) or adjacent to the shared library
-   (e.g. python37._pth adjacent to python36.dll), it is used in preference to
+   (e.g. python36._pth adjacent to python36.dll), it is used in preference to
    the above process. The shared library file takes precedence over the
    executable. The path file must contain a list of paths to add to sys.path,
    one per line. Each path is relative to the directory containing the file.

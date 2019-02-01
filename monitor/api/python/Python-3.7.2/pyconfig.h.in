@@ -1521,7 +1521,7 @@
 #undef _POSIX_SOURCE
 
 /* Define if you have POSIX threads, and your system does not define that. */
-//#undef _POSIX_THREADS
+#undef _POSIX_THREADS
 
 /* framework name */
 #undef _PYTHONFRAMEWORK

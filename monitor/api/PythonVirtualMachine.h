@@ -1,7 +1,6 @@
 #pragma once
 #ifdef ACTIONMONITOR_API_PY
 
-#include "python\include\Python.h"
 #include "pyapi.h"
 #include "../threads/lock.h"
 
