@@ -126,6 +126,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "myoddtest", "myoddtest\myod
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythoncore64.test", "pythoncore64.test\pythoncore64.test.vcxproj", "{28291524-8308-47D2-BACD-9A2D348B93D0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{67EB96D1-01F2-462E-A66C-064BFBA919FC} = {67EB96D1-01F2-462E-A66C-064BFBA919FC}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

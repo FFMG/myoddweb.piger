@@ -1391,7 +1391,7 @@
 #undef SIZEOF_VOID_P
 
 /* The size of `wchar_t', as computed by sizeof. */
-// #undef SIZEOF_WCHAR_T
+#undef SIZEOF_WCHAR_T
 
 /* The size of `_Bool', as computed by sizeof. */
 #undef SIZEOF__BOOL
@@ -1577,6 +1577,29 @@
 #if defined(__USLC__) && defined(__SCO_VERSION__)
 #define STRICT_SYSV_CURSES /* Don't use ncurses extensions */
 #endif
+
+/* Define if the compiler provides a wchar.h header file. */
+#define SIZEOF_WCHAR_T 2
+
+#define NT_THREADS 
+
+#define Py_BUILD_CORE
+#define Py_BUILD_CORE_BUILTIN
+
+/* not building the core - must be an ext */
+# if defined(_MSC_VER)
+/*  So MSVC users need not specify the .lib
+    file in their Makefile (other compilers are
+    generally taken care of by distutils.) */
+# if defined(_DEBUG)
+#   pragma comment(lib,"python37_d.lib")
+# elif defined(Py_LIMITED_API)
+#   pragma comment(lib,"python3.lib")
+# else
+#   pragma comment(lib,"python37.lib")
+# endif /* _DEBUG */
+#endif /* _MSC_VER */
+
 
 #endif /*Py_PYCONFIG_H*/
 
