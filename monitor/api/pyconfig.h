@@ -1600,6 +1600,5 @@
 # endif /* _DEBUG */
 #endif /* _MSC_VER */
 
-
 #endif /*Py_PYCONFIG_H*/
 

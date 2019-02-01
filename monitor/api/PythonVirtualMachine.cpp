@@ -45,10 +45,9 @@ PyObject *PyInit_am(void)
 }
 #endif 
 
-static PyObject*
-PyInit_am(void)
+static PyObject* PyInit_am(void)
 {
-  return PyModule_Create(&amModule);
+  return PyModule_Create2(&amModule, PYTHON_API_VERSION );
 }
 
 /**
