@@ -4,13 +4,13 @@
 #include "pch.h"
 #include <iostream>
 
-# if defined(_DEBUG)
-#   pragma comment(lib,"python37_d.lib")
-# elif defined(Py_LIMITED_API)
-#   pragma comment(lib,"python37.lib")
-# endif /* _DEBUG */
+// # if defined(_DEBUG)
+// #   pragma comment(lib,"python37_d.lib")
+// # elif defined(Py_LIMITED_API)
+// #   pragma comment(lib,"python37.lib")
+// # endif /* _DEBUG */
 
-#include "Python.h"
+#include <Python.h>
 
 // void Clear( PyThreadState *state )
 // {
@@ -37,6 +37,10 @@ int main()
   // Py_SetPythonHome(L"Z:/projects/github/myoddweb.piger/Output/Debug/x64/python/");
   Py_SetPath(L"H:/projects/github/myoddweb.piger/Output/Debug/x64/python/python37.zip");
   Py_InitializeEx(0);
+
+  if (PyErr_ExceptionMatches(PyExc_AttributeError)) {
+    PyErr_Clear();
+  }
 
   // Clear(mainThreadState);
 
