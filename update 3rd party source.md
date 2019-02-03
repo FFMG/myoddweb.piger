@@ -34,6 +34,14 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
   - copy it as "pythoncore86.vcxproj.filters"
   - copy it as "pythoncore64.vcxproj.filters"
 
+#### zlib
+
+- Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.11).
+- Unpack that version to the `.\api\python\Python-3.7.2\externals`, (you might need to create the folder `externals`)
+- The folder should look something like `.\api\python\Python-3.7.2\externals\zlib-1.2.11\`
+
+**NB**: You must make sure that the the project `$(zlibDir)` is pointing to the same version of zlib and that the name of the folder.
+
 ### In python 86/64 project
 
   - delete pythoncore86
