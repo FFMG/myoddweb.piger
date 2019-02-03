@@ -221,10 +221,10 @@ std::wstring Action::ToSingleLine( const wchar_t* text ) const
   // Sanity checks.
   if(nullptr == text )
   {
-    return _T("");
+    return L"";
   }
 
-  auto pdest = _tcschr( text, '\n' );
+  auto pdest = _tcschr( text, L'\n' );
   size_t  result;
 
   std::wstring ret( text );
@@ -235,7 +235,7 @@ std::wstring Action::ToSingleLine( const wchar_t* text ) const
     return ToSingleLine( ret.c_str() );
   }
 
-  pdest = _tcschr( text, '\r' );
+  pdest = _tcschr( text, L'\r' );
   if( pdest != nullptr)
   {
     result = pdest - text;

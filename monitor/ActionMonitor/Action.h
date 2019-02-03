@@ -5,9 +5,12 @@
 class ActiveAction;
 class Action  
 {
+  /**
+   * \brief default constructor is private
+   */
+  Action();
+
 public:
-	Action();
-  
   const Action& operator=(const Action& );
   Action( const Action&);
   Action( const std::wstring& szCommand, const std::wstring& szPath );
@@ -38,7 +41,11 @@ public:
 protected:
   ActiveAction* CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const;
 
-protected:
+  /**
+   * \brief convert a multi line piece of text to a single line.
+   * \param text the multi line text
+   * \return the converted text
+   */
   std::wstring ToSingleLine( const wchar_t* text  ) const;
 
 public:

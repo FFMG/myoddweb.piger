@@ -12,7 +12,7 @@
  * @param void
  * @return void
  */
-ActionLoad::ActionLoad( ) : Action( ACTION_CORE_LOAD, nullptr)
+ActionLoad::ActionLoad( ) : Action( ACTION_CORE_LOAD, L"")
 {
 }
 
