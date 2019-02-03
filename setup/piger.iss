@@ -74,7 +74,7 @@ Type: files; Name: "{app}\python35.zip"
 Type: files; Name: "{app}\python6435.dll"
 
 Type: files; Name: "{app}\python36.zip"
-Type: files; Name: "{app}\python6435.dll"
+Type: files; Name: "{app}\python6436.dll"
 
 ; remove the powershell dll, in case the user removed powershell, (or something weird).
 ; that way we will not try and execute something that might not exist.
@@ -131,8 +131,8 @@ Source: {#APP_INCLUDE}python64\*.*; DestDir: {app}\python\; Flags: recursesubdir
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist
 
 [Run]
-Filename: {tmp}\vc_redist.x86.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...(Please wait a few minutes); Check: "not IsWin64"
-Filename: {tmp}\vc_redist.x64.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2015 Redistributables...(Please wait a few minutes); Check: IsWin64
+Filename: {tmp}\vc_redist.x86.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2017 Redistributables...(Please wait a few minutes); Check: "not IsWin64"
+Filename: {tmp}\vc_redist.x64.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2017 Redistributables...(Please wait a few minutes); Check: IsWin64
 
 Filename: {app}\ActionMonitor.exe; Description: {cm:LaunchProgram,Piger}; Flags: nowait postinstall skipifsilent
 
