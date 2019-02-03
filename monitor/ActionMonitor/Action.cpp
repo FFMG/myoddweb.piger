@@ -19,9 +19,7 @@
 #include "ActivePowershellAction.h"
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief Constructor
  */
 Action::Action()
 {
@@ -29,14 +27,14 @@ Action::Action()
 }
 
 /**
- * constructor
- * @param LPCTSTR szCommand the name of the action, (the the user will enter)
- * @param LPCTSTR the full path of the action that we will execute.
- * @return none
+ * \brief Constructor
+ * \param szCommand the name of the action, (the the user will enter)
+ * \param szPath the full path of the action that we will execute.
+ * \return none
  */
-Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = nullptr  */)
+Action::Action(const std::wstring& szCommand, const std::wstring& szPath )
 {
-  if(nullptr == szCommand)
+  if(szCommand.length() == 0 )
   {
     //  we cannot have nullptr commands.
     throw -1;
@@ -57,18 +55,18 @@ Action::Action( LPCTSTR szCommand, LPCTSTR szPath /* = nullptr  */)
   }
 
   // expand the path
-  if( szPath )
+  if( szPath.length() > 0  )
   {
     LPTSTR lpExpandPath = nullptr;
-    if( myodd::files::ExpandEnvironment( szPath, lpExpandPath ) )
+    if( myodd::files::ExpandEnvironment( szPath.c_str(), lpExpandPath ) )
     {
-      m_szFile = lpExpandPath;
+      _szFile = lpExpandPath;
       delete [] lpExpandPath;
     }
     else
     {
       // keep whatever value was given to us.
-      m_szFile = szPath;
+      _szFile = szPath;
     }
   }// if we have an szPath != nullptr
 }
@@ -91,53 +89,42 @@ Action::Action( const Action&action)
  * @version 0.1
  * @return none
  */
-const Action& Action::operator=(const Action& action)
+auto Action::operator=(const Action& action) -> const Action&
 {
   if( this != &action )
   {
     _szCommand = action._szCommand; 
-    m_szFile   = action.m_szFile;
+    _szFile   = action._szFile;
   }
   return *this;
 }
 
 /**
- * Destructor
- * @param void
- * @return void
- */
-Action::~Action()
-{
-}
-
-/**
- * Reset the path and the command name.
- * @param void
- * @return void
+ * \brief Reset the path and the command name.
  */
 void Action::Reset()
 {
-  m_szFile = _szCommand = _T("");
+  _szFile = _szCommand = _T("");
 }
 
 /**
- * Set the path for this action.
- * @param LPCTSTR set the path for this command.
- * @return void
+ * \brief Set the path for this action.
+ * \param szPath set the path for this command.
+ * \return void
  */
-void Action::SetCommandPath( LPCTSTR szPath )
+void Action::SetCommandPath(const std::wstring& szPath )
 {
-  m_szFile = szPath;
+  _szFile = szPath;
 }
 
 /**
- * Run the command, we take into account the current selection and command parameters given.
- * @param CWnd* pWnd the last forground window.
- * @param const MYODD_STRING& szCommandLine the command line argument.
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @return BOOL true.
+ * \brief Run the command, we take into account the current selection and command parameters given.
+ * \param pWnd the last foreground window.
+ * \param szCommandLine the command line argument.
+ * \param isPrivileged if we need administrator privilege to run this.
+ * \return BOOL true.
  */
-ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
 {
   //  not sure how to do that...
   if ( Len() == 0)
@@ -147,7 +134,7 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szComma
 
   // we are about to execute a command, we don't know how long the command will last
   // a badly written plugin could take forever to return.
-  BOOL bThen = hook_RejectKeyboad( FALSE );
+  const auto bThen = hook_RejectKeyboad( FALSE );
 
   //  if we are here then we are going to load a user command
   //
@@ -170,17 +157,18 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szComma
 }
 
 /**
- * Try and do it when we have no command line
- * @param CWnd* pWnd the last forground window.
- * @param bool isPrivileged if this action is privileged or not.
- * @return bool success or not.
+ * \brief Try and do it when we have no command line
+ * \param pWnd the last foreground window.
+ * \param isPrivileged if this action is privileged or not.
+ * \return bool success or not.
  */
-ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const
+ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, const bool isPrivileged ) const
 {
   //  the command line we will try and make.
-  MYODD_STRING szCommandLine = _T("");
+  std::wstring szCommandLine = L"";
 
-  size_t maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
+  // how much memory we want to use .... max value.
+  const auto maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
 
   //
   //  we need to wrap the whole clipboard around try/catch as not all clipboard cases have been tested
@@ -193,88 +181,89 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPri
     //  there will probably only be a conflict with explorer, (of any flavor)
     //  that could copy text and/or file names.
     //
-    CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
-    Clipboard clipboard( cwnd, maxClipboardMemory );
+    const auto foregroundWnd = CActionMonitorApp::GetLastForegroundWindow();
+    Clipboard clipboard(foregroundWnd, maxClipboardMemory );
 
-    //  any other values are rejected, (bitmaps and so on).
-    MYODD_STRING sText = _T("");
-    if (clipboard.GetTextFromClipboard(sText, true ))
+    // any other values are rejected, (bitmaps and so on).
+    // we do not want to add a quote around the text
+    // it is up to the calling action to surround the text with quotes of need be
+    std::wstring sText = L"";
+    if (clipboard.GetTextFromClipboard(sText, false ))
     {
       //  we need to trim all the items into one single line
       //  because command lines cannot accept multiple lines
       //
       //  or we might need to replace certain characters.
-      szCommandLine = toSingleLine(sText.c_str());
+      szCommandLine = ToSingleLine(sText.c_str());
     }
   }
   catch (...)
   {
     szCommandLine = _T("");
-    myodd::log::LogError(_T("Critical error while trying to run an action, [%s]."), Command() );
+    myodd::log::LogError(_T("Critical error while trying to run an action, [%s]."), Command().c_str() );
     _ASSERT(0);         //  the main reason for failure is probably because  
                         //  there is a format in the Clipboard that I am not handling properly
                         //  there should be a way of sending me a mail when this happens so we can look into fixing it.
   }
 
   // we can now do it direct.
-  return CreateActiveActionDirect( pWnd, szCommandLine.c_str(), isPrivileged);
+  return CreateActiveActionDirect( pWnd, szCommandLine, isPrivileged);
 }
 
 /**
- * Get a text an remove the single lines out of it/
+ * \brief Get a text an remove the single lines out of it/
  * TODO: Move this to the am_string namespace?
- * @param const MYODD_STRING& szCommandLine the text that we would like to enforce into a single line.
- * @return MYODD_STRING a single line of text.
+ * \param text the text that we would like to enforce into a single line.
+ * \return a single line of text.
  */
-MYODD_STRING Action::toSingleLine( LPCTSTR sText ) const
+std::wstring Action::ToSingleLine( const wchar_t* text ) const
 {
   // Sanity checks.
-  if(nullptr == sText )
+  if(nullptr == text )
   {
     return _T("");
   }
 
-  LPCTSTR pdest = _tcschr( sText, '\n' );
+  auto pdest = _tcschr( text, '\n' );
   size_t  result;
 
-  MYODD_STRING ret( sText );
+  std::wstring ret( text );
   if( pdest != nullptr)
   {
-    result = pdest - sText;
+    result = pdest - text;
     ret = ret.substr( 0, result );
-    return toSingleLine( ret.c_str() );
+    return ToSingleLine( ret.c_str() );
   }
 
-  pdest = _tcschr( sText, '\r' );
+  pdest = _tcschr( text, '\r' );
   if( pdest != nullptr)
   {
-    result = pdest - sText;
+    result = pdest - text;
     ret = ret.substr( 0, result );
-    return toSingleLine( ret.c_str() );
+    return ToSingleLine( ret.c_str() );
   }
   return ret;
 }
 
 /**
- * Return the command as a LPCTSTR
- * @param void
- * @return LPCTSTR the command, (the name the user has to enter).
+ * \brief Return the command as a string
+ * \return the command, (the name the user has to enter).
  */
-const MYODD_STRING& Action::Command() const
+const std::wstring& Action::Command() const
 {
   return _szCommand;
 }
 
 /**
- * Execute a file.
- * We will expend all the environment variables as needed.
- * @param const std::vector<MYODD_STRING> [0] the file path, [1] the arguments to launch with, (optional).
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @param HANDLE hProcess if this value is not nullptr, we will return the handle of the started process.
+ * \brief Execute a file.
+ *        We will expend all the environment variables as needed.
+ * \param argv [0] the file path, [1] the arguments to launch with, (optional).
+ * \param isPrivileged if we need administrator privilege to run this.
+ * \param hProcess if this value is not nullptr, we will return the handle of the started process.
  *               it is then up to the calling application to close this handle when done with it...
- * @return bool true|false success or not.
+ * \return bool true|false success or not.
  */
-bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, HANDLE* hProcess)
+bool Action::Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess)
 {
   // get the number of arguments.
   auto argc = argv.size();
@@ -369,28 +358,28 @@ bool Action::Execute(const std::vector<MYODD_STRING>& argv, bool isPrivileged, H
 }
 
 /**
- * Launch a single action with all the command line arguments.
+ * \brief Launch a single action with all the command line arguments.
  * TODO : The API calls ignore the values been passed to them, so we should first check that we have all the values.
- * @param CWnd* pWnd the last forground window.
- * @param const MYODD_STRING& szCommandLine the command and the arguments we are launching this file with.
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @return BOOL TRUE|FALSE success or not.
+ * \param pWnd the last forground window.
+ * \param szCommandLine the command and the arguments we are launching this file with.
+ * \param isPrivileged if we need administrator privilege to run this.
+ * \return TRUE|FALSE success or not.
  */
-ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
 {
   // sanity check
-  if (0 == m_szFile.length())
+  if (0 == _szFile.length())
   {
     return nullptr;
   }
 
   //  get the last forground window handle
-  auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
+  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
 
 #ifdef ACTIONMONITOR_API_LUA
   // Do the API calls.
   //
-  if (LuaVirtualMachine::IsExt(m_szFile ))
+  if (LuaVirtualMachine::IsExt(_szFile ))
   {
     auto ala = new ActiveLuaAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (ala->Initialize())
@@ -406,7 +395,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_API_PY
   // Do the API calls.
   //
-  if (PythonVirtualMachine::IsExt(m_szFile))
+  if (PythonVirtualMachine::IsExt(_szFile))
   {
     auto apa = new ActivePythonAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if(apa->Initialize() )
@@ -422,7 +411,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_PS_PLUGIN
   // Do the API calls.
   //
-  if (PowershellVirtualMachine::IsExt(m_szFile))
+  if (PowershellVirtualMachine::IsExt(_szFile))
   {
     auto apa = new ActivePowershellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
@@ -438,7 +427,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #ifdef ACTIONMONITOR_API_PLUGIN
   // Do the API calls.
   //
-  if (PluginVirtualMachine::IsExt(m_szFile))
+  if (PluginVirtualMachine::IsExt(_szFile))
   {
     auto apa = new ActivePluginAction(*this, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
@@ -452,19 +441,19 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& s
 #endif // ACTIONMONITOR_API_PLUGIN
 
   // Batch files...
-  if( myodd::files::IsExtension (m_szFile, _T("bat")))
+  if( myodd::files::IsExtension (_szFile, _T("bat")))
   {
     return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
   }
-  if (myodd::files::IsExtension(m_szFile, _T("cmd")))
+  if (myodd::files::IsExtension(_szFile, _T("cmd")))
   {
     return new ActiveCmdAction(*this, hTopHWnd, szCommandLine);
   }
-  if (myodd::files::IsExtension(m_szFile, _T("com")))
+  if (myodd::files::IsExtension(_szFile, _T("com")))
   {
     return new ActiveComAction(*this, hTopHWnd, szCommandLine);
   }
-  if (myodd::files::IsExtension(m_szFile, _T("exe")))
+  if (myodd::files::IsExtension(_szFile, _T("exe")))
   {
     return new ActiveExeAction(*this, hTopHWnd, szCommandLine, isPrivileged);
   }

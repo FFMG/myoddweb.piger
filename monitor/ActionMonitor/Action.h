@@ -10,41 +10,45 @@ public:
   
   const Action& operator=(const Action& );
   Action( const Action&);
-  Action( LPCTSTR szCommand, LPCTSTR szPath = nullptr );
+  Action( const std::wstring& szCommand, const std::wstring& szPath );
 
-	virtual ~Action();
+	virtual ~Action() = default;
 
   void Reset();
-  void SetCommandPath( LPCTSTR szPath );
+  void SetCommandPath(const std::wstring& szPath );
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const;
+  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const;
 
   // Same as CreateActiveAction( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  ActiveAction* CreateActiveActionDirect(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionDirect(CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged ) const;
 
-  //  convert to a LPCTSTR
-  const MYODD_STRING& Command() const;
+  /**
+   * \brief get the command string
+   */
+  const std::wstring& Command() const;
   
-  // the lenght of the command.
+  /**
+   * \brief the length of the command.
+   */
   size_t Len() const { return _szCommand.length();}
 
 protected:
   ActiveAction* CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const;
 
 protected:
-  MYODD_STRING toSingleLine( LPCTSTR  ) const;
+  std::wstring ToSingleLine( const wchar_t* text  ) const;
 
 public:
   // ----------------------------
-  //  this is the full file name + extentions
-  const MYODD_STRING& File() const { return m_szFile; }
+  //  this is the full file name + extensions
+  const std::wstring& File() const { return _szFile; }
 
-  static bool Execute( const std::vector<MYODD_STRING>& argv, bool isPrivileged, HANDLE* hProcess );
+  static bool Execute( const std::vector<std::wstring>& argv, bool isPrivileged, HANDLE* hProcess );
 
 private:  
-  MYODD_STRING _szCommand;  //  the command line only.
-  MYODD_STRING m_szFile;    //  the full path+extention
+  std::wstring _szCommand;  //  the command line only.
+  std::wstring _szFile;    //  the full path+extension
 };

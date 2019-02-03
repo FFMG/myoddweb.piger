@@ -9,15 +9,15 @@
 
 /**
  * The contructor
- * @param const Action& src the action that is now active.
- * @param HWND hTopHWnd the window that was on top at the time the command was given.
- * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
- * @param bool isPrivileged if this action is privileged or not.
+ * \param src the action that is now active.
+ * \param hTopHWnd the window that was on top at the time the command was given.
+ * \param szCommandLine the given command line that is, the words after the command itself
+ * \param isPrivileged if this action is privileged or not.
  */
 ActiveAction::ActiveAction(const Action& src, 
-                           HWND hTopHWnd,
+                           const HWND hTopHWnd,
                            const MYODD_STRING& szCommandLine, 
-                           bool isPrivileged) : 
+                           const bool isPrivileged) : 
   Action( src ), 
   _clipboard(nullptr),
   _szCommandLine( szCommandLine ),
@@ -27,9 +27,7 @@ ActiveAction::ActiveAction(const Action& src,
 }
 
 /**
- * Destructor
- * @param void
- * @return void
+ * \brief Destructor
  */
 ActiveAction::~ActiveAction()
 {
@@ -42,7 +40,7 @@ ActiveAction::~ActiveAction()
 void ActiveAction::ClearClipboard()
 {
   delete _clipboard;
-  _clipboard = NULL;
+  _clipboard = nullptr;
 }
 
 void ActiveAction::CreateClipboard()
@@ -71,9 +69,9 @@ bool ActiveAction::Initialize()
 
 bool ActiveAction::DeInitialize()
 {
-  bool result = OnDeInitialize();
+  const auto result = OnDeInitialize();
 
-  // clear the cipboard.
+  // clear the clipboard.
   ClearClipboard();
 
   // all done
@@ -94,9 +92,9 @@ void ActiveAction::ExecuteInThread()
 
 /**
  * Read the given file and get the script out of it.
- * @param LPCTSTR pyFile the python file we want to read.
- * @param std::string& script the string that will contain the string.
- * @return boolean success or not.
+ * \param pyFile the python file we want to read.
+ * \param script the string that will contain the string.
+ * \return boolean success or not.
  */
 bool ActiveAction::ReadFile(LPCTSTR pyFile, std::string& script) const
 {
@@ -161,12 +159,12 @@ void ActiveAction::UpdateEnvironmentVariables()
 }
 
 /**
- * Update the environment value, (if needed).
+ * \brief Update the environment value, (if needed).
  * We also check if the value can/should be updated.
- * @param const VariableType variableType the variable we are expanding.
- * @return none.
+ * \param variableType the variable we are expanding.
+ * \return none.
  */
-void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
+void ActiveAction::UpdateEnvironmentValue(const VariableType variableType) const
 {
   // values we will be using
   MYODD_STRING keyConfig;
@@ -242,7 +240,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType)
     }
 
     // current value
-    TCHAR* sCurrentValue = new TCHAR[l + 1];
+    const auto sCurrentValue = new TCHAR[l + 1];
     GetEnvironmentVariable(keyName.c_str(), sCurrentValue, l);
 
     // if the two are not the same, then we need to update it.
@@ -274,7 +272,7 @@ void ActiveAction::UpdateEnvironmentPath()
  * Update the environment variables path extenstions
  * to make sure it is up to date.
  */
-void ActiveAction::UpdateEnvironmentPathExt()
+void ActiveAction::UpdateEnvironmentPathExt() const
 {
   UpdateEnvironmentValue(ActiveAction::PathExt);
 }
