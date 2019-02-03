@@ -39,8 +39,9 @@ int main()
 {
   // PyThreadState* mainThreadState = nullptr;
   // Py_SetPythonHome(L"Z:/projects/github/myoddweb.piger/Output/Debug/x64/python/");
+//  Py_SetPath(L"H:/projects/github/myoddweb.piger/Output/Debug/x64/python/");
   Py_SetPath(L"H:/projects/github/myoddweb.piger/Output/Debug/x64/python/python37.zip");
-  Py_InitializeEx(0);
+  Py_Initialize();
 
   if (PyErr_ExceptionMatches(PyExc_AttributeError)) {
     PyErr_Clear();
