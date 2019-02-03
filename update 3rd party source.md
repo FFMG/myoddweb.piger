@@ -15,7 +15,16 @@ To build the code you might need to update some third party libraries from time 
 - Unzip the files to *\myoddweb.piger\myodd\sqlite\*.**
 
 ## Python
-Downlaod the lates source code from [https://www.python.org/downloads/release/](https://www.python.org/downloads/release/)
+
+### Notes
+
+- In the example below, the version is Python 3.7.2 and the files are unpacked in that folder.
+Make sure that you use the correct folder name for whatever future versions you use.
+- Make sure you delete any old `pyconfig.h` that might be lurking around
+
+### Setup
+
+Download the lates source code from [https://www.python.org/downloads/release/](https://www.python.org/downloads/release/)
 The file is called something like "Gzipped source tarball"
 It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.7.2\`
 
@@ -26,6 +35,7 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
   - copy it as "pythoncore64.vcxproj.filters"
 
 ### In python 86/64 project
+
   - delete pythoncore86
   - delete pythoncore64
   - locate and add the project you just copied
@@ -41,7 +51,8 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
   - the debug x86 should output to .\Output\Debug\x86
   
 ### The projects that need Python-3
-- Aditional include directory `"../monitor/api/python/Python-3.7.2/Include"` or `"../../monitor/api/python/Python-3.7.2/Include"`, (dependding on where the project is located).  
+
+- Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/`, (just make sure that the paths are valid).  
 
 ## Google test
 

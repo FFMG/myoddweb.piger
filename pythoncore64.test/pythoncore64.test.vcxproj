@@ -62,12 +62,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../monitor/api/;../monitor/api/python/Python-3.7.2/Include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/monitor/api/;$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/;$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -81,7 +81,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../monitor/api/;../monitor/api/python/Python-3.7.2/Include/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/monitor/api/;$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/;$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,6 +100,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="pythoncore64.test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\monitor\api\python\Python-3.7.2\PCbuild\pythoncore64.vcxproj">
+      <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

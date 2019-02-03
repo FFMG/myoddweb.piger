@@ -4,13 +4,17 @@
 #include "pch.h"
 #include <iostream>
 
+// #pragma comment(lib,"Ws2_32.Lib")
+// #pragma comment(lib,"version.lib")
+// #pragma comment(lib, "Shlwapi.lib")
+//
 // # if defined(_DEBUG)
 // #   pragma comment(lib,"python37_d.lib")
 // # elif defined(Py_LIMITED_API)
 // #   pragma comment(lib,"python37.lib")
 // # endif /* _DEBUG */
 
-#include <Python.h>
+#include "Python.h"
 
 // void Clear( PyThreadState *state )
 // {
