@@ -32,7 +32,7 @@ All the configuration of piger is contained in the profile.xml file.
 
 ### Commandline arguments
 
-- --c [configpath]     
+- --c [configpath] 
 The full path of the config 
 - --d [commandspath]    
 The full path of the commands directory.
@@ -61,6 +61,11 @@ Then, after startup, simply press the [Caps Lock] button and type "go...", (you 
 
 Of course, the main aim is for you to write your own plugins rather than been spoon-fed actions ...
 
+## Scripts
+
+*[Powershell usage](scripts/powershell.md)
+*[C# usage](scripts/csharp.md)
+
 # Special folders
 
 ## Root command
@@ -74,9 +79,9 @@ For example, the file "**google.lua**" will create a command called "**google**"
 
 ## Powershell
 
-Read more [code examples/notes](powershell.md).
+Read more [code examples/notes](scripts/powershell.md).
 
-**<u>If</u>** you have powershell 3 installed, (and you should have if you have a decent version of windows installed), then you can run powershell scripts.
+**_If_** you have powershell 3 installed, (and you should have if you have a decent version of windows installed), then you can run powershell scripts.
 
 ### Code
 
@@ -95,44 +100,47 @@ Read more [code examples/notes](powershell.md).
 - GetVersion, get the piger version number.
 - FindAction, find an action in our list of actions.
 - Log, log a message to file, (or whatever logger is been used).
-	- Success = 1
-	- Error = 2
-	- Warning = 3
-	- Message = 4
-	- System = 5
+  - Success = 1
+  - Error = 2
+  - Warning = 3
+  - Message = 4
+  - System = 5
 - GetForegroundWindow, get the foreground window at the time the script was called.
 
 ### Example
+
 #### Calculator.ps1
 
-    #
-    # The module is automatically imported.
-    #
+```ps1
+  #
+  # The module is automatically imported.
+  #
 
-    # give a message
-    # we use '| out-null' so we don't output the result of the message.
-    $am.Say( "Run - calc ...", 400, 10 ) | out-null
+  # give a message
+  # we use '| out-null' so we don't output the result of the message.
+  $am.Say( "Run - calc ...", 400, 10 ) | out-null
 
-    # Launch the application
-    # use the second parameter for arguments and 
-    # the third, (true|false), is to elevate the process.
-    Try
-    {
-      $am.Execute( "%SystemRoot%\\system32\\calc.exe", "", $true ) | out-null
-    }
-    Catch
-    {
-      # some functions throw exceptions...
-      Write-Host "Caught exception!"
-    }
-    
-    # log that all is good.
-    $am.Log( 1, "Launched calculator" ) | out-null
+  # Launch the application
+  # use the second parameter for arguments and 
+  # the third, (true|false), is to elevate the process.
+  Try
+  {
+    $am.Execute( "%SystemRoot%\\system32\\calc.exe", "", $true ) | out-null
+  }
+  Catch
+  {
+    # some functions throw exceptions...
+    Write-Host "Caught exception!"
+  }
 
-	# Powershell will close automatically...
+  # log that all is good.
+  $am.Log( 1, "Launched calculator" ) | out-null
 
+  # Powershell will close automatically...
+```
 
 ## Python
+
 ### Code
 
 import module, **import am**, (only usable within Piger of course).
@@ -152,13 +160,14 @@ import module, **import am**, (only usable within Piger of course).
 - getVersion, get the piger version number.
 - findAction, find an action in our list of actions.
 - log, log a message to file, (or whatever logger is been used).
-	- Success = 1
-	- Error = 2
-	- Warning = 3
-	- Message = 4
-	- System = 5
+  - Success = 1
+  - Error = 2
+  - Warning = 3
+  - Message = 4
+  - System = 5
 
 ### Example
+
 #### Calculator.py
 
     # import the action monitor, (am), module.
@@ -176,6 +185,7 @@ import module, **import am**, (only usable within Piger of course).
     am.log( 1, "Launched calculator" );
 
 ## Lua
+
 ### Code
 - am_say( what, elapse, fade ), display a message
 - am_version, get the LUA version been used.
@@ -192,13 +202,14 @@ import module, **import am**, (only usable within Piger of course).
 - am_getVersion, get the piger version number.
 - am_findAction, find an action in our list of actions.
 - am_log, log a message to file, (or whatever logger is been used).
-	- Success = 1
-	- Error = 2
-	- Warning = 3
-	- Message = 4
-	- System = 5
+  - Success = 1
+  - Error = 2
+  - Warning = 3
+  - Message = 4
+  - System = 5
 
 ### Example
+
 #### Calculator.lua
 
 Launch the default calculator.
@@ -218,40 +229,42 @@ Launch the default calculator.
 
 Launch the explorer and navigate to the Google site, if one or more words are highlighted then those words will be searched.
 
-	-- the browser to use
-	browser = "iexplore"
-    
-	-- we need to know the number of arguments.
-	sizeOf = am_getCommandCount();
+```lua
+  -- the browser to use
+  browser = "iexplore"
 
-	-- try and get the word that might be highlighted. 
-	if sizeOf == 0  then
-	  word = am_getstring();
-	  if false == word then
-	    am_say( "Starting Google.", 400, 10 );
-	    am_execute( browser, "http://www.google.com/", false );
-	  else
-	    am_say( "Starting Google for : " .. word , 400, 10 );
-	    am_execute( browser, "http://www.google.com/search?hl=en&q=" .. word, false );
-	  end
-	else
-	  query = ""
-	  prettyQuery = "";
-	  for count = 1, sizeOf, 1  do
-	    -- the numbers are 0 based.
-	    -- and we ignore the first one as it is the command itself
-	    word = am_getCommand( count )
-	    query = query .. word
-	    prettyQuery = prettyQuery .. "<b><i>" .. word .. "</i></b>"
-	    if count < sizeOf then
-	      query = query .. "+"
-	      prettyQuery = prettyQuery .. " and "
-	    end
-	  end
-	
-	  am_say( "Searching Google for: " .. prettyQuery, 400, 10 );
-	  am_execute( browser, "http://www.google.com/search?hl=en&q=" .. query, false );
-	end
+  -- we need to know the number of arguments.
+  sizeOf = am_getCommandCount();
+
+  -- try and get the word that might be highlighted. 
+  if sizeOf == 0  then
+    word = am_getstring();
+    if false == word then
+      am_say( "Starting Google.", 400, 10 );
+      am_execute( browser, "http://www.google.com/", false );
+    else
+      am_say( "Starting Google for : " .. word , 400, 10 );
+      am_execute( browser, "http://www.google.com/search?hl=en&q=" .. word, false );
+    end
+  else
+    query = ""
+    prettyQuery = "";
+    for count = 1, sizeOf, 1  do
+      -- the numbers are 0 based.
+      -- and we ignore the first one as it is the command itself
+      word = am_getCommand( count )
+      query = query .. word
+      prettyQuery = prettyQuery .. "<b><i>" .. word .. "</i></b>"
+      if count < sizeOf then
+        query = query .. "+"
+        prettyQuery = prettyQuery .. " and "
+      end
+    end
+
+    am_say( "Searching Google for: " .. prettyQuery, 400, 10 );
+    am_execute( browser, "http://www.google.com/search?hl=en&q=" .. query, false );
+  end
+```
 
 ## Batch files (*\*.bat/\*.cmd/\*.com*)
 
@@ -259,7 +272,7 @@ Windows batch files are just executed, they have no access to any of the plugins
 
 Any arguments given are simply passed.
 
-  - %0 is the path to the exe, (Actionmonitor.exe).
+- %0 is the path to the exe, (Actionmonitor.exe).
 
 **NB**: Any batch files are "**Elevated**" this is because almost all scripts need to be elevated to run.
 
