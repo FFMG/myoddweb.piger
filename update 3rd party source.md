@@ -15,41 +15,73 @@ To build the code you might need to update some third party libraries from time 
 - Unzip the files to *\myoddweb.piger\myodd\sqlite\*.**
 
 ## Python
-- Download the latest code from the Windows section of [Python.org](https://www.python.org/)    
-You will need 3 files, the code for x86/x64 as well as the code itself.
-	- The x64 is called "Windows x86-64 embeddable zip file"
-	- The x86 is called "Windows x86 embeddable zip file"
-	- The code is called "Gzipped source tarball", (for some reason it is not a xip file).
 
-### Copy the files
-#### Source code
-- delete all the files from *myoddweb.piger\monitor\api\python*, (this is to prevent old code from creeping in)    
-**Execpt for:**
-	- myoddweb.piger\monitor\api\python\PCbuild\pythoncore*.vcxproj
-	- myoddweb.piger\monitor\api\python\PCbuild\pythoncore*.vcxproj.filters
-	- myoddweb.piger\monitor\api\python\PCbuild\pythoncore*.vcxproj.user
-- Spend some time comparing the old and new *myoddweb.piger\monitor\api\python\PCbuild\pythoncore.vcxproj*, check if anything from the old ***.vcxproj** should be added to the new one. Also check if anything from the old one needs to be put in to the correcsponding ***64.vcxproj** project. 
-- Unzip the source code to the Python directory, *myoddweb.piger\monitor\api\python*.
-- Open the project
-	- Make sure that all the files are deleted properly from the filters, (you should have picked it up by comparing the old/new ***.vcxproj.filters** project filter files.
-- delete all the files from *myoddweb.piger\includes\python64*, (this is to prevent old code from creeping in)
-- Unzip all the "Windows x86-64 embeddable zip file" files into *myoddweb.piger\includes\python64*
-	- You can ignore the **python*.exe** files.
-- delete all the files from *myoddweb.piger\includes\python*, (this is to prevent old code from creeping in)
-- Unzip all the "Windows x86 embeddable zip file" files into *myoddweb.piger\includes\python*
-	- You can ignore the **python*.exe** files.
+### Notes
 
-#### Debug files
-Installing the debug symbols is a little trickier
+- In the example below, the version is Python 3.7.2 and the files are unpacked in that folder.
+Make sure that you use the correct folder name for whatever future versions you use.
+- Make sure you delete any old `pyconfig.h` that might be lurking around
 
-##### x86
-- Download and run the "Windows x86 web-based installer"
-- Uncheck every single option apart from the "*download debugging symbols*" and "*Download debug binaries (...)*", change the install location to somewhere more practical.
-- Go to that install library and in the sub directory "\DLLs\*" look for all the ***_d.pyd** files, copy all those files to "myoddweb.piger\includes\python86d\*.*"
-- Run the install again, but this time select "uninstall" and remove everything. Everything should be removed.
+### Setup
 
-##### x64
-- Download and run the "Windows x86-64 web-based installer"
-- Uncheck every single option apart from the "*download debugging symbols*" and "*Download debug binaries (...)*", change the install location to somewhere more practical.
-- Go to that install library and in the sub directory "\DLLs\*" look for all the ***_d.pyd** files, copy all those files to "myoddweb.piger\includes\python64d\*.*"
-- Run the install again, but this time select "uninstall" and remove everything. Everything should be removed.
+Download the lates source code from [https://www.python.org/downloads/release/](https://www.python.org/downloads/release/)
+The file is called something like "Gzipped source tarball"
+It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.7.2\`
+
+- look for pythoncore.vcxproj
+  - copy it as "pythoncore86.vcxproj"
+  - copy it as "pythoncore64.vcxproj"
+  - copy it as "pythoncore86.vcxproj.filters"
+  - copy it as "pythoncore64.vcxproj.filters"
+
+#### zlib
+
+- Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.11).
+- Unpack that version to the `.\api\python\Python-3.7.2\externals`, (you might need to create the folder `externals`)
+- The folder should look something like `.\api\python\Python-3.7.2\externals\zlib-1.2.11\`
+
+**NB**: You must make sure that the the project `$(zlibDir)` is pointing to the same version of zlib and that the name of the folder.
+
+### In python 86/64 project
+
+  - delete pythoncore86
+  - delete pythoncore64
+  - locate and add the project you just copied
+    - pythoncore86
+    - pythoncore64
+
+- For the x64 delete the x86 configuration
+- For the x86 delete the x64 configuration
+- Set the output Directory for all configurations to $(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\ ($(BuildPath))
+
+- Build 
+  - the debug x64 should output to .\Output\Debug\x64
+  - the debug x86 should output to .\Output\Debug\x86
+  
+### The projects that need Python-3
+
+- Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/`, (just make sure that the paths are valid).  
+
+## Google test
+
+- Download the latest version from [https://github.com/google/googletest/releases](https://github.com/google/googletest/releases), get the amalgamation file, (the file is normally called "sqlite-amalgamation-*.zip")
+- Unzip the files to *\myoddweb.piger\myodd\gtest\gtest-x.y.z\*.** where `xyz` is the new version number.     
+**NB:** In the zip file only unpack the `googletest` folder, `googletest-release-x.y.z\googletest` where x.y.z is the compressed file name.
+
+- In the x64 and x86 remove the 2 files that are pointing to the older version: 
+  - gtest_main.cc
+  - gtest-all.cc
+- Re-add the 2 files to point to the new folder.
+  - gtest_main.cc
+  - gtest-all.cc
+- Make sure that the files don't use 'precompiled headers', (Properties > C/C++ > Precompiled headers)
+- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.    
+Make sure that the setting is for both debug and release version. 
+
+### Project
+
+- Update `myoddtest` and `myoddtest64` to point to the folder you unpacked the files above, \myoddweb.piger\myodd\gtest\gtest-x.y.z    
+Properties > C/C++ > General > Additional Include directories 
+  - `.\..\gtest\gtest-1.8.1\include;`
+  - `.\..\gtest\gtest-1.8.1\`
+- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.

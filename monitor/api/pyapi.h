@@ -11,7 +11,13 @@
 static const double ACTIONMONITOR_API_PY_VERSION = 3.0;
 
 // support for Python
-#include "python\include\Python.h"
+# if defined(_DEBUG)
+#   pragma comment(lib,"python37_d.lib")
+# elif defined(Py_LIMITED_API)
+#   pragma comment(lib,"python37.lib")
+# endif /* _DEBUG */
+
+#include "Python.h"
 
 class PyApi : public HelperApi
 {

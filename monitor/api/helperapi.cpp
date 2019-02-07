@@ -141,7 +141,7 @@ bool HelperApi::GetAction( MYODD_STRING& sValue )
   {
     //  we only need the action and not the 'active' action.
     const Action* action = &_action;
-    if (NULL == action)
+    if (nullptr == action)
     {
       //  we don't have a command.
       return false;

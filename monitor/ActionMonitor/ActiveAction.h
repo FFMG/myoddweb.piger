@@ -30,17 +30,17 @@ public:
    * this is the command line arguments as given by the user.
    * So if the action is ""learn" and the user typed "Lea aaaa bbbb"
    * the command line is aaaa bbbb and the command is "learn"
-   * @return const MYODD_STRING& the command line.
+   * \return const MYODD_STRING& the command line.
    */
   const MYODD_STRING& CommandLine() const {
     return _szCommandLine;
   }
 
   /**
-   * check if this is a priviledged command
-   * @return bool
+   * check if this is a privileged command
+   * \return bool
    */
-  const bool IsPrivileged() const {
+  bool IsPrivileged() const {
     return _isPrivileged;
   }
 
@@ -58,7 +58,6 @@ protected:
   virtual bool OnInitialize() = 0;
   virtual bool OnDeInitialize() = 0;
 
-private:
   DISALLOW_COPY_AND_ASSIGN(ActiveAction);
 
 private:
@@ -83,11 +82,11 @@ private:
   };
 
   void UpdateEnvironmentVariables();
-  void UpdateEnvironmentValue( const VariableType variableType );
+  void UpdateEnvironmentValue( const VariableType variableType ) const;
   void UpdateEnvironmentPath();
   void UpdateEnvironmentTmp();
   void UpdateEnvironmentTemp();
-  void UpdateEnvironmentPathExt();
+  void UpdateEnvironmentPathExt() const;
 };
 
 #endif // __ActiveAction_h__

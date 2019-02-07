@@ -12,15 +12,6 @@ Clipboard::Clipboard( CWnd* mainWnd, size_t maxMemory ) : _maxMemory( maxMemory 
   Init(mainWnd);
 }
 
-/**
- * Todo
- * @param void
- * @return void
- */
-Clipboard::~Clipboard()
-{
-}
-
 Clipboard::Clipboard(const Clipboard& rhs) : _maxMemory( 0 )
 {
   *this = rhs;
@@ -42,20 +33,22 @@ const Clipboard& Clipboard::operator=(const Clipboard& rhs)
  * have any files.
  * Folders is always given with files.
  * 
- * @param string the container that will, (maybe), have hold our return string.
- * @return BOOL TRUE if we have something to return.
+ * \param sText the container that will have the text from the clipboard.
+ * \param bQuote the container that will, (maybe), have hold our return string.
+ * \return BOOL TRUE if we have something to return.
  */
-bool Clipboard::GetTextFromClipboard(MYODD_STRING& sText, bool bQuote /*= true */) const
+bool Clipboard::GetTextFromClipboard(MYODD_STRING& sText, const bool bQuote ) const
 {
   return _clipboardData.GetTextFromClipboard(sText, bQuote);
 }
 
 /**
- * Get the currently selected Text
- * @param string that will received the data
- * @return BOOL true if we have Data or FALSE if not.
+ * \brief Get the currently selected Text
+ * \param sText that will received the data
+ * \param bQuote if want want to add a quote around the returned text.
+ * \return BOOL true if we have Data or FALSE if not.
  */
-bool Clipboard::GetText( MYODD_STRING& sText, bool bQuote ) const
+bool Clipboard::GetText( MYODD_STRING& sText, const bool bQuote ) const
 {
   return _clipboardData.GetText(sText, bQuote);
 }

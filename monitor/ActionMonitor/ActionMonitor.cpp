@@ -16,9 +16,7 @@ BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 END_MESSAGE_MAP()
 
 /**
- * todo
- * @param void
- * @return void
+ *The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
   m_hMutex(nullptr),
@@ -258,7 +256,6 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::geo::Test();
   myodd::math::Test();
   myodd::files::Test();
-  myodd::idx_map<int,int>::Test();
   
 	AfxEnableControlContainer();
 
@@ -273,7 +270,7 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::desc desc;
   desc.add_options()
 #ifdef UNICODE
-    ("c", myodd::po::wvalue<std::wstring>(), "the oath of the config file.")
+    ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
     ("d", myodd::po::wvalue<std::wstring>(), "the full path of the root commands.")
 #else
     ("c", myodd::po::wvalue<std::string>(), "the oath of the config file.")

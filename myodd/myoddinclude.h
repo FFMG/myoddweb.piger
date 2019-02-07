@@ -41,10 +41,6 @@
 // the registry files.
 #include "registry/registry.h"
 
-// containers
-#include "containers/idx_map.h"
-#include "containers/Matrix2D.h"
-
 // sqlite
 #include "sqlite/sqlite.h"
 

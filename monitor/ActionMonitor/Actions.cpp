@@ -35,7 +35,7 @@ void Actions::ClearAll()
     myodd::threads::Lock guard(_mutex);
 
     //  delete all the pointers.
-    for (array_of_actions::iterator it = m_Actions.begin(); it != m_Actions.end(); ++it)
+    for (auto it = m_Actions.begin(); it != m_Actions.end(); ++it)
     {
       delete *it;
     }
@@ -130,20 +130,20 @@ Actions::array_of_actions_it Actions::Find(const MYODD_STRING& szText, const MYO
 }
 
 /**
- * Add an action name and path to the vector
- * @param LPCTSTR the name of the action the user will enter.
- * @param LPCTSTR the path of the file that will be executed.
- * @return bool success or not.
+ * \brief Add an action name and path to the vector
+ * \param szText the name of the action the user will enter.
+ * \param szPath the path of the file that will be executed.
+ * \return bool success or not.
  */
 bool Actions::Add(LPCTSTR szText, LPCTSTR szPath)
 {
   //  sanity check
-  if (szText == NULL || _tcslen(szText) == 0)
+  if (szText == nullptr || _tcslen(szText) == 0)
   {
     return false;
   }
 
-  Action* action = new Action(szText, szPath);
+  const auto action = new Action(szText, szPath);
   if (!Add(action))
   {
     delete action;
@@ -472,9 +472,9 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
   (*cmdLine) = _T("");
 
   // how many words are in the command?
-  LPCTSTR lpAction = action->Command().c_str();
-  std::vector<MYODD_STRING> exploded;
-  size_t nSize = myodd::strings::Explode( exploded, m_sActionAsTyped, _T(' ') );
+  const auto lpAction = action->Command().c_str();
+  std::vector<std::wstring> exploded;
+  const auto nSize = myodd::strings::Explode( exploded, m_sActionAsTyped, L' ' );
 
   // we now need to see how many of those words are present in the select
   // so if the actual command is 

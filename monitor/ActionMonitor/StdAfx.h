@@ -23,9 +23,9 @@
 #endif
 
 #ifndef DISALLOW_COPY_AND_ASSIGN
-#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&);               \
-  void operator=(const TypeName&)
+#define DISALLOW_COPY_AND_ASSIGN(TypeName)  \
+  TypeName(const TypeName&) = delete;       \
+  void operator=(const TypeName&) = delete
 #endif
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
@@ -69,25 +69,4 @@ static const TCHAR CONF_MUTEXT[]	  = _T("MyOddweb_com_ActionMonitor"); //  if yo
 // Include all the common files.
 #include <myoddinclude.h>
 
-// this is the various API we are using
-// remove/comment if we are not using it.
-#define ACTIONMONITOR_API_LUA
-#define ACTIONMONITOR_API_PY
-#define ACTIONMONITOR_API_PLUGIN
-#define ACTIONMONITOR_PS_PLUGIN
-
-#ifdef ACTIONMONITOR_API_LUA
-#   include "../api/luavirtualmachine.h"
-#endif
-
-#ifdef ACTIONMONITOR_API_PY
-#   include "../api/pythonvirtualmachine.h"
-#endif
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-#   include "../api/pluginvirtualmachine.h"
-#endif
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
-#   include "../api/powershellvirtualmachine.h"
-#endif
+#include "../api/plugins.h"
