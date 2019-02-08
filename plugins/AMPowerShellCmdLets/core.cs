@@ -1,4 +1,5 @@
 ﻿using System;
+using MyOdd = AMPowerShellCmdLets.myodd;
 
 namespace Am
 {
@@ -10,12 +11,21 @@ namespace Am
   // -noexit -command "&{Add-Type -Path .\AMPowerShellCmdLets.dll}"
   public class Core
   {
-    //  the default connection name.
+    /// <summary>
+    /// Unique name for our IPC connector.
+    /// </summary>
     private const string Name = "MyOddweb_com_ActionMonitor";
 
+    /// <summary>
+    /// The connector.
+    /// </summary>
     private MyOdd.IpcConnector Connector { get; }
 
-    private string Uuid { get; }
+    /// <summary>
+    /// Our unique identifiers.
+    /// It allows us to connect back to Piger
+    /// </summary>
+    public string Uuid { get; }
 
     /// <summary>
     /// The contructor

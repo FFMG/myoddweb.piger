@@ -1,4 +1,4 @@
-# Examples
+# Powershell Examples
 
 ## GetForegroundWindow
 
@@ -61,7 +61,7 @@ The first parameter is a string, then the amount of time in ml the message will 
 
 ```ps1
   # Say message 
-  [void]($am.Say( "Hello world", 3000, 5 )
+  [void]($am.Say( "Hello world", 3000, 5 ))
 ```
 
 ## Currently selected string
@@ -129,3 +129,17 @@ The first parameter is a string, then the amount of time in ml the message will 
 **Note**: In some cases, an *Exception* will be thrown if there are other problem, but the main reason would be because ActionMonitor.exe was closed while the script itself is still running.
 
 You can check the log file for error/warning messages.
+
+## How to Debug
+
+- Comandline arguments: `-noexit -command "&{ import-module .\AMPowerShellCmdLets.dll -Verbose"}"`
+- Start External program: `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe`
+
+Then in your powershell script:
+
+```ps1
+# Create a object
+$am = New-Object Am.Core 'UniqueValue`
+```
+
+But of course this will not really help as you cann `Say( ... )` anything for example as you are not connected.
