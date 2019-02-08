@@ -1,6 +1,6 @@
-## Examples
+# Examples
 
-### GetForegroundWindow
+## GetForegroundWindow
 
 Get the foreground window at the time of the call.
 The value returned is a IntPtr or a window handle, (32bit integer really).
@@ -35,7 +35,7 @@ The value returned is a IntPtr or a window handle, (32bit integer really).
   }
 ```
 
-### Log messages
+## Log messages
 
 ```ps1
   $am.Log( 1, "Hello from powershell" )
@@ -55,7 +55,7 @@ The log messages are:
 - Message = 4
 - System = 5
 
-### Say
+## Say
 
 The first parameter is a string, then the amount of time in ml the message will appear for, and the last parameter is the fade speed, (if zero it will not fade).
 
@@ -64,7 +64,7 @@ The first parameter is a string, then the amount of time in ml the message will 
   [void]($am.Say( "Hello world", 3000, 5 )
 ```
 
-### Currently selected string
+## Currently selected string
 
 ```ps1
   Try
@@ -86,7 +86,7 @@ The first parameter is a string, then the amount of time in ml the message will 
   }
 ```
 
-### Get Folder/File/Url
+## Get Folder/File/Url
 
 ```ps1
   Try
