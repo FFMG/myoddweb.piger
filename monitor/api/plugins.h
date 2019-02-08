@@ -6,6 +6,7 @@
 #define ACTIONMONITOR_API_PY
 #define ACTIONMONITOR_API_PLUGIN
 #define ACTIONMONITOR_PS_PLUGIN
+#define ACTIONMONITOR_CS_PLUGIN
 
 #ifdef ACTIONMONITOR_API_LUA
 #   include "../api/luavirtualmachine.h"
@@ -21,5 +22,9 @@
 
 #ifdef ACTIONMONITOR_PS_PLUGIN
 #   include "../api/powershellvirtualmachine.h"
+#endif
+
+#ifdef ACTIONMONITOR_CS_PLUGIN
+#   include "../api/csvirtualmachine.h"
 #endif
 

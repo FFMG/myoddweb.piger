@@ -15,7 +15,6 @@ namespace Foo
     static public void Boo( Core am )
     {
       am.Say( "Hello world", 3000, 5 );
-      System.Console.WriteLine("Hello World again!");
     }
   }
 }

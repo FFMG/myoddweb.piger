@@ -115,6 +115,14 @@ public:
   PowershellVirtualMachine* GetPowershellVirtualMachine();
 #endif
 
+#ifdef ACTIONMONITOR_CS_PLUGIN
+protected:
+  CsVirtualMachine* _csvm;
+
+public:
+  CsVirtualMachine* GetCsVirtualMachine();
+#endif
+
   void DestroyActiveActions();
 };
 

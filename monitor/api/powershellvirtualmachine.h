@@ -36,8 +36,16 @@ protected:
 
   void WaitForApi(const std::wstring& uuid);
 
-
   static bool IsPowershell3Installed();
   static bool Powershell3Path(MYODD_STRING& szPath);
+
+protected:
+  /**
+   * \brief create the full command line argument that will be passed to powershell
+   * \param dllFullpath the full path of the dll
+   * \param pluginPath the path to the plugin
+   * \param uuid the unique id
+   */
+  virtual MYODD_STRING GetCommandLineArguments(const std::wstring& dllFullpath, const std::wstring& pluginPath, const std::wstring& uuid);
 };
 #endif /*ACTIONMONITOR_PS_PLUGIN*/
