@@ -27,6 +27,21 @@ In your class, your constructor must take an "\Am.Core\" object
 
 One function is expected ... `Go` and that function will be the start of all the work your amzing script will do.
 
+### Loaded assemblies
+
+The loaded assemblies are:
+
+- `System`
+- `System.Core`
+- `System.Xml.Linq`
+- `System.Data.DataSetExtensions`
+- `Microsoft.CSharp`
+- `System.Data`
+- `System.Net.Http`
+- `System.Xml`
+
+And of course the `AMPowerShellCmdLets.dll`.
+
 ### Complete example
 
 In the root command directory, create a file `Bar.cs`
