@@ -63,49 +63,44 @@ Of course, the main aim is for you to write your own plugins rather than been sp
 
 ## Scripts
 
-*[Powershell usage](scripts/powershell.md)
-*[C# usage](scripts/csharp.md)
-
-# Special folders
-
-## Root command
-All your commands are located in your rootcommand folder, (%appdata%\myoddweb\ActionMonitor\RootCommands\ by default).
-
-At statup all the actions/plugins are loaded. A file will have the command name.
-
-For example, the file "**google.lua**" will create a command called "**google**" and the code in "google.lua" will be executed when that action is called. 
+- [C# usage](scripts/csharp.md)
+- [Powershell usage](scripts/powershell.md)
 
 # Scripting your own commands.
+
+## C Sharp/C#
+
+Read more about the [C# scripts](scripts/csharp.md)
+
+### Example
+
+#### Hello world
+
+```csharp
+using System;
+namespace Am
+{
+  public class Bar
+  {
+    private Am.Core _am;
+    public Bar( Am.Core am )
+    {
+      _am = am;
+    }
+
+    public void Go()
+    {
+      _am.Say( "Hello World!", 3000, 5 );
+    }
+  }
+}
+```
 
 ## Powershell
 
 Read more [code examples/notes](scripts/powershell.md).
 
 **_If_** you have powershell 3 installed, (and you should have if you have a decent version of windows installed), then you can run powershell scripts.
-
-### Code
-
-- Say( what, elapse, fade ), display a message
-- Version, get the LUA version been used.
-- GetCommand( idx ), get a typed command, if the user selects something like "*google world*", then command #0 is "google" and command #1 is "world".
-- GetAction, get the selected action.
-- GetCommandCount, get the number of commands including the action.
-- execute, execute a certain app/event/batch file. You can also ask for elevated permission, (if piger is not running elevated).
-- GetString, get a string that the user might have selected at the time of calling the action.
-- GetFile, get a file that the user might have selected at the time of calling the action.
-- GetFolder, get a folder that the user might have selected at the time of calling the action.
-- GetUrl, get a url that the user might have selected at the time of calling the action.
-- AddAction, add an action to our current list of actions. (lost when the app restarts!)
-- RemoveAction, remove an action from the list.
-- GetVersion, get the piger version number.
-- FindAction, find an action in our list of actions.
-- Log, log a message to file, (or whatever logger is been used).
-  - Success = 1
-  - Error = 2
-  - Warning = 3
-  - Message = 4
-  - System = 5
-- GetForegroundWindow, get the foreground window at the time the script was called.
 
 ### Example
 
@@ -140,6 +135,8 @@ Read more [code examples/notes](scripts/powershell.md).
 ```
 
 ## Python
+
+Read more about the [Powershell scripts](scripts/powershell.md)
 
 ### Code
 
@@ -310,6 +307,14 @@ None, Python **3.5** is embedded in Piger, so it does not matter if you have pyt
 
 Just send us a message with your scripts.
 
+# Special folders
+
+## Root command
+All your commands are located in your rootcommand folder, (%appdata%\myoddweb\ActionMonitor\RootCommands\ by default).
+
+At statup all the actions/plugins are loaded. A file will have the command name.
+
+For example, the file "**google.lua**" will create a command called "**google**" and the code in "google.lua" will be executed when that action is called. 
 
 ### How to debug
 
