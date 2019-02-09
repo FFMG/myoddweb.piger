@@ -135,6 +135,15 @@
     <ClCompile Include="ActiveExeAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="ActiveCsAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\csapi.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\csvirtualmachine.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -270,6 +279,15 @@
     </ClInclude>
     <ClInclude Include="ActiveExeAction.h">
       <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveCsAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\csapi.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\csvirtualmachine.h">
+      <Filter>api</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

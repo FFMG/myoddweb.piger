@@ -17,6 +17,7 @@
 
 #include "os\os.h"
 #include "ActivePowershellAction.h"
+#include "ActiveCsAction.h"
 
 /**
  * \brief Constructor
@@ -421,6 +422,22 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
 
     // did not work, try the default way...
     delete apa;
+  }
+#endif // ACTIONMONITOR_API_PLUGIN
+
+#ifdef ACTIONMONITOR_PS_PLUGIN
+  // Do the API calls.
+  //
+  if (CsVirtualMachine::IsExt(_szFile))
+  {
+    auto acsa = new ActiveCsAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    if (acsa->Initialize())
+    {
+      return acsa;
+    }
+
+    // did not work, try the default way...
+    delete acsa;
   }
 #endif // ACTIONMONITOR_API_PLUGIN
 

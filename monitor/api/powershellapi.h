@@ -41,7 +41,7 @@ public:
   void SetHandle(HANDLE process);
   HANDLE GetHandle() const;
 
-protected:
+private:
   HANDLE _hProcess;
 };
 

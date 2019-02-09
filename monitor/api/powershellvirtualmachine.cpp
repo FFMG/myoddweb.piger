@@ -180,7 +180,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   Initialize();
 
   //  create uuid and andd it to our list.
-  auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
+  const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
   auto psApi = AddApi(uuid, action);
 
   //  do we have powerhsell3?
@@ -204,9 +204,9 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   }
 
   // get the powershell dll path
-  auto path = myodd::files::GetAppPath(true);
-  myodd::files::Join(path, path, _T("AMPowerShellCmdLets.dll"));
-  if (!myodd::files::FileExists(path))
+  auto dllFullpath = myodd::files::GetAppPath(true);
+  myodd::files::Join(dllFullpath, dllFullpath, _T("AMPowerShellCmdLets.dll"));
+  if (!myodd::files::FileExists(dllFullpath))
   {
     auto errorMsg = _T("I was unable to find the AMPowerShell dll, I cannot execute this script.");
     psApi->Say(errorMsg, 3000, 5);
@@ -217,12 +217,9 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
     return 0;
   }
 
-  // the object
-  auto am = myodd::strings::Format( _T("$am = New-Object Am.Core \"%s\""), uuid.c_str() );
-
   //  prepare the arguments.
-  auto arguments = myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), path.c_str(), am.c_str(), pluginFile);
-
+  auto arguments = GetCommandLineArguments( action, dllFullpath, pluginFile, uuid );
+  
   //
   // it is very important that we do not use out locks here!
   // otherwise no other powershell window will be able to run
@@ -254,9 +251,29 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
 }
 
 /**
- * Check if a given file extension is used by this API or not.
- * @param const MYODD_STRING& file the file we are checking
- * @return bool true|false if the given extension is LUA or not.
+ * \brief create the full command line argument that will be passed to powershell
+ * \param action the action we are working with
+ * \param dllFullPath the full path of the dll
+ * \param pluginPath the path to the plugin
+ * \param uuid the unique id
+ */
+MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(const ActiveAction& action, const std::wstring& dllFullPath, const std::wstring& pluginPath, const std::wstring& uuid )
+{
+  // the object
+  auto am = myodd::strings::Format(_T("$am = New-Object Am.Core \"%s\""), uuid.c_str());
+
+  //  prepare the arguments.
+  return myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), 
+    dllFullPath.c_str(),
+    am.c_str(), 
+    pluginPath.c_str()
+  );
+}
+
+/**
+ * \brief Check if a given file extension is used by this API or not.
+ * \param file the file we are checking
+ * \return bool true|false if the given extension is powershell or not.
  */
 bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
 {

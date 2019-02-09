@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace MyOdd
+namespace AMPowerShellCmdLets.myodd
 {
   internal class IpcData
   {

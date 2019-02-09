@@ -165,6 +165,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\api\csapi.cpp" />
+    <ClCompile Include="..\api\csvirtualmachine.cpp" />
     <ClCompile Include="..\api\helperapi.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -206,6 +208,7 @@
     <ClCompile Include="ActiveByeAction.cpp" />
     <ClCompile Include="ActiveCmdAction.cpp" />
     <ClCompile Include="ActiveComAction.cpp" />
+    <ClCompile Include="ActiveCsAction.cpp" />
     <ClCompile Include="ActiveDefaultAction.cpp" />
     <ClCompile Include="ActiveExeAction.cpp" />
     <ClCompile Include="ActiveLuaAction.cpp" />
@@ -224,6 +227,8 @@
     <ResourceCompile Include="ActionMonitor.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\api\csapi.h" />
+    <ClInclude Include="..\api\csvirtualmachine.h" />
     <ClInclude Include="..\api\helperapi.h" />
     <ClInclude Include="..\api\luaapi.h" />
     <ClInclude Include="..\api\LuaVirtualMachine.h" />
@@ -254,6 +259,7 @@
     <ClInclude Include="ActiveByeAction.h" />
     <ClInclude Include="ActiveCmdAction.h" />
     <ClInclude Include="ActiveComAction.h" />
+    <ClInclude Include="ActiveCsAction.h" />
     <ClInclude Include="ActiveDefaultAction.h" />
     <ClInclude Include="ActiveExeAction.h" />
     <ClInclude Include="ActiveLuaAction.h" />

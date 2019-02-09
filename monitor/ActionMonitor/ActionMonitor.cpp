@@ -35,13 +35,14 @@ CActionMonitorApp::CActionMonitorApp() :
 #ifdef ACTIONMONITOR_PS_PLUGIN
   , _psvm(nullptr)
 #endif
+#ifdef ACTIONMONITOR_CS_PLUGIN
+  , _csvm(nullptr)
+#endif
 {
 }
 
 /**
- * todo
- * @param void
- * @return void
+ *  \brief destruction
  */
 CActionMonitorApp::~CActionMonitorApp()
 {
@@ -60,6 +61,10 @@ CActionMonitorApp::~CActionMonitorApp()
 #ifdef ACTIONMONITOR_PS_PLUGIN
   delete _psvm;
   _psvm = nullptr;
+#endif
+#ifdef ACTIONMONITOR_PS_PLUGIN
+  delete _csvm;
+  _csvm = nullptr;
 #endif
 }
 
@@ -106,14 +111,24 @@ PowershellVirtualMachine* CActionMonitorApp::GetPowershellVirtualMachine()
   return _psvm;
 }
 #endif
+
+#ifdef ACTIONMONITOR_CS_PLUGIN
+CsVirtualMachine* CActionMonitorApp::GetCsVirtualMachine()
+{
+  if (_csvm == nullptr)
+  {
+    _csvm = new CsVirtualMachine();
+  }
+  return _csvm;
+}
+#endif
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CActionMonitorApp object
 CActionMonitorApp theApp;
 
 /**
- * Get the current CActionMonitorApp reference
- * @param nonce
- * @return the CActionMonitorApp reference.
+ * \brief Get the current CActionMonitorApp reference
+ * \return the CActionMonitorApp reference.
  */
 CActionMonitorApp& App()
 { 
@@ -121,9 +136,8 @@ CActionMonitorApp& App()
 };
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief get the last foregound window.
+ * \return void
  */
 CWnd* CActionMonitorApp::GetLastForegroundWindow()
 {
@@ -139,13 +153,13 @@ size_t CActionMonitorApp::GetMaxClipboardMemory()
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * Set the value of the last window.
+ * \param window the new 'last' window.
+ * \return void
  */
-void CActionMonitorApp::SetLastForegroundWindow( CWnd* w )
+void CActionMonitorApp::SetLastForegroundWindow( CWnd* window )
 {
-  App()._cwndLastForegroundWindow = w;
+  App()._cwndLastForegroundWindow = window;
 }
 
 /**
@@ -231,9 +245,8 @@ void CActionMonitorApp::SelfElavate()
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief initialise 
+ * \return success or not
  */
 BOOL CActionMonitorApp::InitInstance()
 {
@@ -350,9 +363,7 @@ BOOL CActionMonitorApp::InitInstance()
 }
 
 /**
- * (Re)build a list of possible actions.
- * @param void
- * @return void
+ * \brief (Re)build a list of possible actions.
  */
 void CActionMonitorApp::BuildActionsList()
 {
@@ -373,10 +384,9 @@ void CActionMonitorApp::BuildActionsList()
 }
 
 /**
- * Execute all the actions that are exectuted at the start of this app.
- * Note that the Dialog box is alredy created so we can show all the messages, (if any).
- * @param void
- * @return void
+ * \brief Execute all the actions that are exectuted at the start of this app.
+ *        Note that the Dialog box is alredy created so we can show all the messages, (if any).
+ * \return void
  */
 void CActionMonitorApp::DoStartActionsList()
 {
@@ -385,10 +395,8 @@ void CActionMonitorApp::DoStartActionsList()
 }
 
 /**
- * Exectue all the actions that are executed at just before we end the app.
- * Note that the dialog should still be alive so we can display the messages.
- * @param void
- * @return void
+ * \brief Exectue all the actions that are executed at just before we end the app.
+ *        Note that the dialog should still be alive so we can display the messages.
  */
 void CActionMonitorApp::DoEndActionsList( )
 {
@@ -422,14 +430,12 @@ void CActionMonitorApp::InitMaxClipboardSize()
 }
 
 /**
- * Initialize the path of the reserved paths.
- * Make sure that the values exist and are set properly.
- * @param void
- * @return void
+ * \brief Initialize the path of the reserved paths.
+ *        Make sure that the values exist and are set properly.
  */
 void CActionMonitorApp::InitReservedPaths()
 {
-  MYODD_STRING sPath = ::myodd::config::Get( L"paths\\commands", L"");
+  const auto sPath = ::myodd::config::Get( L"paths\\commands", L"");
 
   MYODD_STRING sPathIn;
   myodd::files::Join( sPathIn, sPath, AM_DIRECTORY_IN );
@@ -453,11 +459,11 @@ void CActionMonitorApp::InitReservedPaths()
 }
 
 /**
- * Initialize the path of the configurations file.
- * @param const myodd::variables& vm the given variables.
- * @return bool success or not.
+ * \brief Initialize the path of the configurations file.
+ * \param variables the given variables.
+ * \return Success or not.
  */
-bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
+bool CActionMonitorApp::InitConfig( const myodd::variables& variables )
 {
 #ifdef UNICODE
   std::wstring sAPath = CONF_FULLPATH;
@@ -465,11 +471,11 @@ bool CActionMonitorApp::InitConfig( const myodd::variables& vm)
   std::string sAPath = CONF_FULLPATH;
 #endif
 
-  if (1 == vm.count("c"))
+  if (1 == variables.count("c"))
   {
     // get the path
 #ifdef UNICODE
-    sAPath = vm["c"].as< std::wstring >();
+    sAPath = variables["c"].as< std::wstring >();
 #else
     sAPath = vm["c"].as< std::string >();
 #endif
@@ -504,13 +510,13 @@ void CActionMonitorApp::InitLog()
   }
 
   //  the directory we will be logging to.
-  std::wstring logPath = ::myodd::config::Get(L"log\\file\\path", LOG_PATH );
+  const std::wstring logPath = ::myodd::config::Get(L"log\\file\\path", LOG_PATH );
 
   // the prefix of the filename.
-  std::wstring logPrefix = ::myodd::config::Get(L"log\\file\\prefix", L"myodd");
+  const std::wstring logPrefix = ::myodd::config::Get(L"log\\file\\prefix", L"myodd");
 
   // the file extension
-  std::wstring logExtension = ::myodd::config::Get(L"log\\file\\extension", L"log" );
+  const std::wstring logExtension = ::myodd::config::Get(L"log\\file\\extension", L"log" );
 
   //  get the max file size.
   size_t maxFileSize = ::myodd::config::Get(L"log\\file\\maxFileSize", 10 );
@@ -527,9 +533,8 @@ void CActionMonitorApp::InitLog()
 }
 
 /**
- * Todo
- * @param void
- * @return int
+ * \brief close the application
+ * \return the result.
  */
 int CActionMonitorApp::ExitInstance()
 {
@@ -569,4 +574,11 @@ void CActionMonitorApp::DestroyActiveActions()
   auto ps = GetPowershellVirtualMachine();
   ps->DestroyScripts();
 #endif // ACTIONMONITOR_PS_PLUGIN
+
+#ifdef ACTIONMONITOR_CS_PLUGIN
+  // We have to kill all the API plugins.
+  // they should be all done and completed.
+  auto cs = GetCsVirtualMachine();
+  cs->DestroyScripts();
+#endif // ACTIONMONITOR_CS_PLUGIN
 }

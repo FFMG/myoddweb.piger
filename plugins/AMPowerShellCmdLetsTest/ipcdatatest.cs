@@ -1,6 +1,6 @@
 ﻿using System;
+using AMPowerShellCmdLets.myodd;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyOdd;
 
 namespace MyOddTest
 {
