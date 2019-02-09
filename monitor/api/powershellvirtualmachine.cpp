@@ -218,7 +218,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   }
 
   //  prepare the arguments.
-  auto arguments = GetCommandLineArguments(dllFullpath, pluginFile, uuid );
+  auto arguments = GetCommandLineArguments( action, dllFullpath, pluginFile, uuid );
   
   //
   // it is very important that we do not use out locks here!
@@ -252,18 +252,19 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
 
 /**
  * \brief create the full command line argument that will be passed to powershell
- * \param dllFullpath the full path of the dll
+ * \param action the action we are working with
+ * \param dllFullPath the full path of the dll
  * \param pluginPath the path to the plugin
  * \param uuid the unique id
  */
-MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(const std::wstring& dllFullpath, const std::wstring& pluginPath, const std::wstring& uuid )
+MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(const ActiveAction& action, const std::wstring& dllFullPath, const std::wstring& pluginPath, const std::wstring& uuid )
 {
   // the object
   auto am = myodd::strings::Format(_T("$am = New-Object Am.Core \"%s\""), uuid.c_str());
 
   //  prepare the arguments.
   return myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), 
-    dllFullpath.c_str(),
+    dllFullPath.c_str(),
     am.c_str(), 
     pluginPath.c_str()
   );

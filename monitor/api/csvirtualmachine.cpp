@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <fstream>
 #ifdef ACTIONMONITOR_CS_PLUGIN
 
 #include <os/ipclistener.h>
@@ -20,69 +21,91 @@ CsVirtualMachine::~CsVirtualMachine()
  */
 bool CsVirtualMachine::IsExt(const MYODD_STRING& file)
 {
-  return myodd::files::IsExtension(file, _T("ps1"));
+  return myodd::files::IsExtension(file, _T("CS"));
 }
 
 /**
  * \brief create the full command line argument that will be passed to powershell
- * \param dllFullpath the full path of the dll
+ * \param action the action we are working with
+ * \param dllFullPath the full path of the dll
  * \param pluginPath the path to the plugin
  * \param uuid the unique id
  */
-MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(const std::wstring& dllFullpath, const std::wstring& pluginPath, const std::wstring& uuid)
+MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
+  const ActiveAction& action,
+  const std::wstring& dllFullPath, 
+  const std::wstring& pluginPath, 
+  const std::wstring& uuid
+)
 {
-  // we need to recreate the code
+  // the command is our class name.
+  auto className = action.Command();
 
-  /**
-    # get the full content as code.
-    $code = [IO.File]::ReadAllText(pluginPath)
-   */
+  // we want to create the powershell script
+  auto script = myodd::strings::Format(
 
-  // or
+    L"# Press a key\n"
+    L"function __amPressKey()\n"
+    L"{\n"
+    L"  #press key\n"
+    L"  Write-Host -NoNewLine 'Press any key to continue...';\n"
+    L"  $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');\n"
+    L"}\n"
+    L"\n"
 
-  /**
-    $code = @"
-      using Am;
-      using System.Windows.Forms;
+    L"# Include the dll, (so the c# can access it)\n"
+    L"Add-Type -Path \"%s\"\n"
+    L"\n"
 
-      // Hello World! program
-      namespace Foo
-      {
-        public class Bar
-        {
-          static public void Boo( Am.Core am )
-          {
-            DialogResult res = MessageBox.Show("Are you sure you want to Delete", "Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-            if (res == DialogResult.OK) {
-                am.Say( "You have clicked Ok Button", 3000, 5 );
-                //Some task…
-            }
-            if (res == DialogResult.Cancel) {
-                am.Say( "You have clicked Cancel Button", 3000, 5 );
-                //Some task…
-            }
-          }
-        }
-      }
-    "@
+    L"# Create the Action monitor object to pass to the c# code\n"
+    L"$am = New-Object Am.Core \"%s\"\n"
+    L"\n"
 
-    $assem = (
-      "System.Windows.Forms.dll",
-      "AMPowerShellCmdLets.dll"
-        )
+    L"try {\n"
+    L"  # Load the code.\n"
+    L"  $code = [IO.File]::ReadAllText(\"%s\")\n"
+    L"  \n"
 
-    Add-Type -TypeDefinition $code -ReferencedAssemblies $assem -Language CSharp
-    [Foo.Bar]::Boo( $am )
-  */
+    L"  # Pas it the common assemblies\n"
+    L"  $assem = (\n"
+    L"    \"%s\"\n"
+    L"  )\n"
+    L"\n"
+    L"  # Putting it all together\n"
+    L"  Add-Type -TypeDefinition $code -ReferencedAssemblies $assem -Language CSharp\n"
+    L"  $plugin = New-Object Am.%s $am\n"
+    L"  [void]($plugin.Go())\n"
+    L"\n"
+    L"} catch {\n"
+    L"  # Give the error message\n"
+    L"  $ErrorMessage = $_.Exception.Message\n"
+    L"\n"
+    L"  $fullMessage = \"There was an error in script '%s', The error message was \"\"$ErrorMessage\"\"\"\n"
+    L"  [void]($am.Log( 2, $fullMessage ))\n"
+    L"  Write-Warning $fullMessage\n"
+    L"  # And then wait\n"
+    L"  __amPressKey;\n"
+    L"}\n"
+    , dllFullPath.c_str()   // create object
+    , uuid.c_str()          // unique id
+    , pluginPath.c_str()    // the code itself.
+    , dllFullPath.c_str()   // assemblies
+    , className.c_str()     // the class name
+    , pluginPath.c_str()    // the code itself, (for the error).
+  );
 
-  // the object
-  auto am = myodd::strings::Format(_T("$am = New-Object Am.Core \"%s\""), uuid.c_str());
+  std::wstring file;
+  myodd::files::GetFullTempFileName(file, L"file", L"ps1");
+  std::wofstream myfile;
+  myfile.open(file.c_str());
+  myfile << script.c_str();
+  myfile.close();
 
   // The simply execute the 
-  return myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"),
-    dllFullpath.c_str(),
-    am.c_str(),
-    pluginPath.c_str()
+  return myodd::strings::Format(
+    _T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; . '%s';Set-ExecutionPolicy $policy -Force; }\""),
+    dllFullPath.c_str(),
+    file.c_str()
   );
 }
 #endif /*ACTIONMONITOR_CS_PLUGIN*/
