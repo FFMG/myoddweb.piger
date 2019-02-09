@@ -60,7 +60,7 @@ The log messages are:
 The first parameter is a string, then the amount of time in ml the message will appear for, and the last parameter is the fade speed, (if zero it will not fade).
 
 ```ps1
-  # Say message 
+  # Say message
   [void]($am.Say( "Hello world", 3000, 5 ))
 ```
 
