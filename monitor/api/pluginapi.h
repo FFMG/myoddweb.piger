@@ -17,20 +17,21 @@ public:
   double Version ();
   size_t GetCommandCount();
 
-  bool Say         (const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const override;
+  bool Say         (const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut) const override;
   bool Execute     (const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
-  int GetString    ( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
-  size_t GetCommand( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer );
-  int GetAction    ( DWORD nBufferLength, wchar_t* lpBuffer );
-  int GetFile      ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
-  int GetFolder    ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
-  int GetUrl       ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote) const;
-  bool AddAction   (const wchar_t* szText, const wchar_t* szPath );
-  bool RemoveAction(const wchar_t* szText, const wchar_t* szPath );
-  bool GetVersion  ( DWORD nBufferLength, wchar_t* lpBuffer);
-  bool FindAction  ( UINT idx, const wchar_t* lpCommand, DWORD nBufferLength, wchar_t* lpBuffer);
-  void Log( unsigned int logType, const wchar_t* lpText );
-  HWND GetForegroundWindow() const;
+  int GetString    (unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const;
+  size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer ) const;
+  int GetAction    (unsigned int nBufferLength, wchar_t* lpBuffer ) const;
+  int GetFile      (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const;
+  int GetFolder    (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const;
+  int GetUrl       (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const;
+  bool AddAction   (const wchar_t* szText, const wchar_t* szPath ) const;
+  bool RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const;
+  bool GetVersion  (unsigned int nBufferLength, wchar_t* lpBuffer) const;
+  bool FindAction  (unsigned int idx, const wchar_t* lpCommand, unsigned int nBufferLength, wchar_t* lpBuffer) const;
+  void Log( unsigned int logType, const wchar_t* lpText ) const;
+  
+  HWND GetForegroundWindow() const override;
 };
 
 #endif

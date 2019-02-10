@@ -19,13 +19,6 @@ HelperApi::HelperApi(const ActiveAction& action) : _action( action )
 }
 
 /**
- * \brief destructor
- */
-HelperApi::~HelperApi()
-{
-}
-
-/**
  * \brief Get the current clipboard data for this active action.
  * \return const Clipboard& the current clipboard.
  */

@@ -12,8 +12,8 @@
 class HelperApi
 {
 public:
-  HelperApi(const ActiveAction& action );
-  virtual ~HelperApi();
+  explicit HelperApi(const ActiveAction& action );
+  virtual ~HelperApi() = default;
 
 private:
   const Clipboard& GetClipboard() const;
@@ -32,7 +32,7 @@ protected:
   
   // get a command by index
   // return false if it does not exist
-  bool GetCommand(const unsigned int idx, MYODD_STRING& sValue ) const;
+  bool GetCommand( unsigned int idx, MYODD_STRING& sValue ) const;
 
   // get the action given by the user
   // this is useful in case a plugin creates more than one action.
@@ -44,23 +44,27 @@ protected:
   // execute a module and a command line
   virtual bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const;
 
-  // get the currently selected text, or false if none.
-  bool GetString (MYODD_STRING& sValue, bool bQuote) const;
+  // Get the last foreground window.
+  // this is the window that was in the foreground at the time the call was made.
+  virtual HWND GetForegroundWindow() const;
 
-  // get the action monitor version number.
-  static bool GetVersion (MYODD_STRING& sValue );
+  // get the currently selected text, or false if none.
+  virtual bool GetString (MYODD_STRING& sValue, bool bQuote) const;
   
   // get one of x _file_ currently selected by index.
   // if 3 files and 4 folders are selected, only the files are counted.
-  bool GetFile( unsigned int idx, MYODD_STRING& sValue, bool bQuote ) const;
+  virtual bool GetFile( unsigned int idx, MYODD_STRING& sValue, bool bQuote ) const;
 
   // get one of x _folders_ currently selected by index.
   // if 3 files and 4 folders are selected, only the folders are counted.
-  bool GetFolder ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
+  virtual bool GetFolder ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
 
   // get one of x _URL_ currently selected by index.
   // note that this is only syntax check, we don't actually check if the URL resolves.
-  bool GetUrl ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
+  virtual bool GetUrl ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
+
+  // get the action monitor version number.
+  static bool GetVersion(MYODD_STRING& sValue);
 
   // add a set of command to the list of commands.
   // note that we do hardly any checks to see of the command already exists
@@ -73,10 +77,6 @@ protected:
   // find an action, we return true when we find it
   // there can be more than one action with the same name.
   static bool FindAction( unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath );
-
-  // Get the last foreground window.
-  // this is the window that was in the foreground at the time the call was made.
-  HWND GetForegroundWindow() const;
 
   // log a message to the log file.
   static void Log(unsigned int logType, const wchar_t* lpText);

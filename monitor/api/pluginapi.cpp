@@ -57,7 +57,7 @@ bool PluginApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsign
  * @param wchar_t* lpBuffer the buffer that will contain the command, if it is NULL only the size will be returned.
  * @return void
  */
-size_t PluginApi::GetCommand( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer )
+size_t PluginApi::GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer ) const
 {
   // first get the command
   MYODD_STRING sValue = _T("");
@@ -87,7 +87,7 @@ size_t PluginApi::GetCommand( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer )
  * @param void
  * @return void
  */
-int PluginApi::GetAction( DWORD nBufferLength, wchar_t* lpBuffer )
+int PluginApi::GetAction(unsigned int nBufferLength, wchar_t* lpBuffer ) const
 {
   MYODD_STRING sValue = _T("");
   if( !__super::GetAction( sValue ) )
@@ -141,7 +141,7 @@ bool PluginApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
  * @param void
  * @return void
  */
-int PluginApi::GetString( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote )
+int PluginApi::GetString(unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote ) const
 {
   MYODD_STRING sValue = _T("");
   if( !__super::GetString ( sValue, bQuote ) )
@@ -166,7 +166,7 @@ int PluginApi::GetString( DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote )
  * @param void
  * @return void
  */
-int PluginApi::GetFile(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
+int PluginApi::GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const
 {
   MYODD_STRING sValue = _T("");
   if( !__super::GetFile(idx, sValue, bQuote ) )
@@ -191,7 +191,7 @@ int PluginApi::GetFile(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQ
  * @param void
  * @return void
  */
-int PluginApi::GetFolder (UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
+int PluginApi::GetFolder (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const
 {
   MYODD_STRING sValue = _T("");
   if( !__super::GetFolder (idx, sValue, bQuote ) )
@@ -216,7 +216,7 @@ int PluginApi::GetFolder (UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool
  * @param void
  * @return void
  */
-int PluginApi::GetUrl(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote) const
+int PluginApi::GetUrl(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const
 {
   MYODD_STRING sValue = _T("");
   if( !__super::GetUrl (idx, sValue, bQuote ) )
@@ -224,7 +224,7 @@ int PluginApi::GetUrl(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQu
     return 0;
   }
 
-  size_t len = sValue.length();
+  const auto len = sValue.length();
   if ( nBufferLength > 0 && lpBuffer )
   {
     memset( lpBuffer, 0, nBufferLength );
@@ -240,7 +240,7 @@ int PluginApi::GetUrl(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQu
  * @param void
  * @return void
  */
-bool PluginApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
+bool PluginApi::AddAction(const wchar_t* szText, const wchar_t* szPath ) const
 {
   // pass it straight to the helper API as it will do all the needed validations
   return __super::AddAction( szText, szPath );
@@ -253,7 +253,7 @@ bool PluginApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
  * @param void
  * @return void
  */
-bool PluginApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
+bool PluginApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const
 {
   // pass it straight to the helper API as it will do all the needed validations
   return __super::RemoveAction( szText, szPath );
@@ -265,7 +265,7 @@ bool PluginApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
  * @param wchar_t* the buffer that will contain the return data, (version).
  * @return bool success or not if there was an error.
  */
-bool PluginApi::GetVersion(DWORD nBufferLength, wchar_t* lpBuffer )
+bool PluginApi::GetVersion(unsigned int nBufferLength, wchar_t* lpBuffer ) const
 {
   MYODD_STRING stdVersion;
   if( !__super::GetVersion( stdVersion ) )
@@ -286,11 +286,11 @@ bool PluginApi::GetVersion(DWORD nBufferLength, wchar_t* lpBuffer )
  */
 bool PluginApi::FindAction
 ( 
-  UINT idx, 
+  unsigned int idx,
   const wchar_t* lpCommand,
-  DWORD nBufferLength, 
+  unsigned int nBufferLength,
   wchar_t* lpBuffer
-)
+) const
 {
   MYODD_STRING stdActionPath;
   if( !__super::FindAction( idx, lpCommand, stdActionPath ) )
@@ -317,7 +317,7 @@ HWND PluginApi::GetForegroundWindow() const
  * @param const wchar_t* lpText the text we wish to log.
  * @return none.
  */
-void PluginApi::Log(unsigned int logType, const wchar_t* lpText)
+void PluginApi::Log(unsigned int logType, const wchar_t* lpText) const
 {
   __super::Log(logType, lpText);
 }
