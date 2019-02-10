@@ -56,11 +56,11 @@ protected:
 
   // get one of x _folders_ currently selected by index.
   // if 3 files and 4 folders are selected, only the folders are counted.
-  bool GetFolder (const unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
+  bool GetFolder ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
 
   // get one of x _URL_ currently selected by index.
   // note that this is only syntax check, we don't actually check if the URL resolves.
-  bool GetUrl (const unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
+  bool GetUrl ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
 
   // add a set of command to the list of commands.
   // note that we do hardly any checks to see of the command already exists
@@ -72,7 +72,7 @@ protected:
 
   // find an action, we return true when we find it
   // there can be more than one action with the same name.
-  static bool FindAction(const unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath );
+  static bool FindAction( unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath );
 
   // Get the last foreground window.
   // this is the window that was in the foreground at the time the call was made.

@@ -272,7 +272,7 @@ int LuaVirtualMachine::GetVersion(lua_State *lua)
 */
 int LuaVirtualMachine::Getfile(lua_State *lua)
 {
-  return GetApi(lua).Getfile(lua);
+  return GetApi(lua).GetFile(lua);
 }
 
 /**
@@ -282,7 +282,7 @@ int LuaVirtualMachine::Getfile(lua_State *lua)
 */
 int LuaVirtualMachine::Getfolder(lua_State *lua)
 {
-  return GetApi(lua).Getfolder(lua);
+  return GetApi(lua).GetFolder(lua);
 }
 
 /**
@@ -292,7 +292,7 @@ int LuaVirtualMachine::Getfolder(lua_State *lua)
 */
 int LuaVirtualMachine::Geturl(lua_State *lua)
 {
-  return GetApi(lua).Geturl(lua);
+  return GetApi(lua).GetUrl(lua);
 }
 
 /**

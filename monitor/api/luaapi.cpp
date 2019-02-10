@@ -10,40 +10,38 @@
 // 3.2 check all the params type/number
 // 3.3 fixed lua execute with just one element.
 // 3.4 some code cleanup
-static const double ACTIONMONITOR_API_LUA_VERSION = 3.4;
+// 3.5 C++11 code cleanup
+static const double ACTIONMONITOR_API_LUA_VERSION = 3.5;
 
 #include "luaapi.h"
 #include "../string/string.h"
 
 /**
- * Todo
- * @param lua_State
- * @return void
+ * \brief Todo
+ * \param action the action that we are calling
  */
 LuaApi::LuaApi(const ActiveAction& action) : HelperApi( action )
 {
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief the destructor
  */
 LuaApi::~LuaApi(void)
 {
 }
 
 /**
- * 'Get the current version number
- * @param lua_State *
- * @return int
+ * \brief Get the Monitor version number
+ * \param lua the current LUA state.
+ * \return success or not.
  */
-int LuaApi::Version (lua_State *lua)
+int LuaApi::Version (lua_State *lua) const
 {
-  auto n = lua_gettop(lua);
-  if (n > 0 )
+  const auto numberOfArguments = lua_gettop(lua);
+  if (numberOfArguments > 0 )
   {
-    auto errorMsg = _T("<b>Error : </b> The 'Version function does not take any parametters.");
+    const auto errorMsg = _T("<b>Error : </b> The 'Version function does not take any parametters.");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say( errorMsg , 3000, 5);
     lua_pushboolean(lua, false);
@@ -59,25 +57,25 @@ int LuaApi::Version (lua_State *lua)
 }
 
 /**
- * Execute.
- * @param lua_State *
- * @return int
+ * \brief Execute a module.
+ * \param lua the current LUA state.
+ * \return success or not.
  */
-int LuaApi::Execute (lua_State *lua)
+int LuaApi::Execute (lua_State *lua) const
 {
-  static const int ARGUMENT_MODULE = 1;
-  static const int ARGUMENT_ARGS = 2;
-  static const int ARGUMENT_PRIVILEGED = 3;
+  static const auto ARGUMENT_MODULE = 1;
+  static const auto ARGUMENT_ARGS = 2;
+  static const auto ARGUMENT_PRIVILEGED = 3;
 
   // get the number of arguments.
   // we can only have one or 2 arguments 
   // 
   // the first argument is the name of the module
   // and the second is the arguments.
-  int n = lua_gettop( lua );
-  if( n < 1 || n > 3 )
+  const auto numberOfArguments = lua_gettop( lua );
+  if( numberOfArguments < 1 || numberOfArguments > 3 )
   {
-    auto errorMsg = _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg , 3000, 5 );
     lua_pushboolean ( lua, false );
@@ -89,7 +87,7 @@ int LuaApi::Execute (lua_State *lua)
   // do we have a module?
   if (!lua_isstring(lua, ARGUMENT_MODULE) )
   {
-    auto errorMsg = _T("<b>Error : </b> The first parameters must be strings.");
+    const auto errorMsg = _T("<b>Error : </b> The first parameters must be strings.");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -99,9 +97,9 @@ int LuaApi::Execute (lua_State *lua)
   }
 
   // do we have an argument?
-  if ( n >= 2 && !lua_isstring(lua, ARGUMENT_ARGS))
+  if ( numberOfArguments >= 2 && !lua_isstring(lua, ARGUMENT_ARGS))
   {
-    auto errorMsg = _T("<b>Error : </b> The second parameters must be a string.");
+    const auto errorMsg = _T("<b>Error : </b> The second parameters must be a string.");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -110,8 +108,8 @@ int LuaApi::Execute (lua_State *lua)
     return 1;
   }
 
-  bool isPrivileged = false;
-  if (n == 3)
+  auto isPrivileged = false;
+  if (numberOfArguments == 3)
   {
     if (!lua_isboolean(lua, ARGUMENT_PRIVILEGED))
     {
@@ -125,13 +123,13 @@ int LuaApi::Execute (lua_State *lua)
   }
 
   //  get the module
-  auto module = (n >= 1) ? myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_MODULE)) : L"";
+  auto module = (numberOfArguments >= 1) ? myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_MODULE)) : L"";
 
   // and the command line argument
-  auto cmdLine = (n >= 2) ? myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ARGS)) : L"";
+  auto cmdLine = (numberOfArguments >= 2) ? myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ARGS)) : L"";
 
   // run the query
-  bool result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr );
+  const auto result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr );
 
   // push the result.
   lua_pushboolean ( lua, result );
@@ -139,7 +137,7 @@ int LuaApi::Execute (lua_State *lua)
   // tell the user it did not work
   if (false == result)
   {
-    auto errorMsg = _T("<b>Error : </b> There was an error executing the request, please check the parameters.");
+    const auto errorMsg = _T("<b>Error : </b> There was an error executing the request, please check the parameters.");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
   }
@@ -149,16 +147,16 @@ int LuaApi::Execute (lua_State *lua)
 }
 
 /**
- * Get the number of arguments passed.
- * @param lua_State *
- * @return int
+ * \brief Get the number of arguments passed.
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::GetCommandCount(lua_State *lua)
+int LuaApi::GetCommandCount(lua_State *lua) const
 {
-  int n = lua_gettop(lua);
-  if (n > 0)
+  const auto numberOfArguments = lua_gettop(lua);
+  if (numberOfArguments > 0)
   {
-    auto errorMsg = _T("<b>Error : </b> The 'GetCommandCount' function does not take any parametters.");
+    const auto errorMsg = _T("<b>Error : </b> The 'GetCommandCount' function does not take any parametters.");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -168,7 +166,7 @@ int LuaApi::GetCommandCount(lua_State *lua)
   }
 
   // get it
-  size_t nSize = __super::GetCommandCount();
+  const auto nSize = __super::GetCommandCount();
   
   // and push it to LUA.
   lua_pushinteger(lua, nSize );
@@ -178,17 +176,17 @@ int LuaApi::GetCommandCount(lua_State *lua)
 }
 
 /**
- * Get an arguments
- * @param lua_State *
- * @return int
+ * \brief Get an arguments
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::GetCommand (lua_State *lua)
+int LuaApi::GetCommand (lua_State *lua) const
 {
-  static const int ARGUMENT_NUMBER = 1;
-  int n = lua_gettop( lua );
-  if( n != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
+  static const auto ARGUMENT_NUMBER = 1;
+  const auto numberOfArguments = lua_gettop( lua );
+  if( numberOfArguments != 1 || !lua_isnumber(lua, ARGUMENT_NUMBER ) )
   {
-    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getCommand( <b>index</b> )</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getCommand( <b>index</b> )</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -197,11 +195,11 @@ int LuaApi::GetCommand (lua_State *lua)
     return 1;
   }
 
-  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER);
+  const auto idx = static_cast<unsigned int>(lua_tointeger (lua, ARGUMENT_NUMBER));
   MYODD_STRING sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
-    auto errorMsg = _T("Trying to get an argument past the number of arguments.");
+    const auto errorMsg = _T("Trying to get an argument past the number of arguments.");
     __super::Log(AM_LOG_WARNING, errorMsg);
 
     lua_pushboolean( lua, false );
@@ -219,16 +217,16 @@ int LuaApi::GetCommand (lua_State *lua)
 }
 
 /**
- * Get an action
- * @param lua_State *
- * @return int
+ * \brief Get an action
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::GetAction (lua_State *lua)
+int LuaApi::GetAction (lua_State *lua) const
 {
-  int n = lua_gettop( lua );
-  if( n != 0 )
+  const auto numberOfArguments = lua_gettop( lua );
+  if( numberOfArguments != 0 )
   {
-    auto errorMsg = _T("<b>Error : </b>.<br>Format is <i>am_getAction( )</i>");
+    const auto errorMsg = _T("<b>Error : </b>.<br>Format is <i>am_getAction( )</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean( lua, false );
@@ -240,7 +238,7 @@ int LuaApi::GetAction (lua_State *lua)
   MYODD_STRING sValue;
   if( !__super::GetAction( sValue ) )
   {
-    auto errorMsg = _T("Trying to get the action name/value.");
+    const auto errorMsg = _T("Trying to get the action name/value.");
     __super::Log(AM_LOG_WARNING, errorMsg);
 
     lua_pushboolean(lua, false);
@@ -258,20 +256,20 @@ int LuaApi::GetAction (lua_State *lua)
 }
 
 /**
- * Todo
- * @param lua_State *
- * @return int
+ * \brief Say a message on screen 
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::Say (lua_State *lua)
+int LuaApi::Say (lua_State *lua) const
 {
-  const int ARGUMENT_TEXT = 1;
-  const int ARGUMENT_ELAPSE = 2;
-  const int ARGUMENT_FADEOUT = 3;
+  const auto ARGUMENT_TEXT = 1;
+  const auto ARGUMENT_ELAPSE = 2;
+  const auto ARGUMENT_FADEOUT = 3;
 
-  int n = lua_gettop(lua);
-  if (n < 2 || n > 3)
+  const auto numberOfArguments = lua_gettop(lua);
+  if (numberOfArguments < 2 || numberOfArguments > 3)
   {
-    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -303,11 +301,11 @@ int LuaApi::Say (lua_State *lua)
   }
 
   // the first item is the message.
-  auto msg = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_TEXT) );
-  auto nElapse = (unsigned int)lua_tointeger (lua, ARGUMENT_ELAPSE);
+  const auto msg = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_TEXT) );
+  const auto nElapse = (unsigned int)lua_tointeger (lua, ARGUMENT_ELAPSE);
   if(  nElapse == 0 )
   {
-    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>am_say( msg, <b>elapse</b>[, fade=0])</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say( errorMsg, 3000, 5 );
     lua_pushboolean(lua, false);
@@ -318,11 +316,11 @@ int LuaApi::Say (lua_State *lua)
 
   // if it is 0 then we fade rapidely
   unsigned int nFadeOut = 0;
-  if (n == 3)
+  if (numberOfArguments == 3)
   {
     if (!lua_isinteger(lua, ARGUMENT_FADEOUT))
     {
-      auto errorMsg = _T("<b>Error : </b> The fadout parameters must be an integer.");
+      const auto errorMsg = _T("<b>Error : </b> The fadout parameters must be an integer.");
       __super::Log(AM_LOG_ERROR, errorMsg);
       __super::Say(errorMsg, 3000, 5);
       lua_pushboolean(lua, false);
@@ -334,7 +332,7 @@ int LuaApi::Say (lua_State *lua)
   }
 
   // and we can now display the message.
-  bool result = __super::Say( msg.c_str(), nElapse, nFadeOut );
+  const auto result = __super::Say( msg.c_str(), nElapse, nFadeOut );
   lua_pushboolean ( lua, result );
 
   // return the number of results
@@ -342,18 +340,18 @@ int LuaApi::Say (lua_State *lua)
 }
 
 /**
- * Get the currently selected string.
- * @param lua_State *
- * @return int
+ * \brief Get the currently selected string.
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::Getstring( lua_State *lua )
+int LuaApi::Getstring( lua_State *lua ) const
 {
-  const int ARGUMENT_QUOTE = 1;
+  const auto ARGUMENT_QUOTE = 1;
 
-  int n = lua_gettop(lua);
-  if ( n > 1 )
+  const auto numberOfArguments = lua_gettop(lua);
+  if (numberOfArguments > 1 )
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Getstring' does not take more than one parameter");
+    const auto errorMsg = _T("<b>Error : </b> The function 'Getstring' does not take more than one parameter");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -363,8 +361,8 @@ int LuaApi::Getstring( lua_State *lua )
   }
 
   // the quote
-  bool bQuote = true;
-  if (n == 1)
+  auto bQuote = true;
+  if (numberOfArguments == 1)
   {
     if (!lua_isboolean(lua, ARGUMENT_QUOTE) )
     {
@@ -400,16 +398,16 @@ int LuaApi::Getstring( lua_State *lua )
 }
 
 /**
- * Get the action monitor version string.
- * @param lua_State *
- * @return int
+ * \brief Get the action monitor version string.
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::GetVersion( lua_State *lua )
+int LuaApi::GetVersion( lua_State *lua ) const
 {
-  int n = lua_gettop(lua);
-  if (n > 0)
+  const auto numberOfArguments = lua_gettop(lua);
+  if (numberOfArguments > 0)
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'GetVersion' does not take any parameters");
+    const auto errorMsg = _T("<b>Error : </b> The function 'GetVersion' does not take any parameters");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -439,20 +437,20 @@ int LuaApi::GetVersion( lua_State *lua )
 }
 
 /**
- * Get a file at a given index.
- * @param lua_State *
- * @return int
+ * \brief Get a file at a given index.
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::Getfile( lua_State *lua )
+int LuaApi::GetFile( lua_State *lua ) const
 {
   //  the arguments.
-  const int ARGUMENT_NUMBER = 1;
-  const int ARGUMENT_QUOTE = 2;
+  const auto ARGUMENT_NUMBER = 1;
+  const auto ARGUMENT_QUOTE = 2;
 
-  int n = lua_gettop( lua );
-  if (n < 1 || n > 2 )
+  const auto numberOfArguments = lua_gettop( lua );
+  if (numberOfArguments < 1 || numberOfArguments > 2 )
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters");
+    const auto errorMsg = _T("<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -473,15 +471,15 @@ int LuaApi::Getfile( lua_State *lua )
   }
 
   //  get the nunber
-  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER );
+  const auto idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER );
 
   // the quote
-  bool bQuote = true;
-  if (n == 2)
+  auto bQuote = true;
+  if (numberOfArguments == 2)
   {
     if (!lua_isboolean(lua, ARGUMENT_QUOTE))
     {
-      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
       __super::Log(AM_LOG_ERROR, errorMsg);
       __super::Say(errorMsg, 3000, 5);
       lua_pushboolean(lua, false);
@@ -511,19 +509,19 @@ int LuaApi::Getfile( lua_State *lua )
 }
 
 /**
- * Get a folder at a given index.
- * @param lua_State *
- * @return int
+ * \brief Get a folder at a given index.
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::Getfolder( lua_State *lua )
+int LuaApi::GetFolder( lua_State *lua ) const
 {
-  const int ARGUMENT_NUMBER = 1;
-  const int ARGUMENT_QUOTE = 2;
+  const auto ARGUMENT_NUMBER = 1;
+  const auto ARGUMENT_QUOTE = 2;
 
-  int n = lua_gettop(lua);
-  if (n < 1 || n > 2)
+  const auto numberOfArguments = lua_gettop(lua);
+  if (numberOfArguments < 1 || numberOfArguments > 2)
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Getfolder' takes 1 or 2 parameters");
+    const auto errorMsg = _T("<b>Error : </b> The function 'Getfolder' takes 1 or 2 parameters");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -544,11 +542,11 @@ int LuaApi::Getfolder( lua_State *lua )
   }
 
   //  the number.
-  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER);
+  const auto idx = static_cast<unsigned int>(lua_tointeger (lua, ARGUMENT_NUMBER));
 
   // the quote
-  bool bQuote = true;
-  if (n >= 2)
+  auto bQuote = true;
+  if (numberOfArguments >= 2)
   {
     if (!lua_isboolean(lua, ARGUMENT_QUOTE))
     {
@@ -582,19 +580,19 @@ int LuaApi::Getfolder( lua_State *lua )
 }
 
 /**
- * Get a url at a given index.
- * @param lua_State *
- * @return int
+ * \brief Get a url at a given index.
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::Geturl( lua_State *lua )
+int LuaApi::GetUrl( lua_State *lua ) const
 {
-  const int ARGUMENT_NUMBER = 1;
-  const int ARGUMENT_QUOTE = 2;
+  const auto ARGUMENT_NUMBER = 1;
+  const auto ARGUMENT_QUOTE = 2;
 
-  int n = lua_gettop(lua);
-  if (n < 1 || n > 2)
+  const auto numberOfArguments = lua_gettop(lua);
+  if (numberOfArguments < 1 || numberOfArguments > 2)
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Geturl' takes 1 or 2 parameters");
+    const auto errorMsg = _T("<b>Error : </b> The function 'Geturl' takes 1 or 2 parameters");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -615,15 +613,15 @@ int LuaApi::Geturl( lua_State *lua )
   }
 
   //  get the index.
-  unsigned int idx = (unsigned int)lua_tointeger (lua, ARGUMENT_NUMBER);
+  const auto idx = static_cast<unsigned int>(lua_tointeger (lua, ARGUMENT_NUMBER));
 
   // the quote
-  bool bQuote = true;
-  if (n >= 2)
+  auto bQuote = true;
+  if (numberOfArguments >= 2)
   {
     if (!lua_isboolean(lua, ARGUMENT_QUOTE))
     {
-      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
       __super::Log(AM_LOG_ERROR, errorMsg);
       __super::Say(errorMsg, 3000, 5);
       lua_pushboolean(lua, false);
@@ -653,22 +651,22 @@ int LuaApi::Geturl( lua_State *lua )
 }
 
 /**
- * Add a given action
- * @param lua_State *
- * @return int
+ * \brief Add a given action
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::AddAction( lua_State *lua )
+int LuaApi::AddAction( lua_State *lua ) const
 {
   const auto ARGUMENT_ACTION = 1;
   const auto ARGUMENT_PATH = 2;
 
   //  get the number of arguments
-  int n = lua_gettop( lua );
+  const auto numberOfArguments = lua_gettop(lua);
 
   // we must have 2 items
-  if( n != 2 )
+  if(numberOfArguments != 2 )
   {
-    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say( errorMsg, 3000, 5 );
     lua_pushboolean ( lua, false );
@@ -677,7 +675,7 @@ int LuaApi::AddAction( lua_State *lua )
 
   if (!lua_isstring(lua, ARGUMENT_ACTION))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -686,7 +684,7 @@ int LuaApi::AddAction( lua_State *lua )
 
   if (!lua_isstring(lua, ARGUMENT_PATH))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -694,11 +692,11 @@ int LuaApi::AddAction( lua_State *lua )
   }
 
   // get the action and path
-  auto szAction = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_ACTION) );
-  auto szPath = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_PATH ) );
+  const auto szAction = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_ACTION) );
+  const auto szPath = myodd::strings::String2WString( lua_tostring (lua, ARGUMENT_PATH ) );
 
   // add it, (or try).
-  auto result = __super::AddAction(szAction.c_str(), szPath.c_str() );
+  const auto result = __super::AddAction(szAction.c_str(), szPath.c_str() );
   
   // return if it works.
   lua_pushboolean ( lua, result);
@@ -706,22 +704,22 @@ int LuaApi::AddAction( lua_State *lua )
 }
 
 /**
- * Remove a given action
- * @param lua_State *
- * @return int
+ * \brief Remove a given action
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::RemoveAction( lua_State *lua )
+int LuaApi::RemoveAction( lua_State *lua ) const
 {
-  const int ARGUMENT_ACTION = 1;
-  const int ARGUMENT_PATH = 2;
+  const auto ARGUMENT_ACTION = 1;
+  const auto ARGUMENT_PATH = 2;
 
   //  get the number of arguments
-  int n = lua_gettop( lua );
+  const auto numberOfArguments = lua_gettop(lua);
 
   // we must have 1 or 2
-  if( n != 2 )
+  if(numberOfArguments != 2 )
   {
-    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean ( lua, false );
@@ -730,7 +728,7 @@ int LuaApi::RemoveAction( lua_State *lua )
 
   if (!lua_isstring(lua, ARGUMENT_ACTION))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -739,16 +737,16 @@ int LuaApi::RemoveAction( lua_State *lua )
 
   if (!lua_isstring(lua, ARGUMENT_PATH))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
     return 1;
   }
 
-  auto szAction = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ACTION));
-  auto szPath = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_PATH));
-  auto result = __super::RemoveAction(szAction.c_str(), szPath.c_str());
+  const auto szAction = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ACTION));
+  const auto szPath = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_PATH));
+  const auto result = __super::RemoveAction(szAction.c_str(), szPath.c_str());
   
   // return if it works.
   lua_pushboolean ( lua, result);
@@ -758,22 +756,22 @@ int LuaApi::RemoveAction( lua_State *lua )
 }
 
 /**
- * Find an action at a given index.
- * @param lua_State *
- * @return int
+ * \brief Find an action at a given index.
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::FindAction( lua_State *lua )
+int LuaApi::FindAction( lua_State *lua ) const
 {
-  const int ARGUMENT_INDEX = 1;
-  const int ARGUMENT_ACTION = 2;
+  const auto ARGUMENT_INDEX = 1;
+  const auto ARGUMENT_ACTION = 2;
 
   //  get the number of arguments
-  int n = lua_gettop( lua );
+  const auto numberOfArguments = lua_gettop(lua);
 
   // we must have 2 arguments.
-  if( n != 2 )
+  if(numberOfArguments != 2 )
   {
-    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean ( lua, false );
@@ -782,7 +780,7 @@ int LuaApi::FindAction( lua_State *lua )
 
   if (!lua_isinteger(lua, ARGUMENT_INDEX))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'index' must be a number");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'index' must be a number");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -791,15 +789,15 @@ int LuaApi::FindAction( lua_State *lua )
 
   if (!lua_isstring(lua, ARGUMENT_ACTION))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
     return 1;
   }
 
-  auto idx = (unsigned int)lua_tointeger (lua, ARGUMENT_INDEX);
-  auto action = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ACTION));
+  const auto idx = (unsigned int)lua_tointeger (lua, ARGUMENT_INDEX);
+  const auto action = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ACTION));
 
   MYODD_STRING sValue = _T("");
   if( !__super::FindAction( idx, action.c_str(), sValue ) )
@@ -814,7 +812,7 @@ int LuaApi::FindAction( lua_State *lua )
   }
 
   // otherwise push the string
-  auto asValue = myodd::strings::WString2String(sValue);
+  const auto asValue = myodd::strings::WString2String(sValue);
   lua_pushstring(lua, asValue.c_str());
 
   // one return variable.
@@ -822,22 +820,22 @@ int LuaApi::FindAction( lua_State *lua )
 }
 
 /**
- * Log a message 
- * @param lua_Sate *lua
- * @return int the number of arguments.
+ * \brief Log a message 
+ * \param lua the current LUA state.
+ * \return the number of arguments being returned.
  */
-int LuaApi::Log(lua_State *lua)
+int LuaApi::Log(lua_State *lua) const
 {
-  const int ARGUMENT_LOGTYPE = 1;
-  const int ARGUMENT_MESSAGE = 2;
+  const auto ARGUMENT_LOGTYPE = 1;
+  const auto ARGUMENT_MESSAGE = 2;
 
   //  get the number of arguments
-  int n = lua_gettop(lua);
+  const auto numberOfArguments = lua_gettop(lua);
 
   // we must have 2 items
-  if (n != 2)
+  if (numberOfArguments != 2)
   {
-    auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
+    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -846,7 +844,7 @@ int LuaApi::Log(lua_State *lua)
 
   if (!lua_isinteger(lua, ARGUMENT_LOGTYPE))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'logtype' must be a number");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'logtype' must be a number");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
@@ -855,15 +853,15 @@ int LuaApi::Log(lua_State *lua)
 
   if (!lua_isstring(lua, ARGUMENT_MESSAGE))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'message' must be a string");
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'message' must be a string");
     __super::Log(AM_LOG_ERROR, errorMsg);
     __super::Say(errorMsg, 3000, 5);
     lua_pushboolean(lua, false);
     return 1;
   }
 
-  auto logType = (unsigned int)lua_tointeger(lua, ARGUMENT_LOGTYPE);
-  auto action = myodd::strings::String2WString( lua_tostring(lua, ARGUMENT_MESSAGE));
+  const auto logType = (unsigned int)lua_tointeger(lua, ARGUMENT_LOGTYPE);
+  const auto action = myodd::strings::String2WString( lua_tostring(lua, ARGUMENT_MESSAGE));
 
   __super::Log(logType, action.c_str() );
 
