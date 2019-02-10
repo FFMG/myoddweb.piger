@@ -24,7 +24,7 @@ public:
   int GetAction    ( DWORD nBufferLength, wchar_t* lpBuffer );
   int GetFile      ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   int GetFolder    ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
-  int GetURL       ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
+  int GetUrl       ( UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote) const;
   bool AddAction   (const wchar_t* szText, const wchar_t* szPath );
   bool RemoveAction(const wchar_t* szText, const wchar_t* szPath );
   bool GetVersion  ( DWORD nBufferLength, wchar_t* lpBuffer);

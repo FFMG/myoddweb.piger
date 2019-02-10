@@ -24,7 +24,7 @@ public:
   virtual int GetString(unsigned int nBufferLength, wchar_t* lpBuffer);
   virtual size_t GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
   virtual size_t GetFolder(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
-  virtual size_t GetURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
+  virtual size_t GetUrl(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const;
   virtual bool AddAction(const wchar_t* szText, const wchar_t* szPath);
   virtual bool RemoveAction(const wchar_t* szText, const wchar_t* szPath);
   virtual bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer);

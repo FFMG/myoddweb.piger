@@ -114,7 +114,7 @@ public:
   virtual int GetString(unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
   virtual size_t GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
   virtual size_t GetFolder(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
-  virtual size_t GetURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
+  virtual size_t GetUrl(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;
   virtual bool AddAction(const wchar_t* szText, const wchar_t* szPath) = 0;
   virtual bool RemoveAction(const wchar_t* szText, const wchar_t* szPath) = 0;
   virtual bool FindAction(unsigned int idx, const wchar_t* szText, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;

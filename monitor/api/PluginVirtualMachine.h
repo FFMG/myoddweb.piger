@@ -79,7 +79,7 @@ public:
   static int GetAction(DWORD nBufferLength, wchar_t* lpBuffer);
   static int GetFile(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   static int GetFolder(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
-  static int GetURL(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
+  static int GetUrl(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   static bool AddAction(const wchar_t* szText, const wchar_t* szPath);
   static bool RemoveAction(const wchar_t* szText, const wchar_t* szPath);
   static bool GetVersion(DWORD nBufferLength, wchar_t* lpBuffer);

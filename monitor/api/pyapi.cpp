@@ -63,7 +63,7 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args)
 
   // display the message
   // and we can now display the message.
-  bool result = __super::Say(HelperApi::widen( msg ).c_str(), nElapse, nFadeOut );
+  const auto result = __super::Say(HelperApi::Widen( msg ).c_str(), nElapse, nFadeOut );
   
   // return true.
   return Py_BuildValue("b", result );
@@ -160,8 +160,8 @@ PyObject* PyApi::GetCommandCount(PyObject *self, PyObject *args)
  */
 PyObject* PyApi::Execute(PyObject *self, PyObject *args)
 {
-  CHAR* module = NULL;
-  CHAR* cmdLine = NULL;
+  CHAR* module = nullptr;
+  CHAR* cmdLine = nullptr;
   int isPrivileged = 0;
   if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
   {
@@ -170,7 +170,7 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args)
   }
 
   // run it
-  auto result = __super::Execute(HelperApi::widen( module ).c_str(), HelperApi::widen( cmdLine ).c_str(), (isPrivileged==1), nullptr );
+  auto result = __super::Execute(HelperApi::Widen( module ).c_str(), HelperApi::Widen( cmdLine ).c_str(), (isPrivileged==1), nullptr );
 
   // tell the user it did not work
   if (false == result)
@@ -286,7 +286,7 @@ PyObject* PyApi::Geturl(PyObject *self, PyObject *args)
   }
 
   MYODD_STRING sValue = _T("");
-  if( !__super::GetURL( idx, sValue, (iQuote == 1)) )
+  if( !__super::GetUrl( idx, sValue, (iQuote == 1)) )
   {
     // return false, nothing was found.
     return Py_BuildValue("b", false );
@@ -306,8 +306,8 @@ PyObject* PyApi::Geturl(PyObject *self, PyObject *args)
  */
 PyObject* PyApi::AddAction(PyObject *self, PyObject *args)
 {
-  CHAR* szText = NULL;
-  CHAR* szPath = NULL;
+  CHAR* szText = nullptr;
+  CHAR* szPath = nullptr;
   
   if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
   {
@@ -316,7 +316,7 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::AddAction(HelperApi::widen( szText ).c_str(), HelperApi::widen( szPath ).c_str() );
+  bool result = __super::AddAction(HelperApi::Widen( szText ).c_str(), HelperApi::Widen( szPath ).c_str() );
   return Py_BuildValue("b", result );
 }
 
@@ -329,8 +329,8 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args)
  */
 PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
 {
-  char* szText = NULL;
-  char* szPath = NULL;
+  char* szText = nullptr;
+  char* szPath = nullptr;
   
   if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
   {
@@ -339,7 +339,7 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
   }
 
   // run it
-  bool result = __super::RemoveAction(HelperApi::widen(szText).c_str(), HelperApi::widen(szPath).c_str() );
+  bool result = __super::RemoveAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str() );
   return Py_BuildValue("b", result );
 }
 
@@ -353,7 +353,7 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
 PyObject* PyApi::Log(PyObject *self, PyObject *args)
 {
   unsigned int logType = 0;
-  char* szText = NULL;
+  char* szText = nullptr;
 
   if (!PyArg_ParseTuple(args, "Is", &logType, &szText))
   {
@@ -398,7 +398,7 @@ PyObject* PyApi::GetVersion(PyObject *self, PyObject *args)
 PyObject* PyApi::FindAction(PyObject *self, PyObject *args)
 {
   UINT idx = 0;
-  CHAR* szText = NULL;
+  CHAR* szText = nullptr;
   if (!PyArg_ParseTuple(args, "Is", &idx, &szText ))
   {
     __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>"), 3000, 5 );
@@ -406,7 +406,7 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args)
   }
 
   MYODD_STRING sValue = _T("");
-  if( !__super::FindAction( idx, HelperApi::widen( szText ).c_str(), sValue ) )
+  if( !__super::FindAction( idx, HelperApi::Widen( szText ).c_str(), sValue ) )
   {
     // we have nothing
     return Py_BuildValue("b", false);
@@ -467,7 +467,7 @@ void PyApi::ExecuteInThread()
   // clear anything left behind.
   PyThreadState_Clear(myThreadState);
 
-  PyThreadState_Swap(NULL);
+  PyThreadState_Swap(nullptr);
 
   // delete my thread.
   PyThreadState_Delete(myThreadState);
@@ -485,7 +485,7 @@ void PyApi::ExecuteInThread()
 void PyApi::CheckForPythonErrors()
 {
   PyObject* ex = PyErr_Occurred();
-  if (NULL != ex)
+  if (nullptr != ex)
   {
     //  if this is a normal exist, then we don't need to show an error message.
     if (!PyErr_ExceptionMatches(PyExc_SystemExit))
@@ -497,7 +497,7 @@ void PyApi::CheckForPythonErrors()
       std::string message = "<b>Error : </b>An error was raised in the PyAPI.";
       if (type) {
         PyObject * temp_bytes = PyUnicode_AsEncodedString(type, "ASCII", "strict");
-        if (temp_bytes != NULL) {
+        if (temp_bytes != nullptr) {
           message += "<br>";
           message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
           Py_DECREF(temp_bytes);
@@ -505,7 +505,7 @@ void PyApi::CheckForPythonErrors()
       }
       if (value) {
         PyObject * temp_bytes = PyUnicode_AsEncodedString(value, "ASCII", "strict");
-        if (temp_bytes != NULL) {
+        if (temp_bytes != nullptr) {
           message += "<br>";
           message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
           Py_DECREF(temp_bytes);
@@ -513,7 +513,7 @@ void PyApi::CheckForPythonErrors()
       }
       if (traceback) {
         PyObject * temp_bytes = PyUnicode_AsEncodedString(traceback, "ASCII", "strict");
-        if (temp_bytes != NULL) {
+        if (temp_bytes != nullptr) {
           message += "<br>";
           message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
           Py_DECREF(temp_bytes);

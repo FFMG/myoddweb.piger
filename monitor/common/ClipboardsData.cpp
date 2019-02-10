@@ -211,7 +211,7 @@ bool ClipboardsData::GetFile(MYODD_STRING& sText, size_t idx, bool bQuote ) cons
  * @param bool bQuote if we want to quote the filename
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool ClipboardsData::GetURL(MYODD_STRING& sText, size_t idx, bool bQuote ) const
+bool ClipboardsData::GetUrl(MYODD_STRING& sText, size_t idx, bool bQuote ) const
 {
   sText = _T(""); //  reset the contents
 

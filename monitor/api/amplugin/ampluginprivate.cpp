@@ -136,7 +136,7 @@ size_t AmPluginPrivate::GetFolder(unsigned int idx, unsigned int nBufferLength, 
 * @param void
 * @return void
 */
-size_t AmPluginPrivate::GetURL(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const
+size_t AmPluginPrivate::GetUrl(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const
 {
   void* pFunc = Get(L"getURL");
   if (!pFunc)

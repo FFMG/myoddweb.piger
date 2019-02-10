@@ -210,16 +210,16 @@ int PluginApi::GetFolder (UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool
 
 /**
  * Todo
- * @see __super::getURL
+ * @see __super::getUrl
  * @param void
  * @param void
  * @param void
  * @return void
  */
-int PluginApi::GetURL(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
+int PluginApi::GetUrl(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote) const
 {
   MYODD_STRING sValue = _T("");
-  if( !__super::GetURL (idx, sValue, bQuote ) )
+  if( !__super::GetUrl (idx, sValue, bQuote ) )
   {
     return 0;
   }

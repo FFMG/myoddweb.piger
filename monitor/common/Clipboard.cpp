@@ -84,9 +84,9 @@ bool Clipboard::GetFolder( MYODD_STRING& sText, size_t idx, bool bQuote ) const
  * @param int the URL number/index we are looking for.
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool Clipboard::GetURL( MYODD_STRING& sText, size_t idx, bool bQuote ) const
+bool Clipboard::GetUrl( MYODD_STRING& sText, size_t idx, bool bQuote ) const
 {
-  return _clipboardData.GetURL(sText, idx, bQuote );
+  return _clipboardData.GetUrl(sText, idx, bQuote );
 }
 
 /**

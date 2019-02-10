@@ -197,7 +197,7 @@ void LoaderManager::Learn(AmPlugin* p, bool isPrivileged)
     l = p->GetFolder( 0, _countof(asPath), asPath );
     if( l == 0 )
     {
-      l = p->GetURL( 0, _countof(asPath), asPath );
+      l = p->GetUrl( 0, _countof(asPath), asPath );
       if( l == 0 )
       {
         p->Say( L"Error : Learn as <i>... what file</i>?", 100, 5 );

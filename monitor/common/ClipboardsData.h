@@ -17,7 +17,7 @@ public:
   // accessors.
   bool GetFolder(MYODD_STRING& sText, size_t idx, bool bQuote ) const;
   bool GetFile(MYODD_STRING& sText, size_t idx, bool bQuote) const;
-  bool GetURL(MYODD_STRING& sText, size_t idx, bool bQuotec) const;
+  bool GetUrl(MYODD_STRING& sText, size_t idx, bool bQuotec) const;
 
   bool GetTextFromClipboard(MYODD_STRING& sText, bool bQuote ) const;
   bool GetText(MYODD_STRING& sText, bool bQuote ) const;

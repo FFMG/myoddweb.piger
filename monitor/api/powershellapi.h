@@ -25,7 +25,7 @@ public:
   bool GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
-  bool GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
+  bool GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
   bool GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
   bool Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse);
 

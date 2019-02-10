@@ -151,7 +151,7 @@ void PluginVirtualMachine::InitializeFunctions()
   Register(_T("getString"), PluginVirtualMachine::GetString);
   Register(_T("getFile"), PluginVirtualMachine::GetFile);
   Register(_T("getFolder"), PluginVirtualMachine::GetFolder);
-  Register(_T("getURL"), PluginVirtualMachine::GetURL);
+  Register(_T("getURL"), PluginVirtualMachine::GetUrl);
   Register(_T("addAction"), PluginVirtualMachine::AddAction);
   Register(_T("removeAction"), PluginVirtualMachine::RemoveAction);
   Register(_T("getVersion"), PluginVirtualMachine::GetVersion);
@@ -569,9 +569,9 @@ int PluginVirtualMachine::GetFolder(UINT idx, DWORD nBufferLength, wchar_t* lpBu
 * @param void
 * @return void
 */
-int PluginVirtualMachine::GetURL(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
+int PluginVirtualMachine::GetUrl(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote)
 {
-  return GetApi().GetURL( idx,  nBufferLength,  lpBuffer, bQuote );
+  return GetApi().GetUrl( idx,  nBufferLength,  lpBuffer, bQuote );
 }
 
 /**

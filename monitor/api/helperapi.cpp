@@ -2,36 +2,32 @@
 #include "helperapi.h"
 
 #include <locale>
-#include <iostream>
 #include <sstream>
 
-#include "../actionmonitor/ActionMonitor.h"
-#include "../actionmonitor/ActionMonitorDlg.h"
+#include "../ActionMonitor/ActionMonitor.h"
+#include "../ActionMonitor/ActionMonitorDlg.h"
 
 //  the clipboard code
-#include "../common/clipboard.h"
+#include "../common/Clipboard.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief the constructor
+ * \param action the action being called
  */
 HelperApi::HelperApi(const ActiveAction& action) : _action( action )
 {
 }
 
 /**
- * Todo
- * @param void
- * @return void 
+ * \brief destructor
  */
 HelperApi::~HelperApi()
 {
 }
 
 /**
- * Get the current clipboard for this active action.
- * @return const Clipboard& the current clipboard.
+ * \brief Get the current clipboard data for this active action.
+ * \return const Clipboard& the current clipboard.
  */
 const Clipboard& HelperApi::GetClipboard() const
 {
@@ -39,11 +35,11 @@ const Clipboard& HelperApi::GetClipboard() const
 }
 
 /**
- * Display a message on the string.
- * @param LPCSTR the message we want to display.
- * @param const unsigned int how long, (in ms), we are displaying the message for.
- * @param const unsigned int how fast we want to fade out.
- * @return bool if the message was displayed properly.
+ * \brief Display a message on the string.
+ * \param msg the message we want to display.
+ * \param nElapse how long, (in ms), we are displaying the message for.
+ * \param nFadeOut how fast we want to fade out.
+ * \return bool if the message was displayed properly or if there was an error.
  */
 bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
 {
@@ -73,23 +69,23 @@ bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsign
 }
 
 /**
- * Get a command by index
- * @param void
- * @param void
- * @param void
- * @return boolean false if it does not exist
+ * \brief Get a command by index, so if the user pressed "Hello World" get each word per index.
+ *        Index 0 is the action itself 
+ * \param idx the command index
+ * \param sValue the returned value.
+ * \return boolean false if it does not exist
  */
-bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue )
+bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue ) const
 {
   try
   {
-    const ActiveAction* action = &_action;
-    if (NULL == action)
+    const auto& action = &_action;
+    if (nullptr == action)
     {
       //  we don't have a command.
       return false;
     }
-    const MYODD_STRING& szCommandLine = action->CommandLine();
+    const auto& szCommandLine = action->CommandLine();
 
     // if the user wants command 0 then we want the full name
     // this is more consistent with the get commands normally work.
@@ -107,7 +103,7 @@ bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue )
 
       // because the std::vector is 0 based
       // we must step the index back once to get the right number
-      unsigned int actual_idx = idx-1;
+      const auto actual_idx = idx-1;
 
       // if the number that the user wants is within our limits then we will add it.
       if(actual_idx >= params.size() )
@@ -115,13 +111,14 @@ bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue )
         return false;
       }
 
+      // set the value
       sValue = params[actual_idx].c_str();
       return true;
     }
   }
   catch(...)
   {
-    //  smething broke...
+    // something did not work.
     sValue = _T("");
     return false;
   }
@@ -129,18 +126,18 @@ bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue )
 }
 
 /**
- * Get the command line that the user tried to use
- * for example if the command is "lean" and the user entered "Lea" 
- * this function will return "lean"
- * @param MYODD_STRING& sValue the value will be put here.
- * @return bool if we were able to get the command or not.
+ * \brief Get the command line that the user tried to use
+ *        for example if the command is "lean" and the user entered "Lea" 
+ *        this function will return "lean"
+ * \param sValue the value will be put here.
+ * \return bool if we were able to get the command or not.
  */
-bool HelperApi::GetAction( MYODD_STRING& sValue )
+bool HelperApi::GetAction( MYODD_STRING& sValue ) const
 {
   try
   {
     //  we only need the action and not the 'active' action.
-    const Action* action = &_action;
+    const auto& action = &_action;
     if (nullptr == action)
     {
       //  we don't have a command.
@@ -160,23 +157,23 @@ bool HelperApi::GetAction( MYODD_STRING& sValue )
 }
 
 /**
- * Get the number of arguments that the user entered.
- * If the Action is "Google Earth" and the user typed in "Goo Ear Home" then there is only
+ * \brief Get the number of arguments that the user entered.
+ *        If the Action is "Google Earth" and the user typed in "Goo Ear Home" then there is only
  * one command count, ( 'Home' );
- * @return void
+ * @return the number of arguments.
  */
-size_t HelperApi::GetCommandCount()
+size_t HelperApi::GetCommandCount() const
 {
   try
   {
-    const ActiveAction* action = &_action;
-    if (NULL == action)
+    const auto& action = &_action;
+    if (nullptr == action)
     {
       //  we don't have a command.
       return false;
     }
 
-    const MYODD_STRING& szCommandLine = action->CommandLine();
+    const auto& szCommandLine = action->CommandLine();
     if( 0 == szCommandLine.length() )
     {
       return 0; //  we have no arguments.
@@ -184,10 +181,7 @@ size_t HelperApi::GetCommandCount()
 
     // get the action commands and get the number of argument .
     std::vector<MYODD_STRING> params;
-    size_t nSize = myodd::strings::Explode(  params, szCommandLine, _T(' '), MYODD_MAX_INT32, false );
-    
-    // return the number of arguments we have.
-    return nSize;
+    return myodd::strings::Explode(  params, szCommandLine, _T(' '), MYODD_MAX_INT32, false );
   }
   catch( ... )
   {
@@ -197,17 +191,17 @@ size_t HelperApi::GetCommandCount()
 }
 
 /**
- * Execute a module and a command line if the module is NULL then we try
- * and run the command line arguments only.
- *
- * @param LPCTSTR | NULL the name of the module/dll/exe we are trying to run
- * @param LPCTSTR | NULL the command line arguments we want to run.
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @return bool success or not
+ * \brief Execute a module and a command line if the module is NULL then we try
+ *        and run the command line arguments only.
+ * \param module the name of the module/dll/exe we are trying to run, (can't be null)
+ * \param cmdLine the command line arguments we want to run, (can't be null).
+ * \param isPrivileged if we need administrator privilege to run this.
+ * \param hProcess the return handle, (so we can keep track of it)
+ * \return bool success or not
  */
-bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const
+bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, const bool isPrivileged, HANDLE* hProcess) const
 {
-  if( NULL == module && NULL == cmdLine )
+  if( nullptr == module && nullptr == cmdLine )
   {
     return false;
   }
@@ -217,7 +211,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
   std::vector<MYODD_STRING> argv;
 
   // we must have at least the module
-  if( NULL == module )
+  if( nullptr == module )
   {
     argv.push_back( _T("") );
   }
@@ -226,7 +220,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
     argv.push_back( module );
   }
 
-  if( NULL != cmdLine )
+  if(nullptr != cmdLine )
   {
     argv.push_back( cmdLine );
   }
@@ -236,32 +230,32 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
 }
 
 /**
- * Get the version number of the action monitor.
- * @param MYODD_STRING& the return string that will contain the FULL version number.
- * @return bool true|false
+ * \brief Get the version number of the action monitor.
+ * \param sValue the return string that will contain the FULL version number.
+ * \return bool true|false
  */
 bool HelperApi::GetVersion (MYODD_STRING& sValue )
 {
-  myodd::files::Version _ver;
+  myodd::files::Version ver;
   sValue = myodd::strings::Format( _T("%d.%d.%d.%d"),
-                                   _ver.GetFileVersionMajor(),
-                                   _ver.GetFileVersionMinor(),
-                                   _ver.GetFileVersionMaintenance(),
-                                   _ver.GetFileVersionBuild() );
+                                   ver.GetFileVersionMajor(),
+                                   ver.GetFileVersionMinor(),
+                                   ver.GetFileVersionMaintenance(),
+                                   ver.GetFileVersionBuild() );
   return true;
 }
 
 /**
- * Get the string that is currently selected when the action was called.
- * @param MYODD_STRING& the return value.
- * @param bool bQuote if we want to quote the text or not.
- * @return bool if we have a string selected or not.
+ * \brief Get the string that is currently selected when the action was called.
+ * \param sValue the return value.
+ * \param bQuote if we want to quote the text or not.
+ * \return bool if we have a string selected or not.
  */
-bool HelperApi::GetString (MYODD_STRING& sValue, bool bQuote)
+bool HelperApi::GetString (MYODD_STRING& sValue, const bool bQuote) const
 {
   try
   {
-    const Clipboard& clipBoard = GetClipboard( );
+    const auto& clipBoard = GetClipboard( );
     MYODD_STRING sClipBoard = _T("");
     if( !clipBoard.GetText( sClipBoard, bQuote ) )
     {
@@ -286,14 +280,14 @@ bool HelperApi::GetString (MYODD_STRING& sValue, bool bQuote)
 }
 
 /**
- * Get a currently selected file in the clipboard.
- * Used by plugins who want to behave a certain way for files.
- * @param const unsigned int the file number we are after
- * @param MYODD_STRING& the return value
- * @param bool bQuote if we want to quote or not.
- * @return bool success or not if there are no more files
+ * \brief Get a currently selected file in the clipboard.
+ *        Used by plugins who want to behave a certain way for files.
+ * \param idx the file number we are after
+ * \param sValue the return value
+ * \param bQuote if we want to quote or not.
+ * \return bool success or not if there are no more files
  */
-bool HelperApi::GetFile(const unsigned int idx, MYODD_STRING& sValue, bool bQuote)
+bool HelperApi::GetFile(const unsigned int idx, MYODD_STRING& sValue, const bool bQuote) const
 {
   try
   {
@@ -317,21 +311,21 @@ bool HelperApi::GetFile(const unsigned int idx, MYODD_STRING& sValue, bool bQuot
 }
 
 /**
- * Get a currently selected URL in the clipboard.
- * Used by plugins who want to behave a certain way for URLs.
- * @param const unsigned int the URL number we are after
- * @param MYODD_STRING& the return value
- * @param bool bQuote if we want to quote the string or not.
- * @return bool success or not if there are no more URLs
+ * \brief Get a currently selected URL in the clipboard.
+ *        Used by plugins who want to behave a certain way for URLs.
+ * \param idx the URL number we are after
+ * \param sValue the return value
+ * \param bQuote if we want to quote the string or not.
+ * \return bool success or not if there are no more URLs
  */
-bool HelperApi::GetURL (const unsigned int idx, MYODD_STRING& sValue, bool bQuote)
+bool HelperApi::GetUrl (const unsigned int idx, MYODD_STRING& sValue, const bool bQuote) const
 {
   try
   {
-    const Clipboard& clipBoard = GetClipboard( );
+    const auto& clipBoard = GetClipboard( );
 
     MYODD_STRING sClipBoard = _T("");
-    if( !clipBoard.GetURL( sClipBoard, idx, bQuote ) )
+    if( !clipBoard.GetUrl( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
       return false;
@@ -350,15 +344,15 @@ bool HelperApi::GetURL (const unsigned int idx, MYODD_STRING& sValue, bool bQuot
 }
 
 /**
- * Get the currently selected folder, (if any)
- * This is used when plugins want to behave a certain way depending
- * on the currently selected folder.
- * @param const unsigned int the folder number we are getting.
- * @param MYODD_STRING& the value we are after.
- * @param bool bQuote if we want to quote the string or not.
- * @return bool success or not, we return false when there are no more folders.
+ * \brief Get the currently selected folder, (if any)
+ *        This is used when plugins want to behave a certain way depending
+ *        on the currently selected folder.
+ * \param idx the folder number we are getting.
+ * \param sValue the value we are after.
+ * \param bQuote if we want to quote the string or not.
+ * \return bool success or not, we return false when there are no more folders.
  */
-bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, bool bQuote)
+bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, const bool bQuote) const
 {
   try
   {
@@ -386,18 +380,18 @@ bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, bool bQ
 /**
  * Add a set of command to the list of commands.
  * Note that we do hardly any checks to see of the command already exists
- * @param LPCTSTR the name of the command we want to add.
- * @param LPCTSTR the full path of the command that will be executed.
+ * @param szText the name of the command we want to add.
+ * @param szPath the full path of the command that will be executed.
  * @return bool if the action was added properly or not.
  */
 bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
 {
-  if( NULL == szText || _tcslen(szText) == 0 )
+  if( nullptr == szText || _tcslen(szText) == 0 )
   {
     //  this cannot be valid
     return false;
   }
-  if( NULL == szPath || _tcslen(szPath) == 0 )
+  if( nullptr == szPath || _tcslen(szPath) == 0 )
   {
     //  this cannot be valid
     // only internal commands have null paths
@@ -407,20 +401,20 @@ bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
 }
 
 /**
- * Remove an action, if more than one action is found
- * Then the path will be compared against.
- * @param const wchar_t* the action we want to remove
- * @param const wchar_t* the path of the action we are removing.
- * @return bool if the action was removed or not.
+ * \brief Remove an action, if more than one action is found
+ *        Then the path will be compared against.
+ * \param szText the action we want to remove
+ * \param szPath the path of the action we are removing.
+ * \return bool if the action was removed or not.
  */
 bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
 {
-  if( NULL == szText || _tcslen(szText) == 0 )
+  if( nullptr == szText || _tcslen(szText) == 0 )
   {
     //  this cannot be valid
     return false;
   }
-  if( NULL == szPath || _tcslen(szPath) == 0 )
+  if(nullptr == szPath || _tcslen(szPath) == 0 )
   {
     //  this cannot be valid
     // only internal commands have null paths
@@ -430,16 +424,15 @@ bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
 }
 
 /**
- * Add a set of command to the list of commands.
- * Note that we do hardly any checks to see of the command already exists
- * @param const unsigned int the index of the action we are looking for.
- * @param LPCTSTR the name of the command we want to find
- * @param MYODD_STRING& if the action exists, return the path for it.
+ * \brief Find an action to see if it exists already
+ * @param idx the index of the action we are looking for.
+ * @param szText the name of the command we want to find
+ * @param stdPath if the action exists, return the path for it.
  * @return bool if the action exits or not.
  */
 bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath )
 {
-  if( NULL == szText )
+  if( nullptr == szText )
   {
     return false;
   }
@@ -447,46 +440,51 @@ bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, MYODD_
 }
 
 /** 
- * Get the last foreground window. This is the window that was last on top.
- * It is posible to return NULL if the window is not 
- * @return HWND the last top window.
+ * \brief Get the last foreground window. This is the window that was last on top.
+ *        It is possible to return NULL if the window is not 
+ * \return HWND the last top window.
  */
 HWND HelperApi::GetForegroundWindow() const
 {
   //  is it NULL?
-  if (NULL == _action.TopHWnd())
+  if (nullptr == _action.TopHWnd())
   {
-    return NULL;
+    return nullptr;
   }
 
   // is it still valid?
   if ( !::IsWindow(_action.TopHWnd() ))
   {
-    return NULL;
+    return nullptr;
   }
 
   // looks good, so we can return it.
   return _action.TopHWnd();
 }
 
-std::wstring HelperApi::widen(const std::string& str)
+/**
+ * \brief Widen a string, (from std::string to std::wstring)
+ * \param str the std string
+ * \return the widened string
+ */
+std::wstring HelperApi::Widen(const std::string& str)
 {
   std::wostringstream wstm;
-  const std::ctype<wchar_t>& ctfacet = std::use_facet< std::ctype<wchar_t> >(wstm.getloc());
+  const auto& ctfacet = std::use_facet< std::ctype<wchar_t> >(wstm.getloc());
   for (size_t i = 0; i<str.size(); ++i)
     wstm << ctfacet.widen(str[i]);
   return wstm.str();
 }
 
 /**
- * Log a message.
- * @param unsigned int logType the message type we are logging.
- * @param const wchar_t* lpText the text we wish to log.
- * @return none.
+ * \brief Log a message.
+ * \param logType the message type we are logging.
+ * \param lpText the text we wish to log.
+ * \return none.
  */
 void HelperApi::Log(unsigned int logType, const wchar_t* lpText)
 {
-  switch ( (myodd::log::LogType)logType )
+  switch ( static_cast<myodd::log::LogType>(logType) )
   {
   case myodd::log::LogType::Success:
     myodd::log::LogSuccess( L"%s", lpText);

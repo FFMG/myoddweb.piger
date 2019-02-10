@@ -635,7 +635,7 @@ int LuaApi::Geturl( lua_State *lua )
   }
 
   MYODD_STRING sValue = _T("");
-  if( !__super::GetURL( idx, sValue, bQuote) )
+  if( !__super::GetUrl( idx, sValue, bQuote) )
   {
     __super::Log(AM_LOG_WARNING, _T("Unable to get the requested url index."));
 

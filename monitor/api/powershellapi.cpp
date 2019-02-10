@@ -674,12 +674,12 @@ bool PowershellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::I
 
 /**
  * Get a currently selected folder, return false if we don't have that index.
- * @see __super::getURL
+ * @see __super::getUrl
  * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return boolean success or not
  */
-bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_NUMBER = 0;
   const auto ARGUMENT_QUOTE = 1;
@@ -719,7 +719,7 @@ bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcD
   }
 
   MYODD_STRING sValue = _T("");
-  if (!__super::GetURL(idx, sValue, bQuote))
+  if (!__super::GetUrl(idx, sValue, bQuote))
   {
     __super::Log(AM_LOG_WARNING, _T("Unable to get the requested url index."));
 
