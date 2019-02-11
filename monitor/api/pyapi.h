@@ -37,7 +37,7 @@ public:
   PyObject* FindAction(PyObject *self, PyObject *args) const;
   PyObject* Log(PyObject *self, PyObject *args) const;
 
-  void ExecuteInThread();
+  void ExecuteInThread() const;
 protected:
   /**
    * \brief the script that we are running
@@ -56,6 +56,7 @@ protected:
    * \return PyObject* a 'false' python object.
    */
   static PyObject* Fail();
+  void Say(const std::wstring& what) const;
 };
 
 #endif /*# ACTIONMONITOR_API_PY*/

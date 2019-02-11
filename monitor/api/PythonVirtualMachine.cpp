@@ -2,7 +2,7 @@
 #ifdef ACTIONMONITOR_API_PY
 
 #include "PythonVirtualMachine.h"
-#include "files\files.h"
+#include "files/files.h"
 #include "ActionMonitor.h"
 
 static PyMethodDef amMethods[] = {
@@ -12,10 +12,10 @@ static PyMethodDef amMethods[] = {
   { "getAction", PythonVirtualMachine::GetAction, METH_VARARGS, "Get the action entered by the user." },
   { "getCommandCount", PythonVirtualMachine::GetCommandCount, METH_VARARGS, "Get the number of commands." },
   { "execute", PythonVirtualMachine::Execute, METH_VARARGS, "Execute a command, (app, command)." },
-  { "getString", PythonVirtualMachine::Getstring, METH_VARARGS, "Get the currently selected text if any." },
-  { "getFile", PythonVirtualMachine::Getfile, METH_VARARGS, "Get a file by index, return false if not found." },
-  { "getFolder", PythonVirtualMachine::Getfolder, METH_VARARGS, "Get a folder by index, return false if not found." },
-  { "getUrl", PythonVirtualMachine::Geturl, METH_VARARGS, "Get a URL by index, return false if not found." },
+  { "getString", PythonVirtualMachine::GetString, METH_VARARGS, "Get the currently selected text if any." },
+  { "getFile", PythonVirtualMachine::GetFile, METH_VARARGS, "Get a file by index, return false if not found." },
+  { "getFolder", PythonVirtualMachine::GetFolder, METH_VARARGS, "Get a folder by index, return false if not found." },
+  { "getUrl", PythonVirtualMachine::GetUrl, METH_VARARGS, "Get a URL by index, return false if not found." },
   { "addAction", PythonVirtualMachine::AddAction, METH_VARARGS, "Add an action and path to the list of actions." },
   { "removeAction", PythonVirtualMachine::RemoveAction, METH_VARARGS, "Remove an action from the list." },
   { "getVersion", PythonVirtualMachine::GetVersion, METH_VARARGS, "Get the full version string." },
@@ -302,9 +302,9 @@ PyObject* PythonVirtualMachine::Execute(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::Getstring(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetString(PyObject *self, PyObject *args)
 {
-  return GetApi().Getstring(self, args);
+  return GetApi().GetString(self, args);
 }
 
 /**
@@ -314,9 +314,9 @@ PyObject* PythonVirtualMachine::Getstring(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::Getfile(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetFile(PyObject *self, PyObject *args)
 {
-  return GetApi().Getfile(self, args);
+  return GetApi().GetFile(self, args);
 }
 
 /**
@@ -326,9 +326,9 @@ PyObject* PythonVirtualMachine::Getfile(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::Getfolder(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetFolder(PyObject *self, PyObject *args)
 {
-  return GetApi().Getfolder(self, args);
+  return GetApi().GetFolder(self, args);
 }
 
 /**
@@ -338,9 +338,9 @@ PyObject* PythonVirtualMachine::Getfolder(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::Geturl(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::GetUrl(PyObject *self, PyObject *args)
 {
-  return GetApi().Geturl(self, args);
+  return GetApi().GetUrl(self, args);
 }
 
 /**

@@ -41,10 +41,10 @@ public:
   static PyObject* GetAction(PyObject *self, PyObject *args);
   static PyObject* GetCommandCount(PyObject *self, PyObject *args);
   static PyObject* Execute(PyObject *self, PyObject *args);
-  static PyObject* Getstring(PyObject *self, PyObject *args);
-  static PyObject* Getfile(PyObject *self, PyObject *args);
-  static PyObject* Getfolder(PyObject *self, PyObject *args);
-  static PyObject* Geturl(PyObject *self, PyObject *args);
+  static PyObject* GetString(PyObject *self, PyObject *args);
+  static PyObject* GetFile(PyObject *self, PyObject *args);
+  static PyObject* GetFolder(PyObject *self, PyObject *args);
+  static PyObject* GetUrl(PyObject *self, PyObject *args);
   static PyObject* AddAction(PyObject *self, PyObject *args);
   static PyObject* RemoveAction(PyObject *self, PyObject *args);
   static PyObject* GetVersion(PyObject *self, PyObject *args);

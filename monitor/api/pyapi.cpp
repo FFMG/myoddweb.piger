@@ -25,6 +25,12 @@ PyApi::PyApi(const ActiveAction& action, std::string script, PyThreadState* main
 {
 }
 
+void PyApi::Say(const std::wstring& what ) const
+{
+  // ReSharper disable once CppDeclaratorNeverUsed
+  const auto _ = __super::Say( what.c_str() , 3000, 5);
+}
+
 /**
  * \brief Return a 'false' message and swallow any errors.
  * \return PyObject* a 'false' python object.
@@ -49,7 +55,7 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
 {
   try
   {
-    CHAR* msg;
+    char* msg;
     auto slen = 0;
     auto nElapse = 0;
     auto nFadeOut = 0;
@@ -57,7 +63,7 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
     // the last argument is optional
     if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
     {
-      __super::Say(_T("<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>"), 3000, 5);
+      Say( L"<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>");
 
       //  just return false.
       return Fail();
@@ -102,7 +108,7 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args) const
   // get the index number
   if (!PyArg_ParseTuple(args, "I", &idx))
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getCommand( <b>index</b> )</i>"), 3000, 5 );
+    Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getCommand( <b>index</b> )</i>");
 
     //  just return false.
     return Fail();
@@ -168,12 +174,12 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args) const
 {
   try
   {
-    CHAR* module = nullptr;
-    CHAR* cmdLine = nullptr;
+    char* module = nullptr;
+    char* cmdLine = nullptr;
     const auto isPrivileged = 0;
     if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
     {
-      __super::Say(_T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged=False]])</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged=False]])</i>");
       return Fail();
     }
 
@@ -181,9 +187,10 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args) const
     const auto result = __super::Execute(HelperApi::Widen(module).c_str(), HelperApi::Widen(cmdLine).c_str(), (isPrivileged == 1), nullptr);
 
     // tell the user it did not work
-    if (false == result)
+    if (!result)
     {
-      __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
+      Say(L"<b>Error : </b> There was an error executing the request, please check the parameters.");
+      return Fail();
     }
 
     // return the result.
@@ -207,7 +214,7 @@ PyObject* PyApi::GetString(PyObject *self, PyObject *args) const
   auto iQuote = 1;
   if (!PyArg_ParseTuple(args, "|p", &iQuote))  
   {
-    __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [quote=True] )</i>"), 3000, 5);
+    Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [quote=True] )</i>");
     return Fail();
   }
 
@@ -238,11 +245,11 @@ PyObject* PyApi::GetFile(PyObject *self, PyObject *args) const
     auto iQuote = 1;
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
     {
-      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[,quote=True] )</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[,quote=True] )</i>");
       return Fail();
     }
 
-    MYODD_STRING sValue = _T("");
+    MYODD_STRING sValue;
     if (!__super::GetFile(idx, sValue, (iQuote == 1)))
     {
       // return false, nothing was found.
@@ -274,11 +281,11 @@ PyObject* PyApi::GetFolder(PyObject *self, PyObject *args) const
     auto iQuote = 1;
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
     {
-      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> [,quote=True] )</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> [,quote=True] )</i>");
       return Fail();
     }
 
-    MYODD_STRING sValue = _T("");
+    MYODD_STRING sValue;
     if (!__super::GetFolder(idx, sValue, (iQuote == 1)))
     {
       // return false, nothing was found.
@@ -310,7 +317,7 @@ PyObject* PyApi::GetUrl(PyObject *self, PyObject *args) const
     auto iQuote = 1;
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
     {
-      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( index [,quote=True] )</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( index [,quote=True] )</i>");
       return Fail();
     }
 
@@ -347,7 +354,7 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args) const
 
     if (!PyArg_ParseTuple(args, "ss", &szText, &szPath))
     {
-      __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>");
       return Fail();
     }
 
@@ -377,7 +384,7 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args) const
 
     if (!PyArg_ParseTuple(args, "ss", &szText, &szPath))
     {
-      __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>");
       return Fail();
     }
 
@@ -407,7 +414,7 @@ PyObject* PyApi::Log(PyObject *self, PyObject *args) const
 
     if (!PyArg_ParseTuple(args, "Is", &logType, &szText))
     {
-      __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
       return Fail();
     }
 
@@ -465,7 +472,7 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
     char* szText = nullptr;
     if (!PyArg_ParseTuple(args, "Is", &idx, &szText))
     {
-      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>"), 3000, 5);
+      Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>");
       return Fail();
     }
 
@@ -490,7 +497,7 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
  * Execute the current script
  * We are now in the thread.
  */
-void PyApi::ExecuteInThread()
+void PyApi::ExecuteInThread() const
 {
   assert(Py_IsInitialized() );
   
@@ -498,11 +505,11 @@ void PyApi::ExecuteInThread()
   PyEval_AcquireLock();
 
   // make sure that the main thread is the active one.
-  PyInterpreterState* mainInterpreterState = _mainThreadState->interp;
+  const auto  mainInterpreterState = _mainThreadState->interp;
   PyThreadState_Swap(_mainThreadState);
 
   // create a new thread.
-  PyThreadState * myThreadState =  PyThreadState_New(mainInterpreterState);
+  const auto  myThreadState =  PyThreadState_New(mainInterpreterState);
 
   // make sure that the new thread has control
   // https://docs.python.org/3/c-api/init.html
@@ -510,16 +517,16 @@ void PyApi::ExecuteInThread()
 
   //  execute it...
   {
-    PyObject *main_module = PyImport_AddModule("__main__");
-    PyObject *main_dict = PyModule_GetDict(main_module);
+    const auto main_module = PyImport_AddModule("__main__");
+    const auto main_dict = PyModule_GetDict(main_module);
     Py_XINCREF(main_module);
  
-    PyObject *local_dic = PyDict_New();
+    const auto local_dic = PyDict_New();
     Py_XINCREF(local_dic);
 
     // we can now run our script
-    const char* s = _script.c_str();
-    PyObject * PyRes = PyRun_String(s, Py_file_input, main_dict, local_dic);
+    const auto s = _script.c_str();
+    const auto pyRes = PyRun_String(s, Py_file_input, main_dict, local_dic);
 
     CheckForPythonErrors();
 
@@ -551,9 +558,9 @@ void PyApi::ExecuteInThread()
 /**
  * Check for errors and log a message.
  */
-void PyApi::CheckForPythonErrors()
+void PyApi::CheckForPythonErrors() const
 {
-  PyObject* ex = PyErr_Occurred();
+  const auto  ex = PyErr_Occurred();
   if (nullptr != ex)
   {
     //  if this is a normal exist, then we don't need to show an error message.
@@ -565,7 +572,7 @@ void PyApi::CheckForPythonErrors()
 
       std::string message = "<b>Error : </b>An error was raised in the PyAPI.";
       if (type) {
-        PyObject * temp_bytes = PyUnicode_AsEncodedString(type, "ASCII", "strict");
+        const auto temp_bytes = PyUnicode_AsEncodedString(type, "ASCII", "strict");
         if (temp_bytes != nullptr) {
           message += "<br>";
           message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
@@ -573,7 +580,7 @@ void PyApi::CheckForPythonErrors()
         }
       }
       if (value) {
-        PyObject * temp_bytes = PyUnicode_AsEncodedString(value, "ASCII", "strict");
+        const auto temp_bytes = PyUnicode_AsEncodedString(value, "ASCII", "strict");
         if (temp_bytes != nullptr) {
           message += "<br>";
           message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
@@ -581,7 +588,7 @@ void PyApi::CheckForPythonErrors()
         }
       }
       if (traceback) {
-        PyObject * temp_bytes = PyUnicode_AsEncodedString(traceback, "ASCII", "strict");
+        const auto temp_bytes = PyUnicode_AsEncodedString(traceback, "ASCII", "strict");
         if (temp_bytes != nullptr) {
           message += "<br>";
           message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
