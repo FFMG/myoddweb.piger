@@ -2,32 +2,32 @@
 
 #ifdef ACTIONMONITOR_API_PY
 #include "pyapi.h"
+#include <utility>
 #include "ActionMonitor.h"
 
+// this is the version number for that particular API
+// 0.1 was the old API, not idea what version of Python it was using.
+// 2.0 uses version 3.5 of Python.
+// 3.0 added Log( ... )
+// 3.1 C++11 code cleanup
+static const double ACTIONMONITOR_API_PY_VERSION = 3.1;
+
 /**
- * Todo
- * @param void
- * @return void
+ * \brief constructor
+ * \param action 
+ * \param script the script that we will be running
+ * \param mainThreadState
  */
-PyApi::PyApi(const ActiveAction& action, const std::string& script, PyThreadState* mainThreadState) :
+PyApi::PyApi(const ActiveAction& action, std::string script, PyThreadState* mainThreadState) :
   HelperApi(action),
-  _script( script ),
+  _script(std::move(script)),
   _mainThreadState(mainThreadState)
 {
 }
 
 /**
- * Todo
- * @param void
- * @return void
- */
-PyApi::~PyApi()
-{
-}
-
-/**
- * Return a 'false' message and swallow any errors.
- * @return PyObject* a 'false' python object.
+ * \brief Return a 'false' message and swallow any errors.
+ * \return PyObject* a 'false' python object.
  */
 PyObject* PyApi::Fail()
 {
@@ -39,42 +39,48 @@ PyObject* PyApi::Fail()
 }
 
 /**
- * Todo
- * @see __super::say
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief say a message
+ * \see __super::say
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::Say(PyObject *self, PyObject *args)
+PyObject* PyApi::Say(PyObject *self, PyObject *args) const
 {
-  CHAR* msg;
-  int slen;
-  int nElapse = 0;
-  int nFadeOut = 0;
-
-  // the last argument is optional
-  if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>"), 3000, 5 );
-    
-    //  just return false.
+    CHAR* msg;
+    auto slen = 0;
+    auto nElapse = 0;
+    auto nFadeOut = 0;
+
+    // the last argument is optional
+    if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
+    {
+      __super::Say(_T("<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>"), 3000, 5);
+
+      //  just return false.
+      return Fail();
+    }
+
+    // display the message
+    // and we can now display the message.
+    const auto result = __super::Say(HelperApi::Widen(msg).c_str(), nElapse, nFadeOut);
+
+    // return true.
+    return Py_BuildValue("b", result);
+  }
+  catch(...)
+  {
     return Fail();
   }
-
-  // display the message
-  // and we can now display the message.
-  const auto result = __super::Say(HelperApi::Widen( msg ).c_str(), nElapse, nFadeOut );
-  
-  // return true.
-  return Py_BuildValue("b", result );
 }
 
 /**
- * Todo
- * @see __super::version
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get the version number of this
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
 PyObject* PyApi::Version (PyObject *self, PyObject *args)
 {
@@ -84,15 +90,15 @@ PyObject* PyApi::Version (PyObject *self, PyObject *args)
 }
 
 /**
- * Todo
- * @see __super::getCommand
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get a command, by index
+ * \see __super::GetCommand
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::GetCommand(PyObject *self, PyObject *args)
+PyObject* PyApi::GetCommand(PyObject *self, PyObject *args) const
 {
-  UINT idx = 0;
+  unsigned idx = 0;
   // get the index number
   if (!PyArg_ParseTuple(args, "I", &idx))
   {
@@ -115,13 +121,13 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args)
 }
 
 /**
- * Todo
- * @see __super::getAction
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get an action, by index
+ * \see __super::GetAction
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::GetAction(PyObject *self, PyObject *args)
+PyObject* PyApi::GetAction(PyObject *self, PyObject *args) const
 {
   MYODD_STRING sValue;
   if( !__super::GetAction( sValue ) )
@@ -136,69 +142,76 @@ PyObject* PyApi::GetAction(PyObject *self, PyObject *args)
 }
 
 /**
- * Todo
- * @see __super::getcommandcount
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get the number of commands.
+ * \see __super::GetCommandCount
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::GetCommandCount(PyObject *self, PyObject *args)
+PyObject* PyApi::GetCommandCount(PyObject *self, PyObject *args) const
 {
   // get it
-  size_t nSize = __super::GetCommandCount();
+  const auto nSize = __super::GetCommandCount();
 
   // and return it.
   return Py_BuildValue("i", nSize);
 }
 
 /**
- * Todo
- * @see __super::execute
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Execute a module with arguments.
+ * \see __super::GetCommandCount
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::Execute(PyObject *self, PyObject *args)
+PyObject* PyApi::Execute(PyObject *self, PyObject *args) const
 {
-  CHAR* module = nullptr;
-  CHAR* cmdLine = nullptr;
-  int isPrivileged = 0;
-  if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged=False]])</i>"), 3000, 5 );
+    CHAR* module = nullptr;
+    CHAR* cmdLine = nullptr;
+    const auto isPrivileged = 0;
+    if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
+    {
+      __super::Say(_T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged=False]])</i>"), 3000, 5);
+      return Fail();
+    }
+
+    // run it
+    const auto result = __super::Execute(HelperApi::Widen(module).c_str(), HelperApi::Widen(cmdLine).c_str(), (isPrivileged == 1), nullptr);
+
+    // tell the user it did not work
+    if (false == result)
+    {
+      __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
+    }
+
+    // return the result.
+    return Py_BuildValue("b", result);
+  }
+  catch( ... )
+  {
     return Fail();
   }
-
-  // run it
-  auto result = __super::Execute(HelperApi::Widen( module ).c_str(), HelperApi::Widen( cmdLine ).c_str(), (isPrivileged==1), nullptr );
-
-  // tell the user it did not work
-  if (false == result)
-  {
-    __super::Say(_T("<b>Error : </b> There was an error executing the request, please check the parameters."), 3000, 5);
-  }
-
-  // return the result.
-  return Py_BuildValue("b", result );
 }
 
 /**
- * Todo
- * @see __super::getstring
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get a string by index,
+ * \see __super::GetString
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::Getstring(PyObject *self, PyObject *args)
+PyObject* PyApi::GetString(PyObject *self, PyObject *args) const
 {
-  int iQuote = 1;
+  auto iQuote = 1;
   if (!PyArg_ParseTuple(args, "|p", &iQuote))  
   {
     __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [quote=True] )</i>"), 3000, 5);
     return Fail();
   }
 
-  MYODD_STRING sValue = _T("");
+  MYODD_STRING sValue;
   if( !__super::GetString( sValue, iQuote == 1) )
   {
     // we have nothing
@@ -211,210 +224,266 @@ PyObject* PyApi::Getstring(PyObject *self, PyObject *args)
 }
 
 /**
- * Todo
- * @see __super::getfile
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get a string by index,
+ * \see __super::GetFile
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::Getfile(PyObject *self, PyObject *args)
+PyObject* PyApi::GetFile(PyObject *self, PyObject *args) const
 {
-  UINT idx = 0;
-  int iQuote = 1;
-  if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote ))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[,quote=True] )</i>"), 3000, 5 );
+    unsigned idx = 0;
+    auto iQuote = 1;
+    if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
+    {
+      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[,quote=True] )</i>"), 3000, 5);
+      return Fail();
+    }
+
+    MYODD_STRING sValue = _T("");
+    if (!__super::GetFile(idx, sValue, (iQuote == 1)))
+    {
+      // return false, nothing was found.
+      return Py_BuildValue("b", false);
+    }
+
+    USES_CONVERSION;
+    // we have a string
+    return Py_BuildValue("s", T_T2A(sValue.c_str()));
+  }
+  catch( ... )
+  {
     return Fail();
   }
-  
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetFile( idx, sValue, (iQuote == 1) ) )
-  {
-    // return false, nothing was found.
-    return Py_BuildValue("b", false );
-  }
-
-  USES_CONVERSION;
-  // we have a string
-  return Py_BuildValue("s", T_T2A(sValue.c_str()) );
 }
 
 /**
- * Todo
- * @see __super::getfolder
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get a string by index,
+ * \see __super::GetFolder
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::Getfolder(PyObject *self, PyObject *args)
+PyObject* PyApi::GetFolder(PyObject *self, PyObject *args) const
 {
-  UINT idx = 0;
-  int iQuote = 1;
-  if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote ))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> [,quote=True] )</i>"), 3000, 5 );
+    unsigned idx = 0;
+    auto iQuote = 1;
+    if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
+    {
+      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> [,quote=True] )</i>"), 3000, 5);
+      return Fail();
+    }
+
+    MYODD_STRING sValue = _T("");
+    if (!__super::GetFolder(idx, sValue, (iQuote == 1)))
+    {
+      // return false, nothing was found.
+      return Py_BuildValue("b", false);
+    }
+
+    USES_CONVERSION;
+    // we have a string
+    return Py_BuildValue("s", T_T2A(sValue.c_str()));
+  }
+  catch( ... )
+  {
     return Fail();
   }
-
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetFolder( idx, sValue, (iQuote == 1) ) )
-  {
-    // return false, nothing was found.
-    return Py_BuildValue("b", false );
-  }
-
-  USES_CONVERSION;
-  // we have a string
-  return Py_BuildValue("s", T_T2A(sValue.c_str()) );
 }
 
 /**
- * Todo
- * @see __super::geturl
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get the URL
+ * \see __super::GetUrl
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::Geturl(PyObject *self, PyObject *args)
+PyObject* PyApi::GetUrl(PyObject *self, PyObject *args) const
 {
-  UINT idx = 0;
-  int iQuote = 1;
-  if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote ))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( index [,quote=True] )</i>"), 3000, 5 );
+    unsigned idx = 0;
+    auto iQuote = 1;
+    if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
+    {
+      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( index [,quote=True] )</i>"), 3000, 5);
+      return Fail();
+    }
+
+    MYODD_STRING sValue;
+    if (!__super::GetUrl(idx, sValue, (iQuote == 1)))
+    {
+      // return false, nothing was found.
+      return Py_BuildValue("b", false);
+    }
+
+    USES_CONVERSION;
+    // we have a string
+    return Py_BuildValue("s", T_T2A(sValue.c_str()));
+  }
+  catch( ... )
+  {
     return Fail();
   }
-
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetUrl( idx, sValue, (iQuote == 1)) )
-  {
-    // return false, nothing was found.
-    return Py_BuildValue("b", false );
-  }
-
-  USES_CONVERSION;
-  // we have a string
-  return Py_BuildValue("s", T_T2A(sValue.c_str()) );
 }
 
 /**
- * Todo
- * @see __super::addAction
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get a string by index,
+ * \see __super::AddAction
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::AddAction(PyObject *self, PyObject *args)
+PyObject* PyApi::AddAction(PyObject *self, PyObject *args) const
 {
-  CHAR* szText = nullptr;
-  CHAR* szPath = nullptr;
-  
-  if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
+    char* szText = nullptr;
+    char* szPath = nullptr;
+
+    if (!PyArg_ParseTuple(args, "ss", &szText, &szPath))
+    {
+      __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5);
+      return Fail();
+    }
+
+    // run it
+    const auto result = __super::AddAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str());
+    return Py_BuildValue("b", result);
+  }
+  catch( ... )
+  {
     return Fail();
   }
-
-  // run it
-  bool result = __super::AddAction(HelperApi::Widen( szText ).c_str(), HelperApi::Widen( szPath ).c_str() );
-  return Py_BuildValue("b", result );
 }
 
 /**
- * Todo
- * @see __super::RemoveAction
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get a string by index,
+ * \see __super::Remove an action
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args)
+PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args) const
 {
-  char* szText = nullptr;
-  char* szPath = nullptr;
-  
-  if (!PyArg_ParseTuple(args, "ss", &szText, &szPath ))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5 );
+    char* szText = nullptr;
+    char* szPath = nullptr;
+
+    if (!PyArg_ParseTuple(args, "ss", &szText, &szPath))
+    {
+      __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>"), 3000, 5);
+      return Fail();
+    }
+
+    // run it
+    const auto result = __super::RemoveAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str());
+    return Py_BuildValue("b", result);
+  }
+  catch( ... )
+  {
     return Fail();
   }
-
-  // run it
-  bool result = __super::RemoveAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str() );
-  return Py_BuildValue("b", result );
 }
 
 /**
-* Log a message.
-* @see helperapi::Log
-* @param PyObject *
-* @param PyObject *
-* @return PyObject* false or the path of that action.
-*/
-PyObject* PyApi::Log(PyObject *self, PyObject *args)
+ * \brief Log a message
+ * \see __super::Remove an action
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
+ */
+PyObject* PyApi::Log(PyObject *self, PyObject *args) const
 {
-  unsigned int logType = 0;
-  char* szText = nullptr;
-
-  if (!PyArg_ParseTuple(args, "Is", &logType, &szText))
+  try
   {
-    __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>"), 3000, 5);
+    unsigned int logType = 0;
+    char* szText = nullptr;
+
+    if (!PyArg_ParseTuple(args, "Is", &logType, &szText))
+    {
+      __super::Say(_T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>"), 3000, 5);
+      return Fail();
+    }
+
+    // run it
+    const auto action = myodd::strings::String2WString(szText);
+    __super::Log(logType, action.c_str());
+    return Py_BuildValue("b", true);
+  }
+  catch( ... )
+  {
     return Fail();
   }
-
-  // run it
-  auto action = myodd::strings::String2WString(szText);
-  __super::Log( logType, action.c_str() );
-  return Py_BuildValue("b", true);
 }
 
 /**
- * Get the current Action monitor version number.
- * @see __super::getVersion
- * @param PyObject *
- * @param PyObject *
- * @return PyObject*
+ * \brief Get the application version number.
+ * \see __super::Remove an action
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::GetVersion(PyObject *self, PyObject *args)
+PyObject* PyApi::GetVersion(PyObject *self, PyObject *args) const
 {
-  MYODD_STRING sValue = _T("");
-  if( !__super::GetVersion( sValue ) )
+  try
   {
-    // we have nothing
-    return Py_BuildValue("b", false);
-  }
+    MYODD_STRING sValue = _T("");
+    if (!__super::GetVersion(sValue))
+    {
+      // we have nothing
+      return Py_BuildValue("b", false);
+    }
 
-  USES_CONVERSION;
-  // we have a string
-  return Py_BuildValue("s", T_T2A(sValue.c_str()) );
+    USES_CONVERSION;
+    // we have a string
+    return Py_BuildValue("s", T_T2A(sValue.c_str()));
+  }
+  catch( ... )
+  {
+    return Fail();
+  }
 }
 
 /**
- * Find an action.
- * @see __super::findAction
- * @param PyObject *
- * @param PyObject *
- * @return PyObject* false or the path of that action.
+ * \brief Find an acton... by index/
+ * \see __super::Remove an action
+ * \param self the object
+ * \param args the given arguments
+ * \return PyObject* the result of the opreation
  */
-PyObject* PyApi::FindAction(PyObject *self, PyObject *args)
+PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
 {
-  UINT idx = 0;
-  CHAR* szText = nullptr;
-  if (!PyArg_ParseTuple(args, "Is", &idx, &szText ))
+  try
   {
-    __super::Say( _T("<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>"), 3000, 5 );
+    unsigned idx = 0;
+    char* szText = nullptr;
+    if (!PyArg_ParseTuple(args, "Is", &idx, &szText))
+    {
+      __super::Say(_T("<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>"), 3000, 5);
+      return Fail();
+    }
+
+    MYODD_STRING sValue = _T("");
+    if (!__super::FindAction(idx, HelperApi::Widen(szText).c_str(), sValue))
+    {
+      // we have nothing
+      return Py_BuildValue("b", false);
+    }
+
+    USES_CONVERSION;
+    // we have a string
+    return Py_BuildValue("s", T_T2A(sValue.c_str()));
+  }
+  catch( ... )
+  {
     return Fail();
   }
-
-  MYODD_STRING sValue = _T("");
-  if( !__super::FindAction( idx, HelperApi::Widen( szText ).c_str(), sValue ) )
-  {
-    // we have nothing
-    return Py_BuildValue("b", false);
-  }
-
-  USES_CONVERSION;
-  // we have a string
-  return Py_BuildValue("s", T_T2A(sValue.c_str()) );
 }
 
 /**
