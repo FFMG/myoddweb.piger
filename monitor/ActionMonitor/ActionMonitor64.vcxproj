@@ -239,7 +239,6 @@
     <ClInclude Include="..\api\powershellapi.h" />
     <ClInclude Include="..\api\powershellvirtualmachine.h" />
     <ClInclude Include="..\api\pyapi.h" />
-    <ClInclude Include="..\api\pyconfig.h" />
     <ClInclude Include="..\api\PythonVirtualMachine.h" />
     <ClInclude Include="..\common\Clipboard.h" />
     <ClInclude Include="..\common\ClipboardData.h" />

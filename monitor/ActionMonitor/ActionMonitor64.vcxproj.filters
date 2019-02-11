@@ -202,9 +202,6 @@
     <ClInclude Include="..\api\pyapi.h">
       <Filter>api</Filter>
     </ClInclude>
-    <ClInclude Include="..\api\pyconfig.h">
-      <Filter>api</Filter>
-    </ClInclude>
     <ClInclude Include="..\api\PythonVirtualMachine.h">
       <Filter>api</Filter>
     </ClInclude>

@@ -20,7 +20,7 @@ PowershellVirtualMachine::~PowershellVirtualMachine()
 {
   if (_initialized)
   {
-    auto pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
+    const auto pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
     if (pThis)
     {
       pThis->RemoveMessageHandler(*this);
@@ -36,7 +36,7 @@ PowershellVirtualMachine::~PowershellVirtualMachine()
 void PowershellVirtualMachine::Initialize()
 {
   // make sure that we have ourselves as a listener
-  auto pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
+  const auto pThis = dynamic_cast<CActionMonitorDlg*>(App().GetMainWnd());
   if( pThis )
   {
     pThis->AddMessageHandler(*this);
@@ -45,17 +45,17 @@ void PowershellVirtualMachine::Initialize()
 }
 
 /**
- * Handle the various messages.
- * @param const myodd::os::IpcData& ipcRequest the request we received.
- * @param myodd::os::IpcData& ipcResponse if we send a response, this will be the container.
- * @return boolean if we handled the message or not.
+ * \brief Handle the various messages.
+ * \param ipcRequest the request we received.
+ * \param ipcResponse if we send a response, this will be the container.
+ * \return boolean if we handled the message or not.
  */
 bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
   //  we must have 2 arguments
   // #1 is the uiid
   // #2 is the function name
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if ( argumentCount < 2)
   {
     //  this is not for us
@@ -66,15 +66,15 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   myodd::threads::Lock lock(_mutex);
 
   // get the uuid
-  auto uuid = ipcRequest.Get<std::wstring>(0);
-  auto psApi = FindApi(uuid);
+  const auto uuid = ipcRequest.Get<std::wstring>(0);
+  const auto psApi = FindApi(uuid);
   if (nullptr == psApi)
   {
     return false;
   }
 
   //  get the function name
-  auto functionName = ipcRequest.Get<std::wstring>(1);
+  const auto functionName = ipcRequest.Get<std::wstring>(1);
 
   // shift the 2 arguments.
   auto shiftedRequest = ipcRequest;
@@ -196,7 +196,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   MYODD_STRING szPath;
   if( !Powershell3Path(szPath) )
   {
-    auto errorMsg = _T("Powersell 3 could not be found in the installed path, so we cannot run this script!");
+    const auto errorMsg = _T("Powersell 3 could not be found in the installed path, so we cannot run this script!");
     psApi->Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
     RemoveApi(uuid);
@@ -208,7 +208,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   myodd::files::Join(dllFullpath, dllFullpath, _T("AMPowerShellCmdLets.dll"));
   if (!myodd::files::FileExists(dllFullpath))
   {
-    auto errorMsg = _T("I was unable to find the AMPowerShell dll, I cannot execute this script.");
+    const auto errorMsg = _T("I was unable to find the AMPowerShell dll, I cannot execute this script.");
     psApi->Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
 
@@ -280,13 +280,19 @@ bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
   return myodd::files::IsExtension(file, _T("ps1"));
 }
 
+/**
+ * \brief Add an API to our current list, we cannot add duplicates!
+ * \param uuid the unique Id we are adding
+ * \param action the matching action for this Id.
+ * \return the powershell API that manages the action
+ */
 PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action)
 {
   //  lock us in
   myodd::threads::Lock lock(_mutex);
 
   //  does it exist already
-  auto it = _apis.find(uuid);
+  const auto it = _apis.find(uuid);
   if (it != _apis.end())
   {
     //  yes it does, so just return what we have.
@@ -294,7 +300,7 @@ PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const 
   }
 
   //  create the powershell api.
-  auto psApi = new PowershellApi(action);
+  const auto psApi = new PowershellApi(action);
 
   // add it to the array
   _apis[uuid] = psApi;
@@ -306,7 +312,7 @@ PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const 
 PowershellApi* PowershellVirtualMachine::FindApi(const std::wstring& uuid) const
 {
   //  look for it
-  auto it = _apis.find(uuid);
+  const auto it = _apis.find(uuid);
   if (it == _apis.end())
   {
     //  does not seem to exist.
@@ -318,8 +324,8 @@ PowershellApi* PowershellVirtualMachine::FindApi(const std::wstring& uuid) const
 }
 
 /**
- * Remove a single api from our list of apis.
- * @param const std::wstring& uuid the uuid we want to remove.
+ * \brief Remove a single api from our list of apis.
+ * \param uuid the uuid we want to remove.
  */
 void PowershellVirtualMachine::RemoveApi(const std::wstring& uuid)
 {
@@ -370,9 +376,9 @@ void PowershellVirtualMachine::RemoveApis()
 }
 
 /**
- * Get the path of powershell 3
- * @param MYODD_STRING& szPath the path, if we find it.
- * @return boolean if we managed to locate the exe
+ * \brief Get the path of powershell 3
+ * \param szPath the path, if we find it.
+ * \return boolean if we managed to locate the exe
  */
 bool PowershellVirtualMachine::Powershell3Path(MYODD_STRING& szPath)
 {
@@ -431,8 +437,8 @@ bool PowershellVirtualMachine::IsPowershell3Installed()
 }
 
 /**
-* Wait for an API to complete, (or be removed).
-* @param const std::wstring& uuid the uuid that we want to wait for.
+* \brief Wait for an API to complete, (or be removed).
+* \param uuid the uuid that we want to wait for.
 */
 void PowershellVirtualMachine::WaitForApi(const std::wstring& uuid)
 {
@@ -442,7 +448,7 @@ void PowershellVirtualMachine::WaitForApi(const std::wstring& uuid)
     {
       //  lock us in
       myodd::threads::Lock lock(_mutex);
-      auto api = FindApi(uuid);
+      const auto api = FindApi(uuid);
 
       // do we have that api?
       if( api == nullptr )
@@ -500,7 +506,7 @@ void PowershellVirtualMachine::DestroyScripts()
   {
     try
     {
-      auto hProcess = it->second->GetHandle();
+      const auto hProcess = it->second->GetHandle();
       if( hProcess )
       {
         CloseHandle(hProcess);
