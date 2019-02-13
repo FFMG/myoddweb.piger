@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AMPowerShellCmdLets\ActionMonitor.csproj">
+    <ProjectReference Include="..\ActionMonitor\ActionMonitor.csproj">
       <Project>{03964471-3f88-4596-942e-db924d794be5}</Project>
       <Name>ActionMonitor</Name>
     </ProjectReference>

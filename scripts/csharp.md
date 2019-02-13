@@ -10,6 +10,8 @@ So if your command is "`Bar`" then your *must* have a class `Am.Bar` somewhere.
 
 ```cs
 using System;
+using ActionMonitor.Interfaces;
+
 namespace Am
 {
   public class Bar
@@ -21,7 +23,7 @@ namespace Am
 
 ### The contructor
 
-In your class, your constructor must take an "\Am.Core\" object
+In your class, your constructor must take an "\IActionMonitor\" object
 
 ### 'Go' Function
 
@@ -40,7 +42,7 @@ The loaded assemblies are:
 - `System.Net.Http`
 - `System.Xml`
 
-And of course the `ActionMonitor.Interfaces.dll`.
+And of course the `ActionMonitor.Interfaces`.
 
 ### Complete example
 
@@ -48,12 +50,14 @@ In the root command directory, create a file `Bar.cs`
 
 ```cs
 using System;
+using ActionMonitor.Interfaces;
+
 namespace Am
 {
   public class Bar
   {
-    private Am.Core _am;
-    public Bar( Am.Core am )
+    private IActionMonitor _am;
+    public Bar( IActionMonitor am )
     {
       _am = am;
     }
@@ -70,7 +74,7 @@ namespace Am
 }
 ```
 
-## `Am.Core` Functions
+## `IActionMonitor` Functions
 
 The available functions are:
 

@@ -28,15 +28,17 @@ bool CsVirtualMachine::IsExt(const MYODD_STRING& file)
  * \brief create the full command line argument that will be passed to powershell
  * \param action the action we are working with
  * \param dllFullPath the full path of the dll
+ * \param dllInterfaceFullPath the interface full path.
  * \param pluginPath the path to the plugin
  * \param uuid the unique id
  */
 MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
   const ActiveAction& action,
-  const std::wstring& dllFullPath, 
-  const std::wstring& pluginPath, 
+  const std::wstring& dllFullPath,
+  const std::wstring& dllInterfaceFullPath,
+  const std::wstring& pluginPath,
   const std::wstring& uuid
-)
+) const
 {
   // the command is our class name.
   auto className = action.Command();
@@ -55,10 +57,11 @@ MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
 
     L"# Include the dll, (so the c# can access it)\n"
     L"Add-Type -Path \"%s\"\n"
+    L"Add-Type -Path \"%s\"\n"
     L"\n"
 
     L"# Create the Action monitor object to pass to the c# code\n"
-    L"$am = New-Object Am.Core \"%s\"\n"
+    L"$am = New-Object ActionMonitor.Core \"%s\"\n"
     L"\n"
 
     L"try {\n"
@@ -81,6 +84,7 @@ MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
     L"    \"System.Threading.Tasks\",\n"
     L"    \"System.Xml\",\n"
     L"    \"System.Xml.Linq\",\n"
+    L"    \"%s\",\n"
     L"    \"%s\"\n"
     L"  )\n"
     L"\n"
@@ -99,12 +103,14 @@ MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
     L"  # And then wait\n"
     L"  __amPressKey;\n"
     L"}\n"
-    , dllFullPath.c_str()   // create object
-    , uuid.c_str()          // unique id
-    , pluginPath.c_str()    // the code itself.
-    , dllFullPath.c_str()   // assemblies
-    , className.c_str()     // the class name
-    , pluginPath.c_str()    // the code itself, (for the error).
+    , dllFullPath.c_str()           // create object
+    , dllInterfaceFullPath.c_str()  // the interface
+    , uuid.c_str()                  // unique id
+    , pluginPath.c_str()            // the code itself.
+    , dllFullPath.c_str()           // assemblies+Dll
+    , dllInterfaceFullPath.c_str()  //   + interface
+    , className.c_str()             // the class name
+    , pluginPath.c_str()            // the code itself, (for the error).
   );
 
   std::wstring file;

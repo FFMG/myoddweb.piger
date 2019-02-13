@@ -208,7 +208,20 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   myodd::files::Join(dllFullpath, dllFullpath, _T("ActionMonitor.dll"));
   if (!myodd::files::FileExists(dllFullpath))
   {
-    const auto errorMsg = _T("I was unable to find the AMPowerShell dll, I cannot execute this script.");
+    const auto errorMsg = _T("I was unable to find the ActionMonitor dll, I cannot execute this script.");
+    psApi->Say(errorMsg, 3000, 5);
+    myodd::log::LogError(errorMsg);
+
+    // did not find the command let
+    RemoveApi(uuid);
+    return 0;
+  }
+
+  auto dllInterfacesFullpath = myodd::files::GetAppPath(true);
+  myodd::files::Join(dllInterfacesFullpath, dllInterfacesFullpath, _T("ActionMonitor.Interfaces.dll"));
+  if (!myodd::files::FileExists(dllInterfacesFullpath))
+  {
+    const auto errorMsg = _T("I was unable to find the ActionMonitor.Interfaces dll, I cannot execute this script.");
     psApi->Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
 
@@ -218,7 +231,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
   }
 
   //  prepare the arguments.
-  auto arguments = GetCommandLineArguments( action, dllFullpath, pluginFile, uuid );
+  auto arguments = GetCommandLineArguments( action, dllFullpath, dllInterfacesFullpath, pluginFile, uuid );
   
   //
   // it is very important that we do not use out locks here!
@@ -254,13 +267,20 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
  * \brief create the full command line argument that will be passed to powershell
  * \param action the action we are working with
  * \param dllFullPath the full path of the dll
+ * \param dllInterfaceFullPath the interface full path.
  * \param pluginPath the path to the plugin
  * \param uuid the unique id
  */
-MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(const ActiveAction& action, const std::wstring& dllFullPath, const std::wstring& pluginPath, const std::wstring& uuid )
+MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(
+  const ActiveAction& action,
+  const std::wstring& dllFullPath,
+  const std::wstring& dllInterfaceFullPath,
+  const std::wstring& pluginPath,
+  const std::wstring& uuid
+) const
 {
   // the object
-  auto am = myodd::strings::Format(_T("$am = New-Object Am.Core \"%s\""), uuid.c_str());
+  auto am = myodd::strings::Format(_T("$am = New-Object ActionMonitor.Core \"%s\""), uuid.c_str());
 
   //  prepare the arguments.
   return myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), 

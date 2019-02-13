@@ -78,12 +78,14 @@ Read more about the [C# scripts](scripts/csharp.md)
 
 ```csharp
 using System;
+using ActionMonitor.Interfaces;
+
 namespace Am
 {
   public class Bar
   {
-    private Am.Core _am;
-    public Bar( Am.Core am )
+    private IActionMonitor _am;
+    public Bar( IActionMonitor am )
     {
       _am = am;
     }
