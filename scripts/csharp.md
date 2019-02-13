@@ -40,7 +40,7 @@ The loaded assemblies are:
 - `System.Net.Http`
 - `System.Xml`
 
-And of course the `AMPowerShellCmdLets.dll`.
+And of course the `ActionMonitor.Interfaces.dll`.
 
 ### Complete example
 

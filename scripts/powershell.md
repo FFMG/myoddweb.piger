@@ -132,7 +132,7 @@ You can check the log file for error/warning messages.
 
 ## How to Debug
 
-- Comandline arguments: `-noexit -command "&{ import-module .\AMPowerShellCmdLets.dll -Verbose"}"`
+- Comandline arguments: `-noexit -command "&{ import-module .\ActionMonitor.dll -Verbose"}"`
 - Start External program: `C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe`
 
 Then in your powershell script:
