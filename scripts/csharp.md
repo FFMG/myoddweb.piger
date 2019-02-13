@@ -4,15 +4,14 @@
 
 ### Clas name
 
-The expected class is `Am.{YourCommandName}`
+The expected class is `ActionMonitor.Plugin.{YourCommandName}`
 
-So if your command is "`Bar`" then your *must* have a class `Am.Bar` somewhere.
+So if your command is "`Bar`" then your *must* have a class `ActionMonitor.Plugin.Bar` somewhere.
 
 ```cs
 using System;
-using ActionMonitor.Interfaces;
 
-namespace Am
+namespace ActionMonitor.Plugin
 {
   public class Bar
   {
@@ -52,7 +51,7 @@ In the root command directory, create a file `Bar.cs`
 using System;
 using ActionMonitor.Interfaces;
 
-namespace Am
+namespace ActionMonitor.Plugin
 {
   public class Bar
   {

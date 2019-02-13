@@ -90,7 +90,7 @@ MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
     L"\n"
     L"  # Putting it all together\n"
     L"  Add-Type -TypeDefinition $code -ReferencedAssemblies $assem -Language CSharp\n"
-    L"  $plugin = New-Object Am.%s $am\n"
+    L"  $plugin = New-Object ActionMonitor.Plugin.%s $am\n"
     L"  [void]($plugin.Go())\n"
     L"\n"
     L"} catch {\n"
