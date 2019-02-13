@@ -205,7 +205,7 @@ int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAc
 
   // get the powershell dll path
   auto dllFullpath = myodd::files::GetAppPath(true);
-  myodd::files::Join(dllFullpath, dllFullpath, _T("AMPowerShellCmdLets.dll"));
+  myodd::files::Join(dllFullpath, dllFullpath, _T("ActionMonitor.dll"));
   if (!myodd::files::FileExists(dllFullpath))
   {
     const auto errorMsg = _T("I was unable to find the AMPowerShell dll, I cannot execute this script.");

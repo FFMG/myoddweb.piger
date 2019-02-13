@@ -101,9 +101,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OnTop64", "plugins\OnTop\On
 		{0161D190-3859-42D8-B30D-15718AEBB5DA} = {0161D190-3859-42D8-B30D-15718AEBB5DA}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMPowerShellCmdLets", "plugins\AMPowerShellCmdLets\AMPowerShellCmdLets.csproj", "{03964471-3F88-4596-942E-DB924D794BE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionMonitor", "plugins\AMPowerShellCmdLets\ActionMonitor.csproj", "{03964471-3F88-4596-942E-DB924D794BE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMPowerShellCmdLetsTest", "plugins\AMPowerShellCmdLetsTest\AMPowerShellCmdLetsTest.csproj", "{27700D61-68EC-4283-A57B-12B6CAD909E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionMonitor.Tests", "plugins\AMPowerShellCmdLetsTest\ActionMonitor.Tests.csproj", "{27700D61-68EC-4283-A57B-12B6CAD909E7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest64", "gtest\gtest64.vcxproj", "{33B0B60D-9EE9-4D28-81F3-9881C292420C}"
 EndProject
@@ -124,6 +124,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythoncore64", "monitor\api\python\Python-3.7.2\PCbuild\pythoncore64.vcxproj", "{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythoncore86", "monitor\api\python\Python-3.7.2\PCbuild\pythoncore86.vcxproj", "{0FAE4F78-0AB8-4F83-8A54-52099D3549CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionMonitor.Interfaces", "plugins\ActionMonitor.Interfaces\ActionMonitor.Interfaces.csproj", "{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -661,6 +663,30 @@ Global
 		{0FAE4F78-0AB8-4F83-8A54-52099D3549CD}.Release|x64.ActiveCfg = Release|Win32
 		{0FAE4F78-0AB8-4F83-8A54-52099D3549CD}.Release|x86.ActiveCfg = Release|Win32
 		{0FAE4F78-0AB8-4F83-8A54-52099D3549CD}.Release|x86.Build.0 = Release|Win32
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Debug|x64.Build.0 = Debug|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Debug|x86.Build.0 = Debug|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGInstrument|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGInstrument|Any CPU.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGInstrument|x64.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGInstrument|x64.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGInstrument|x86.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGInstrument|x86.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGUpdate|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGUpdate|Any CPU.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGUpdate|x64.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGUpdate|x64.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGUpdate|x86.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.PGUpdate|x86.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Release|x64.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Release|x64.Build.0 = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Release|x86.ActiveCfg = Release|Any CPU
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -696,6 +722,7 @@ Global
 		{E7E43EE8-6802-414F-B5CC-372F3268D0D4} = {FBDF6C02-5C76-4DCD-840C-CCFC1DB841C4}
 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {BE811670-1EAA-43F1-87B9-DB0472B19118}
 		{0FAE4F78-0AB8-4F83-8A54-52099D3549CD} = {CE9E6430-7DDC-4D25-AD43-A371125EE02C}
+		{2FD0640E-9966-42A9-A339-B2A78BA4D3F9} = {2BB81E9C-4236-4078-8FB6-3B4FF1C7A388}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06079DC0-90F1-40F4-BD47-F2D47CA8C2F9}

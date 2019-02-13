@@ -7,8 +7,8 @@
     <ProjectGuid>{03964471-3F88-4596-942E-DB924D794BE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AMPowerShellCmdLets</RootNamespace>
-    <AssemblyName>AMPowerShellCmdLets</AssemblyName>
+    <RootNamespace>ActionMonitor</RootNamespace>
+    <AssemblyName>ActionMonitor</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ActionMonitor.Interfaces\ActionMonitor.Interfaces.csproj">
+      <Project>{2fd0640e-9966-42a9-a339-b2a78ba4d3f9}</Project>
+      <Name>ActionMonitor.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

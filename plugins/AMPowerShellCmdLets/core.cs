@@ -1,15 +1,16 @@
 ﻿using System;
-using MyOdd = AMPowerShellCmdLets.myodd;
+using ActionMonitor.Interfaces;
+using ActionMonitor.Myodd;
 
-namespace Am
+namespace ActionMonitor
 {
   // http://www.powershellmagazine.com/2014/03/18/writing-a-powershell-module-in-c-part-1-the-basics/
   // http://www.powershellmagazine.com/2014/04/08/basics-of-writing-a-powershell-module-with-c-part-2-debugging/
   //
   // Debug
   // C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
-  // -noexit -command "&{Add-Type -Path .\AMPowerShellCmdLets.dll}"
-  public class Core
+  // -noexit -command "&{Add-Type -Path .\ActionMonitor.dll}"
+  public class Core : IActionMonitor
   {
     /// <summary>
     /// Unique name for our IPC connector.
@@ -19,13 +20,13 @@ namespace Am
     /// <summary>
     /// The connector.
     /// </summary>
-    private MyOdd.IpcConnector Connector { get; }
+    private IpcConnector Connector { get; }
 
     /// <summary>
     /// Our unique identifiers.
     /// It allows us to connect back to Piger
     /// </summary>
-    public string Uuid { get; }
+    private string Uuid { get; }
 
     /// <summary>
     /// The contructor
@@ -42,20 +43,15 @@ namespace Am
       Uuid = givenUuid;
 
       //  create the connector.
-      Connector = new MyOdd.IpcConnector(Name);
+      Connector = new IpcConnector(Name);
     }
 
-    /// <summary>
-    /// Output a message on the screen.
-    /// </summary>
-    /// <param name="what">The message</param>
-    /// <param name="elapse">For how long, (ms)</param>
-    /// <param name="fadeout">The fadeout speed.</param>
-    /// <returns></returns>
+    #region IActionMonitor
+    /// <inheritdoc />
     public bool Say(string what, uint elapse, uint fadeout )
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("Say");
       ipcRequest.Add(what);
@@ -72,14 +68,11 @@ namespace Am
       return i == 1;
     }
 
-    /// <summary>
-    /// Get the Powershell version number.
-    /// </summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string Version()
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("Version");
 
@@ -92,17 +85,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get a command at a certain index.
-    /// We throw if the value is out of range, use GetCommandCount(...)
-    /// Command #0 is the full path of this script.
-    /// </summary>
-    /// <param name="index">the index we want</param>
-    /// <returns>The command</returns>
+    /// <inheritdoc />
     public string GetCommand( uint index )
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetCommand");
       ipcRequest.Add(index);
@@ -127,14 +114,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get the action name.
-    /// </summary>
-    /// <returns>The name of the action that we called.</returns>
+    /// <inheritdoc />
     public string GetAction()
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetAction");
 
@@ -158,14 +142,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get the number of arguments entered after the command.
-    /// </summary>
-    /// <returns>The number of commands entered.</returns>
+    /// <inheritdoc />
     public int GetCommandCount()
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetCommandCount");
 
@@ -178,17 +159,11 @@ namespace Am
       return ipcResponse.Get<int>(0);
     }
 
-    /// <summary>
-    /// Execute a process.
-    /// </summary>
-    /// <param name="module">The process we want to execute.</param>
-    /// <param name="args">the arguments to pass</param>
-    /// <param name="priviledged">if we want it to be elevated or not.</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public bool Execute( string module, string args, bool priviledged )
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("Execute");
       ipcRequest.Add(module);
@@ -204,15 +179,11 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
-    /// <summary>
-    /// Get the currently selected string, (if any).
-    /// </summary>
-    /// <param name="quote"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string Getstring( bool quote )
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetString");
       ipcRequest.Add(quote);
@@ -237,16 +208,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get a selected file at an index.
-    /// </summary>
-    /// <param name="index">the index we want</param>
-    /// <param name="quote">if we want to quote the text or not.</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string Getfile( uint index, bool quote )
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetFile");
       ipcRequest.Add(index);
@@ -272,16 +238,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get the currenctly selected folder by index.
-    /// </summary>
-    /// <param name="index">The folder we are looking for.</param>
-    /// <param name="quote">If we want to quote the response or not.</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string Getfolder( uint index, bool quote)
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetFolder");
       ipcRequest.Add(index);
@@ -307,16 +268,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get the url by index.
-    /// </summary>
-    /// <param name="index">The url we are looking for.</param>
-    /// <param name="quote">If we want to quote the response or not.</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string Geturl( uint index, bool quote)
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetUrl");
       ipcRequest.Add(index);
@@ -342,14 +298,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get the application version number.
-    /// </summary>
-    /// <returns>The app version number.</returns>
+    /// <inheritdoc />
     public string GetVersion()
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetVersion");
 
@@ -362,16 +315,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Log a message to the main application log.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="message"></param>
-    /// <returns>Success or not</returns>
+    /// <inheritdoc />
     public bool Log( int type, string message )
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("Log");
       ipcRequest.Add(type);
@@ -386,16 +334,11 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
-    /// <summary>
-    /// Add an action
-    /// </summary>
-    /// <param name="action">The action we want to add.</param>
-    /// <param name="path">The path of the action we are adding.</param>
-    /// <returns>Success or not</returns>
+    /// <inheritdoc />
     public bool AddAction(string action, string path)
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("AddAction");
       ipcRequest.Add(action);
@@ -410,16 +353,11 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
-    /// <summary>
-    /// Remove an action given a path
-    /// </summary>
-    /// <param name="action">The action we want to remove.</param>
-    /// <param name="path">The path of the action we want to remove.</param>
-    /// <returns>Success or not</returns>
+    /// <inheritdoc />
     public bool RemoveAction(string action, string path)
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("RemoveAction");
       ipcRequest.Add(action);
@@ -434,18 +372,11 @@ namespace Am
       return ipcResponse.Get<bool>(0);
     }
 
-    /// <summary>
-    /// Find an action at a given index.
-    /// So if we are looking for a command "stuff", there could be more than one.
-    /// And index 0, 1, ..., x are the posible numbers.
-    /// </summary>
-    /// <param name="index">The action index we are looking for.</param>
-    /// <param name="action">The action we want.</param>
-    /// <returns>Success or not</returns>
+    /// <inheritdoc />
     public string FindAction(uint index, string action)
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("FindAction");
       ipcRequest.Add(index);
@@ -471,14 +402,11 @@ namespace Am
       return ipcResponse.Get<string>(0);
     }
 
-    /// <summary>
-    /// Get the foreground window at the time of the call. 
-    /// </summary>
-    /// <returns>IntPtr the current fogregorund window.</returns>
+    /// <inheritdoc />
     public IntPtr GetForegroundWindow()
     {
       //  request
-      var ipcRequest = new MyOdd.IpcData();
+      var ipcRequest = new IpcData();
       ipcRequest.Add(Uuid);
       ipcRequest.Add("GetForegroundWindow");
 
@@ -490,5 +418,6 @@ namespace Am
       }
       return (IntPtr)ipcResponse.Get<int>(0);
     }
+    #endregion
   }
 }

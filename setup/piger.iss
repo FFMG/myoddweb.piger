@@ -115,13 +115,15 @@ Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinsta
 Source: {#APP_SOURCE86}ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}hook.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE86}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64 and IsPowershell3Installed" 
+Source: {#APP_SOURCE86}ActionMonitor.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64 and IsPowershell3Installed" 
+Source: {#APP_SOURCE64}ActionMonitor.Interfaces.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64 and IsPowershell3Installed" 
 
 ; x64 App
 Source: {#APP_SOURCE64}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE64}AMPowerShellCmdLets.dll; DestDir: {app}; Flags: ignoreversion; Check: (IsWin64 and IsPowershell3Installed)
+Source: {#APP_SOURCE64}ActionMonitor.dll; DestDir: {app}; Flags: ignoreversion; Check: (IsWin64 and IsPowershell3Installed)
+Source: {#APP_SOURCE64}ActionMonitor.Interfaces.dll; DestDir: {app}; Flags: ignoreversion; Check: (IsWin64 and IsPowershell3Installed)
 
 ; common
 Source: {#APP_INCLUDE}python86\*.*; DestDir: {app}\python\; Flags: recursesubdirs createallsubdirs; Check: "not IsWin64"

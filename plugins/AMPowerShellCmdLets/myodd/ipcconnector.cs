@@ -4,7 +4,7 @@ using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
-namespace AMPowerShellCmdLets.myodd
+namespace ActionMonitor.Myodd
 {
   internal class IpcConnector
   {

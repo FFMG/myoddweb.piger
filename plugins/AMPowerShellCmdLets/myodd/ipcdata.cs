@@ -4,13 +4,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace AMPowerShellCmdLets.myodd
+namespace ActionMonitor.Myodd
 {
   internal class IpcData
   {
     private enum DataType : short
     {
-      None = 0,
       Guid = 1,
       Int32 = 2,
       Int64 = 3,
@@ -135,7 +134,7 @@ namespace AMPowerShellCmdLets.myodd
 
           case DataType.String: //string unicode
             {
-              Add(ReadString(bytes, ref pointer), true);
+              Add(ReadString(bytes, ref pointer));
             }
             break;
 
@@ -145,7 +144,6 @@ namespace AMPowerShellCmdLets.myodd
             }
             break;
 
-          case DataType.None:
           default:
             // no point goint further as we do no know the size of that argument.
             // even if we can move the pointer forward, it would be more luck than anything.
@@ -380,11 +378,11 @@ namespace AMPowerShellCmdLets.myodd
     /// <returns></returns>
     private void AddGuid()
     {
-      Add(Combine(new byte[][]
+      Add(Combine(new []
       {
         BitConverter.GetBytes((short) DataType.Guid), //  short
         BitConverter.GetBytes(Guid.Length), //
-        System.Text.Encoding.Unicode.GetBytes(Guid)
+        Encoding.Unicode.GetBytes(Guid)
       }
       ));
 
@@ -406,8 +404,8 @@ namespace AMPowerShellCmdLets.myodd
       if (asUnicode)
       {
         var stringInBytes = Encoding.Unicode.GetBytes(stringToAdd);
-        Add(Combine(new byte[][]
-        {
+        Add(Combine(new[]
+          {
           BitConverter.GetBytes((short) DataType.String), //  short
           BitConverter.GetBytes(stringToAdd.Length), //  Int32, size is guaranteed.
           stringInBytes
@@ -416,13 +414,7 @@ namespace AMPowerShellCmdLets.myodd
       }
       else
       {
-        Add(Combine(new byte[][]
-        {
-          BitConverter.GetBytes((short) DataType.StringAscii), //  short
-          BitConverter.GetBytes(stringToAdd.Length), //  Int32, size is guaranteed.
-          System.Text.Encoding.ASCII.GetBytes(stringToAdd)
-        }
-          ));
+        Add(Combine(BitConverter.GetBytes((short) DataType.StringAscii), BitConverter.GetBytes(stringToAdd.Length), Encoding.ASCII.GetBytes(stringToAdd)));
       }
 
       //  add to the arguments list.
@@ -523,7 +515,7 @@ namespace AMPowerShellCmdLets.myodd
       var offset = 0;
       foreach (var array in arrays)
       {
-        System.Buffer.BlockCopy(array, 0, rv, offset, array.Length);
+        Buffer.BlockCopy(array, 0, rv, offset, array.Length);
         offset += array.Length;
       }
       return rv;

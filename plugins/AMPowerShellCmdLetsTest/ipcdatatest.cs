@@ -1,8 +1,8 @@
 ﻿using System;
-using AMPowerShellCmdLets.myodd;
+using ActionMonitor.Myodd;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace MyOddTest
+namespace ActionMonitor.Tests
 {
   internal enum ExpectedIpcDataType : byte
   {

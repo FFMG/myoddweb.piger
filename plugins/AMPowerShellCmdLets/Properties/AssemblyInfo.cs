@@ -5,16 +5,16 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AMPowerShellCmdLets")]
+[assembly: AssemblyTitle("ActionMonitor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AMPowerShellCmdLets")]
+[assembly: AssemblyProduct("ActionMonitor")]
 [assembly: AssemblyCopyright("Copyright © 2016-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: InternalsVisibleTo("AMPowerShellCmdLetsTest")]
+[assembly: InternalsVisibleTo("ActionMonitor.Tests")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("03964471-3f88-4596-942e-db924d794be5")]
 
-// 2019-02-8 Updated to version 2 as Myodd is no longer visible.
-[assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("2.0.0.0")]
+// 2019-02-08 Updated to version 2 as Myodd is no longer visible.
+// 2019-02-13 Renamed to 'ActionMonitor'
+[assembly: AssemblyVersion("2.1.0.0")]
+[assembly: AssemblyFileVersion("2.1.0.0")]
