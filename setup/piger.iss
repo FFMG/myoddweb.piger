@@ -58,6 +58,7 @@ Name: pluginontop; Description: "Create 'OnTop' command to keep any window as th
 Name: plugindolly; Description: "Hello Dolly sample plugin"; GroupDescription: "Plugins"; Flags: unchecked
 ; make sure that this remains item #5 as the [code] bellow disables it.
 Name: pluginpowershell3; Description: "Powershell 3 plugins"; GroupDescription: "Plugins";
+Name: plugincsharp; Description: "C# Sharp plugins"; GroupDescription: "Plugins";
 
 [InstallDelete]
 ; remove old files that the user might no longer want
@@ -100,6 +101,7 @@ Source: {#APP_SOURCE64}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\m
 ; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
 Source: .\RootCommandsPS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "IsTaskSelected('pluginpowershell3') and IsPowershell3Installed"
+Source: .\RootCommandsCS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "IsTaskSelected('plugincsharp') and IsPowershell3Installed"
 
 ;
 ; All the plugins
