@@ -12,27 +12,26 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
-using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
-using ActionMonitor.Interfaces;
 
-namespace ActionMonitor.Shell.Runners
+namespace ActionMonitor.Interfaces
 {
-  internal interface IRunner
+  public interface IAction
   {
     /// <summary>
-    /// The action monitor.
+    /// Initialsize the code running.
     /// </summary>
-    IActionMonitor ActionMonitor { get; }
+    /// <param name="monitor"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task InitializeAsync(IActionMonitor monitor, CancellationToken token );
 
     /// <summary>
-    /// The path being executed.
+    /// Run the action 
     /// </summary>
-    FileSystemInfo FileSystemInfo { get; }
-
-    /// <summary>
-    /// Tell the runner to do.
-    /// </summary>
-    Task GoAsync();
+    /// <param name="token"></param>
+    /// <returns></returns>
+    Task<bool> GoAsync(CancellationToken token);
   }
 }
