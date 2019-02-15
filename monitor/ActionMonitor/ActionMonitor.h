@@ -1,6 +1,17 @@
-// ActionMonitor.h : main header file for the ACTIONMONITOR application
+//This file is part of Myoddweb.Piger.
 //
-
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
 #include "Actions.h"    //  the actions we can call, (the name of the file)
@@ -113,6 +124,14 @@ protected:
 
 public:
   PowershellVirtualMachine* GetPowershellVirtualMachine();
+#endif
+
+#ifdef ACTIONMONITOR_S_PLUGIN
+protected:
+  ShellVirtualMachine* _svm;
+
+public:
+  ShellVirtualMachine* GetShellVirtualMachine();
 #endif
 
 #ifdef ACTIONMONITOR_CS_PLUGIN

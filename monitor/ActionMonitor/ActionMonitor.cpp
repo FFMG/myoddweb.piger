@@ -1,3 +1,17 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
@@ -35,6 +49,9 @@ CActionMonitorApp::CActionMonitorApp() :
 #ifdef ACTIONMONITOR_PS_PLUGIN
   , _psvm(nullptr)
 #endif
+#ifdef ACTIONMONITOR_S_PLUGIN
+  , _svm(nullptr)
+#endif
 #ifdef ACTIONMONITOR_CS_PLUGIN
   , _csvm(nullptr)
 #endif
@@ -62,7 +79,11 @@ CActionMonitorApp::~CActionMonitorApp()
   delete _psvm;
   _psvm = nullptr;
 #endif
-#ifdef ACTIONMONITOR_PS_PLUGIN
+#ifdef ACTIONMONITOR_S_PLUGIN
+  delete _svm;
+  _svm = nullptr;
+#endif
+#ifdef ACTIONMONITOR_CS_PLUGIN
   delete _csvm;
   _csvm = nullptr;
 #endif
@@ -109,6 +130,17 @@ PowershellVirtualMachine* CActionMonitorApp::GetPowershellVirtualMachine()
     _psvm = new PowershellVirtualMachine();
   }
   return _psvm;
+}
+#endif
+
+#ifdef ACTIONMONITOR_S_PLUGIN
+ShellVirtualMachine* CActionMonitorApp::GetShellVirtualMachine()
+{
+  if (_svm == nullptr)
+  {
+    _svm = new ShellVirtualMachine();
+  }
+  return _svm;
 }
 #endif
 
@@ -574,6 +606,13 @@ void CActionMonitorApp::DestroyActiveActions()
   auto ps = GetPowershellVirtualMachine();
   ps->DestroyScripts();
 #endif // ACTIONMONITOR_PS_PLUGIN
+
+#ifdef ACTIONMONITOR_S_PLUGIN
+  // We have to kill all the API plugins.
+  // they should be all done and completed.
+  auto s = GetShellVirtualMachine();
+  s->DestroyScripts();
+#endif // ACTIONMONITOR_S_PLUGIN
 
 #ifdef ACTIONMONITOR_CS_PLUGIN
   // We have to kill all the API plugins.
