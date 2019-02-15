@@ -71,9 +71,11 @@ Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\OnTop
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\SamplePlugin.amp"
 
 ; remove old python file as things are now moved to {app}\python\ folder.
+Type: files; Name: "{app}\python35.dll"
 Type: files; Name: "{app}\python35.zip"
 Type: files; Name: "{app}\python6435.dll"
 
+Type: files; Name: "{app}\python36.dll"
 Type: files; Name: "{app}\python36.zip"
 Type: files; Name: "{app}\python6436.dll"
 
