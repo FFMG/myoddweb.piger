@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using ActionMonitor.Interfaces;
 using ActionMonitor.Shell.Runners;
 using NUnit.Framework;
 
@@ -8,49 +10,23 @@ namespace ActionMonitor.Shell.Tests.Runners
   internal class PluginTests
   {
     [Test]
-    public void TestUuidCannotBeNull()
+    public void MonitorCannotBeNull()
     {
+      var fs = new Moq.Mock<FileSystemInfo>();
       Assert.Throws<ArgumentNullException>(() =>
       {
-        var _ = new Plugin(null);
+        var _ = new Plugin(null, fs.Object);
       });
     }
 
     [Test]
-    public void UuidCannotBeEmpty()
+    public void FileSystemCannotBeNull()
     {
-      Assert.Throws<ArgumentException>(() =>
+      var am = new Moq.Mock<IActionMonitor>();
+      Assert.Throws<ArgumentNullException>(() =>
       {
-        var _ = new Plugin("");
+        var _ = new Plugin(am.Object, null );
       });
-    }
-
-    [Test]
-    public void UuidCannotBeFullOfWhileSpaces()
-    {
-      Assert.Throws<ArgumentException>(() =>
-      {
-        var _ = new Plugin("      ");
-      });
-    }
-
-    [TestCase("Hello")]
-    [TestCase("Wolrd")]
-    [TestCase("1234-5667-897")]
-    public void UuidIsSavedAsExpected( string uuid )
-    {
-      var plugin = new Plugin(uuid);
-      Assert.AreEqual( uuid, plugin.Uuid );
-    }
-
-    [TestCase("Hello", "    Hello    ")]
-    [TestCase("Hello", "    Hello")]
-    [TestCase("Hello", "Hello        ")]
-    [TestCase("Hello", " Hello ")]
-    public void UuidIsTrimmed(string uuid, string given )
-    {
-      var plugin = new Plugin(given);
-      Assert.AreEqual(uuid, plugin.Uuid);
     }
   }
 }

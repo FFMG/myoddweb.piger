@@ -39,6 +39,11 @@ namespace ActionMonitor.Shell
       /// There was an argument error
       /// </summary>
       public static int InvalidCommandLineArgument { get; } = 2;
+
+      /// <summary>
+      /// The path given could not be found.
+      /// </summary>
+      public static int InvalidPath { get; } = 3;
     }
 
     private static class Argument
@@ -67,14 +72,15 @@ namespace ActionMonitor.Shell
       var path = parser.Get(Argument.Path);
       if (!File.Exists(path))
       {
-        throw new FileNotFoundException();
+        throw new FileNotFoundException( "Could not locate path", path );
       }
+      var fileInfo = new FileInfo( path );
 
       // create the action monitor
       var actionMonitor = new Core( uuid );
 
       // create the pluggin.
-      return new Plugin(actionMonitor);
+      return new Plugin(actionMonitor, fileInfo );
     }
 
     private static int Main(string[] args)
@@ -96,7 +102,7 @@ namespace ActionMonitor.Shell
       catch (FileNotFoundException e)
       {
         Console.WriteLine($"The given path '{e.FileName}' does not exist: {e}");
-        return ExitCode.InvalidCommandLineArgument;
+        return ExitCode.InvalidPath;
       }
       catch (ArgumentException e)
       {

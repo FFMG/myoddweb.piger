@@ -50,5 +50,15 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ActionMonitor.Interfaces\ActionMonitor.Interfaces.csproj">
+      <Project>{2fd0640e-9966-42a9-a339-b2a78ba4d3f9}</Project>
+      <Name>ActionMonitor.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ActionMonitor\ActionMonitor.csproj">
+      <Project>{03964471-3f88-4596-942e-db924d794be5}</Project>
+      <Name>ActionMonitor</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
