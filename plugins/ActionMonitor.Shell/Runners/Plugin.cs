@@ -60,6 +60,7 @@ namespace ActionMonitor.Shell.Runners
       catch( Exception e )
       {
         ActionMonitor.Log(1, $"Exception running the plugin {FileSystemInfo.FullName}: {e.ToString()}");
+        throw;
       }
     }
 

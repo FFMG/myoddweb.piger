@@ -95,7 +95,10 @@ namespace ActionMonitor.Shell
         // create the runner.
         var runner = CreateRunner(parser);
 
-
+        // and then go
+        runner.GoAsync().GetAwaiter().GetResult();
+        
+        // if we made it here ... we are good.
         return ExitCode.Succeeded;
       }
       catch (FileNotFoundException e)

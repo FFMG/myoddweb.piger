@@ -98,6 +98,9 @@ Source: {#APP_SOURCE64}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappd
 Source: {#APP_SOURCE64}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('plugindolly')
 Source: {#APP_SOURCE64}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginontop')
 
+; common
+Source: {#APP_SOURCE64}Dolly.NET.dll; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('plugindolly')
+
 ; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
 Source: .\RootCommandsPS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "IsTaskSelected('pluginpowershell3') and IsPowershell3Installed"
