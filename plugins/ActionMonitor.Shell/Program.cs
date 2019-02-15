@@ -45,7 +45,8 @@ namespace ActionMonitor.Shell
       {
         var parser = new CommandlineParser(args, new Dictionary<string, CommandlineData>
         {
-          { "uuid", new CommandlineData{ IsRequired = true}}
+          { "uuid", new CommandlineData{ IsRequired = true}},   //  the unique id
+          { "path", new CommandlineData{ IsRequired = true}}    //  the path to what we want to run from shell.
         });
         return ExitCode.Succeeded;
       }
