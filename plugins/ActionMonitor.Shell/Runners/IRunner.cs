@@ -1,10 +1,12 @@
-﻿namespace ActionMonitor.Shell.Runners
+﻿using ActionMonitor.Interfaces;
+
+namespace ActionMonitor.Shell.Runners
 {
   internal interface IRunner
   {
     /// <summary>
-    /// The unique Id given to us by the caller.
+    /// The action monitor.
     /// </summary>
-    string Uuid { get; }
+    IActionMonitor ActionMonitor { get; }
   }
 }

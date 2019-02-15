@@ -1,20 +1,17 @@
 ﻿using System;
+using ActionMonitor.Interfaces;
 
 namespace ActionMonitor.Shell.Runners
 {
   internal class Plugin : IRunner
   {
     /// <inheritdoc />
-    public string Uuid { get; }
+    public IActionMonitor ActionMonitor { get; }
 
-    public Plugin(string uuid)
+    public Plugin(IActionMonitor actionMonitor)
     {
       // set the Unique Id.
-      Uuid = uuid?.Trim() ?? throw new ArgumentNullException( nameof(uuid) );
-      if (string.IsNullOrEmpty(Uuid))
-      {
-        throw new ArgumentException();
-      }
+      ActionMonitor = actionMonitor ?? throw new ArgumentNullException( nameof(actionMonitor) );
     }
   }
 }

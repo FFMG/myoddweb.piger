@@ -15,6 +15,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using ActionMonitor.Shell.Runners;
 using myoddweb.commandlineparser;
 
@@ -56,12 +57,24 @@ namespace ActionMonitor.Shell
     private static IRunner CreateRunner(CommandlineParser parser )
     {
       // get the unique id.
-      var uuid = parser.Get(Argument.Uuid);
+      var uuid = parser.Get(Argument.Uuid).Trim();
+      if (string.IsNullOrEmpty(uuid))
+      {
+        throw new ArgumentException( nameof(uuid ));
+      }
 
       // then get the path.
       var path = parser.Get(Argument.Path);
+      if (!File.Exists(path))
+      {
+        throw new FileNotFoundException();
+      }
 
-      return new Plugin( uuid );
+      // create the action monitor
+      var actionMonitor = new Core( uuid );
+
+      // create the pluggin.
+      return new Plugin(actionMonitor);
     }
 
     private static int Main(string[] args)
@@ -70,15 +83,20 @@ namespace ActionMonitor.Shell
       {
         var parser = new CommandlineParser(args, new Dictionary<string, CommandlineData>
         {
-          { Argument.Uuid, new CommandlineData{ IsRequired = true}},   //  the unique id
-          { Argument.Path, new CommandlineData{ IsRequired = true}}    //  the path to what we want to run from shell.
+          {Argument.Uuid, new CommandlineData {IsRequired = true}}, //  the unique id
+          {Argument.Path, new CommandlineData {IsRequired = true}} //  the path to what we want to run from shell.
         });
 
         // create the runner.
-        var runner = CreateRunner( parser );
+        var runner = CreateRunner(parser);
 
 
         return ExitCode.Succeeded;
+      }
+      catch (FileNotFoundException e)
+      {
+        Console.WriteLine($"The given path '{e.FileName}' does not exist: {e}");
+        return ExitCode.InvalidCommandLineArgument;
       }
       catch (ArgumentException e)
       {
