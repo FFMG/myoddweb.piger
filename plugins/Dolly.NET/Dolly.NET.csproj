@@ -51,4 +51,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(TargetDir)..\x86" /Y
+xcopy "$(TargetDir)*.*" "$(TargetDir)..\x64" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
