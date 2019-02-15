@@ -15,6 +15,7 @@
 
 using System;
 using System.Collections.Generic;
+using ActionMonitor.Shell.Runners;
 using myoddweb.commandlineparser;
 
 namespace ActionMonitor.Shell
@@ -39,15 +40,44 @@ namespace ActionMonitor.Shell
       public static int InvalidCommandLineArgument { get; } = 2;
     }
 
+    private static class Argument
+    {
+      /// <summary>
+      /// The name of the UUID argument.
+      /// </summary>
+      public static string Uuid { get; } = "uuid";
+
+      /// <summary>
+      /// The path of the item we are trying to run, (dll, code etc...)
+      /// </summary>
+      public static string Path { get; } = "path";
+    }
+
+    private static IRunner CreateRunner(CommandlineParser parser )
+    {
+      // get the unique id.
+      var uuid = parser.Get(Argument.Uuid);
+
+      // then get the path.
+      var path = parser.Get(Argument.Path);
+
+      return new Plugin( uuid );
+    }
+
     private static int Main(string[] args)
     {
       try
       {
         var parser = new CommandlineParser(args, new Dictionary<string, CommandlineData>
         {
-          { "uuid", new CommandlineData{ IsRequired = true}},   //  the unique id
-          { "path", new CommandlineData{ IsRequired = true}}    //  the path to what we want to run from shell.
+          { Argument.Uuid, new CommandlineData{ IsRequired = true}},   //  the unique id
+          { Argument.Path, new CommandlineData{ IsRequired = true}}    //  the path to what we want to run from shell.
         });
+
+        // create the runner.
+        var runner = CreateRunner( parser );
+
+
         return ExitCode.Succeeded;
       }
       catch (ArgumentException e)
