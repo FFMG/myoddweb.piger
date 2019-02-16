@@ -74,12 +74,8 @@ namespace ActionMonitor.Shell
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-    const int SwHide = 0;
-    const int SwShow = 5;
-
-    [DllImport("kernel32.dll")]
-    private static extern bool AttachConsole(int dwProcessId);
-    private const int AttachParentProcess = -1;
+    private const int SwHide = 0;
+    private const int SwShow = 5;
 
     public static void ShowConsoleWindow()
     {
@@ -139,8 +135,15 @@ namespace ActionMonitor.Shell
         if ( !parser.IsSet(Argument.Hidden ))
         {
           ShowConsoleWindow();
-          AttachConsole(AttachParentProcess);
-          Console.WriteLine("Starting Action Monitor Shell ...");
+          // @thanks http://patorjk.com/software/taag/
+          Console.WriteLine(
+@"
+    _      _   _            __  __          _ _             ___ _        _ _         
+   /_\  __| |_(_)___ _ _   |  \/  |___ _ _ (_) |_ ___ _ _  / __| |_  ___| | |        
+  / _ \/ _|  _| / _ \ ' \  | |\/| / _ \ ' \| |  _/ _ \ '_| \__ \ ' \/ -_) | |  _ _ _ 
+ /_/ \_\__|\__|_\___/_||_| |_|  |_\___/_||_|_|\__\___/_|   |___/_||_\___|_|_| (_|_|_)
+                                                                                     
+");
         }
         else
         {
