@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using ActionMonitor.Shell.Runners;
 using myoddweb.commandlineparser;
 
@@ -22,6 +23,7 @@ namespace ActionMonitor.Shell
 {
   internal class Program
   {
+
     private static class ExitCode
     {
       /// <summary>
@@ -48,6 +50,11 @@ namespace ActionMonitor.Shell
     private static class Argument
     {
       /// <summary>
+      /// If we have this flag then the app will be hidden
+      /// </summary>
+      public static string Hidden { get; } = "hidden";
+
+      /// <summary>
       /// The name of the UUID argument.
       /// </summary>
       public static string Uuid { get; } = "uuid";
@@ -56,6 +63,42 @@ namespace ActionMonitor.Shell
       /// The path of the item we are trying to run, (dll, code etc...)
       /// </summary>
       public static string Path { get; } = "path";
+    }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern bool AllocConsole();
+
+    [DllImport("kernel32.dll")]
+    private static extern IntPtr GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    const int SW_HIDE = 0;
+    const int SW_SHOW = 5;
+
+    [DllImport("kernel32.dll")]
+    static extern bool AttachConsole(int dwProcessId);
+    private const int ATTACH_PARENT_PROCESS = -1;
+
+    public static void ShowConsoleWindow()
+    {
+      var handle = GetConsoleWindow();
+
+      if (handle == IntPtr.Zero)
+      {
+        AllocConsole();
+      }
+      else
+      {
+        ShowWindow(handle, SW_SHOW);
+      }
+    }
+
+    public static void HideConsoleWindow()
+    {
+      var handle = GetConsoleWindow();
+      ShowWindow(handle, SW_HIDE);
     }
 
     private static IRunner CreateRunner(CommandlineParser parser )
@@ -88,9 +131,20 @@ namespace ActionMonitor.Shell
       {
         var parser = new CommandlineParser(args, new Dictionary<string, CommandlineData>
         {
+          {Argument.Hidden, new CommandlineData {IsRequired = false}},
           {Argument.Uuid, new CommandlineData {IsRequired = true}}, //  the unique id
           {Argument.Path, new CommandlineData {IsRequired = true}} //  the path to what we want to run from shell.
         });
+
+        if ( !parser.IsSet(Argument.Hidden ))
+        {
+          ShowConsoleWindow();
+          AttachConsole(ATTACH_PARENT_PROCESS);
+        }
+        else
+        {
+          HideConsoleWindow();
+        }
 
         // create the runner.
         var runner = CreateRunner(parser);

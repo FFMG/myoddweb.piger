@@ -10,6 +10,8 @@
     <RootNamespace>Dolly.NET</RootNamespace>
     <AssemblyName>Dolly.NET</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetName>Dolly.NET</TargetName>
+    <TargetExt>.amp-net</TargetExt>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>

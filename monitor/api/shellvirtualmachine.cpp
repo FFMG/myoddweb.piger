@@ -181,19 +181,20 @@ int ShellVirtualMachine::ExecuteInThread(const LPCTSTR pluginFile, const ActiveA
 
   //  create uuid and andd it to our list.
   const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  auto psApi = AddApi(uuid, action);
+  const auto psApi = AddApi(uuid, action);
 
+  // get the path of the exe
   std::wstring szPath;
   if( !ShellPath(szPath) )
   {
-    const auto errorMsg = L"Powersell 3 could not be found in the installed path, so we cannot run this script!";
+    const auto errorMsg = L"Action Monitor Shell could not be found in the installed path, so we cannot run this script!";
     psApi->Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
     RemoveApi(uuid);
     return 0;
   }
 
-  // get the powershell dll path
+  // get the action monitor dll path
   auto dllFullpath = myodd::files::GetAppPath(true);
   myodd::files::Join(dllFullpath, dllFullpath, L"ActionMonitor.dll");
   if (!myodd::files::FileExists(dllFullpath))
@@ -221,11 +222,11 @@ int ShellVirtualMachine::ExecuteInThread(const LPCTSTR pluginFile, const ActiveA
   }
 
   //  prepare the arguments.
-  auto arguments = GetCommandLineArguments( action, dllFullpath, dllInterfacesFullpath, pluginFile, uuid );
+  auto arguments = GetCommandLineArguments( action, pluginFile, uuid );
   
   //
-  // it is very important that we do not use out locks here!
-  // otherwise no other powershell window will be able to run
+  // it is very important that we do not use our locks here!
+  // otherwise no other Shell window will be able to run
   // we must let everything run fine.
   //
   //  execute a script now.
@@ -240,13 +241,14 @@ int ShellVirtualMachine::ExecuteInThread(const LPCTSTR pluginFile, const ActiveA
         myodd::threads::Lock lock(_mutex);
         psApi->SetHandle(hProcess);
       }
-      
+
+      // save the api so we know it is running.
       WaitForApi(uuid);
     }
   }
   else
   {
-    myodd::log::LogError(L"I was unable to start powershell : '%s'"), arguments.c_str();
+    myodd::log::LogError(L"I was unable to start Action Monitor with the arguments : '%s'"), arguments.c_str();
   }
 
   // if we are here, it worked.
@@ -254,40 +256,35 @@ int ShellVirtualMachine::ExecuteInThread(const LPCTSTR pluginFile, const ActiveA
 }
 
 /**
- * \brief create the full command line argument that will be passed to powershell
+ * \brief create the full command line argument that will be passed to ActionMonitor Shell
  * \param action the action we are working with
- * \param dllFullPath the full path of the dll
- * \param dllInterfaceFullPath the interface full path.
  * \param pluginPath the path to the plugin
  * \param uuid the unique id
  */
 std::wstring ShellVirtualMachine::GetCommandLineArguments(
   const ActiveAction& action,
-  const std::wstring& dllFullPath,
-  const std::wstring& dllInterfaceFullPath,
   const std::wstring& pluginPath,
   const std::wstring& uuid
 ) const
 {
-  // the object
-  auto am = myodd::strings::Format(L"$am = New-Object ActionMonitor.Core \"%s\"", uuid.c_str());
+  // the uuid
+  const auto uuidCommand = myodd::strings::Format(L"--uuid \"%s\"", uuid.c_str());
 
-  //  prepare the arguments.
-  return myodd::strings::Format(_T("-command \"&{$policy = Get-ExecutionPolicy; Set-ExecutionPolicy RemoteSigned -Force; Add-Type -Path '%s'; %s; . '%s' ;Set-ExecutionPolicy $policy -Force; }"), 
-    dllFullPath.c_str(),
-    am.c_str(), 
-    pluginPath.c_str()
-  );
+  // the path
+  const auto pathCommand = myodd::strings::Format(L"--path \"%s\"", pluginPath.c_str());
+
+  //  together ... and this is hidden as well.
+  return myodd::strings::Format( L"%s %s --hidden", uuidCommand.c_str(), pathCommand.c_str() );
 }
 
 /**
  * \brief Check if a given file extension is used by this API or not.
  * \param file the file we are checking
- * \return bool true|false if the given extension is powershell or not.
+ * \return bool true|false if the given extension is Action Monitor .NET or not.
  */
 bool ShellVirtualMachine::IsExt(const std::wstring& file)
 {
-  return myodd::files::IsExtension(file, L"camp");
+  return myodd::files::IsExtension(file, L"amp-net");
 }
 
 /**
@@ -404,15 +401,19 @@ bool ShellVirtualMachine::ShellPath(std::wstring& szPath)
     return false;
   }
 
-  // we now need to add powershell.exe
-  myodd::files::Join(szPath, szRegPath, _T("powershell.exe"));
+  // get the app path
+  const auto appPath = myodd::files::GetAppPath();
+
+  // and then add the exe to it.
+  myodd::files::Join(szPath, appPath, L"ActionMonitor.Shell.exe");
+
   if (!myodd::files::FileExists(szPath))
   {
     // this does not make sense.
-    myodd::log::LogError(_T("Could not get PS3 path, while it looks like it is installed, the path given does not point to a valid exe."));
+    myodd::log::LogError( L"Could not get Shell path, while it looks like it is installed, the path given does not point to a valid exe.");
 
     // the value does not even exist.
-    szPath = _T("");
+    szPath = L"";
     return false;
   }
 
