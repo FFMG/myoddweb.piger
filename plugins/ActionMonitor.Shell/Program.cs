@@ -140,6 +140,7 @@ namespace ActionMonitor.Shell
         {
           ShowConsoleWindow();
           AttachConsole(AttachParentProcess);
+          Console.WriteLine("Starting Action Monitor Shell ...");
         }
         else
         {
@@ -157,16 +158,19 @@ namespace ActionMonitor.Shell
       }
       catch (FileNotFoundException e)
       {
+        ShowConsoleWindow();
         Console.WriteLine($"The given path '{e.FileName}' does not exist: {e}");
         return ExitCode.InvalidPath;
       }
       catch (ArgumentException e)
       {
+        ShowConsoleWindow();
         Console.WriteLine( $"Invalid command line argument: {e}");
         return ExitCode.InvalidCommandLineArgument;
       }
       catch( Exception e )
       {
+        ShowConsoleWindow();
         Console.WriteLine(e);
         return ExitCode.UnknownError;
       }
