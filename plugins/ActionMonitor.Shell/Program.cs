@@ -74,12 +74,12 @@ namespace ActionMonitor.Shell
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-    const int SW_HIDE = 0;
-    const int SW_SHOW = 5;
+    const int SwHide = 0;
+    const int SwShow = 5;
 
     [DllImport("kernel32.dll")]
-    static extern bool AttachConsole(int dwProcessId);
-    private const int ATTACH_PARENT_PROCESS = -1;
+    private static extern bool AttachConsole(int dwProcessId);
+    private const int AttachParentProcess = -1;
 
     public static void ShowConsoleWindow()
     {
@@ -91,14 +91,14 @@ namespace ActionMonitor.Shell
       }
       else
       {
-        ShowWindow(handle, SW_SHOW);
+        ShowWindow(handle, SwShow);
       }
     }
 
     public static void HideConsoleWindow()
     {
       var handle = GetConsoleWindow();
-      ShowWindow(handle, SW_HIDE);
+      ShowWindow(handle, SwHide);
     }
 
     private static IRunner CreateRunner(CommandlineParser parser )
@@ -139,7 +139,7 @@ namespace ActionMonitor.Shell
         if ( !parser.IsSet(Argument.Hidden ))
         {
           ShowConsoleWindow();
-          AttachConsole(ATTACH_PARENT_PROCESS);
+          AttachConsole(AttachParentProcess);
         }
         else
         {

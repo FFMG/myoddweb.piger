@@ -15,11 +15,11 @@ namespace Dolly.NET
     /// <summary>
     /// A random item so we can pick a sentence
     /// </summary>
-    private Random _random = new Random();
+    private readonly Random _random = new Random();
 
     public Task<bool> GoAsync(CancellationToken token)
     {
-      var sentences = new string[]
+      var sentences = new[]
       {
         "Hello, Dolly",
         "Well, hello, Dolly",

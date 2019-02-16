@@ -52,14 +52,16 @@ Name: english; MessagesFile: compiler:Default.isl
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: Piger; ValueData: """{app}\ActionMonitor.exe"""; Flags: uninsdeletevalue
 
 [Tasks]
+; Plugins
 Name: pluginloader; Description: "Create a 'Learn/Unlearn' action to learn new simple actions."; GroupDescription: "Plugins";
 Name: pluginapppaths; Description: "Parse all the common applications on your system and create actions on the fly."; GroupDescription: "Plugins";
 Name: pluginontop; Description: "Create 'OnTop' command to keep any window as the topmost window, (like vlc/winamp etc...)."; GroupDescription: "Plugins";
 Name: plugindolly; Description: "Hello Dolly sample plugin (c++)"; GroupDescription: "Plugins"; Flags: unchecked
 Name: plugindollynet; Description: "Hello Dolly sample plugin (.NET)"; GroupDescription: "Plugins"; Flags: unchecked
+; scripts
 ; make sure that this remains item #5 as the [code] bellow disables it.
-Name: pluginpowershell3; Description: "Powershell 3 plugins"; GroupDescription: "Plugins";
-Name: plugincsharp; Description: "C# Sharp plugins"; GroupDescription: "Plugins";
+Name: pluginpowershell3; Description: "Powershell 3 plugins"; GroupDescription: "Scripts";
+Name: plugincsharp; Description: "C# Sharp plugins"; GroupDescription: "Scripts";
 
 [InstallDelete]
 ; remove old files that the user might no longer want
@@ -102,7 +104,7 @@ Source: {#APP_SOURCE64}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\m
 Source: {#APP_SOURCE64}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginontop')
 
 ; common
-Source: {#APP_SOURCE64}Dolly.NET.amp-net; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('plugindollynet')
+Source: {#APP_SOURCE64}Dolly.NET.amp-net; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsTaskSelected('plugindollynet')
 
 ; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs

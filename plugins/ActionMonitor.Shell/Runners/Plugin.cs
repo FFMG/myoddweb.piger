@@ -59,7 +59,7 @@ namespace ActionMonitor.Shell.Runners
       }
       catch( Exception e )
       {
-        ActionMonitor.Log(1, $"Exception running the plugin {FileSystemInfo.FullName}: {e.ToString()}");
+        ActionMonitor.Log(1, $"Exception running the plugin {FileSystemInfo.FullName}: {e}");
         throw;
       }
     }
@@ -87,7 +87,7 @@ namespace ActionMonitor.Shell.Runners
     /// <param name="actions">The actions we will be calling</param>
     /// <param name="token">The token to pass to the action.</param>
     /// <returns></returns>
-    private async Task RunAllActionsAsync(IList<IAction> actions, CancellationToken token)
+    private static async Task RunAllActionsAsync(ICollection<IAction> actions, CancellationToken token)
     {
       var tasks = new List<Task>(actions.Count);
       foreach (var action in actions)
