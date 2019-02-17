@@ -26,7 +26,7 @@ static bool g_isRunning = false;
  * \brief Check if the dialog is running or not.
  * \return bool true|false if the dialog is running or not, (destroyed).
  */
-bool CActionMonitorDlg::IsRunning()
+bool ActionMonitorDlg::IsRunning()
 {
   return g_isRunning;
 }
@@ -37,8 +37,8 @@ bool CActionMonitorDlg::IsRunning()
  * @param void
  * @return void
  */
-CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
-	: CTrayDialog(CActionMonitorDlg::IDD, pParent), 
+ActionMonitorDlg::ActionMonitorDlg(CWnd* pParent /*=nullptr*/)
+	: CTrayDialog(ActionMonitorDlg::IDD, pParent), 
   m_keyState (ACTION_NONE),
   fontTime(nullptr),
   _IpcListener(nullptr)
@@ -55,7 +55,7 @@ CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
  * @param void
  * @return void
  */
-CActionMonitorDlg::~CActionMonitorDlg()
+ActionMonitorDlg::~ActionMonitorDlg()
 {
   //  clear the ipc listener
   if (_IpcListener != nullptr)
@@ -77,12 +77,12 @@ CActionMonitorDlg::~CActionMonitorDlg()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
+void ActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CTrayDialog::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CActionMonitorDlg, CTrayDialog)
+BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_REGISTERED_MESSAGE(UWM_KEYBOARD_CHAR     , OnHookKeyChar)
@@ -106,7 +106,7 @@ END_MESSAGE_MAP()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
+void ActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
 {
   if( 0 == IsVisible() )
   {
@@ -122,7 +122,7 @@ void CActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
  * @param void
  * @return void
  */
-BOOL CActionMonitorDlg::OnInitDialog()
+BOOL ActionMonitorDlg::OnInitDialog()
 {
 	CTrayDialog::OnInitDialog();
   ModifyStyleEx(WS_EX_APPWINDOW,0); //  no taskbar!
@@ -172,7 +172,7 @@ BOOL CActionMonitorDlg::OnInitDialog()
   return TRUE;
 }
 
-void CActionMonitorDlg::InitializeListener()
+void ActionMonitorDlg::InitializeListener()
 {
   if (nullptr == _IpcListener)
   {
@@ -196,7 +196,7 @@ void CActionMonitorDlg::InitializeListener()
  * @param void
  * @return void
  */
-BOOL CActionMonitorDlg::IsSpecialKeyDown( )const
+BOOL ActionMonitorDlg::IsSpecialKeyDown( )const
 {
   const auto vk = GetKeyState(SPECIAL_KEY);
   return ((vk & 0xffff) == 1 );
@@ -207,7 +207,7 @@ BOOL CActionMonitorDlg::IsSpecialKeyDown( )const
  * @param void
  * @return void
  */
-void CActionMonitorDlg::InitHook()
+void ActionMonitorDlg::InitHook()
 {
   //  in case we called setHook(...); and crashed we might not be able to
   //  restart the hook
@@ -241,7 +241,7 @@ void CActionMonitorDlg::InitHook()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::ShowWindow( BYTE bTrans )
+void ActionMonitorDlg::ShowWindow( BYTE bTrans )
 {
   if( IsVisible() != bTrans )
   {
@@ -276,7 +276,7 @@ void CActionMonitorDlg::ShowWindow( BYTE bTrans )
  * @param none
  * @return none
  */
-void CActionMonitorDlg::CalcMaxes( )
+void ActionMonitorDlg::CalcMaxes( )
 {
   const auto fX = static_cast<float>(GetSystemMetrics(SM_CXSCREEN));
   const auto fY = static_cast<float>(GetSystemMetrics(SM_CYSCREEN));
@@ -292,7 +292,7 @@ void CActionMonitorDlg::CalcMaxes( )
  * @param none
  * @return none
  */
-void CActionMonitorDlg::InitWindow( )
+void ActionMonitorDlg::InitWindow( )
 {
   CalcMaxes();
 
@@ -319,7 +319,7 @@ void CActionMonitorDlg::InitWindow( )
  * @param none
  * @return none
  */
-void CActionMonitorDlg::OnPaint() 
+void ActionMonitorDlg::OnPaint() 
 {
 	CPaintDC dc(this); // device context for painting
 
@@ -378,7 +378,7 @@ void CActionMonitorDlg::OnPaint()
  * @param void
  * @return void
  */
-HCURSOR CActionMonitorDlg::OnQueryDragIcon()
+HCURSOR ActionMonitorDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
 }
@@ -390,7 +390,7 @@ HCURSOR CActionMonitorDlg::OnQueryDragIcon()
  * @param void
  * @return void
  */
-LRESULT CActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
+LRESULT ActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
 { 
   /**
    * The WM_CHAR message is posted to the window with the keyboard focus when a WM_KEYDOWN message is translated by the TranslateMessage function. 
@@ -405,7 +405,7 @@ LRESULT CActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
  * @param void
  * @return void
  */
-BOOL CActionMonitorDlg::IsSpecialKey( WPARAM wParam ) const
+BOOL ActionMonitorDlg::IsSpecialKey( WPARAM wParam ) const
 {
   return (wParam == SPECIAL_KEY);
 }
@@ -416,7 +416,7 @@ BOOL CActionMonitorDlg::IsSpecialKey( WPARAM wParam ) const
  * @param void
  * @return void
  */
-LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
+LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 {
   TRACE( "KeyDown 0x%x\n", wParam );
 
@@ -535,7 +535,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
  * @param void
  * @return void
  */
-LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
+LRESULT ActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
 {
   TRACE( "KeyUp 0x%x\n", wParam );
 
@@ -612,7 +612,7 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
  * We only know we are the main thread because that number was set at construction.
  * @return bool if this thread is main or not.
  */
-bool CActionMonitorDlg::IsMainThread() const
+bool ActionMonitorDlg::IsMainThread() const
 {
   return (std::this_thread::get_id() == _main_threadId);
 }
@@ -623,7 +623,7 @@ bool CActionMonitorDlg::IsMainThread() const
  * \param lParam the message object we want to display.
  * \return if we are able to add the window or not.
  */
-LRESULT CActionMonitorDlg::OnDisplayMessage( WPARAM, const LPARAM lParam )
+LRESULT ActionMonitorDlg::OnDisplayMessage( WPARAM, const LPARAM lParam )
 {
   const auto msg = reinterpret_cast<MessageDlg::Msg*>(lParam);
   const auto result = DisplayMessage(msg->Text(), msg->Elapse(), msg->FadeOut());
@@ -638,7 +638,7 @@ LRESULT CActionMonitorDlg::OnDisplayMessage( WPARAM, const LPARAM lParam )
  * \param nFadeOut where we want to fade the window from.
  * \return if we were able to display the message or not.
  */
-bool CActionMonitorDlg::DisplayMessage( const std::wstring& wsText, const int nElapse, const int nFadeOut)
+bool ActionMonitorDlg::DisplayMessage( const std::wstring& wsText, const int nElapse, const int nFadeOut)
 {
   // Sanity check
   if(wsText.length() == 0 )
@@ -701,7 +701,7 @@ bool CActionMonitorDlg::DisplayMessage( const std::wstring& wsText, const int nE
  * @param void
  * @return void
  */
-bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
+bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
 {
   // should we even be here?
   if( 0 == IsVisible() )
@@ -807,7 +807,7 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
  * @param void
  * @return void
  */
-void CActionMonitorDlg::DisplayTime
+void ActionMonitorDlg::DisplayTime
 (
   HDC hdc, 
   RECT &rParent
@@ -859,7 +859,7 @@ void CActionMonitorDlg::DisplayTime
  * @param RECT the new size of the rectangle
  * @return BOOL if the window size was changed or not.
  */
-bool CActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
+bool ActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
 {
   //  compare the structs
   if( memcmp( &newSize, &m_rWindow, sizeof(RECT)) != 0 )
@@ -892,7 +892,7 @@ bool CActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
  * @param void
  * @return void
  */
-HGDIOBJ CActionMonitorDlg::SelTimeFont( HDC hdc )
+HGDIOBJ ActionMonitorDlg::SelTimeFont( HDC hdc )
 {
   if(nullptr == fontTime )
   {
@@ -920,7 +920,7 @@ HGDIOBJ CActionMonitorDlg::SelTimeFont( HDC hdc )
  *        Like IPC messages.
  * \return unused/reserved
  */
-LRESULT CActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
+LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
 {
   //  do all the actions that are labeled as 'start'
   App().DoStartActionsList( false );
@@ -932,7 +932,7 @@ LRESULT CActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
  * \brief  Message to tell the system to give us the version number.
  * \return unused/reserved
  */
-LRESULT CActionMonitorDlg::OnVersion( WPARAM, LPARAM )
+LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
 {
   myodd::files::Version ver;
   const auto strSay = myodd::strings::Format( _T("<b>Version : </b>%d.%d.%d.%d"),
@@ -954,7 +954,7 @@ LRESULT CActionMonitorDlg::OnVersion( WPARAM, LPARAM )
  * @param LPARAM unused/reserved
  * @return LRESULT unused/reserved
  */
-LRESULT CActionMonitorDlg::OnReload
+LRESULT ActionMonitorDlg::OnReload
 (
   WPARAM,
   LPARAM
@@ -1009,7 +1009,7 @@ LRESULT CActionMonitorDlg::OnReload
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnTrayExit() 
+void ActionMonitorDlg::OnTrayExit() 
 {
   ::PostMessage( m_hWnd, WM_CLOSE, 0, 0 );	
 }
@@ -1020,7 +1020,7 @@ void CActionMonitorDlg::OnTrayExit()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnTrayReload() 
+void ActionMonitorDlg::OnTrayReload() 
 {
   ::PostMessage( m_hWnd, UWM_KEYBOARD_RELOAD, 0, 0 );
 }
@@ -1031,7 +1031,7 @@ void CActionMonitorDlg::OnTrayReload()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnTrayVersion()
+void ActionMonitorDlg::OnTrayVersion()
 {
   ::PostMessage( m_hWnd, UWM_KEYBOARD_VERSION, 0, 0 );
 }
@@ -1040,7 +1040,7 @@ void CActionMonitorDlg::OnTrayVersion()
  * \brief called when the dialog is closing, (this is the main app).
  * \see CTrayDialog::OnClose
  */
-void CActionMonitorDlg::OnClose()
+void ActionMonitorDlg::OnClose()
 {
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
@@ -1062,7 +1062,7 @@ void CActionMonitorDlg::OnClose()
 /**
  * \brief remove all the completed on screen messages.
  */
-void CActionMonitorDlg::ClearUnusedMessages()
+void ActionMonitorDlg::ClearUnusedMessages()
 {
   while( _displayWindows.size() > 0 )
   {
@@ -1091,7 +1091,7 @@ void CActionMonitorDlg::ClearUnusedMessages()
 /**
  * Kill all the currently active message windows.
  */
-void CActionMonitorDlg::KillAllActiveWindows()
+void ActionMonitorDlg::KillAllActiveWindows()
 {
   //  remove what is complete.
   ClearUnusedMessages();
@@ -1120,7 +1120,7 @@ void CActionMonitorDlg::KillAllActiveWindows()
 /**
  * \brief Wait for all the active windows to complete.
  */
-void CActionMonitorDlg::WaitForActiveWindows()
+void ActionMonitorDlg::WaitForActiveWindows()
 {
   // first give our window a chance to process UWM_DISPLAYMESSAGE.
   // but we don't want to do other messages only the pending display messages.
@@ -1183,7 +1183,7 @@ void CActionMonitorDlg::WaitForActiveWindows()
  * \brief pump all the messages for a given window.
  * \param hWnd the handle of the window messages we are pumping.
  */
-void CActionMonitorDlg::MessagePump(const HWND hWnd)
+void ActionMonitorDlg::MessagePump(const HWND hWnd)
 {
   //  lock up to make sure we only do one at a time
   MSG msg;
@@ -1202,7 +1202,7 @@ void CActionMonitorDlg::MessagePump(const HWND hWnd)
  * \brief stop accepting any more messages and close everything
  * \see CTrayDialog::OnDestroy
  */
-void CActionMonitorDlg::OnDestroy()
+void ActionMonitorDlg::OnDestroy()
 {
   // the window is about to be destroyed, 
   // we are no longer up and running!
@@ -1217,7 +1217,7 @@ void CActionMonitorDlg::OnDestroy()
  *        Each will be called when a new message arrives.
  * \param handler the message handler we are adding.
  */
-void CActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
+void ActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
 {
   myodd::threads::Lock guard(_mutex);
   if(_IpcListener == nullptr )
@@ -1231,7 +1231,7 @@ void CActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
  * \brief Remove a message handler from our list.
  * \param handler the message handler we want to remove.
  */
-void CActionMonitorDlg::RemoveMessageHandler(myodd::os::IpcMessageHandler& handler)
+void ActionMonitorDlg::RemoveMessageHandler(myodd::os::IpcMessageHandler& handler)
 {
   myodd::threads::Lock guard(_mutex);
   if (_IpcListener == nullptr)

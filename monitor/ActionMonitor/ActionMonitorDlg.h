@@ -20,33 +20,32 @@
 #include "resource.h"		// main symbols
 
 /////////////////////////////////////////////////////////////////////////////
-// CActionMonitorDlg dialog
+// ActionMonitorDlg dialog
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
 #define ACTION_SHIFT_DOWN     0x002
 #define ACTION_LSHIFT_DOWN    0x004 /* if not set then RSHIFT is down */
-
 
 #define SPECIAL_KEY VK_CAPITAL
 
 #include "../common/trayDialog.h" //  system tray icon item
 #include <os/ipclistener.h>
 
-class CActionMonitorDlg : public CTrayDialog, FadeWnd, ActiveActions
+class ActionMonitorDlg final : public CTrayDialog, FadeWnd, ActiveActions
 {
 // Construction
 public:
-	CActionMonitorDlg(CWnd* pParent = NULL);	// standard constructor
-  virtual ~CActionMonitorDlg();
+  explicit ActionMonitorDlg(CWnd* pParent = nullptr);	// standard constructor
+  virtual ~ActionMonitorDlg();
 
 // Dialog Data
-	//{{AFX_DATA(CActionMonitorDlg)
+	//{{AFX_DATA(ActionMonitorDlg)
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 		// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CActionMonitorDlg)
+	//{{AFX_VIRTUAL(ActionMonitorDlg)
 	protected:
 	void DoDataExchange(CDataExchange* pDX) override;	// DDX/DDV support
 	//}}AFX_VIRTUAL
@@ -122,7 +121,7 @@ protected:
   afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
 
   // Generated message map functions
-	//{{AFX_MSG(CActionMonitorDlg)
+	//{{AFX_MSG(ActionMonitorDlg)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();

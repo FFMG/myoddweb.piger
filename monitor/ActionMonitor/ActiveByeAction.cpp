@@ -37,7 +37,7 @@ void ActiveByeAction::OnExecuteInThread()
 {
   // close all the active windows
   // we no longer need them.
-  auto pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
+  auto pThis = static_cast<ActionMonitorDlg*>(App().GetMainWnd());
   pThis->KillAllActiveWindows();
 
   // let the end actions proceed.

@@ -372,7 +372,7 @@ BOOL CActionMonitorApp::InitInstance()
   auto noTaskBar = new CFrameWnd();
   noTaskBar->Create(nullptr, nullptr,WS_OVERLAPPEDWINDOW);
 
-	CActionMonitorDlg dlg( noTaskBar );
+	ActionMonitorDlg dlg( noTaskBar );
 	m_pMainWnd = &dlg;
 
   // create the possible actions
