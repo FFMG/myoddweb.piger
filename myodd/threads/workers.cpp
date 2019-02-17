@@ -22,13 +22,13 @@ namespace myodd {
     }
 
     /**
-     * Add this thread to the queue.
-     * @param std::thread* the thread we want to queue.
-     * @return std::thread& the thread that we just added.
+     * \brief Add this thread to the queue.
+     * \param threadToQueue the thread we want to queue.
+     * \return std::thread& the thread that we just added.
      */
     std::thread& Workers::QueueWorker(std::thread* threadToQueue)
     {
-      myodd::threads::Lock guard(_mutex);
+      Lock guard(_mutex);
       _workers.push_back(threadToQueue);
       return *threadToQueue;
     }
@@ -46,17 +46,20 @@ namespace myodd {
       }
 
       //  we _might_ have some workers waiting to finish.
-      myodd::threads::Lock guard(_mutex);
-      for (vWorkers::iterator it = _workers.begin(); it != _workers.end(); ++it)
+      Lock guard(_mutex);
+      for (auto& th : _workers)
       {
-        //  is it still busy?
-        if ((*it)->joinable())
-        {
-          (*it)->join();
-        }
+        th->join();
 
+        // give threads a chance to run...
+        std::this_thread::yield();
+      }
+
+      // then delete the threads.
+      for (auto& th : _workers)
+      {
         // now that it is done, we can free the memory
-        delete (*it);
+        delete th;
 
         // give threads a chance to run...
         std::this_thread::yield();

@@ -637,26 +637,26 @@ void Actions::up()
 }
 
 /**
- * Return true if this is one of the reserved directory.
- * A reserved directory is not parsed in the normal sense of the term. 
- * @param LPCTSTR the name of the directory.
+ * \brief Return true if this is one of the reserved directory.
+ *        A reserved directory is not parsed in the normal sense of the term. 
+ * \param name the name of the directory we want to check.
  * @return bool if this is a reserved directory or not.
  */
-bool Actions::IsReservedDir( LPCTSTR lp ) const
+bool Actions::IsReservedDir(const wchar_t* name ) const
 {
-  if( _tcscmp(AM_DIRECTORY_IN, lp ) == 0 )        //  out directory, items that are automatically run at start time
+  if( _tcscmp(AM_DIRECTORY_IN, name ) == 0 )        //  out directory, items that are automatically run at start time
   {
     return true;
   }
-  else if( _tcscmp(AM_DIRECTORY_OUT, lp ) == 0 )  //  out directory, items that are automatically run at close time
+  else if( _tcscmp(AM_DIRECTORY_OUT, name ) == 0 )  //  out directory, items that are automatically run at close time
   {
     return true;
   }
-  else if( _tcscmp(AM_DIRECTORY_TMP, lp ) == 0 )  //  temp directory
+  else if( _tcscmp(AM_DIRECTORY_TMP, name ) == 0 )  //  temp directory
   {
     return true;
   }
-  else if( _tcscmp(AM_DIRECTORY_PLUGIN, lp ) == 0 )  //  plugin directory
+  else if( _tcscmp(AM_DIRECTORY_PLUGIN, name ) == 0 )  //  plugin directory
   {
     return true;
   }

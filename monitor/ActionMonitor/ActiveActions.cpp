@@ -1,23 +1,29 @@
-// Action.cpp: implementation of the Action class.
+//This file is part of Myoddweb.Piger.
 //
-//////////////////////////////////////////////////////////////////////
-
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActiveActions.h"
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief Constructor.
  */
 ActiveActions::ActiveActions()
 {
 }
 
 /**
- * Destructor
- * @param void
- * @return void
+ * \brief Destructor
  */
 ActiveActions::~ActiveActions()
 {
@@ -29,7 +35,7 @@ ActiveActions::~ActiveActions()
   // the map should now be empty
   // otherwise we will simply delete the items.
   myodd::threads::Lock guard(_mutex);
-  for (Runners::iterator it = _runners.begin(); it != _runners.end(); ++it)
+  for (auto it = _runners.begin(); it != _runners.end(); ++it)
   {
     delete it->second;
   }
@@ -38,13 +44,13 @@ ActiveActions::~ActiveActions()
 }
 
 /**
- * Add an item to our list of workers and queue.
- * @param ActiveAction* activeAction the action we want to queue, this can be NULL
+ * \brief Add an item to our list of workers and queue.
+ * \param activeAction the action we want to queue, this can be NULL
  */
 void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
 {
   //  it could be NULL.
-  if (NULL == activeAction)
+  if (nullptr == activeAction)
   {
     return;
   }
@@ -64,8 +70,8 @@ void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
 }
 
 /**
- * Remove an active action form the list of actions.
- * @param ActiveAction* runner the runner we would like to remove from the list.
+ * \brief Remove an active action form the list of actions.
+ * \param runner the runner we would like to remove from the list.
  */
 void ActiveActions::RemoveRunner( ActiveAction* runner )
 {
@@ -73,7 +79,7 @@ void ActiveActions::RemoveRunner( ActiveAction* runner )
   myodd::threads::Lock guard(_mutex);
 
   // find it
-  Runners::iterator it = _runners.find(runner);
+  auto it = _runners.find(runner);
   if (it == _runners.end())
   {
     //  does not exist?
@@ -91,9 +97,9 @@ void ActiveActions::RemoveRunner( ActiveAction* runner )
 }
 
 /**
- * Execute an active action
- * @param ActiveAction* runner the action we will be running.
- * @param ActiveActions* parent the parent actions holder so we can clean up once complete.
+ * \brief Execute an active action
+ * \param runner the action we will be running.
+ * \param parent the parent actions holder so we can clean up once complete.
  */
 void ActiveActions::Execute( ActiveAction* runner, ActiveActions* parent )
 {

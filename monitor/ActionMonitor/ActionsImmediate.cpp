@@ -1,12 +1,27 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionsImmediate.h"
 #include "ActionMonitor.h"
+#include "ActionMonitorDlg.h"
 
 /**
- * Constructor
- * @param LPCTSTR subDir the directory we want to parse.
+ * \brief Constructor
+ * \param subDir subDir the directory we want to parse.
  */
-ActionsImmediate::ActionsImmediate( LPCTSTR subDir ) : 
+ActionsImmediate::ActionsImmediate(const wchar_t* subDir ) :
   Actions(),
   m_subDir( subDir )
 {
@@ -14,20 +29,12 @@ ActionsImmediate::ActionsImmediate( LPCTSTR subDir ) :
 }
 
 /**
- * Destructor
- */
-ActionsImmediate::~ActionsImmediate(void)
-{
-}
-
-/**
- * todo
- * @param void
- * @return void
+ * \brief Initialise all the actions so we can start doing them.
+ *        Go around the directory and look for possible actions.
  */
 void ActionsImmediate::Init()
 {
-  MYODD_STRING sPath = ::myodd::config::Get( L"paths\\commands", L"");
+  std::wstring sPath = ::myodd::config::Get( L"paths\\commands", L"");
   if( myodd::files::ExpandEnvironment( sPath, sPath ) )
   {
     ParseDirectory( sPath.c_str(), m_subDir.c_str() );
@@ -38,20 +45,19 @@ void ActionsImmediate::Init()
 }
 
 /**
- * Do all the action right away.
- * @return void
+ * \brief Do all the action right away.
  */
 void ActionsImmediate::DoThem(  )
 {
-  const bool isPrivileged = true;
-  for( array_of_actions::iterator it = m_Actions.begin(); it != m_Actions.end(); ++it )
+  const auto isPrivileged = true;
+  for( auto it = m_Actions.begin(); it != m_Actions.end(); ++it )
   {
     // we must be carefull that we replace all the values properly
     // recover properly even in a crash so we can reset the posible Action
     try
     {
       // The action.
-      Action* action = *it;
+      const auto action = *it;
 
       // We must tell the APIs who the current action will be
       // this one is because some APIs need to know the name of the current command
@@ -72,9 +78,16 @@ void ActionsImmediate::DoThem(  )
     }// catch
   }// for loop
 
+  // reset the current action to the default.
+  App().PossibleActions().SetAction( nullptr );
+}
+
+/**
+ * \brief wait for all currently running actions to complete.
+ */
+void ActionsImmediate::WaitForAll()
+{
   // wait for all the workers to finish.
   WaitForAllWorkers();
-
-  // reset the current action to the default.
-  App().PossibleActions().SetAction( NULL );
 }
+

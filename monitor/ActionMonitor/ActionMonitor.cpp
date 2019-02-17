@@ -33,6 +33,8 @@ END_MESSAGE_MAP()
  *The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
+  _startActions(nullptr), 
+_endActions(nullptr),
   m_hMutex(nullptr),
   _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize( NULL )
@@ -63,6 +65,13 @@ CActionMonitorApp::CActionMonitorApp() :
  */
 CActionMonitorApp::~CActionMonitorApp()
 {
+  // the actions are either finished
+  // or they should have been waited for.
+  // if we did not wait for them, then it is not the destructors fault.
+  // here we will simply destroy.
+  delete _endActions;
+  delete _startActions;
+
 #ifdef ACTIONMONITOR_API_LUA
   delete _lvm;
   _lvm = nullptr;
@@ -213,7 +222,7 @@ bool CActionMonitorApp::CanStartApp()
   }
 
   //
-  DWORD lErr = GetLastError();
+  const auto lErr = GetLastError();
   switch (lErr)
   {
   case ERROR_ALREADY_EXISTS:
@@ -231,8 +240,7 @@ bool CActionMonitorApp::CanStartApp()
 }
 
 /**
- * If needed we restart ourselves and run as administrator.
- * @return none
+ * \brief If needed we restart ourselves and run as administrator.
  */
 void CActionMonitorApp::SelfElavate()
 {
@@ -346,7 +354,7 @@ BOOL CActionMonitorApp::InitInstance()
 #else
     std::string sAPath = vm["d"].as< std::string >();
 #endif
-    LPCTSTR lpPath = sAPath.c_str();
+    const auto lpPath = sAPath.c_str();
 
     //  set it in case next time we have nothing
     myodd::config::Set( L"paths\\commands", lpPath );
@@ -370,7 +378,7 @@ BOOL CActionMonitorApp::InitInstance()
   // create the possible actions
   BuildActionsList( );
 
-  auto nResponse = dlg.DoModal();
+  const auto nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
 		// TODO: Place code here to handle when the dialog is
@@ -416,29 +424,79 @@ void CActionMonitorApp::BuildActionsList()
 }
 
 /**
- * \brief Execute all the actions that are exectuted at the start of this app.
- *        Note that the Dialog box is alredy created so we can show all the messages, (if any).
- * \return void
+ * \brief Execute all the actions that are executed at the start of this app.
+ *        Note that the Dialog box is already created so we can show all the messages, (if any).
+ * \param wait if we want to wait for the actions to finish or not.
  */
-void CActionMonitorApp::DoStartActionsList()
+void CActionMonitorApp::DoStartActionsList(const bool wait)
 {
-  ActionsImmediate aI( AM_DIRECTORY_IN );
-  aI.Init();
+  // wait for whatever is still running
+  WaitForStartActionsToComplete();
+
+  // start the new ones
+  _startActions = new ActionsImmediate(AM_DIRECTORY_IN);
+  _startActions->Init();
+
+  // wait if needed.
+  if (wait)
+  {
+    WaitForStartActionsToComplete();
+  }
 }
 
 /**
- * \brief Exectue all the actions that are executed at just before we end the app.
+ * \brief Execute all the actions that are executed at just before we end the app.
  *        Note that the dialog should still be alive so we can display the messages.
+ * \param wait if we want to wait for the actions to finish or not.
  */
-void CActionMonitorApp::DoEndActionsList( )
+void CActionMonitorApp::DoEndActionsList(const bool wait)
 {
-  ActionsImmediate aI( AM_DIRECTORY_OUT );
-  aI.Init();
+  // wait for whatever is still running
+  WaitForEndActionsToComplete();
+
+  // start the new ones
+  _endActions = new ActionsImmediate( AM_DIRECTORY_OUT );
+  _endActions->Init();
+
+  // wait if needed.
+  if (wait)
+  {
+    WaitForEndActionsToComplete();
+  }
 }
 
 /**
- * Set the max cliboard size that we don't want to use more of.
- * depending on the windows version/memory available.
+ * \brief wait for the actions to complete and cleanup.
+ */
+void CActionMonitorApp::WaitForEndActionsToComplete()
+{
+  if (_endActions == nullptr)
+  {
+    return;
+  }
+  _endActions->WaitForAll();
+  delete _endActions;
+  _endActions = nullptr;
+
+}
+
+/**
+ * \brief wait for the actions to complete and cleanup.
+ */
+void CActionMonitorApp::WaitForStartActionsToComplete()
+{
+  if (_startActions == nullptr)
+  {
+    return;
+  }
+  _startActions->WaitForAll();
+  delete _startActions;
+  _startActions = nullptr;
+
+}
+/**
+ * \brief Set the max clipboard size that we don't want to use more of.
+ *        depending on the windows version/memory available.
  */
 void CActionMonitorApp::InitMaxClipboardSize()
 {
@@ -457,7 +515,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   }
 
   // do we have a valid value in the config?
-  auto maxClipboardSize = static_cast<size_t>(::myodd::config::Get( path, 1024 ));
+  const auto maxClipboardSize = static_cast<size_t>(::myodd::config::Get( path, 1024 ));
   _maxClipboardSize = maxClipboardSize;
 }
 

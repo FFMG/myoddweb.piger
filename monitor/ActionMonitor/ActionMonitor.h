@@ -15,6 +15,7 @@
 #pragma once
 
 #include "Actions.h"    //  the actions we can call, (the name of the file)
+#include "ActionsImmediate.h"
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
@@ -27,7 +28,7 @@
 
 #define _MAX_CMD_LINE_ARGS  128
 
-class CActionMonitorApp : public CWinApp
+class CActionMonitorApp final : public CWinApp
 {
 public:
 	CActionMonitorApp();
@@ -59,8 +60,14 @@ public:
   void BuildActionsList();
 
 public:
-  static void DoStartActionsList();
-  static void DoEndActionsList();
+  void DoStartActionsList( bool wait );
+  void DoEndActionsList(bool wait);
+  void WaitForEndActionsToComplete();
+  void WaitForStartActionsToComplete();
+
+private:
+  ActionsImmediate* _startActions;
+  ActionsImmediate* _endActions;
 
 public:
 //  virtual int ExitInstance();

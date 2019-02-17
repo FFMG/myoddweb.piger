@@ -1,5 +1,17 @@
-// ActionMonitorDlg.h : header file
+//This file is part of Myoddweb.Piger.
 //
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
 #include "FadeWnd.h"
@@ -66,7 +78,7 @@ protected:
   typedef std::vector<MessageDlg*> vMessages;
   vMessages _displayWindows;
 
-  void MessagePump(HWND hWnd);
+static void MessagePump(HWND hWnd);
 
 public:
   bool DisplayMessage( LPCTSTR pText, UINT nElapse, UINT nFadeOut );
@@ -100,13 +112,14 @@ protected:
   POINT m_ptMaxValues;
   void CalcMaxes();
 
-  afx_msg LRESULT OnHookKeyChar   (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyDown   (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyUp     (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnReload        (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnVersion       (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnDisplayMessage(WPARAM wParam, LPARAM lParam);
-  afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
+  afx_msg LRESULT OnHookKeyChar     (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnHookKeyDown     (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnHookKeyUp       (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnReload          (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnVersion         (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnMessagePumpReady(WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnDisplayMessage  (WPARAM wParam, LPARAM lParam);
+  afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
 
   // Generated message map functions
 	//{{AFX_MSG(CActionMonitorDlg)

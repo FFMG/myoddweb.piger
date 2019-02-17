@@ -42,7 +42,7 @@ void ActiveByeAction::OnExecuteInThread()
 
   // let the end actions proceed.
   // we are creating a thread within a thread.
-  App().DoEndActionsList();
+  App().DoEndActionsList( true );
 
   // while the app is running, we might still have some windows
   // that are still visible.
