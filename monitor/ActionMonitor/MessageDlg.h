@@ -31,24 +31,24 @@ public:
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 
 public:
-  class Msg {
+  class Msg 
+  {
   public:
-    Msg(LPCTSTR pText, UINT nElapse, UINT nFadeOut) {
-      _pText = new MYODD_STRING(pText);
-      _nElapse = nElapse;
-      _nFadeOut = nFadeOut;
+    Msg(const std::wstring& wsText, int nElapse, int nFadeOut) :
+      _pText( wsText),
+      _nElapse( nElapse ),
+      _nFadeOut(  nFadeOut )
+    {
     }
-    virtual ~Msg() {
-      delete _pText;
-    }
-    LPCTSTR Text() const { return _pText->c_str(); }
-    UINT Elapse() const { return _nElapse; }
-    UINT FadeOut() const { return _nFadeOut; }
+    virtual ~Msg() = default;
+    const wchar_t* Text() const { return _pText.c_str(); }
+    int Elapse() const { return _nElapse; }
+    int FadeOut() const { return _nFadeOut; }
 
   protected:
-    MYODD_STRING* _pText;
-    UINT _nElapse;
-    UINT _nFadeOut;
+    const std::wstring _pText;
+    int _nElapse;
+    int _nFadeOut;
   };
 
   void Create( const std::wstring& sText, int nElapse, int nFadeOut);
@@ -80,10 +80,12 @@ protected:
 
   void CloseFromThread();
 
+  std::function<void(CWnd*)> _onComplete;
+
 public:
   BOOL OnInitDialog() override;
 
-  void FadeShowWindow();
+  void FadeShowWindow( std::function<void(CWnd*)> onComplete );
   void FadeKillWindow();
   bool IsRunning() const;
 };

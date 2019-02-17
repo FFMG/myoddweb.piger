@@ -201,6 +201,10 @@ void MessageDlg::DoFade()
  */
 void MessageDlg::CloseFromThread()
 {
+  // call the complete function.
+  // so we can tell all that we are done here.
+  _onComplete(this);
+
   // close it
   PostMessage(WM_CLOSE);
 
@@ -277,12 +281,16 @@ BOOL MessageDlg::OnInitDialog()
 /**
  * \brief start the thread to fade the window.
  */
-void MessageDlg::FadeShowWindow()
+void MessageDlg::FadeShowWindow(std::function<void(CWnd*)> onComplete)
 {
   // fade the window a little.
   ShowWindow(SW_SHOW);
   Transparent( ::myodd::config::Get( L"commands\\transparency", 127) );
 
+  // save the complete callback function
+  _onComplete = onComplete;
+
+  // start the worker.
   _worker.QueueWorker(&MessageDlg::Fade, this);
 }
 

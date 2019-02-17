@@ -75,13 +75,13 @@ protected:
   DWORD m_keyState;
   
 protected:
-  typedef std::vector<MessageDlg*> vMessages;
-  vMessages _displayWindows;
+  typedef std::vector<MessageDlg*> VMessages;
+  VMessages _displayWindows;
 
-static void MessagePump(HWND hWnd);
+  static void MessagePump(HWND hWnd);
 
 public:
-  bool DisplayMessage( LPCTSTR pText, UINT nElapse, UINT nFadeOut );
+  bool DisplayMessage( const std::wstring& wsText, int nElapse, int nFadeOut );
 
   // kill all the active windows.
   void KillAllActiveWindows();

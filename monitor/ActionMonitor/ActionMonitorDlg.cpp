@@ -618,41 +618,31 @@ bool CActionMonitorDlg::IsMainThread() const
 }
 
 /**
- * Display a message, this comes from another thread.
- * @param WPARAM unused/reserved
- * @param LPARAM unused/reserved
- * @return LRESULT unused/reserved
+ * \brief Display a message, this comes from another thread.
+ * \param
+ * \param lParam the message object we want to display.
+ * \return if we are able to add the window or not.
  */
-LRESULT CActionMonitorDlg::OnDisplayMessage
-(
-  WPARAM,
-  LPARAM l
-  )
+LRESULT CActionMonitorDlg::OnDisplayMessage( WPARAM, const LPARAM lParam )
 {
-  MessageDlg::Msg* msg = (MessageDlg::Msg*)l;
-  bool result = DisplayMessage(msg->Text(), msg->Elapse(), msg->FadeOut());
+  const auto msg = reinterpret_cast<MessageDlg::Msg*>(lParam);
+  const auto result = DisplayMessage(msg->Text(), msg->Elapse(), msg->FadeOut());
   delete msg;
   return result ? 1 : 0;
 }
 
 /**
- * todo
- * @param void
- * @param void
- * @param void
- * @return void
+ * \brief display a message 
+ * \param wsText the message we want to display
+ * \param nElapse how long we want to display the message for.
+ * \param nFadeOut where we want to fade the window from.
+ * \return if we were able to display the message or not.
  */
-bool CActionMonitorDlg::DisplayMessage
-( 
- LPCTSTR pText, 
- UINT nElapse, 
- UINT nFadeOut 
-)
+bool CActionMonitorDlg::DisplayMessage( const std::wstring& wsText, const int nElapse, const int nFadeOut)
 {
   // Sanity check
-  if(nullptr == pText )
+  if(wsText.length() == 0 )
   {
-
     return false;
   }
 
@@ -661,7 +651,7 @@ bool CActionMonitorDlg::DisplayMessage
 
     // if this is not the main thread
     // then we need to POST to oursleves and wait for the message to complete.
-    PostMessage(UWM_DISPLAYMESSAGE, 0, (LPARAM)(new MessageDlg::Msg(pText, nElapse, nFadeOut)) );
+    PostMessage(UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new MessageDlg::Msg(wsText, nElapse, nFadeOut)) );
     return true;
   }
   
@@ -669,15 +659,30 @@ bool CActionMonitorDlg::DisplayMessage
   ClearUnusedMessages( );
 
   const auto messageDlg = new MessageDlg( this );
-  messageDlg->Create( pText, nElapse, nFadeOut );
+  messageDlg->Create( wsText, nElapse, nFadeOut );
 
   // if this window is still running, (and valid)
-  if( CActionMonitorDlg::IsRunning() )
+  if( IsRunning() )
   {
-    messageDlg->FadeShowWindow();
+    // start the fade message and pass a lambda
+    // function so we are called back when the window is deleted
+    // this is so we can remove it from our list here.
+    messageDlg->FadeShowWindow( [&](CWnd* dlg )
+    {
+      // protected the vector for a short while.
+      myodd::threads::Lock guard(_mutex);
 
-    // protected the vector for a short while.
-    myodd::threads::Lock guard(_mutex);
+      // look for the window we want to delete.
+      const auto saved = std::find(_displayWindows.begin(), _displayWindows.end(), dlg);
+      if( saved != _displayWindows.end()  )
+      {
+       // remove it from the list
+        _displayWindows.erase(saved);
+      }
+    });
+
+      // protected the vector for a short while.
+      myodd::threads::Lock guard(_mutex);
 
     // add it to our list of messages.
     _displayWindows.push_back( messageDlg );
