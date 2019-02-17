@@ -24,9 +24,6 @@
     <ClCompile Include="ActionMonitorDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActionsImmediate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\Clipboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -153,6 +150,9 @@
     <ClCompile Include="ActiveShellAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="ActionsImmediate.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -164,9 +164,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActionMonitorDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionsImmediate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\common\Clipboard.h">
@@ -302,6 +299,9 @@
       <Filter>api</Filter>
     </ClInclude>
     <ClInclude Include="ActiveShellAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionsImmediate.h">
       <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>

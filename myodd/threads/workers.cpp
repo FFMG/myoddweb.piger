@@ -1,4 +1,6 @@
 #include "workers.h"
+#include <future>
+#include <thread>
 
 namespace myodd {
   namespace threads {
@@ -12,7 +14,7 @@ namespace myodd {
       if (_workers.size() != 0)
       {
         //  we _might_ have some workers waiting to finish.
-        myodd::threads::Lock guard(_mutex);
+        Lock guard(_mutex);
         if (_workers.size() != 0)
         {
           //  make sure we wait for all our workers.
@@ -22,15 +24,22 @@ namespace myodd {
     }
 
     /**
-     * \brief Add this thread to the queue.
-     * \param threadToQueue the thread we want to queue.
-     * \return std::thread& the thread that we just added.
+     * \brief check if any threads are running
+     * \return if anything is still running, (joinable)
      */
-    std::thread& Workers::QueueWorker(std::thread* threadToQueue)
+    bool Workers::Running() const
     {
-      Lock guard(_mutex);
-      _workers.push_back(threadToQueue);
-      return *threadToQueue;
+      // if anybody is busy ... then we are not ready.
+      for (auto& future : _workers)
+      {
+        const auto status = future.wait_for(std::chrono::seconds(0));
+        if( status != std::future_status::ready)
+        {
+          return true;
+        }
+      }
+      // if we are here, nothing is running.
+      return false;
     }
 
     /**
@@ -47,19 +56,9 @@ namespace myodd {
 
       //  we _might_ have some workers waiting to finish.
       Lock guard(_mutex);
-      for (auto& th : _workers)
+      for (auto& future : _workers)
       {
-        th->join();
-
-        // give threads a chance to run...
-        std::this_thread::yield();
-      }
-
-      // then delete the threads.
-      for (auto& th : _workers)
-      {
-        // now that it is done, we can free the memory
-        delete th;
+        future.wait();
 
         // give threads a chance to run...
         std::this_thread::yield();

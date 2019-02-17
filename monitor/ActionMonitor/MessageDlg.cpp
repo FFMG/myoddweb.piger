@@ -1,39 +1,40 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
-
-#include "ActionMonitor.h"
 #include "MessageDlg.h"
 
 IMPLEMENT_DYNAMIC(MessageDlg, CDialog)
 
 /**
- * Todo
- * @see CDialog::CDialog
- * @param void
- * @return void
+ * \brief the constructor
+ * \see CDialog::CDialog
+ * \param pParent the parent window.
  */
 MessageDlg::MessageDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(MessageDlg::IDD, pParent),
-  FadeWnd( ),
-  m_timerId( 0 ),
-  m_nElapse( 0 )
-{
-
-}
-
-/**
- * Todo
- * @param void
- * @return void
- */
-MessageDlg::~MessageDlg()
+  : CDialog(MessageDlg::IDD, pParent),
+    FadeWnd(), 
+    _mNFadeOut(0),
+    _mNElapse(0)
 {
 }
 
 /**
  * Todo
- * @see CDialog::DoDataExchange
- * @param void
- * @return void
+ * \see CDialog::DoDataExchange
+ * \param pDX the data exchange being processed.
+ * \return void
  */
 void MessageDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -41,74 +42,68 @@ void MessageDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(MessageDlg, CDialog)
-  ON_WM_TIMER()
   ON_WM_PAINT()
+  ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 /**
- * Todo
- * @see CDialog::PostNcDestroy
- * @param void
- * @return void
+ * \brief the dialog is about to destroy itself.
+ * \see CDialog::PostNcDestroy
  */
 void MessageDlg::PostNcDestroy()
 {
-  CDialog::PostNcDestroy();
   delete this;
 }
 
 /**
- * Todo
- * @see CDialog::Create
- * @param void
- * @param void
- * @param void
- * @return void
+ * \brief called when the window is being created, we can then set our own values.
+ * \see CDialog::Create
+ * \param sText the text we want to display
+ * \param nElapse how long we want to display the message for
+ * \param nFadeOut where the fade start from.
  */
-void MessageDlg::Create( LPCTSTR pText, UINT nElapse, UINT nFadeOut )
+void MessageDlg::Create(const std::wstring& sText, const int nElapse, const int nFadeOut)
 {
   //  save the value
-  m_nFadeOut = nFadeOut;
-  m_stdMessage = pText;
-  m_nElapse = nElapse;
+  _mNFadeOut = nFadeOut;
+  _mStdMessage = sText;
+  _mNElapse = nElapse;
 
   __super::Create( MessageDlg::IDD );
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief Initialise the fading window.
  */
 void MessageDlg::InitWindowPos()
 {
   //  get the size of the windows
-  HDC hdc = ::GetDC( m_hWnd );
+  const auto hdc = ::GetDC( m_hWnd );
 
   //  get the font that we will be using for display
   //  because of the XML config this is only really used for size.
-  HGDIOBJ pOldFont = SelDisplayFont( hdc );
+  const auto pOldFont = SelDisplayFont( hdc );
 
   RECT r = {0,0,0,0};
-  myodd::html::html(hdc, m_stdMessage.c_str() , m_stdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
+  myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
 
   //  clean up old fonts
-  if ( pOldFont != NULL )
+  if ( pOldFont != nullptr )
   {
     SelectObject( hdc, pOldFont );
   }
 
-  ::ReleaseDC( NULL, hdc );
+  ::ReleaseDC( nullptr, hdc );
 
-  int width   = GetSystemMetrics( SM_CXFULLSCREEN ) / 2;
-  int height  = GetSystemMetrics( SM_CYFULLSCREEN ) / 2;
+  const auto width   = GetSystemMetrics( SM_CXFULLSCREEN ) / 2;
+  const auto height  = GetSystemMetrics( SM_CYFULLSCREEN ) / 2;
 
   int widthM   = abs( r.right - r.left);
   int heightM  = abs( r.bottom - r.top);
 
   //  pad a little
-  widthM  += 2 * (int)::myodd::config::Get( L"commands\\pad.x", 2);
-  heightM += 2 * (int)::myodd::config::Get( L"commands\\pad.y", 2);
+  widthM  += 2 * static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
+  heightM += 2 * static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
 
 
   //  move the window to the top left hand corner 
@@ -121,106 +116,146 @@ void MessageDlg::InitWindowPos()
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief set the font we will be using to display the message
+ * \param hdc the device context handle
+ * \param fontSize the size of the font.
+ * \return the created font.
  */
-HGDIOBJ MessageDlg::SelDisplayFont( HDC hdc, UINT fontSize )
+HGDIOBJ MessageDlg::SelDisplayFont(const HDC hdc, UINT fontSize )
 {
   // TODO replace magic number.
   return __super::SelDisplayFont( hdc, 35 );
 }
 
 /**
- * Todo
- * @see CDialog::OnTimer
- * @param void
- * @return void
+ * \brief Check if anything is running
+ * \return if we are still busy
  */
-void MessageDlg::OnTimer(UINT_PTR nIDEvent)
+bool MessageDlg::IsRunning() const
 {
-  CDialog::OnTimer(nIDEvent);
-  if( nIDEvent == m_timerId )
-  {
-    // kill the timer
-    KillTimer( nIDEvent );
-
-    // make it thread safe
-    Fade();
-
-    //  if this is the timer event then we can close the window.
-    DestroyWindow();
-  }
+  return _worker.Running();
 }
 
-void MessageDlg::Fade()
+/**
+ * \brief the timer to fade the window from time to time.
+ * \param owner the timer event number
+ */
+void MessageDlg::Fade(MessageDlg* owner )
+{
+  // make it thread safe
+  try
+  {
+    owner->DoFade();
+  }
+  catch ( ... )
+  {
+    // ignore the errors.
+    // something broke ... somewhere.
+  }
+
+  // close it
+  owner->CloseFromThread();
+}
+
+/**
+ * \brief do the actual fading.
+ */
+void MessageDlg::DoFade()
 {
   // 0 means that we move right away
-  if (m_nFadeOut > 0)
+  if (_mNFadeOut <= 0)
   {
-    unsigned char bStart = ::myodd::config::Get( L"commands\\transparency", 127);
-    for (auto b = bStart; b > 0; --b)
-    {
-      Transparent(b);
-      DWORD d = (GetTickCount() + m_nFadeOut);
-      while (d > GetTickCount())
-      {
-        if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
-        {
-          break;
-        }
+    return;
+  }
 
-        //  are we stopping everything?
-        // then bail out now!
-        if (Stopped())
-        {
-          return;
-        }
-        MessagePump(m_hWnd);
-        Sleep(0);
-        MessagePump(NULL);
+  const auto bStart = ::myodd::config::Get(L"commands\\transparency", 127);
+  for (auto b = bStart; b > 0; --b)
+  {
+    Transparent(b);
+    const auto d = (GetTickCount() + _mNFadeOut);
+    while (d > GetTickCount())
+    {
+      if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
+      {
+        break;
       }
+
+      //  are we stopping everything?
+      // then bail out now!
+      if (Stopped())
+      {
+        return;
+      }
+      MessagePump(m_hWnd);
+
+      Sleep(0);
+
+      MessagePump(nullptr);
     }
   }
 }
 
 /**
- * Todo
- * @see CDialog::OnPaint
- * @param void
- * @return void
+ * \brief we cannot close the window from inside a thread
+ *        so we post a message here, so the owning thread can call destroy window.
+ */
+void MessageDlg::CloseFromThread()
+{
+  // close it
+  PostMessage(WM_CLOSE);
+
+  // complete whatever needs to be done
+  MessagePump(m_hWnd);
+
+  // wait a little.
+  Sleep(0);
+
+  // and let the other threads process their messages.
+  MessagePump(nullptr);
+}
+
+/**
+ * \brief called when the dialog is closing, (this is the main app).
+ * \see CTrayDialog::OnClose
+ */
+void MessageDlg::OnClose()
+{
+  DestroyWindow();
+}
+
+/**
+ * \brief function called every time we are repainting the window.
+ * \see CDialog::OnPaint
  */
 void MessageDlg::OnPaint()
 {
   CPaintDC dc(this); // device context for painting
 
-  HDC hdc = dc.GetSafeHdc();
+  const auto hdc = dc.GetSafeHdc();
   //  get the font that we will be using for display
   //  because of the XML config this is only really used for size.
-  HGDIOBJ pOldFont = SelDisplayFont( hdc );
+  const auto pOldFont = SelDisplayFont( hdc );
 
   RECT r = {0,0,0,0};
-  myodd::html::html(hdc, m_stdMessage.c_str() , m_stdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
+  myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
 
   //  pad a little
-  r.left += (int)::myodd::config::Get( L"commands\\pad.x", 2);
-  r.top  += (int)::myodd::config::Get( L"commands\\pad.y", 2);
+  r.left += static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
+  r.top  += static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
 
   SetBkMode( hdc, TRANSPARENT );
-  myodd::html::html(hdc, m_stdMessage.c_str() , m_stdMessage.length(), &r, DT_DEFAULT );
+  myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, DT_DEFAULT );
 
   //  clean up old fonts
-  if ( pOldFont != NULL )
+  if ( pOldFont != nullptr )
   {
     SelectObject( hdc, pOldFont );
   }
 }
 
 /**
- * Todo
- * @see CDialog::OnInitDialog
- * @param void
- * @return void
+ * \brief initialise the dialog.
+ * \see CDialog::OnInitDialog
  */
 BOOL MessageDlg::OnInitDialog()
 {
@@ -240,9 +275,7 @@ BOOL MessageDlg::OnInitDialog()
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief start the thread to fade the window.
  */
 void MessageDlg::FadeShowWindow()
 {
@@ -250,18 +283,19 @@ void MessageDlg::FadeShowWindow()
   ShowWindow(SW_SHOW);
   Transparent( ::myodd::config::Get( L"commands\\transparency", 127) );
 
-  m_timerId = SetTimer( WM_USER+1, m_nElapse, NULL );
+  _worker.QueueWorker(&MessageDlg::Fade, this);
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief kill the window and wait for it to complete.
  */
 void MessageDlg::FadeKillWindow()
 {
-  if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
+  // are we done already?
+  if ( !IsRunning() )
   {
+    // close the window.
+    CloseFromThread();
     return;
   }
 
@@ -270,5 +304,8 @@ void MessageDlg::FadeKillWindow()
 
   // pump the remaining messages
   MessagePump( m_hWnd );
-  MessagePump( NULL );
+  MessagePump( nullptr );
+
+  // then wait for everything to finish.
+  _worker.WaitForAllWorkers();
 }

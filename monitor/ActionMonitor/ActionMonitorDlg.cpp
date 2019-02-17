@@ -23,10 +23,8 @@
 static bool g_isRunning = false;
 
 /**
- * Check if the dialog is running or not.
- * Static function.
- * @param void
- * @return bool true|false if the dialog is running or not, (destroyed).
+ * \brief Check if the dialog is running or not.
+ * \return bool true|false if the dialog is running or not, (destroyed).
  */
 bool CActionMonitorDlg::IsRunning()
 {
@@ -670,7 +668,7 @@ bool CActionMonitorDlg::DisplayMessage
   //  look for old messages to remove
   ClearUnusedMessages( );
 
-  MessageDlg* messageDlg = new MessageDlg( this );
+  const auto messageDlg = new MessageDlg( this );
   messageDlg->Create( pText, nElapse, nFadeOut );
 
   // if this window is still running, (and valid)
@@ -957,7 +955,14 @@ LRESULT CActionMonitorDlg::OnReload
   LPARAM
 )
 {
-  // stop everything and wait for them.
+  // destroy the active actions that are still running.
+  // this could include start actions that are up and running.
+  App().DestroyActiveActions();
+
+  // kill them ... dead.
+  KillAllActiveWindows();
+
+  // call the end actions to run
   App().DoEndActionsList( true );
 
   // wait all the active windows.
@@ -965,6 +970,8 @@ LRESULT CActionMonitorDlg::OnReload
   WaitForActiveWindows();
 
   // destroy the active actions.
+  // those are the actions that must have been started by the
+  // end action but are still hanging around.
   App().DestroyActiveActions();
 
   //
@@ -1025,10 +1032,8 @@ void CActionMonitorDlg::OnTrayVersion()
 }
 
 /**
- * todo
- * @see CTrayDialog::OnClose
- * @param void
- * @return void
+ * \brief called when the dialog is closing, (this is the main app).
+ * \see CTrayDialog::OnClose
  */
 void CActionMonitorDlg::OnClose()
 {
@@ -1050,9 +1055,7 @@ void CActionMonitorDlg::OnClose()
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief remove all the completed on screen messages.
  */
 void CActionMonitorDlg::ClearUnusedMessages()
 {
@@ -1070,10 +1073,8 @@ void CActionMonitorDlg::ClearUnusedMessages()
     const auto dlg = static_cast<MessageDlg*>(*it);
     if (dlg != nullptr)
     {
-      const auto hwnd = dlg->GetSafeHwnd();
-      if (0 != ::GetWindowLongPtr(hwnd, GWLP_HWNDPARENT))
+      if( dlg->IsRunning() )
       {
-        // no need to go past this one
         break;
       }
     }
@@ -1125,15 +1126,15 @@ void CActionMonitorDlg::WaitForActiveWindows()
     DispatchMessage(&msg);
   }
 
-  // wait for the Ipc windows.
-  _IpcListener->WaitForActiveHandlers();
-
   // Wait for pending messages
   // we try and get the parent window
   // and if we cannot locate it, then it must be because the window no longer exists
   // and as such we must wait for it.
   while( true )
   {
+    // wait for the Ipc windows.
+    _IpcListener->WaitForActiveHandlers();
+
     // protected the vector for a short while.
     myodd::threads::Lock guard(_mutex);
 
@@ -1154,6 +1155,8 @@ void CActionMonitorDlg::WaitForActiveWindows()
 
         // let go of the thread.
         std::this_thread::yield();
+
+        Sleep(1);
 
         // just do one message at a time
         // so we don't block others.

@@ -1,16 +1,31 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "FadeWnd.h"
 #include "resource.h"		// main symbols
+#include "threads/workers.h"
 
 // MessageDlg dialog
 
-class MessageDlg : public CDialog, FadeWnd
+class MessageDlg final : public CDialog, FadeWnd
 {
 	DECLARE_DYNAMIC(MessageDlg)
 
 public:
-	MessageDlg(CWnd* pParent = NULL);   // standard constructor
-	virtual ~MessageDlg();
+  explicit MessageDlg(CWnd* pParent = nullptr);   // standard constructor
+	virtual ~MessageDlg() = default;
 
 // Dialog Data
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
@@ -36,33 +51,39 @@ public:
     UINT _nFadeOut;
   };
 
-  void Create( LPCTSTR pText, UINT nElapse, UINT nFadeOut);
+  void Create( const std::wstring& sText, int nElapse, int nFadeOut);
 
 protected:
   virtual HGDIOBJ SelDisplayFont( HDC hdc, UINT fontSize = 70 );
 
-protected:
-  UINT m_nFadeOut;          //  how fast the text will fade out
-  MYODD_STRING m_stdMessage; //  the message
-  UINT m_nElapse;           //  how long before we fade out.
-
-  void Fade();
+  myodd::threads::Workers _worker;
+  static void Fade(MessageDlg* owner );
 
 protected:
-  UINT_PTR m_timerId;
+  int _mNFadeOut;          //  how fast the text will fade out
+  std::wstring _mStdMessage; //  the message
+  int _mNElapse;           //  how long before we fade out.
+
+  void DoFade();
+
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
   virtual void PostNcDestroy();
 public:
-  afx_msg void OnTimer(UINT_PTR nIDEvent);
   afx_msg void OnPaint();
+  afx_msg void OnClose();
 
 protected:
   void InitWindowPos();
+
+  void CloseFromThread();
+
 public:
-  virtual BOOL OnInitDialog();
+  BOOL OnInitDialog() override;
 
   void FadeShowWindow();
   void FadeKillWindow();
+  bool IsRunning() const;
 };
