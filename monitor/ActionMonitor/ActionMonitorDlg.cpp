@@ -1,6 +1,17 @@
-// ActionMonitorDlg.cpp : implementation file
+//This file is part of Myoddweb.Piger.
 //
-
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionsCore.h"
 #include "ActionMonitor.h"
@@ -12,12 +23,10 @@
 static bool g_isRunning = false;
 
 /**
- * Check if the dialog is running or not.
- * Static function.
- * @param void
- * @return bool true|false if the dialog is running or not, (destroyed).
+ * \brief Check if the dialog is running or not.
+ * \return bool true|false if the dialog is running or not, (destroyed).
  */
-bool CActionMonitorDlg::IsRunning()
+bool ActionMonitorDlg::IsRunning()
 {
   return g_isRunning;
 }
@@ -28,8 +37,8 @@ bool CActionMonitorDlg::IsRunning()
  * @param void
  * @return void
  */
-CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
-	: CTrayDialog(CActionMonitorDlg::IDD, pParent), 
+ActionMonitorDlg::ActionMonitorDlg(CWnd* pParent /*=nullptr*/)
+	: CTrayDialog(ActionMonitorDlg::IDD, pParent), 
   m_keyState (ACTION_NONE),
   fontTime(nullptr),
   _IpcListener(nullptr)
@@ -46,7 +55,7 @@ CActionMonitorDlg::CActionMonitorDlg(CWnd* pParent /*=nullptr*/)
  * @param void
  * @return void
  */
-CActionMonitorDlg::~CActionMonitorDlg()
+ActionMonitorDlg::~ActionMonitorDlg()
 {
   //  clear the ipc listener
   if (_IpcListener != nullptr)
@@ -68,20 +77,21 @@ CActionMonitorDlg::~CActionMonitorDlg()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
+void ActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CTrayDialog::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CActionMonitorDlg, CTrayDialog)
+BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_REGISTERED_MESSAGE(UWM_KEYBOARD_CHAR   , OnHookKeyChar)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_DOWN   , OnHookKeyDown)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_UP     , OnHookKeyUp)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD , OnReload)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION, OnVersion)
-  ON_REGISTERED_MESSAGE(UWM_DISPLAYMESSAGE  , OnDisplayMessage )
+	ON_REGISTERED_MESSAGE(UWM_KEYBOARD_CHAR     , OnHookKeyChar)
+  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_DOWN     , OnHookKeyDown)
+  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_UP       , OnHookKeyUp)
+  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD   , OnReload)
+  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION  , OnVersion)
+  ON_REGISTERED_MESSAGE(UWM_DISPLAYMESSAGE    , OnDisplayMessage )
+  ON_REGISTERED_MESSAGE(UWM_MESSAGE_PUMP_READY, OnMessagePumpReady )
   ON_WM_WINDOWPOSCHANGING()
   ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
 	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
@@ -96,7 +106,7 @@ END_MESSAGE_MAP()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
+void ActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
 {
   if( 0 == IsVisible() )
   {
@@ -112,7 +122,7 @@ void CActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
  * @param void
  * @return void
  */
-BOOL CActionMonitorDlg::OnInitDialog()
+BOOL ActionMonitorDlg::OnInitDialog()
 {
 	CTrayDialog::OnInitDialog();
   ModifyStyleEx(WS_EX_APPWINDOW,0); //  no taskbar!
@@ -151,16 +161,18 @@ BOOL CActionMonitorDlg::OnInitDialog()
   // initialise the listener.
   InitializeListener();
 
-  //  do all the actions that are labeled as 'start'
-  App().DoStartActionsList();
-
   //  setup the hooks and the key
   InitHook();
+
+  // tell everybody that the message pump is ready
+  // only once the message pump is ready can we actually send messages
+  // this is important to things like IPC Windows.
+  ::PostMessage(m_hWnd, UWM_MESSAGE_PUMP_READY, 0, 0);
   
   return TRUE;
 }
 
-void CActionMonitorDlg::InitializeListener()
+void ActionMonitorDlg::InitializeListener()
 {
   if (nullptr == _IpcListener)
   {
@@ -172,7 +184,7 @@ void CActionMonitorDlg::InitializeListener()
     {
       // create the listenner and pass oursleves as the window.
       // so some messages can be routed back to us.
-      auto hWnd = GetSafeHwnd();
+      const auto hWnd = GetSafeHwnd();
       _IpcListener = new myodd::os::IpcListener(CONF_MUTEXT, hWnd);
     }
   }
@@ -184,9 +196,9 @@ void CActionMonitorDlg::InitializeListener()
  * @param void
  * @return void
  */
-BOOL CActionMonitorDlg::IsSpecialKeyDown( )const
+BOOL ActionMonitorDlg::IsSpecialKeyDown( )const
 {
-  SHORT vk = GetKeyState(SPECIAL_KEY);
+  const auto vk = GetKeyState(SPECIAL_KEY);
   return ((vk & 0xffff) == 1 );
 }
 
@@ -195,7 +207,7 @@ BOOL CActionMonitorDlg::IsSpecialKeyDown( )const
  * @param void
  * @return void
  */
-void CActionMonitorDlg::InitHook()
+void ActionMonitorDlg::InitHook()
 {
   //  in case we called setHook(...); and crashed we might not be able to
   //  restart the hook
@@ -229,7 +241,7 @@ void CActionMonitorDlg::InitHook()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::ShowWindow( BYTE bTrans )
+void ActionMonitorDlg::ShowWindow( BYTE bTrans )
 {
   if( IsVisible() != bTrans )
   {
@@ -264,14 +276,14 @@ void CActionMonitorDlg::ShowWindow( BYTE bTrans )
  * @param none
  * @return none
  */
-void CActionMonitorDlg::CalcMaxes( )
+void ActionMonitorDlg::CalcMaxes( )
 {
-	float fX = (float)GetSystemMetrics(SM_CXSCREEN);
-	float fY = (float)GetSystemMetrics(SM_CYSCREEN);
+  const auto fX = static_cast<float>(GetSystemMetrics(SM_CXSCREEN));
+  const auto fY = static_cast<float>(GetSystemMetrics(SM_CYSCREEN));
 
   //  calc the percentages.
-  m_ptMaxValues.x = (int)(fX * (int)::myodd::config::Get( L"commands\\max.x", 99)/100.f );
-  m_ptMaxValues.y = (int)(fY * (int)::myodd::config::Get( L"commands\\max.y", 99)/100.f );
+  m_ptMaxValues.x = static_cast<int>(fX * (int)::myodd::config::Get(L"commands\\max.x", 99) / 100.f);
+  m_ptMaxValues.y = static_cast<int>(fY * (int)::myodd::config::Get(L"commands\\max.y", 99) / 100.f);
 }
 
 /**
@@ -280,7 +292,7 @@ void CActionMonitorDlg::CalcMaxes( )
  * @param none
  * @return none
  */
-void CActionMonitorDlg::InitWindow( )
+void ActionMonitorDlg::InitWindow( )
 {
   CalcMaxes();
 
@@ -307,7 +319,7 @@ void CActionMonitorDlg::InitWindow( )
  * @param none
  * @return none
  */
-void CActionMonitorDlg::OnPaint() 
+void ActionMonitorDlg::OnPaint() 
 {
 	CPaintDC dc(this); // device context for painting
 
@@ -366,7 +378,7 @@ void CActionMonitorDlg::OnPaint()
  * @param void
  * @return void
  */
-HCURSOR CActionMonitorDlg::OnQueryDragIcon()
+HCURSOR ActionMonitorDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
 }
@@ -378,7 +390,7 @@ HCURSOR CActionMonitorDlg::OnQueryDragIcon()
  * @param void
  * @return void
  */
-LRESULT CActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
+LRESULT ActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
 { 
   /**
    * The WM_CHAR message is posted to the window with the keyboard focus when a WM_KEYDOWN message is translated by the TranslateMessage function. 
@@ -393,7 +405,7 @@ LRESULT CActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
  * @param void
  * @return void
  */
-BOOL CActionMonitorDlg::IsSpecialKey( WPARAM wParam ) const
+BOOL ActionMonitorDlg::IsSpecialKey( WPARAM wParam ) const
 {
   return (wParam == SPECIAL_KEY);
 }
@@ -404,7 +416,7 @@ BOOL CActionMonitorDlg::IsSpecialKey( WPARAM wParam ) const
  * @param void
  * @return void
  */
-LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
+LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 {
   TRACE( "KeyDown 0x%x\n", wParam );
 
@@ -503,7 +515,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
       
       if( 0 != ToAscii(wParam,scan,ks,&w,0) )
       {
-        TCHAR c = (TCHAR)( CHAR(w) );
+        const auto c = static_cast<TCHAR>(CHAR(w));
         //  add the current character to the list of items
         App().PossibleActions().CurrentActionAdd( c );
 
@@ -523,7 +535,7 @@ LRESULT CActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
  * @param void
  * @return void
  */
-LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
+LRESULT ActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
 {
   TRACE( "KeyUp 0x%x\n", wParam );
 
@@ -600,47 +612,37 @@ LRESULT CActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
  * We only know we are the main thread because that number was set at construction.
  * @return bool if this thread is main or not.
  */
-bool CActionMonitorDlg::IsMainThread() const
+bool ActionMonitorDlg::IsMainThread() const
 {
   return (std::this_thread::get_id() == _main_threadId);
 }
 
 /**
- * Display a message, this comes from another thread.
- * @param WPARAM unused/reserved
- * @param LPARAM unused/reserved
- * @return LRESULT unused/reserved
+ * \brief Display a message, this comes from another thread.
+ * \param
+ * \param lParam the message object we want to display.
+ * \return if we are able to add the window or not.
  */
-LRESULT CActionMonitorDlg::OnDisplayMessage
-(
-  WPARAM,
-  LPARAM l
-  )
+LRESULT ActionMonitorDlg::OnDisplayMessage( WPARAM, const LPARAM lParam )
 {
-  MessageDlg::Msg* msg = (MessageDlg::Msg*)l;
-  bool result = DisplayMessage(msg->Text(), msg->Elapse(), msg->FadeOut());
+  const auto msg = reinterpret_cast<MessageDlg::Msg*>(lParam);
+  const auto result = DisplayMessage(msg->Text(), msg->Elapse(), msg->FadeOut());
   delete msg;
   return result ? 1 : 0;
 }
 
 /**
- * todo
- * @param void
- * @param void
- * @param void
- * @return void
+ * \brief display a message 
+ * \param wsText the message we want to display
+ * \param nElapse how long we want to display the message for.
+ * \param nFadeOut where we want to fade the window from.
+ * \return if we were able to display the message or not.
  */
-bool CActionMonitorDlg::DisplayMessage
-( 
- LPCTSTR pText, 
- UINT nElapse, 
- UINT nFadeOut 
-)
+bool ActionMonitorDlg::DisplayMessage( const std::wstring& wsText, const int nElapse, const int nFadeOut)
 {
   // Sanity check
-  if(nullptr == pText )
+  if(wsText.length() == 0 )
   {
-
     return false;
   }
 
@@ -649,23 +651,38 @@ bool CActionMonitorDlg::DisplayMessage
 
     // if this is not the main thread
     // then we need to POST to oursleves and wait for the message to complete.
-    PostMessage(UWM_DISPLAYMESSAGE, 0, (LPARAM)(new MessageDlg::Msg(pText, nElapse, nFadeOut)) );
+    PostMessage(UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new MessageDlg::Msg(wsText, nElapse, nFadeOut)) );
     return true;
   }
   
   //  look for old messages to remove
   ClearUnusedMessages( );
 
-  MessageDlg* messageDlg = new MessageDlg( this );
-  messageDlg->Create( pText, nElapse, nFadeOut );
+  const auto messageDlg = new MessageDlg( this );
+  messageDlg->Create( wsText, nElapse, nFadeOut );
 
   // if this window is still running, (and valid)
-  if( CActionMonitorDlg::IsRunning() )
+  if( IsRunning() )
   {
-    messageDlg->FadeShowWindow();
+    // start the fade message and pass a lambda
+    // function so we are called back when the window is deleted
+    // this is so we can remove it from our list here.
+    messageDlg->FadeShowWindow( [&](CWnd* dlg )
+    {
+      // protected the vector for a short while.
+      myodd::threads::Lock guard(_mutex);
 
-    // protected the vector for a short while.
-    myodd::threads::Lock guard(_mutex);
+      // look for the window we want to delete.
+      const auto saved = std::find(_displayWindows.begin(), _displayWindows.end(), dlg);
+      if( saved != _displayWindows.end()  )
+      {
+       // remove it from the list
+        _displayWindows.erase(saved);
+      }
+    });
+
+      // protected the vector for a short while.
+      myodd::threads::Lock guard(_mutex);
 
     // add it to our list of messages.
     _displayWindows.push_back( messageDlg );
@@ -684,7 +701,7 @@ bool CActionMonitorDlg::DisplayMessage
  * @param void
  * @return void
  */
-bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
+bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
 {
   // should we even be here?
   if( 0 == IsVisible() )
@@ -790,7 +807,7 @@ bool CActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
  * @param void
  * @return void
  */
-void CActionMonitorDlg::DisplayTime
+void ActionMonitorDlg::DisplayTime
 (
   HDC hdc, 
   RECT &rParent
@@ -842,7 +859,7 @@ void CActionMonitorDlg::DisplayTime
  * @param RECT the new size of the rectangle
  * @return BOOL if the window size was changed or not.
  */
-bool CActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
+bool ActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
 {
   //  compare the structs
   if( memcmp( &newSize, &m_rWindow, sizeof(RECT)) != 0 )
@@ -875,7 +892,7 @@ bool CActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
  * @param void
  * @return void
  */
-HGDIOBJ CActionMonitorDlg::SelTimeFont( HDC hdc )
+HGDIOBJ ActionMonitorDlg::SelTimeFont( HDC hdc )
 {
   if(nullptr == fontTime )
   {
@@ -898,24 +915,31 @@ HGDIOBJ CActionMonitorDlg::SelTimeFont( HDC hdc )
 }
 
 /**
- * Message to tell the system to give us the version number.
- *
- * @param WPARAM unused/reserved
- * @param LPARAM unused/reserved
- * @return LRESULT unused/reserved
+ * \brief When we get this message it means that the message pump is now up and running.
+ *        this is important for plugins that require the message pump
+ *        Like IPC messages.
+ * \return unused/reserved
  */
-LRESULT CActionMonitorDlg::OnVersion
-(
-  WPARAM,
-  LPARAM
-)
+LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
 {
-  myodd::files::Version _ver;
-  MYODD_STRING strSay = myodd::strings::Format( _T("<b>Version : </b>%d.%d.%d.%d"),
-    _ver.GetFileVersionMajor(),
-    _ver.GetFileVersionMinor(),
-    _ver.GetFileVersionMaintenance(),
-    _ver.GetFileVersionBuild() );
+  //  do all the actions that are labeled as 'start'
+  App().DoStartActionsList( false );
+
+  return 0L;
+}
+
+/**
+ * \brief  Message to tell the system to give us the version number.
+ * \return unused/reserved
+ */
+LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
+{
+  myodd::files::Version ver;
+  const auto strSay = myodd::strings::Format( _T("<b>Version : </b>%d.%d.%d.%d"),
+    ver.GetFileVersionMajor(),
+    ver.GetFileVersionMinor(),
+    ver.GetFileVersionMaintenance(),
+    ver.GetFileVersionBuild() );
   
   DisplayMessage( strSay.c_str(), 3000, 5 );
 
@@ -930,20 +954,29 @@ LRESULT CActionMonitorDlg::OnVersion
  * @param LPARAM unused/reserved
  * @return LRESULT unused/reserved
  */
-LRESULT CActionMonitorDlg::OnReload
+LRESULT ActionMonitorDlg::OnReload
 (
   WPARAM,
   LPARAM
 )
 {
-  // stop everything and wait for them.
-  App().DoEndActionsList( );
+  // destroy the active actions that are still running.
+  // this could include start actions that are up and running.
+  App().DestroyActiveActions();
+
+  // kill them ... dead.
+  KillAllActiveWindows();
+
+  // call the end actions to run
+  App().DoEndActionsList( true );
 
   // wait all the active windows.
   // those are the ones created by the end Action list.
   WaitForActiveWindows();
 
   // destroy the active actions.
+  // those are the actions that must have been started by the
+  // end action but are still hanging around.
   App().DestroyActiveActions();
 
   //
@@ -960,7 +993,7 @@ LRESULT CActionMonitorDlg::OnReload
   App().BuildActionsList();
 
   //  and restart everything
-  App().DoStartActionsList( );
+  App().DoStartActionsList( false );
 
   // wait all the active windows.
   // those we just re-started.
@@ -976,7 +1009,7 @@ LRESULT CActionMonitorDlg::OnReload
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnTrayExit() 
+void ActionMonitorDlg::OnTrayExit() 
 {
   ::PostMessage( m_hWnd, WM_CLOSE, 0, 0 );	
 }
@@ -987,7 +1020,7 @@ void CActionMonitorDlg::OnTrayExit()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnTrayReload() 
+void ActionMonitorDlg::OnTrayReload() 
 {
   ::PostMessage( m_hWnd, UWM_KEYBOARD_RELOAD, 0, 0 );
 }
@@ -998,18 +1031,16 @@ void CActionMonitorDlg::OnTrayReload()
  * @param void
  * @return void
  */
-void CActionMonitorDlg::OnTrayVersion()
+void ActionMonitorDlg::OnTrayVersion()
 {
   ::PostMessage( m_hWnd, UWM_KEYBOARD_VERSION, 0, 0 );
 }
 
 /**
- * todo
- * @see CTrayDialog::OnClose
- * @param void
- * @return void
+ * \brief called when the dialog is closing, (this is the main app).
+ * \see CTrayDialog::OnClose
  */
-void CActionMonitorDlg::OnClose()
+void ActionMonitorDlg::OnClose()
 {
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
@@ -1029,30 +1060,26 @@ void CActionMonitorDlg::OnClose()
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief remove all the completed on screen messages.
  */
-void CActionMonitorDlg::ClearUnusedMessages()
+void ActionMonitorDlg::ClearUnusedMessages()
 {
   while( _displayWindows.size() > 0 )
   {
     // protected the vector for a short while.
     myodd::threads::Lock guard(_mutex);
 
-    vMessages::iterator it = _displayWindows.begin();
+    const auto it = _displayWindows.begin();
     if( it == _displayWindows.end() )
     {
       break;
     }
 
-    MessageDlg* dlg = (MessageDlg*)(*it);
+    const auto dlg = static_cast<MessageDlg*>(*it);
     if (dlg != nullptr)
     {
-      HWND hwnd = dlg->GetSafeHwnd();
-      if (0 != ::GetWindowLongPtr(hwnd, GWLP_HWNDPARENT))
+      if( dlg->IsRunning() )
       {
-        // no need to go past this one
         break;
       }
     }
@@ -1064,7 +1091,7 @@ void CActionMonitorDlg::ClearUnusedMessages()
 /**
  * Kill all the currently active message windows.
  */
-void CActionMonitorDlg::KillAllActiveWindows()
+void ActionMonitorDlg::KillAllActiveWindows()
 {
   //  remove what is complete.
   ClearUnusedMessages();
@@ -1073,12 +1100,12 @@ void CActionMonitorDlg::KillAllActiveWindows()
   myodd::threads::Lock guard(_mutex);
 
   // kill the other messages;
-  for (vMessages::iterator it = _displayWindows.begin();
+  for (auto it = _displayWindows.begin();
        it != _displayWindows.end();
        ++it)
   {
     //  clear what is still good.
-    MessageDlg* dlg = (MessageDlg*)(*it);
+    const auto dlg = static_cast<MessageDlg*>(*it);
     if (dlg != nullptr)
     {
       dlg->FadeKillWindow();
@@ -1091,11 +1118,9 @@ void CActionMonitorDlg::KillAllActiveWindows()
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief Wait for all the active windows to complete.
  */
-void CActionMonitorDlg::WaitForActiveWindows()
+void ActionMonitorDlg::WaitForActiveWindows()
 {
   // first give our window a chance to process UWM_DISPLAYMESSAGE.
   // but we don't want to do other messages only the pending display messages.
@@ -1112,19 +1137,22 @@ void CActionMonitorDlg::WaitForActiveWindows()
   // and as such we must wait for it.
   while( true )
   {
+    // wait for the Ipc windows.
+    _IpcListener->WaitForActiveHandlers();
+
     // protected the vector for a short while.
     myodd::threads::Lock guard(_mutex);
 
-    vMessages::iterator it = _displayWindows.begin();
+    auto it = _displayWindows.begin();
     if( it == _displayWindows.end() )
       break;
 
-    MessageDlg* dlg = (MessageDlg*)(*it);
+    const auto dlg = static_cast<MessageDlg*>(*it);
     if (dlg != nullptr)
     {
       // then try and process the remaining messages
       // if the window has not been killed properly.
-      HWND hWnd = dlg->GetSafeHwnd();
+      const auto hWnd = dlg->GetSafeHwnd();
       if (0 != ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
       {
         //  give the other apps/classes one last chance to do some work.
@@ -1132,6 +1160,8 @@ void CActionMonitorDlg::WaitForActiveWindows()
 
         // let go of the thread.
         std::this_thread::yield();
+
+        Sleep(1);
 
         // just do one message at a time
         // so we don't block others.
@@ -1150,11 +1180,10 @@ void CActionMonitorDlg::WaitForActiveWindows()
 }
 
 /**
-* Todo
-* @param void
-* @return void
-*/
-void CActionMonitorDlg::MessagePump(HWND hWnd)
+ * \brief pump all the messages for a given window.
+ * \param hWnd the handle of the window messages we are pumping.
+ */
+void ActionMonitorDlg::MessagePump(const HWND hWnd)
 {
   //  lock up to make sure we only do one at a time
   MSG msg;
@@ -1170,12 +1199,10 @@ void CActionMonitorDlg::MessagePump(HWND hWnd)
 }
 
 /**
- * todo
- * @see CTrayDialog::OnDestroy
- * @param void
- * @return void
+ * \brief stop accepting any more messages and close everything
+ * \see CTrayDialog::OnDestroy
  */
-void CActionMonitorDlg::OnDestroy()
+void ActionMonitorDlg::OnDestroy()
 {
   // the window is about to be destroyed, 
   // we are no longer up and running!
@@ -1186,11 +1213,11 @@ void CActionMonitorDlg::OnDestroy()
 }
 
 /**
- * Add a message handler to our list of handlers.
- * Each will be called when a new message arrives.
- * @param IpcMessageHandler& handler the message handler we are adding.
+ * \brief Add a message handler to our list of handlers.
+ *        Each will be called when a new message arrives.
+ * \param handler the message handler we are adding.
  */
-void CActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
+void ActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
 {
   myodd::threads::Lock guard(_mutex);
   if(_IpcListener == nullptr )
@@ -1201,11 +1228,10 @@ void CActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
 }
 
 /**
- * Remove a message handler from our list.
- * @param IpcMessageHandler& handler the message handler we want to remove.
- * @return none
+ * \brief Remove a message handler from our list.
+ * \param handler the message handler we want to remove.
  */
-void CActionMonitorDlg::RemoveMessageHandler(myodd::os::IpcMessageHandler& handler)
+void ActionMonitorDlg::RemoveMessageHandler(myodd::os::IpcMessageHandler& handler)
 {
   myodd::threads::Lock guard(_mutex);
   if (_IpcListener == nullptr)

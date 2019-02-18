@@ -1,5 +1,17 @@
-// ActionMonitorDlg.h : header file
+//This file is part of Myoddweb.Piger.
 //
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
 #include "FadeWnd.h"
@@ -8,33 +20,32 @@
 #include "resource.h"		// main symbols
 
 /////////////////////////////////////////////////////////////////////////////
-// CActionMonitorDlg dialog
+// ActionMonitorDlg dialog
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
 #define ACTION_SHIFT_DOWN     0x002
 #define ACTION_LSHIFT_DOWN    0x004 /* if not set then RSHIFT is down */
-
 
 #define SPECIAL_KEY VK_CAPITAL
 
 #include "../common/trayDialog.h" //  system tray icon item
 #include <os/ipclistener.h>
 
-class CActionMonitorDlg : public CTrayDialog, FadeWnd, ActiveActions
+class ActionMonitorDlg final : public CTrayDialog, FadeWnd, ActiveActions
 {
 // Construction
 public:
-	CActionMonitorDlg(CWnd* pParent = NULL);	// standard constructor
-  virtual ~CActionMonitorDlg();
+  explicit ActionMonitorDlg(CWnd* pParent = nullptr);	// standard constructor
+  virtual ~ActionMonitorDlg();
 
 // Dialog Data
-	//{{AFX_DATA(CActionMonitorDlg)
+	//{{AFX_DATA(ActionMonitorDlg)
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 		// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CActionMonitorDlg)
+	//{{AFX_VIRTUAL(ActionMonitorDlg)
 	protected:
 	void DoDataExchange(CDataExchange* pDX) override;	// DDX/DDV support
 	//}}AFX_VIRTUAL
@@ -63,13 +74,13 @@ protected:
   DWORD m_keyState;
   
 protected:
-  typedef std::vector<MessageDlg*> vMessages;
-  vMessages _displayWindows;
+  typedef std::vector<MessageDlg*> VMessages;
+  VMessages _displayWindows;
 
-  void MessagePump(HWND hWnd);
+  static void MessagePump(HWND hWnd);
 
 public:
-  bool DisplayMessage( LPCTSTR pText, UINT nElapse, UINT nFadeOut );
+  bool DisplayMessage( const std::wstring& wsText, int nElapse, int nFadeOut );
 
   // kill all the active windows.
   void KillAllActiveWindows();
@@ -100,16 +111,17 @@ protected:
   POINT m_ptMaxValues;
   void CalcMaxes();
 
-  afx_msg LRESULT OnHookKeyChar   (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyDown   (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyUp     (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnReload        (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnVersion       (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnDisplayMessage(WPARAM wParam, LPARAM lParam);
-  afx_msg void OnWindowPosChanging(WINDOWPOS FAR* lpwndpos);
+  afx_msg LRESULT OnHookKeyChar     (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnHookKeyDown     (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnHookKeyUp       (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnReload          (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnVersion         (WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnMessagePumpReady(WPARAM wParam, LPARAM lParam);
+  afx_msg LRESULT OnDisplayMessage  (WPARAM wParam, LPARAM lParam);
+  afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
 
   // Generated message map functions
-	//{{AFX_MSG(CActionMonitorDlg)
+	//{{AFX_MSG(ActionMonitorDlg)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();

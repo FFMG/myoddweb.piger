@@ -1,11 +1,18 @@
-// Actions.h: interface for the Actions class.
-//////////////////////////////////////////////////////////////////////
-
-#ifndef __Actions_h__
-#define __Actions_h__
-
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-#include "ActionsCore.h"
 #include "Action.h"
 #include <mutex>
 
@@ -57,7 +64,7 @@ protected:
 protected:
   //  vectors containing all the commands we can call
   typedef std::vector<Action*> array_of_actions;
-  typedef Actions::array_of_actions::const_iterator array_of_actions_it;
+  typedef array_of_actions::const_iterator array_of_actions_it;
   array_of_actions m_Actions;
   array_of_actions m_ActionsMatch;
 
@@ -83,7 +90,7 @@ protected:
   size_t m_uCommand;
 
 public:
-  const Action* GetCommand( MYODD_STRING* cmdLine = NULL ) const;
+  const Action* GetCommand( MYODD_STRING* cmdLine = nullptr ) const;
   void SetAction( Action* tmpAction );
 
 protected:
@@ -91,13 +98,13 @@ protected:
 
 public:
   /**
-   * Get the current action as it was entered by the user.
-   * This is the action that the user typed in.
-   * So if the action is "Google" but the user typed if "Goo" then we will only return "Goo"
+   * \brief Get the current action as it was entered by the user.
+   *        This is the action that the user typed in.
+   *        So if the action is "Google" but the user typed if "Goo" then we will only return "Goo"
    *
-   * @return const MYODD_STRING& the current action.
+   * \return The current action as typed by the user.
    */
-  inline const MYODD_STRING& getActionAsTyped() const
+  const std::wstring& getActionAsTyped() const
   { 
     return m_sActionAsTyped;
   }
@@ -115,9 +122,7 @@ protected:
   size_t BuildMatchList( );
   size_t BuildMatchList( std::vector<MYODD_STRING>& exploded );
 
-protected:
-  virtual bool IsReservedDir( LPCTSTR ) const;
+  virtual bool IsReservedDir(const wchar_t*) const;
 
   std::mutex _mutex;
 };
-#endif // __Actions_h__

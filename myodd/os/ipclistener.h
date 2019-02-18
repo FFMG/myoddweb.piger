@@ -23,7 +23,9 @@ namespace myodd {
 
       // the message handler
       bool HandleIpcMessage(const IpcData& ipcRequest, IpcData& ipcResponse) override;
-      
+
+      // wait for the work to finish
+      void WaitForActiveHandlers();
     protected:
       // create the window that will receive all the messages.
       void Create(const wchar_t* serverName, void* pParent);

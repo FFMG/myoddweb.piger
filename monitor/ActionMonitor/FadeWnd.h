@@ -10,7 +10,7 @@ class FadeWnd
 {
 public:
   FadeWnd( );
-  ~FadeWnd(void);
+  virtual ~FadeWnd(void);
 
   void SetFadeParent( HWND hFade );
   HWND GetFadeParent( ) const{ return m_hFade; }
@@ -29,7 +29,7 @@ protected:
   CFont *fontDisplay; //  the display font
 
   //
-  void MessagePump( HWND hWnd );
+  static void MessagePump( HWND hWnd );
   void Stop() {
     m_stop = true;
   }

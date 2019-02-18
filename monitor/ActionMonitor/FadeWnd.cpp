@@ -2,24 +2,20 @@
 #include "FadeWnd.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief the constructor
  */
-FadeWnd::FadeWnd(void) :
+FadeWnd::FadeWnd() :
   m_byteVisible( 0 ),
-  m_hFade( NULL ),
-  fontDisplay( NULL ),
+  m_hFade( nullptr ),
+  fontDisplay( nullptr ),
   m_stop( false )
 {
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief the destructor
  */
-FadeWnd::~FadeWnd(void)
+FadeWnd::~FadeWnd()
 {
   if( fontDisplay )
   {
@@ -29,11 +25,10 @@ FadeWnd::~FadeWnd(void)
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief set the handle of this fading window.
+ * \param hFade the handle that is fading. 
  */
-void FadeWnd::SetFadeParent( HWND hFade )
+void FadeWnd::SetFadeParent( const HWND hFade )
 {
   m_hFade = hFade;
 }
@@ -68,18 +63,18 @@ void FadeWnd::Transparent( BYTE bTrans )
   //  in User32.dll
   if( g_pSetLayeredWindowAttributes == NULL  )
   {
-    HMODULE hUser32 = GetModuleHandle(_T("USER32.DLL"));
-    g_pSetLayeredWindowAttributes = (lpfn)GetProcAddress(hUser32,"SetLayeredWindowAttributes");
+    const auto hUser32 = GetModuleHandle(_T("USER32.DLL"));
+    g_pSetLayeredWindowAttributes = reinterpret_cast<lpfn>(GetProcAddress(hUser32, "SetLayeredWindowAttributes"));
   }
   
   //  if this was not created properly then we need to do it again
-  if( NULL == g_pSetLayeredWindowAttributes )
+  if( nullptr == g_pSetLayeredWindowAttributes )
   {
     return;
   }
   ::SetWindowLong(m_hFade, GWL_EXSTYLE, GetWindowLong(m_hFade, GWL_EXSTYLE) | WS_EX_LAYERED);
   //  range of opacity between 0 and 255
-  g_pSetLayeredWindowAttributes(m_hFade, RGB(255,255,255),   (BYTE)bTrans, LWA_COLORKEY | LWA_ALPHA);
+  g_pSetLayeredWindowAttributes(m_hFade, RGB(255,255,255), (BYTE)bTrans, LWA_COLORKEY | LWA_ALPHA);
 }
 
 
@@ -113,11 +108,10 @@ HGDIOBJ FadeWnd::SelDisplayFont( HDC hdc, UINT fontSize /*= 70*/  )
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief the fading window message pump
+ * \param hWnd the window busy fading
  */
-void FadeWnd::MessagePump(  HWND hWnd )
+void FadeWnd::MessagePump( const HWND hWnd )
 {
   //  lock up to make sure we only do one at a time
   MSG msg;
@@ -125,7 +119,7 @@ void FadeWnd::MessagePump(  HWND hWnd )
 	{         
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-    if ( NULL != hWnd && 0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
+    if ( nullptr != hWnd && 0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
     {
       break;
     }

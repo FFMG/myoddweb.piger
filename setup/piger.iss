@@ -52,13 +52,16 @@ Name: english; MessagesFile: compiler:Default.isl
 Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: Piger; ValueData: """{app}\ActionMonitor.exe"""; Flags: uninsdeletevalue
 
 [Tasks]
+; Plugins
 Name: pluginloader; Description: "Create a 'Learn/Unlearn' action to learn new simple actions."; GroupDescription: "Plugins";
 Name: pluginapppaths; Description: "Parse all the common applications on your system and create actions on the fly."; GroupDescription: "Plugins";
 Name: pluginontop; Description: "Create 'OnTop' command to keep any window as the topmost window, (like vlc/winamp etc...)."; GroupDescription: "Plugins";
-Name: plugindolly; Description: "Hello Dolly sample plugin"; GroupDescription: "Plugins"; Flags: unchecked
+Name: plugindolly; Description: "Hello Dolly sample plugin (c++)"; GroupDescription: "Plugins"; Flags: unchecked
+Name: plugindollynet; Description: "Hello Dolly sample plugin (.NET)"; GroupDescription: "Plugins"; Flags: unchecked
+; scripts
 ; make sure that this remains item #5 as the [code] bellow disables it.
-Name: pluginpowershell3; Description: "Powershell 3 plugins"; GroupDescription: "Plugins";
-Name: plugincsharp; Description: "C# Sharp plugins"; GroupDescription: "Plugins";
+Name: pluginpowershell3; Description: "Powershell 3 plugins"; GroupDescription: "Scripts";
+Name: plugincsharp; Description: "C# Sharp plugins"; GroupDescription: "Scripts";
 
 [InstallDelete]
 ; remove old files that the user might no longer want
@@ -71,9 +74,11 @@ Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\OnTop
 Type: files; Name: "{userappdata}\myoddweb\ActionMonitor\RootCommands\__in\SamplePlugin.amp"
 
 ; remove old python file as things are now moved to {app}\python\ folder.
+Type: files; Name: "{app}\python35.dll"
 Type: files; Name: "{app}\python35.zip"
 Type: files; Name: "{app}\python6435.dll"
 
+Type: files; Name: "{app}\python36.dll"
 Type: files; Name: "{app}\python36.zip"
 Type: files; Name: "{app}\python6436.dll"
 
@@ -98,6 +103,9 @@ Source: {#APP_SOURCE64}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappd
 Source: {#APP_SOURCE64}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('plugindolly')
 Source: {#APP_SOURCE64}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginontop')
 
+; common
+Source: {#APP_SOURCE64}Dolly.NET.amp-net; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsTaskSelected('plugindollynet')
+
 ; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
 Source: .\RootCommandsPS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "IsTaskSelected('pluginpowershell3') and IsPowershell3Installed"
@@ -117,19 +125,22 @@ Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinsta
 Source: {#APP_SOURCE86}ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}hook.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE86}ActionMonitor.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64 and IsPowershell3Installed" 
-Source: {#APP_SOURCE64}ActionMonitor.Interfaces.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64 and IsPowershell3Installed" 
 
 ; x64 App
 Source: {#APP_SOURCE64}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE64}ActionMonitor.dll; DestDir: {app}; Flags: ignoreversion; Check: (IsWin64 and IsPowershell3Installed)
-Source: {#APP_SOURCE64}ActionMonitor.Interfaces.dll; DestDir: {app}; Flags: ignoreversion; Check: (IsWin64 and IsPowershell3Installed)
 
 ; common
 Source: {#APP_INCLUDE}python86\*.*; DestDir: {app}\python\; Flags: recursesubdirs createallsubdirs; Check: "not IsWin64"
 Source: {#APP_INCLUDE}python64\*.*; DestDir: {app}\python\; Flags: recursesubdirs createallsubdirs; Check: IsWin64
+
+; the .NET files are always built in the x64 folder _and_ the x86
+; So we can use either folders, they are both valid
+Source: {#APP_SOURCE64}ActionMonitor.dll; DestDir: {app}; Flags: ignoreversion;
+Source: {#APP_SOURCE64}ActionMonitor.Interfaces.dll; DestDir: {app}; Flags: ignoreversion;
+Source: {#APP_SOURCE64}myoddweb.commandlineparser.dll; DestDir: {app}; Flags: ignoreversion;
+Source: {#APP_SOURCE64}ActionMonitor.Shell.exe; DestDir: {app}; Flags: ignoreversion;
 
 ; default config
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist

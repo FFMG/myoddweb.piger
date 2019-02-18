@@ -20,7 +20,7 @@ PowershellVirtualMachine::~PowershellVirtualMachine()
 {
   if (_initialized)
   {
-    const auto pThis = static_cast<CActionMonitorDlg*>(App().GetMainWnd());
+    const auto pThis = static_cast<ActionMonitorDlg*>(App().GetMainWnd());
     if (pThis)
     {
       pThis->RemoveMessageHandler(*this);
@@ -36,7 +36,7 @@ PowershellVirtualMachine::~PowershellVirtualMachine()
 void PowershellVirtualMachine::Initialize()
 {
   // make sure that we have ourselves as a listener
-  const auto pThis = dynamic_cast<CActionMonitorDlg*>(App().GetMainWnd());
+  const auto pThis = dynamic_cast<ActionMonitorDlg*>(App().GetMainWnd());
   if( pThis )
   {
     pThis->AddMessageHandler(*this);

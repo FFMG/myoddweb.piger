@@ -26,5 +26,6 @@ using System.Runtime.InteropServices;
 
 // 2019-02-08 Updated to version 2 as Myodd is no longer visible.
 // 2019-02-13 Renamed to 'ActionMonitor'
-[assembly: AssemblyVersion("2.1.0.0")]
-[assembly: AssemblyFileVersion("2.1.0.0")]
+// 2019-02-15 Removed uneeded assembly reference!
+[assembly: AssemblyVersion("2.1.1.0")]
+[assembly: AssemblyFileVersion("2.1.1.0")]

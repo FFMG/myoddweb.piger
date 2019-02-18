@@ -14,8 +14,9 @@
 #include "activecmdaction.h"
 #include "activecomaction.h"
 #include "activeexeaction.h"
+#include "activeshellAction.h"
 
-#include "os\os.h"
+#include "os/os.h"
 #include "ActivePowershellAction.h"
 #include "ActiveCsAction.h"
 
@@ -423,10 +424,26 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
     // did not work, try the default way...
     delete apa;
   }
-#endif // ACTIONMONITOR_API_PLUGIN
+#endif // ACTIONMONITOR_PS_PLUGIN
 
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  // Do the API calls.
+#ifdef ACTIONMONITOR_S_PLUGIN
+  // Do the Shell calls.
+  //
+  if (ShellVirtualMachine::IsExt(_szFile))
+  {
+    auto asa = new ActiveShellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    if (asa->Initialize())
+    {
+      return asa;
+    }
+
+    // did not work, try the default way...
+    delete asa;
+  }
+#endif // ACTIONMONITOR_S_PLUGIN
+
+#ifdef ACTIONMONITOR_CS_PLUGIN
+  // Do the CSharp calls.
   //
   if (CsVirtualMachine::IsExt(_szFile))
   {
@@ -439,7 +456,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
     // did not work, try the default way...
     delete acsa;
   }
-#endif // ACTIONMONITOR_API_PLUGIN
+#endif // ACTIONMONITOR_CS_PLUGIN
 
 #ifdef ACTIONMONITOR_API_PLUGIN
   // Do the API calls.
