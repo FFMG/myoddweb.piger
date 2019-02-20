@@ -16,6 +16,7 @@
 #include "ActionsCore.h"
 #include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
+#include "Messages.h"
 
 #define RECT_MIN_H 70
 
@@ -32,28 +33,27 @@ bool ActionMonitorDlg::IsRunning()
 }
 
 /**
- * todo
- * @see CTrayDialog::CTrayDialog
- * @param void
- * @return void
+ * \brief the constructor
+ * \see CTrayDialog::CTrayDialog
+ * \param pParent the parent owner of this window
  */
 ActionMonitorDlg::ActionMonitorDlg(CWnd* pParent /*=nullptr*/)
-	: CTrayDialog(ActionMonitorDlg::IDD, pParent), 
-  m_keyState (ACTION_NONE),
-  fontTime(nullptr),
-  _IpcListener(nullptr)
+  : CTrayDialog(ActionMonitorDlg::IDD, pParent), 
+    m_rWindow(),
+    m_keyState(ACTION_NONE),
+    _fontTime(nullptr), 
+    m_ptMaxValues(),
+    _IpcListener(nullptr)
 {
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+  // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+  m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
   // save the main thread id.
   _main_threadId = std::this_thread::get_id();
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief destructor
  */
 ActionMonitorDlg::~ActionMonitorDlg()
 {
@@ -64,10 +64,10 @@ ActionMonitorDlg::~ActionMonitorDlg()
     _IpcListener = nullptr;
   }
 
-  if( fontTime )
+  if( _fontTime )
   {
-    fontTime->DeleteObject();
-    delete fontTime;
+    _fontTime->DeleteObject();
+    delete _fontTime;
   }
 }
 
@@ -90,8 +90,8 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_UP       , OnHookKeyUp)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD   , OnReload)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION  , OnVersion)
-  ON_REGISTERED_MESSAGE(UWM_DISPLAYMESSAGE    , OnDisplayMessage )
   ON_REGISTERED_MESSAGE(UWM_MESSAGE_PUMP_READY, OnMessagePumpReady )
+  ON_REGISTERED_MESSAGE(UWM_DISPLAYMESSAGE    , OnDisplayMessage)
   ON_WM_WINDOWPOSCHANGING()
   ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
 	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
@@ -99,6 +99,20 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
   ON_WM_CLOSE()
   ON_WM_DESTROY()
 END_MESSAGE_MAP()
+
+/**
+ * \brief Display a message, this comes from another thread.
+ * \param
+ * \param lParam the message object we want to display.
+ * \return if we are able to add the window or not.
+ */
+LRESULT ActionMonitorDlg::OnDisplayMessage(WPARAM, const LPARAM lParam)
+{
+  const auto msg = reinterpret_cast<MessageDlg::Msg*>(lParam);
+  const auto result = Messages::Show(msg->Text(), msg->Elapse(), msg->FadeOut());
+  delete msg;
+  return result ? 1 : 0;
+}
 
 /**
  * todo
@@ -170,6 +184,40 @@ BOOL ActionMonitorDlg::OnInitDialog()
   ::PostMessage(m_hWnd, UWM_MESSAGE_PUMP_READY, 0, 0);
   
   return TRUE;
+}
+
+/**
+ * \brief display a message
+ * \param wsText the message we want to display
+ * \param nElapse how long we want to display the message for.
+ * \param nFadeOut where we want to fade the window from.
+ * \return if we were able to display the message or not.
+ */
+bool ActionMonitorDlg::DisplayMessage(const std::wstring& wsText, const int nElapse, const int nFadeOut)
+{
+  // Sanity check
+  if (wsText.length() == 0)
+  {
+    return false;
+  }
+
+  if (!IsMainThread())
+  {
+
+    // if this is not the main thread
+    // then we need to POST to oursleves and wait for the message to complete.
+    PostMessage(UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new MessageDlg::Msg(wsText, nElapse, nFadeOut)));
+    return true;
+  }
+
+  if (!IsRunning())
+  {
+    return false;
+  }
+
+  // if this window is still running, (and valid)
+  // then we can show this message
+  return Messages::Show(wsText, nElapse, nFadeOut);
 }
 
 void ActionMonitorDlg::InitializeListener()
@@ -400,12 +448,11 @@ LRESULT ActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
 }
 
 /**
- * Return true if a param is our special key
- *
- * @param void
- * @return void
+ * \brief Return true if a param is our special key
+ * \param wParam check if the given param is the special key or not.
+ * \return if wParam is the special key.
  */
-BOOL ActionMonitorDlg::IsSpecialKey( WPARAM wParam ) const
+bool ActionMonitorDlg::IsSpecialKey( const WPARAM wParam )
 {
   return (wParam == SPECIAL_KEY);
 }
@@ -618,88 +665,9 @@ bool ActionMonitorDlg::IsMainThread() const
 }
 
 /**
- * \brief Display a message, this comes from another thread.
- * \param
- * \param lParam the message object we want to display.
- * \return if we are able to add the window or not.
- */
-LRESULT ActionMonitorDlg::OnDisplayMessage( WPARAM, const LPARAM lParam )
-{
-  const auto msg = reinterpret_cast<MessageDlg::Msg*>(lParam);
-  const auto result = DisplayMessage(msg->Text(), msg->Elapse(), msg->FadeOut());
-  delete msg;
-  return result ? 1 : 0;
-}
-
-/**
- * \brief display a message 
- * \param wsText the message we want to display
- * \param nElapse how long we want to display the message for.
- * \param nFadeOut where we want to fade the window from.
- * \return if we were able to display the message or not.
- */
-bool ActionMonitorDlg::DisplayMessage( const std::wstring& wsText, const int nElapse, const int nFadeOut)
-{
-  // Sanity check
-  if(wsText.length() == 0 )
-  {
-    return false;
-  }
-
-  if (!IsMainThread())
-  {
-
-    // if this is not the main thread
-    // then we need to POST to oursleves and wait for the message to complete.
-    PostMessage(UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new MessageDlg::Msg(wsText, nElapse, nFadeOut)) );
-    return true;
-  }
-  
-  //  look for old messages to remove
-  ClearUnusedMessages( );
-
-  const auto messageDlg = new MessageDlg( this );
-  messageDlg->Create( wsText, nElapse, nFadeOut );
-
-  // if this window is still running, (and valid)
-  if( IsRunning() )
-  {
-    // start the fade message and pass a lambda
-    // function so we are called back when the window is deleted
-    // this is so we can remove it from our list here.
-    messageDlg->FadeShowWindow( [&](CWnd* dlg )
-    {
-      // protected the vector for a short while.
-      myodd::threads::Lock guard(_mutex);
-
-      // look for the window we want to delete.
-      const auto saved = std::find(_displayWindows.begin(), _displayWindows.end(), dlg);
-      if( saved != _displayWindows.end()  )
-      {
-       // remove it from the list
-        _displayWindows.erase(saved);
-      }
-    });
-
-      // protected the vector for a short while.
-      myodd::threads::Lock guard(_mutex);
-
-    // add it to our list of messages.
-    _displayWindows.push_back( messageDlg );
-  }
-  else
-  {
-    messageDlg->DestroyWindow();
-  }
-
-  return true;
-}
-
-/**
- * Display the current command that will be executing.
- *
- * @param void
- * @return void
+ * \brief Display the current command that will be executing.
+ * \param hdc the handle of the device context, (the screen)
+ * \return success or not.
  */
 bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
 {
@@ -710,8 +678,8 @@ bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
   }
   //  get the current text as well as the possible commands.
   //  we pass what ever the user entered to whatever commands are saved.
-  MYODD_STRING sCommand = App().PossibleActions().toChar( );
-  size_t len = sCommand.length();
+  const auto sCommand = App().PossibleActions().toChar( );
+  const auto len = sCommand.length();
 
   HDC localHdc = nullptr;
   if(nullptr == hdc )
@@ -802,36 +770,30 @@ bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
 }
 
 /**
- * todo
- * @param void
- * @param void
- * @return void
+ * \brief add the time at the bottom of the commands window.
+ * \param hdc the handle device context
+ * \param rParent the parent rectangle.
  */
-void ActionMonitorDlg::DisplayTime
-(
-  HDC hdc, 
-  RECT &rParent
-)
+void ActionMonitorDlg::DisplayTime( const HDC hdc, RECT &rParent )
 {
   //  But only if we want to!
   if( ::myodd::config::Get( L"commands\\show.time", 1) )
   {
-    HGDIOBJ pOldTime = SelTimeFont( hdc );
+    const auto pOldTime = SelTimeFont( hdc );
     if(nullptr != pOldTime )
     {
       __time64_t long_time;
       _time64( &long_time ); 
       struct tm newtime;
-      errno_t err;
 
-      err = _localtime64_s( &newtime, &long_time ); 
+      const auto err = _localtime64_s( &newtime, &long_time ); 
       if (!err)
       {
         TCHAR szBuffer[ 256 ];
         _tcsftime(szBuffer, _countof(szBuffer), _T("%A, %B %d, %Y, %H:%M"), &newtime);
 
         RECT r      = {0,0,0,0};
-        size_t bufferLen = _tcslen(szBuffer);
+        const auto bufferLen = _tcslen(szBuffer);
         if( bufferLen > 0 )
         {
           DrawText( hdc, szBuffer , bufferLen, &r, DT_DEFAULT | DT_CALCRECT);
@@ -853,11 +815,10 @@ void ActionMonitorDlg::DisplayTime
 }// DisplayTime(...)
 
 /**
- * Resize the command window if need be, (and return true)
- * Otherwise return false if nothing was changed.
- *
- * @param RECT the new size of the rectangle
- * @return BOOL if the window size was changed or not.
+ * \brief Resize the command window if need be, (and return true)
+ *        Otherwise return false if nothing was changed.
+ * \param newSize the new size of the rectangle
+ * \return if the window size was changed or not.
  */
 bool ActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
 {
@@ -888,13 +849,13 @@ bool ActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief get the time font.
+ * \param hdc the handle of the device context.
+ * \return handle of the timer font.
  */
-HGDIOBJ ActionMonitorDlg::SelTimeFont( HDC hdc )
+HGDIOBJ ActionMonitorDlg::SelTimeFont( const HDC hdc )
 {
-  if(nullptr == fontTime )
+  if(nullptr == _fontTime )
   {
 	  LOGFONT logFont;
 	  memset(&logFont, 0, sizeof(LOGFONT));
@@ -903,15 +864,14 @@ HGDIOBJ ActionMonitorDlg::SelTimeFont( HDC hdc )
 	  logFont.lfItalic	=	FALSE;
 	  lstrcpy(logFont.lfFaceName, _T("Arial") ); 
 
-    fontTime = new CFont();
-	  if (!fontTime->CreateFontIndirect(&logFont))
+    _fontTime = new CFont();
+	  if (!_fontTime->CreateFontIndirect(&logFont))
     {
       return nullptr;
     }
   }
 
-  HGDIOBJ pOldTime = ::SelectObject(hdc, *fontTime );
-  return pOldTime;
+  return ::SelectObject(hdc, *_fontTime );
 }
 
 /**
@@ -941,24 +901,17 @@ LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
     ver.GetFileVersionMaintenance(),
     ver.GetFileVersionBuild() );
   
-  DisplayMessage( strSay.c_str(), 3000, 5 );
+  Messages::Show( strSay.c_str(), 3000, 5 );
 
   return 0L;
 }
 
 /**
- * Message to tell the system to reload everything
- * This is called when there has been a change to the options.xml
- *
- * @param WPARAM unused/reserved
- * @param LPARAM unused/reserved
- * @return LRESULT unused/reserved
+ * \brief Message to tell the system to reload everything
+ *        This is called when there has been a change to the options.xml
+ * \return unused/reserved
  */
-LRESULT ActionMonitorDlg::OnReload
-(
-  WPARAM,
-  LPARAM
-)
+LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
 {
   // destroy the active actions that are still running.
   // this could include start actions that are up and running.
@@ -1060,57 +1013,14 @@ void ActionMonitorDlg::OnClose()
 }
 
 /**
- * \brief remove all the completed on screen messages.
- */
-void ActionMonitorDlg::ClearUnusedMessages()
-{
-  while( _displayWindows.size() > 0 )
-  {
-    // protected the vector for a short while.
-    myodd::threads::Lock guard(_mutex);
-
-    const auto it = _displayWindows.begin();
-    if( it == _displayWindows.end() )
-    {
-      break;
-    }
-
-    const auto dlg = static_cast<MessageDlg*>(*it);
-    if (dlg != nullptr)
-    {
-      if( dlg->IsRunning() )
-      {
-        break;
-      }
-    }
-    //  otherwise we can remove it from the list
-    _displayWindows.erase( it );
-  }
-}
-
-/**
  * Kill all the currently active message windows.
  */
 void ActionMonitorDlg::KillAllActiveWindows()
 {
-  //  remove what is complete.
-  ClearUnusedMessages();
+  Messages::KillAll();
 
   // protected the vector for a short while.
   myodd::threads::Lock guard(_mutex);
-
-  // kill the other messages;
-  for (auto it = _displayWindows.begin();
-       it != _displayWindows.end();
-       ++it)
-  {
-    //  clear what is still good.
-    const auto dlg = static_cast<MessageDlg*>(*it);
-    if (dlg != nullptr)
-    {
-      dlg->FadeKillWindow();
-    }
-  }
 
   // now that we asked for windows to be closed.
   // we can wait for them to close.
@@ -1122,61 +1032,11 @@ void ActionMonitorDlg::KillAllActiveWindows()
  */
 void ActionMonitorDlg::WaitForActiveWindows()
 {
-  // first give our window a chance to process UWM_DISPLAYMESSAGE.
-  // but we don't want to do other messages only the pending display messages.
-  MSG msg;
-  while (PeekMessage(&msg, m_hWnd, UWM_DISPLAYMESSAGE, UWM_DISPLAYMESSAGE, PM_REMOVE))
-  {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-  }
+  // wait for the Ipc windows.
+  _IpcListener->WaitForActiveHandlers();
 
-  // Wait for pending messages
-  // we try and get the parent window
-  // and if we cannot locate it, then it must be because the window no longer exists
-  // and as such we must wait for it.
-  while( true )
-  {
-    // wait for the Ipc windows.
-    _IpcListener->WaitForActiveHandlers();
-
-    // protected the vector for a short while.
-    myodd::threads::Lock guard(_mutex);
-
-    auto it = _displayWindows.begin();
-    if( it == _displayWindows.end() )
-      break;
-
-    const auto dlg = static_cast<MessageDlg*>(*it);
-    if (dlg != nullptr)
-    {
-      // then try and process the remaining messages
-      // if the window has not been killed properly.
-      const auto hWnd = dlg->GetSafeHwnd();
-      if (0 != ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
-      {
-        //  give the other apps/classes one last chance to do some work.
-        MessagePump(nullptr);
-
-        // let go of the thread.
-        std::this_thread::yield();
-
-        Sleep(1);
-
-        // just do one message at a time
-        // so we don't block others.
-        // the peek message should allow all message to be handled
-        MessagePump(hWnd);
-        
-        // go around one last time
-        // to give everyone a chance to close.
-        continue;
-      }
-    }
-
-    //  otherwise we can remove it
-    _displayWindows.erase( it );
-  }
+  // wait for all the messages
+  Messages::WaitForAllToComplete();
 }
 
 /**

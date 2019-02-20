@@ -20,10 +20,9 @@ IMPLEMENT_DYNAMIC(MessageDlg, CDialog)
 /**
  * \brief the constructor
  * \see CDialog::CDialog
- * \param pParent the parent window.
  */
-MessageDlg::MessageDlg(CWnd* pParent /*=NULL*/)
-  : CDialog(MessageDlg::IDD, pParent),
+MessageDlg::MessageDlg()
+  : CDialog(MessageDlg::IDD, nullptr),
     FadeWnd(), 
     _mNFadeOut(0),
     _mNElapse(0)

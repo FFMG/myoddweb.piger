@@ -56,9 +56,7 @@ bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsign
   }
 
   // simply display the message.
-  pThis->DisplayMessage( msg, nElapse, nFadeOut );
-
-  return true;
+  return pThis->DisplayMessage( msg, nElapse, nFadeOut );
 }
 
 /**

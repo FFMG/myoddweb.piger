@@ -24,7 +24,7 @@ class MessageDlg final : public CDialog, FadeWnd
 	DECLARE_DYNAMIC(MessageDlg)
 
 public:
-  explicit MessageDlg(CWnd* pParent = nullptr);   // standard constructor
+  explicit MessageDlg();   // standard constructor
 	virtual ~MessageDlg() = default;
 
 // Dialog Data

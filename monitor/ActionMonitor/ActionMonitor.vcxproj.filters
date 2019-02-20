@@ -153,6 +153,9 @@
     <ClCompile Include="..\api\shellvirtualmachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="Messages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="..\api\shellvirtualmachine.h">
       <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="Messages.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

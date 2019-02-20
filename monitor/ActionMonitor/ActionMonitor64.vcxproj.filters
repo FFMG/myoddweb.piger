@@ -153,6 +153,9 @@
     <ClCompile Include="ActionsImmediate.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="Messages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -303,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="ActionsImmediate.h">
       <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Messages.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

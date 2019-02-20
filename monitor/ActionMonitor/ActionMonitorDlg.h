@@ -16,7 +16,6 @@
 
 #include "FadeWnd.h"
 #include "ActiveActions.h"
-#include "MessageDlg.h"
 #include "resource.h"		// main symbols
 
 /////////////////////////////////////////////////////////////////////////////
@@ -38,17 +37,11 @@ public:
   explicit ActionMonitorDlg(CWnd* pParent = nullptr);	// standard constructor
   virtual ~ActionMonitorDlg();
 
-// Dialog Data
-	//{{AFX_DATA(ActionMonitorDlg)
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ActionMonitorDlg)
 	protected:
 	void DoDataExchange(CDataExchange* pDX) override;	// DDX/DDV support
-	//}}AFX_VIRTUAL
 
 // Implementation
 protected:
@@ -66,7 +59,7 @@ protected:
 
 protected:
   //  check if the param is our special key
-  BOOL IsSpecialKey( WPARAM wparam )const;
+  static bool IsSpecialKey( WPARAM wparam );
   BOOL IsSpecialKeyDown( )const;
 
 protected:
@@ -74,13 +67,10 @@ protected:
   DWORD m_keyState;
   
 protected:
-  typedef std::vector<MessageDlg*> VMessages;
-  VMessages _displayWindows;
 
   static void MessagePump(HWND hWnd);
 
 public:
-  bool DisplayMessage( const std::wstring& wsText, int nElapse, int nFadeOut );
 
   // kill all the active windows.
   void KillAllActiveWindows();
@@ -99,12 +89,10 @@ protected:
   void DisplayTime( HDC hdc, RECT &rParent );
   bool ResizeCommandWindow( const RECT &newSize );
   
-  CFont *fontTime;    //  the time font
+  CFont *_fontTime;    //  the time font
 
   HGDIOBJ SelTimeFont( HDC hdc );
 
-  // remove old/unused messages clogging up the vector
-  void ClearUnusedMessages();
 protected:
   //  ---------------------------------------------------------------------------------
   //  thwe max width/hewight
@@ -137,7 +125,7 @@ public:
 
   static bool IsRunning();
 
-//  virtual void PostNcDestroy();
+  bool DisplayMessage(const std::wstring& wsText, const int nElapse, const int nFadeOut);
 public:
   afx_msg void OnDestroy();
 
