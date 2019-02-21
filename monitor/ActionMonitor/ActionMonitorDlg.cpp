@@ -207,8 +207,8 @@ bool ActionMonitorDlg::DisplayMessage(const std::wstring& wsText, const int nEla
 
     // if this is not the main thread
     // then we need to POST to oursleves and wait for the message to complete.
-    PostMessage(UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new MessageDlg::Msg(wsText, nElapse, nFadeOut)));
-    return true;
+    // PostMessage(UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new MessageDlg::Msg(wsText, nElapse, nFadeOut)));
+    return _messages.Show(wsText, nElapse, nFadeOut);
   }
 
   if (!IsRunning())
