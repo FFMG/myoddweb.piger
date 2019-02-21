@@ -944,7 +944,10 @@ LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
   InitHook();
 
   // (re)build the action list
-  App().BuildActionsList();
+  App().CreateMessageHandler();
+
+  // (re)build the action list
+  App().CreateActionsList();
 
   //  and restart everything
   App().DoStartActionsList( false );
