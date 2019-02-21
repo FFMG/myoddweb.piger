@@ -143,27 +143,30 @@ void Messages::WaitForAllToComplete()
     const auto dlg = static_cast<MessageDlg*>(*it);
     if (dlg != nullptr)
     {
-      // then try and process the remaining messages
-      // if the window has not been killed properly.
-      const auto hWnd = dlg->GetSafeHwnd();
-      if (0 != ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
+      if (dlg->IsRunning())
       {
-        //  give the other apps/classes one last chance to do some work.
-        MessagePump(nullptr);
+        // then try and process the remaining messages
+        // if the window has not been killed properly.
+        const auto hWnd = dlg->GetSafeHwnd();
+        if (0 != ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
+        {
+          //  give the other apps/classes one last chance to do some work.
+          MessagePump(nullptr);
 
-        // let go of the thread.
-        std::this_thread::yield();
+          // let go of the thread.
+          std::this_thread::yield();
 
-        Sleep(1);
+          Sleep(1);
 
-        // just do one message at a time
-        // so we don't block others.
-        // the peek message should allow all message to be handled
-        MessagePump(hWnd);
+          // just do one message at a time
+          // so we don't block others.
+          // the peek message should allow all message to be handled
+          MessagePump(hWnd);
 
-        // go around one last time
-        // to give everyone a chance to close.
-        continue;
+          // go around one last time
+          // to give everyone a chance to close.
+          continue;
+        }
       }
     }
 
