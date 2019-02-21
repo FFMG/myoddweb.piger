@@ -9,6 +9,8 @@ Messages::Messages() :
 
 Messages::~Messages()
 {
+  // stop the window
+  _messagesWnd.Close();
 }
 
 /**
@@ -106,9 +108,6 @@ bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFa
  */
 void Messages::KillAll()
 {
-  // stop the window
-  _messagesWnd.Close();
-
   //  remove what is complete.
   ClearUnused();
 

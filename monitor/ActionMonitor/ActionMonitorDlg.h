@@ -111,27 +111,21 @@ protected:
   afx_msg LRESULT OnVersion         (WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnMessagePumpReady(WPARAM wParam, LPARAM lParam);
   afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
-
-  // Generated message map functions
-	//{{AFX_MSG(ActionMonitorDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnTrayExit();
+  afx_msg void OnPaint();
+  afx_msg void OnTrayExit();
   afx_msg void OnTrayVersion();
-	afx_msg void OnTrayReload();
-	//}}AFX_MSG
+  afx_msg void OnTrayReload();
+  afx_msg void OnClose();
+  afx_msg void OnDestroy();
+  virtual BOOL OnInitDialog();
+  afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
-//  virtual void PostNcDestroy();
 public:
-  afx_msg void OnClose();
 
   static bool IsRunning();
 
   bool DisplayMessage(const std::wstring& wsText, const int nElapse, const int nFadeOut);
-public:
-  afx_msg void OnDestroy();
 
 protected:
   std::mutex _mutex;
