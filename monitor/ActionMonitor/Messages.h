@@ -27,6 +27,14 @@ protected:
   typedef std::vector<MessageDlg*> MessagesCollection;
   MessagesCollection _collection;
 
+  /**
+   * \brief the mutex to ensure that data is only updated once at a time.
+   */
   std::mutex _mutex;
+
+  /**
+   * \brief the thread id that 'created' this message collection
+   */
+  const unsigned long _threadId;
 };
 

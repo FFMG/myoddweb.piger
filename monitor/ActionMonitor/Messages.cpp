@@ -1,8 +1,10 @@
 #include "stdafx.h"
 #include "Messages.h"
+#include "ActionsCore.h"
 
 
-Messages::Messages()
+Messages::Messages() :
+  _threadId(GetCurrentThreadId() )
 {
 }
 
