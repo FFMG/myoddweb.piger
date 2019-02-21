@@ -29,12 +29,13 @@
 
 #include "../common/trayDialog.h" //  system tray icon item
 #include <os/ipclistener.h>
+#include "IMessages.h"
 
 class ActionMonitorDlg final : public CTrayDialog, FadeWnd, ActiveActions
 {
 // Construction
 public:
-  explicit ActionMonitorDlg(CWnd* pParent = nullptr);	// standard constructor
+  explicit ActionMonitorDlg( IMessages& messages, CWnd* pParent = nullptr);	// standard constructor
   virtual ~ActionMonitorDlg();
 
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
@@ -65,7 +66,6 @@ protected:
 protected:
   //  the state of our special key
   DWORD m_keyState;
-  
 protected:
 
   static void MessagePump(HWND hWnd);
@@ -85,6 +85,11 @@ public:
   void RemoveMessageHandler(myodd::os::IpcMessageHandler& handler);
 
 protected:
+  /**
+   * \brief the messages handler
+   */
+  IMessages& _messages;
+
   bool DisplayCommand( HDC hdc = NULL );
   void DisplayTime( HDC hdc, RECT &rParent );
   bool ResizeCommandWindow( const RECT &newSize );

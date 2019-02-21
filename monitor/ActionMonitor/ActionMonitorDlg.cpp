@@ -37,13 +37,14 @@ bool ActionMonitorDlg::IsRunning()
  * \see CTrayDialog::CTrayDialog
  * \param pParent the parent owner of this window
  */
-ActionMonitorDlg::ActionMonitorDlg(CWnd* pParent /*=nullptr*/)
+ActionMonitorDlg::ActionMonitorDlg(IMessages& messages, CWnd* pParent /*=nullptr*/)
   : CTrayDialog(ActionMonitorDlg::IDD, pParent), 
     m_rWindow(),
     m_keyState(ACTION_NONE),
     _fontTime(nullptr), 
     m_ptMaxValues(),
-    _IpcListener(nullptr)
+    _IpcListener(nullptr),
+    _messages( messages)
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -109,7 +110,7 @@ END_MESSAGE_MAP()
 LRESULT ActionMonitorDlg::OnDisplayMessage(WPARAM, const LPARAM lParam)
 {
   const auto msg = reinterpret_cast<MessageDlg::Msg*>(lParam);
-  const auto result = Messages::Show(msg->Text(), msg->Elapse(), msg->FadeOut());
+  const auto result = _messages.Show(msg->Text(), msg->Elapse(), msg->FadeOut());
   delete msg;
   return result ? 1 : 0;
 }
@@ -217,7 +218,7 @@ bool ActionMonitorDlg::DisplayMessage(const std::wstring& wsText, const int nEla
 
   // if this window is still running, (and valid)
   // then we can show this message
-  return Messages::Show(wsText, nElapse, nFadeOut);
+  return _messages.Show(wsText, nElapse, nFadeOut);
 }
 
 void ActionMonitorDlg::InitializeListener()
@@ -901,7 +902,7 @@ LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
     ver.GetFileVersionMaintenance(),
     ver.GetFileVersionBuild() );
   
-  Messages::Show( strSay.c_str(), 3000, 5 );
+  _messages.Show( strSay.c_str(), 3000, 5 );
 
   return 0L;
 }
@@ -1017,7 +1018,7 @@ void ActionMonitorDlg::OnClose()
  */
 void ActionMonitorDlg::KillAllActiveWindows()
 {
-  Messages::KillAll();
+  _messages.KillAll();
 
   // protected the vector for a short while.
   myodd::threads::Lock guard(_mutex);
@@ -1036,7 +1037,7 @@ void ActionMonitorDlg::WaitForActiveWindows()
   _IpcListener->WaitForActiveHandlers();
 
   // wait for all the messages
-  Messages::WaitForAllToComplete();
+  _messages.WaitForAllToComplete();
 }
 
 /**

@@ -28,6 +28,8 @@
 
 #define _MAX_CMD_LINE_ARGS  128
 
+class IMessages;
+
 class CActionMonitorApp final : public CWinApp
 {
 public:
@@ -57,7 +59,9 @@ public:
   static size_t GetMaxClipboardMemory();
 
 public:
-  void BuildActionsList();
+  void CreateActionsList();
+
+  void CreateMessageHandler();
 
 public:
   void DoStartActionsList( bool wait );
@@ -80,7 +84,7 @@ public:
   static void SelfElavate();
 
   // the handle of the mutex
-  HANDLE m_hMutex; 
+  HANDLE m_hMutex;
 
   /**
    * @param CWnd* The window that last had the focus when we pressed the special key.
@@ -98,7 +102,22 @@ public:
   Actions& PossibleActions() {
     return *_possibleActions;
   }
+
+  const IMessages& MessageHandler() const {
+    return *_messages;
+  }
+  IMessages& MessageHandler() {
+    return *_messages;
+  }
 private:
+  /**
+   * \brief the messages handler
+   */
+  IMessages* _messages;
+
+  /**
+   * \brief the list of posible actions
+   */
   Actions* _possibleActions;
 
 #ifdef ACTIONMONITOR_API_LUA

@@ -11,34 +11,6 @@ Messages::~Messages()
 }
 
 /**
- * \brief display a message
- * \param wsText the message we want to display
- * \param nElapse how long we want to display the message for.
- * \param nFadeOut where we want to fade the window from.
- * \return if we were able to display the message or not.
- */
-bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFadeOut)
-{
-  return Instance()._Show(wsText, nElapse, nFadeOut);
-}
-
-/**
- * \brief Kill all the currently active message windows.
- */
-void Messages::KillAll()
-{
-  Instance()._KillAll();
-}
-
-/**
- *  \brief wait for all the messages to complete.
- */
-void Messages::WaitForAllToComplete()
-{
-  Instance()._WaitForAllToComplete();
-}
-
-/**
  * \brief remove all the completed on screen messages.
  */
 void Messages::ClearUnused()
@@ -74,7 +46,7 @@ void Messages::ClearUnused()
  * \param nFadeOut where we want to fade the window from.
  * \return if we were able to display the message or not.
  */
-bool Messages::_Show(const std::wstring& wsText, const int nElapse, const int nFadeOut)
+bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFadeOut)
 {
   // Sanity check
   if (wsText.length() == 0)
@@ -122,9 +94,9 @@ bool Messages::_Show(const std::wstring& wsText, const int nElapse, const int nF
 }
 
 /**
- * Kill all the currently active message windows.
+ * \brief Kill all the currently active message windows.
  */
-void Messages::_KillAll()
+void Messages::KillAll()
 {
   //  remove what is complete.
   ClearUnused();
@@ -147,13 +119,13 @@ void Messages::_KillAll()
 
   // now that we asked for windows to be closed.
   // we can wait for them to close.
-  _WaitForAllToComplete();
+  WaitForAllToComplete();
 }
 
 /**
  * \brief Wait for all the active windows to complete.
  */
-void Messages::_WaitForAllToComplete()
+void Messages::WaitForAllToComplete()
 {
   // Wait for pending messages
   // we try and get the parent window

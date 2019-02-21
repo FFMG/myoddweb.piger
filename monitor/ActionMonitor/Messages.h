@@ -1,35 +1,23 @@
 #pragma once
 #include <vector>
 #include "MessageDlg.h"
+#include "IMessages.h"
 
-class Messages final
+class Messages final : public IMessages
 {
 public:
+  Messages();
   ~Messages();
-
-  static bool Show(const std::wstring& wsText, int nElapse, int nFadeOut);
-  static void KillAll();
-  static void WaitForAllToComplete();
 
   // cannot copy
   Messages(const Messages&) = delete;
   void Operator(const Messages&) = delete;
 
+  bool Show(const std::wstring& wsText, int nElapse, int nFadeOut) override;
+  void KillAll() override;
+  void WaitForAllToComplete() override;
+
 protected:
-  // cannot create directlry
-  Messages();
-
-  // the one and only instance
-  // will be destroyed when we get out.
-  static Messages& Instance()
-  {
-    static Messages singleInstance;
-    return singleInstance;
-  }
-
-  bool _Show(const std::wstring& wsText, int nElapse, int nFadeOut);
-  void _KillAll();
-  void _WaitForAllToComplete();
 
   static void MessagePump( HWND hWnd);
 

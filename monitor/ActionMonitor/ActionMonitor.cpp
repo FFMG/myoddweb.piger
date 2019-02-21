@@ -20,6 +20,7 @@
 #include "ActionBye.h"
 #include "ActionLoad.h"
 #include "ActionVersion.h"
+#include "Messages.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 	//{{AFX_MSG_MAP(CActionMonitorApp)
@@ -37,10 +38,11 @@ CActionMonitorApp::CActionMonitorApp() :
 _endActions(nullptr),
   m_hMutex(nullptr),
   _cwndLastForegroundWindow(nullptr),
-  _maxClipboardSize( NULL )
+  _maxClipboardSize( NULL ), 
+  _possibleActions(nullptr),
+  _messages( nullptr )
 #ifdef ACTIONMONITOR_API_LUA
-  , _possibleActions(nullptr), 
-  _lvm(nullptr)
+  , _lvm(nullptr)
 #endif
 #ifdef ACTIONMONITOR_API_PY
   , _pvm(nullptr)
@@ -372,11 +374,14 @@ BOOL CActionMonitorApp::InitInstance()
   auto noTaskBar = new CFrameWnd();
   noTaskBar->Create(nullptr, nullptr,WS_OVERLAPPEDWINDOW);
 
-	ActionMonitorDlg dlg( noTaskBar );
-	m_pMainWnd = &dlg;
+  CreateMessageHandler();
 
   // create the possible actions
-  BuildActionsList( );
+  CreateActionsList();
+
+  // create the actual dicali.
+	ActionMonitorDlg dlg( *_messages, noTaskBar );
+	m_pMainWnd = &dlg;
 
   const auto nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
@@ -396,6 +401,11 @@ BOOL CActionMonitorApp::InitInstance()
   // remove the actions
   // we are about to close, we are no longer monitoring anything
   delete _possibleActions;
+  _possibleActions = nullptr;
+
+  // stop all the message handling
+  delete _messages;
+  _messages = nullptr;
 
 	//  Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pupszCmdLine.
@@ -403,9 +413,21 @@ BOOL CActionMonitorApp::InitInstance()
 }
 
 /**
+ * \brief (Re)build the message handler
+ */
+void CActionMonitorApp::CreateMessageHandler()
+{
+  //  remove the old one
+  delete _messages;
+
+  //  create a new one.
+  _messages = new Messages();
+}
+
+/**
  * \brief (Re)build a list of possible actions.
  */
-void CActionMonitorApp::BuildActionsList()
+void CActionMonitorApp::CreateActionsList()
 {
   //  remove the old one
   delete _possibleActions;

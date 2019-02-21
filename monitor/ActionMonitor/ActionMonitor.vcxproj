@@ -220,6 +220,7 @@
     <ClCompile Include="ActiveShellAction.cpp" />
     <ClCompile Include="ActiveUserMessageAction.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
+    <ClCompile Include="IMessages.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="Messages.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -275,6 +276,7 @@
     <ClInclude Include="ActiveShellAction.h" />
     <ClInclude Include="ActiveUserMessageAction.h" />
     <ClInclude Include="FadeWnd.h" />
+    <ClInclude Include="IMessages.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="Messages.h" />
