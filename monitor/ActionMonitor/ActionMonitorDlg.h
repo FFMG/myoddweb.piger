@@ -135,8 +135,6 @@ public:
 
 protected:
   std::mutex _mutex;
-  std::thread::id _main_threadId;
-  bool IsMainThread() const;
 
   void InitializeListener();
   myodd::os::IpcListener* _IpcListener;

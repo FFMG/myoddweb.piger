@@ -48,9 +48,6 @@ ActionMonitorDlg::ActionMonitorDlg(IMessages& messages, CWnd* pParent /*=nullptr
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-
-  // save the main thread id.
-  _main_threadId = std::this_thread::get_id();
 }
 
 /**
@@ -185,14 +182,6 @@ bool ActionMonitorDlg::DisplayMessage(const std::wstring& wsText, const int nEla
   if (wsText.length() == 0)
   {
     return false;
-  }
-
-  if (!IsMainThread())
-  {
-
-    // if this is not the main thread
-    // then we need to POST to oursleves and wait for the message to complete.
-    return _messages.Show(wsText, nElapse, nFadeOut);
   }
 
   if (!IsRunning())
@@ -637,16 +626,6 @@ LRESULT ActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
    * or a keyboard key that is pressed when a window has the keyboard focus. 
    */
   return 0L;
-}
-
-/**
- * Check if the current thread is the main thread or not.
- * We only know we are the main thread because that number was set at construction.
- * @return bool if this thread is main or not.
- */
-bool ActionMonitorDlg::IsMainThread() const
-{
-  return (std::this_thread::get_id() == _main_threadId);
 }
 
 /**
