@@ -2,6 +2,7 @@
 #include <vector>
 #include "MessageDlg.h"
 #include "IMessages.h"
+#include "MessagesWnd.h"
 
 class Messages final : public IMessages
 {
@@ -27,8 +28,11 @@ protected:
   typedef std::vector<MessageDlg*> MessagesCollection;
   MessagesCollection _collection;
 
-  typedef std::vector<MessageDlg::Msg*> MessagesMsgCollection;
-  MessagesMsgCollection _collectionInOtherThreads;
+  /**
+   * \brief the messages window that allows us to post messages from
+   *        threads that are not the main one.
+   */
+  MessagesWnd _messagesWnd;
 
   /**
    * \brief the mutex to ensure that data is only updated once at a time.
@@ -36,27 +40,8 @@ protected:
   std::mutex _mutex;
 
   /**
-   * \brief if this message it true, we will stop everyting
-   */
-  bool _stop;
-
-  /**
    * \brief the thread id that 'created' this message collection
    */
   const std::thread::id _threadId;
-
-  /**
-   * \brief Set the flag to stop
-   */
-  void Stop();
-
-  /**
-   * \brief Check if this is stopped
-   * \return if we flagged this to stop or not.
-   */
-  bool Stopped() const;
-
-  myodd::threads::Workers _worker;
-  static void Wait(Messages* owner);
 };
 

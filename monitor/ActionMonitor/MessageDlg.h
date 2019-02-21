@@ -31,26 +31,6 @@ public:
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 
 public:
-  class Msg 
-  {
-  public:
-    Msg(const std::wstring& wsText, int nElapse, int nFadeOut) :
-      _pText( wsText),
-      _nElapse( nElapse ),
-      _nFadeOut(  nFadeOut )
-    {
-    }
-    virtual ~Msg() = default;
-    const wchar_t* Text() const { return _pText.c_str(); }
-    int Elapse() const { return _nElapse; }
-    int FadeOut() const { return _nFadeOut; }
-
-  protected:
-    const std::wstring _pText;
-    int _nElapse;
-    int _nFadeOut;
-  };
-
   void Create( const std::wstring& sText, int nElapse, int nFadeOut);
 
 protected:

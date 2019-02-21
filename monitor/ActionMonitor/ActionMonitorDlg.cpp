@@ -92,7 +92,6 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD   , OnReload)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION  , OnVersion)
   ON_REGISTERED_MESSAGE(UWM_MESSAGE_PUMP_READY, OnMessagePumpReady )
-  ON_REGISTERED_MESSAGE(UWM_DISPLAYMESSAGE    , OnDisplayMessage)
   ON_WM_WINDOWPOSCHANGING()
   ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
 	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
@@ -100,20 +99,6 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
   ON_WM_CLOSE()
   ON_WM_DESTROY()
 END_MESSAGE_MAP()
-
-/**
- * \brief Display a message, this comes from another thread.
- * \param
- * \param lParam the message object we want to display.
- * \return if we are able to add the window or not.
- */
-LRESULT ActionMonitorDlg::OnDisplayMessage(WPARAM, const LPARAM lParam)
-{
-  const auto msg = reinterpret_cast<MessageDlg::Msg*>(lParam);
-  const auto result = _messages.Show(msg->Text(), msg->Elapse(), msg->FadeOut());
-  delete msg;
-  return result ? 1 : 0;
-}
 
 /**
  * todo
@@ -207,7 +192,6 @@ bool ActionMonitorDlg::DisplayMessage(const std::wstring& wsText, const int nEla
 
     // if this is not the main thread
     // then we need to POST to oursleves and wait for the message to complete.
-    // PostMessage(UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new MessageDlg::Msg(wsText, nElapse, nFadeOut)));
     return _messages.Show(wsText, nElapse, nFadeOut);
   }
 

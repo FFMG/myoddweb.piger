@@ -1,14 +1,10 @@
 #include "stdafx.h"
 #include "Messages.h"
-#include "ActionsCore.h"
-
 
 Messages::Messages() :
-  _threadId(std::this_thread::get_id()),
-  _stop(false)
+  _threadId(std::this_thread::get_id())
 {
-  // start the worker.
-  _worker.QueueWorker(&Messages::Wait, this);
+  _messagesWnd.Create();
 }
 
 Messages::~Messages()
@@ -62,14 +58,12 @@ bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFa
   //  look for old messages to remove
   ClearUnused();
 
-//  if (std::this_thread::get_id() != _threadId)
-//  {
-//    // protected the vector for a short while.
-//    myodd::threads::Lock guard(_mutex);
-//
-//    _collectionInOtherThreads.push_back(new MessageDlg::Msg(wsText, nElapse, nFadeOut));
-//    return true;
-//  }
+  if (std::this_thread::get_id() != _threadId)
+  {
+    // we do not need to use the lock here
+    // this is because we will use the lock in the correct thread id...
+    return _messagesWnd.Show( *this, wsText, nElapse, nFadeOut);
+  }
 
   try
   {
@@ -108,32 +102,12 @@ bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFa
 }
 
 /**
- * \brief Set the flag to stop
- */
-void Messages::Stop()
-{
-  // protected the vector for a short while.
-  myodd::threads::Lock guard(_mutex);
-
-  _stop = true;
-}
-
-/**
- * \brief Check if this is stopped
- * \return if we flagged this to stop or not.
- */
-bool Messages::Stopped() const
-{
-  return _stop;
-}
-
-/**
  * \brief Kill all the currently active message windows.
  */
 void Messages::KillAll()
 {
-  // flag the stop
-  Stop();
+  // stop the window
+  _messagesWnd.Close();
 
   //  remove what is complete.
   ClearUnused();
@@ -228,31 +202,5 @@ void Messages::MessagePump(const HWND hWnd)
     {
       break;
     }
-  }
-}
-
-/**
- * \brief Wait for messages added to the parent thread.
- * \param owner the owner class
- */
-void Messages::Wait(Messages* owner)
-{
-  while(!owner->Stopped() )
-  {
-    if (std::this_thread::get_id() == owner->_threadId)
-    {
-      // protected the vector for a short while.
-      myodd::threads::Lock guard(owner->_mutex);
-      while (owner->_collectionInOtherThreads.size() > 0)
-      {
-        const auto it = owner->_collectionInOtherThreads.begin();
-        owner->Show((*it)->Text(), (*it)->Elapse(), (*it)->FadeOut());
-        delete (*it);
-        owner->_collectionInOtherThreads.erase(it);
-      }
-    }
-
-    // wait a little.
-    Sleep(1);
   }
 }

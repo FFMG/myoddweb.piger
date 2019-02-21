@@ -110,7 +110,6 @@ protected:
   afx_msg LRESULT OnReload          (WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnVersion         (WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnMessagePumpReady(WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnDisplayMessage  (WPARAM wParam, LPARAM lParam);
   afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
 
   // Generated message map functions
