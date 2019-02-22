@@ -1,21 +1,21 @@
 #pragma once
 #include <vector>
 #include "MessageDlg.h"
-#include "IMessages.h"
-#include "MessagesWnd.h"
+#include "IMessagesHandler.h"
+#include "MessagesHandlerWnd.h"
 
-class Messages final : public IMessages
+class MessagesHandler final : public IMessagesHandler
 {
 public:
-  Messages();
-  ~Messages();
+  MessagesHandler();
+  ~MessagesHandler();
 
   // cannot copy
-  Messages(const Messages&) = delete;
-  void Operator(const Messages&) = delete;
+  MessagesHandler(const MessagesHandler&) = delete;
+  void Operator(const MessagesHandler&) = delete;
 
   bool Show(const std::wstring& wsText, int nElapse, int nFadeOut) override;
-  void KillAll() override;
+  void CloseAll() override;
   void WaitForAllToComplete() override;
 
 protected:
@@ -32,7 +32,7 @@ protected:
    * \brief the messages window that allows us to post messages from
    *        threads that are not the main one.
    */
-  MessagesWnd _messagesWnd;
+  MessagesHandlerWnd _messagesHandlerWnd;
 
   /**
    * \brief the mutex to ensure that data is only updated once at a time.

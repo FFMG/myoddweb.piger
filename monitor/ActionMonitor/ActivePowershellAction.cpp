@@ -39,5 +39,5 @@ void ActivePowershellAction::OnExecuteInThread()
   auto pvm = App().GetPowershellVirtualMachine();
   
   // we can now execute the thread.
-  pvm->ExecuteInThread( szFile.c_str(), *this, App().MessageHandler() );
+  pvm->ExecuteInThread( szFile.c_str(), *this, App().MsgHandler() );
 }

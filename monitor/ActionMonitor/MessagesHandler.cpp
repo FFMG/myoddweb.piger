@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "Messages.h"
+#include "MessagesHandler.h"
 
-Messages::Messages() :
+MessagesHandler::MessagesHandler() :
   _threadId(std::this_thread::get_id())
 {
-  _messagesWnd.Create();
+  _messagesHandlerWnd.Create();
 }
 
-Messages::~Messages()
+MessagesHandler::~MessagesHandler()
 {
   // stop the window
-  _messagesWnd.Close();
+  _messagesHandlerWnd.Close();
 }
 
 /**
  * \brief remove all the completed on screen messages.
  */
-void Messages::ClearUnused()
+void MessagesHandler::ClearUnused()
 {
   while (_collection.size() > 0)
   {
@@ -49,7 +49,7 @@ void Messages::ClearUnused()
  * \param nFadeOut where we want to fade the window from.
  * \return if we were able to display the message or not.
  */
-bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFadeOut)
+bool MessagesHandler::Show(const std::wstring& wsText, const int nElapse, const int nFadeOut)
 {
   // Sanity check
   if (wsText.length() == 0)
@@ -64,7 +64,7 @@ bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFa
   {
     // we do not need to use the lock here
     // this is because we will use the lock in the correct thread id...
-    return _messagesWnd.Show( *this, wsText, nElapse, nFadeOut);
+    return _messagesHandlerWnd.Show( *this, wsText, nElapse, nFadeOut);
   }
 
   try
@@ -106,7 +106,7 @@ bool Messages::Show(const std::wstring& wsText, const int nElapse, const int nFa
 /**
  * \brief Kill all the currently active message windows.
  */
-void Messages::KillAll()
+void MessagesHandler::CloseAll()
 {
   //  remove what is complete.
   ClearUnused();
@@ -135,7 +135,7 @@ void Messages::KillAll()
 /**
  * \brief Wait for all the active windows to complete.
  */
-void Messages::WaitForAllToComplete()
+void MessagesHandler::WaitForAllToComplete()
 {
   // Wait for pending messages
   // we try and get the parent window
@@ -189,7 +189,7 @@ void Messages::WaitForAllToComplete()
  * \brief pump all the messages for a given window.
  * \param hWnd the handle of the window messages we are pumping.
  */
-void Messages::MessagePump(const HWND hWnd)
+void MessagesHandler::MessagePump(const HWND hWnd)
 {
   //  lock up to make sure we only do one at a time
   MSG msg;

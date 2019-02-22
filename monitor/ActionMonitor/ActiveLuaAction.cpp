@@ -37,7 +37,7 @@ void ActiveLuaAction::OnExecuteInThread()
 
   // create the Python Api.
   LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
-  LuaApi* api = new LuaApi( *this, App().MessageHandler() );
+  auto api = new LuaApi( *this, App().MsgHandler() );
 
   //  save it.
   // we can now execute the thread.

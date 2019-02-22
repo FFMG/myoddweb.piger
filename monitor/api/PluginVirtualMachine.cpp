@@ -271,7 +271,7 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
  * @param void
  * @return void
  */
-int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessages& messages)
+int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler)
 {
   Initialize();
   if (NULL == _amPlugin)
@@ -282,7 +282,7 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction
   }
 
   // add the api to the list.
-  auto api = new PluginApi(action, messages);
+  auto api = new PluginApi(action, messagesHandler);
   AddApi( api );
 
   // execute this plugin

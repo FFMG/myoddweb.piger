@@ -20,7 +20,7 @@
 #include "ActionBye.h"
 #include "ActionLoad.h"
 #include "ActionVersion.h"
-#include "Messages.h"
+#include "MessagesHandler.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 	//{{AFX_MSG_MAP(CActionMonitorApp)
@@ -40,7 +40,7 @@ _endActions(nullptr),
   _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize( NULL ), 
   _possibleActions(nullptr),
-  _messages( nullptr )
+  _messagesHandler( nullptr )
 #ifdef ACTIONMONITOR_API_LUA
   , _lvm(nullptr)
 #endif
@@ -404,8 +404,8 @@ BOOL CActionMonitorApp::InitInstance()
   _possibleActions = nullptr;
 
   // stop all the message handling
-  delete _messages;
-  _messages = nullptr;
+  delete _messagesHandler;
+  _messagesHandler = nullptr;
 
 	//  Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pupszCmdLine.
@@ -418,10 +418,10 @@ BOOL CActionMonitorApp::InitInstance()
 void CActionMonitorApp::CreateMessageHandler()
 {
   //  remove the old one
-  delete _messages;
+  delete _messagesHandler;
 
   //  create a new one.
-  _messages = new Messages();
+  _messagesHandler = new MessagesHandler();
 }
 
 /**
@@ -454,7 +454,7 @@ void CActionMonitorApp::DoVersion()
     ver.GetFileVersionMaintenance(),
     ver.GetFileVersionBuild());
 
-  MessageHandler().Show(strSay.c_str(), 3000, 5);
+  MessagesHandler().Show(strSay.c_str(), 3000, 5);
 }
 
 /**

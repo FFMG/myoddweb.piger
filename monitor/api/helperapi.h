@@ -15,7 +15,7 @@
 #pragma once
 
 #include "ActiveAction.h"
-#include "IMessages.h"
+#include "IMessagesHandler.h"
 
 /**
  * Helper function used to make new APIs easier to create and most of them more standard.
@@ -27,7 +27,7 @@
 class HelperApi
 {
 public:
-  explicit HelperApi( const ActiveAction& action, IMessages& messages );
+  explicit HelperApi( const ActiveAction& action, IMessagesHandler& messages );
   virtual ~HelperApi() = default;
 
 private:
@@ -41,7 +41,7 @@ private:
   /**
    * \brief the messages handler
    */
-  IMessages& _messages;
+  IMessagesHandler& _messagesHandler;
 
 protected:
   // helper function
@@ -99,5 +99,5 @@ protected:
   static bool FindAction( unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath );
 
   // log a message to the log file.
-  static void Log(unsigned int logType, const wchar_t* lpText);
+  static void Log(unsigned int logType, const wchar_t* lpText );
 };

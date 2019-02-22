@@ -1,9 +1,9 @@
 #pragma once
-class IMessages
+class IMessagesHandler
 {
 public:
-  IMessages();
-  virtual ~IMessages();
+  IMessagesHandler();
+  virtual ~IMessagesHandler();
 
   /**
    * \brief display a message
@@ -17,7 +17,7 @@ public:
   /**
    * \brief Kill all the currently active message windows.
    */
-  virtual void KillAll() = 0;
+  virtual void CloseAll() = 0;
 
   /**
    * \brief Wait for all the active windows to complete.

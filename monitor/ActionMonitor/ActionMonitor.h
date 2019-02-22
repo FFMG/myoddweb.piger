@@ -16,19 +16,9 @@
 
 #include "Actions.h"    //  the actions we can call, (the name of the file)
 #include "ActionsImmediate.h"
-
-#ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
-#endif
-
-/////////////////////////////////////////////////////////////////////////////
-// CActionMonitorApp:
-// See ActionMonitor.cpp for the implementation of this class
-//
+#include "IMessagesHandler.h"
 
 #define _MAX_CMD_LINE_ARGS  128
-
-class IMessages;
 
 class CActionMonitorApp final : public CWinApp
 {
@@ -104,18 +94,18 @@ public:
     return *_possibleActions;
   }
 
-  const IMessages& MessageHandler() const {
-    return *_messages;
+  const IMessagesHandler& MsgHandler() const {
+    return *_messagesHandler;
   }
 
-  IMessages& MessageHandler() {
-    return *_messages;
+  IMessagesHandler& MsgHandler() {
+    return *_messagesHandler;
   }
 private:
   /**
    * \brief the messages handler
    */
-  IMessages* _messages;
+  IMessagesHandler* _messagesHandler;
 
   /**
    * \brief the list of posible actions

@@ -1,16 +1,16 @@
 #include "stdafx.h"
-#include "MessagesWnd.h"
+#include "MessagesHandlerWnd.h"
 
-MessagesWnd::MessagesWnd() :
+MessagesHandlerWnd::MessagesHandlerWnd() :
   _szClassName(L"ActionMonitorMessagesWindowClass")
 {
 }
 
-MessagesWnd::~MessagesWnd()
+MessagesHandlerWnd::~MessagesHandlerWnd()
 {
 }
 
-LRESULT CALLBACK MessagesWnd::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK MessagesHandlerWnd::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
   if (UWM_DISPLAYMESSAGE == msg)
   {
@@ -43,19 +43,19 @@ LRESULT CALLBACK MessagesWnd::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
   return 0;
 }
 
-bool MessagesWnd::Show(IMessages& parent, const std::wstring& wsText, int nElapse, int nFadeOut)
+bool MessagesHandlerWnd::Show(IMessagesHandler& parent, const std::wstring& wsText, int nElapse, int nFadeOut)
 {
   return 1L == SendMessage(_hwnd, UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new Msg(parent, wsText, nElapse, nFadeOut)));
 }
 
-bool MessagesWnd::Create()
+bool MessagesHandlerWnd::Create()
 {
   HINSTANCE hInstance = nullptr;
 
   //Step 1: Registering the Window Class
   _wc.cbSize = sizeof(WNDCLASSEX);
   _wc.style = 0;
-  _wc.lpfnWndProc = MessagesWnd::WndProc;
+  _wc.lpfnWndProc = MessagesHandlerWnd::WndProc;
   _wc.cbClsExtra = 0;
   _wc.cbWndExtra = 0;
   _wc.hInstance = hInstance;
@@ -89,7 +89,7 @@ bool MessagesWnd::Create()
   return true;
 }
 
-bool MessagesWnd::Close()
+bool MessagesHandlerWnd::Close()
 {
   if (_hwnd == nullptr)
   {

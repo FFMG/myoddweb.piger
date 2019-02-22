@@ -153,13 +153,13 @@
     <ClCompile Include="..\api\shellvirtualmachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
-    <ClCompile Include="Messages.cpp">
+    <ClCompile Include="MessagesHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IMessages.cpp">
+    <ClCompile Include="MessagesHandlerWnd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MessagesWnd.cpp">
+    <ClCompile Include="IMessagesHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -316,13 +316,13 @@
     <ClInclude Include="..\api\shellvirtualmachine.h">
       <Filter>api</Filter>
     </ClInclude>
-    <ClInclude Include="Messages.h">
+    <ClInclude Include="MessagesHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IMessages.h">
+    <ClInclude Include="MessagesHandlerWnd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MessagesWnd.h">
+    <ClInclude Include="IMessagesHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,8 +8,8 @@
  * @param void
  * @return void
  */
-PowershellApi::PowershellApi(const ActiveAction& action, IMessages& messages) :
-  HelperApi(action, messages ), 
+PowershellApi::PowershellApi(const ActiveAction& action, IMessagesHandler& messagesHandler ) :
+  HelperApi(action, messagesHandler ), 
   _hProcess( nullptr )
 {
 }

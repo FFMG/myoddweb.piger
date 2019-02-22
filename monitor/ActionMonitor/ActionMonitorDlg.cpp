@@ -16,7 +16,7 @@
 #include "ActionsCore.h"
 #include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
-#include "Messages.h"
+#include "MessagesHandler.h"
 
 #define RECT_MIN_H 70
 
@@ -949,7 +949,7 @@ void ActionMonitorDlg::OnClose()
  */
 void ActionMonitorDlg::KillAllActiveWindows()
 {
-  App().MessageHandler().KillAll();
+  App().MsgHandler().CloseAll();
 
   // protected the vector for a short while.
   myodd::threads::Lock guard(_mutex);
@@ -968,7 +968,7 @@ void ActionMonitorDlg::WaitForActiveWindows()
   _IpcListener->WaitForActiveHandlers();
 
   // wait for all the messages
-  App().MessageHandler().WaitForAllToComplete();
+  App().MsgHandler().WaitForAllToComplete();
 }
 
 /**

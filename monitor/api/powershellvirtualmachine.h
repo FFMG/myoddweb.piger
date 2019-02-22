@@ -12,7 +12,7 @@ public:
   PowershellVirtualMachine();
   virtual ~PowershellVirtualMachine();
 
-  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessages& messages);
+  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler);
   static bool IsExt(const MYODD_STRING& file);
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
@@ -29,7 +29,7 @@ protected:
   typedef std::map<std::wstring, PowershellApi*> APIS;
   APIS _apis;
 
-  PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action, IMessages& messages);
+  PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action, IMessagesHandler& messagesHandler);
   PowershellApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();

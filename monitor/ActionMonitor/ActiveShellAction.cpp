@@ -49,5 +49,5 @@ void ActiveShellAction::OnExecuteInThread()
   auto csvm = App().GetShellVirtualMachine();
   
   // we can now execute the thread.
-  csvm->ExecuteInThread( szFile.c_str(), *this, App().MessageHandler() );
+  csvm->ExecuteInThread( szFile.c_str(), *this, App().MsgHandler() );
 }
