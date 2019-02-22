@@ -20,7 +20,7 @@ static const double ACTIONMONITOR_API_LUA_VERSION = 3.5;
  * \brief Todo
  * \param action the action that we are calling
  */
-LuaApi::LuaApi(const ActiveAction& action) : HelperApi( action )
+LuaApi::LuaApi(const ActiveAction& action, IMessages& messages) : HelperApi( action, messages )
 {
 }
 

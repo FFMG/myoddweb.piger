@@ -36,14 +36,10 @@ public:
 	CActionMonitorApp();
   virtual ~CActionMonitorApp();
   
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CActionMonitorApp)
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
 
-// Implementation
+  // Implementation
 	DECLARE_MESSAGE_MAP()
 
 protected:
@@ -64,6 +60,7 @@ public:
   void CreateMessageHandler();
 
 public:
+  void DoVersion();
   void DoStartActionsList( bool wait );
   void DoEndActionsList(bool wait);
   void WaitForEndActionsToComplete();
@@ -83,22 +80,26 @@ public:
   // self elevate us to admin.
   static void SelfElavate();
 
-  // the handle of the mutex
+  /**
+   * \brief the handle of the mutex
+   */
   HANDLE m_hMutex;
 
   /**
-   * @param CWnd* The window that last had the focus when we pressed the special key.
+   * \brief CWnd* The window that last had the focus when we pressed the special key.
    */
   CWnd* _cwndLastForegroundWindow;
 
   /**
-   * @param size_t the maximum memory we want to use when getting clipboard data.
+   * \brief The maximum memory we want to use when getting clipboard data.
    */
   size_t _maxClipboardSize;
 public:
+
   const Actions& PossibleActions() const {
     return *_possibleActions;
   }
+  
   Actions& PossibleActions() {
     return *_possibleActions;
   }
@@ -106,6 +107,7 @@ public:
   const IMessages& MessageHandler() const {
     return *_messages;
   }
+
   IMessages& MessageHandler() {
     return *_messages;
   }

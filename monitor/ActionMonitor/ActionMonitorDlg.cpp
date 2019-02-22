@@ -37,14 +37,13 @@ bool ActionMonitorDlg::IsRunning()
  * \see CTrayDialog::CTrayDialog
  * \param pParent the parent owner of this window
  */
-ActionMonitorDlg::ActionMonitorDlg(IMessages& messages, CWnd* pParent /*=nullptr*/)
+ActionMonitorDlg::ActionMonitorDlg( CWnd* pParent /*=nullptr*/)
   : CTrayDialog(ActionMonitorDlg::IDD, pParent), 
     m_rWindow(),
     m_keyState(ACTION_NONE),
     _fontTime(nullptr), 
     m_ptMaxValues(),
-    _IpcListener(nullptr),
-    _messages( messages)
+    _IpcListener(nullptr)
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -169,31 +168,6 @@ BOOL ActionMonitorDlg::OnInitDialog()
   return TRUE;
 }
 
-/**
- * \brief display a message
- * \param wsText the message we want to display
- * \param nElapse how long we want to display the message for.
- * \param nFadeOut where we want to fade the window from.
- * \return if we were able to display the message or not.
- */
-bool ActionMonitorDlg::DisplayMessage(const std::wstring& wsText, const int nElapse, const int nFadeOut)
-{
-  // Sanity check
-  if (wsText.length() == 0)
-  {
-    return false;
-  }
-
-  if (!IsRunning())
-  {
-    return false;
-  }
-
-  // if this window is still running, (and valid)
-  // then we can show this message
-  return _messages.Show(wsText, nElapse, nFadeOut);
-}
-
 void ActionMonitorDlg::InitializeListener()
 {
   if (nullptr == _IpcListener)
@@ -211,7 +185,6 @@ void ActionMonitorDlg::InitializeListener()
     }
   }
 }
-
 
 /**
  * todo
@@ -858,15 +831,7 @@ LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
  */
 LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
 {
-  myodd::files::Version ver;
-  const auto strSay = myodd::strings::Format( _T("<b>Version : </b>%d.%d.%d.%d"),
-    ver.GetFileVersionMajor(),
-    ver.GetFileVersionMinor(),
-    ver.GetFileVersionMaintenance(),
-    ver.GetFileVersionBuild() );
-  
-  _messages.Show( strSay.c_str(), 3000, 5 );
-
+  App().DoVersion();
   return 0L;
 }
 
@@ -984,7 +949,7 @@ void ActionMonitorDlg::OnClose()
  */
 void ActionMonitorDlg::KillAllActiveWindows()
 {
-  _messages.KillAll();
+  App().MessageHandler().KillAll();
 
   // protected the vector for a short while.
   myodd::threads::Lock guard(_mutex);
@@ -1003,7 +968,7 @@ void ActionMonitorDlg::WaitForActiveWindows()
   _IpcListener->WaitForActiveHandlers();
 
   // wait for all the messages
-  _messages.WaitForAllToComplete();
+  App().MessageHandler().WaitForAllToComplete();
 }
 
 /**

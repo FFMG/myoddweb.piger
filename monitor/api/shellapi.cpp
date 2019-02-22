@@ -19,8 +19,8 @@
 /**
  * \param action the action triggering this event.
  */
-ShellApi::ShellApi(const ActiveAction& action) : 
-  HelperApi(action ), 
+ShellApi::ShellApi(const ActiveAction& action, IMessages& messages) :
+  HelperApi(action, messages ), 
   _hProcess( nullptr )
 {
 }

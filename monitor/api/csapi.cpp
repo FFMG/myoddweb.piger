@@ -7,7 +7,7 @@
  * \brief constructor
  * \param action the action being called.
  */
-CsApi::CsApi(const ActiveAction& action) :
-  PowershellApi(action )
+CsApi::CsApi(const ActiveAction& action, IMessages& messages) :
+  PowershellApi(action, messages )
 {
 }

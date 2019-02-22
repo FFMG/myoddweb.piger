@@ -380,7 +380,7 @@ BOOL CActionMonitorApp::InitInstance()
   CreateActionsList();
 
   // create the actual dicali.
-	ActionMonitorDlg dlg( *_messages, noTaskBar );
+	ActionMonitorDlg dlg( noTaskBar );
 	m_pMainWnd = &dlg;
 
   const auto nResponse = dlg.DoModal();
@@ -443,6 +443,18 @@ void CActionMonitorApp::CreateActionsList()
   _possibleActions->Add( new ActionBye() );
   _possibleActions->Add( new ActionLoad() );
   _possibleActions->Add( new ActionVersion() );
+}
+
+void CActionMonitorApp::DoVersion()
+{
+  myodd::files::Version ver;
+  const auto strSay = myodd::strings::Format(_T("<b>Version : </b>%d.%d.%d.%d"),
+    ver.GetFileVersionMajor(),
+    ver.GetFileVersionMinor(),
+    ver.GetFileVersionMaintenance(),
+    ver.GetFileVersionBuild());
+
+  MessageHandler().Show(strSay.c_str(), 3000, 5);
 }
 
 /**

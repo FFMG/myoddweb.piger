@@ -40,5 +40,5 @@ void ActivePluginAction::OnExecuteInThread()
   
   //  save it.
   // we can now execute the thread.
-  pvm->ExecuteInThread( szFile.c_str(), *this );
+  pvm->ExecuteInThread( szFile.c_str(), *this, App().MessageHandler() );
 }

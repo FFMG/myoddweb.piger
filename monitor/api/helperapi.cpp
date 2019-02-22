@@ -14,7 +14,9 @@
  * \brief the constructor
  * \param action the action being called
  */
-HelperApi::HelperApi(const ActiveAction& action) : _action( action )
+HelperApi::HelperApi(const ActiveAction& action, IMessages& messages ) : 
+  _action( action ),
+  _messages(messages)
 {
 }
 
@@ -45,18 +47,7 @@ bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsign
   {
     return false;
   }
-
-  // it is possible for a rogue thread to try and display a message
-  // even after we have shutdown everything.
-  // if the dlg is no longer active then we will not display anything.
-  ActionMonitorDlg* pThis = static_cast<ActionMonitorDlg*>(App().GetMainWnd());
-  if( !ActionMonitorDlg::IsRunning() )
-  {
-    return false;
-  }
-
-  // simply display the message.
-  return pThis->DisplayMessage( msg, nElapse, nFadeOut );
+  return _messages.Show(msg, nElapse, nFadeOut);
 }
 
 /**

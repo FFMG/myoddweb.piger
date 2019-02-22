@@ -175,13 +175,13 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   return false;
 }
 
-int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action)
+int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessages& messages)
 {
   Initialize();
 
   //  create uuid and andd it to our list.
   const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  auto psApi = AddApi(uuid, action);
+  auto psApi = AddApi(uuid, action, messages );
 
   //  do we have powerhsell3?
   if (!IsPowershell3Installed())
@@ -304,9 +304,10 @@ bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
  * \brief Add an API to our current list, we cannot add duplicates!
  * \param uuid the unique Id we are adding
  * \param action the matching action for this Id.
+ * \param messages the messages handler
  * \return the powershell API that manages the action
  */
-PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action)
+PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action, IMessages& messages)
 {
   //  lock us in
   myodd::threads::Lock lock(_mutex);
@@ -320,7 +321,7 @@ PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const 
   }
 
   //  create the powershell api.
-  const auto psApi = new PowershellApi(action);
+  const auto psApi = new PowershellApi(action, messages );
 
   // add it to the array
   _apis[uuid] = psApi;

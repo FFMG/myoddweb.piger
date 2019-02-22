@@ -16,7 +16,7 @@ public:
   PluginVirtualMachine();
   virtual ~PluginVirtualMachine();
 
-  int ExecuteInThread( LPCTSTR pluginFile, const ActiveAction& action );
+  int ExecuteInThread( LPCTSTR pluginFile, const ActiveAction& action, IMessages& messages);
   static bool IsExt(const MYODD_STRING& file );
 
   bool Register( LPCTSTR, void* );

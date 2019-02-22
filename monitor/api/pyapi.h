@@ -16,7 +16,7 @@
 class PyApi : public HelperApi
 {
 public:
-  PyApi( const ActiveAction& action, std::string script, PyThreadState* mainThreadState );
+  PyApi( const ActiveAction& action, IMessages& messages, std::string script, PyThreadState* mainThreadState );
   virtual ~PyApi() = default;
 
 public:

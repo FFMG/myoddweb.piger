@@ -18,8 +18,6 @@
 #include "ActiveActions.h"
 #include "resource.h"		// main symbols
 
-/////////////////////////////////////////////////////////////////////////////
-// ActionMonitorDlg dialog
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
 #define ACTION_SHIFT_DOWN     0x002
@@ -29,13 +27,12 @@
 
 #include "../common/trayDialog.h" //  system tray icon item
 #include <os/ipclistener.h>
-#include "IMessages.h"
 
 class ActionMonitorDlg final : public CTrayDialog, FadeWnd, ActiveActions
 {
 // Construction
 public:
-  explicit ActionMonitorDlg( IMessages& messages, CWnd* pParent = nullptr);	// standard constructor
+  explicit ActionMonitorDlg( CWnd* pParent = nullptr);	// standard constructor
   virtual ~ActionMonitorDlg();
 
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
@@ -85,11 +82,6 @@ public:
   void RemoveMessageHandler(myodd::os::IpcMessageHandler& handler);
 
 protected:
-  /**
-   * \brief the messages handler
-   */
-  IMessages& _messages;
-
   bool DisplayCommand( HDC hdc = NULL );
   void DisplayTime( HDC hdc, RECT &rParent );
   bool ResizeCommandWindow( const RECT &newSize );
@@ -124,8 +116,6 @@ protected:
 public:
 
   static bool IsRunning();
-
-  bool DisplayMessage(const std::wstring& wsText, const int nElapse, const int nFadeOut);
 
 protected:
   std::mutex _mutex;

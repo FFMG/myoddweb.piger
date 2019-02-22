@@ -18,8 +18,8 @@ static const double ACTIONMONITOR_API_PY_VERSION = 3.1;
  * \param script the script that we will be running
  * \param mainThreadState
  */
-PyApi::PyApi(const ActiveAction& action, std::string script, PyThreadState* mainThreadState) :
-  HelperApi(action),
+PyApi::PyApi(const ActiveAction& action, IMessages& messages, std::string script, PyThreadState* mainThreadState) :
+  HelperApi(action, messages),
   _script(std::move(script)),
   _mainThreadState(mainThreadState)
 {

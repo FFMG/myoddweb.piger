@@ -11,7 +11,7 @@ static const std::wstring ACTIONMONITOR_CS_PLUGIN_VERSION = L"0.1";
 class CsApi : public PowershellApi
 {
 public:
-  CsApi(const ActiveAction& action);
+  CsApi(const ActiveAction& action, IMessages& messages);
   virtual ~CsApi() = default;
 };
 

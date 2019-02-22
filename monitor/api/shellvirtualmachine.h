@@ -26,7 +26,7 @@ public:
   ShellVirtualMachine();
   virtual ~ShellVirtualMachine();
 
-  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action);
+  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessages& messages);
   static bool IsExt(const std::wstring& file);
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
@@ -43,7 +43,7 @@ protected:
   typedef std::map<std::wstring, ShellApi*> APIS;
   APIS _apis;
 
-  ShellApi* AddApi(const std::wstring& uuid, const ActiveAction& action);
+  ShellApi* AddApi(const std::wstring& uuid, const ActiveAction& action, IMessages& messages);
   ShellApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();

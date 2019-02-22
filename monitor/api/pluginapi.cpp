@@ -8,7 +8,8 @@
  * @param void
  * @return void
  */
-PluginApi::PluginApi(const ActiveAction& action) : HelperApi(action )
+PluginApi::PluginApi(const ActiveAction& action, IMessages& messages) : 
+  HelperApi(action, messages )
 {
 }
 

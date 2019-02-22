@@ -55,7 +55,7 @@ void ActivePythonAction::OnExecuteInThread()
 
   // create the Python Api.
   PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-  PyApi* api = new PyApi( *this, script, py->GetMainPyThread() );
+  PyApi* api = new PyApi( *this, App().MessageHandler(), script, py->GetMainPyThread() );
 
   //  save it.
   std::thread::id id = std::this_thread::get_id();
