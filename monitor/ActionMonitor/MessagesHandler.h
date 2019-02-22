@@ -14,7 +14,7 @@ public:
   MessagesHandler(const MessagesHandler&) = delete;
   void Operator(const MessagesHandler&) = delete;
 
-  bool Show(const std::wstring& wsText, int nElapse, int nFadeOut) override;
+  bool Show(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) override;
   void CloseAll() override;
   void WaitForAllToComplete() override;
 

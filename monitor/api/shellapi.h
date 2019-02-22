@@ -29,7 +29,7 @@ public:
   virtual ~ShellApi() = default;
 
 public:
-  bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const override;
+  bool Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const override;
 
   bool Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
   bool Version (const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;

@@ -7,12 +7,12 @@ public:
 
   /**
    * \brief display a message
-   * \param wsText the message we want to display
-   * \param nElapse how long we want to display the message for.
-   * \param nFadeOut where we want to fade the window from.
+   * \param sText the text we want to display
+   * \param elapseMiliSecondsBeforeFadeOut how long we want to display the message for before we fade out.
+   * \param totalMilisecondsToShowMessage how long we want the message to be displayed before fading out.
    * \return if we were able to display the message or not.
    */
-  virtual bool Show(const std::wstring& wsText, int nElapse, int nFadeOut) = 0;
+  virtual bool Show(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) = 0;
 
   /**
    * \brief Kill all the currently active message windows.

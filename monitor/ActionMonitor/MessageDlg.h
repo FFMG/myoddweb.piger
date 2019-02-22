@@ -31,7 +31,7 @@ public:
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 
 public:
-  void Create( const std::wstring& sText, int nElapse, int nFadeOut);
+  void Create( const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage);
 
 protected:
   virtual HGDIOBJ SelDisplayFont( HDC hdc, UINT fontSize = 70 );
@@ -40,9 +40,9 @@ protected:
   static void Fade(MessageDlg* owner );
   
 protected:
-  int _mNFadeOut;          //  how fast the text will fade out
-  std::wstring _mStdMessage; //  the message
-  int _mNElapse;           //  how long before we fade out.
+  long _totalMilisecondsToShowMessage;           //  how fast the text will fade out
+  std::wstring _mStdMessage;                    //  the message
+  long _elapseMiliSecondsBeforeFadeOut;    //  how long before we fade out.
 
   void DoFade();
 
@@ -63,6 +63,10 @@ protected:
   std::function<void(CWnd*)> _onComplete;
 
   void FadeCloseWindow();
+
+  unsigned char GetStartTransparency() const;
+
+  void ShowMessageWithNoFadding( long milliseconds );
 
 public:
   BOOL OnInitDialog() override;

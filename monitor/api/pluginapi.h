@@ -17,7 +17,7 @@ public:
   double Version ();
   size_t GetCommandCount();
 
-  bool Say         (const wchar_t* msg, unsigned int nElapse, unsigned int nFadeOut) const override;
+  bool Say         (const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const override;
   bool Execute     (const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
   int GetString    (unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const;
   size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer ) const;

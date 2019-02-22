@@ -48,7 +48,7 @@ protected:
   static std::wstring Widen(const std::string& str);
   
   // display a message onto the screen.
-  virtual bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const;
+  virtual bool Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const;
   
   // get a command by index
   // return false if it does not exist

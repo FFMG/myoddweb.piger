@@ -308,14 +308,14 @@ bool ShellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::
 /**
  * \brief Output a message on the screen
  * \see __super::Say
- * \param msg what to say
- * \param nElapse how long to say it for
- * \param nFadeOut how quickly we will fadeout
+ * \param sText what to say
+ * \param elapseMiliSecondsBeforeFadeOut how long to say it for before we fade out
+ * \param totalMilisecondsToShowMessage how long to show it for.
  * \return bool success or not.
  */
-bool ShellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
+bool ShellApi::Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const
 {
-  return __super::Say(msg, nElapse, nFadeOut);
+  return __super::Say(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 }
 
 /**

@@ -82,15 +82,15 @@ void MessagesHandler::AddMessageDialogToCollection(MessageDlg* dlg)
 
 /**
  * \brief display a message
- * \param wsText the message we want to display
- * \param nElapse how long we want to display the message for.
- * \param nFadeOut where we want to fade the window from.
+ * \param sText the text we want to display
+ * \param elapseMiliSecondsBeforeFadeOut how long we want to display the message for before we fade out.
+ * \param totalMilisecondsToShowMessage how long we want the message to be displayed before fading out.
  * \return if we were able to display the message or not.
  */
-bool MessagesHandler::Show(const std::wstring& wsText, const int nElapse, const int nFadeOut)
+bool MessagesHandler::Show(const std::wstring& sText, const long elapseMiliSecondsBeforeFadeOut, const long totalMilisecondsToShowMessage)
 {
   // Sanity check
-  if (wsText.length() == 0)
+  if (sText.length() == 0)
   {
     return false;
   }
@@ -99,7 +99,7 @@ bool MessagesHandler::Show(const std::wstring& wsText, const int nElapse, const 
   {
     // we do not need to use the lock here
     // this is because we will use the lock in the correct thread id...
-    return _messagesHandlerWnd.Show( *this, wsText, nElapse, nFadeOut);
+    return _messagesHandlerWnd.Show( *this, sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
   }
 
   try
@@ -108,7 +108,7 @@ bool MessagesHandler::Show(const std::wstring& wsText, const int nElapse, const 
     ClearUnused();
 
     const auto messageDlg = new MessageDlg();
-    messageDlg->Create(wsText, nElapse, nFadeOut);
+    messageDlg->Create(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 
     // start the fade message and pass a lambda
     // function so we are called back when the window is deleted
@@ -200,7 +200,7 @@ void MessagesHandler::WaitForAllToComplete()
       {
         // let go of the thread.
         std::this_thread::yield();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
         // go around one last time
         // to give everyone a chance to close.

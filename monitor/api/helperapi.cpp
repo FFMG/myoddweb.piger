@@ -31,23 +31,14 @@ const Clipboard& HelperApi::GetClipboard() const
 
 /**
  * \brief Display a message on the string.
- * \param msg the message we want to display.
- * \param nElapse how long, (in ms), we are displaying the message for.
- * \param nFadeOut how fast we want to fade out.
+ * \param sText the message we want to display.
+ * \param elapseMiliSecondsBeforeFadeOut how long, (in ms), we are displaying the message for.
+ * \param totalMilisecondsToShowMessage how fast we want to fade out.
  * \return bool if the message was displayed properly or if there was an error.
  */
-bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
+bool HelperApi::Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const
 {
-  if( nullptr == msg )
-  {
-    return false;
-  }
-
-  if( 0 == nElapse )
-  {
-    return false;
-  }
-  return _messagesHandler.Show(msg, nElapse, nFadeOut);
+  return _messagesHandler.Show(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 }
 
 /**

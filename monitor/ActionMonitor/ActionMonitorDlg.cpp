@@ -241,7 +241,7 @@ void ActionMonitorDlg::ShowWindow( BYTE bTrans )
   if( IsVisible() != bTrans )
   {
     Visible(bTrans);
-    Transparent( bTrans );
+    SetTransparency( bTrans );
     if( bTrans == 0 )
     {
       // remove the current action

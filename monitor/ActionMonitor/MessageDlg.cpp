@@ -15,6 +15,9 @@
 #include "stdafx.h"
 #include "MessageDlg.h"
 
+#define MAX_TRANSPARENCY (unsigned char)255
+#define DEFAULT_TRANSPARENCY (unsigned char)127
+
 IMPLEMENT_DYNAMIC(MessageDlg, CDialog)
 
 /**
@@ -24,8 +27,8 @@ IMPLEMENT_DYNAMIC(MessageDlg, CDialog)
 MessageDlg::MessageDlg()
   : CDialog(MessageDlg::IDD, nullptr),
     FadeWnd(), 
-    _mNFadeOut(0),
-    _mNElapse(0)
+    _elapseMiliSecondsBeforeFadeOut(0),
+    _totalMilisecondsToShowMessage(0)
 {
 }
 
@@ -58,15 +61,15 @@ void MessageDlg::PostNcDestroy()
  * \brief called when the window is being created, we can then set our own values.
  * \see CDialog::Create
  * \param sText the text we want to display
- * \param nElapse how long we want to display the message for
- * \param nFadeOut where the fade start from.
+ * \param elapseMiliSecondsBeforeFadeOut how long we want to display the message for before we fade out.
+ * \param totalMilisecondsToShowMessage how long we want the message to be displayed before fading out.
  */
-void MessageDlg::Create(const std::wstring& sText, const int nElapse, const int nFadeOut)
+void MessageDlg::Create(const std::wstring& sText, const long elapseMiliSecondsBeforeFadeOut, const long totalMilisecondsToShowMessage)
 {
   //  save the value
-  _mNFadeOut = nFadeOut;
+  _totalMilisecondsToShowMessage = totalMilisecondsToShowMessage;
   _mStdMessage = sText;
-  _mNElapse = nElapse;
+  _elapseMiliSecondsBeforeFadeOut = elapseMiliSecondsBeforeFadeOut;
 
   __super::Create( MessageDlg::IDD );
 }
@@ -103,8 +106,7 @@ void MessageDlg::InitWindowPos()
   //  pad a little
   widthM  += 2 * static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
   heightM += 2 * static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
-
-
+  
   //  move the window to the top left hand corner 
   SetWindowPos( &wndTopMost, 
                 (width - widthM/2), 
@@ -161,37 +163,80 @@ void MessageDlg::Fade(MessageDlg* owner )
  */
 void MessageDlg::DoFade()
 {
-  // 0 means that we move right away
-  if (_mNFadeOut <= 0)
+  // if we do not want to show the message, we might as well hide it right away.
+  if ((_totalMilisecondsToShowMessage+_elapseMiliSecondsBeforeFadeOut) <= 0)
   {
     return;
   }
 
-  const auto bStart = ::myodd::config::Get(L"commands\\transparency", 127);
-  for (auto b = bStart; b > 0; --b)
+  // where we want the transparancy to start from, (we will end at zero)
+  const auto startTransparency = GetStartTransparency();
+
+  // if we want to show the message for a total of _totalMilisecondsToShowMessage
+  // but we want to wait for _elapseMiliSecondsBeforeFadeOut before we go
+  // how many milliseconds do we have before we need to fade out.
+  const auto timeLeftForFadeOutMilliseconds = _totalMilisecondsToShowMessage - _elapseMiliSecondsBeforeFadeOut;
+
+  // and given that we have 'startTransparency' steps to fade out in
+  // the number of milliseconds between each steps is ...
+  // the sleep time _could_ be zero
+  const auto waitTimeBetweenFadeStepsInMilliseconds = (long)((double)timeLeftForFadeOutMilliseconds / (double)startTransparency);
+
+  // show the message without any fadding.
+  for (auto timeToSleptInMilliseconds = 0;
+    timeToSleptInMilliseconds < _elapseMiliSecondsBeforeFadeOut;
+    timeToSleptInMilliseconds += (waitTimeBetweenFadeStepsInMilliseconds <= 0 ? 1 : waitTimeBetweenFadeStepsInMilliseconds)
+    )
   {
-    Transparent(b);
-    const auto d = (GetTickCount() + _mNFadeOut);
-    while (d > GetTickCount())
+    // if we have been asked to stop ... then stop right away.
+    if (Stopped())
     {
-      if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
-      {
-        break;
-      }
-
-      //  are we stopping everything?
-      // then bail out now!
-      if (Stopped())
-      {
-        return;
-      }
-      MessagePump(m_hWnd);
-
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-      MessagePump(nullptr);
+      return;
     }
+
+    // then show the window a little.
+    ShowMessageWithNoFadding(_elapseMiliSecondsBeforeFadeOut);
   }
+  
+  // we can now start fading down toward 'hidden' so the total time
+  // should be near our target time of '_totalMilisecondsToShowMessage'
+  for (auto currentTransparancy = startTransparency; 
+       currentTransparancy > 0; 
+       --currentTransparancy)
+  {
+    // if we have been asked to stop ... then stop right away.
+    if (Stopped())
+    {
+      return;
+    }
+
+    // set the transparancy
+    SetTransparency(currentTransparancy);
+
+    // show the message a little bit more.
+    ShowMessageWithNoFadding(waitTimeBetweenFadeStepsInMilliseconds);
+  }
+}
+
+void MessageDlg::ShowMessageWithNoFadding(long milliseconds)
+{
+  if (milliseconds <= 0)
+  {
+    return;
+  }
+
+  // sleep a little.
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+
+  // is the window still visible?
+  // if not, then there is no point in going any further.
+  if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
+  {
+    return;
+  }
+
+  // pump the message
+  MessagePump(m_hWnd);
 }
 
 /**
@@ -285,13 +330,27 @@ void MessageDlg::Show(std::function<void(CWnd*)> onComplete)
 {
   // fade the window a little.
   ShowWindow(SW_SHOW);
-  Transparent( ::myodd::config::Get( L"commands\\transparency", 127) );
+  SetTransparency( GetStartTransparency() );
 
   // save the complete callback function
   _onComplete = onComplete;
 
   // start the worker.
   _worker.QueueWorker(&MessageDlg::Fade, this);
+}
+
+/**
+ * \brief get the start transparency and make sure that it falls within range.
+ * \return safe start transparency
+ */
+unsigned char MessageDlg::GetStartTransparency() const
+{
+  const auto transparency = ::myodd::config::Get(L"commands\\transparency", DEFAULT_TRANSPARENCY);
+  if( transparency < 0 )
+  {
+    return DEFAULT_TRANSPARENCY;
+  }
+  return transparency > MAX_TRANSPARENCY ? DEFAULT_TRANSPARENCY : transparency;
 }
 
 /**

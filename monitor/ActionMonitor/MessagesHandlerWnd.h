@@ -10,7 +10,7 @@ public:
 
   bool Close();
   bool Create();
-  bool Show(IMessagesHandler& parent, const std::wstring& wsText, int nElapse, int nFadeOut);
+  bool Show(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage);
 
 protected:
   const std::wstring _szClassName;
@@ -21,11 +21,11 @@ protected:
   class Msg
   {
   public:
-    Msg(IMessagesHandler& parent, const std::wstring& wsText, int elapse, int fadeOut) :
+    Msg(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) :
       _parent(parent),
-      _text(wsText),
-      _elapse(elapse),
-      _fadeOut(fadeOut)
+      _text(sText),
+      _elapse(elapseMiliSecondsBeforeFadeOut),
+      _fadeOut(totalMilisecondsToShowMessage)
     {
     }
     virtual ~Msg() = default;
