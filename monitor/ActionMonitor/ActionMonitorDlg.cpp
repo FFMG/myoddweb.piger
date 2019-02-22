@@ -951,9 +951,6 @@ void ActionMonitorDlg::KillAllActiveWindows()
 {
   App().MsgHandler().CloseAll();
 
-  // protected the vector for a short while.
-  myodd::threads::Lock guard(_mutex);
-
   // now that we asked for windows to be closed.
   // we can wait for them to close.
   WaitForActiveWindows();

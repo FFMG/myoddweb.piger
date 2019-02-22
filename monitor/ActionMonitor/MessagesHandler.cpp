@@ -14,32 +14,70 @@ MessagesHandler::~MessagesHandler()
 }
 
 /**
- * \brief remove all the completed on screen messages.
+ * \brief remove old/unused messages clogging up the vector
+ *        this function will obtain the lock before clearing the list.
  */
 void MessagesHandler::ClearUnused()
 {
-  while (_collection.size() > 0)
+  // protected the vector for a short while.
+  myodd::threads::Lock guard(_mutex);
+
+  // we can now call the unsafe function
+  UnsafeClearUnused();
+}
+
+/**
+ * \brief remove old/unused messages clogging up the vector
+ *        this function does not use the lock and assumes the caller has the lcoks
+ */
+void MessagesHandler::UnsafeClearUnused()
+{
+  for (auto it = _collection.begin(); it != _collection.end(); ++it )
   {
-    // protected the vector for a short while.
-    myodd::threads::Lock guard(_mutex);
-
-    const auto it = _collection.begin();
-    if (it == _collection.end())
+    if((*it)->IsRunning())
     {
-      break;
+      continue;
     }
 
-    const auto dlg = static_cast<MessageDlg*>(*it);
-    if (dlg != nullptr)
-    {
-      if (dlg->IsRunning())
-      {
-        break;
-      }
-    }
     //  otherwise we can remove it from the list
     _collection.erase(it);
+
+    // but as we changed the vector, we have to start all over again
+    UnsafeClearUnused();
   }
+}
+
+/**
+ * \brief handle a message dialog that has now been completed.
+ * \param dlg the dialog that we just completed.
+ */
+void MessagesHandler::MessageDialogIsComplete(MessageDlg* dlg)
+{
+  // protected the vector for a short while.
+  myodd::threads::Lock guard(_mutex);
+
+  // look for the window we want to delete.
+  const auto saved = std::find(_collection.begin(), _collection.end(), dlg);
+  if (saved == _collection.end())
+  {
+    return;
+  }
+
+  // remove it from the list
+  _collection.erase(saved);
+}
+
+/**
+ * \brief Add a message to the dialog
+ * \param dlg the dialog we are adding.
+ */
+void MessagesHandler::AddMessageDialogToCollection(MessageDlg* dlg)
+{
+  // protected the vector for a short while.
+  myodd::threads::Lock guard(_mutex);
+
+  // add it to our list of messages.
+  _collection.push_back(dlg);
 }
 
 /**
@@ -57,9 +95,6 @@ bool MessagesHandler::Show(const std::wstring& wsText, const int nElapse, const 
     return false;
   }
 
-  //  look for old messages to remove
-  ClearUnused();
-
   if (std::this_thread::get_id() != _threadId)
   {
     // we do not need to use the lock here
@@ -69,32 +104,24 @@ bool MessagesHandler::Show(const std::wstring& wsText, const int nElapse, const 
 
   try
   {
+    //  look for old messages to remove
+    ClearUnused();
+
     const auto messageDlg = new MessageDlg();
     messageDlg->Create(wsText, nElapse, nFadeOut);
 
     // start the fade message and pass a lambda
     // function so we are called back when the window is deleted
     // this is so we can remove it from our list here.
-    messageDlg->FadeShowWindow([&](CWnd* dlg)
-    {
-      // protected the vector for a short while.
-      myodd::threads::Lock guard(_mutex);
+    messageDlg->Show([&](CWnd* dlg)
+                     {
+                       MessageDialogIsComplete(static_cast<MessageDlg*>(dlg));
+                     });
 
-      // look for the window we want to delete.
-      const auto saved = std::find(_collection.begin(), _collection.end(), dlg);
-      if (saved != _collection.end())
-      {
-        // remove it from the list
-        _collection.erase(saved);
-      }
-    });
+    // add the message dialog to the collection.
+    AddMessageDialogToCollection(messageDlg);
 
-    // protected the vector for a short while.
-    myodd::threads::Lock guard(_mutex);
-
-    // add it to our list of messages.
-    _collection.push_back(messageDlg);
-
+    // success.
     return true;
   }
   catch( ... )
@@ -111,25 +138,41 @@ void MessagesHandler::CloseAll()
   //  remove what is complete.
   ClearUnused();
 
-  // protected the vector for a short while.
-  myodd::threads::Lock guard(_mutex);
-
-  // kill the other messages;
-  for (auto it = _collection.begin();
-    it != _collection.end();
-    ++it)
-  {
-    //  clear what is still good.
-    const auto dlg = static_cast<MessageDlg*>(*it);
-    if (dlg != nullptr)
-    {
-      dlg->FadeKillWindow();
-    }
-  }
+  // tell everybody to close now.
+  SendCloseMessageToAllMessageWindows();
 
   // now that we asked for windows to be closed.
   // we can wait for them to close.
   WaitForAllToComplete();
+}
+
+/**
+ * \brief send a request to all running windows to close now.
+ */
+void MessagesHandler::SendCloseMessageToAllMessageWindows()
+{
+  // protected the vector for a short while.
+  myodd::threads::Lock guard(_mutex);
+
+  // get a worker so we can do it all in parallel.
+  myodd::threads::Workers workers;
+
+  // kill the other messages;
+  for (auto it = _collection.begin();
+      it != _collection.end();
+      ++it)
+  {
+    //  clear what is still good.
+    workers.QueueWorker( &MessageDlg::Close, *it);
+  }
+
+  // then wait for all of them to finish.
+  workers.WaitForAllWorkers();
+
+  // look for old messages to remove
+  // but as we still have the lock
+  // we can do it the 'unsafe' way
+  UnsafeClearUnused();
 }
 
 /**

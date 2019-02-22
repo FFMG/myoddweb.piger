@@ -19,11 +19,39 @@ public:
   void WaitForAllToComplete() override;
 
 protected:
+  /**
+   * \brief handle a message dialog that has now been completed.
+   * \param dlg the dialog that we just completed.
+   */
+  void MessageDialogIsComplete( MessageDlg* dlg );
 
+  /**
+   * \brief Add a message to the dialog
+   * \param dlg the dialog we are adding.
+   */
+  void AddMessageDialogToCollection(MessageDlg* dlg);
+
+  /**
+   * \brief send a request to all running windows to close now.
+   */
+  void SendCloseMessageToAllMessageWindows();
+
+  /**
+   * \brief message pump
+   */
   static void MessagePump( HWND hWnd);
 
-  // remove old/unused messages clogging up the vector
+  /** 
+   * \brief remove old/unused messages clogging up the vector
+   *        this function will obtain the lock before clearing the list.
+   */
   void ClearUnused();
+
+  /**
+   * \brief remove old/unused messages clogging up the vector
+   *        this function does not use the lock and assumes the caller has the lcoks
+   */
+  void UnsafeClearUnused();
 
   typedef std::vector<MessageDlg*> MessagesCollection;
   MessagesCollection _collection;

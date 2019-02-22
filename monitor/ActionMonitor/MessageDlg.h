@@ -38,7 +38,7 @@ protected:
 
   myodd::threads::Workers _worker;
   static void Fade(MessageDlg* owner );
-
+  
 protected:
   int _mNFadeOut;          //  how fast the text will fade out
   std::wstring _mStdMessage; //  the message
@@ -62,10 +62,14 @@ protected:
 
   std::function<void(CWnd*)> _onComplete;
 
+  void FadeCloseWindow();
+
 public:
   BOOL OnInitDialog() override;
 
-  void FadeShowWindow( std::function<void(CWnd*)> onComplete );
-  void FadeKillWindow();
+  void Show( std::function<void(CWnd*)> onComplete );
+  
+  static void Close(MessageDlg* owner);
+
   bool IsRunning() const;
 };

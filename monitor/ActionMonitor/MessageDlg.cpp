@@ -279,8 +279,9 @@ BOOL MessageDlg::OnInitDialog()
 
 /**
  * \brief start the thread to fade the window.
+ * \param onComplete the callback function we want to call when the window is complete
  */
-void MessageDlg::FadeShowWindow(std::function<void(CWnd*)> onComplete)
+void MessageDlg::Show(std::function<void(CWnd*)> onComplete)
 {
   // fade the window a little.
   ShowWindow(SW_SHOW);
@@ -295,8 +296,18 @@ void MessageDlg::FadeShowWindow(std::function<void(CWnd*)> onComplete)
 
 /**
  * \brief kill the window and wait for it to complete.
+ *        this is a static function so we can call it with workers.
+ * \param owner the owner of the window we are closing.
  */
-void MessageDlg::FadeKillWindow()
+void MessageDlg::Close(MessageDlg* owner)
+{
+  owner->FadeCloseWindow();
+}
+
+/**
+ * \brief kill the window and wait for it to complete.
+ */
+void MessageDlg::FadeCloseWindow()
 {
   // are we done already?
   if ( !IsRunning() )
