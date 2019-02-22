@@ -33,15 +33,15 @@ bool ActiveLuaAction::OnInitialize()
 void ActiveLuaAction::OnExecuteInThread()
 {
   //  the file.
-  const MYODD_STRING& szFile = File();
+  const auto& szFile = File();
 
   // create the Python Api.
-  LuaVirtualMachine* lua = App().GetLuaVirtualMachine();
-  auto api = new LuaApi( *this, App().MsgHandler() );
+  auto& lua = App().VirtualMachinesHandler().Get<LuaVirtualMachine>();
+  const auto api = new LuaApi( *this, App().MsgHandler() );
 
   //  save it.
   // we can now execute the thread.
-  lua->ExecuteInThread(szFile, api);
+  lua.ExecuteInThread(szFile, api);
 
   // we can now dispose of the lua
   delete api;

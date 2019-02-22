@@ -17,6 +17,8 @@ public:
 
   static bool IsExt(const MYODD_STRING& file );
 
+  void Destroy(){};
+
 protected:
   lua_State* CreateState(LuaApi* api );
   void Dispose(lua_State* lua);

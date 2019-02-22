@@ -162,24 +162,24 @@ LuaApi& LuaVirtualMachine::GetApi(lua_State* lua)
   throw - 1;
 #else
   // get our current self.
-  LuaVirtualMachine* lvm = App().GetLuaVirtualMachine();
+  auto& lvm = App().VirtualMachinesHandler().Get< LuaVirtualMachine>();
 
   // find the lua...
-  lvm->_mutex.lock();
-  state_api::iterator it = lvm->_lua_Api.find( lua );
+  lvm._mutex.lock();
+  const auto it = lvm._lua_Api.find( lua );
 
   // does it exist?
-  if (it == lvm->_lua_Api.end())
+  if (it == lvm._lua_Api.end())
   {
     // we could not find this lua!
     // has it been destroyed?
-    lvm->_mutex.unlock();
+    lvm._mutex.unlock();
     throw - 1;
   }
 
   //  get the value before we lock it...
-  LuaApi* api = it->second;
-  lvm->_mutex.unlock();
+  const auto api = it->second;
+  lvm._mutex.unlock();
 
   return *api;
 #endif

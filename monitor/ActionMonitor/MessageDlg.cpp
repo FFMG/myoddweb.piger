@@ -180,7 +180,7 @@ void MessageDlg::DoFade()
   // and given that we have 'startTransparency' steps to fade out in
   // the number of milliseconds between each steps is ...
   // the sleep time _could_ be zero
-  const auto waitTimeBetweenFadeStepsInMilliseconds = (long)((double)timeLeftForFadeOutMilliseconds / (double)startTransparency);
+  const auto waitTimeBetweenFadeStepsInMilliseconds = static_cast<long>(static_cast<double>(timeLeftForFadeOutMilliseconds) / static_cast<double>(startTransparency));
 
   // show the message without any fadding.
   for (auto timeToSleptInMilliseconds = 0;

@@ -26,8 +26,8 @@ bool ActivePythonAction::OnDeInitialize()
 
 bool ActivePythonAction::OnInitialize()
 {
-  PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-  if (!py->Initialize())
+  auto& py = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
+  if (!py.Initialize())
   {
     return false;
   }
@@ -54,16 +54,16 @@ void ActivePythonAction::OnExecuteInThread()
   }
 
   // create the Python Api.
-  PythonVirtualMachine* py = App().GetPythonVirtualMachine();
-  PyApi* api = new PyApi( *this, App().MsgHandler(), script, py->GetMainPyThread() );
+  auto& py = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
+  const auto api = new PyApi( *this, App().MsgHandler(), script, py.GetMainPyThread() );
 
   //  save it.
-  std::thread::id id = std::this_thread::get_id();
-  py->AddApi(id, api);
+  const auto id = std::this_thread::get_id();
+  py.AddApi(id, api);
 
   // we can now execute the thread.
   api->ExecuteInThread();
 
-  py->RemoveApi(id);
+  py.RemoveApi(id);
   delete api;
 }

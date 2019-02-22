@@ -21,7 +21,7 @@ public:
 
   bool Register( LPCTSTR, void* );
 
-  void DestroyPlugins();
+  void Destroy();
   void ErasePlugin( const MYODD_STRING& plugin);
 
 protected:

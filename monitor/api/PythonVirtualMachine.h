@@ -10,10 +10,10 @@ public:
   PythonVirtualMachine();
   ~PythonVirtualMachine();
 
-  bool Initialize(); 
+  bool Initialize();
 
   //  check the extension.
-  static bool IsExt( const MYODD_STRING& file );
+  static bool IsExt(const MYODD_STRING& file);
 
   PyThreadState* GetMainPyThread() const {
     return _mainThreadState;
@@ -21,6 +21,8 @@ public:
 
   void AddApi(std::thread::id id, PyApi* api);
   void RemoveApi(std::thread::id id);
+
+  void Destroy() {};
 
 protected:
   bool m_isInitialized;

@@ -27,7 +27,7 @@ PluginVirtualMachine::PluginVirtualMachine() :
 PluginVirtualMachine::~PluginVirtualMachine()
 {
   //  destroy all the plugins.
-  DestroyPlugins();
+  Destroy();
 
   // remove the plugins list
   delete _amPlugin;
@@ -96,12 +96,12 @@ PluginApi& PluginVirtualMachine::GetApi()
   throw - 1;
 #else
   // get our current self.
-  PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
+  auto& pvm = App().VirtualMachinesHandler().Get< PluginVirtualMachine>();
 
   // for now, get the first value...
   // @todo, we need to get the actual thread id running.
-  ListOfPlugins::const_iterator it = pvm->_apis.find(std::this_thread::get_id());
-  if (it == pvm->_apis.end() )
+  const auto it = pvm._apis.find(std::this_thread::get_id());
+  if (it == pvm._apis.end() )
   {
     throw -1;
   }
@@ -422,7 +422,7 @@ void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
  * @param void
  * @return void
  */
-void PluginVirtualMachine::DestroyPlugins()
+void PluginVirtualMachine::Destroy()
 {
   //  get the lock.
   myodd::threads::Lock guard(_mutex);

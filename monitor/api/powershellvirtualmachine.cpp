@@ -511,7 +511,7 @@ void PowershellVirtualMachine::WaitForApi(const std::wstring& uuid)
 /**
  * Destroy all the currently running scripts.
  */
-void PowershellVirtualMachine::DestroyScripts()
+void PowershellVirtualMachine::Destroy()
 {
   //  are we initialised?
   if( !_initialized )

@@ -31,7 +31,7 @@ public:
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
 
-  void DestroyScripts();
+  void Destroy();
 
 protected:
   void Initialize();

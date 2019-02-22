@@ -45,9 +45,9 @@ void ActiveShellAction::OnExecuteInThread()
   //  the file.
   const auto& szFile = File();
 
-  // create the Python Api.
-  auto csvm = App().GetShellVirtualMachine();
+  // get the vistual machines.
+  auto& csvm = App().VirtualMachinesHandler().Get<ShellVirtualMachine>();
   
   // we can now execute the thread.
-  csvm->ExecuteInThread( szFile.c_str(), *this, App().MsgHandler() );
+  csvm.ExecuteInThread( szFile.c_str(), *this, App().MsgHandler() );
 }

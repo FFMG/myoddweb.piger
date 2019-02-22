@@ -191,6 +191,7 @@
     </ClCompile>
     <ClCompile Include="..\api\shellapi.cpp" />
     <ClCompile Include="..\api\shellvirtualmachine.cpp" />
+    <ClCompile Include="..\api\VirtualMachines.cpp" />
     <ClCompile Include="..\common\Clipboard.cpp" />
     <ClCompile Include="..\common\ClipboardData.cpp" />
     <ClCompile Include="..\common\ClipboardDropData.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="..\api\PythonVirtualMachine.h" />
     <ClInclude Include="..\api\shellapi.h" />
     <ClInclude Include="..\api\shellvirtualmachine.h" />
+    <ClInclude Include="..\api\VirtualMachines.h" />
     <ClInclude Include="..\common\Clipboard.h" />
     <ClInclude Include="..\common\ClipboardData.h" />
     <ClInclude Include="..\common\ClipboardDropData.h" />

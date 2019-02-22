@@ -33,12 +33,12 @@ bool ActivePluginAction::OnInitialize()
 void ActivePluginAction::OnExecuteInThread()
 {
   //  the file.
-  const MYODD_STRING& szFile = File();
+  const auto& szFile = File();
 
   // create the Python Api.
-  PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
+  auto& pvm = App().VirtualMachinesHandler().Get< PluginVirtualMachine>();
   
   //  save it.
   // we can now execute the thread.
-  pvm->ExecuteInThread( szFile.c_str(), *this, App().MsgHandler() );
+  pvm.ExecuteInThread( szFile.c_str(), *this, App().MsgHandler() );
 }

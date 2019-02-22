@@ -476,7 +476,7 @@ void ShellVirtualMachine::WaitForApi(const std::wstring& uuid)
 /**
  * Destroy all the currently running scripts.
  */
-void ShellVirtualMachine::DestroyScripts()
+void ShellVirtualMachine::Destroy()
 {
   //  are we initialised?
   if( !_initialized )

@@ -17,6 +17,7 @@
 #include "Actions.h"    //  the actions we can call, (the name of the file)
 #include "ActionsImmediate.h"
 #include "IMessagesHandler.h"
+#include "../api/VirtualMachines.h"
 
 #define _MAX_CMD_LINE_ARGS  128
 
@@ -46,8 +47,8 @@ public:
 
 public:
   void CreateActionsList();
-
   void CreateMessageHandler();
+  void CreateVirtualMachines();
 
 public:
   void DoVersion();
@@ -101,6 +102,16 @@ public:
   IMessagesHandler& MsgHandler() {
     return *_messagesHandler;
   }
+
+  VirtualMachines& VirtualMachinesHandler()
+  {
+    return *_virtualMachines;
+  }
+
+  const VirtualMachines& VirtualMachinesHandler() const
+  {
+    return *_virtualMachines;
+  }
 private:
   /**
    * \brief the messages handler
@@ -108,61 +119,17 @@ private:
   IMessagesHandler* _messagesHandler;
 
   /**
-   * \brief the list of posible actions
+   * \brief the list of possible actions
    */
   Actions* _possibleActions;
 
-#ifdef ACTIONMONITOR_API_LUA
-protected:
-  LuaVirtualMachine* _lvm;
+  /**
+   * \brief the virtual machines handler.
+   */
+  VirtualMachines* _virtualMachines;
 
 public:
-  LuaVirtualMachine* GetLuaVirtualMachine();
-#endif
-
-#ifdef ACTIONMONITOR_API_PY
-protected:
-  PythonVirtualMachine* _pvm;
-
-public:
-  PythonVirtualMachine* GetPythonVirtualMachine();
-#endif
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-protected:
-  PluginVirtualMachine* _plugvm;
-
-public:
-  PluginVirtualMachine* GetPluginVirtualMachine();
-#endif
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
-protected:
-  PowershellVirtualMachine* _psvm;
-
-public:
-  PowershellVirtualMachine* GetPowershellVirtualMachine();
-#endif
-
-#ifdef ACTIONMONITOR_S_PLUGIN
-protected:
-  ShellVirtualMachine* _svm;
-
-public:
-  ShellVirtualMachine* GetShellVirtualMachine();
-#endif
-
-#ifdef ACTIONMONITOR_CS_PLUGIN
-protected:
-  CsVirtualMachine* _csvm;
-
-public:
-  CsVirtualMachine* GetCsVirtualMachine();
-#endif
-
   void DestroyActiveActions();
 };
 
 CActionMonitorApp& App();
-
-/////////////////////////////////////////////////////////////////////////////

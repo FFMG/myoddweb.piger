@@ -40,25 +40,8 @@ _endActions(nullptr),
   _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize( NULL ), 
   _possibleActions(nullptr),
-  _messagesHandler( nullptr )
-#ifdef ACTIONMONITOR_API_LUA
-  , _lvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_API_PY
-  , _pvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_API_PLUGIN
-  , _plugvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  , _psvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_S_PLUGIN
-  , _svm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  , _csvm(nullptr)
-#endif
+  _messagesHandler( nullptr ),
+  _virtualMachines(nullptr)
 {
 }
 
@@ -73,98 +56,9 @@ CActionMonitorApp::~CActionMonitorApp()
   // here we will simply destroy.
   delete _endActions;
   delete _startActions;
-
-#ifdef ACTIONMONITOR_API_LUA
-  delete _lvm;
-  _lvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_API_PY
-  delete _pvm;
-  _pvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_API_PLUGIN
-  delete _plugvm;
-  _plugvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  delete _psvm;
-  _psvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_S_PLUGIN
-  delete _svm;
-  _svm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  delete _csvm;
-  _csvm = nullptr;
-#endif
+  delete _virtualMachines;
 }
 
-#ifdef ACTIONMONITOR_API_LUA
-LuaVirtualMachine* CActionMonitorApp::GetLuaVirtualMachine()
-{
-  if (_lvm == nullptr)
-  {
-    _lvm = new LuaVirtualMachine();
-  }
-  return _lvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_API_PY
-PythonVirtualMachine* CActionMonitorApp::GetPythonVirtualMachine()
-{
-  if (_pvm == nullptr)
-  {
-    _pvm = new PythonVirtualMachine();
-  }
-  return _pvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-PluginVirtualMachine* CActionMonitorApp::GetPluginVirtualMachine()
-{
-  if (_plugvm == nullptr)
-  {
-    _plugvm = new PluginVirtualMachine();
-  }
-  return _plugvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
-PowershellVirtualMachine* CActionMonitorApp::GetPowershellVirtualMachine()
-{
-  if (_psvm == nullptr)
-  {
-    _psvm = new PowershellVirtualMachine();
-  }
-  return _psvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_S_PLUGIN
-ShellVirtualMachine* CActionMonitorApp::GetShellVirtualMachine()
-{
-  if (_svm == nullptr)
-  {
-    _svm = new ShellVirtualMachine();
-  }
-  return _svm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_CS_PLUGIN
-CsVirtualMachine* CActionMonitorApp::GetCsVirtualMachine()
-{
-  if (_csvm == nullptr)
-  {
-    _csvm = new CsVirtualMachine();
-  }
-  return _csvm;
-}
-#endif
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CActionMonitorApp object
 CActionMonitorApp theApp;
@@ -403,6 +297,10 @@ BOOL CActionMonitorApp::InitInstance()
   delete _possibleActions;
   _possibleActions = nullptr;
 
+  // stop the virtuall machines
+  delete _virtualMachines;
+  _virtualMachines = nullptr;
+
   // stop all the message handling
   delete _messagesHandler;
   _messagesHandler = nullptr;
@@ -410,6 +308,13 @@ BOOL CActionMonitorApp::InitInstance()
 	//  Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pupszCmdLine.
 	return FALSE;
+}
+
+void CActionMonitorApp::CreateVirtualMachines()
+{
+  // stop the virtuall machines
+  delete _virtualMachines;
+  _virtualMachines = new VirtualMachines( MsgHandler() );
 }
 
 /**
@@ -685,31 +590,4 @@ int CActionMonitorApp::ExitInstance()
  */
 void CActionMonitorApp::DestroyActiveActions()
 {
-#ifdef ACTIONMONITOR_API_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto pg = GetPluginVirtualMachine();
-  pg->DestroyPlugins();
-#endif // ACTIONMONITOR_API_PLUGIN
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto ps = GetPowershellVirtualMachine();
-  ps->DestroyScripts();
-#endif // ACTIONMONITOR_PS_PLUGIN
-
-#ifdef ACTIONMONITOR_S_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto s = GetShellVirtualMachine();
-  s->DestroyScripts();
-#endif // ACTIONMONITOR_S_PLUGIN
-
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto cs = GetCsVirtualMachine();
-  cs->DestroyScripts();
-#endif // ACTIONMONITOR_CS_PLUGIN
 }
