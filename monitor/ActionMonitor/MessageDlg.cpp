@@ -195,7 +195,7 @@ void MessageDlg::DoFade()
     }
 
     // then show the window a little.
-    ShowMessageWithNoFadding(_elapseMiliSecondsBeforeFadeOut);
+    ShowMessageWithNoFadding(waitTimeBetweenFadeStepsInMilliseconds);
   }
   
   // we can now start fading down toward 'hidden' so the total time
