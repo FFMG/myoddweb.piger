@@ -1,4 +1,6 @@
 #include "lock.h"
+#include <ostream>
+#include <iostream>
 
 namespace myodd {
   namespace threads {
@@ -10,7 +12,9 @@ namespace myodd {
       {
         _guard = new std::lock_guard<std::mutex>(_mutex);
       }
-      catch (const std::system_error&) {
+      catch (const std::system_error&) 
+      {
+        // and error is thrown if we are trying re-entry.
       }
     }
 

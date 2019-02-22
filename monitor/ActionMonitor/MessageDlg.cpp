@@ -187,7 +187,7 @@ void MessageDlg::DoFade()
       }
       MessagePump(m_hWnd);
 
-      Sleep(0);
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
       MessagePump(nullptr);
     }
@@ -211,7 +211,7 @@ void MessageDlg::CloseFromThread()
   MessagePump(m_hWnd);
 
   // wait a little.
-  Sleep(0);
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
   // and let the other threads process their messages.
   MessagePump(nullptr);

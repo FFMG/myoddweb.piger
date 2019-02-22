@@ -223,7 +223,7 @@ void ActionMonitorDlg::InitHook()
     SendInput( 1, input, sizeof(INPUT) ) ; 
 
     //  surrender our thread time to give time for the toggle to work.
-    Sleep(500);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
   }
 
   //  start hook the DLL

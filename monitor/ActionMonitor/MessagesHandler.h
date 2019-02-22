@@ -36,11 +36,6 @@ protected:
    */
   void SendCloseMessageToAllMessageWindows();
 
-  /**
-   * \brief message pump
-   */
-  static void MessagePump( HWND hWnd);
-
   /** 
    * \brief remove old/unused messages clogging up the vector
    *        this function will obtain the lock before clearing the list.

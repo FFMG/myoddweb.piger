@@ -57,7 +57,7 @@ void MessagesHandler::MessageDialogIsComplete(MessageDlg* dlg)
   myodd::threads::Lock guard(_mutex);
 
   // look for the window we want to delete.
-  const auto saved = std::find(_collection.begin(), _collection.end(), dlg);
+  auto saved = std::find(_collection.begin(), _collection.end(), dlg);
   if (saved == _collection.end())
   {
     return;
@@ -198,51 +198,19 @@ void MessagesHandler::WaitForAllToComplete()
     {
       if (dlg->IsRunning())
       {
-        // then try and process the remaining messages
-        // if the window has not been killed properly.
-        const auto hWnd = dlg->GetSafeHwnd();
-        if (0 != ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
-        {
-          //  give the other apps/classes one last chance to do some work.
-          MessagePump(nullptr);
+        // let go of the thread.
+        std::this_thread::yield();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-          // let go of the thread.
-          std::this_thread::yield();
-
-          Sleep(1);
-
-          // just do one message at a time
-          // so we don't block others.
-          // the peek message should allow all message to be handled
-          MessagePump(hWnd);
-
-          // go around one last time
-          // to give everyone a chance to close.
-          continue;
-        }
+        // go around one last time
+        // to give everyone a chance to close.
+        continue;
       }
     }
 
     //  otherwise we can remove it
+    // this should never really happen because we have onComplete()
+    // that should be called when we remove it.
     _collection.erase(it);
-  }
-}
-
-/**
- * \brief pump all the messages for a given window.
- * \param hWnd the handle of the window messages we are pumping.
- */
-void MessagesHandler::MessagePump(const HWND hWnd)
-{
-  //  lock up to make sure we only do one at a time
-  MSG msg;
-  while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
-  {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-    if (0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
-    {
-      break;
-    }
   }
 }
