@@ -31,9 +31,9 @@ PluginVirtualMachine::~PluginVirtualMachine()
 }
 
 /**
- * Remove the current thread API from our list.
- * @param PluginApi* api the api we wish to remove.
- * @return bool if the item was removed or not.
+ * \brief Remove the current thread API from our list.
+ * \param api the api we wish to remove.
+ * \return if the item was removed or not.
  */
 bool PluginVirtualMachine::DisposeApi(PluginApi* api)
 {
@@ -41,9 +41,9 @@ bool PluginVirtualMachine::DisposeApi(PluginApi* api)
   myodd::threads::Lock guard( _mutex );
   
   // find this thread
-  for (ListOfPlugins::const_iterator it = _apis.begin();
-    it != _apis.end();
-    ++it)
+  for (auto it = _apis.begin();
+       it != _apis.end();
+       ++it)
   {
     if (it->second == api)
     {

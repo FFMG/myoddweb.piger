@@ -88,10 +88,12 @@ public:
 public:
 
   const Actions& PossibleActions() const {
+    assert(_possibleActions != nullptr);
     return *_possibleActions;
   }
   
   Actions& PossibleActions() {
+    assert(_possibleActions != nullptr);
     return *_possibleActions;
   }
 
