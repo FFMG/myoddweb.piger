@@ -1,24 +1,27 @@
 #pragma once
-#include "ActionsCore.h"
 #include "IMessagesHandler.h"
 
 class MessagesHandlerWnd final
 {
 public:
   MessagesHandlerWnd();
-  virtual ~MessagesHandlerWnd();
+  ~MessagesHandlerWnd();
 
   bool Close();
   bool Create();
-  bool Show(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage);
+  bool Show(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const;
 
 protected:
+  /**
+   * \brief Create the class if it does not exist
+   */
+  bool CreateClass();
+
   const std::wstring _szClassName;
   WNDCLASSEX _wc;
   HWND _hwnd;
-  MSG _Msg;
 
-  class Msg
+  class Msg final
   {
   public:
     Msg(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) :
@@ -28,7 +31,8 @@ protected:
       _fadeOut(totalMilisecondsToShowMessage)
     {
     }
-    virtual ~Msg() = default;
+
+    ~Msg() = default;
     const wchar_t* Text() const { return _text.c_str(); }
     int Elapse() const { return _elapse; }
     int FadeOut() const { return _fadeOut; }

@@ -26,9 +26,6 @@ PluginVirtualMachine::PluginVirtualMachine( IMessagesHandler& messagesHandler ) 
  */
 PluginVirtualMachine::~PluginVirtualMachine()
 {
-  //  destroy all the plugins.
-  Destroy();
-
   // remove the plugins list
   delete _amPlugin;
 }
@@ -404,7 +401,7 @@ void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
   try
   {
     //  try and destroy it.
-    PLUGIN_THREAD* f = iter->second;
+    const auto f = iter->second;
  
     // destroy
     f-> fnMsg( AM_MSG_DEINIT, 0, 0 );
@@ -437,7 +434,7 @@ void PluginVirtualMachine::Destroy()
        ++it 
      )
   {
-    PLUGIN_THREAD* f = it->second;
+    auto f = it->second;
 
     // destroy
     f-> fnMsg( AM_MSG_DEINIT, 0, 0 );
