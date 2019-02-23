@@ -1,4 +1,5 @@
 #pragma once
+#include "IVirtualMachine.h"
 #ifdef ACTIONMONITOR_PS_PLUGIN
 
 #include <map>
@@ -6,21 +7,21 @@
 #include <os/ipcmessagehandler.h>
 #include "powershellapi.h"
 
-class PowershellVirtualMachine : public myodd::os::IpcMessageHandler
+class PowershellVirtualMachine : public myodd::os::IpcMessageHandler, public IVirtualMachine
 {
 public:
-  PowershellVirtualMachine();
+  explicit PowershellVirtualMachine(IMessagesHandler& messagesHandler);
   virtual ~PowershellVirtualMachine();
 
-  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler);
   static bool IsExt(const MYODD_STRING& file);
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
 
-  void Destroy();
+  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
+  void Destroy() override;
+  bool Initialize() override;
 
 protected:
-  void Initialize();
 
   bool _initialized;
 

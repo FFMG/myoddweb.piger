@@ -11,7 +11,8 @@
 
 #include "ShellVirtualMachine.h"
 
-ShellVirtualMachine::ShellVirtualMachine() : 
+ShellVirtualMachine::ShellVirtualMachine(IMessagesHandler& messagesHandler) :
+  IVirtualMachine( messagesHandler),
   _initialized( false )
 {
 }
@@ -33,14 +34,29 @@ ShellVirtualMachine::~ShellVirtualMachine()
 }
 
 // create the IPC server
-void ShellVirtualMachine::Initialize()
+bool ShellVirtualMachine::Initialize()
 {
   // make sure that we have ourselves as a listener
   const auto pThis = dynamic_cast<ActionMonitorDlg*>(App().GetMainWnd());
-  if( pThis )
+  if (nullptr == pThis)
+  {
+    return false;
+  }
+
+  if (_initialized == true)
+  {
+    return true;
+  }
+
+  try
   {
     pThis->AddMessageHandler(*this);
     _initialized = true;
+    return true;
+  }
+  catch (...)
+  {
+    return false;
   }
 }
 
@@ -175,13 +191,13 @@ bool ShellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcRequest,
   return false;
 }
 
-int ShellVirtualMachine::ExecuteInThread(const LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler )
+int ShellVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
 {
   Initialize();
 
   //  create uuid and andd it to our list.
   const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  const auto psApi = AddApi(uuid, action, messagesHandler );
+  const auto psApi = AddApi(uuid, action, GetMessagesHandler() );
 
   // get the path of the exe
   std::wstring szPath;

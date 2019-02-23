@@ -361,7 +361,7 @@ void CActionMonitorApp::DoVersion()
     ver.GetFileVersionMaintenance(),
     ver.GetFileVersionBuild());
 
-  MessagesHandler().Show(strSay.c_str(), 3000, 5);
+  MsgHandler().Show(strSay.c_str(), 3000, 5);
 }
 
 /**

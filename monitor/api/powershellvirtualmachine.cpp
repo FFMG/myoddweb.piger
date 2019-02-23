@@ -11,7 +11,8 @@
 
 #include "powershellvirtualmachine.h"
 
-PowershellVirtualMachine::PowershellVirtualMachine() : 
+PowershellVirtualMachine::PowershellVirtualMachine(IMessagesHandler& messagesHandler) :
+  IVirtualMachine( messagesHandler ),
   _initialized( false )
 {
 }
@@ -33,14 +34,29 @@ PowershellVirtualMachine::~PowershellVirtualMachine()
 }
 
 // create the IPC server
-void PowershellVirtualMachine::Initialize()
+bool PowershellVirtualMachine::Initialize()
 {
   // make sure that we have ourselves as a listener
   const auto pThis = dynamic_cast<ActionMonitorDlg*>(App().GetMainWnd());
-  if( pThis )
+  if (nullptr == pThis)
+  {
+    return false;
+  }
+
+  if( _initialized == true )
+  {
+    return true;
+  }
+
+  try
   {
     pThis->AddMessageHandler(*this);
     _initialized = true;
+    return true;
+  }
+  catch( ... )
+  {
+    return false;
   }
 }
 
@@ -175,18 +191,18 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   return false;
 }
 
-int PowershellVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler)
+int PowershellVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
 {
   Initialize();
 
   //  create uuid and andd it to our list.
   const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  auto psApi = AddApi(uuid, action, messagesHandler );
+  auto psApi = AddApi(uuid, action, GetMessagesHandler() );
 
   //  do we have powerhsell3?
   if (!IsPowershell3Installed())
   {
-    auto errorMsg = _T("Powersell 3 is not installed, so we cannot run this script!");
+    const auto errorMsg = _T("Powersell 3 is not installed, so we cannot run this script!");
     psApi->Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
     RemoveApi(uuid);

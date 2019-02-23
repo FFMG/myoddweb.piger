@@ -1,4 +1,6 @@
 #pragma once
+#include "IVirtualMachine.h"
+
 class VirtualMachines final
 {
 public:
@@ -13,6 +15,9 @@ public:
 
   template<class T>
   T& Get();
+
+  template<class T>
+  IVirtualMachine& Get1();
 
 private:
   IMessagesHandler& _messagesHandler;
@@ -74,11 +79,12 @@ private:
 
 public:
   template<>
-  ShellVirtualMachine& Get<ShellVirtualMachine>()
+  IVirtualMachine& Get1<ShellVirtualMachine>()
   {
     if (_svm == nullptr)
     {
-      _svm = new ShellVirtualMachine();
+      _svm = new ShellVirtualMachine( _messagesHandler );
+      _svm->Initialize();
     }
     return *_svm;
   }
@@ -106,11 +112,12 @@ private:
 
 public:
   template<>
-  CsVirtualMachine& Get<CsVirtualMachine>()
+  IVirtualMachine& Get1<CsVirtualMachine>()
   {
     if (_csvm == nullptr)
     {
-      _csvm = new CsVirtualMachine();
+      _csvm = new CsVirtualMachine( _messagesHandler );
+      _csvm->Initialize();
     }
     return *_csvm;
   }
@@ -138,11 +145,12 @@ private:
 
 public:
   template<>
-  PowershellVirtualMachine& Get<PowershellVirtualMachine>()
+  IVirtualMachine& Get1<PowershellVirtualMachine>()
   {
     if (_psvm == nullptr)
     {
-      _psvm = new PowershellVirtualMachine();
+      _psvm = new PowershellVirtualMachine( _messagesHandler );
+      _psvm->Initialize();
     }
     return *_psvm;
   }
@@ -170,11 +178,12 @@ private:
 
 public:
   template<>
-  PluginVirtualMachine& Get<PluginVirtualMachine>()
+  IVirtualMachine& Get1<PluginVirtualMachine>()
   {
     if (_psvm == nullptr)
     {
-      _plugvm = new PluginVirtualMachine();
+      _plugvm = new PluginVirtualMachine( _messagesHandler );
+      _plugvm->Initialize();
     }
     return *_plugvm;
   }
@@ -202,11 +211,12 @@ private:
 
 public:
   template<>
-  PythonVirtualMachine& Get<PythonVirtualMachine>()
+  IVirtualMachine& Get1<PythonVirtualMachine>()
   {
     if (_pvm == nullptr)
     {
-      _pvm = new PythonVirtualMachine();
+      _pvm = new PythonVirtualMachine( _messagesHandler );
+      _pvm->Initialize();
     }
     return *_pvm;
   }

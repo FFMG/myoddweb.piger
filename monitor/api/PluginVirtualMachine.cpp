@@ -8,11 +8,11 @@
 #include "amplugin\ampluginprivate.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief the plugins virtual machine constructor
+ * \param messagesHandler the messages handler.
  */
-PluginVirtualMachine::PluginVirtualMachine() : 
+PluginVirtualMachine::PluginVirtualMachine( IMessagesHandler& messagesHandler ) :
+  IVirtualMachine( messagesHandler ),
   _amPlugin( nullptr )
 {
   //  get our own module architecture.
@@ -90,13 +90,14 @@ void PluginVirtualMachine::AddApi(PluginApi* api)
   _apis[std::this_thread::get_id()] = api;
 }
 
+/**
+ * \brief Called by the plugins to find the currently running action.
+ * \return get the plugin api so we can call helper functions.
+ */
 PluginApi& PluginVirtualMachine::GetApi()
 {
-#ifndef ACTIONMONITOR_API_PLUGIN
-  throw - 1;
-#else
   // get our current self.
-  auto& pvm = App().VirtualMachinesHandler().Get< PluginVirtualMachine>();
+  auto& pvm = static_cast<PluginVirtualMachine&>( App().VirtualMachinesHandler().Get1<PluginVirtualMachine>());
 
   // for now, get the first value...
   // @todo, we need to get the actual thread id running.
@@ -106,33 +107,41 @@ PluginApi& PluginVirtualMachine::GetApi()
     throw -1;
   }
   return *(it->second);
-#endif
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief Initialize the virtual machine
+ * \return bool success or not.
  */
-void PluginVirtualMachine::Initialize()
+bool PluginVirtualMachine::Initialize()
 {
   //  only do it once
-  if (_amPlugin == NULL)
+  if (_amPlugin != nullptr)
   {
-    //  get the lock.
-    myodd::threads::Lock guard(_mutex);
+    return true;
+  }
+  //  get the lock.
+  myodd::threads::Lock guard(_mutex);
 
-    // double lock...
-    if (_amPlugin == NULL)
-    {
-      //  we can now create it.
-      _amPlugin = new AmPluginPrivate();
-
-      // register our Plugin functions.
-      InitializeFunctions();
-    }
+  // double lock...
+  if (_amPlugin != nullptr)
+  {
+    return true;
   }
 
+  try
+  {
+    //  we can now create it.
+    _amPlugin = new AmPluginPrivate();
+
+    // register our Plugin functions.
+    InitializeFunctions();
+    return true;
+  }
+  catch( ... )
+  {
+    return false;
+  }
 }
 
 /**
@@ -147,7 +156,7 @@ void PluginVirtualMachine::InitializeFunctions()
   Register(_T("getCommand"), PluginVirtualMachine::GetCommand);
   Register(_T("getAction"), PluginVirtualMachine::GetAction);
   Register(_T("getCommandCount"), PluginVirtualMachine::GetCommandCount);
-  Register(_T("execute"), PluginVirtualMachine::Execute);
+  Register(_T("execute"), PluginVirtualMachine::ExecuteInPlugin);
   Register(_T("getString"), PluginVirtualMachine::GetString);
   Register(_T("getFile"), PluginVirtualMachine::GetFile);
   Register(_T("getFolder"), PluginVirtualMachine::GetFolder);
@@ -266,15 +275,10 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
   return result;
 }
 
-/**
- * Todo
- * @param void
- * @return void
- */
-int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler)
+int PluginVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
 {
   Initialize();
-  if (NULL == _amPlugin)
+  if (nullptr == _amPlugin)
   {
     // the plugin manager was not created?
     // or could not be created properly
@@ -282,11 +286,11 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction
   }
 
   // add the api to the list.
-  auto api = new PluginApi(action, messagesHandler);
+  auto api = new PluginApi(action, GetMessagesHandler() );
   AddApi( api );
 
   // execute this plugin
-  auto result = ExecuteInThread(pluginFile);
+  const auto result = ExecuteInThread(pluginFile.c_str() );
 
   // dispose of the api
   if( false == DisposeApi( api ) )
@@ -518,7 +522,7 @@ size_t PluginVirtualMachine::GetCommandCount()
 * @param bool isPrivileged if we need administrator privilege to run this.
 * @return void
 */
-bool PluginVirtualMachine::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
+bool PluginVirtualMachine::ExecuteInPlugin(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
 {
   return GetApi().Execute(module, cmdLine, isPrivileged, nullptr );
 }

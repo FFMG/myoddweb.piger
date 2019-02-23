@@ -3,10 +3,10 @@
 
 #include "csapi.h"
 
-class CsVirtualMachine : public PowershellVirtualMachine
+class CsVirtualMachine final : public PowershellVirtualMachine
 {
 public:
-  CsVirtualMachine();
+  explicit CsVirtualMachine(IMessagesHandler& messagesHandler);
   virtual ~CsVirtualMachine();
 
   static bool IsExt(const MYODD_STRING& file);

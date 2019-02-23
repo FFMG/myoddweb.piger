@@ -39,7 +39,7 @@ void ActiveBatchAction::OnExecuteInThread()
   std::vector<MYODD_STRING> argv;
   argv.push_back( _T("cmd") );
 
-  auto arguments = myodd::strings::Format(_T("/c %s %s"), szFile.c_str(), GetCommandLine());
+  const auto arguments = myodd::strings::Format(_T("/c %s %s"), szFile.c_str(), GetCommandLine());
   argv.push_back(arguments);
   Execute(argv, IsPrivileged(), nullptr);
 }

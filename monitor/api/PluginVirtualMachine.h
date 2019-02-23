@@ -1,4 +1,5 @@
 #pragma once
+#include "IVirtualMachine.h"
 
 #ifdef ACTIONMONITOR_API_PLUGIN
 
@@ -8,20 +9,22 @@
 #include <thread>
 #include <mutex>
 #include "os/os.h"
-#include "amplugin\ampluginprivate.h"
+#include "amplugin/ampluginprivate.h"
 
-class PluginVirtualMachine
+class PluginVirtualMachine : public IVirtualMachine
 {
 public:
-  PluginVirtualMachine();
+  PluginVirtualMachine( IMessagesHandler& messagesHandler );
   virtual ~PluginVirtualMachine();
 
-  int ExecuteInThread( LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler);
+  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
+  void Destroy() override;
+  bool Initialize() override;
+
   static bool IsExt(const MYODD_STRING& file );
 
   bool Register( LPCTSTR, void* );
 
-  void Destroy();
   void ErasePlugin( const MYODD_STRING& plugin);
 
 protected:
@@ -38,7 +41,6 @@ protected:
   int ExecuteInThread( LPCTSTR pluginFile );
 protected:
   AmPluginPrivate* _amPlugin;
-  void Initialize();
   void InitializeFunctions();
 
 protected:
@@ -73,7 +75,7 @@ public:
   static size_t GetCommandCount();
 
   static bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut);
-  static bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
+  static bool ExecuteInPlugin(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
   static int GetString(DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   static size_t GetCommand(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer);
   static int GetAction(DWORD nBufferLength, wchar_t* lpBuffer);

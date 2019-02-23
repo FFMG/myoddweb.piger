@@ -1,6 +1,6 @@
 #pragma once
 #include "ActiveAction.h"
-class ActivePythonAction :
+class ActivePythonAction final :
   public ActiveAction
 {
 public:
@@ -8,8 +8,8 @@ public:
   virtual ~ActivePythonAction();
 
 protected:
-  virtual bool OnInitialize();
-  virtual bool OnDeInitialize();
-  virtual void OnExecuteInThread();
+  bool OnInitialize() override;
+  bool OnDeInitialize() override;
+  void OnExecuteInThread() override;
 };
 

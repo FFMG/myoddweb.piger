@@ -13,6 +13,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
+#include "IVirtualMachine.h"
 #ifdef ACTIONMONITOR_S_PLUGIN
 
 #include <map>
@@ -20,22 +21,21 @@
 #include <os/ipcmessagehandler.h>
 #include "shellapi.h"
 
-class ShellVirtualMachine final : public myodd::os::IpcMessageHandler
+class ShellVirtualMachine final : public myodd::os::IpcMessageHandler, public IVirtualMachine
 {
 public:
-  ShellVirtualMachine();
+  explicit ShellVirtualMachine(IMessagesHandler& messagesHandler);
   virtual ~ShellVirtualMachine();
+  bool Initialize() override;
 
-  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action, IMessagesHandler& messagesHandler);
   static bool IsExt(const std::wstring& file);
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
 
-  void Destroy();
+  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
+  void Destroy() override;
 
 protected:
-  void Initialize();
-
   bool _initialized;
 
   std::mutex _mutex;

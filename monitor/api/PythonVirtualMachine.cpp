@@ -11,7 +11,7 @@ static PyMethodDef amMethods[] = {
   { "getCommand", PythonVirtualMachine::GetCommand, METH_VARARGS, "Get a certain command, return false if it does not exist." },
   { "getAction", PythonVirtualMachine::GetAction, METH_VARARGS, "Get the action entered by the user." },
   { "getCommandCount", PythonVirtualMachine::GetCommandCount, METH_VARARGS, "Get the number of commands." },
-  { "execute", PythonVirtualMachine::Execute, METH_VARARGS, "Execute a command, (app, command)." },
+  { "execute", PythonVirtualMachine::ExecuteInScript, METH_VARARGS, "Execute a command, (app, command)." },
   { "getString", PythonVirtualMachine::GetString, METH_VARARGS, "Get the currently selected text if any." },
   { "getFile", PythonVirtualMachine::GetFile, METH_VARARGS, "Get a file by index, return false if not found." },
   { "getFolder", PythonVirtualMachine::GetFolder, METH_VARARGS, "Get a folder by index, return false if not found." },
@@ -55,9 +55,10 @@ PyMODINIT_FUNC PyInit_am(void)
  * @param void
  * @return void
  */
-PythonVirtualMachine::PythonVirtualMachine() : 
+PythonVirtualMachine::PythonVirtualMachine(IMessagesHandler& messagesHandler) :
+  IVirtualMachine(messagesHandler),
   m_isInitialized( false ),
-  _mainThreadState( NULL )
+  _mainThreadState( nullptr )
 {
 }
 
@@ -162,6 +163,95 @@ bool PythonVirtualMachine::InitializeFunctions()
       ) != -1);
 }
 
+/**
+ * Read the given file and get the script out of it.
+ * \param pyFile the python file we want to read.
+ * \param script the string that will contain the string.
+ * \return boolean success or not.
+ */
+bool PythonVirtualMachine::ReadFile(const std::wstring& pyFile, std::string& script) const
+{
+  // clear the scruot.
+  script = "";
+
+  errno_t err;
+  FILE *fp;
+  const auto asciiString = myodd::strings::WString2String(pyFile);
+  if (err = fopen_s(&fp, asciiString.c_str(), "rt"))
+  {
+    return false;
+  }
+
+  //
+  // Note that we are no longer in the realm of UNICODE here.
+  // We are using Multi Byte data.
+  static const UINT FILE_READ_SIZE = 100;
+  size_t  count, total = 0;
+  while (!feof(fp))
+  {
+    // Attempt to read
+    char buffer[FILE_READ_SIZE + 1];
+    memset(buffer, '\0', FILE_READ_SIZE + 1);
+    count = fread(buffer, sizeof(char), FILE_READ_SIZE, fp);
+
+    buffer[count] = '\0';
+
+    // was there a problem?
+    if (ferror(fp))
+    {
+      break;
+    }
+
+    // add it to the script
+    script += buffer;
+
+    // Total up actual bytes read
+    total += count;
+  }
+
+  // we are done with the file.
+  fclose(fp);
+
+  // success.
+  return true;
+}
+
+int PythonVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
+{
+  // Python is not thread safe 
+  // and windows cannot lock the file properly
+  // so we need to read the file ourselves and pass it.
+  //
+  // this could be a memory problem at some stage.
+  //
+  std::string script = "";
+  if (!ReadFile(pluginFile, script))
+  {
+    return -1;
+  }
+
+  const auto api = new PyApi(action, App().MsgHandler(), script, GetMainPyThread());  //  save it.
+  const auto id = std::this_thread::get_id();
+  AddApi(id, api);
+
+  auto result = -1;
+
+  try
+  {
+    // we can now execute the thread.
+    api->ExecuteInThread();
+    result = 0;
+  }
+  catch ( ... )
+  {
+    result = -1;
+  }
+
+  // and remove it when we are done.
+  RemoveApi(id);
+  delete api;
+  return 0;
+}
 
 /**
  * Check if a given file extension is used by this API or not.
@@ -183,7 +273,7 @@ PyApi& PythonVirtualMachine::GetApi()
   throw - 1;
 #else
   // get our current self.
-  auto& pvm = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
+  auto& pvm = static_cast<PythonVirtualMachine&>(App().VirtualMachinesHandler().Get1<PythonVirtualMachine>());
 
   myodd::threads::Lock guard(pvm._mutex);
   const auto it = pvm._apis.find( std::this_thread::get_id() );
@@ -290,7 +380,7 @@ PyObject* PythonVirtualMachine::GetCommandCount(PyObject *self, PyObject *args)
 * @param PyObject *
 * @return PyObject*
 */
-PyObject* PythonVirtualMachine::Execute(PyObject *self, PyObject *args)
+PyObject* PythonVirtualMachine::ExecuteInScript(PyObject *self, PyObject *args)
 {
   return GetApi().Execute(self, args);
 }

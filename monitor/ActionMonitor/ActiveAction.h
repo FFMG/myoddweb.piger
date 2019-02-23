@@ -1,9 +1,3 @@
-// Action.h: interface for the Action class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#ifndef __ActiveAction_h__
-#define __ActiveAction_h__
 #pragma once
 
 // the parent action.
@@ -88,5 +82,3 @@ private:
   void UpdateEnvironmentTemp();
   void UpdateEnvironmentPathExt() const;
 };
-
-#endif // __ActiveAction_h__

@@ -26,7 +26,7 @@ bool ActivePythonAction::OnDeInitialize()
 
 bool ActivePythonAction::OnInitialize()
 {
-  auto& py = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
+  auto& py = App().VirtualMachinesHandler().Get1<PythonVirtualMachine>();
   if (!py.Initialize())
   {
     return false;
@@ -38,32 +38,12 @@ bool ActivePythonAction::OnInitialize()
 
 void ActivePythonAction::OnExecuteInThread()
 {
-  //  the file.
-  const MYODD_STRING& szFile = File();
+  //  the file who owns the action.
+  const auto& szFile = File();
 
-  // Python is not thread safe 
-  // and windows cannot lock the file properly
-  // so we need to read the file ourselves and pass it.
-  //
-  // this could be a memory problem at some stage.
-  //
-  std::string script = "";
-  if (!ReadFile(szFile.c_str(), script))
-  {
-    return;
-  }
+  // get the virtual machine
+  auto& pyvm = App().VirtualMachinesHandler().Get1<PythonVirtualMachine>();
 
-  // create the Python Api.
-  auto& py = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
-  const auto api = new PyApi( *this, App().MsgHandler(), script, py.GetMainPyThread() );
-
-  //  save it.
-  const auto id = std::this_thread::get_id();
-  py.AddApi(id, api);
-
-  // we can now execute the thread.
-  api->ExecuteInThread();
-
-  py.RemoveApi(id);
-  delete api;
+  // we can now execute the action.
+  pyvm.Execute(*this, szFile);
 }

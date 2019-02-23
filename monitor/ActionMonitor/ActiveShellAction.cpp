@@ -42,12 +42,12 @@ bool ActiveShellAction::OnInitialize()
 
 void ActiveShellAction::OnExecuteInThread()
 {
-  //  the file.
+  //  the file that owns the action.
   const auto& szFile = File();
 
-  // get the vistual machines.
-  auto& csvm = App().VirtualMachinesHandler().Get<ShellVirtualMachine>();
+  // get the virtual machine to run the action.
+  auto& csvm = App().VirtualMachinesHandler().Get1<ShellVirtualMachine>();
   
-  // we can now execute the thread.
-  csvm.ExecuteInThread( szFile.c_str(), *this, App().MsgHandler() );
+  // we can now execute the action.
+  csvm.Execute(*this, szFile );
 }
