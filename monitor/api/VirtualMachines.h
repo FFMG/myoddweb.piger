@@ -14,10 +14,7 @@ public:
   void Destroy();
 
   template<class T>
-  T& Get();
-
-  template<class T>
-  IVirtualMachine& Get1();
+  IVirtualMachine& Get();
 
 private:
   IMessagesHandler& _messagesHandler;
@@ -47,11 +44,11 @@ private:
 
 public:
   template<>
-  LuaVirtualMachine& Get<LuaVirtualMachine>()
+  IVirtualMachine& Get<LuaVirtualMachine>()
   {
     if (_lvm == nullptr)
     {
-      _lvm = new LuaVirtualMachine();
+      _lvm = new LuaVirtualMachine( _messagesHandler );
     }
     return *_lvm;
   }
@@ -79,7 +76,7 @@ private:
 
 public:
   template<>
-  IVirtualMachine& Get1<ShellVirtualMachine>()
+  IVirtualMachine& Get<ShellVirtualMachine>()
   {
     if (_svm == nullptr)
     {
@@ -112,7 +109,7 @@ private:
 
 public:
   template<>
-  IVirtualMachine& Get1<CsVirtualMachine>()
+  IVirtualMachine& Get<CsVirtualMachine>()
   {
     if (_csvm == nullptr)
     {
@@ -145,7 +142,7 @@ private:
 
 public:
   template<>
-  IVirtualMachine& Get1<PowershellVirtualMachine>()
+  IVirtualMachine& Get<PowershellVirtualMachine>()
   {
     if (_psvm == nullptr)
     {
@@ -178,9 +175,9 @@ private:
 
 public:
   template<>
-  IVirtualMachine& Get1<PluginVirtualMachine>()
+  IVirtualMachine& Get<PluginVirtualMachine>()
   {
-    if (_psvm == nullptr)
+    if (_plugvm == nullptr)
     {
       _plugvm = new PluginVirtualMachine( _messagesHandler );
       _plugvm->Initialize();
@@ -211,7 +208,7 @@ private:
 
 public:
   template<>
-  IVirtualMachine& Get1<PythonVirtualMachine>()
+  IVirtualMachine& Get<PythonVirtualMachine>()
   {
     if (_pvm == nullptr)
     {

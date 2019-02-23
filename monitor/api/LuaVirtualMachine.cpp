@@ -5,11 +5,11 @@
 #include "ActionMonitor.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief the Lua virtual machine
+ * \param messagesHandler the messages handler
  */
-LuaVirtualMachine::LuaVirtualMachine()
+LuaVirtualMachine::LuaVirtualMachine(IMessagesHandler& messagesHandler) :
+  IVirtualMachine( messagesHandler )
 {
 }
 
@@ -18,7 +18,7 @@ LuaVirtualMachine::LuaVirtualMachine()
  * @param void
  * @return void
  */
-LuaVirtualMachine::~LuaVirtualMachine(void)
+LuaVirtualMachine::~LuaVirtualMachine()
 {
   //  dispose all 
   Dispose();
@@ -51,14 +51,14 @@ void LuaVirtualMachine::Dispose()
 }
 
 /**
- * Try and displose of a lua state.
- * @param lua_State* lua the lua we are trying to get rid of.
+ * \brief Try and dispose of a lua state.
+ * \param, lua the lua we are trying to get rid of.
  */
 void LuaVirtualMachine::Dispose(lua_State* lua)
 {
   // find the lua...
   _mutex.lock();
-  state_api::iterator it = _lua_Api.find(lua);
+  const auto it = _lua_Api.find(lua);
 
   // does it exist?
   if (it != _lua_Api.end())
@@ -113,43 +113,50 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
   return lua;
 }
 
-/**
- * Todo
- * @param const MYODD_STRING& szFile the file/script we would like to load.
- * @param LuaApi api the created api we will be using.
- * @return int result of the operation.
- */
-int LuaVirtualMachine::ExecuteInThread(const MYODD_STRING& szFile, LuaApi* api)
+int LuaVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
 {
-  lua_State* lua = CreateState(api);
-  if( NULL == lua )
+  const auto api = new LuaApi(action, GetMessagesHandler() );
+  try
   {
+    const auto lua = CreateState(api);
+    if (nullptr == lua)
+    {
+      delete api;
+      return -1;
+    }
+
+    const auto file = myodd::strings::WString2String(pluginFile);
+    auto resultOfCall = luaL_loadfile(lua, file.c_str());
+    if (resultOfCall != 0)
+    {
+      const auto sErr = myodd::strings::String2WString(lua_tostring(lua, -1));
+      myodd::log::LogError(_T("LUA Err: %s"), sErr.c_str());
+    }
+    else
+    {
+      // execute Lua program
+      resultOfCall = lua_pcall(lua, 0, LUA_MULTRET, 0);
+    }
+
+    // clean lua
+    Dispose(lua);
+
+    // finally clean the api itself.
+    delete api;
+
+    return resultOfCall;
+  }
+  catch( ... )
+  {
+    delete api;
     return -1;
   }
-
-  USES_CONVERSION;
-
-  int resultOfCall = luaL_loadfile( lua , T_T2A(szFile.c_str() ) );
-  if(resultOfCall != 0 )
-  {
-    MYODD_STRING sErr = T_A2T( lua_tostring( lua, -1) );
-    myodd::log::LogError( _T("LUA Err: %s"), sErr.c_str() );
-  }
-  else
-  {
-    // execute Lua program
-    resultOfCall = lua_pcall(lua, 0, LUA_MULTRET, 0);
-  }
-
-  Dispose(lua);
-
-  return resultOfCall;
 }
 
 /**
- * Check if a given file extension is used by this API or not.
- * @param const MYODD_STRING& file the file we are checking
- * @return bool true|false if the given extension is LUA or not.
+ * \brief Check if a given file extension is used by this API or not.
+ * \param file the file we are checking
+ * \return true|false if the given extension is LUA or not.
  */
 bool LuaVirtualMachine::IsExt(const MYODD_STRING& file )
 {
@@ -162,7 +169,7 @@ LuaApi& LuaVirtualMachine::GetApi(lua_State* lua)
   throw - 1;
 #else
   // get our current self.
-  auto& lvm = App().VirtualMachinesHandler().Get< LuaVirtualMachine>();
+  auto& lvm = static_cast<LuaVirtualMachine&>(App().VirtualMachinesHandler().Get<LuaVirtualMachine>());
 
   // find the lua...
   lvm._mutex.lock();

@@ -46,7 +46,7 @@ void ActiveShellAction::OnExecuteInThread()
   const auto& szFile = File();
 
   // get the virtual machine to run the action.
-  auto& csvm = App().VirtualMachinesHandler().Get1<ShellVirtualMachine>();
+  auto& csvm = App().VirtualMachinesHandler().Get<ShellVirtualMachine>();
   
   // we can now execute the action.
   csvm.Execute(*this, szFile );

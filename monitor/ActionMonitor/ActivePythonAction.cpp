@@ -26,7 +26,7 @@ bool ActivePythonAction::OnDeInitialize()
 
 bool ActivePythonAction::OnInitialize()
 {
-  auto& py = App().VirtualMachinesHandler().Get1<PythonVirtualMachine>();
+  auto& py = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
   if (!py.Initialize())
   {
     return false;
@@ -42,7 +42,7 @@ void ActivePythonAction::OnExecuteInThread()
   const auto& szFile = File();
 
   // get the virtual machine
-  auto& pyvm = App().VirtualMachinesHandler().Get1<PythonVirtualMachine>();
+  auto& pyvm = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
 
   // we can now execute the action.
   pyvm.Execute(*this, szFile);

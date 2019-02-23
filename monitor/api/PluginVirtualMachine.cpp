@@ -94,7 +94,7 @@ void PluginVirtualMachine::AddApi(PluginApi* api)
 PluginApi& PluginVirtualMachine::GetApi()
 {
   // get our current self.
-  auto& pvm = static_cast<PluginVirtualMachine&>( App().VirtualMachinesHandler().Get1<PluginVirtualMachine>());
+  auto& pvm = static_cast<PluginVirtualMachine&>( App().VirtualMachinesHandler().Get<PluginVirtualMachine>());
 
   // for now, get the first value...
   // @todo, we need to get the actual thread id running.
@@ -449,6 +449,9 @@ void PluginVirtualMachine::Destroy()
 
   // and remove everything
   m_pluginsContainer.erase( m_pluginsContainer.begin(), m_pluginsContainer.end() );
+
+  delete _amPlugin;
+  _amPlugin = nullptr;
 }
 
 /**

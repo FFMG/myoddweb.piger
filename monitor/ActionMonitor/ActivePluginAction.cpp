@@ -36,7 +36,7 @@ void ActivePluginAction::OnExecuteInThread()
   const auto& szFile = File();
 
   // create the Python Api.
-  auto& pvm = App().VirtualMachinesHandler().Get1<PluginVirtualMachine>();
+  auto& pvm = App().VirtualMachinesHandler().Get<PluginVirtualMachine>();
   
   //  save it.
   // we can now execute the thread.

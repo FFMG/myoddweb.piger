@@ -1,4 +1,7 @@
 #pragma once
+#include "IMessagesHandler.h"
+#include "ActiveAction.h"
+
 class IVirtualMachine
 {
 public:

@@ -273,7 +273,7 @@ PyApi& PythonVirtualMachine::GetApi()
   throw - 1;
 #else
   // get our current self.
-  auto& pvm = static_cast<PythonVirtualMachine&>(App().VirtualMachinesHandler().Get1<PythonVirtualMachine>());
+  auto& pvm = static_cast<PythonVirtualMachine&>(App().VirtualMachinesHandler().Get<PythonVirtualMachine>());
 
   myodd::threads::Lock guard(pvm._mutex);
   const auto it = pvm._apis.find( std::this_thread::get_id() );

@@ -37,12 +37,8 @@ void ActiveLuaAction::OnExecuteInThread()
 
   // create the Python Api.
   auto& lua = App().VirtualMachinesHandler().Get<LuaVirtualMachine>();
-  const auto api = new LuaApi( *this, App().MsgHandler() );
 
   //  save it.
   // we can now execute the thread.
-  lua.ExecuteInThread(szFile, api);
-
-  // we can now dispose of the lua
-  delete api;
+  lua.Execute(*this, szFile );
 }
