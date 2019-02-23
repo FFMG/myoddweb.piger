@@ -270,6 +270,8 @@ BOOL CActionMonitorApp::InitInstance()
 
   CreateMessageHandler();
 
+  CreateVirtualMachines();
+
   // create the possible actions
   CreateActionsList();
 
@@ -590,4 +592,9 @@ int CActionMonitorApp::ExitInstance()
  */
 void CActionMonitorApp::DestroyActiveActions()
 {
+  if( _virtualMachines == nullptr )
+  {
+    return;
+  }
+  _virtualMachines->Destroy();
 }

@@ -26,6 +26,11 @@ VirtualMachines::VirtualMachines(IMessagesHandler& messagesHandler) :
 
 VirtualMachines::~VirtualMachines()
 {
+  Destroy();
+}
+
+void VirtualMachines::Destroy()
+{
 #ifdef ACTIONMONITOR_API_LUA
   Destroy<LuaVirtualMachine>();
 #endif

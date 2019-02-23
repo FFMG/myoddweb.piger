@@ -9,6 +9,8 @@ public:
   void operator=(const VirtualMachines&) = delete;
   VirtualMachines(const VirtualMachines&) = delete;
 
+  void Destroy();
+
   template<class T>
   T& Get();
 

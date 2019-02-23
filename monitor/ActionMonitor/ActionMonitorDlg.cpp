@@ -874,6 +874,8 @@ LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
   // (re)build the action list
   App().CreateMessageHandler();
 
+  App().CreateVirtualMachines();
+
   // (re)build the action list
   App().CreateActionsList();
 
