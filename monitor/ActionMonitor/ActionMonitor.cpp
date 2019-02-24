@@ -272,11 +272,16 @@ BOOL CActionMonitorApp::InitInstance()
   // create the message handler
   CreateMessageHandler();
 
+  // create the possible actions
+  CreateActionsList();
+
   // create the virtual machines
   CreateVirtualMachines();
 
-  // create the possible actions
-  CreateActionsList();
+  // sanity check
+  assert(_possibleActions != nullptr);
+  assert(_messagesHandler != nullptr);
+  assert(_virtualMachines != nullptr);
 
   // create the actual dicali.
 	ActionMonitorDlg dlg( *_possibleActions, *_messagesHandler, _taskBar);
@@ -328,6 +333,10 @@ void CActionMonitorApp::CreateTaskBar()
 
 void CActionMonitorApp::CreateVirtualMachines()
 {
+  // sanity check
+  assert(_possibleActions != nullptr);
+  assert(_messagesHandler != nullptr);
+
   // stop the virtuall machines
   delete _virtualMachines;
   _virtualMachines = new VirtualMachines( *_possibleActions, *_messagesHandler );
@@ -386,6 +395,9 @@ void CActionMonitorApp::DoVersion()
  */
 void CActionMonitorApp::DoStartActionsList(const bool wait)
 {
+  // sanity check
+  assert(_possibleActions != nullptr);
+
   // wait for whatever is still running
   WaitForStartActionsToComplete();
 
@@ -407,6 +419,9 @@ void CActionMonitorApp::DoStartActionsList(const bool wait)
  */
 void CActionMonitorApp::DoEndActionsList(const bool wait)
 {
+  // sanity check
+  assert(_possibleActions != nullptr);
+
   // wait for whatever is still running
   WaitForEndActionsToComplete();
 
