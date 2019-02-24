@@ -15,31 +15,24 @@
 #pragma once
 #include "Action.h"
 #include <mutex>
+#include "IActions.h"
 
 // the name of protected directories
-static LPCTSTR AM_DIRECTORY_IN  = _T("__in");           //  dir of actions that will run at start
-static LPCTSTR AM_DIRECTORY_OUT = _T("__out");          //  dir of actions that will run at exit time
-static LPCTSTR AM_DIRECTORY_TMP = _T("__tmp");          //  dir that will not be run/loaded - used for files/app needed by other actions
-static LPCTSTR AM_DIRECTORY_PLUGIN = _T("__plugins");   //  dir that will not be run/loaded - used for files/app needed by other actions
+static const wchar_t* AM_DIRECTORY_IN  = L"__in";           //  dir of actions that will run at start
+static const wchar_t* AM_DIRECTORY_OUT = L"__out";          //  dir of actions that will run at exit time
+static const wchar_t* AM_DIRECTORY_TMP = L"__tmp";          //  dir that will not be run/loaded - used for files/app needed by other actions
+static const wchar_t* AM_DIRECTORY_PLUGIN = L"__plugins";   //  dir that will not be run/loaded - used for files/app needed by other actions
 
-class Actions  
+class Actions : public IActions
 {
 public:
 	Actions();
 	virtual ~Actions();
 
-  bool Add( Action* action );
-  bool Add( LPCTSTR szText, LPCTSTR szPath );
-  bool Remove( LPCTSTR szText, LPCTSTR szPath );
-  bool Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath );
-
-  MYODD_STRING toChar( ) const;
-
 protected:
   DISALLOW_COPY_AND_ASSIGN(Actions);
 
 protected:
-
   struct COMMANDS_VALUE
   {
     std::wstring color;
@@ -69,18 +62,8 @@ protected:
   array_of_actions m_ActionsMatch;
 
   array_of_actions::const_iterator Find( const MYODD_STRING& szText, const MYODD_STRING& szPath );
-public:
-  //  select one item down in the list
-  void down();
 
-  //  select one item up in the list
-  void up();
-
-protected:
   virtual void ParseDirectory( LPCTSTR  rootDir, LPCTSTR  extentionDir );
-
-public:
-  virtual void Init();
 
 protected:
   // clear the search string and posible actions match list.
@@ -88,10 +71,6 @@ protected:
 
   // the command currently chosen
   size_t m_uCommand;
-
-public:
-  const Action* GetCommand( MYODD_STRING* cmdLine = nullptr ) const;
-  void SetAction( Action* tmpAction );
 
 protected:
   Action* m_tmpAction;
@@ -109,9 +88,19 @@ public:
     return m_sActionAsTyped;
   }
 
-  void CurrentActionReset();
-  void CurrentActionAdd( TCHAR c );
-  void CurrentActionBack();
+  void CurrentActionReset() override;
+  void CurrentActionAdd( wchar_t c ) override;
+  void CurrentActionBack() override;
+  void SetAction(Action* tmpAction) override;
+  const Action* GetCommand() const override;
+  const std::wstring GetCommandLine() const override;
+  const std::wstring toChar() const override;
+  void down() override;
+  void up() override;
+  void Initialize() override;
+  bool Add(Action* action) override;
+  bool Remove(const std::wstring& szText, const std::wstring& szPath) override;
+  const Action* Find(const std::wstring& szText, unsigned int idx ) override;
 
   void ClearAll();
 protected:

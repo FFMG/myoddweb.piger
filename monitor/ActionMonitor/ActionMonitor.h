@@ -46,6 +46,7 @@ public:
   static size_t GetMaxClipboardMemory();
 
 public:
+  void CreateTaskBar();
   void CreateActionsList();
   void CreateMessageHandler();
   void CreateVirtualMachines();
@@ -87,24 +88,6 @@ public:
   size_t _maxClipboardSize;
 public:
 
-  const Actions& PossibleActions() const {
-    assert(_possibleActions != nullptr);
-    return *_possibleActions;
-  }
-  
-  Actions& PossibleActions() {
-    assert(_possibleActions != nullptr);
-    return *_possibleActions;
-  }
-
-  const IMessagesHandler& MsgHandler() const {
-    return *_messagesHandler;
-  }
-
-  IMessagesHandler& MsgHandler() {
-    return *_messagesHandler;
-  }
-
   VirtualMachines& VirtualMachinesHandler()
   {
     return *_virtualMachines;
@@ -115,6 +98,8 @@ public:
     return *_virtualMachines;
   }
 private:
+  CFrameWnd* _taskBar;
+
   /**
    * \brief the messages handler
    */
@@ -123,7 +108,7 @@ private:
   /**
    * \brief the list of possible actions
    */
-  Actions* _possibleActions;
+  IActions* _possibleActions;
 
   /**
    * \brief the virtual machines handler.

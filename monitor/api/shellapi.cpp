@@ -17,10 +17,10 @@
 #include "pluginVirtualMachine.h"
 
 /**
- * \param action the action triggering this event.
+ * \copydoc 
  */
-ShellApi::ShellApi(const ActiveAction& action, IMessagesHandler& messagesHandler ) :
-  HelperApi(action, messagesHandler ), 
+ShellApi::ShellApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+  HelperApi(action, actions, messagesHandler ), 
   _hProcess( nullptr )
 {
 }

@@ -27,9 +27,12 @@
 /**
  * \brief the constructor
  * \param action the action being called
+ * \param actions all the actions
+ * \param messagesHandler the interface to show messages
  */
-HelperApi::HelperApi(const ActiveAction& action, IMessagesHandler& messagesHandler ) :
+HelperApi::HelperApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
   _action( action ),
+  _actions( actions),
   _messagesHandler(messagesHandler)
 {
 }
@@ -371,7 +374,7 @@ bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, const b
  * @param szPath the full path of the command that will be executed.
  * @return bool if the action was added properly or not.
  */
-bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
+bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath ) const
 {
   if( nullptr == szText || _tcslen(szText) == 0 )
   {
@@ -384,7 +387,7 @@ bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
     // only internal commands have null paths
     return false;
   }
-  return App().PossibleActions().Add( szText, szPath );
+  return _actions.Add( new Action(szText, szPath ) );
 }
 
 /**
@@ -394,7 +397,7 @@ bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
  * \param szPath the path of the action we are removing.
  * \return bool if the action was removed or not.
  */
-bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
+bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const
 {
   if( nullptr == szText || _tcslen(szText) == 0 )
   {
@@ -407,23 +410,30 @@ bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
     // only internal commands have null paths
     return false;
   }
-  return App().PossibleActions().Remove( szText, szPath );
+  return _actions.Remove( szText, szPath );
 }
 
 /**
  * \brief Find an action to see if it exists already
- * @param idx the index of the action we are looking for.
- * @param szText the name of the command we want to find
- * @param stdPath if the action exists, return the path for it.
- * @return bool if the action exits or not.
+ * \param idx the index of the action we are looking for.
+ * \param szText the name of the command we want to find
+ * \param stdPath if the action exists, return the path for it.
+ * \return if the action exits or not.
  */
-bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath )
+bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, std::wstring& stdPath ) const
 {
   if( nullptr == szText )
   {
     return false;
   }
-  return App().PossibleActions().Find( idx, szText, stdPath );
+  const auto action = _actions.Find( szText, idx );
+  if( nullptr == action )
+  {
+    return false;
+  }
+
+  stdPath = action->File();
+  return true;
 }
 
 /** 

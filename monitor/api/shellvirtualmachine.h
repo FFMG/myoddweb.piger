@@ -24,7 +24,7 @@
 class ShellVirtualMachine final : public myodd::os::IpcMessageHandler, public IVirtualMachine
 {
 public:
-  explicit ShellVirtualMachine(IMessagesHandler& messagesHandler);
+  explicit ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler);
   virtual ~ShellVirtualMachine();
   bool Initialize() override;
 
@@ -43,7 +43,7 @@ protected:
   typedef std::map<std::wstring, ShellApi*> APIS;
   APIS _apis;
 
-  ShellApi* AddApi(const std::wstring& uuid, const ActiveAction& action, IMessagesHandler& messagesHandler );
+  ShellApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
   ShellApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();

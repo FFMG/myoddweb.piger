@@ -5,8 +5,8 @@
 #include <os/ipclistener.h>
 #include "csvirtualmachine.h"
 
-CsVirtualMachine::CsVirtualMachine(IMessagesHandler& messagesHandler) :
-  PowershellVirtualMachine( messagesHandler )
+CsVirtualMachine::CsVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler) :
+  PowershellVirtualMachine( actions, messagesHandler )
 {
 }
 

@@ -11,10 +11,10 @@
 #include "os/os.h"
 #include "amplugin/ampluginprivate.h"
 
-class PluginVirtualMachine : public IVirtualMachine
+class PluginVirtualMachine final : public IVirtualMachine
 {
 public:
-  PluginVirtualMachine( IMessagesHandler& messagesHandler );
+  PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler );
   virtual ~PluginVirtualMachine();
 
   int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;

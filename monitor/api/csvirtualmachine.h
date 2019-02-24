@@ -6,7 +6,7 @@
 class CsVirtualMachine final : public PowershellVirtualMachine
 {
 public:
-  explicit CsVirtualMachine(IMessagesHandler& messagesHandler);
+  explicit CsVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler);
   virtual ~CsVirtualMachine();
 
   static bool IsExt(const MYODD_STRING& file);

@@ -17,6 +17,9 @@
 #include "FadeWnd.h"
 #include "ActiveActions.h"
 #include "resource.h"		// main symbols
+#include "../common/trayDialog.h" //  system tray icon item
+#include <os/ipclistener.h>
+#include "../ActionMonitor/IActions.h"
 
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
@@ -25,14 +28,14 @@
 
 #define SPECIAL_KEY VK_CAPITAL
 
-#include "../common/trayDialog.h" //  system tray icon item
-#include <os/ipclistener.h>
-
 class ActionMonitorDlg final : public CTrayDialog, FadeWnd, ActiveActions
 {
 // Construction
 public:
-  explicit ActionMonitorDlg( CWnd* pParent = nullptr);	// standard constructor
+  explicit ActionMonitorDlg(
+    IActions& actions,
+    IMessagesHandler& messagesHandler,
+    CWnd* pParent = nullptr);	// standard constructor
   virtual ~ActionMonitorDlg();
 
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
@@ -91,6 +94,16 @@ protected:
   HGDIOBJ SelTimeFont( HDC hdc );
 
 protected:
+  /**
+   * \brief the actions currently loaded
+   */
+  IActions& _actions;
+
+  /**
+   * \brief the messages handler
+   */
+  IMessagesHandler& _messagesHandler;
+
   //  ---------------------------------------------------------------------------------
   //  thwe max width/hewight
   POINT m_ptMaxValues;

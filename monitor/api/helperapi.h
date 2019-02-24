@@ -16,6 +16,7 @@
 
 #include "ActiveAction.h"
 #include "IMessagesHandler.h"
+#include "IActions.h"
 
 /**
  * Helper function used to make new APIs easier to create and most of them more standard.
@@ -27,7 +28,7 @@
 class HelperApi
 {
 public:
-  explicit HelperApi( const ActiveAction& action, IMessagesHandler& messages );
+  explicit HelperApi( const ActiveAction& action, IActions& actions, IMessagesHandler& messages );
   virtual ~HelperApi() = default;
 
 private:
@@ -42,6 +43,11 @@ private:
    * \brief the messages handler
    */
   IMessagesHandler& _messagesHandler;
+
+  /**
+   * \brief all the actions
+   */
+  IActions& _actions;
 
 protected:
   // helper function
@@ -88,15 +94,15 @@ protected:
 
   // add a set of command to the list of commands.
   // note that we do hardly any checks to see of the command already exists
-  static bool AddAction(const wchar_t* szText, const wchar_t* szPath );
+  bool AddAction(const wchar_t* szText, const wchar_t* szPath ) const;
 
   // remove an action, if more than one action is found
   // then the path will be compared against.
-  static bool RemoveAction(const wchar_t* szText, const wchar_t* szPath );
+  bool RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const;
 
   // find an action, we return true when we find it
   // there can be more than one action with the same name.
-  static bool FindAction( unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath );
+  bool FindAction( unsigned int idx, const wchar_t* szText, std::wstring& stdPath ) const;
 
   // log a message to the log file.
   static void Log(unsigned int logType, const wchar_t* lpText );

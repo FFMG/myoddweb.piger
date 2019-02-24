@@ -35,15 +35,21 @@ bool ActionMonitorDlg::IsRunning()
 /**
  * \brief the constructor
  * \see CTrayDialog::CTrayDialog
+ * \param actions the list of possible actions.
  * \param pParent the parent owner of this window
  */
-ActionMonitorDlg::ActionMonitorDlg( CWnd* pParent /*=nullptr*/)
+ActionMonitorDlg::ActionMonitorDlg(
+  IActions& actions,
+  IMessagesHandler& messagesHandler,
+  CWnd* pParent /*=nullptr*/)
   : CTrayDialog(ActionMonitorDlg::IDD, pParent), 
     m_rWindow(),
     m_keyState(ACTION_NONE),
     _fontTime(nullptr), 
     m_ptMaxValues(),
-    _IpcListener(nullptr)
+    _IpcListener(nullptr),
+    _actions( actions ),
+    _messagesHandler(messagesHandler)
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -246,7 +252,7 @@ void ActionMonitorDlg::ShowWindow( BYTE bTrans )
     {
       // remove the current action
       // we are hidding the current action
-      App().PossibleActions().CurrentActionReset();
+      _actions.CurrentActionReset();
 
       //  we need to recalculate the size of the command window
       //  normally when we hide the window it is because we are no longer
@@ -438,7 +444,7 @@ LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
       TrayUpdate();
 
       //  reset the last command
-      App().PossibleActions().CurrentActionReset();
+      _actions.CurrentActionReset();
       ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     }
   }
@@ -452,7 +458,7 @@ LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
   switch (wParam) 
   { 
   case VK_BACK:     // backspace 
-    App().PossibleActions().CurrentActionBack();
+    _actions.CurrentActionBack();
     ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     break;
 
@@ -463,11 +469,11 @@ LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     break; 
 
   case VK_ESCAPE:
-    App().PossibleActions().CurrentActionReset( );
+    _actions.CurrentActionReset( );
     ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
 
   case VK_DOWN:
-    App().PossibleActions().down();
+    _actions.down();
     ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     break;
 
@@ -475,7 +481,7 @@ LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     break;
 
   case VK_UP:
-    App().PossibleActions().up();
+    _actions.up();
     ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
     break;
 
@@ -511,7 +517,7 @@ LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
       {
         const auto c = static_cast<TCHAR>(CHAR(w));
         //  add the current character to the list of items
-        App().PossibleActions().CurrentActionAdd( c );
+        _actions.CurrentActionAdd( c );
 
         //  make sure that the window is visible
         //  This will also force a refresh of the window
@@ -560,13 +566,14 @@ LRESULT ActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
         //  we will use the first command 'google' with the arguments 'french victories'
         //
         //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
-        MYODD_STRING szCommandLine = _T( "" );
-        const Action* action = App().PossibleActions().GetCommand(&szCommandLine);
+        const auto action = _actions.GetCommand();
         if (nullptr != action)
         {
+          const auto szCommandLine = _actions.GetCommandLine();
+
           //  do the action now
           //  we might not have any, but that's not for us to decides :).
-          CWnd* pWnd = CActionMonitorApp::GetLastForegroundWindow();
+          const auto pWnd = CActionMonitorApp::GetLastForegroundWindow();
           QueueAndExecute( action->CreateActiveAction( pWnd, szCommandLine, false) );
         }
       }
@@ -615,7 +622,7 @@ bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
   }
   //  get the current text as well as the possible commands.
   //  we pass what ever the user entered to whatever commands are saved.
-  const auto sCommand = App().PossibleActions().toChar( );
+  const auto sCommand = _actions.toChar( );
   const auto len = sCommand.length();
 
   HDC localHdc = nullptr;
@@ -891,10 +898,7 @@ LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
 }
 
 /**
- * Close this instance
- *
- * @param void
- * @return void
+ * \brief Close this instance
  */
 void ActionMonitorDlg::OnTrayExit() 
 {
@@ -951,7 +955,7 @@ void ActionMonitorDlg::OnClose()
  */
 void ActionMonitorDlg::KillAllActiveWindows()
 {
-  App().MsgHandler().CloseAll();
+  _messagesHandler.CloseAll();
 
   // now that we asked for windows to be closed.
   // we can wait for them to close.
@@ -967,7 +971,7 @@ void ActionMonitorDlg::WaitForActiveWindows()
   _IpcListener->WaitForActiveHandlers();
 
   // wait for all the messages
-  App().MsgHandler().WaitForAllToComplete();
+  _messagesHandler.WaitForAllToComplete();
 }
 
 /**

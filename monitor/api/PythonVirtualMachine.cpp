@@ -51,12 +51,10 @@ PyMODINIT_FUNC PyInit_am(void)
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \copydoc
  */
-PythonVirtualMachine::PythonVirtualMachine(IMessagesHandler& messagesHandler) :
-  IVirtualMachine(messagesHandler),
+PythonVirtualMachine::PythonVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler) :
+  IVirtualMachine(actions, messagesHandler),
   m_isInitialized( false ),
   _mainThreadState( nullptr )
 {
@@ -230,7 +228,7 @@ int PythonVirtualMachine::Execute(const ActiveAction& action, const std::wstring
     return -1;
   }
 
-  const auto api = new PyApi(action, App().MsgHandler(), script, GetMainPyThread());  //  save it.
+  const auto api = new PyApi(action, GetActions(), GetMessagesHandler(), script, GetMainPyThread());  //  save it.
   const auto id = std::this_thread::get_id();
   AddApi(id, api);
 

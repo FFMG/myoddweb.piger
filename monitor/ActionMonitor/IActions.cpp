@@ -12,35 +12,13 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
-#pragma once
+#include "stdafx.h"
+#include "IActions.h"
 
-#include "Actions.h"
-#include "ActiveActions.h"
-
-class ActionsImmediate final :
-  public Actions, ActiveActions
+IActions::IActions()
 {
-public:
-  explicit ActionsImmediate(const std::wstring& directoryToParse, IActions& actions);
-  virtual ~ActionsImmediate() = default;
+}
 
-public:
-  void Initialize() override;
-  void WaitForAll();
-
-protected:
-  //  no reserved directories here.
-  bool IsReservedDir( const wchar_t*)const override { return false;}
-
-protected:
-  /**
-   * \brief the sub directory that contains the actions we want to run.
-   */
-  const std::wstring _directoryToParse;
-
-  /**
-   * \brief the parent actions.
-   */
-  IActions& _actions;
-  void DoThem();
-};
+IActions::~IActions()
+{
+}

@@ -11,12 +11,12 @@
 class LuaVirtualMachine final : public IVirtualMachine
 {
 public:
-  explicit LuaVirtualMachine( IMessagesHandler& messagesHandler );
+  explicit LuaVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler );
   ~LuaVirtualMachine();
   
   static bool IsExt(const MYODD_STRING& file );
 
-  int Execute(const ActiveAction& action, const std::wstring& pluginFile);
+  int Execute( const ActiveAction& action, const std::wstring& pluginFile) override;
   void Destroy() override{};
   bool Initialize() override { return true; };
 

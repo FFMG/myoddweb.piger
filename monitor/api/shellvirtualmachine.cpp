@@ -11,8 +11,11 @@
 
 #include "ShellVirtualMachine.h"
 
-ShellVirtualMachine::ShellVirtualMachine(IMessagesHandler& messagesHandler) :
-  IVirtualMachine( messagesHandler),
+/**
+ * \copydoc
+ */
+ShellVirtualMachine::ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler) :
+  IVirtualMachine( actions, messagesHandler),
   _initialized( false )
 {
 }
@@ -197,7 +200,7 @@ int ShellVirtualMachine::Execute(const ActiveAction& action, const std::wstring&
 
   //  create uuid and andd it to our list.
   const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  const auto psApi = AddApi(uuid, action, GetMessagesHandler() );
+  const auto psApi = AddApi(uuid, action );
 
   // get the path of the exe
   std::wstring szPath;
@@ -307,10 +310,9 @@ bool ShellVirtualMachine::IsExt(const std::wstring& file)
  * \brief Add an API to our current list, we cannot add duplicates!
  * \param uuid the unique Id we are adding
  * \param action the matching action for this Id.
- * \param messagesHandler the messages handler.
  * \return the shell API that manages the action
  */
-ShellApi* ShellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action, IMessagesHandler& messagesHandler)
+ShellApi* ShellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action)
 {
   //  lock us in
   myodd::threads::Lock lock(_mutex);
@@ -324,7 +326,7 @@ ShellApi* ShellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveActi
   }
 
   //  create the powershell api.
-  const auto psApi = new ShellApi(action, messagesHandler );
+  const auto psApi = new ShellApi(action, GetActions(), GetMessagesHandler() );
 
   // add it to the array
   _apis[uuid] = psApi;

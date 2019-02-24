@@ -10,7 +10,7 @@
 class PowershellVirtualMachine : public myodd::os::IpcMessageHandler, public IVirtualMachine
 {
 public:
-  explicit PowershellVirtualMachine(IMessagesHandler& messagesHandler);
+  explicit PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler);
   virtual ~PowershellVirtualMachine();
 
   static bool IsExt(const MYODD_STRING& file);
@@ -30,7 +30,7 @@ protected:
   typedef std::map<std::wstring, PowershellApi*> APIS;
   APIS _apis;
 
-  PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action, IMessagesHandler& messagesHandler);
+  PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
   PowershellApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();

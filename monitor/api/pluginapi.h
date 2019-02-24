@@ -10,7 +10,7 @@ static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 class PluginApi : public HelperApi
 {
 public:
-  PluginApi(const ActiveAction& action, IMessagesHandler& messagesHandler);
+  PluginApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler);
   virtual ~PluginApi();
 
 public:

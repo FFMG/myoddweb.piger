@@ -8,11 +8,10 @@
 #include "amplugin\ampluginprivate.h"
 
 /**
- * \brief the plugins virtual machine constructor
- * \param messagesHandler the messages handler.
+ * \copydoc
  */
-PluginVirtualMachine::PluginVirtualMachine( IMessagesHandler& messagesHandler ) :
-  IVirtualMachine( messagesHandler ),
+PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler ) :
+  IVirtualMachine( actions, messagesHandler ),
   _amPlugin( nullptr )
 {
   //  get our own module architecture.
@@ -283,7 +282,7 @@ int PluginVirtualMachine::Execute(const ActiveAction& action, const std::wstring
   }
 
   // add the api to the list.
-  auto api = new PluginApi(action, GetMessagesHandler() );
+  auto api = new PluginApi(action, GetActions(), GetMessagesHandler() );
   AddApi( api );
 
   // execute this plugin

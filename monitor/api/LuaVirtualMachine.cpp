@@ -5,11 +5,10 @@
 #include "ActionMonitor.h"
 
 /**
- * \brief the Lua virtual machine
- * \param messagesHandler the messages handler
+ * \copydoc
  */
-LuaVirtualMachine::LuaVirtualMachine(IMessagesHandler& messagesHandler) :
-  IVirtualMachine( messagesHandler )
+LuaVirtualMachine::LuaVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler) :
+  IVirtualMachine(actions, messagesHandler )
 {
 }
 
@@ -115,7 +114,7 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
 
 int LuaVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
 {
-  const auto api = new LuaApi(action, GetMessagesHandler() );
+  const auto api = new LuaApi(action, GetActions(), GetMessagesHandler() );
   try
   {
     const auto lua = CreateState(api);

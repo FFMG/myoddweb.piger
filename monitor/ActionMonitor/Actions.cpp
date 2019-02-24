@@ -47,29 +47,22 @@ void Actions::ClearAll()
 }
 
 /**
- * Find a certain action given the name and index number.
- * This is because we can have more than one action with the same name.
- * @param UINT the index number we are looking for.
- * @param LPCTSTR the action name we are after.
- * @param MYODD_STRING& if found, the path of the action.
- * @return bool if the action was found or not.
+ * \brief Find a certain action given the name and index number.
+ *        This is because we can have more than one action with the same name.
+ * \param szText the action name we are after.
+ * \param idx the index number we are looking for.
+ * \return Action or nullptr if the action was found or not.
  */
-bool Actions::Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath )
+const Action* Actions::Find(const std::wstring& szText, unsigned int idx )
 {
-  if( NULL == szText )
-  {
-    // this is not valid
-    return false;
-  }
-
   //  get the lock
   myodd::threads::Lock guard(_mutex);
 
   UINT currentIdx = 0;
-  size_t size = m_Actions.size();
-  for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
+  const auto size = m_Actions.size();
+  for( auto it = m_Actions.begin(); it < m_Actions.end(); ++it )
   {
-    const Action &a = *(*i);
+    const auto& a = *(*it);
     // is it the command we were after?
     if( myodd::strings::Compare( a.Command(), szText, false ) == 0 )
     {
@@ -77,8 +70,7 @@ bool Actions::Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath )
       if( idx == currentIdx )
       {
         // this is what we were looking for.
-        stdPath = a.File();
-        return true;
+        return *it;
       }
 
       // look for the next index.
@@ -131,35 +123,12 @@ Actions::array_of_actions_it Actions::Find(const MYODD_STRING& szText, const MYO
 
 /**
  * \brief Add an action name and path to the vector
- * \param szText the name of the action the user will enter.
- * \param szPath the path of the file that will be executed.
+ * \param action the action we want to add.
  * \return bool success or not.
- */
-bool Actions::Add(LPCTSTR szText, LPCTSTR szPath)
-{
-  //  sanity check
-  if (szText == nullptr || _tcslen(szText) == 0)
-  {
-    return false;
-  }
-
-  const auto action = new Action(szText, szPath);
-  if (!Add(action))
-  {
-    delete action;
-    return false;
-  }
-  return true;
-}
-
-/**
- * Add an action name and path to the vector
- * @param const Action& the action we want to add.
- * @return bool success or not.
  */
 bool Actions::Add( Action* action )
 {
-  if (NULL == action)
+  if (nullptr == action)
   {
     return false;
   }
@@ -167,7 +136,7 @@ bool Actions::Add( Action* action )
   //  get the lock
   myodd::threads::Lock guard(_mutex);
 
-  array_of_actions_it it = Find(action->Command(), action->File() );
+  const auto it = Find(action->Command(), action->File() );
   if( it != m_Actions.end() )
   {
     // this item already exists
@@ -179,19 +148,19 @@ bool Actions::Add( Action* action )
 
   // make sure we have not reached our limit this can be changed in the config file
   // but if you have more than 2048 then we might have problems with loading speed, memory and so forth.
-  ASSERT( m_Actions.size() <= (size_t)::myodd::config::Get( L"paths\\maxcommand", 2048 ) );
+  ASSERT( m_Actions.size() <= static_cast<size_t>(::myodd::config::Get(L"paths\\maxcommand", 2048)) );
   
   // the action was added.
   return true;
 }
 
 /**
- * Remove a single command
- * @param LPCTSTR the name of the action the user will enter.
- * @param LPCTSTR the path of the file that will be executed.
- * @return bool success or not, if it does not exit we return false.
+ * \brief try and remove a single command
+ * \param szText the name of the action the user will enter.
+ * \param szPath the path of the file that will be executed.
+ * \return success or not, if it does not exit we return false.
  */
-bool Actions::Remove( LPCTSTR szText, LPCTSTR szPath )
+bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
 {
   //  look for this path and this command.
   array_of_actions_it it = Find( szText, szPath );
@@ -274,7 +243,7 @@ void Actions::GetCommandValue(const std::wstring& lpName, COMMANDS_VALUE& cv ) c
  * remember that we need to escape all the '.' that are in the commands, (file names can have special chars).
  * If a user is looking for "google.bat" are they looking for "google\.bat" or "google(.*)bat" or "google(.)bat"?
  */
-MYODD_STRING Actions::toChar( ) const
+const std::wstring Actions::toChar( ) const
 {
   //  get the current command, colors and style
   COMMANDS_VALUE cv( _T("000000"), 0, 0 );
@@ -296,7 +265,7 @@ MYODD_STRING Actions::toChar( ) const
   {
     //  we need a break after the previous line, (even for the current action)
     szCurrentView += _T("<br>");
-    const Action &acc = *(*it);
+    const auto& acc = *(*it);
 
     szCurrentView += toChar( acc.Command(), (count==m_uCommand) ? cvSel:cvDef );
     ++count;
@@ -446,30 +415,33 @@ void Actions::SetAction( Action* tmpAction )
 
 // -------------------------------------------------------------
 //  get the currently selected command
-const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
+const Action* Actions::GetCommand() const
 {
   //  do we have a posible action?
-  if( m_tmpAction )
+  if (m_tmpAction)
   {
     return m_tmpAction;
   }
 
   //  do we have a potential action?
   // if not, then return NULL
-  if( m_uCommand >= m_ActionsMatch.size() )
+  if (m_uCommand >= m_ActionsMatch.size())
   {
-    return NULL;
+    return nullptr;
   }
 
   //  get the current action.
-  const Action* action = m_ActionsMatch[ m_uCommand ];
+  const Action* action = m_ActionsMatch[m_uCommand];
+  return action;
+}
 
-  // Add the command line if we have anything.
-  if (cmdLine == NULL)
+const std::wstring Actions::GetCommandLine() const
+{
+  const auto action = GetCommand();
+  if( nullptr == action )
   {
-    return action;
+    return L"";
   }
-  (*cmdLine) = _T("");
 
   // how many words are in the command?
   const auto lpAction = action->Command().c_str();
@@ -483,9 +455,10 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
   // but the user selected the command and typed 
   // 'goo home'
   // then we need to remove only 'goo' as the other character make part of the command line.
-  MYODD_STRING wildAction = _T( "" );
-  std::vector<MYODD_STRING> wildActions;
-  for( std::vector<MYODD_STRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
+  std::wstring wildAction = L"";
+  std::wstring commandLine = L"";
+  std::vector<std::wstring> wildActions;
+  for( auto it = exploded.begin(); it != exploded.end(); ++it )
   {
     wildActions.push_back( _T("(") + *it + _T("\\S*)") );
     wildAction = myodd::strings::implode( wildActions, _T( "\\s+" ) );
@@ -494,20 +467,18 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
     if( !myodd::strings::wildcmp( (wildAction).c_str(), lpAction ) )
     {
       // this no longer match, so any words afterward make up the command.
-      (*cmdLine) = wildAction = myodd::strings::implode( _T( " " ), it, exploded.end() );
+      commandLine = wildAction = myodd::strings::implode( _T( " " ), it, exploded.end() );
       break;
     }
   }
 
   // trim the unneeded chars.
-  myodd::strings::Trim( (*cmdLine) );
-
-  // return what we have.
-  return action;
+  myodd::strings::Trim( commandLine );
+  return commandLine;
 }
 
 // -------------------------------------------------------------
-void Actions::Init()
+void Actions::Initialize()
 {
   //  get the root directory
   std::wstring commandsPath = ::myodd::config::Get( L"paths\\commands", L"" );
@@ -607,7 +578,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
         myodd::files::StripExtension( szName );
       }        
 
-      Add( szName.c_str(), szFullPath.c_str() );
+      Add( new Action( szName, szFullPath));
     }while( _tfindnext( ffhandle, &fdata ) == 0 );
 
     _findclose( ffhandle );

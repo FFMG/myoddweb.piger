@@ -4,7 +4,7 @@
 class VirtualMachines final
 {
 public:
-  explicit VirtualMachines( IMessagesHandler& messagesHandler);
+  explicit VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler);
   ~VirtualMachines();
 
   // prevent copies.
@@ -18,6 +18,7 @@ public:
 
 private:
   IMessagesHandler& _messagesHandler;
+  IActions& _actions;
 
   template<class T>
   void Destroy();
@@ -48,7 +49,7 @@ public:
   {
     if (_lvm == nullptr)
     {
-      _lvm = new LuaVirtualMachine( _messagesHandler );
+      _lvm = new LuaVirtualMachine( _actions, _messagesHandler );
     }
     return *_lvm;
   }
@@ -80,7 +81,7 @@ public:
   {
     if (_svm == nullptr)
     {
-      _svm = new ShellVirtualMachine( _messagesHandler );
+      _svm = new ShellVirtualMachine( _actions, _messagesHandler );
       _svm->Initialize();
     }
     return *_svm;
@@ -113,7 +114,7 @@ public:
   {
     if (_csvm == nullptr)
     {
-      _csvm = new CsVirtualMachine( _messagesHandler );
+      _csvm = new CsVirtualMachine( _actions, _messagesHandler );
       _csvm->Initialize();
     }
     return *_csvm;
@@ -146,7 +147,7 @@ public:
   {
     if (_psvm == nullptr)
     {
-      _psvm = new PowershellVirtualMachine( _messagesHandler );
+      _psvm = new PowershellVirtualMachine( _actions, _messagesHandler );
       _psvm->Initialize();
     }
     return *_psvm;
@@ -179,7 +180,7 @@ public:
   {
     if (_plugvm == nullptr)
     {
-      _plugvm = new PluginVirtualMachine( _messagesHandler );
+      _plugvm = new PluginVirtualMachine( _actions, _messagesHandler );
       _plugvm->Initialize();
     }
     return *_plugvm;
@@ -212,7 +213,7 @@ public:
   {
     if (_pvm == nullptr)
     {
-      _pvm = new PythonVirtualMachine( _messagesHandler );
+      _pvm = new PythonVirtualMachine( _actions, _messagesHandler );
       _pvm->Initialize();
     }
     return *_pvm;

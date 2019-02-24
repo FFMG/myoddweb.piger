@@ -31,7 +31,7 @@ BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 END_MESSAGE_MAP()
 
 /**
- *The constructor.
+ * \brief The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
   _startActions(nullptr), 
@@ -39,8 +39,9 @@ _endActions(nullptr),
   m_hMutex(nullptr),
   _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize( NULL ), 
-  _possibleActions(nullptr),
+  _taskBar(nullptr),
   _messagesHandler( nullptr ),
+  _possibleActions(nullptr),
   _virtualMachines(nullptr)
 {
 }
@@ -265,18 +266,20 @@ BOOL CActionMonitorApp::InitInstance()
   // set the cliboard size.
   InitMaxClipboardSize();
 
-  auto noTaskBar = new CFrameWnd();
-  noTaskBar->Create(nullptr, nullptr,WS_OVERLAPPEDWINDOW);
+  // create the taskbar
+  CreateTaskBar();
 
+  // create the message handler
   CreateMessageHandler();
 
+  // create the virtual machines
   CreateVirtualMachines();
 
   // create the possible actions
   CreateActionsList();
 
   // create the actual dicali.
-	ActionMonitorDlg dlg( noTaskBar );
+	ActionMonitorDlg dlg( *_possibleActions, *_messagesHandler, _taskBar);
 	m_pMainWnd = &dlg;
 
   const auto nResponse = dlg.DoModal();
@@ -292,7 +295,8 @@ BOOL CActionMonitorApp::InitInstance()
 	}
 
   //  clean up the window.
-  noTaskBar->DestroyWindow();
+  _taskBar->DestroyWindow();
+  _taskBar = nullptr;
 
   // remove the actions
   // we are about to close, we are no longer monitoring anything
@@ -312,11 +316,21 @@ BOOL CActionMonitorApp::InitInstance()
 	return FALSE;
 }
 
+void CActionMonitorApp::CreateTaskBar()
+{
+  if(_taskBar != nullptr )
+  {
+    _taskBar->DestroyWindow();
+  }
+  _taskBar = new CFrameWnd();
+  _taskBar->Create(nullptr, nullptr, WS_OVERLAPPEDWINDOW);
+}
+
 void CActionMonitorApp::CreateVirtualMachines()
 {
   // stop the virtuall machines
   delete _virtualMachines;
-  _virtualMachines = new VirtualMachines( MsgHandler() );
+  _virtualMachines = new VirtualMachines( *_possibleActions, *_messagesHandler );
 }
 
 /**
@@ -343,7 +357,7 @@ void CActionMonitorApp::CreateActionsList()
   _possibleActions = new Actions( );
 
   //  parse the directory for all possible files.
-  _possibleActions->Init();
+  _possibleActions->Initialize();
 
   //TODO these really need to move out of here
   //  add the default commands
@@ -361,7 +375,8 @@ void CActionMonitorApp::DoVersion()
     ver.GetFileVersionMaintenance(),
     ver.GetFileVersionBuild());
 
-  MsgHandler().Show(strSay.c_str(), 500, 3000);
+  assert(_messagesHandler != nullptr);
+  _messagesHandler->Show(strSay.c_str(), 500, 3000);
 }
 
 /**
@@ -375,8 +390,8 @@ void CActionMonitorApp::DoStartActionsList(const bool wait)
   WaitForStartActionsToComplete();
 
   // start the new ones
-  _startActions = new ActionsImmediate(AM_DIRECTORY_IN);
-  _startActions->Init();
+  _startActions = new ActionsImmediate( AM_DIRECTORY_IN, *_possibleActions);
+  _startActions->Initialize();
 
   // wait if needed.
   if (wait)
@@ -396,8 +411,8 @@ void CActionMonitorApp::DoEndActionsList(const bool wait)
   WaitForEndActionsToComplete();
 
   // start the new ones
-  _endActions = new ActionsImmediate( AM_DIRECTORY_OUT );
-  _endActions->Init();
+  _endActions = new ActionsImmediate( AM_DIRECTORY_OUT, *_possibleActions);
+  _endActions->Initialize();
 
   // wait if needed.
   if (wait)

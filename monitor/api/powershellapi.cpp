@@ -4,12 +4,10 @@
 #include "pluginVirtualMachine.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \copydoc
  */
-PowershellApi::PowershellApi(const ActiveAction& action, IMessagesHandler& messagesHandler ) :
-  HelperApi(action, messagesHandler ), 
+PowershellApi::PowershellApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+  HelperApi(action, actions, messagesHandler ), 
   _hProcess( nullptr )
 {
 }

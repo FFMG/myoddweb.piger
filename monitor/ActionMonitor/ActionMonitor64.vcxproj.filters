@@ -168,6 +168,9 @@
     <ClCompile Include="..\api\IVirtualMachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="IActions.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -333,6 +336,9 @@
     </ClInclude>
     <ClInclude Include="..\api\IVirtualMachine.h">
       <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="IActions.h">
+      <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

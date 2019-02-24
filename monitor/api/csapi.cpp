@@ -3,10 +3,9 @@
 #include "pluginVirtualMachine.h"
 
 /**
- * \brief constructor
- * \param action the action being called.
+ * \copydoc
  */
-CsApi::CsApi(const ActiveAction& action, IMessagesHandler& messagesHandler) :
-  PowershellApi(action, messagesHandler )
+CsApi::CsApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
+  PowershellApi(action, actions, messagesHandler )
 {
 }

@@ -19,11 +19,13 @@
 
 /**
  * \brief Constructor
- * \param subDir subDir the directory we want to parse.
+ * \param directoryToParse the directory with the actions we want to do immidiately.
+ * \param actions the parent actions.
  */
-ActionsImmediate::ActionsImmediate(const wchar_t* subDir ) :
+ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& actions) :
   Actions(),
-  m_subDir( subDir )
+  _directoryToParse( directoryToParse ),
+  _actions( actions )
 {
 
 }
@@ -32,12 +34,12 @@ ActionsImmediate::ActionsImmediate(const wchar_t* subDir ) :
  * \brief Initialise all the actions so we can start doing them.
  *        Go around the directory and look for possible actions.
  */
-void ActionsImmediate::Init()
+void ActionsImmediate::Initialize()
 {
   std::wstring sPath = ::myodd::config::Get( L"paths\\commands", L"");
   if( myodd::files::ExpandEnvironment( sPath, sPath ) )
   {
-    ParseDirectory( sPath.c_str(), m_subDir.c_str() );
+    ParseDirectory( sPath.c_str(), _directoryToParse.c_str() );
   }
 
   //  we must now do all the actions
@@ -65,7 +67,7 @@ void ActionsImmediate::DoThem(  )
       //
       // we cannot replace 'possibleActions' with 'this' as the APIs might
       // actually add or remove commands.
-      App().PossibleActions().SetAction( action );
+      _actions.SetAction( action );
 
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'CreateActiveAction(...)' function
@@ -79,7 +81,7 @@ void ActionsImmediate::DoThem(  )
   }// for loop
 
   // reset the current action to the default.
-  App().PossibleActions().SetAction( nullptr );
+  _actions.SetAction( nullptr );
 }
 
 /**

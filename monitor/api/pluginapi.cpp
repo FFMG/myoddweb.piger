@@ -4,12 +4,10 @@
 #include "pluginVirtualMachine.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \copydoc
  */
-PluginApi::PluginApi(const ActiveAction& action, IMessagesHandler& messagesHandler) :
-  HelperApi(action, messagesHandler )
+PluginApi::PluginApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
+  HelperApi(action, actions, messagesHandler )
 {
 }
 
