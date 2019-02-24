@@ -38,7 +38,7 @@ protected:
   inline BYTE IsVisible()const{return m_byteVisible;};
   inline void Visible( BYTE b ){m_byteVisible = b;};
 
-  void SetTransparency( unsigned char bTrans );
+  void SetTransparency( unsigned char bTrans ) const;
 
   CFont *fontDisplay; //  the display font
 

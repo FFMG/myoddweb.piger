@@ -70,7 +70,7 @@ static lpfn g_pSetLayeredWindowAttributes = NULL;
  * \brief set the current transparency of this window.
  * \param bTrans the transparency amount.
  */
-void FadeWnd::SetTransparency(unsigned char bTrans)
+void FadeWnd::SetTransparency(const unsigned char bTrans) const
 {
   //  get the function pointer for SetLayeredWindowAttributes 
   //  in User32.dll
@@ -87,7 +87,7 @@ void FadeWnd::SetTransparency(unsigned char bTrans)
   }
   ::SetWindowLong(m_hFade, GWL_EXSTYLE, GetWindowLong(m_hFade, GWL_EXSTYLE) | WS_EX_LAYERED);
   //  range of opacity between 0 and 255
-  g_pSetLayeredWindowAttributes(m_hFade, RGB(255,255,255), (BYTE)bTrans, LWA_COLORKEY | LWA_ALPHA);
+  g_pSetLayeredWindowAttributes(m_hFade, RGB(255,255,255), static_cast<BYTE>(bTrans), LWA_COLORKEY | LWA_ALPHA);
 }
 
 

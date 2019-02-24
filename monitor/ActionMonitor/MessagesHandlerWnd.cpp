@@ -54,7 +54,7 @@ bool MessagesHandlerWnd::Show(IMessagesHandler& parent, const std::wstring& sTex
 bool MessagesHandlerWnd::CreateClass()
 {
   memset(&_wc, 0, sizeof(WNDCLASSEX));
-  const auto hInstance = AfxGetInstanceHandle();
+  const auto hInstance = GetModuleHandle(nullptr); ;
   if (GetClassInfoEx(hInstance, _szClassName.c_str(), &_wc))
   {
     return true;
