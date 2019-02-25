@@ -21,6 +21,7 @@
 #include "ActionLoad.h"
 #include "ActionVersion.h"
 #include "MessagesHandler.h"
+#include "IpcListener.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 	//{{AFX_MSG_MAP(CActionMonitorApp)
@@ -35,14 +36,15 @@ END_MESSAGE_MAP()
  */
 CActionMonitorApp::CActionMonitorApp() :
   _startActions(nullptr), 
-_endActions(nullptr),
-  m_hMutex(nullptr),
+  _endActions(nullptr),
+  _mutex(nullptr),
   _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize( NULL ), 
   _taskBar(nullptr),
   _messagesHandler( nullptr ),
   _possibleActions(nullptr),
-  _virtualMachines(nullptr)
+  _virtualMachines(nullptr),
+  _ipcListener( nullptr )
 {
 }
 
@@ -107,12 +109,12 @@ void CActionMonitorApp::SetLastForegroundWindow( CWnd* window )
  */
 bool CActionMonitorApp::CanStartApp()
 {
-  m_hMutex = CreateMutex(nullptr,   // default security attributes
+  _mutex = CreateMutex(nullptr,   // default security attributes
                           FALSE,  // initially not owned
                           CONF_MUTEXT 
                          );
 
-  if (m_hMutex == nullptr)
+  if (_mutex == nullptr)
   {
     TRACE("CreateMutex error: %d\n", GetLastError());
     return false;
@@ -123,8 +125,8 @@ bool CActionMonitorApp::CanStartApp()
   switch (lErr)
   {
   case ERROR_ALREADY_EXISTS:
-    CloseHandle(m_hMutex);
-    m_hMutex = nullptr;
+    CloseHandle(_mutex);
+    _mutex = nullptr;
     return false;
 
   case ERROR_SUCCESS:
@@ -192,7 +194,7 @@ BOOL CActionMonitorApp::InitInstance()
 
   // can we start running now?
   // if not then there is a problem.
-  if( !CanStartApp( ) )
+  if (!CanStartApp())
   {
     return FALSE;
   }
@@ -206,13 +208,13 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::geo::Test();
   myodd::math::Test();
   myodd::files::Test();
-  
-	AfxEnableControlContainer();
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+  AfxEnableControlContainer();
+
+  // Standard initialization
+  // If you are not using these features and wish to reduce the size
+  //  of your final executable, you should remove from the following
+  //  the specific initialization routines you do not need.
 
   //  load the command line
   //  --d xxxxxxx    : path of all the root comands
@@ -220,7 +222,7 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::desc desc;
   desc.add_options()
 #ifdef UNICODE
-    ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
+  ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
     ("d", myodd::po::wvalue<std::wstring>(), "the full path of the root commands.")
 #else
     ("c", myodd::po::wvalue<std::string>(), "the oath of the config file.")
@@ -233,7 +235,7 @@ BOOL CActionMonitorApp::InitInstance()
 #else
   TCHAR** args = __argv;
 #endif
-  myodd::variables vm( __argc, args, desc );
+  myodd::variables vm(__argc, args, desc);
 
   // We need to init the registry so that everybody can use it.
   if (!InitConfig(vm))
@@ -243,7 +245,7 @@ BOOL CActionMonitorApp::InitInstance()
   }
 
   // if the user passed something then it will override what we have
-  if( 1 == vm.count( "d") )
+  if (1 == vm.count("d"))
   {
     // get the path
 #ifdef UNICODE
@@ -254,23 +256,35 @@ BOOL CActionMonitorApp::InitInstance()
     const auto lpPath = sAPath.c_str();
 
     //  set it in case next time we have nothing
-    myodd::config::Set( L"paths\\commands", lpPath );
+    myodd::config::Set(L"paths\\commands", lpPath);
   }
 
   // setup the log
   InitLog();
-  
+
   // we now need to add the default reserved paths.
   InitReservedPaths();
 
   // set the cliboard size.
   InitMaxClipboardSize();
 
+  // show the dialog box and wait for it to complete.
+  CreateAndShowActionDialog();
+
+  // always return false
+  return FALSE;
+}
+
+bool CActionMonitorApp::CreateAndShowActionDialog()
+{
   // create the taskbar
   CreateTaskBar();
 
   // create the message handler
   CreateMessageHandler();
+
+  // create the messages/listener.
+  CreateIpcListener();
 
   // create the possible actions
   CreateActionsList();
@@ -278,26 +292,19 @@ BOOL CActionMonitorApp::InitInstance()
   // create the virtual machines
   CreateVirtualMachines();
 
-  // sanity check
+  // sanity checks
+  assert(_taskBar != nullptr);
   assert(_possibleActions != nullptr);
   assert(_messagesHandler != nullptr);
   assert(_virtualMachines != nullptr);
+  assert(_ipcListener != nullptr);
 
   // create the actual dicali.
 	ActionMonitorDlg dlg( *_possibleActions, *_messagesHandler, _taskBar);
 	m_pMainWnd = &dlg;
 
+  // show the dialog box
   const auto nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
-	}
 
   //  clean up the window.
   _taskBar->DestroyWindow();
@@ -316,9 +323,10 @@ BOOL CActionMonitorApp::InitInstance()
   delete _messagesHandler;
   _messagesHandler = nullptr;
 
-	//  Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pupszCmdLine.
-	return FALSE;
+  delete _ipcListener;
+  _ipcListener = nullptr;
+
+  return (nResponse == IDOK);
 }
 
 void CActionMonitorApp::CreateTaskBar()
@@ -333,13 +341,26 @@ void CActionMonitorApp::CreateTaskBar()
 
 void CActionMonitorApp::CreateVirtualMachines()
 {
-  // sanity check
+  // sanity checks
   assert(_possibleActions != nullptr);
   assert(_messagesHandler != nullptr);
+  assert(_ipcListener != nullptr);
 
   // stop the virtuall machines
   delete _virtualMachines;
-  _virtualMachines = new VirtualMachines( *_possibleActions, *_messagesHandler );
+  _virtualMachines = new VirtualMachines( *_possibleActions, *_messagesHandler, *_ipcListener );
+}
+
+void CActionMonitorApp::CreateIpcListener()
+{
+  assert(_taskBar != nullptr);
+
+  // remove the old one
+  delete _ipcListener;
+
+  // create a new one
+  _ipcListener = new IpcListener();
+  _ipcListener->Initialize( _taskBar->GetSafeHwnd() );
 }
 
 /**
@@ -374,6 +395,93 @@ void CActionMonitorApp::CreateActionsList()
   _possibleActions->Add( new ActionLoad() );
   _possibleActions->Add( new ActionVersion() );
 }
+
+/**
+ * \brief Wait for all the active windows to complete.
+ */
+void CActionMonitorApp::WaitForHandlersToComplete()
+{
+  // wait for the Ipc windows.
+  if( _ipcListener != nullptr )
+  {
+    _ipcListener->WaitForAllToComplete();
+  }
+
+  if (_messagesHandler != nullptr)
+  {
+    // wait for all the messages
+    _messagesHandler->WaitForAllToComplete();
+  }
+}
+
+void CActionMonitorApp::DoClose()
+{
+  // log that we are closing down
+  myodd::log::LogMessage(_T("Piger is shutting down."));
+
+  // destroy the active actions.
+  DestroyActiveActions();
+
+  // for them to finish
+  WaitForHandlersToComplete();
+
+  // call the end actions to run
+  DoEndActionsList(true);
+
+  // wait all the active windows.
+  // those are the ones created by the end Action list.
+  WaitForHandlersToComplete();
+
+  //  remove the hooks
+  hook_clear( GetMainWnd()->GetSafeHwnd() );
+
+  WaitForHandlersToComplete();
+
+  //  close us
+  auto mainWnd = GetMainWnd();
+  if (mainWnd)
+  {
+    mainWnd->PostMessage(WM_CLOSE, 0, 0);
+  }
+}
+
+void CActionMonitorApp::DoReload()
+{
+  // destroy the active actions that are still running.
+  // this could include start actions that are up and running.
+  DestroyActiveActions();
+
+  // for them to finish
+  WaitForHandlersToComplete();
+
+  // call the end actions to run
+  DoEndActionsList(true);
+
+  // wait all the active windows.
+  // those are the ones created by the end Action list.
+  WaitForHandlersToComplete();
+
+  // destroy the active actions.
+  // those are the actions that must have been started by the
+  // end action but are still hanging around.
+  DestroyActiveActions();
+
+  // (re)build the action list
+  CreateMessageHandler();
+
+  CreateVirtualMachines();
+
+  // (re)build the action list
+  CreateActionsList();
+
+  //  and restart everything
+  DoStartActionsList(false);
+
+  // wait all the active windows.
+  // those we just re-started.
+  WaitForHandlersToComplete();
+}
+
 
 void CActionMonitorApp::DoVersion()
 {
@@ -603,15 +711,15 @@ int CActionMonitorApp::ExitInstance()
   myodd::config::Close();
 
   //  this should never not be null.
-  if (m_hMutex)
+  if (_mutex)
   {
     // releaste the mutex
-    ReleaseMutex(m_hMutex);
+    ReleaseMutex(_mutex);
 
     //  close the mutext
-    CloseHandle(m_hMutex);
+    CloseHandle(_mutex);
   }
-  m_hMutex = nullptr;
+  _mutex = nullptr;
 
   return CWinApp::ExitInstance();
 }
@@ -620,7 +728,7 @@ int CActionMonitorApp::ExitInstance()
  * Destroy the active actions.
  * @return non.
  */
-void CActionMonitorApp::DestroyActiveActions()
+void CActionMonitorApp::DestroyActiveActions() const
 {
   if( _virtualMachines == nullptr )
   {

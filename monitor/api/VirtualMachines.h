@@ -4,7 +4,7 @@
 class VirtualMachines final
 {
 public:
-  explicit VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler);
+  explicit VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener);
   ~VirtualMachines();
 
   // prevent copies.
@@ -19,6 +19,7 @@ public:
 private:
   IMessagesHandler& _messagesHandler;
   IActions& _actions;
+  IIpcListener& _ipcListener;
 
   template<class T>
   void Destroy();
@@ -49,7 +50,7 @@ public:
   {
     if (_lvm == nullptr)
     {
-      _lvm = new LuaVirtualMachine( _actions, _messagesHandler );
+      _lvm = new LuaVirtualMachine( _actions, _messagesHandler, _ipcListener);
     }
     return *_lvm;
   }
@@ -81,7 +82,7 @@ public:
   {
     if (_svm == nullptr)
     {
-      _svm = new ShellVirtualMachine( _actions, _messagesHandler );
+      _svm = new ShellVirtualMachine( _actions, _messagesHandler, _ipcListener);
       _svm->Initialize();
     }
     return *_svm;
@@ -114,7 +115,7 @@ public:
   {
     if (_csvm == nullptr)
     {
-      _csvm = new CsVirtualMachine( _actions, _messagesHandler );
+      _csvm = new CsVirtualMachine( _actions, _messagesHandler, _ipcListener);
       _csvm->Initialize();
     }
     return *_csvm;
@@ -147,7 +148,7 @@ public:
   {
     if (_psvm == nullptr)
     {
-      _psvm = new PowershellVirtualMachine( _actions, _messagesHandler );
+      _psvm = new PowershellVirtualMachine( _actions, _messagesHandler, _ipcListener);
       _psvm->Initialize();
     }
     return *_psvm;
@@ -180,7 +181,7 @@ public:
   {
     if (_plugvm == nullptr)
     {
-      _plugvm = new PluginVirtualMachine( _actions, _messagesHandler );
+      _plugvm = new PluginVirtualMachine( _actions, _messagesHandler, _ipcListener);
       _plugvm->Initialize();
     }
     return *_plugvm;
@@ -213,7 +214,7 @@ public:
   {
     if (_pvm == nullptr)
     {
-      _pvm = new PythonVirtualMachine( _actions, _messagesHandler );
+      _pvm = new PythonVirtualMachine( _actions, _messagesHandler, _ipcListener);
       _pvm->Initialize();
     }
     return *_pvm;

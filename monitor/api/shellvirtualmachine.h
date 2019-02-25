@@ -24,7 +24,7 @@
 class ShellVirtualMachine final : public myodd::os::IpcMessageHandler, public IVirtualMachine
 {
 public:
-  explicit ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler);
+  explicit ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~ShellVirtualMachine();
   bool Initialize() override;
 

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "VirtualMachines.h"
 
-VirtualMachines::VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler) :
+VirtualMachines::VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener) :
   _messagesHandler( messagesHandler ),
-  _actions(actions)
+  _actions(actions),
+  _ipcListener(ipcListener)
 #ifdef ACTIONMONITOR_API_LUA
   , _lvm(nullptr)
 #endif

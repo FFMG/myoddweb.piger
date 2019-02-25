@@ -10,7 +10,7 @@
 class PowershellVirtualMachine : public myodd::os::IpcMessageHandler, public IVirtualMachine
 {
 public:
-  explicit PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler);
+  explicit PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~PowershellVirtualMachine();
 
   static bool IsExt(const MYODD_STRING& file);

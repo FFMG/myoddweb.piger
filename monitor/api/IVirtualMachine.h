@@ -1,13 +1,31 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "IMessagesHandler.h"
 #include "IActions.h"
 #include "ActiveAction.h"
+#include "IIpcListener.h"
 
 class IVirtualMachine
 {
 public:
-  explicit IVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler);
+  explicit IVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~IVirtualMachine();
+
+  IVirtualMachine(const IVirtualMachine&) = delete;
+  void operator=(const IVirtualMachine&) = delete;
 
   /**
    * \brief tell the virtual machine to execute the given action
@@ -42,6 +60,10 @@ protected:
     return _actions;
   }
 
+  IIpcListener& GetIpcListener() const
+  {
+    return _ipcListener;
+  }
 private:
   /**
    * \param the message handler that the virtual machine can use.
@@ -52,4 +74,9 @@ private:
    * \param the collection of actions
    */
   IActions& _actions;
+
+  /**
+   * \brief the ipc listener.
+   */
+  IIpcListener& _ipcListener;
 };

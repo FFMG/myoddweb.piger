@@ -33,7 +33,6 @@ public:
   // Implementation
 	DECLARE_MESSAGE_MAP()
 
-protected:
   static bool InitConfig(const myodd::variables& vm);
   static void InitLog();
   static void InitReservedPaths();
@@ -46,17 +45,34 @@ public:
   static size_t GetMaxClipboardMemory();
 
 public:
+  bool CreateAndShowActionDialog();
   void CreateTaskBar();
   void CreateActionsList();
   void CreateMessageHandler();
   void CreateVirtualMachines();
+  void CreateIpcListener();
 
 public:
   void DoVersion();
+  void DoReload();
+  void DoClose();
+
   void DoStartActionsList( bool wait );
   void DoEndActionsList(bool wait);
   void WaitForEndActionsToComplete();
   void WaitForStartActionsToComplete();
+
+private:
+  /**
+   * \brief Wait for the active windows to complete.
+   */
+  void WaitForHandlersToComplete();
+
+  /**
+   * \brief check if the special key is currently pressed down.
+   * \return if the special key is down.
+   */
+  bool IsSpecialKeyDown()const;
 
 private:
   ActionsImmediate* _startActions;
@@ -75,7 +91,7 @@ public:
   /**
    * \brief the handle of the mutex
    */
-  HANDLE m_hMutex;
+  HANDLE _mutex;
 
   /**
    * \brief CWnd* The window that last had the focus when we pressed the special key.
@@ -86,17 +102,6 @@ public:
    * \brief The maximum memory we want to use when getting clipboard data.
    */
   size_t _maxClipboardSize;
-public:
-
-  VirtualMachines& VirtualMachinesHandler()
-  {
-    return *_virtualMachines;
-  }
-
-  const VirtualMachines& VirtualMachinesHandler() const
-  {
-    return *_virtualMachines;
-  }
 private:
   CFrameWnd* _taskBar;
 
@@ -111,12 +116,29 @@ private:
   IActions* _possibleActions;
 
   /**
+   * \brief the IPC Listener.
+   */
+  IIpcListener* _ipcListener;
+
+  /**
    * \brief the virtual machines handler.
    */
   VirtualMachines* _virtualMachines;
 
 public:
-  void DestroyActiveActions();
+
+  VirtualMachines& VirtualMachinesHandler()
+  {
+    return *_virtualMachines;
+  }
+
+  const VirtualMachines& VirtualMachinesHandler() const
+  {
+    return *_virtualMachines;
+  }
+
+public:
+  void DestroyActiveActions() const;
 };
 
 CActionMonitorApp& App();

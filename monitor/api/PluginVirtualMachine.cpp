@@ -10,8 +10,8 @@
 /**
  * \copydoc
  */
-PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler ) :
-  IVirtualMachine( actions, messagesHandler ),
+PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine( actions, messagesHandler, iIpcListener ),
   _amPlugin( nullptr )
 {
   //  get our own module architecture.

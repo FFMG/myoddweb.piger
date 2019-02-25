@@ -18,7 +18,6 @@
 #include "ActiveActions.h"
 #include "resource.h"		// main symbols
 #include "../common/trayDialog.h" //  system tray icon item
-#include <os/ipclistener.h>
 #include "../ActionMonitor/IActions.h"
 
 #define ACTION_NONE           0x000
@@ -66,23 +65,9 @@ protected:
 protected:
   //  the state of our special key
   DWORD m_keyState;
+
 protected:
-
   static void MessagePump(HWND hWnd);
-
-public:
-
-  // kill all the active windows.
-  void KillAllActiveWindows();
-
-  // before we close the dlg we must wait for our last messages
-  void WaitForActiveWindows();
-
-  //  add a message handler
-  void AddMessageHandler(myodd::os::IpcMessageHandler& handler);
-
-  // remove a message handler.
-  void RemoveMessageHandler(myodd::os::IpcMessageHandler& handler);
 
 protected:
   bool DisplayCommand( HDC hdc = NULL );
@@ -120,7 +105,6 @@ protected:
   afx_msg void OnTrayExit();
   afx_msg void OnTrayVersion();
   afx_msg void OnTrayReload();
-  afx_msg void OnClose();
   afx_msg void OnDestroy();
   virtual BOOL OnInitDialog();
   afx_msg HCURSOR OnQueryDragIcon();
@@ -132,7 +116,4 @@ public:
 
 protected:
   std::mutex _mutex;
-
-  void InitializeListener();
-  myodd::os::IpcListener* _IpcListener;
 };

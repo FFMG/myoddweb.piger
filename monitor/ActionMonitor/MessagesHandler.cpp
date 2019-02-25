@@ -57,7 +57,7 @@ void MessagesHandler::MessageDialogIsComplete(MessageDlg* dlg)
   myodd::threads::Lock guard(_mutex);
 
   // look for the window we want to delete.
-  auto saved = std::find(_collection.begin(), _collection.end(), dlg);
+  const auto saved = std::find(_collection.begin(), _collection.end(), dlg);
   if (saved == _collection.end())
   {
     return;

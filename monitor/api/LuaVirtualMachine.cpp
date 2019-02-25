@@ -7,8 +7,8 @@
 /**
  * \copydoc
  */
-LuaVirtualMachine::LuaVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler) :
-  IVirtualMachine(actions, messagesHandler )
+LuaVirtualMachine::LuaVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine(actions, messagesHandler, iIpcListener )
 {
 }
 

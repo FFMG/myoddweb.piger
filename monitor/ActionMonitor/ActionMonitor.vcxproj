@@ -223,7 +223,9 @@
     <ClCompile Include="ActiveUserMessageAction.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="IActions.cpp" />
+    <ClCompile Include="IIpcListener.cpp" />
     <ClCompile Include="IMessagesHandler.cpp" />
+    <ClCompile Include="IpcListener.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="MessagesHandler.cpp" />
     <ClCompile Include="MessagesHandlerWnd.cpp" />
@@ -283,7 +285,9 @@
     <ClInclude Include="ActiveUserMessageAction.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="IActions.h" />
+    <ClInclude Include="IIpcListener.h" />
     <ClInclude Include="IMessagesHandler.h" />
+    <ClInclude Include="IpcListener.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="MessagesHandler.h" />

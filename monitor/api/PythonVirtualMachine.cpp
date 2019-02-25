@@ -53,8 +53,8 @@ PyMODINIT_FUNC PyInit_am(void)
 /**
  * \copydoc
  */
-PythonVirtualMachine::PythonVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler) :
-  IVirtualMachine(actions, messagesHandler),
+PythonVirtualMachine::PythonVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener) :
+  IVirtualMachine(actions, messagesHandler, ipcListener ),
   m_isInitialized( false ),
   _mainThreadState( nullptr )
 {

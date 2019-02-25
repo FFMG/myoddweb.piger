@@ -47,7 +47,6 @@ ActionMonitorDlg::ActionMonitorDlg(
     m_keyState(ACTION_NONE),
     _fontTime(nullptr), 
     m_ptMaxValues(),
-    _IpcListener(nullptr),
     _actions( actions ),
     _messagesHandler(messagesHandler)
 {
@@ -60,13 +59,6 @@ ActionMonitorDlg::ActionMonitorDlg(
  */
 ActionMonitorDlg::~ActionMonitorDlg()
 {
-  //  clear the ipc listener
-  if (_IpcListener != nullptr)
-  {
-    delete _IpcListener;
-    _IpcListener = nullptr;
-  }
-
   if( _fontTime )
   {
     _fontTime->DeleteObject();
@@ -98,7 +90,6 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
   ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
 	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
   ON_COMMAND(ID_TRAY_VERSION, OnTrayVersion)
-  ON_WM_CLOSE()
   ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -160,9 +151,6 @@ BOOL ActionMonitorDlg::OnInitDialog()
   // set the fade window
   SetFadeParent( m_hWnd );
 
-  // initialise the listener.
-  InitializeListener();
-
   //  setup the hooks and the key
   InitHook();
 
@@ -172,24 +160,6 @@ BOOL ActionMonitorDlg::OnInitDialog()
   ::PostMessage(m_hWnd, UWM_MESSAGE_PUMP_READY, 0, 0);
   
   return TRUE;
-}
-
-void ActionMonitorDlg::InitializeListener()
-{
-  if (nullptr == _IpcListener)
-  {
-    // lock us in
-    myodd::threads::Lock guard(_mutex);
-
-    // if this is done already, we don't want to do it again.
-    if (nullptr == _IpcListener)
-    {
-      // create the listenner and pass oursleves as the window.
-      // so some messages can be routed back to us.
-      const auto hWnd = GetSafeHwnd();
-      _IpcListener = new myodd::os::IpcListener(CONF_MUTEXT, hWnd);
-    }
-  }
 }
 
 /**
@@ -204,9 +174,7 @@ BOOL ActionMonitorDlg::IsSpecialKeyDown( )const
 }
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief initialise the hook
  */
 void ActionMonitorDlg::InitHook()
 {
@@ -849,51 +817,7 @@ LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
  */
 LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
 {
-  // destroy the active actions that are still running.
-  // this could include start actions that are up and running.
-  App().DestroyActiveActions();
-
-  // kill them ... dead.
-  KillAllActiveWindows();
-
-  // call the end actions to run
-  App().DoEndActionsList( true );
-
-  // wait all the active windows.
-  // those are the ones created by the end Action list.
-  WaitForActiveWindows();
-
-  // destroy the active actions.
-  // those are the actions that must have been started by the
-  // end action but are still hanging around.
-  App().DestroyActiveActions();
-
-  //
-  //  Restart everything.
-  //
-
-  //  set up up the command window for the first time, (hidden)
-  InitWindow();
-
-  //  setup the hooks and the key
-  InitHook();
-
-  // (re)build the action list
-  App().CreateMessageHandler();
-
-  App().CreateVirtualMachines();
-
-  // (re)build the action list
-  App().CreateActionsList();
-
-  //  and restart everything
-  App().DoStartActionsList( false );
-
-  // wait all the active windows.
-  // those we just re-started.
-  WaitForActiveWindows();
-
-  //  we are now done.
+  App().DoReload();
   return 0L;
 }
 
@@ -902,7 +826,7 @@ LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
  */
 void ActionMonitorDlg::OnTrayExit() 
 {
-  ::PostMessage( m_hWnd, WM_CLOSE, 0, 0 );	
+  App().DoClose();
 }
 
 /**
@@ -925,53 +849,6 @@ void ActionMonitorDlg::OnTrayReload()
 void ActionMonitorDlg::OnTrayVersion()
 {
   ::PostMessage( m_hWnd, UWM_KEYBOARD_VERSION, 0, 0 );
-}
-
-/**
- * \brief called when the dialog is closing, (this is the main app).
- * \see CTrayDialog::OnClose
- */
-void ActionMonitorDlg::OnClose()
-{
-  // log that we are closing down
-  myodd::log::LogMessage(_T("Piger is shutting down."));
-
-  // destroy the active actions.
-  App().DestroyActiveActions();
-
-  //  hide the main window
-  ShowWindow(0);
-
-  //  remove the hooks
-  hook_clear( m_hWnd );
-
-  WaitForActiveWindows( );
-
-  __super::OnClose();
-}
-
-/**
- * Kill all the currently active message windows.
- */
-void ActionMonitorDlg::KillAllActiveWindows()
-{
-  _messagesHandler.CloseAll();
-
-  // now that we asked for windows to be closed.
-  // we can wait for them to close.
-  WaitForActiveWindows();
-}
-
-/**
- * \brief Wait for all the active windows to complete.
- */
-void ActionMonitorDlg::WaitForActiveWindows()
-{
-  // wait for the Ipc windows.
-  _IpcListener->WaitForActiveHandlers();
-
-  // wait for all the messages
-  _messagesHandler.WaitForAllToComplete();
 }
 
 /**
@@ -1005,33 +882,4 @@ void ActionMonitorDlg::OnDestroy()
 
   // destroy the window.
   __super::OnDestroy(); 
-}
-
-/**
- * \brief Add a message handler to our list of handlers.
- *        Each will be called when a new message arrives.
- * \param handler the message handler we are adding.
- */
-void ActionMonitorDlg::AddMessageHandler(myodd::os::IpcMessageHandler& handler)
-{
-  myodd::threads::Lock guard(_mutex);
-  if(_IpcListener == nullptr )
-  {
-    return;
-  }
-  _IpcListener->AddMessageHandler(handler);
-}
-
-/**
- * \brief Remove a message handler from our list.
- * \param handler the message handler we want to remove.
- */
-void ActionMonitorDlg::RemoveMessageHandler(myodd::os::IpcMessageHandler& handler)
-{
-  myodd::threads::Lock guard(_mutex);
-  if (_IpcListener == nullptr)
-  {
-    return;
-  }
-  _IpcListener->RemoveMessageHandler(handler);
 }

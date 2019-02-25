@@ -14,8 +14,8 @@
 /**
  * \copydoc
  */
-ShellVirtualMachine::ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler) :
-  IVirtualMachine( actions, messagesHandler),
+ShellVirtualMachine::ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine( actions, messagesHandler, iIpcListener),
   _initialized( false )
 {
 }
@@ -24,12 +24,8 @@ ShellVirtualMachine::~ShellVirtualMachine()
 {
   if (_initialized)
   {
-    const auto pThis = static_cast<ActionMonitorDlg*>(App().GetMainWnd());
-    if (pThis)
-    {
-      pThis->RemoveMessageHandler(*this);
-      _initialized = false;
-    }
+    GetIpcListener().Remove(*this);
+    _initialized = false;
   }
 
   //  Remove all the apis
@@ -39,13 +35,6 @@ ShellVirtualMachine::~ShellVirtualMachine()
 // create the IPC server
 bool ShellVirtualMachine::Initialize()
 {
-  // make sure that we have ourselves as a listener
-  const auto pThis = dynamic_cast<ActionMonitorDlg*>(App().GetMainWnd());
-  if (nullptr == pThis)
-  {
-    return false;
-  }
-
   if (_initialized == true)
   {
     return true;
@@ -53,7 +42,7 @@ bool ShellVirtualMachine::Initialize()
 
   try
   {
-    pThis->AddMessageHandler(*this);
+    GetIpcListener().Add(*this);
     _initialized = true;
     return true;
   }
