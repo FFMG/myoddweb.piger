@@ -41,7 +41,9 @@ namespace myodd {
       bool Running() const;
 
     private:
-
+      // wait for one of the worker to complete and remove it if needed.
+      int WaitForOneWorkerAndCompleteIfNeeded( int index );
+      
       // all the messages we are waiting to complete.
       typedef std::vector<std::future<void>> VWorkers;
       VWorkers _workers;

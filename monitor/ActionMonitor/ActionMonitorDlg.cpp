@@ -72,6 +72,7 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_DOWN     , OnHookKeyDown)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_UP       , OnHookKeyUp)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD   , OnReload)
+  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_EXIT     , OnExit)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION  , OnVersion)
   ON_REGISTERED_MESSAGE(UWM_MESSAGE_PUMP_READY, OnMessagePumpReady )
   ON_WM_WINDOWPOSCHANGING()
@@ -805,6 +806,16 @@ LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
 }
 
 /**
+ * \brief called when the user wants to close via the tray
+ * \return unused/reserved
+ */
+LRESULT ActionMonitorDlg::OnExit(WPARAM wParam, LPARAM lParam)
+{
+  App().DoVersion();
+  return 0L;
+}
+
+/**
  * \brief Message to tell the system to reload everything
  *        This is called when there has been a change to the options.xml
  * \return unused/reserved
@@ -820,7 +831,7 @@ LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
  */
 void ActionMonitorDlg::OnTrayExit() 
 {
-  App().DoClose();
+  ::PostMessage(m_hWnd, UWM_KEYBOARD_EXIT, 0, 0);
 }
 
 /**

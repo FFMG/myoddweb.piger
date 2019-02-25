@@ -444,41 +444,10 @@ void CActionMonitorApp::DoClose()
 
 void CActionMonitorApp::DoReload()
 {
-  // destroy the active actions that are still running.
-  // this could include start actions that are up and running.
-  DestroyAllVirtualMachines();
-
-  // for them to finish
-  WaitForHandlersToComplete();
-
-  // call the end actions to run
-  DoEndActionsList(true);
-
-  // wait all the active windows.
-  // those are the ones created by the end Action list.
-  WaitForHandlersToComplete();
-
-  // destroy the active actions.
-  // those are the actions that must have been started by the
-  // end action but are still hanging around.
-  DestroyAllVirtualMachines();
-
-  // (re)build the action list
-  CreateMessageHandler();
-
-  CreateVirtualMachines();
-
-  // (re)build the action list
-  CreateActionsList();
-
-  //  and restart everything
-  DoStartActionsList(false);
-
-  // wait all the active windows.
-  // those we just re-started.
-  WaitForHandlersToComplete();
+  // we first want to close.
+  // but make sure that we restart.
+  DoClose();
 }
-
 
 void CActionMonitorApp::DoVersion()
 {
