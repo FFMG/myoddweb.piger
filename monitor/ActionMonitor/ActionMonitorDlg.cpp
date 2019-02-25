@@ -20,18 +20,6 @@
 
 #define RECT_MIN_H 70
 
-// we are not running
-static bool g_isRunning = false;
-
-/**
- * \brief Check if the dialog is running or not.
- * \return bool true|false if the dialog is running or not, (destroyed).
- */
-bool ActionMonitorDlg::IsRunning()
-{
-  return g_isRunning;
-}
-
 /**
  * \brief the constructor
  * \see CTrayDialog::CTrayDialog
@@ -91,7 +79,16 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
 	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
   ON_COMMAND(ID_TRAY_VERSION, OnTrayVersion)
   ON_WM_DESTROY()
+  ON_WM_CLOSE()
 END_MESSAGE_MAP()
+
+void ActionMonitorDlg::OnClose()
+{
+  //  remove the hooks
+  hook_clear( m_hWnd );
+
+  __super::OnClose();
+}
 
 /**
  * todo
@@ -119,9 +116,6 @@ BOOL ActionMonitorDlg::OnInitDialog()
 {
 	CTrayDialog::OnInitDialog();
   ModifyStyleEx(WS_EX_APPWINDOW,0); //  no taskbar!
-
-  //  we are up and running!
-  g_isRunning = true;
 
   // Set the icon for this dialog.  The framework does this automatically
 	//  when the applications main window is not a dialog
@@ -868,18 +862,4 @@ void ActionMonitorDlg::MessagePump(const HWND hWnd)
       break;
     }
   }
-}
-
-/**
- * \brief stop accepting any more messages and close everything
- * \see CTrayDialog::OnDestroy
- */
-void ActionMonitorDlg::OnDestroy()
-{
-  // the window is about to be destroyed, 
-  // we are no longer up and running!
-  g_isRunning = false;
-
-  // destroy the window.
-  __super::OnDestroy(); 
 }

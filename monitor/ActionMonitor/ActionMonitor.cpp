@@ -419,8 +419,8 @@ void CActionMonitorApp::DoClose()
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
 
-  // destroy the active actions.
-  DestroyActiveActions();
+  // we need to stop all running acctions
+
 
   // for them to finish
   WaitForHandlersToComplete();
@@ -432,16 +432,13 @@ void CActionMonitorApp::DoClose()
   // those are the ones created by the end Action list.
   WaitForHandlersToComplete();
 
-  //  remove the hooks
-  hook_clear( GetMainWnd()->GetSafeHwnd() );
-
   WaitForHandlersToComplete();
 
   //  close us
-  auto mainWnd = GetMainWnd();
+  const auto mainWnd = GetMainWnd();
   if (mainWnd)
   {
-    mainWnd->PostMessage(WM_CLOSE, 0, 0);
+    mainWnd->SendMessage(WM_CLOSE, 0, 0);
   }
 }
 
@@ -449,7 +446,7 @@ void CActionMonitorApp::DoReload()
 {
   // destroy the active actions that are still running.
   // this could include start actions that are up and running.
-  DestroyActiveActions();
+  DestroyAllVirtualMachines();
 
   // for them to finish
   WaitForHandlersToComplete();
@@ -464,7 +461,7 @@ void CActionMonitorApp::DoReload()
   // destroy the active actions.
   // those are the actions that must have been started by the
   // end action but are still hanging around.
-  DestroyActiveActions();
+  DestroyAllVirtualMachines();
 
   // (re)build the action list
   CreateMessageHandler();
@@ -725,10 +722,9 @@ int CActionMonitorApp::ExitInstance()
 }
 
 /**
- * Destroy the active actions.
- * @return non.
+ * \brief destroy all the virtual machines.
  */
-void CActionMonitorApp::DestroyActiveActions() const
+void CActionMonitorApp::DestroyAllVirtualMachines() const
 {
   if( _virtualMachines == nullptr )
   {

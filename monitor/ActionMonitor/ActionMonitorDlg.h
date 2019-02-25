@@ -105,14 +105,10 @@ protected:
   afx_msg void OnTrayExit();
   afx_msg void OnTrayVersion();
   afx_msg void OnTrayReload();
-  afx_msg void OnDestroy();
+  afx_msg void OnClose();
   virtual BOOL OnInitDialog();
   afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-
-public:
-
-  static bool IsRunning();
 
 protected:
   std::mutex _mutex;

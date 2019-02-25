@@ -138,7 +138,7 @@ public:
   }
 
 public:
-  void DestroyActiveActions() const;
+  void DestroyAllVirtualMachines() const;
 };
 
 CActionMonitorApp& App();
