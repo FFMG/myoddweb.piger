@@ -21,14 +21,22 @@ public:
   void Destroy() override;
   bool Initialize() override;
 
-protected:
-
+private:
+  /**
+   * \brief if we initialized the virtual machine
+   */
   bool _initialized;
 
+  /**
+   * \brief the mutex we are using.
+   */
   std::mutex _mutex;
 
-  typedef std::map<std::wstring, PowershellApi*> APIS;
-  APIS _apis;
+  /**
+   * \brief the collection of created apis.
+   */
+  typedef std::map<std::wstring, PowershellApi*> Apis;
+  Apis _apis;
 
   PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
   PowershellApi* FindApi(const std::wstring& uuid) const;

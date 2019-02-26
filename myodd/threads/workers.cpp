@@ -103,10 +103,13 @@ namespace myodd {
 
       // get a future and move the indexes forward.
       auto& future = _workers[index];
-      const auto status = future.wait_for(waitForMilliseconds);
-      if (status != std::future_status::ready)
+      if (future.valid())
       {
-        return index;
+        const auto status = future.wait_for(waitForMilliseconds);
+        if (status != std::future_status::ready)
+        {
+          return index;
+        }
       }
 
       // remove that worker as it is complete.

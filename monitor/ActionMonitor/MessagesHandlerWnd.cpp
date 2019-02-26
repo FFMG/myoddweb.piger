@@ -20,7 +20,7 @@ LRESULT CALLBACK MessagesHandlerWnd::WndProc(HWND hwnd, UINT msg, WPARAM wParam,
     const auto messageHanderData = reinterpret_cast<Msg*>(lParam);
     const auto result = messageHanderData->Parent().Show(messageHanderData->Text(), messageHanderData->Elapse(), messageHanderData->FadeOut());
     delete messageHanderData;
-
+    
     return result ? 1L : 0L;
   }
 
@@ -48,7 +48,8 @@ LRESULT CALLBACK MessagesHandlerWnd::WndProc(HWND hwnd, UINT msg, WPARAM wParam,
 
 bool MessagesHandlerWnd::Show(IMessagesHandler& parent, const std::wstring& sText, const long elapseMiliSecondsBeforeFadeOut, const long totalMilisecondsToShowMessage) const
 {
-  return 1L == SendMessage(_hwnd, UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new Msg(parent, sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage)));
+  assert(::IsWindow(_hwnd));
+  return ERROR_SUCCESS == SendMessage(_hwnd, UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new Msg(parent, sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage)));
 }
 
 bool MessagesHandlerWnd::CreateClass()

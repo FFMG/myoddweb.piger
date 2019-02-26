@@ -419,8 +419,8 @@ void CActionMonitorApp::DoClose()
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
 
-  // we need to stop all running acctions
-
+  // stop and destroy all the running virtual machines.
+  DestroyAllVirtualMachines();
 
   // for them to finish
   WaitForHandlersToComplete();
