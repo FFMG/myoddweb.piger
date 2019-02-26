@@ -30,7 +30,7 @@ void IpcListener::WaitForAllToComplete()
 {
 }
 
-void IpcListener::Initialize(HWND hWnd)
+void IpcListener::Initialize(const HWND hWnd)
 {
   if (nullptr == _ipc)
   {

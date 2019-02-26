@@ -28,9 +28,9 @@ public:
   virtual void CurrentActionAdd(wchar_t c) = 0;
   virtual void CurrentActionBack() = 0;
   virtual void SetAction(Action* tmpAction) = 0;
-  virtual const Action* GetCommand() const = 0;
-  virtual const std::wstring GetCommandLine() const = 0;
-  virtual const std::wstring toChar() const = 0;
+  virtual const Action* GetCommand() = 0;
+  virtual std::wstring GetCommandLine() = 0;
+  virtual std::wstring ToChar() = 0;
   virtual void down() = 0;
   virtual void up() = 0;
   virtual void Initialize() = 0;

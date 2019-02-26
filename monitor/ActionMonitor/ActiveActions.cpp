@@ -34,13 +34,12 @@ ActiveActions::~ActiveActions()
 
   // the map should now be empty
   // otherwise we will simply delete the items.
-  myodd::threads::Lock guard(_mutex);
-  for (auto it = _runners.begin(); it != _runners.end(); ++it)
+  myodd::threads::Lock guard(_mutexRunner);
+  for ( auto it = _runners.begin(); it != _runners.end(); ++it)
   {
-    delete it->second;
+    delete *it;
   }
   _runners.clear();
-  guard.Release();
 }
 
 /**
@@ -57,10 +56,14 @@ void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
 
   // add this item to our list.
   // make sure that we keep the lock for as little as posible..
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutexRunner);
 
-  // add it to the list
-  _runners[activeAction] = activeAction;
+  const auto it = std::find(_runners.begin(), _runners.end(), activeAction);
+  if (it == _runners.end())
+  {
+    // add it to the list
+    _runners.push_back(activeAction);
+  }
 
   //  release the lock
   guard.Release();
@@ -76,10 +79,10 @@ void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
 void ActiveActions::RemoveRunner( ActiveAction* runner )
 {
   //  lock it.
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutexRunner);
 
   // find it
-  auto it = _runners.find(runner);
+  const auto it = std::find( _runners.begin(), _runners.end(), runner);
   if (it == _runners.end())
   {
     //  does not exist?
@@ -90,7 +93,7 @@ void ActiveActions::RemoveRunner( ActiveAction* runner )
   runner->DeInitialize();
 
   // delete it
-  delete it->second;
+  delete *it;
 
   // remove it
   _runners.erase(it);

@@ -46,7 +46,7 @@ LRESULT CALLBACK MessagesHandlerWnd::WndProc(HWND hwnd, UINT msg, WPARAM wParam,
   return 0;
 }
 
-bool MessagesHandlerWnd::Show(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const
+bool MessagesHandlerWnd::Show(IMessagesHandler& parent, const std::wstring& sText, const long elapseMiliSecondsBeforeFadeOut, const long totalMilisecondsToShowMessage) const
 {
   return 1L == SendMessage(_hwnd, UWM_DISPLAYMESSAGE, 0, reinterpret_cast<LPARAM>(new Msg(parent, sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage)));
 }

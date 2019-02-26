@@ -65,16 +65,16 @@ bool PluginVirtualMachine::DisposeApi(PluginApi* api)
 }
 
 /**
- * Add an api to our current list of plugins.
- * this must be in thread
- * @param PluginApi* api the api we would like to add.
+ * \brief Add an api to our current list of plugins.
+ *        this must be in thread
+ * \param api the api we would like to add.
  */
 void PluginVirtualMachine::AddApi(PluginApi* api)
 {
   // lock it
   myodd::threads::Lock guard(_mutex);
 
-  ListOfPlugins::const_iterator it = _apis.find(std::this_thread::get_id());
+  const auto it = _apis.find(std::this_thread::get_id());
   if (it != _apis.end())
   {
     // we are trying to add an api

@@ -43,7 +43,7 @@ protected:
       bItalic(0)
     {
     }
-    COMMANDS_VALUE( MYODD_STRING c, bool b, bool i ) :
+    COMMANDS_VALUE(std::wstring c, bool b, bool i ) :
       bBold( b), bItalic( i ), color( c ) 
     {
     }
@@ -51,17 +51,17 @@ protected:
     DISALLOW_COPY_AND_ASSIGN(COMMANDS_VALUE);
   };
 
-  static MYODD_STRING toChar( const MYODD_STRING& s, const COMMANDS_VALUE& cv );
+  static std::wstring toChar( const std::wstring& s, const COMMANDS_VALUE& cv );
   void GetCommandValue( const std::wstring& lpName, COMMANDS_VALUE& cv ) const;
 
 protected:
   //  vectors containing all the commands we can call
   typedef std::vector<Action*> array_of_actions;
   typedef array_of_actions::const_iterator array_of_actions_it;
-  array_of_actions m_Actions;
-  array_of_actions m_ActionsMatch;
+  array_of_actions _actions;
+  array_of_actions _actionsMatch;
 
-  array_of_actions::const_iterator Find( const MYODD_STRING& szText, const MYODD_STRING& szPath );
+  array_of_actions::const_iterator Find( const std::wstring& szText, const std::wstring& szPath );
 
   virtual void ParseDirectory( LPCTSTR  rootDir, LPCTSTR  extentionDir );
 
@@ -73,7 +73,7 @@ protected:
   size_t m_uCommand;
 
 protected:
-  Action* m_tmpAction;
+  Action* _actionCurrentlySelected;
 
 public:
   /**
@@ -85,16 +85,16 @@ public:
    */
   const std::wstring& getActionAsTyped() const
   { 
-    return m_sActionAsTyped;
+    return _sActionAsTyped;
   }
 
   void CurrentActionReset() override;
   void CurrentActionAdd( wchar_t c ) override;
   void CurrentActionBack() override;
   void SetAction(Action* tmpAction) override;
-  const Action* GetCommand() const override;
-  const std::wstring GetCommandLine() const override;
-  const std::wstring toChar() const override;
+  const Action* GetCommand() override;
+  std::wstring GetCommandLine() override;
+  std::wstring ToChar() override;
   void down() override;
   void up() override;
   void Initialize() override;
@@ -105,13 +105,15 @@ public:
   void ClearAll();
 protected:
   // this is the text that the user is currently typing
-  MYODD_STRING m_sActionAsTyped;
+  std::wstring _sActionAsTyped;
 
 protected:
   size_t BuildMatchList( );
-  size_t BuildMatchList( std::vector<MYODD_STRING>& exploded );
+  size_t BuildMatchList( std::vector<std::wstring>& exploded );
 
   virtual bool IsReservedDir(const wchar_t*) const;
 
-  std::mutex _mutex;
+  std::mutex _mutexActions;
+  std::mutex _mutexActionTemp;
+  std::mutex _mutexActionsMatch;
 };

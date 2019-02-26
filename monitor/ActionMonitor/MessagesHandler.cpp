@@ -64,6 +64,7 @@ void MessagesHandler::MessageDialogIsComplete(MessageDlg* dlg)
   }
 
   // remove it from the list
+  // we do not delete it, it calls 'delete this' when it is destroyed.
   _collection.erase(saved);
 }
 
@@ -151,28 +152,30 @@ void MessagesHandler::CloseAll()
  */
 void MessagesHandler::SendCloseMessageToAllMessageWindows()
 {
-  // protected the vector for a short while.
-  myodd::threads::Lock guard(_mutex);
-
-  // get a worker so we can do it all in parallel.
-  myodd::threads::Workers workers;
-
-  // kill the other messages;
-  for (auto it = _collection.begin();
-      it != _collection.end();
-      ++it)
+  // we cannot use a lock or a for/loop on the collection
+  // because the act of closing the message actually sends a callback
+  // the callback will delete the pointer and then remove it from the list.
+  for(;;)
   {
-    //  clear what is still good.
-    workers.QueueWorker( &MessageDlg::Close, *it);
+    // protected the vector for a short while.
+    myodd::threads::Lock guard(_mutex);
+    const auto it = _collection.begin();
+    if( it == _collection.end() )
+    {
+      break;
+    }
+
+    auto* copy = *it;
+
+    // make a copy of the pointer.
+    guard.Release();
+
+    // close it and wait for the message to be deleted.
+    MessageDlg::Close(copy);
   }
 
-  // then wait for all of them to finish.
-  workers.WaitForAllWorkers();
-
-  // look for old messages to remove
-  // but as we still have the lock
-  // we can do it the 'unsafe' way
-  UnsafeClearUnused();
+  // then clear all the unsused messages.
+  ClearUnused();
 }
 
 /**

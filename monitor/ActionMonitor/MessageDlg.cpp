@@ -360,7 +360,15 @@ unsigned char MessageDlg::GetStartTransparency() const
  */
 void MessageDlg::Close(MessageDlg* owner)
 {
-  owner->FadeCloseWindow();
+  try
+  {
+    owner->FadeCloseWindow();
+  }
+  catch(...)
+  {
+    // it is posible that the deleted window
+    // tried to close the message
+  }
 }
 
 /**

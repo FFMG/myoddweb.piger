@@ -21,18 +21,24 @@ class ActionsImmediate final :
   public Actions, ActiveActions
 {
 public:
-  explicit ActionsImmediate(const std::wstring& directoryToParse, IActions& actions);
+  explicit ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions);
   virtual ~ActionsImmediate() = default;
 
-public:
+  ActionsImmediate(const ActionsImmediate&) = delete;
+  void operator=(const ActionsImmediate&) = delete;
+
   void Initialize() override;
   void WaitForAll();
 
 protected:
-  //  no reserved directories here.
-  bool IsReservedDir( const wchar_t*)const override { return false;}
+  void DoThem();
 
-protected:
+private:
+  /**
+   * \brief no reserved directories here.
+   */
+  bool IsReservedDir(const wchar_t*)const override { return false; }
+
   /**
    * \brief the sub directory that contains the actions we want to run.
    */
@@ -41,6 +47,10 @@ protected:
   /**
    * \brief the parent actions.
    */
-  IActions& _actions;
-  void DoThem();
+  IActions& _parentActions;
+
+  /**
+   * \brief the mutex that manages the runners
+   */
+  std::mutex _mutex;
 };

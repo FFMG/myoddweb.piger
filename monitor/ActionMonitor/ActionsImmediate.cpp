@@ -20,12 +20,12 @@
 /**
  * \brief Constructor
  * \param directoryToParse the directory with the actions we want to do immidiately.
- * \param actions the parent actions.
+ * \param parentActions the parent actions.
  */
-ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& actions) :
+ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions) :
   Actions(),
   _directoryToParse( directoryToParse ),
-  _actions( actions )
+  _parentActions( parentActions )
 {
 
 }
@@ -51,15 +51,16 @@ void ActionsImmediate::Initialize()
  */
 void ActionsImmediate::DoThem(  )
 {
+  myodd::threads::Lock guard(_mutex);
   const auto isPrivileged = true;
-  for( auto it = m_Actions.begin(); it != m_Actions.end(); ++it )
+  for( auto it = _actions.begin(); it != _actions.end(); ++it )
   {
     // we must be carefull that we replace all the values properly
     // recover properly even in a crash so we can reset the posible Action
     try
     {
       // The action.
-      const auto action = *it;
+      const auto& action = *it;
 
       // We must tell the APIs who the current action will be
       // this one is because some APIs need to know the name of the current command
@@ -67,7 +68,7 @@ void ActionsImmediate::DoThem(  )
       //
       // we cannot replace 'possibleActions' with 'this' as the APIs might
       // actually add or remove commands.
-      _actions.SetAction( action );
+      _parentActions.SetAction( action );
 
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'CreateActiveAction(...)' function
@@ -81,7 +82,7 @@ void ActionsImmediate::DoThem(  )
   }// for loop
 
   // reset the current action to the default.
-  _actions.SetAction( nullptr );
+  _parentActions.SetAction( nullptr );
 }
 
 /**

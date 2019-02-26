@@ -585,7 +585,7 @@ bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
   }
   //  get the current text as well as the possible commands.
   //  we pass what ever the user entered to whatever commands are saved.
-  const auto sCommand = _actions.toChar( );
+  const auto sCommand = _actions.ToChar( );
   const auto len = sCommand.length();
 
   HDC localHdc = nullptr;
@@ -811,7 +811,7 @@ LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
  */
 LRESULT ActionMonitorDlg::OnExit(WPARAM wParam, LPARAM lParam)
 {
-  App().DoVersion();
+  App().DoClose();
   return 0L;
 }
 
