@@ -152,29 +152,36 @@ void MessagesHandler::CloseAll()
  */
 void MessagesHandler::SendCloseMessageToAllMessageWindows()
 {
-  // we cannot use a lock or a for/loop on the collection
-  // because the act of closing the message actually sends a callback
-  // the callback will delete the pointer and then remove it from the list.
-  for(;;)
-  {
-    // protected the vector for a short while.
-    myodd::threads::Lock guard(_mutex);
-    const auto it = _collection.begin();
-    if( it == _collection.end() )
-    {
-      break;
-    }
+  myodd::threads::Workers workers;
 
+  // get all the pointers and add them all to a worker.
+  // then wait for them all to finish outside the lock
+  // because the act of closing the dialog will try and update the collection.
+  myodd::threads::Lock guard(_mutex);
+  for( auto it = _collection.begin(); it != _collection.end(); ++it )
+  {
+    // get the pointer.
     auto* copy = *it;
 
-    // make a copy of the pointer.
-    guard.Release();
-
-    // close it and wait for the message to be deleted.
-    MessageDlg::Close(copy);
+    // add this item to the list of worker.
+    // if the message is completed it will try and remove itself from the list
+    // it will not work as we still have the lock.
+    // but we will release it asap.
+    workers.QueueWorker( &MessageDlg::Close, copy );
   }
 
-  // then clear all the unsused messages.
+  // make a copy of the pointer.
+  guard.Release();
+
+  // wait for all the workers to finisher their work. 
+  // when they complete they call "OnComplete" and will cause
+  // the lock to be obtained.
+  // but we released the lock, so they should be able to complete their work.
+  workers.WaitForAllWorkers();
+
+  // they should now all be complete.
+  // so we can clear them.
+  // we cannot call the unsafe version as we do not have the lock.
   ClearUnused();
 }
 
