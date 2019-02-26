@@ -426,12 +426,10 @@ void CActionMonitorApp::DoClose()
   WaitForHandlersToComplete();
 
   // call the end actions to run
-  DoEndActionsList(true);
+  DoEndActionsList( true );
 
   // wait all the active windows.
   // those are the ones created by the end Action list.
-  WaitForHandlersToComplete();
-
   WaitForHandlersToComplete();
 
   //  close us
