@@ -14,6 +14,7 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActiveActions.h"
+#include "ActionMonitor.h"
 
 /**
  * \brief Constructor.
@@ -31,27 +32,7 @@ ActiveActions::~ActiveActions()
   // we must do it in this destructor
   // otherwise our own map will be destroyed.
     // wait for all the workers to finish.
-  const auto pumpMessagesForMilliseconds = std::chrono::milliseconds(10);
-  WaitForAllWorkers([&]() {
-    // we do not want to run the message pump for ever
-    // so we will use the milliseconds as a 
-    auto start_time = std::chrono::high_resolution_clock::now();
-    MSG msg;
-    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-      TranslateMessage(&msg);
-      DispatchMessage(&msg);
-
-      auto current_time = std::chrono::high_resolution_clock::now();
-      if (std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time) > pumpMessagesForMilliseconds)
-      {
-        break;
-      }
-    }
-
-    // we want this message pump to continue.
-    return true;
-  });
-
+  WaitForAllWorkers( &CActionMonitorApp::MessagePump );
 
   // the map should now be empty
   // otherwise we will simply delete the items.
