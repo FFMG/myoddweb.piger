@@ -131,8 +131,6 @@ private:
   VirtualMachines* _virtualMachines;
 
 public:
-  static bool MessagePump();
-
   VirtualMachines& VirtualMachinesHandler()
   {
     return *_virtualMachines;

@@ -14,7 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActiveActions.h"
-#include "ActionMonitor.h"
 
 /**
  * \brief Constructor.
@@ -32,7 +31,11 @@ ActiveActions::~ActiveActions()
   // we must do it in this destructor
   // otherwise our own map will be destroyed.
     // wait for all the workers to finish.
-  WaitForAllWorkers( &CActionMonitorApp::MessagePump );
+  WaitForAllWorkers( []()
+  {
+    myodd::wnd::MessagePump(nullptr);
+    return true;
+  });
 
   // the map should now be empty
   // otherwise we will simply delete the items.

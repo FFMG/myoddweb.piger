@@ -14,7 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "MessageDlg.h"
-#include "ActionMonitor.h"
 
 #define MAX_TRANSPARENCY (unsigned char)255
 #define DEFAULT_TRANSPARENCY (unsigned char)127
@@ -237,7 +236,7 @@ void MessageDlg::ShowMessageWithNoFadding(long milliseconds)
   }
 
   // pump the message
-  MessagePump(m_hWnd);
+  myodd::wnd::MessagePump(m_hWnd);
 }
 
 /**
@@ -254,13 +253,13 @@ void MessageDlg::CloseFromThread()
   PostMessage(WM_CLOSE);
 
   // complete whatever needs to be done
-  MessagePump(m_hWnd);
+  myodd::wnd::MessagePump(m_hWnd);
 
   // wait a little.
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
   // and let the other threads process their messages.
-  MessagePump(nullptr);
+  myodd::wnd::MessagePump(nullptr);
 }
 
 /**
@@ -389,9 +388,12 @@ void MessageDlg::FadeCloseWindow()
   Stop();
 
   // pump the remaining messages
-  MessagePump( m_hWnd );
-  MessagePump( nullptr );
 
   // wait for all the workers to finish.
-  _worker.WaitForAllWorkers( &CActionMonitorApp::MessagePump);
+  _worker.WaitForAllWorkers([&]()
+  {
+    myodd::wnd::MessagePump(m_hWnd );
+    myodd::wnd::MessagePump(nullptr);
+    return true;
+  });
 }

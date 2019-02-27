@@ -855,22 +855,3 @@ void ActionMonitorDlg::OnTrayVersion()
 {
   ::PostMessage( m_hWnd, UWM_KEYBOARD_VERSION, 0, 0 );
 }
-
-/**
- * \brief pump all the messages for a given window.
- * \param hWnd the handle of the window messages we are pumping.
- */
-void ActionMonitorDlg::MessagePump(const HWND hWnd)
-{
-  //  lock up to make sure we only do one at a time
-  MSG msg;
-  while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
-  {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-    if (0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
-    {
-      break;
-    }
-  }
-}

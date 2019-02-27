@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "MessagesHandler.h"
-#include "ActionMonitor.h"
 
 MessagesHandler::MessagesHandler() :
   _threadId(std::this_thread::get_id()),
@@ -180,7 +179,11 @@ void MessagesHandler::SendCloseMessageToAllMessageWindows()
   // the lock to be obtained.
   // but we released the lock, so they should be able to complete their work.
   // wait for all the workers to finish.
-  workers.WaitForAllWorkers(&CActionMonitorApp::MessagePump);
+  workers.WaitForAllWorkers([&]()
+  {
+    myodd::wnd::MessagePump(nullptr);
+    return true;
+  });
 
   // they should now all be complete.
   // so we can clear them.
@@ -206,16 +209,18 @@ void MessagesHandler::WaitForAllToComplete()
     if (it == _collection.end())
       break;
 
+    myodd::wnd::MessagePump(nullptr);
+
     const auto dlg = static_cast<MessageDlg*>(*it);
     if (dlg != nullptr)
     {
       if (dlg->IsRunning())
       {
+        myodd::wnd::MessagePump(dlg->GetSafeHwnd() );
+
         // let go of the thread.
         std::this_thread::yield();
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-        CActionMonitorApp::MessagePump();
 
         // go around one last time
         // to give everyone a chance to close.

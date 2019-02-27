@@ -3,7 +3,6 @@
 #define __Math_h__
 
 #include "../common/includes.h"
-#include <limits>
 #include <assert.h>
 #include <math.h>
 #include <vector>

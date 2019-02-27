@@ -2,6 +2,7 @@
 #include "wnd.h"
 #include "../math/math.h"
 #include <assert.h>
+#include "../string/string.h"
 
 namespace myodd{ namespace wnd{
 /**
@@ -373,26 +374,26 @@ void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
     myodd::math::swap( nMax, nMin );
   }
 
-  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
+  auto sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, false ) )
   {
     sValue = myodd::strings::ToString( _tstoi(sValue.c_str()) );
     myodd::wnd::SetText( hWndParent, id, sValue );
   
-    int nStartChar = (int)sValue.length();
-    int nEndChar = nStartChar;
+    const auto nStartChar = static_cast<int>(sValue.length());
+    const auto nEndChar = nStartChar;
     SetSel( hWndParent, id, nStartChar, nEndChar);
   }
 
   // now make sure that it is withing ranges.
-  int nActual = myodd::math::Convert<MYODD_STRING, int>( sValue );
+  const auto nActual = myodd::math::Convert<const MYODD_STRING&, int>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax );
     myodd::wnd::SetText( hWndParent, id, sValue );
 
-    int nStartChar = (int)sValue.length();
-    int nEndChar = nStartChar;
+    const auto nStartChar = static_cast<int>(sValue.length());
+    const auto nEndChar = nStartChar;
     SetSel( hWndParent, id, nStartChar, nEndChar);
   }
   else if( nActual < nMin )
@@ -455,14 +456,14 @@ void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, c
   }
 
   // now make sure that it is withing ranges.
-  double nActual = myodd::math::Convert<MYODD_STRING, int>( sValue );
+  const auto nActual = myodd::math::Convert<const MYODD_STRING&, double>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax, lpszFormat );
     myodd::wnd::SetText( hWndParent, id, sValue );
 
-    int nStartChar = (int)sValue.length();
-    int nEndChar = nStartChar;
+    const auto nStartChar = static_cast<int>(sValue.length());
+    const auto nEndChar = nStartChar;
     SetSel( hWndParent, id, nStartChar, nEndChar);
   }
   else if( nActual < nMin )
@@ -648,5 +649,16 @@ BOOL CALLBACK _TerminateAppEnum( HWND hwnd, MYODD_LPARAM lParam )
 
   return TRUE ;
 }
+
+void MessagePump(const HWND hwnd)
+{
+  MSG msg;
+  while (PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE) > 0)
+  {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+  }
+}
+
 } //  wnd
 } //  myodd

@@ -67,9 +67,6 @@ protected:
   DWORD m_keyState;
 
 protected:
-  static void MessagePump(HWND hWnd);
-
-protected:
   bool DisplayCommand( HDC hdc = NULL );
   void DisplayTime( HDC hdc, RECT &rParent );
   bool ResizeCommandWindow( const RECT &newSize );

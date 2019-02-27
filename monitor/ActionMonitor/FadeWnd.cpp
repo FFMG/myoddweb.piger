@@ -119,22 +119,3 @@ HGDIOBJ FadeWnd::SelDisplayFont( HDC hdc, UINT fontSize /*= 70*/  )
   HGDIOBJ pOldFont = ::SelectObject(hdc, *fontDisplay );
   return pOldFont;
 }
-
-/**
- * \brief the fading window message pump
- * \param hWnd the window busy fading
- */
-void FadeWnd::MessagePump( const HWND hWnd )
-{
-  //  lock up to make sure we only do one at a time
-  MSG msg;
-	while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
-	{         
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-    if ( nullptr != hWnd && 0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
-    {
-      break;
-    }
-	}
-}

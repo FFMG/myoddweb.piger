@@ -43,7 +43,6 @@ protected:
   CFont *fontDisplay; //  the display font
 
   //
-  static void MessagePump( HWND hWnd );
   void Stop() {
     m_stop = true;
   }

@@ -30,17 +30,17 @@ END_MESSAGE_MAP()
  * \brief The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
-  _startActions(nullptr), 
+  _restartApplication( false ), 
+  _startActions(nullptr),
   _endActions(nullptr),
   _mutex(nullptr),
-  _cwndLastForegroundWindow(nullptr),
-  _maxClipboardSize( NULL ), 
+  _cwndLastForegroundWindow(nullptr), 
+  _maxClipboardSize( NULL ),
   _taskBar(nullptr),
   _messagesHandler( nullptr ),
   _possibleActions(nullptr),
-  _virtualMachines(nullptr),
   _ipcListener( nullptr ),
-  _restartApplication( false )
+  _virtualMachines(nullptr)
 {
 }
 
@@ -516,28 +516,6 @@ void CActionMonitorApp::DoEndActionsList(const bool wait)
   {
     WaitForEndActionsToComplete();
   }
-}
-
-bool CActionMonitorApp::MessagePump()
-{
-  const auto pumpMessagesForMilliseconds = std::chrono::milliseconds(10);
-  // we do not want to run the message pump for ever
-  // so we will use the milliseconds as a 
-  auto start_time = std::chrono::high_resolution_clock::now();
-  MSG msg;
-  while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
-
-    auto current_time = std::chrono::high_resolution_clock::now();
-    if (std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time) > pumpMessagesForMilliseconds)
-    {
-      break;
-    }
-  }
-
-  // we want this message pump to continue.
-  return true;
 }
 
 /**

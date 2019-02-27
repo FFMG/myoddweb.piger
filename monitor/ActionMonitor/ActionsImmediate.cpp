@@ -14,7 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionsImmediate.h"
-#include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
 
 /**
@@ -92,6 +91,10 @@ void ActionsImmediate::DoThem(  )
 void ActionsImmediate::WaitForAll()
 {
   // wait for all the workers to finish.
-  WaitForAllWorkers( &CActionMonitorApp::MessagePump );
+  WaitForAllWorkers([]()
+  {
+    myodd::wnd::MessagePump(nullptr);
+    return true;
+  });
 }
 

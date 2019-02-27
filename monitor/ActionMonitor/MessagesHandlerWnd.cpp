@@ -115,5 +115,6 @@ bool MessagesHandlerWnd::Close()
   }
   SendMessage(_hwnd, WM_CLOSE, 0, 0);
   _hwnd = nullptr;
+
   return true;
 }
