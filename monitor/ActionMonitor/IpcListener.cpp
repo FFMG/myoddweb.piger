@@ -16,7 +16,8 @@
 #include "IpcListener.h"
 
 IpcListener::IpcListener() : 
-  _ipc(nullptr)
+  _ipc(nullptr),
+  _mutex( L"Ipc Listener")
 {
 }
 
@@ -35,7 +36,7 @@ void IpcListener::Initialize(const HWND hWnd)
   if (nullptr == _ipc)
   {
     // lock us in
-    myodd::threads::Lock guard(_mutex);
+    myodd::threads::Lock guard(_mutex );
 
     // if this is done already, we don't want to do it again.
     if (nullptr == _ipc)
@@ -54,7 +55,7 @@ void IpcListener::Initialize(const HWND hWnd)
  */
 void IpcListener::Add(myodd::os::IpcMessageHandler& handler)
 {
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutex );
   if (_ipc == nullptr)
   {
     return;
@@ -68,7 +69,7 @@ void IpcListener::Add(myodd::os::IpcMessageHandler& handler)
  */
 void IpcListener::Remove(myodd::os::IpcMessageHandler& handler)
 {
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutex );
   if (_ipc == nullptr)
   {
     return;

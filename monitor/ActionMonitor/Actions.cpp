@@ -5,9 +5,7 @@
 #include "stdafx.h"
 #include "Actions.h"
 #include <io.h>
-
-//  the Dll hooks, (for the pause)
-#include "threads/lock.h"
+#include <threads/lock.h>
 
 
 //////////////////////////////////////////////////////////////////////
@@ -17,7 +15,10 @@
 Actions::Actions() : 
   m_uCommand( 0 ),
   _actionCurrentlySelected( nullptr ),
-  _sActionAsTyped( L"" )
+  _sActionAsTyped( L"" ),
+  _mutexActions( L"Actions"),
+  _mutexActionsMatch( L"Actions - Match"),
+  _mutexActionTemp( L"Action - Temp")
 {
 }
 
@@ -257,7 +258,7 @@ std::wstring Actions::ToChar()
   COMMANDS_VALUE cvSel( _T("808000"), 1, 1 );
   GetCommandValue( _T("selected"), cvSel );
 
-  myodd::threads::Lock guard(_mutexActionsMatch);
+  myodd::threads::Lock guard(_mutexActionsMatch );
 
   //  the return string
   //  we keep it as global 'cause we are returning it.
@@ -406,7 +407,7 @@ void Actions::SetAction( Action* tmpAction )
   _sActionAsTyped = L"";
   BuildMatchList( );
 
-  myodd::threads::Lock guardMatch(_mutexActionTemp );
+  myodd::threads::Lock guardMatch(_mutexActionTemp);
   _actionCurrentlySelected = tmpAction;
   if( tmpAction )
   {

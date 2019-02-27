@@ -15,6 +15,7 @@
 #pragma once
 
 #include <vector>
+#include <threads/lock.h>
 #include "activeaction.h"
 #include "threads/workers.h"
 
@@ -35,7 +36,7 @@ private:
   /**
    * \brief the mutex that manages the runners
    */
-  std::mutex _mutexRunner;
+  myodd::threads::Key _mutexRunner;
 
   /**
    * \brief the collection of runners.

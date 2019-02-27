@@ -14,6 +14,7 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "IIpcListener.h"
+#include "threads/lock.h"
 #include "os/ipclistener.h"
 
 class IpcListener final : public IIpcListener
@@ -31,6 +32,6 @@ private:
 
   myodd::os::IpcListener* _ipc;
 
-  std::mutex _mutex;
+  myodd::threads::Key _mutex;
 };
 

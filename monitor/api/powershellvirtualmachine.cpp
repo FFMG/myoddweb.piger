@@ -16,7 +16,8 @@
  */
 PowershellVirtualMachine::PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
   IVirtualMachine( actions, messagesHandler, iIpcListener ),
-  _initialized( false )
+  _initialized( false ),
+  _mutex( L"Powershell Virtual Machine")
 {
 }
 

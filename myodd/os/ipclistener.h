@@ -2,6 +2,7 @@
 
 #include <mutex>
 #include <vector>
+#include "../threads/lock.h"
 #include "ipcmessagehandler.h"
 
 namespace myodd {
@@ -40,7 +41,7 @@ namespace myodd {
       std::vector<IpcMessageHandler*>::const_iterator FindMessageHandler(IpcMessageHandler& handler) const;
 
       // the mutex lock
-      std::mutex _mutex;
+      myodd::threads::Key _mutex;
     };
   }
 }

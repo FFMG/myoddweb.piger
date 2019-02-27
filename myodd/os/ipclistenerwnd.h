@@ -2,6 +2,7 @@
 
 #include <mutex>
 #include <afxwin.h>
+#include "../threads/lock.h"
 #include "ipcmessagehandler.h"
 
 namespace myodd {
@@ -9,7 +10,7 @@ namespace myodd {
     class IpcListenerWnd : public CWnd
     {
     protected:
-      std::mutex& _mutex;
+      myodd::threads::Key& _mutex;
 
       enum class IpcMessageType : unsigned int
       {
@@ -28,7 +29,7 @@ namespace myodd {
       };
 
     public:
-      explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex, IpcMessageHandler& handler );
+      explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, myodd::threads::Key& mutex, IpcMessageHandler& handler );
 
     protected:
       static bool MessageStructFromCopyData(const COPYDATASTRUCT& cds, IpcMessageStruct& ipcMessageStructure);

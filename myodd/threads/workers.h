@@ -47,7 +47,7 @@ namespace myodd {
       // all the messages we are waiting to complete.
       typedef std::vector<std::future<void>> VWorkers;
       VWorkers _workers;
-      std::mutex _mutex;
+      Key _mutex;
     };
   }
 }

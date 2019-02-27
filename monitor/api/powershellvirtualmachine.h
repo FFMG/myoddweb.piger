@@ -1,10 +1,10 @@
 #pragma once
-#include "IVirtualMachine.h"
 #ifdef ACTIONMONITOR_PS_PLUGIN
-
+#include "IVirtualMachine.h"
 #include <map>
 #include <mutex>
 #include <os/ipcmessagehandler.h>
+#include <threads/lock.h>
 #include "powershellapi.h"
 
 class PowershellVirtualMachine : public myodd::os::IpcMessageHandler, public IVirtualMachine
@@ -30,7 +30,7 @@ private:
   /**
    * \brief the mutex we are using.
    */
-  std::mutex _mutex;
+  myodd::threads::Key _mutex;
 
   /**
    * \brief the collection of created apis.

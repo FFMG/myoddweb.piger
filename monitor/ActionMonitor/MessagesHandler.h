@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <threads/lock.h>
 #include "MessageDlg.h"
 #include "IMessagesHandler.h"
 #include "MessagesHandlerWnd.h"
@@ -60,7 +61,7 @@ protected:
   /**
    * \brief the mutex to ensure that data is only updated once at a time.
    */
-  std::mutex _mutex;
+  myodd::threads::Key _mutex;
 
   /**
    * \brief the thread id that 'created' this message collection

@@ -4,7 +4,6 @@
 
 #include "PluginVirtualMachine.h"
 #include "ActionMonitor.h"
-#include "../threads/lock.h"
 #include "amplugin\ampluginprivate.h"
 
 /**
@@ -12,7 +11,8 @@
  */
 PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
   IVirtualMachine( actions, messagesHandler, iIpcListener ),
-  _amPlugin( nullptr )
+  _amPlugin( nullptr ),
+  _mutex(L"PLuginVirtualMachine")
 {
   //  get our own module architecture.
   _moduleArchitecture = myodd::os::GetImageArchitecture( nullptr );

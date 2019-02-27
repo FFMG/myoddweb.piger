@@ -8,6 +8,7 @@
 #include <map>
 #include <thread>
 #include <mutex>
+#include "../threads/lock.h"
 #include "os/os.h"
 #include "amplugin/ampluginprivate.h"
 
@@ -27,11 +28,11 @@ public:
 
   void ErasePlugin( const MYODD_STRING& plugin);
 
-protected:
+private:
   typedef std::map< std::thread::id, PluginApi*> ListOfPlugins;
   ListOfPlugins _apis;
   
-  std::mutex _mutex;
+  myodd::threads::Key _mutex;
   static PluginApi& GetApi();
 
 protected:

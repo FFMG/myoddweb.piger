@@ -56,7 +56,8 @@ PyMODINIT_FUNC PyInit_am(void)
 PythonVirtualMachine::PythonVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener) :
   IVirtualMachine(actions, messagesHandler, ipcListener ),
   m_isInitialized( false ),
-  _mainThreadState( nullptr )
+  _mainThreadState( nullptr ),
+  _mutex( L"Python VirtualMachine")
 {
 }
 

@@ -16,7 +16,8 @@
  */
 ShellVirtualMachine::ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
   IVirtualMachine( actions, messagesHandler, iIpcListener),
-  _initialized( false )
+  _initialized( false ),
+  _mutex( L"Shell VirtualMachine")
 {
 }
 
@@ -71,7 +72,7 @@ bool ShellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcRequest,
   }
 
   //  lock us in to prevent the api from going away
-  myodd::threads::Lock lock(_mutex);
+  myodd::threads::Lock lock(_mutex );
 
   // get the uuid
   const auto uuid = ipcRequest.Get<std::wstring>(0);

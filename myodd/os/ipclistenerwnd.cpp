@@ -20,7 +20,7 @@
 
 namespace myodd {
 namespace os {
-  IpcListenerWnd::IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex, IpcMessageHandler& handler) :
+  IpcListenerWnd::IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, myodd::threads::Key& mutex, IpcMessageHandler& handler) :
     _mutex( mutex ),
     _pParentWnd(pParent),
     _handler( handler )

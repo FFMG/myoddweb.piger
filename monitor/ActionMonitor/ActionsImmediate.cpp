@@ -25,7 +25,8 @@
 ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions) :
   Actions(),
   _directoryToParse( directoryToParse ),
-  _parentActions( parentActions )
+  _parentActions( parentActions ),
+  _mutex( L"Actions - Immediate")
 {
 
 }

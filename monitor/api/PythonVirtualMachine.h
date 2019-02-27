@@ -3,7 +3,7 @@
 
 #include "IVirtualMachine.h"
 #include "pyapi.h"
-#include "../threads/lock.h"
+#include <threads/lock.h>
 
 class PythonVirtualMachine final : public IVirtualMachine
 {
@@ -25,11 +25,11 @@ public:
   void Destroy() override {};
   int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
 
-protected:
+private:
   bool m_isInitialized;
   bool InitializeFunctions();
 
-  std::mutex _mutex;
+  myodd::threads::Key _mutex;
 
   typedef std::map<std::thread::id, PyApi*> Apis;
   Apis _apis;

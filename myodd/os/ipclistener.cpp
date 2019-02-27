@@ -15,14 +15,14 @@
 #include "stdafx.h"
 #include "ipclistener.h"
 #include <afxwin.h>
-#include "../threads/lock.h"
 #include <assert.h>
 #include "ipclistenerwnd.h"
 
 namespace myodd {
 namespace os {
 IpcListener::IpcListener(const wchar_t* serverName, void* parent ) :
-  _pServer( nullptr )
+  _pServer( nullptr ),
+  _mutex( L"IpcListener" )
 {
   // create the server
   Create(serverName, parent );

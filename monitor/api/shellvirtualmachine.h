@@ -19,6 +19,7 @@
 #include <map>
 #include <mutex>
 #include <os/ipcmessagehandler.h>
+#include <threads/lock.h>
 #include "shellapi.h"
 
 class ShellVirtualMachine final : public myodd::os::IpcMessageHandler, public IVirtualMachine
@@ -38,7 +39,7 @@ public:
 protected:
   bool _initialized;
 
-  std::mutex _mutex;
+  myodd::threads::Key _mutex;
 
   typedef std::map<std::wstring, ShellApi*> APIS;
   APIS _apis;

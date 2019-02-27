@@ -4,7 +4,7 @@
 
 namespace myodd {
   namespace threads {
-    Workers::Workers()
+    Workers::Workers() : _mutex(L"Workers")
     {
     }
 

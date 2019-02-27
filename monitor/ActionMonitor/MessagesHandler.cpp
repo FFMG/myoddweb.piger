@@ -2,7 +2,8 @@
 #include "MessagesHandler.h"
 
 MessagesHandler::MessagesHandler() :
-  _threadId(std::this_thread::get_id())
+  _threadId(std::this_thread::get_id()),
+  _mutex( L"Messages Handler" )
 {
   _messagesHandlerWnd.Create();
 }
@@ -54,7 +55,7 @@ void MessagesHandler::UnsafeClearUnused()
 void MessagesHandler::MessageDialogIsComplete(MessageDlg* dlg)
 {
   // protected the vector for a short while.
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutex );
 
   // look for the window we want to delete.
   const auto saved = std::find(_collection.begin(), _collection.end(), dlg);

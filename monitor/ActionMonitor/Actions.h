@@ -15,6 +15,7 @@
 #pragma once
 #include "Action.h"
 #include <mutex>
+#include <threads/lock.h>
 #include "IActions.h"
 
 // the name of protected directories
@@ -113,7 +114,7 @@ protected:
 
   virtual bool IsReservedDir(const wchar_t*) const;
 
-  std::mutex _mutexActions;
-  std::mutex _mutexActionTemp;
-  std::mutex _mutexActionsMatch;
+  myodd::threads::Key _mutexActions;
+  myodd::threads::Key _mutexActionTemp;
+  myodd::threads::Key _mutexActionsMatch;
 };

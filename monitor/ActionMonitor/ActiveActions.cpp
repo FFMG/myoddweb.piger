@@ -18,7 +18,7 @@
 /**
  * \brief Constructor.
  */
-ActiveActions::ActiveActions()
+ActiveActions::ActiveActions() : _mutexRunner( L"Active Action - Runner")
 {
 }
 
@@ -56,7 +56,7 @@ void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
 
   // add this item to our list.
   // make sure that we keep the lock for as little as posible..
-  myodd::threads::Lock guard(_mutexRunner);
+  myodd::threads::Lock guard(_mutexRunner );
 
   const auto it = std::find(_runners.begin(), _runners.end(), activeAction);
   if (it == _runners.end())

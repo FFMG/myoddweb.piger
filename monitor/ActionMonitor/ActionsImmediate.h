@@ -14,6 +14,7 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
+#include <threads/lock.h>
 #include "Actions.h"
 #include "ActiveActions.h"
 
@@ -52,5 +53,5 @@ private:
   /**
    * \brief the mutex that manages the runners
    */
-  std::mutex _mutex;
+  myodd::threads::Key _mutex;
 };
