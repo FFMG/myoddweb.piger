@@ -178,7 +178,27 @@ void MessagesHandler::SendCloseMessageToAllMessageWindows()
   // when they complete they call "OnComplete" and will cause
   // the lock to be obtained.
   // but we released the lock, so they should be able to complete their work.
-  workers.WaitForAllWorkers();
+  // wait for all the workers to finish.
+  const auto pumpMessagesForMilliseconds = std::chrono::milliseconds(10);
+  workers.WaitForAllWorkers([&]() {
+    // we do not want to run the message pump for ever
+    // so we will use the milliseconds as a 
+    auto start_time = std::chrono::high_resolution_clock::now();
+    MSG msg;
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
+
+      auto current_time = std::chrono::high_resolution_clock::now();
+      if (std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time) > pumpMessagesForMilliseconds)
+      {
+        break;
+      }
+    }
+
+    // we want this message pump to continue.
+    return true;
+  });
 
   // they should now all be complete.
   // so we can clear them.
@@ -212,6 +232,24 @@ void MessagesHandler::WaitForAllToComplete()
         // let go of the thread.
         std::this_thread::yield();
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+        // wait for all the workers to finish.
+        const auto pumpMessagesForMilliseconds = std::chrono::milliseconds(10);
+        // we do not want to run the message pump for ever
+        // so we will use the milliseconds as a 
+        auto start_time = std::chrono::high_resolution_clock::now();
+        MSG msg;
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+          TranslateMessage(&msg);
+          DispatchMessage(&msg);
+
+          auto current_time = std::chrono::high_resolution_clock::now();
+          if (std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time) > pumpMessagesForMilliseconds)
+          {
+            break;
+          }
+        }
+
 
         // go around one last time
         // to give everyone a chance to close.

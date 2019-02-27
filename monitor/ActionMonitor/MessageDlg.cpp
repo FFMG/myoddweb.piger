@@ -391,6 +391,26 @@ void MessageDlg::FadeCloseWindow()
   MessagePump( m_hWnd );
   MessagePump( nullptr );
 
-  // then wait for everything to finish.
-  _worker.WaitForAllWorkers();
+  // wait for all the workers to finish.
+  const auto pumpMessagesForMilliseconds = std::chrono::milliseconds(10);
+  _worker.WaitForAllWorkers([&]() {
+    // we do not want to run the message pump for ever
+    // so we will use the milliseconds as a 
+    auto start_time = std::chrono::high_resolution_clock::now();
+    MSG msg;
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
+
+      auto current_time = std::chrono::high_resolution_clock::now();
+      if (std::chrono::duration_cast<std::chrono::microseconds>(current_time - start_time) > pumpMessagesForMilliseconds)
+      {
+        break;
+      }
+    }
+
+    // we want this message pump to continue.
+    return true;
+  });
+
 }
