@@ -24,11 +24,6 @@
 #include "IpcListener.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
-	//{{AFX_MSG_MAP(CActionMonitorApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 /**
@@ -44,7 +39,8 @@ CActionMonitorApp::CActionMonitorApp() :
   _messagesHandler( nullptr ),
   _possibleActions(nullptr),
   _virtualMachines(nullptr),
-  _ipcListener( nullptr )
+  _ipcListener( nullptr ),
+  _restartApplication( false )
 {
 }
 
@@ -269,7 +265,20 @@ BOOL CActionMonitorApp::InitInstance()
   InitMaxClipboardSize();
 
   // show the dialog box and wait for it to complete.
-  CreateAndShowActionDialog();
+  for (;;)
+  {
+    // assume that we will not restart the app.
+    _restartApplication = 0;
+
+    // while the app is running, the `_restartApplication` flag 
+    // might change, and we might not restart.
+    CreateAndShowActionDialog();
+
+    if (!_restartApplication)
+    {
+      break;
+    }
+  }
 
   // always return false
   return FALSE;
@@ -444,6 +453,7 @@ void CActionMonitorApp::DoReload()
 {
   // we first want to close.
   // but make sure that we restart.
+  _restartApplication = true;
   DoClose();
 }
 

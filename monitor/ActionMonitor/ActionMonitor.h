@@ -64,6 +64,11 @@ public:
 
 private:
   /**
+   * \brief if this value is true then we will reload the application
+   */
+  bool _restartApplication;
+
+  /**
    * \brief Wait for the active windows to complete.
    */
   void WaitForHandlersToComplete();

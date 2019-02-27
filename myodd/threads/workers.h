@@ -17,6 +17,7 @@ namespace myodd {
       const Workers& operator=(const Workers&) = delete;
 
     public:
+      void WaitForAllWorkers(std::function<bool()> onInterval );
       void WaitForAllWorkers();
 
       /**
@@ -41,6 +42,7 @@ namespace myodd {
       bool Running() const;
 
     private:
+      
       // wait for one of the worker to complete and remove it if needed.
       int WaitForOneWorkerAndCompleteIfNeeded( int index );
       

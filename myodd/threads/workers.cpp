@@ -33,7 +33,7 @@ namespace myodd {
       for (auto& future : _workers)
       {
         const auto status = future.wait_for(std::chrono::microseconds(10));
-        if( status != std::future_status::ready)
+        if (status != std::future_status::ready)
         {
           return true;
         }
@@ -42,11 +42,18 @@ namespace myodd {
       return false;
     }
 
+    void Workers::WaitForAllWorkers()
+    {
+      WaitForAllWorkers(nullptr);
+    }
+
     /**
      * \brief Make sure all the workers are finished doing their work.
      *        We call the base class once this is done.
+     * \param onInterval called at regular intervals while we are waiting.
+     *        if the function returns false, we will break out of the loop
      */
-    void Workers::WaitForAllWorkers()
+    void Workers::WaitForAllWorkers(std::function<bool()> onInterval)
     {
       //  anything to do?
       if (_workers.size() == 0)
@@ -71,6 +78,20 @@ namespace myodd {
 
         // move forward.
         ++lastUsedIndex;
+
+        if( onInterval != nullptr )
+        {
+          try
+          {
+            if( !onInterval() )
+            {
+              break;
+            }
+          }
+          catch(...)
+          {
+          }
+        }
 
         // give threads a chance to run...
         std::this_thread::yield();
