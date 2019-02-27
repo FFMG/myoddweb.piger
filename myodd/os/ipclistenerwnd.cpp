@@ -25,12 +25,34 @@ namespace os {
     _pParentWnd(pParent),
     _handler( handler )
   {
+    if( !CreateClass(pszClassName) )
+    {
+      throw "Can't register IpcListener window class.";
+    }
+
+    // one way or another the class was created.
+    // so we can create our listener accordingly.
+    if (!CWnd::CreateEx(0, pszClassName, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
+    {
+      throw "Can't create IpcListener window.";
+    }
+
+    CWnd::UpdateWindow();
+
+    // save this pointer
+    SetWindowLongPtr(GetSafeHwnd(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+  }
+
+  bool IpcListenerWnd::CreateClass(const wchar_t* pszClassName)
+  {
     //  the instance of this module
-    const auto hInstance = ::GetModuleHandle( nullptr );
-    WNDCLASSEX wcx; 
+    const auto hInstance = ::GetModuleHandle(nullptr);
+    WNDCLASSEX wcx;
+    memset(&wcx, 0, sizeof(WNDCLASSEX));
+
     if (GetClassInfoEx(hInstance, pszClassName, &wcx))
     {
-      throw "The server already exists.";
+      return true;
     }
 
     wcx.cbSize = sizeof(wcx);
@@ -45,28 +67,17 @@ namespace os {
     wcx.lpszMenuName = L"MainMenu";
     wcx.lpszClassName = pszClassName;
     wcx.hIconSm = static_cast<HICON>(LoadImage(hInstance,
-                                               MAKEINTRESOURCE(5),
-                                               IMAGE_ICON,
-                                               GetSystemMetrics(SM_CXSMICON),
-                                               GetSystemMetrics(SM_CYSMICON),
-                                               LR_DEFAULTCOLOR));
+      MAKEINTRESOURCE(5),
+      IMAGE_ICON,
+      GetSystemMetrics(SM_CXSMICON),
+      GetSystemMetrics(SM_CYSMICON),
+      LR_DEFAULTCOLOR));
 
     if (!RegisterClassEx(&wcx))
     {
-      throw "Can't register IpcListener window class.";
+      return false;
     }
-
-    // one way or another the class was created.
-    // so we can create our listener accordingly.
-    if (!this->CWnd::CreateEx(0, pszClassName, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
-    {
-      throw "Can't create IpcListener window.";
-    }
-
-    this->CWnd::UpdateWindow();
-
-    // save this pointer
-    SetWindowLongPtr(GetSafeHwnd(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+    return true;
   }
 
   bool IpcListenerWnd::MessageStructFromCopyData(const COPYDATASTRUCT& cds, IpcMessageStruct& ipcMessageStructure)
