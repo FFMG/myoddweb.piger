@@ -31,9 +31,9 @@ ActionLoad::~ActionLoad()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-ActiveAction* ActionLoad::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionLoad::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
   auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
-  return new ActiveUserMessageAction(*this, hTopHWnd, UWM_KEYBOARD_RELOAD);
+  return new ActiveUserMessageAction(*this, virtualMachines, hTopHWnd, UWM_KEYBOARD_RELOAD);
 }

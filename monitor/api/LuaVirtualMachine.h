@@ -26,10 +26,6 @@ protected:
   void Dispose();
 
 protected:
-  std::mutex _mutex;
-  typedef std::map<lua_State*, LuaApi*> state_api;
-  state_api _lua_Api;
-
   static LuaApi& GetApi(lua_State* lua);
 
 public:

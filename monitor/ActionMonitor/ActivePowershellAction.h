@@ -6,7 +6,7 @@ class ActivePowershellAction :
   public ActiveAction
 {
 public:
-  ActivePowershellAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActivePowershellAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
   virtual ~ActivePowershellAction();
 
 protected:

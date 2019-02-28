@@ -14,7 +14,8 @@
  * \param szCommandLine the given command line that is, the words after the command itself
  * \param isPrivileged if this action is privileged or not.
  */
-ActiveAction::ActiveAction(const Action& src, 
+ActiveAction::ActiveAction(const Action& src,
+                           IVirtualMachines& virtualMachines,
                            const HWND hTopHWnd,
                            const MYODD_STRING& szCommandLine, 
                            const bool isPrivileged) : 
@@ -22,7 +23,8 @@ ActiveAction::ActiveAction(const Action& src,
   _clipboard(nullptr),
   _szCommandLine( szCommandLine ),
   _isPrivileged( isPrivileged ),
-  _hTopHWnd( hTopHWnd )
+  _hTopHWnd( hTopHWnd ),
+  _virtualMachines( virtualMachines )
 {
 }
 

@@ -9,8 +9,8 @@
  * \param szCommandLine the given command line that is, the words after the command itself
  * \param isPrivileged if this action is privileged or not.
  */
-ActivePowershellAction::ActivePowershellAction(const Action& src, const HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
-  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
+ActivePowershellAction::ActivePowershellAction(const Action& src, IVirtualMachines& virtualMachines, const HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+  ActiveAction( src, virtualMachines, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 
@@ -36,7 +36,7 @@ void ActivePowershellAction::OnExecuteInThread()
   const auto& szFile = File();
 
   // create the Python Api.
-  auto& pvm = App().VirtualMachinesHandler().Get<PowershellVirtualMachine>();
+  auto& pvm = _virtualMachines.Get(IVirtualMachines::Type::Powershell );
   
   // we can now execute the thread.
   pvm.Execute(*this, szFile );

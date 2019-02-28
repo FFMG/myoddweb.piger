@@ -56,8 +56,7 @@ PyMODINIT_FUNC PyInit_am(void)
 PythonVirtualMachine::PythonVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener) :
   IVirtualMachine(actions, messagesHandler, ipcListener ),
   m_isInitialized( false ),
-  _mainThreadState( nullptr ),
-  _mutex( L"Python VirtualMachine")
+  _mainThreadState( nullptr )
 {
 }
 
@@ -84,6 +83,8 @@ PythonVirtualMachine::~PythonVirtualMachine()
 
     // simply close python
     Py_Finalize();
+
+    VirtualMachineLists<std::thread::id, PyApi>::Instance().Dispose();
   }
 }
 
@@ -268,48 +269,17 @@ bool PythonVirtualMachine::IsExt(const MYODD_STRING& file )
  */
 PyApi& PythonVirtualMachine::GetApi()
 {
-#ifndef ACTIONMONITOR_API_PY
-  throw - 1;
-#else
-  // get our current self.
-  auto& pvm = static_cast<PythonVirtualMachine&>(App().VirtualMachinesHandler().Get<PythonVirtualMachine>());
-
-  myodd::threads::Lock guard(pvm._mutex);
-  const auto it = pvm._apis.find( std::this_thread::get_id() );
-  if (it == pvm._apis.end())
-  {
-    throw - 1;
-  }
-  return *it->second;
-#endif
+  return VirtualMachineLists<std::thread::id, PyApi>::Instance().GetApi(std::this_thread::get_id());
 }
 
 void PythonVirtualMachine::AddApi(std::thread::id id, PyApi* api)
 {
-#ifndef ACTIONMONITOR_API_PY
-  throw - 1;
-#else
-  myodd::threads::Lock guard(_mutex);
-
-  // get our current self.
-  _apis[std::this_thread::get_id()] = api;
-#endif
-
+  VirtualMachineLists<std::thread::id, PyApi>::Instance().AddApi( std::this_thread::get_id(), api );
 }
 
 void PythonVirtualMachine::RemoveApi(std::thread::id id )
 {
-#ifndef ACTIONMONITOR_API_PY
-  throw - 1;
-#else
-  myodd::threads::Lock guard(_mutex);
-  Apis::const_iterator it = _apis.find(std::this_thread::get_id());
-  if (it == _apis.end())
-  {
-    throw - 1;
-  }
-  _apis.erase(it);
-#endif
+  VirtualMachineLists<std::thread::id, PyApi>::Instance().Dispose(id);
 }
 
 /**

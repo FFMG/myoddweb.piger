@@ -17,7 +17,7 @@
 #include "Actions.h"    //  the actions we can call, (the name of the file)
 #include "ActionsImmediate.h"
 #include "IMessagesHandler.h"
-#include "../api/VirtualMachines.h"
+#include "../api/IVirtualMachines.h"
 
 #define _MAX_CMD_LINE_ARGS  128
 
@@ -73,12 +73,6 @@ private:
    */
   void WaitForHandlersToComplete();
 
-  /**
-   * \brief check if the special key is currently pressed down.
-   * \return if the special key is down.
-   */
-  bool IsSpecialKeyDown()const;
-
 private:
   ActionsImmediate* _startActions;
   ActionsImmediate* _endActions;
@@ -128,18 +122,7 @@ private:
   /**
    * \brief the virtual machines handler.
    */
-  VirtualMachines* _virtualMachines;
-
-public:
-  VirtualMachines& VirtualMachinesHandler()
-  {
-    return *_virtualMachines;
-  }
-
-  const VirtualMachines& VirtualMachinesHandler() const
-  {
-    return *_virtualMachines;
-  }
+  IVirtualMachines* _virtualMachines;
 
 public:
   void DestroyAllVirtualMachines() const;

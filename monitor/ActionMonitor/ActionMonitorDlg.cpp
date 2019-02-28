@@ -29,14 +29,17 @@
 ActionMonitorDlg::ActionMonitorDlg(
   IActions& actions,
   IMessagesHandler& messagesHandler,
+  IVirtualMachines& virtualMachines,
   CWnd* pParent /*=nullptr*/)
-  : CTrayDialog(ActionMonitorDlg::IDD, pParent), 
-    m_rWindow(),
-    m_keyState(ACTION_NONE),
-    _fontTime(nullptr), 
-    m_ptMaxValues(),
-    _actions( actions ),
-    _messagesHandler(messagesHandler)
+  : 
+  CTrayDialog(ActionMonitorDlg::IDD, pParent), 
+  m_rWindow(),
+  m_keyState(ACTION_NONE),
+  _fontTime(nullptr), 
+  m_ptMaxValues(),
+  _actions( actions ),
+  _messagesHandler(messagesHandler),
+  _virtualMachines(virtualMachines)
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -537,7 +540,7 @@ LRESULT ActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
           //  do the action now
           //  we might not have any, but that's not for us to decides :).
           const auto pWnd = CActionMonitorApp::GetLastForegroundWindow();
-          QueueAndExecute( action->CreateActiveAction( pWnd, szCommandLine, false) );
+          QueueAndExecute( action->CreateActiveAction(_virtualMachines, pWnd, szCommandLine, false) );
         }
       }
       catch( ... )

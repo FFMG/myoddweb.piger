@@ -14,7 +14,7 @@ public:
   ActionBye();
 	virtual ~ActionBye();
 
-  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const;
+  ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const override;
 };
 
 #endif // __Action_h__

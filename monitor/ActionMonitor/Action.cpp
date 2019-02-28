@@ -126,7 +126,7 @@ void Action::SetCommandPath(const std::wstring& szPath )
  * \param isPrivileged if we need administrator privilege to run this.
  * \return BOOL true.
  */
-ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
+ActiveAction* Action::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
 {
   //  not sure how to do that...
   if ( Len() == 0)
@@ -144,12 +144,12 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const std::wstring& szComma
   ActiveAction* aa;
   if( szCommandLine.length() == 0 )
   {
-    aa = CreateActiveActionWithNoCommandLine( pWnd, isPrivileged);
+    aa = CreateActiveActionWithNoCommandLine( virtualMachines, pWnd, isPrivileged);
   }
   else
   {
     //  so now, at last we can call the command line
-    aa = CreateActiveActionDirect( pWnd, szCommandLine.c_str(), isPrivileged);
+    aa = CreateActiveActionDirect( virtualMachines, pWnd, szCommandLine.c_str(), isPrivileged);
   }
 
   // now that we are back from calling the plugin, restore the keyboard state.
@@ -164,7 +164,7 @@ ActiveAction* Action::CreateActiveAction(CWnd* pWnd, const std::wstring& szComma
  * \param isPrivileged if this action is privileged or not.
  * \return bool success or not.
  */
-ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, const bool isPrivileged ) const
+ActiveAction* Action::CreateActiveActionWithNoCommandLine(IVirtualMachines& virtualMachines, CWnd* pWnd, const bool isPrivileged ) const
 {
   //  the command line we will try and make.
   std::wstring szCommandLine = L"";
@@ -209,7 +209,7 @@ ActiveAction* Action::CreateActiveActionWithNoCommandLine(CWnd* pWnd, const bool
   }
 
   // we can now do it direct.
-  return CreateActiveActionDirect( pWnd, szCommandLine, isPrivileged);
+  return CreateActiveActionDirect( virtualMachines, pWnd, szCommandLine, isPrivileged);
 }
 
 /**
@@ -367,7 +367,7 @@ bool Action::Execute(const std::vector<std::wstring>& argv, const bool isPrivile
  * \param isPrivileged if we need administrator privilege to run this.
  * \return TRUE|FALSE success or not.
  */
-ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
+ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
 {
   // sanity check
   if (0 == _szFile.length())
@@ -383,7 +383,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
   //
   if (LuaVirtualMachine::IsExt(_szFile ))
   {
-    auto ala = new ActiveLuaAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto ala = new ActiveLuaAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
     if (ala->Initialize())
     {
       return ala;
@@ -399,7 +399,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
   //
   if (PythonVirtualMachine::IsExt(_szFile))
   {
-    auto apa = new ActivePythonAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto apa = new ActivePythonAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
     if(apa->Initialize() )
     { 
       return apa;
@@ -415,13 +415,13 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
   //
   if (PowershellVirtualMachine::IsExt(_szFile))
   {
-    auto apa = new ActivePowershellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto apa = new ActivePowershellAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
     {
       return apa;
     }
 
-    // did not work, try the default way...
+    // did not work, try the default way...`
     delete apa;
   }
 #endif // ACTIONMONITOR_PS_PLUGIN
@@ -431,7 +431,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
   //
   if (ShellVirtualMachine::IsExt(_szFile))
   {
-    auto asa = new ActiveShellAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto asa = new ActiveShellAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
     if (asa->Initialize())
     {
       return asa;
@@ -447,7 +447,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
   //
   if (CsVirtualMachine::IsExt(_szFile))
   {
-    auto acsa = new ActiveCsAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto acsa = new ActiveCsAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
     if (acsa->Initialize())
     {
       return acsa;
@@ -463,7 +463,7 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
   //
   if (PluginVirtualMachine::IsExt(_szFile))
   {
-    auto apa = new ActivePluginAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    auto apa = new ActivePluginAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
     {
       return apa;
@@ -477,21 +477,21 @@ ActiveAction* Action::CreateActiveActionDirect(CWnd* pWnd, const std::wstring& s
   // Batch files...
   if( myodd::files::IsExtension (_szFile, _T("bat")))
   {
-    return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
+    return new ActiveBatchAction(*this, virtualMachines, hTopHWnd, szCommandLine );
   }
   if (myodd::files::IsExtension(_szFile, _T("cmd")))
   {
-    return new ActiveCmdAction(*this, hTopHWnd, szCommandLine);
+    return new ActiveCmdAction(*this, virtualMachines, hTopHWnd, szCommandLine);
   }
   if (myodd::files::IsExtension(_szFile, _T("com")))
   {
-    return new ActiveComAction(*this, hTopHWnd, szCommandLine);
+    return new ActiveComAction(*this, virtualMachines, hTopHWnd, szCommandLine);
   }
   if (myodd::files::IsExtension(_szFile, _T("exe")))
   {
-    return new ActiveExeAction(*this, hTopHWnd, szCommandLine, isPrivileged);
+    return new ActiveExeAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
   }
 
   // run the default action.
-  return new ActiveDefaultAction( *this, hTopHWnd, szCommandLine, isPrivileged );
+  return new ActiveDefaultAction( *this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged );
 }

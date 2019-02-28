@@ -34,6 +34,7 @@ public:
   explicit ActionMonitorDlg(
     IActions& actions,
     IMessagesHandler& messagesHandler,
+    IVirtualMachines& virtualMachines, 
     CWnd* pParent = nullptr);	// standard constructor
   virtual ~ActionMonitorDlg();
 
@@ -65,6 +66,11 @@ protected:
 protected:
   //  the state of our special key
   DWORD m_keyState;
+
+  /**
+   * \brief the virtual machines.
+   */
+  IVirtualMachines& _virtualMachines;
 
 protected:
   bool DisplayCommand( HDC hdc = NULL );

@@ -8,8 +8,8 @@
  * @param const Action& src the parent action
  * @param HWND hTopHWnd the top window at the time of the call.
  */
-ActiveByeAction::ActiveByeAction(const Action& src, HWND hTopHWnd ) :
-  ActiveAction( src, hTopHWnd, L"", false  )
+ActiveByeAction::ActiveByeAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
+  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  )
 {
 }
 

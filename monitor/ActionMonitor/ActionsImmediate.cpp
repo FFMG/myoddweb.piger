@@ -21,11 +21,12 @@
  * \param directoryToParse the directory with the actions we want to do immidiately.
  * \param parentActions the parent actions.
  */
-ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions) :
+ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines) :
   Actions(),
   _directoryToParse( directoryToParse ),
   _parentActions( parentActions ),
-  _mutex( L"Actions - Immediate")
+  _mutex( L"Actions - Immediate"),
+  _virtualMachines( virtualMachines )
 {
 
 }
@@ -73,7 +74,7 @@ void ActionsImmediate::DoThem(  )
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'CreateActiveAction(...)' function
       // and go directly to 'Launch(...)'
-      QueueAndExecute( action->CreateActiveActionDirect( nullptr, L"" , isPrivileged ) );
+      QueueAndExecute( action->CreateActiveActionDirect( _virtualMachines, nullptr, L"" , isPrivileged ) );
     }
     catch( ... )
     {

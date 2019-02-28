@@ -22,7 +22,7 @@ class ActionsImmediate final :
   public Actions, ActiveActions
 {
 public:
-  explicit ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions);
+  explicit ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines);
   virtual ~ActionsImmediate() = default;
 
   ActionsImmediate(const ActionsImmediate&) = delete;
@@ -49,6 +49,11 @@ private:
    * \brief the parent actions.
    */
   IActions& _parentActions;
+
+  /**
+   * \brief all the virtual machines.
+   */
+  IVirtualMachines& _virtualMachines;
 
   /**
    * \brief the mutex that manages the runners

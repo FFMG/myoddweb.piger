@@ -2,27 +2,11 @@
 #include "VirtualMachines.h"
 
 VirtualMachines::VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener) :
+  IVirtualMachines(),
   _messagesHandler( messagesHandler ),
   _actions(actions),
-  _ipcListener(ipcListener)
-#ifdef ACTIONMONITOR_API_LUA
-  , _lvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_S_PLUGIN
-  , _svm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  , _csvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  , _psvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_API_PLUGIN
-  , _plugvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_API_PY
-  , _pvm(nullptr)
-#endif
+  _ipcListener(ipcListener),
+  _key( L"Virtual machines" )
 {
 }
 
@@ -33,28 +17,69 @@ VirtualMachines::~VirtualMachines()
 
 void VirtualMachines::Destroy()
 {
-#ifdef ACTIONMONITOR_API_LUA
-  Destroy<LuaVirtualMachine>();
-#endif
+  myodd::threads::Lock lock(_key);
 
-#ifdef ACTIONMONITOR_S_PLUGIN
-  Destroy<ShellVirtualMachine>();
-#endif
-
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  Destroy<CsVirtualMachine>();
-#endif
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  Destroy<PowershellVirtualMachine>();
-#endif
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-  Destroy<PluginVirtualMachine>();
-#endif
-
-#ifdef ACTIONMONITOR_API_PY
-  Destroy<PythonVirtualMachine>();
-#endif
+  // delete them all, one at a time
+  for( auto vm : _machines )
+  {
+    vm.second->Destroy();
+    delete vm.second;
+  }
+  // remove all
+  _machines.clear();
 }
 
+IVirtualMachine& VirtualMachines::Get(IVirtualMachines::Type type)
+{
+  myodd::threads::Lock lock(_key);
+
+  //  check if this already exists.
+  const auto current = _machines.find(type);
+  if (current != _machines.end())
+  {
+    return *current->second;
+  }
+
+  // it does not, we need to add it here.
+  IVirtualMachine* vm = nullptr;
+  switch( type )
+  {
+#ifdef ACTIONMONITOR_API_LUA
+  case Type::Lua:
+    vm = new LuaVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    break;
+#endif
+#ifdef ACTIONMONITOR_API_PY
+  case Type::Python:
+    vm = new PythonVirtualMachine(_actions, _messagesHandler, _ipcListener);;
+    break;
+#endif
+#ifdef ACTIONMONITOR_API_PLUGIN
+  case Type::LegacyPlugin:
+    vm = new PluginVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    break;
+#endif
+#ifdef ACTIONMONITOR_PS_PLUGIN
+  case Type::Powershell:
+    vm = new PowershellVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    break;
+#endif
+#ifdef ACTIONMONITOR_CS_PLUGIN
+  case Type::CSharp:
+    vm = new CsVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    break;
+#endif
+#ifdef ACTIONMONITOR_S_PLUGIN
+  case Type::Shell:
+    vm = new ShellVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    break;
+#endif
+
+  default:
+    throw std::logic_error( "This virtual machine type is not supported for this build.");
+  }
+
+  vm->Initialize();
+  _machines[type] = vm;
+  return *vm;
+}

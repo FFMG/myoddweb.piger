@@ -6,11 +6,14 @@
 // the clipboard data at the time we createed it.
 #include "../common/clipboard.h"
 
+class IVirtualMachines;
 class ActiveAction : public Action
 {
 public:
-  ActiveAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActiveAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
 	virtual ~ActiveAction();
+
+  DISALLOW_COPY_AND_ASSIGN(ActiveAction);
 
   // ----------------------------
   const Clipboard& GetClipboard() const { return *_clipboard; }
@@ -52,7 +55,8 @@ protected:
   virtual bool OnInitialize() = 0;
   virtual bool OnDeInitialize() = 0;
 
-  DISALLOW_COPY_AND_ASSIGN(ActiveAction);
+protected:
+  IVirtualMachines& _virtualMachines;
 
 private:
   // the current clipboard.

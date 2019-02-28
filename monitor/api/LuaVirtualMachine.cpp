@@ -28,25 +28,11 @@ LuaVirtualMachine::~LuaVirtualMachine()
  */
 void LuaVirtualMachine::Dispose()
 {
-  // get the locks.
-  _mutex.lock();
-
-  // and clear everything.
-  for (state_api::iterator it = _lua_Api.begin();
-       it != _lua_Api.end();
-       ++it 
-      )
+  VirtualMachineLists<lua_State*, LuaApi>::Instance().Dispose([](lua_State* lua, LuaApi* api)
   {
     // close the lua
-    lua_close( it->first );
-  }
-
-  // we can now remove everything.
-  // as we have cleared the memory.
-  _lua_Api.clear();
-
-  // release the lock.
-  _mutex.unlock();
+    lua_close(lua);
+  });
 }
 
 /**
@@ -55,20 +41,11 @@ void LuaVirtualMachine::Dispose()
  */
 void LuaVirtualMachine::Dispose(lua_State* lua)
 {
-  // find the lua...
-  _mutex.lock();
-  const auto it = _lua_Api.find(lua);
-
-  // does it exist?
-  if (it != _lua_Api.end())
+  VirtualMachineLists<lua_State*, LuaApi>::Instance().Dispose(lua, [](lua_State* lua, LuaApi* api)
   {
     // close the lua
     lua_close(lua);
-    
-    //  yes, so we can remove it.
-    _lua_Api.erase(it);
-  }
-  _mutex.unlock();
+  });
 }
 
 /**
@@ -80,9 +57,9 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
 {
   // create the new state
   lua_State* lua = luaL_newstate();
-  if (NULL == lua)
+  if (nullptr == lua)
   {
-    return NULL;
+    return nullptr;
   }
   luaL_openlibs( lua ); // provides io.*
 
@@ -104,9 +81,7 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
   lua_register( lua, "am_log", LuaVirtualMachine::Log );
 
   // we can now add it to our list.
-  _mutex.lock();
-  _lua_Api[lua] = api;
-  _mutex.unlock();
+  VirtualMachineLists<lua_State*, LuaApi>::Instance().AddApi(lua, api);
 
   // finally return the lua.
   return lua;
@@ -167,27 +142,7 @@ LuaApi& LuaVirtualMachine::GetApi(lua_State* lua)
 #ifndef ACTIONMONITOR_API_LUA
   throw - 1;
 #else
-  // get our current self.
-  auto& lvm = static_cast<LuaVirtualMachine&>(App().VirtualMachinesHandler().Get<LuaVirtualMachine>());
-
-  // find the lua...
-  lvm._mutex.lock();
-  const auto it = lvm._lua_Api.find( lua );
-
-  // does it exist?
-  if (it == lvm._lua_Api.end())
-  {
-    // we could not find this lua!
-    // has it been destroyed?
-    lvm._mutex.unlock();
-    throw - 1;
-  }
-
-  //  get the value before we lock it...
-  const auto api = it->second;
-  lvm._mutex.unlock();
-
-  return *api;
+  return VirtualMachineLists<lua_State*, LuaApi>::Instance().GetApi(lua);
 #endif
 }
 

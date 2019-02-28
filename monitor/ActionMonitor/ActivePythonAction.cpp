@@ -9,8 +9,8 @@
  * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
  * @param bool isPrivileged if this action is privileged or not.
  */
-ActivePythonAction::ActivePythonAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
-  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
+ActivePythonAction::ActivePythonAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+  ActiveAction( src, virtualMachines, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 
@@ -26,7 +26,7 @@ bool ActivePythonAction::OnDeInitialize()
 
 bool ActivePythonAction::OnInitialize()
 {
-  auto& py = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
+  auto& py = _virtualMachines.Get(IVirtualMachines::Type::Python);
   if (!py.Initialize())
   {
     return false;
@@ -42,7 +42,7 @@ void ActivePythonAction::OnExecuteInThread()
   const auto& szFile = File();
 
   // get the virtual machine
-  auto& pyvm = App().VirtualMachinesHandler().Get<PythonVirtualMachine>();
+  auto& pyvm = _virtualMachines.Get(IVirtualMachines::Type::Python);
 
   // we can now execute the action.
   pyvm.Execute(*this, szFile);

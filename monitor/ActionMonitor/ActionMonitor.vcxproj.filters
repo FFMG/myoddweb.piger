@@ -177,6 +177,9 @@
     <ClCompile Include="IpcListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\api\IVirtualMachines.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc">
@@ -354,6 +357,9 @@
     </ClInclude>
     <ClInclude Include="IpcListener.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\IVirtualMachines.h">
+      <Filter>api</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

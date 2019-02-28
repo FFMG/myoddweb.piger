@@ -6,7 +6,7 @@ class ActiveCmdAction :
   public ActiveAction
 {
 public:
-  ActiveCmdAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine);
+  ActiveCmdAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine);
   virtual ~ActiveCmdAction();
 
 protected:

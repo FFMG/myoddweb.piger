@@ -31,11 +31,11 @@ ActionVersion::~ActionVersion()
  * @param bool isPrivileged if we need administrator privilege to run this.
  * @return BOOL true.
  */
-ActiveAction* ActionVersion::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionVersion::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
   HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
 
   //  display the version.
-  return new ActiveUserMessageAction(*this, hTopHWnd, UWM_KEYBOARD_VERSION);
+  return new ActiveUserMessageAction(*this, virtualMachines, hTopHWnd, UWM_KEYBOARD_VERSION);
 }

@@ -2,8 +2,8 @@
 #include "ActiveUserMessageAction.h"
 #include "ActionMonitor.h"
 
-ActiveUserMessageAction::ActiveUserMessageAction(const Action& src, HWND hTopHWnd, UINT Msg)
-  : ActiveAction( src, hTopHWnd, L"", false ),
+ActiveUserMessageAction::ActiveUserMessageAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, UINT Msg)
+  : ActiveAction( src, virtualMachines, hTopHWnd, L"", false ),
   _Msg( Msg )
 {
 }

@@ -23,8 +23,8 @@
  * \param szCommandLine the given command line that is, the words after the command itself
  * \param isPrivileged if this action is privileged or not.
  */
-ActiveShellAction::ActiveShellAction(const Action& src, const HWND hTopHWnd, const MYODD_STRING& szCommandLine, const bool isPrivileged) :
-  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
+ActiveShellAction::ActiveShellAction(const Action& src, IVirtualMachines& virtualMachines, const HWND hTopHWnd, const MYODD_STRING& szCommandLine, const bool isPrivileged) :
+  ActiveAction( src, virtualMachines, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 
@@ -46,7 +46,7 @@ void ActiveShellAction::OnExecuteInThread()
   const auto& szFile = File();
 
   // get the virtual machine to run the action.
-  auto& csvm = App().VirtualMachinesHandler().Get<ShellVirtualMachine>();
+  auto& csvm = _virtualMachines.Get( IVirtualMachines::Type::Shell );
   
   // we can now execute the action.
   csvm.Execute(*this, szFile );

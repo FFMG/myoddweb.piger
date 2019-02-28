@@ -22,6 +22,7 @@
 #include "ActionVersion.h"
 #include "MessagesHandler.h"
 #include "IpcListener.h"
+#include "../api/VirtualMachines.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 END_MESSAGE_MAP()
@@ -309,7 +310,7 @@ bool CActionMonitorApp::CreateAndShowActionDialog()
   assert(_ipcListener != nullptr);
 
   // create the actual dicali.
-	ActionMonitorDlg dlg( *_possibleActions, *_messagesHandler, _taskBar);
+	ActionMonitorDlg dlg( *_possibleActions, *_messagesHandler, *_virtualMachines, _taskBar);
 	m_pMainWnd = &dlg;
 
   // show the dialog box
@@ -479,12 +480,13 @@ void CActionMonitorApp::DoStartActionsList(const bool wait)
 {
   // sanity check
   assert(_possibleActions != nullptr);
+  assert(_virtualMachines != nullptr);
 
   // wait for whatever is still running
   WaitForStartActionsToComplete();
 
   // start the new ones
-  _startActions = new ActionsImmediate( AM_DIRECTORY_IN, *_possibleActions);
+  _startActions = new ActionsImmediate( AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines );
   _startActions->Initialize();
 
   // wait if needed.
@@ -503,12 +505,13 @@ void CActionMonitorApp::DoEndActionsList(const bool wait)
 {
   // sanity check
   assert(_possibleActions != nullptr);
+  assert(_virtualMachines != nullptr);
 
   // wait for whatever is still running
   WaitForEndActionsToComplete();
 
   // start the new ones
-  _endActions = new ActionsImmediate( AM_DIRECTORY_OUT, *_possibleActions);
+  _endActions = new ActionsImmediate( AM_DIRECTORY_OUT, *_possibleActions, *_virtualMachines);
   _endActions->Initialize();
 
   // wait if needed.

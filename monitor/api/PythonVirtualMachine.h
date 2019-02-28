@@ -29,11 +29,7 @@ private:
   bool m_isInitialized;
   bool InitializeFunctions();
 
-  myodd::threads::Key _mutex;
-
-  typedef std::map<std::thread::id, PyApi*> Apis;
-  Apis _apis;
-  static PyApi& PythonVirtualMachine::GetApi();
+  static PyApi& GetApi();
 
   PyThreadState* _mainThreadState;
 

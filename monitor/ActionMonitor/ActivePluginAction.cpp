@@ -9,8 +9,8 @@
  * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
  * @param bool isPrivileged if this action is privileged or not.
  */
-ActivePluginAction::ActivePluginAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
-  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
+ActivePluginAction::ActivePluginAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+  ActiveAction( src, virtualMachines, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 
@@ -36,7 +36,7 @@ void ActivePluginAction::OnExecuteInThread()
   const auto& szFile = File();
 
   // create the Python Api.
-  auto& pvm = App().VirtualMachinesHandler().Get<PluginVirtualMachine>();
+  auto& pvm = _virtualMachines.Get(IVirtualMachines::Type::LegacyPlugin);
   
   //  save it.
   // we can now execute the thread.

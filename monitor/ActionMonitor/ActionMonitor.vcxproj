@@ -171,6 +171,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\api\IVirtualMachine.cpp" />
+    <ClCompile Include="..\api\IVirtualMachines.cpp" />
     <ClCompile Include="..\api\luaapi.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -242,6 +243,7 @@
     <ClInclude Include="..\api\csvirtualmachine.h" />
     <ClInclude Include="..\api\helperapi.h" />
     <ClInclude Include="..\api\IVirtualMachine.h" />
+    <ClInclude Include="..\api\IVirtualMachines.h" />
     <ClInclude Include="..\api\luaapi.h" />
     <ClInclude Include="..\api\LuaVirtualMachine.h" />
     <ClInclude Include="..\api\pluginapi.h" />

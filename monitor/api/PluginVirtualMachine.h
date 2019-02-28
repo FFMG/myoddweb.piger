@@ -12,6 +12,7 @@
 #include "os/os.h"
 #include "amplugin/ampluginprivate.h"
 
+
 class PluginVirtualMachine final : public IVirtualMachine
 {
 public:
@@ -28,13 +29,6 @@ public:
 
   void ErasePlugin( const MYODD_STRING& plugin);
 
-private:
-  typedef std::map< std::thread::id, PluginApi*> ListOfPlugins;
-  ListOfPlugins _apis;
-  
-  myodd::threads::Key _mutex;
-  static PluginApi& GetApi();
-
 protected:
   bool DisposeApi(PluginApi* api);
   void AddApi( PluginApi* api );
@@ -43,6 +37,8 @@ protected:
 protected:
   AmPluginPrivate* _amPlugin;
   void InitializeFunctions();
+
+  static PluginApi& GetApi();
 
 protected:
   int Create( LPCTSTR pluginFile );
@@ -61,13 +57,15 @@ protected:
     PFUNC_MSG  fnMsg;
   };
 
+  myodd::threads::Key _containerKey;
+  myodd::threads::Key _pluginKey;
+
   // map of all the functions.
   typedef std::map< MYODD_STRING, PLUGIN_THREAD*> PLUGIN_CONTAINER;
-
-  PLUGIN_CONTAINER m_pluginsContainer;
+  PLUGIN_CONTAINER _pluginsContainer;
 
   // find a module
-  PLUGIN_THREAD* Find( const MYODD_STRING& );
+  PLUGIN_THREAD* Find( const std::wstring& );
 
   HMODULE ExpandLoadLibrary( LPCTSTR lpFile );
 

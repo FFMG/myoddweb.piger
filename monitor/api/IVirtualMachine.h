@@ -18,6 +18,126 @@
 #include "ActiveAction.h"
 #include "IIpcListener.h"
 
+template <class Key, class Value>
+class VirtualMachineLists
+{
+protected:
+  VirtualMachineLists() : _key(L"VirtualMachineLists") {};
+
+public:
+  static VirtualMachineLists& Instance()
+  {
+    static VirtualMachineLists singleton;
+    return singleton;
+  }
+
+public:
+  void Dispose(std::function<void(Key, Value*)> onDispose = nullptr)
+  {
+    // lock it
+    myodd::threads::Lock guard(_key);
+
+    if (onDispose != nullptr)
+    {
+      // find this thread
+      for (auto it = _apis.begin(); it != _apis.end(); ++it)
+      {
+        onDispose(it->first, it->second);
+      }
+    }
+    _apis.erase(_apis.begin(), _apis.end());
+  }
+
+  bool Dispose( const Key& key, std::function<void(Key, Value*)> onDispose = nullptr )
+  {
+    // lock it
+    myodd::threads::Lock guard(_key);
+
+    // find this thread
+    const auto it = _apis.find( key );
+    if( it == _apis.end() )
+    {
+      return false;
+    }
+
+    if (onDispose != nullptr)
+    {
+      onDispose(it->first, it->second);
+    }
+
+    // remove it.
+    _apis.erase(it);
+
+    // we found it.
+    return true;
+  }
+
+  bool Dispose(Value* api, std::function<void(Key, Value*)> onDispose = nullptr)
+  {
+    // lock it
+    myodd::threads::Lock guard(_key);
+
+    // find this thread
+    for (auto it = _apis.begin();
+      it != _apis.end();
+      ++it)
+    {
+      if (it->second == api)
+      {
+        if (onDispose != nullptr)
+        {
+          onDispose(it->first, it->second);
+        }
+
+        // remove it.
+        _apis.erase(it);
+
+        // we found it.
+        return true;
+      }
+    }
+
+    // we did not find it.
+    return false;
+  }
+
+  void AddApi(const Key& key, Value* api)
+  {
+    // lock it
+    myodd::threads::Lock guard(_key);
+
+    const auto it = _apis.find( key );
+    if (it != _apis.end())
+    {
+      // we are trying to add an api
+      // to more than one thread.
+      throw - 1;
+    }
+
+    // add it
+    _apis[key] = api;
+  }
+
+  Value& GetApi(const Key& key)
+  {
+    // lock it
+    myodd::threads::Lock guard(_key);
+
+    // for now, get the first value...
+    // @todo, we need to get the actual thread id running.
+    const auto it = _apis.find(key);
+    if (it == _apis.end())
+    {
+      throw - 1;
+    }
+    return *(it->second);
+  }
+protected:
+  typedef std::map<Key, Value*> ListOfPlugins;
+  ListOfPlugins _apis;
+  myodd::threads::Key _key;
+};
+
 class IVirtualMachine
 {
 public:

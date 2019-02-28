@@ -4,7 +4,7 @@ class ActiveByeAction :
   public ActiveAction
 {
 public:
-  ActiveByeAction(const Action& src, HWND hTopHWnd );
+  ActiveByeAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd );
   virtual ~ActiveByeAction();
 
 protected:

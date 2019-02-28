@@ -12,7 +12,7 @@
 PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
   IVirtualMachine( actions, messagesHandler, iIpcListener ),
   _amPlugin( nullptr ),
-  _mutex(L"PLuginVirtualMachine")
+  _containerKey( L"Plugins Container")
 {
   //  get our own module architecture.
   _moduleArchitecture = myodd::os::GetImageArchitecture( nullptr );
@@ -25,6 +25,7 @@ PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& 
  */
 PluginVirtualMachine::~PluginVirtualMachine()
 {
+  VirtualMachineLists<std::thread::id, PluginApi>::Instance().Dispose();
   // remove the plugins list
   delete _amPlugin;
 }
@@ -36,32 +37,7 @@ PluginVirtualMachine::~PluginVirtualMachine()
  */
 bool PluginVirtualMachine::DisposeApi(PluginApi* api)
 {
-  // lock it
-  myodd::threads::Lock guard( _mutex );
-  
-  // find this thread
-  for (auto it = _apis.begin();
-       it != _apis.end();
-       ++it)
-  {
-    if (it->second == api)
-    {
-      // the thread id should be this one.
-      if( it->first != std::this_thread::get_id() )
-      {
-        myodd::log::LogError(_T("Removed an Api from the list of plugin, but the one we removed was not from this thread id."));
-      }
-
-      // remove it.
-      _apis.erase(it);
-
-      // we found it.
-      return true;
-    }
-  }
-
-  // we did not find it.
-  return false;
+  return VirtualMachineLists<std::thread::id, PluginApi>::Instance().Dispose(api);
 }
 
 /**
@@ -71,19 +47,7 @@ bool PluginVirtualMachine::DisposeApi(PluginApi* api)
  */
 void PluginVirtualMachine::AddApi(PluginApi* api)
 {
-  // lock it
-  myodd::threads::Lock guard(_mutex);
-
-  const auto it = _apis.find(std::this_thread::get_id());
-  if (it != _apis.end())
-  {
-    // we are trying to add an api
-    // to more than one thread.
-    throw - 1;
-  }
-
-  // add it
-  _apis[std::this_thread::get_id()] = api;
+  VirtualMachineLists<std::thread::id, PluginApi>::Instance().AddApi(std::this_thread::get_id(), api );
 }
 
 /**
@@ -92,17 +56,7 @@ void PluginVirtualMachine::AddApi(PluginApi* api)
  */
 PluginApi& PluginVirtualMachine::GetApi()
 {
-  // get our current self.
-  auto& pvm = static_cast<PluginVirtualMachine&>( App().VirtualMachinesHandler().Get<PluginVirtualMachine>());
-
-  // for now, get the first value...
-  // @todo, we need to get the actual thread id running.
-  const auto it = pvm._apis.find(std::this_thread::get_id());
-  if (it == pvm._apis.end() )
-  {
-    throw -1;
-  }
-  return *(it->second);
+  return VirtualMachineLists<std::thread::id, PluginApi>::Instance().GetApi(std::this_thread::get_id());
 }
 
 /**
@@ -116,8 +70,9 @@ bool PluginVirtualMachine::Initialize()
   {
     return true;
   }
+
   //  get the lock.
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_pluginKey);
 
   // double lock...
   if (_amPlugin != nullptr)
@@ -173,7 +128,9 @@ void PluginVirtualMachine::InitializeFunctions()
  */
 bool PluginVirtualMachine::Register( LPCTSTR what, void* with )
 {
-  if( !_amPlugin )
+  Initialize();
+  myodd::threads::Lock guard(_pluginKey);
+  if( nullptr == _amPlugin )
   {
     return false;
   }
@@ -197,15 +154,15 @@ bool PluginVirtualMachine::IsExt(const MYODD_STRING& file )
  * @param void
  * @return void
  */
-PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const MYODD_STRING& s)
+PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const std::wstring& s)
 {
   //  get the lock.
-  myodd::threads::Lock guard( _mutex );
+  myodd::threads::Lock guard( _containerKey );
 
-  PLUGIN_CONTAINER::const_iterator iter = m_pluginsContainer.find( s );
-  if( iter == m_pluginsContainer.end() )
+  const auto iter = _pluginsContainer.find( s );
+  if( iter == _pluginsContainer.end() )
   {
-    return NULL;
+    return nullptr;
   }
 
   // return what was found.
@@ -225,9 +182,9 @@ HMODULE PluginVirtualMachine::ExpandLoadLibrary( LPCTSTR lpFile )
   if( !myodd::files::ExpandEnvironment( lpFile, lpExpandFile ) )
   {
     //  something broke.
-    return NULL;
+    return nullptr;
   }
-  HMODULE hMod = LoadLibrary( lpExpandFile );
+  auto hMod = LoadLibrary( lpExpandFile );
   delete [] lpExpandFile;
   return hMod;
 }
@@ -341,13 +298,13 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
     return -1;
   }
 
-  PLUGIN_THREAD* f = new PLUGIN_THREAD;
-  f-> hModule = hModule;
-  f-> fnMsg   = pfMsg;
+  auto pluginThread = new PLUGIN_THREAD;
+  pluginThread-> hModule = hModule;
+  pluginThread-> fnMsg   = pfMsg;
 
   //  get the lock.
-  myodd::threads::Lock guard(_mutex);
-  m_pluginsContainer[ pluginFile ] = f;
+  myodd::threads::Lock guard( _containerKey );
+  _pluginsContainer[ pluginFile ] = pluginThread;
 
   // assume error 
   auto result = AM_RESP_NONE;
@@ -389,10 +346,10 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
 void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
 {
   //  get the lock.
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_containerKey );
 
-  PLUGIN_CONTAINER::const_iterator iter = m_pluginsContainer.find( plugin );
-  if( iter == m_pluginsContainer.end() )
+  const auto iter = _pluginsContainer.find( plugin );
+  if( iter == _pluginsContainer.end() )
   {
     return;
   }
@@ -414,7 +371,7 @@ void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
   }
 
   //  remove it from the list.
-  m_pluginsContainer.erase( iter );
+  _pluginsContainer.erase( iter );
 }
 
 /**
@@ -425,11 +382,11 @@ void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
 void PluginVirtualMachine::Destroy()
 {
   //  get the lock.
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guardContainer( _containerKey);
 
   //  we must clear all the thread.
-  for( PLUGIN_CONTAINER::const_iterator it = m_pluginsContainer.begin(); 
-       it != m_pluginsContainer.end(); 
+  for( auto it = _pluginsContainer.begin(); 
+       it != _pluginsContainer.end(); 
        ++it 
      )
   {
@@ -447,8 +404,9 @@ void PluginVirtualMachine::Destroy()
   }// for each modules.
 
   // and remove everything
-  m_pluginsContainer.erase( m_pluginsContainer.begin(), m_pluginsContainer.end() );
+  _pluginsContainer.erase( _pluginsContainer.begin(), _pluginsContainer.end() );
 
+  myodd::threads::Lock guardPlugin(_pluginKey);
   delete _amPlugin;
   _amPlugin = nullptr;
 }

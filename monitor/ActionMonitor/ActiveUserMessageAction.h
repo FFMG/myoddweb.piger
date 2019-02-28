@@ -4,7 +4,7 @@ class ActiveUserMessageAction :
   public ActiveAction
 {
 public:
-  ActiveUserMessageAction(const Action& src, HWND hTopHWnd, UINT Msg );
+  ActiveUserMessageAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, UINT Msg );
   virtual ~ActiveUserMessageAction();
 
 protected:
