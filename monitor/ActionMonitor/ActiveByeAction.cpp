@@ -1,15 +1,13 @@
 #include "stdafx.h"
 #include "ActiveByeAction.h"
 #include "ActionMonitor.h"
-#include "ActionMonitorDlg.h"
 
 /**
- * Constructor
- * @param const Action& src the parent action
- * @param HWND hTopHWnd the top window at the time of the call.
+ * \copydoc
  */
-ActiveByeAction::ActiveByeAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
-  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  )
+ActiveByeAction::ActiveByeAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
+  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  ),
+  _application( application )
 {
 }
 
@@ -35,5 +33,5 @@ bool ActiveByeAction::OnDeInitialize()
  */
 void ActiveByeAction::OnExecuteInThread()
 {
-  App().DoClose();
+  _application.Destroy();
 }

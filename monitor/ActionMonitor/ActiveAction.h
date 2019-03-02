@@ -5,8 +5,8 @@
 
 // the clipboard data at the time we createed it.
 #include "../common/clipboard.h"
+#include "../api/IVirtualMachines.h"
 
-class IVirtualMachines;
 class ActiveAction : public Action
 {
 public:

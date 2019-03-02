@@ -1,26 +1,16 @@
 #pragma once
 #include "IMessagesHandler.h"
+#include "CommonWnd.h"
 
-class MessagesHandlerWnd final
+class MessagesHandlerWnd final : public CommonWnd
 {
 public:
   MessagesHandlerWnd();
   ~MessagesHandlerWnd();
 
-  bool Close();
-  bool Create();
   bool Show(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const;
 
 protected:
-  /**
-   * \brief Create the class if it does not exist
-   */
-  bool CreateClass();
-
-  const std::wstring _szClassName;
-  WNDCLASSEX _wc;
-  HWND _hwnd;
-
   class Msg final
   {
   public:
@@ -45,5 +35,5 @@ protected:
     IMessagesHandler& _parent;
   };
 
-  static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+  LRESULT OnMessage(UINT msg, WPARAM wParam, LPARAM lParam) override;
 };

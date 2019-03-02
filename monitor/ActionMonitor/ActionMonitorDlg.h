@@ -15,28 +15,29 @@
 #pragma once
 
 #include "FadeWnd.h"
-#include "ActiveActions.h"
 #include "resource.h"		// main symbols
 #include "../common/trayDialog.h" //  system tray icon item
 #include "../ActionMonitor/IActions.h"
+#include "IApplication.h"
+#include "IDisplay.h"
 
-#define ACTION_NONE           0x000
-#define ACTION_MAINKEY_DOWN   0x001
-#define ACTION_SHIFT_DOWN     0x002
-#define ACTION_LSHIFT_DOWN    0x004 /* if not set then RSHIFT is down */
-
-#define SPECIAL_KEY VK_CAPITAL
-
-class ActionMonitorDlg final : public CTrayDialog, FadeWnd, ActiveActions
+class ActionMonitorDlg final : public CTrayDialog, FadeWnd, public IDisplay
 {
 // Construction
 public:
   explicit ActionMonitorDlg(
+    IApplication& application,
     IActions& actions,
     IMessagesHandler& messagesHandler,
     IVirtualMachines& virtualMachines, 
-    CWnd* pParent = nullptr);	// standard constructor
+    CWnd* pParent);
   virtual ~ActionMonitorDlg();
+
+  void Close();
+  void Show() override;
+  void Hide() override;
+  void Active() override;
+  void Inactive() override;
 
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 
@@ -59,20 +60,6 @@ protected:
   void InitHook();
 
 protected:
-  //  check if the param is our special key
-  static bool IsSpecialKey( WPARAM wparam );
-  BOOL IsSpecialKeyDown( )const;
-
-protected:
-  //  the state of our special key
-  DWORD m_keyState;
-
-  /**
-   * \brief the virtual machines.
-   */
-  IVirtualMachines& _virtualMachines;
-
-protected:
   bool DisplayCommand( HDC hdc = NULL );
   void DisplayTime( HDC hdc, RECT &rParent );
   bool ResizeCommandWindow( const RECT &newSize );
@@ -82,6 +69,16 @@ protected:
   HGDIOBJ SelTimeFont( HDC hdc );
 
 protected:
+  /**
+   * \brief the virtual machines.
+   */
+  IVirtualMachines& _virtualMachines;
+
+  /**
+   * \brief the applications controller.
+   */
+  IApplication& _application;
+
   /**
    * \brief the actions currently loaded
    */
@@ -97,9 +94,6 @@ protected:
   POINT m_ptMaxValues;
   void CalcMaxes();
 
-  afx_msg LRESULT OnHookKeyChar     (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyDown     (WPARAM wParam, LPARAM lParam);
-  afx_msg LRESULT OnHookKeyUp       (WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnReload          (WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnExit            (WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnVersion         (WPARAM wParam, LPARAM lParam);

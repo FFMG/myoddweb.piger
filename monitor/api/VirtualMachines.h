@@ -1,5 +1,4 @@
 #pragma once
-#include "IVirtualMachine.h"
 #include "IVirtualMachines.h"
 
 class VirtualMachines final : public IVirtualMachines

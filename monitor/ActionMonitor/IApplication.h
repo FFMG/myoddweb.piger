@@ -13,37 +13,43 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-
-class IVirtualMachine;
-class IVirtualMachines
+class IApplication
 {
 public:
-  enum class Type
-  {
-    None,
-    Lua,
-    Python,
-    LegacyPlugin,
-    Powershell,
-    CSharp,
-    Shell
-  };
+  IApplication();
+  virtual ~IApplication();
 
-  explicit IVirtualMachines();
-  virtual ~IVirtualMachines();
-
-  IVirtualMachines(const IVirtualMachines&) = delete;
-  void operator=(const IVirtualMachines&) = delete;
+  IApplication(const IApplication&) = delete;
+  void operator=(const IApplication&) = delete;
 
   /**
-   * \brief destroy all the virtual machines.
+   * \brief create the application window.
+   */
+  virtual CWnd* Create() = 0;
+
+  /**
+   * \brief show the main window.
+   */
+  virtual void Show() = 0;
+
+  /**
+   * \brief close the main window, (if open), and destroy all the variables.
    */
   virtual void Destroy() = 0;
 
   /**
-   * \brief Get a virtual machine of a certain type
-   *        We will throw if the virtual machine does not exist.
-   * \return the virtual machine
+   * \brief show the app version number.
    */
-  virtual IVirtualMachine& Get( Type type) = 0;
+  virtual void ShowVersion() = 0;
+
+  /**
+   * \brief show all the start actions
+   */
+  virtual void ShowStart() = 0;
+
+  /**
+   * \brief show all the end actions
+   */
+  virtual void ShowEnd() = 0;
 };
+

@@ -14,15 +14,8 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionMonitor.h"
-#include "ActionMonitorDlg.h"
 #include "ActionsImmediate.h"
-
-#include "ActionBye.h"
-#include "ActionLoad.h"
-#include "ActionVersion.h"
-#include "MessagesHandler.h"
-#include "IpcListener.h"
-#include "../api/VirtualMachines.h"
+#include "Application.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
 END_MESSAGE_MAP()
@@ -31,17 +24,13 @@ END_MESSAGE_MAP()
  * \brief The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
-  _restartApplication( false ), 
+  _restartApplication(false),
   _startActions(nullptr),
   _endActions(nullptr),
   _mutex(nullptr),
-  _cwndLastForegroundWindow(nullptr), 
-  _maxClipboardSize( NULL ),
-  _taskBar(nullptr),
-  _messagesHandler( nullptr ),
-  _possibleActions(nullptr),
-  _ipcListener( nullptr ),
-  _virtualMachines(nullptr)
+  _cwndLastForegroundWindow(nullptr),
+  _maxClipboardSize(NULL), 
+_application(nullptr)
 {
 }
 
@@ -56,7 +45,6 @@ CActionMonitorApp::~CActionMonitorApp()
   // here we will simply destroy.
   delete _endActions;
   delete _startActions;
-  delete _virtualMachines;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -269,7 +257,7 @@ BOOL CActionMonitorApp::InitInstance()
   for (;;)
   {
     // assume that we will not restart the app.
-    _restartApplication = 0;
+    _restartApplication = false;
 
     // while the app is running, the `_restartApplication` flag 
     // might change, and we might not restart.
@@ -287,167 +275,14 @@ BOOL CActionMonitorApp::InitInstance()
 
 bool CActionMonitorApp::CreateAndShowActionDialog()
 {
-  // create the taskbar
-  CreateTaskBar();
+  delete _application;
+  _application = new Application();
+  m_pMainWnd = _application->Create();
 
-  // create the message handler
-  CreateMessageHandler();
-
-  // create the messages/listener.
-  CreateIpcListener();
-
-  // create the possible actions
-  CreateActionsList();
-
-  // create the virtual machines
-  CreateVirtualMachines();
-
-  // sanity checks
-  assert(_taskBar != nullptr);
-  assert(_possibleActions != nullptr);
-  assert(_messagesHandler != nullptr);
-  assert(_virtualMachines != nullptr);
-  assert(_ipcListener != nullptr);
-
-  // create the actual dicali.
-	ActionMonitorDlg dlg( *_possibleActions, *_messagesHandler, *_virtualMachines, _taskBar);
-	m_pMainWnd = &dlg;
-
-  // show the dialog box
-  const auto nResponse = dlg.DoModal();
-
-  //  clean up the window.
-  _taskBar->DestroyWindow();
-  _taskBar = nullptr;
-
-  // remove the actions
-  // we are about to close, we are no longer monitoring anything
-  delete _possibleActions;
-  _possibleActions = nullptr;
-
-  // stop the virtuall machines
-  delete _virtualMachines;
-  _virtualMachines = nullptr;
-
-  // stop all the message handling
-  delete _messagesHandler;
-  _messagesHandler = nullptr;
-
-  delete _ipcListener;
-  _ipcListener = nullptr;
-
-  return (nResponse == IDOK);
-}
-
-void CActionMonitorApp::CreateTaskBar()
-{
-  if(_taskBar != nullptr )
-  {
-    _taskBar->DestroyWindow();
-  }
-  _taskBar = new CFrameWnd();
-  _taskBar->Create(nullptr, nullptr, WS_OVERLAPPEDWINDOW);
-}
-
-void CActionMonitorApp::CreateVirtualMachines()
-{
-  // sanity checks
-  assert(_possibleActions != nullptr);
-  assert(_messagesHandler != nullptr);
-  assert(_ipcListener != nullptr);
-
-  // stop the virtuall machines
-  delete _virtualMachines;
-  _virtualMachines = new VirtualMachines( *_possibleActions, *_messagesHandler, *_ipcListener );
-}
-
-void CActionMonitorApp::CreateIpcListener()
-{
-  assert(_taskBar != nullptr);
-
-  // remove the old one
-  delete _ipcListener;
-
-  // create a new one
-  _ipcListener = new IpcListener();
-  _ipcListener->Initialize( _taskBar->GetSafeHwnd() );
-}
-
-/**
- * \brief (Re)build the message handler
- */
-void CActionMonitorApp::CreateMessageHandler()
-{
-  //  remove the old one
-  delete _messagesHandler;
-
-  //  create a new one.
-  _messagesHandler = new MessagesHandler();
-}
-
-/**
- * \brief (Re)build a list of possible actions.
- */
-void CActionMonitorApp::CreateActionsList()
-{
-  //  remove the old one
-  delete _possibleActions;
-
-  //  create a new one.
-  _possibleActions = new Actions( );
-
-  //  parse the directory for all possible files.
-  _possibleActions->Initialize();
-
-  //TODO these really need to move out of here
-  //  add the default commands
-  _possibleActions->Add( new ActionBye() );
-  _possibleActions->Add( new ActionLoad() );
-  _possibleActions->Add( new ActionVersion() );
-}
-
-/**
- * \brief Wait for all the active windows to complete.
- */
-void CActionMonitorApp::WaitForHandlersToComplete()
-{
-  // wait for the Ipc windows.
-  if( _ipcListener != nullptr )
-  {
-    _ipcListener->WaitForAllToComplete();
-  }
-
-  if (_messagesHandler != nullptr)
-  {
-    // wait for all the messages
-    _messagesHandler->WaitForAllToComplete();
-  }
-}
-
-void CActionMonitorApp::DoClose()
-{
-  // log that we are closing down
-  myodd::log::LogMessage(_T("Piger is shutting down."));
-
-  // stop and destroy all the running virtual machines.
-  DestroyAllVirtualMachines();
-
-  // for them to finish
-  WaitForHandlersToComplete();
-
-  // call the end actions to run
-  DoEndActionsList( true );
-
-  // wait all the active windows.
-  // those are the ones created by the end Action list.
-  WaitForHandlersToComplete();
-
-  //  close us
-  const auto mainWnd = GetMainWnd();
-  if (mainWnd)
-  {
-    mainWnd->SendMessage(WM_CLOSE, 0, 0);
-  }
+  _application->Show();
+  delete _application;
+  _application = nullptr;
+  return true;
 }
 
 void CActionMonitorApp::DoReload()
@@ -455,45 +290,18 @@ void CActionMonitorApp::DoReload()
   // we first want to close.
   // but make sure that we restart.
   _restartApplication = true;
-  DoClose();
-}
-
-void CActionMonitorApp::DoVersion()
-{
-  myodd::files::Version ver;
-  const auto strSay = myodd::strings::Format(_T("<b>Version : </b>%d.%d.%d.%d"),
-    ver.GetFileVersionMajor(),
-    ver.GetFileVersionMinor(),
-    ver.GetFileVersionMaintenance(),
-    ver.GetFileVersionBuild());
-
-  assert(_messagesHandler != nullptr);
-  _messagesHandler->Show(strSay.c_str(), 500, 3000);
+  assert(_application != nullptr);
+  _application->Destroy();
 }
 
 /**
  * \brief Execute all the actions that are executed at the start of this app.
  *        Note that the Dialog box is already created so we can show all the messages, (if any).
- * \param wait if we want to wait for the actions to finish or not.
  */
-void CActionMonitorApp::DoStartActionsList(const bool wait)
+void CActionMonitorApp::DoStartActionsList() const
 {
-  // sanity check
-  assert(_possibleActions != nullptr);
-  assert(_virtualMachines != nullptr);
-
-  // wait for whatever is still running
-  WaitForStartActionsToComplete();
-
-  // start the new ones
-  _startActions = new ActionsImmediate( AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines );
-  _startActions->Initialize();
-
-  // wait if needed.
-  if (wait)
-  {
-    WaitForStartActionsToComplete();
-  }
+  assert(_application != nullptr);
+  _application->ShowStart();
 }
 
 /**
@@ -501,55 +309,12 @@ void CActionMonitorApp::DoStartActionsList(const bool wait)
  *        Note that the dialog should still be alive so we can display the messages.
  * \param wait if we want to wait for the actions to finish or not.
  */
-void CActionMonitorApp::DoEndActionsList(const bool wait)
+void CActionMonitorApp::DoEndActionsList() const
 {
-  // sanity check
-  assert(_possibleActions != nullptr);
-  assert(_virtualMachines != nullptr);
-
-  // wait for whatever is still running
-  WaitForEndActionsToComplete();
-
-  // start the new ones
-  _endActions = new ActionsImmediate( AM_DIRECTORY_OUT, *_possibleActions, *_virtualMachines);
-  _endActions->Initialize();
-
-  // wait if needed.
-  if (wait)
-  {
-    WaitForEndActionsToComplete();
-  }
+  assert(_application != nullptr);
+  _application->ShowEnd();
 }
 
-/**
- * \brief wait for the actions to complete and cleanup.
- */
-void CActionMonitorApp::WaitForEndActionsToComplete()
-{
-  if (_endActions == nullptr)
-  {
-    return;
-  }
-  _endActions->WaitForAll();
-  delete _endActions;
-  _endActions = nullptr;
-
-}
-
-/**
- * \brief wait for the actions to complete and cleanup.
- */
-void CActionMonitorApp::WaitForStartActionsToComplete()
-{
-  if (_startActions == nullptr)
-  {
-    return;
-  }
-  _startActions->WaitForAll();
-  delete _startActions;
-  _startActions = nullptr;
-
-}
 /**
  * \brief Set the max clipboard size that we don't want to use more of.
  *        depending on the windows version/memory available.
@@ -699,16 +464,4 @@ int CActionMonitorApp::ExitInstance()
   _mutex = nullptr;
 
   return CWinApp::ExitInstance();
-}
-
-/**
- * \brief destroy all the virtual machines.
- */
-void CActionMonitorApp::DestroyAllVirtualMachines() const
-{
-  if( _virtualMachines == nullptr )
-  {
-    return;
-  }
-  _virtualMachines->Destroy();
 }

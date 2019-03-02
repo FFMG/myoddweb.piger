@@ -14,10 +14,8 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
-#include "Actions.h"    //  the actions we can call, (the name of the file)
 #include "ActionsImmediate.h"
-#include "IMessagesHandler.h"
-#include "../api/IVirtualMachines.h"
+#include "IApplication.h"
 
 #define _MAX_CMD_LINE_ARGS  128
 
@@ -46,21 +44,12 @@ public:
 
 public:
   bool CreateAndShowActionDialog();
-  void CreateTaskBar();
-  void CreateActionsList();
-  void CreateMessageHandler();
-  void CreateVirtualMachines();
-  void CreateIpcListener();
 
 public:
-  void DoVersion();
   void DoReload();
-  void DoClose();
 
-  void DoStartActionsList( bool wait );
-  void DoEndActionsList(bool wait);
-  void WaitForEndActionsToComplete();
-  void WaitForStartActionsToComplete();
+  void DoStartActionsList() const;
+  void DoEndActionsList() const;
 
 private:
   /**
@@ -68,17 +57,14 @@ private:
    */
   bool _restartApplication;
 
-  /**
-   * \brief Wait for the active windows to complete.
-   */
-  void WaitForHandlersToComplete();
-
 private:
   ActionsImmediate* _startActions;
   ActionsImmediate* _endActions;
 
 public:
-//  virtual int ExitInstance();
+  afx_msg LRESULT OnHookKeyDown(WPARAM wParam, LPARAM lParam);
+
+  //  virtual int ExitInstance();
   int ExitInstance() override;
 
   // check Mutext and so on
@@ -102,30 +88,10 @@ public:
    */
   size_t _maxClipboardSize;
 private:
-  CFrameWnd* _taskBar;
-
   /**
-   * \brief the messages handler
+   * \brief the application
    */
-  IMessagesHandler* _messagesHandler;
-
-  /**
-   * \brief the list of possible actions
-   */
-  IActions* _possibleActions;
-
-  /**
-   * \brief the IPC Listener.
-   */
-  IIpcListener* _ipcListener;
-
-  /**
-   * \brief the virtual machines handler.
-   */
-  IVirtualMachines* _virtualMachines;
-
-public:
-  void DestroyAllVirtualMachines() const;
+  IApplication* _application;
 };
 
 CActionMonitorApp& App();

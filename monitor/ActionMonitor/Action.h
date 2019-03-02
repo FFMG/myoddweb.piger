@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
+#include "../api/IVirtualMachines.h"
 
-class IVirtualMachines;
 class ActiveAction;
 class Action  
 {

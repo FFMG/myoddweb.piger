@@ -8,11 +8,12 @@
 #include "ActiveByeAction.h"
 
 /**
- * todo
- * @param void
- * @return void
+ * Contructor
+ * \param application the application to close the app
  */
-ActionBye::ActionBye( ) : Action( ACTION_CORE_BYE, L"" )
+ActionBye::ActionBye(IApplication& application ) : 
+  Action( ACTION_CORE_BYE, L"" ),
+  _application(application)
 {
 }
 
@@ -26,13 +27,11 @@ ActionBye::~ActionBye()
 }
 
 /**
- * Run the command, we take into account the current selection and command parameters given.
- * @param HWND hTopWindow the last foreground window
- * @return BOOL true.
+ * \copydoc
  */
 ActiveAction* ActionBye::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
-  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
-  return new ActiveByeAction( *this, virtualMachines, hTopHWnd );
+  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
+  return new ActiveByeAction( _application, *this, virtualMachines, hTopHWnd );
 }

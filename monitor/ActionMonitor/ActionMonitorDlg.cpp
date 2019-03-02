@@ -23,23 +23,27 @@
 /**
  * \brief the constructor
  * \see CTrayDialog::CTrayDialog
+ * \param application the main application
  * \param actions the list of possible actions.
+ * \param virtualMachines the virtual machines
+ * \param messagesHandler the messages handler.
  * \param pParent the parent owner of this window
  */
 ActionMonitorDlg::ActionMonitorDlg(
+  IApplication& application,
   IActions& actions,
   IMessagesHandler& messagesHandler,
   IVirtualMachines& virtualMachines,
-  CWnd* pParent /*=nullptr*/)
+  CWnd* pParent)
   : 
-  CTrayDialog(ActionMonitorDlg::IDD, pParent), 
+  CTrayDialog(ActionMonitorDlg::IDD, pParent),
   m_rWindow(),
-  m_keyState(ACTION_NONE),
   _fontTime(nullptr), 
-  m_ptMaxValues(),
+  _virtualMachines(virtualMachines),
+  _application( application ),
   _actions( actions ),
   _messagesHandler(messagesHandler),
-  _virtualMachines(virtualMachines)
+  m_ptMaxValues()
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -57,6 +61,28 @@ ActionMonitorDlg::~ActionMonitorDlg()
   }
 }
 
+void ActionMonitorDlg::Show()
+{
+  ShowWindow(::myodd::config::Get(L"commands\\transparency", 127));
+}
+
+void ActionMonitorDlg::Hide()
+{
+  ShowWindow(0);
+}
+
+void ActionMonitorDlg::Active()
+{
+  TraySetIcon(IDR_MAINFRAME_ACTIVE);
+  TrayUpdate();
+}
+
+void ActionMonitorDlg::Inactive()
+{
+  TraySetIcon(IDR_MAINFRAME);
+  TrayUpdate();
+}
+
 /**
  * todo
  * @see CTrayDialog::DoDataExchange
@@ -71,9 +97,6 @@ void ActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_REGISTERED_MESSAGE(UWM_KEYBOARD_CHAR     , OnHookKeyChar)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_DOWN     , OnHookKeyDown)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_UP       , OnHookKeyUp)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD   , OnReload)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_EXIT     , OnExit)
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION  , OnVersion)
@@ -86,11 +109,13 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
   ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
+void ActionMonitorDlg::Close()
+{
+  SendMessage(WM_CLOSE, 0, 0);
+}
+
 void ActionMonitorDlg::OnClose()
 {
-  //  remove the hooks
-  hook_clear( m_hWnd );
-
   __super::OnClose();
 }
 
@@ -161,45 +186,10 @@ BOOL ActionMonitorDlg::OnInitDialog()
 }
 
 /**
- * todo
- * @param void
- * @return void
- */
-BOOL ActionMonitorDlg::IsSpecialKeyDown( )const
-{
-  const auto vk = GetKeyState(SPECIAL_KEY);
-  return ((vk & 0xffff) == 1 );
-}
-
-/**
  * \brief initialise the hook
  */
 void ActionMonitorDlg::InitHook()
 {
-  //  in case we called setHook(...); and crashed we might not be able to
-  //  restart the hook
-  //  so clear the hook and then restart it...
-  hook_clear( m_hWnd );
-
-  //  if the key is down then we need to send a message to
-  //  tell the system to do the work
-  if( IsSpecialKeyDown() )
-  {
-    INPUT input[2] ;
-    ZeroMemory( input, sizeof(input) ) ;
-    input[0].type       = INPUT_KEYBOARD ;
-    input[0].ki.wVk     = SPECIAL_KEY;
-
-    input[0].ki.time    = input[1].ki.time    = GetTickCount() ;
-    input[1].ki.dwFlags = KEYEVENTF_KEYUP ;
-    SendInput( 1, input, sizeof(INPUT) ) ; 
-
-    //  surrender our thread time to give time for the toggle to work.
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-  }
-
-  //  start hook the DLL
-  hook_set(m_hWnd, SPECIAL_KEY);
 }
 
 /**
@@ -249,8 +239,8 @@ void ActionMonitorDlg::CalcMaxes( )
   const auto fY = static_cast<float>(GetSystemMetrics(SM_CYSCREEN));
 
   //  calc the percentages.
-  m_ptMaxValues.x = static_cast<int>(fX * (int)::myodd::config::Get(L"commands\\max.x", 99) / 100.f);
-  m_ptMaxValues.y = static_cast<int>(fY * (int)::myodd::config::Get(L"commands\\max.y", 99) / 100.f);
+  m_ptMaxValues.x = static_cast<int>(fX * static_cast<int>(::myodd::config::Get(L"commands\\max.x", 99)) / 100.f);
+  m_ptMaxValues.y = static_cast<int>(fY * static_cast<int>(::myodd::config::Get(L"commands\\max.y", 99)) / 100.f);
 }
 
 /**
@@ -295,12 +285,12 @@ void ActionMonitorDlg::OnPaint()
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
 		// Center icon in client rectangle
-		int cxIcon = GetSystemMetrics(SM_CXICON);
-		int cyIcon = GetSystemMetrics(SM_CYICON);
+		const auto cxIcon = GetSystemMetrics(SM_CXICON);
+    const auto cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
 		GetClientRect(&rect);
-		int x = (rect.Width() - cxIcon + 1) / 2;
-		int y = (rect.Height() - cyIcon + 1) / 2;
+    const auto x = (rect.Width() - cxIcon + 1) / 2;
+    const auto y = (rect.Height() - cyIcon + 1) / 2;
 
 		// Draw the icon
 		dc.DrawIcon(x, y, m_hIcon);
@@ -314,8 +304,8 @@ void ActionMonitorDlg::OnPaint()
     }
     else
     {
-      ActionMonitorMemDC *myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
-      HDC hdc = myDC->GetSafeHdc();
+      auto myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
+      auto hdc = myDC->GetSafeHdc();
 
       // display command will return true if the rectangle size was updated.
       // if the rectangle, (the display window), changes size then we need to 
@@ -348,230 +338,6 @@ void ActionMonitorDlg::OnPaint()
 HCURSOR ActionMonitorDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
-}
-
-/**
- * todo
- * @see CTrayDialog::CTrayDialog
- * @param void
- * @param void
- * @return void
- */
-LRESULT ActionMonitorDlg::OnHookKeyChar(WPARAM wParam, LPARAM lParam)
-{ 
-  /**
-   * The WM_CHAR message is posted to the window with the keyboard focus when a WM_KEYDOWN message is translated by the TranslateMessage function. 
-   * The WM_CHAR message contains the character code of the key that was pressed.
-   */
-  return 0L;
-}
-
-/**
- * \brief Return true if a param is our special key
- * \param wParam check if the given param is the special key or not.
- * \return if wParam is the special key.
- */
-bool ActionMonitorDlg::IsSpecialKey( const WPARAM wParam )
-{
-  return (wParam == SPECIAL_KEY);
-}
-
-/**
- * todo
- * @param void
- * @param void
- * @return void
- */
-LRESULT ActionMonitorDlg::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
-{
-  TRACE( "KeyDown 0x%x\n", wParam );
-
-  /**
-   * The WM_KEYDOWN message is posted to the window with the keyboard focus when a nonsystem key is pressed. 
-   * A nonsystem key is a key that is pressed when the ALT key is not pressed. 
-   */
-
-  //  if it is the special key then tell the system that from now own
-  //  we need to record keys and prevent any other key from passing accross.
-  if( IsSpecialKey(wParam) )
-  {
-    //  only do it if the key was NOT down previously.
-    //  otherwise we will forever be reseting
-    if( (m_keyState & ACTION_MAINKEY_DOWN) != ACTION_MAINKEY_DOWN )
-    {
-      // we need to save the last forground window
-      // because showing our dialog box will change things a bit.
-      CActionMonitorApp::SetLastForegroundWindow( GetForegroundWindow() );
-      
-      //  tell the system to no longer accept any more key
-      m_keyState |= ACTION_MAINKEY_DOWN;
-      hook_RejectKeyboad( TRUE );
-      TraySetIcon(IDR_MAINFRAME_ACTIVE);
-      TrayUpdate();
-
-      //  reset the last command
-      _actions.CurrentActionReset();
-      ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
-    }
-  }
-
-  //  if the special key is not down then we don't need to go any further
-  if( (m_keyState & ACTION_MAINKEY_DOWN) != ACTION_MAINKEY_DOWN )
-  {
-    return 0L;
-  }
-
-  switch (wParam) 
-  { 
-  case VK_BACK:     // backspace 
-    _actions.CurrentActionBack();
-    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
-    break;
-
-  case 0x0A:        // linefeed 
-  case VK_TAB:      // tab 
-  case VK_RETURN:   // carriage return 
-  case VK_CLEAR:
-    break; 
-
-  case VK_ESCAPE:
-    _actions.CurrentActionReset( );
-    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
-
-  case VK_DOWN:
-    _actions.down();
-    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
-    break;
-
-  case VK_CAPITAL:
-    break;
-
-  case VK_UP:
-    _actions.up();
-    ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
-    break;
-
-  case VK_SHIFT:
-  case VK_RSHIFT:
-    m_keyState |= ACTION_SHIFT_DOWN;
-    break;
-
-  case VK_LSHIFT:
-    m_keyState |= (ACTION_SHIFT_DOWN | ACTION_LSHIFT_DOWN);
-    break;
-
-  default:
-    {
-      BYTE ks[256];
-      memset( ks, 0, sizeof(ks) );
-      GetKeyboardState(ks);
-      WORD w;
-      UINT scan;
-      scan=0;
-      
-      ks[VK_SHIFT] = 1;
-      if( (m_keyState & ACTION_SHIFT_DOWN) == ACTION_SHIFT_DOWN )
-      {
-        //  force the shift key down.
-        //  the low level keyboad does not alway pass the key(shift) before the letter key
-        //  so we might not know that the shift key is pressed.
-        //  so we set it here.
-        ks[VK_SHIFT] = 129;
-      }
-      
-      if( 0 != ToAscii(wParam,scan,ks,&w,0) )
-      {
-        const auto c = static_cast<TCHAR>(CHAR(w));
-        //  add the current character to the list of items
-        _actions.CurrentActionAdd( c );
-
-        //  make sure that the window is visible
-        //  This will also force a refresh of the window
-        ShowWindow( ::myodd::config::Get( L"commands\\transparency", 127) );
-      }
-    }
-    break;
-  }
-  return 0L;
-}
-
-/**
- * todo
- * @param void
- * @param void
- * @return void
- */
-LRESULT ActionMonitorDlg::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
-{
-  TRACE( "KeyUp 0x%x\n", wParam );
-
-  //  check the key that the user had released
-  //  if it the special key then tell the user that the key is no longer down
-  if( IsSpecialKey(wParam) )
-  {
-    //  the key is no longer down
-    //  but was it down at all to start with? - (sanity check)
-    if( (m_keyState & ACTION_MAINKEY_DOWN) == ACTION_MAINKEY_DOWN )
-    {
-      //  remove the fact that the key was pressed.
-      //  do that next time we come around here we don't do it again
-      m_keyState &= ~ACTION_MAINKEY_DOWN;
-
-      //  tell the system that we can now accept key press
-      hook_RejectKeyboad( FALSE );
-      TraySetIcon(IDR_MAINFRAME);
-      TrayUpdate();
-
-      try
-      {
-        //  We use the Actions to find the actual command
-        //  because either it is an exact match, (and it doesn't matter)
-        //  or it is not an exact match and this is what we meant to use
-        // 
-        //  so if the user enters 'goo french victories'
-        //  we will use the first command 'google' with the arguments 'french victories'
-        //
-        //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
-        const auto action = _actions.GetCommand();
-        if (nullptr != action)
-        {
-          const auto szCommandLine = _actions.GetCommandLine();
-
-          //  do the action now
-          //  we might not have any, but that's not for us to decides :).
-          const auto pWnd = CActionMonitorApp::GetLastForegroundWindow();
-          QueueAndExecute( action->CreateActiveAction(_virtualMachines, pWnd, szCommandLine, false) );
-        }
-      }
-      catch( ... )
-      {
-        //  we don't have a valid command.
-      }
-
-      //  hide the window
-      ShowWindow(0);
-    }
-  }
-
-  switch (wParam) 
-  { 
-  case VK_SHIFT:
-  case VK_RSHIFT:
-  case VK_LSHIFT:
-    m_keyState &= ~ACTION_SHIFT_DOWN;
-    m_keyState &= ~ACTION_LSHIFT_DOWN;
-    break;
-
-  default:
-    break;
-  }
-
-  /**
-   * The WM_KEYUP message is posted to the window with the keyboard focus when a nonsystem key is released.
-   * A nonsystem key is a key that is pressed when the ALT key is not pressed, 
-   * or a keyboard key that is pressed when a window has the keyboard focus. 
-   */
-  return 0L;
 }
 
 /**
@@ -793,7 +559,7 @@ HGDIOBJ ActionMonitorDlg::SelTimeFont( const HDC hdc )
 LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
 {
   //  do all the actions that are labeled as 'start'
-  App().DoStartActionsList( false );
+  App().DoStartActionsList( );
 
   return 0L;
 }
@@ -804,7 +570,7 @@ LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
  */
 LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
 {
-  App().DoVersion();
+  _application.ShowVersion();
   return 0L;
 }
 
@@ -814,7 +580,7 @@ LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
  */
 LRESULT ActionMonitorDlg::OnExit(WPARAM wParam, LPARAM lParam)
 {
-  App().DoClose();
+  _application.Destroy();
   return 0L;
 }
 
