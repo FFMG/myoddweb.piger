@@ -23,11 +23,6 @@ public:
   void operator=(const IApplication&) = delete;
 
   /**
-   * \brief create the application window.
-   */
-  virtual CWnd* Create() = 0;
-
-  /**
    * \brief show the main window.
    */
   virtual void Show() = 0;
@@ -37,6 +32,11 @@ public:
    *        also send out messages as needed.
    */
   virtual void Close() = 0;
+
+  /**
+   * \brief restart the application completely.
+   */
+  virtual void Restart() = 0;
 
   /**
    * \brief show the app version number.

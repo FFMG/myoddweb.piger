@@ -32,7 +32,8 @@ Application::Application() :
   _virtualMachines(nullptr),
   _dlg( nullptr ),
   _hookWnd( nullptr ),
-  _startActions( nullptr)
+  _startActions( nullptr),
+  _restartApplication(false)
 {
 }
 
@@ -69,7 +70,17 @@ void Application::Close()
   }
 }
 
-CWnd* Application::Create()
+void Application::Restart()
+{
+  // log that we are restarting
+  myodd::log::LogMessage(_T("Piger is restarting."));
+
+  // close it
+  _restartApplication = true;
+  Close();
+}
+
+void Application::Create()
 {
   // destroy the old one
   Destroy();
@@ -98,21 +109,37 @@ CWnd* Application::Create()
   // create the actual dicali.
   _dlg = new ActionMonitorDlg( *this, *_possibleActions, _taskBar);
 
-  // the hook window.
+  // the hook window, we need dlg, so we have to this last.
+  // also we do not want to fire the hook before needed.
   CreateHookWindow();
-
-  return _dlg;
 }
 
 void Application::Show()
 {
-  assert(_dlg != nullptr);
+  // show the dialog box and wait for it to complete.
+  for (;;)
+  {
+    // assume that we will not restart the app.
+    _restartApplication = false;
 
-  // show the dialog box
-  _dlg->DoModal();
+    // create everything
+    Create();
 
-  // we are now closed, we can destroy everything
-  Destroy();
+    // sanity check
+    assert(_dlg != nullptr);
+
+    // show the dialog box
+    _dlg->DoModal();
+
+    // we are now closed, we can destroy everything
+    Destroy();
+
+    // are we done here?
+    if(_restartApplication == false )
+    {
+      break;
+    }
+  }
 }
 
 void Application::Destroy()
@@ -188,6 +215,11 @@ void Application::ShowStart()
   // start the new ones
   _startActions = new ActionsImmediate(AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines);
   _startActions->Initialize();
+
+  // we do not want to wait for start messages
+  // we will continue in case of long running stat processes.
+  // it is bad to have blocking scripts anyway
+  // rather have a script to call another process.
 }
 
 void Application::ShowVersion()
@@ -281,7 +313,7 @@ void Application::CreateActionsList()
   //  add the default commands
   _possibleActions->Add(new ActionBye(*this));
   _possibleActions->Add(new ActionLoad());
-  _possibleActions->Add(new ActionVersion());
+  _possibleActions->Add(new ActionVersion(*this));
 }
 
 /**

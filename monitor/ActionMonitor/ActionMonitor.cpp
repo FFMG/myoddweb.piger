@@ -24,7 +24,6 @@ END_MESSAGE_MAP()
  * \brief The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
-  _restartApplication(false),
   _mutex(nullptr),
   _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize(NULL), 
@@ -245,21 +244,8 @@ BOOL CActionMonitorApp::InitInstance()
   // set the cliboard size.
   InitMaxClipboardSize();
 
-  // show the dialog box and wait for it to complete.
-  for (;;)
-  {
-    // assume that we will not restart the app.
-    _restartApplication = false;
 
-    // while the app is running, the `_restartApplication` flag 
-    // might change, and we might not restart.
-    CreateAndShowActionDialog();
-
-    if (!_restartApplication)
-    {
-      break;
-    }
-  }
+  CreateAndShowActionDialog();
 
   // always return false
   return FALSE;
@@ -269,21 +255,11 @@ bool CActionMonitorApp::CreateAndShowActionDialog()
 {
   delete _application;
   _application = new Application();
-  m_pMainWnd = _application->Create();
 
   _application->Show();
   delete _application;
   _application = nullptr;
   return true;
-}
-
-void CActionMonitorApp::DoReload()
-{
-  // we first want to close.
-  // but make sure that we restart.
-  _restartApplication = true;
-  assert(_application != nullptr);
-  _application->Close();
 }
 
 /**
@@ -296,7 +272,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   _maxClipboardSize = 0;
 
   // the path
-  const MYODD_STRING path = _T("clipboard\\maxmemory");
+  const auto path = L"clipboard\\maxmemory";
 
   //  does the value exist?
   if (!myodd::config::Contains(path))

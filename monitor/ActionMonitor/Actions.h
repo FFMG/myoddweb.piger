@@ -14,7 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "Action.h"
-#include <mutex>
 #include <threads/lock.h>
 #include "IActions.h"
 

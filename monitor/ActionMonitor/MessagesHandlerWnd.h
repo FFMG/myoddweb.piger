@@ -9,6 +9,7 @@ public:
   ~MessagesHandlerWnd();
 
   bool Show(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const;
+  bool WaitForAllToComplete(IMessagesHandler& parent) const;
 
 protected:
   class Msg final

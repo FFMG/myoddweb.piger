@@ -191,6 +191,9 @@
     <ClCompile Include="IDisplay.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="ActiveVersionAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\api\helperapi.h">
@@ -377,6 +380,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="IDisplay.h" />
+    <ClInclude Include="ActiveVersionAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ActionMonitor.ico">

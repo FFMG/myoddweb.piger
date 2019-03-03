@@ -13,8 +13,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-
-#include "ActionsImmediate.h"
 #include "IApplication.h"
 
 #define _MAX_CMD_LINE_ARGS  128
@@ -25,7 +23,6 @@ public:
 	CActionMonitorApp();
   virtual ~CActionMonitorApp();
   
-	public:
 	virtual BOOL InitInstance();
 
   // Implementation
@@ -44,15 +41,6 @@ public:
 
 public:
   bool CreateAndShowActionDialog();
-
-public:
-  void DoReload();
-
-private:
-  /**
-   * \brief if this value is true then we will reload the application
-   */
-  bool _restartApplication;
 
 public:
   afx_msg LRESULT OnHookKeyDown(WPARAM wParam, LPARAM lParam);

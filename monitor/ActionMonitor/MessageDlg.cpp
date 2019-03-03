@@ -27,8 +27,12 @@ IMPLEMENT_DYNAMIC(MessageDlg, CDialog)
 MessageDlg::MessageDlg()
   : CDialog(MessageDlg::IDD, nullptr),
     FadeWnd(), 
-    _elapseMiliSecondsBeforeFadeOut(0),
-    _totalMilisecondsToShowMessage(0)
+    _totalMilisecondsToShowMessage(0),
+    _elapseMiliSecondsBeforeFadeOut(0)
+{
+}
+
+MessageDlg::~MessageDlg()
 {
 }
 
@@ -45,17 +49,7 @@ void MessageDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(MessageDlg, CDialog)
   ON_WM_PAINT()
-  ON_WM_CLOSE()
 END_MESSAGE_MAP()
-
-/**
- * \brief the dialog is about to destroy itself.
- * \see CDialog::PostNcDestroy
- */
-void MessageDlg::PostNcDestroy()
-{
-  delete this;
-}
 
 /**
  * \brief called when the window is being created, we can then set our own values.
@@ -161,7 +155,7 @@ void MessageDlg::Fade(MessageDlg* owner )
 /**
  * \brief do the actual fading.
  */
-void MessageDlg::DoFade()
+void MessageDlg::DoFade() const
 {
   // if we do not want to show the message, we might as well hide it right away.
   if ((_totalMilisecondsToShowMessage+_elapseMiliSecondsBeforeFadeOut) <= 0)
@@ -218,7 +212,7 @@ void MessageDlg::DoFade()
   }
 }
 
-void MessageDlg::ShowMessageWithNoFadding(long milliseconds)
+void MessageDlg::ShowMessageWithNoFadding(const long milliseconds) const
 {
   if (milliseconds <= 0)
   {
@@ -247,28 +241,13 @@ void MessageDlg::CloseFromThread()
 {
   // call the complete function.
   // so we can tell all that we are done here.
-  _onComplete(this);
+  if (_onComplete != nullptr)
+  {
+    _onComplete(this);
+  }
 
   // close it
   PostMessage(WM_CLOSE);
-
-  // complete whatever needs to be done
-  myodd::wnd::MessagePump(m_hWnd);
-
-  // wait a little.
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-  // and let the other threads process their messages.
-  myodd::wnd::MessagePump(nullptr);
-}
-
-/**
- * \brief called when the dialog is closing, (this is the main app).
- * \see CTrayDialog::OnClose
- */
-void MessageDlg::OnClose()
-{
-  DestroyWindow();
 }
 
 /**

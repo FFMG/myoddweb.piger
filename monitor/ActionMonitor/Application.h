@@ -28,9 +28,9 @@ public:
   Application();
   virtual ~Application();
 
-  CWnd* Create() override;
-
   void Close() override;
+
+  void Restart() override;
 
   void Show() override;
 
@@ -41,6 +41,8 @@ public:
   void ShowEnd() override;
 
 private:
+  void Create();
+
   void CreateTaskBar();
   void CreateActionsList();
   void CreateMessageHandler();
@@ -89,6 +91,11 @@ private:
    *       but we keep track of it, in case we need to kill it.
    */
   ActionsImmediate* _startActions;
+
+  /**
+   * \brief if this value is true then we will reload the application
+   */
+  bool _restartApplication;
 
   /**
    * \brief Close the virtual machines windows/scripts

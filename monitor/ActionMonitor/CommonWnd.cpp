@@ -48,11 +48,20 @@ LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPAR
       }
     }
   }
-  if( obj != nullptr )
-  {
-    return obj->OnMessage(msg, wParam, lParam);
-  }
 
+  LRESULT result = 0L;
+  if (obj != nullptr)
+  {
+    result = obj->OnMessage(msg, wParam, lParam);
+    switch (msg)
+    {
+    case WM_CLOSE:
+    case WM_DESTROY:
+      SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
+      break;
+    }
+    return result;
+  }
   return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
@@ -118,7 +127,6 @@ bool CommonWnd::Close()
     return false;
   }
   SendMessage(_hwnd, WM_CLOSE, 0, 0);
-  SetWindowLongPtr(_hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
   _hwnd = nullptr;
 
   return true;

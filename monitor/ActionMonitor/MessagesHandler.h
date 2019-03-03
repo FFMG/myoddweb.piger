@@ -21,12 +21,6 @@ public:
 
 protected:
   /**
-   * \brief handle a message dialog that has now been completed.
-   * \param dlg the dialog that we just completed.
-   */
-  void MessageDialogIsComplete( MessageDlg* dlg );
-
-  /**
    * \brief Add a message to the dialog
    * \param dlg the dialog we are adding.
    */

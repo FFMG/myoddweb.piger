@@ -13,33 +13,39 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
-#include "ActionBye.h"
-#include "ActionsCore.h"
-#include "ActiveByeAction.h"
-
-/**
- * \brief Constructor
- * \param application the application to close the app
- */
-ActionBye::ActionBye(IApplication& application ) : 
-  Action( ACTION_CORE_BYE, L"" ),
-  _application(application)
-{
-}
+#include "ActiveVersionAction.h"
+#include "ActionMonitor.h"
 
 /**
  * \copydoc
  */
-ActionBye::~ActionBye()
+ActiveVersionAction::ActiveVersionAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
+  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  ),
+  _application( application )
 {
 }
 
-/**
- * \copydoc
- */
-ActiveAction* ActionBye::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+ActiveVersionAction::~ActiveVersionAction()
 {
-  //  get the last forground window handle
-  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
-  return new ActiveByeAction( _application, *this, virtualMachines, hTopHWnd );
+}
+
+bool ActiveVersionAction::OnInitialize()
+{
+  // do nothing
+  return true;
+}
+
+bool ActiveVersionAction::OnDeInitialize()
+{
+  // do nothing
+  return true;
+}
+
+/**
+ * Execute the action in thread.
+ * Call to close this app.
+ */
+void ActiveVersionAction::OnExecuteInThread()
+{
+  _application.ShowVersion();
 }

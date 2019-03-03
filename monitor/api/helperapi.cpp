@@ -18,9 +18,6 @@
 #include <locale>
 #include <sstream>
 
-#include "../ActionMonitor/ActionMonitor.h"
-#include "../ActionMonitor/ActionMonitorDlg.h"
-
 //  the clipboard code
 #include "../common/Clipboard.h"
 

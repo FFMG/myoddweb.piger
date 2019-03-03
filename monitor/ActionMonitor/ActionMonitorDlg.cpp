@@ -92,8 +92,6 @@ BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
   ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD   , OnReload)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_EXIT     , OnExit)
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_VERSION  , OnVersion)
   ON_REGISTERED_MESSAGE(UWM_MESSAGE_PUMP_READY, OnMessagePumpReady )
   ON_WM_WINDOWPOSCHANGING()
   ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
@@ -149,9 +147,9 @@ BOOL ActionMonitorDlg::OnInitDialog()
 
   myodd::files::Version _ver;
 #ifdef _DEBUG
-  MYODD_STRING strSay = myodd::strings::Format(_T("Action Monitor [Debug]: %d.%d.%d.%d"),
+  auto strSay = myodd::strings::Format(_T("Action Monitor [Debug]: %d.%d.%d.%d"),
 #else
-  MYODD_STRING strSay = myodd::strings::Format(_T("Action Monitor : %d.%d.%d.%d"),
+  auto strSay = myodd::strings::Format(_T("Action Monitor : %d.%d.%d.%d"),
 #endif
   _ver.GetFileVersionMajor(),
   _ver.GetFileVersionMinor(),
@@ -549,33 +547,13 @@ LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
 }
 
 /**
- * \brief  Message to tell the system to give us the version number.
- * \return unused/reserved
- */
-LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
-{
-  _application.ShowVersion();
-  return 0L;
-}
-
-/**
- * \brief called when the user wants to close via the tray
- * \return unused/reserved
- */
-LRESULT ActionMonitorDlg::OnExit(WPARAM wParam, LPARAM lParam)
-{
-  _application.Close();
-  return 0L;
-}
-
-/**
  * \brief Message to tell the system to reload everything
  *        This is called when there has been a change to the options.xml
  * \return unused/reserved
  */
 LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
 {
-  App().DoReload();
+  _application.Restart();
   return 0L;
 }
 
@@ -584,7 +562,7 @@ LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
  */
 void ActionMonitorDlg::OnTrayExit() 
 {
-  ::PostMessage(m_hWnd, UWM_KEYBOARD_EXIT, 0, 0);
+  _application.Close();
 }
 
 /**
@@ -606,5 +584,5 @@ void ActionMonitorDlg::OnTrayReload()
  */
 void ActionMonitorDlg::OnTrayVersion()
 {
-  ::PostMessage( m_hWnd, UWM_KEYBOARD_VERSION, 0, 0 );
+  _application.ShowVersion();
 }

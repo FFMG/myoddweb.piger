@@ -25,7 +25,7 @@ class MessageDlg final : public CDialog, FadeWnd
 
 public:
   explicit MessageDlg();   // standard constructor
-	virtual ~MessageDlg() = default;
+	virtual ~MessageDlg();
 
 // Dialog Data
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
@@ -44,16 +44,14 @@ protected:
   std::wstring _mStdMessage;                    //  the message
   long _elapseMiliSecondsBeforeFadeOut;    //  how long before we fade out.
 
-  void DoFade();
+  void DoFade() const;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
-  virtual void PostNcDestroy();
 public:
   afx_msg void OnPaint();
-  afx_msg void OnClose();
 
 protected:
   void InitWindowPos();
@@ -66,7 +64,7 @@ protected:
 
   unsigned char GetStartTransparency() const;
 
-  void ShowMessageWithNoFadding( long milliseconds );
+  void ShowMessageWithNoFadding( long milliseconds ) const;
 
 public:
   BOOL OnInitDialog() override;

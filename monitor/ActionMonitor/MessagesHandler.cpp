@@ -12,6 +12,10 @@ MessagesHandler::~MessagesHandler()
 {
   // stop the window
   _messagesHandlerWnd.Close();
+
+  // remove whatever still needs to be
+  // we are not waiting for anything anymore
+  ClearUnused();
 }
 
 /**
@@ -33,6 +37,13 @@ void MessagesHandler::ClearUnused()
  */
 void MessagesHandler::UnsafeClearUnused()
 {
+  if (std::this_thread::get_id() != _threadId)
+  {
+    // only the owner thread can delete things
+    // so we do not want to do anything here.
+    return;
+  }
+
   for (auto it = _collection.begin(); it != _collection.end(); ++it )
   {
     if((*it)->IsRunning())
@@ -40,33 +51,19 @@ void MessagesHandler::UnsafeClearUnused()
       continue;
     }
 
+    // free the memroy
+    delete (*it);
+
     //  otherwise we can remove it from the list
     _collection.erase(it);
 
     // but as we changed the vector, we have to start all over again
     UnsafeClearUnused();
+
+    // break out so we do not go around 
+    // what is now a broken vector loop
+    break;
   }
-}
-
-/**
- * \brief handle a message dialog that has now been completed.
- * \param dlg the dialog that we just completed.
- */
-void MessagesHandler::MessageDialogIsComplete(MessageDlg* dlg)
-{
-  // protected the vector for a short while.
-  myodd::threads::Lock guard(_mutex );
-
-  // look for the window we want to delete.
-  const auto saved = std::find(_collection.begin(), _collection.end(), dlg);
-  if (saved == _collection.end())
-  {
-    return;
-  }
-
-  // remove it from the list
-  // we do not delete it, it calls 'delete this' when it is destroyed.
-  _collection.erase(saved);
 }
 
 /**
@@ -115,10 +112,7 @@ bool MessagesHandler::Show(const std::wstring& sText, const long elapseMiliSecon
     // start the fade message and pass a lambda
     // function so we are called back when the window is deleted
     // this is so we can remove it from our list here.
-    messageDlg->Show([&](CWnd* dlg)
-                     {
-                       MessageDialogIsComplete(static_cast<MessageDlg*>(dlg));
-                     });
+    messageDlg->Show( nullptr );
 
     // add the message dialog to the collection.
     AddMessageDialogToCollection(messageDlg);
@@ -196,6 +190,14 @@ void MessagesHandler::SendCloseMessageToAllMessageWindows()
  */
 void MessagesHandler::WaitForAllToComplete()
 {
+  if (std::this_thread::get_id() != _threadId)
+  {
+    // only the owner thread can delete dialogs
+    // so we will send a message ... back to us.
+    _messagesHandlerWnd.WaitForAllToComplete(*this);
+    return;
+  }
+
   // Wait for pending messages
   // we try and get the parent window
   // and if we cannot locate it, then it must be because the window no longer exists
@@ -227,6 +229,9 @@ void MessagesHandler::WaitForAllToComplete()
         continue;
       }
     }
+
+    // remember that nullptr does not matter
+    delete dlg;
 
     //  otherwise we can remove it
     // this should never really happen because we have onComplete()
