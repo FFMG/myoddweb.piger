@@ -12,36 +12,22 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
-#include "stdafx.h"
-#include "ActionLoad.h"
-#include "ActionsCore.h"
-#include "ActiveLoadAction.h"
+#pragma once
+#include "ActiveAction.h"
+#include "IApplication.h";
 
-/**
- * \brief Constructor
- * \param application the application to close the app
- */
-ActionLoad::ActionLoad(IApplication& application) :
-  Action( ACTION_CORE_LOAD, L""),
-  _application(application)
+class ActiveLoadAction final : public ActiveAction
 {
-}
+public:
+  ActiveLoadAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd );
+  virtual ~ActiveLoadAction();
 
-/**
- * \copydoc
- */
-ActionLoad::~ActionLoad()
-{
-}
+protected:
+  bool OnInitialize() override;
+  bool OnDeInitialize() override;
+  void OnExecuteInThread() override;
 
-/**
- * \copydoc
- */
-ActiveAction* ActionLoad::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
-{
-  //  get the last forground window handle
-  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
+private:
+  IApplication& _application;
+};
 
-  //  display the version.
-  return new ActiveLoadAction(_application, *this, virtualMachines, hTopHWnd);
-}

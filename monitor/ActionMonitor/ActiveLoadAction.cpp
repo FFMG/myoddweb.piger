@@ -13,35 +13,39 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
-#include "ActionLoad.h"
-#include "ActionsCore.h"
 #include "ActiveLoadAction.h"
-
-/**
- * \brief Constructor
- * \param application the application to close the app
- */
-ActionLoad::ActionLoad(IApplication& application) :
-  Action( ACTION_CORE_LOAD, L""),
-  _application(application)
-{
-}
+#include "ActionMonitor.h"
 
 /**
  * \copydoc
  */
-ActionLoad::~ActionLoad()
+ActiveLoadAction::ActiveLoadAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
+  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  ),
+  _application( application )
 {
 }
 
-/**
- * \copydoc
- */
-ActiveAction* ActionLoad::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+ActiveLoadAction::~ActiveLoadAction()
 {
-  //  get the last forground window handle
-  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
+}
 
-  //  display the version.
-  return new ActiveLoadAction(_application, *this, virtualMachines, hTopHWnd);
+bool ActiveLoadAction::OnInitialize()
+{
+  // do nothing
+  return true;
+}
+
+bool ActiveLoadAction::OnDeInitialize()
+{
+  // do nothing
+  return true;
+}
+
+/**
+ * Execute the action in thread.
+ * Call to close this app.
+ */
+void ActiveLoadAction::OnExecuteInThread()
+{
+  _application.Restart();
 }

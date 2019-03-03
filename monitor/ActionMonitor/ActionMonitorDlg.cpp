@@ -91,25 +91,13 @@ void ActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-  ON_REGISTERED_MESSAGE(UWM_KEYBOARD_RELOAD   , OnReload)
   ON_REGISTERED_MESSAGE(UWM_MESSAGE_PUMP_READY, OnMessagePumpReady )
   ON_WM_WINDOWPOSCHANGING()
   ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
 	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
   ON_COMMAND(ID_TRAY_VERSION, OnTrayVersion)
   ON_WM_DESTROY()
-  ON_WM_CLOSE()
 END_MESSAGE_MAP()
-
-void ActionMonitorDlg::Close()
-{
-  SendMessage(WM_CLOSE, 0, 0);
-}
-
-void ActionMonitorDlg::OnClose()
-{
-  __super::OnClose();
-}
 
 /**
  * todo
@@ -547,17 +535,6 @@ LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
 }
 
 /**
- * \brief Message to tell the system to reload everything
- *        This is called when there has been a change to the options.xml
- * \return unused/reserved
- */
-LRESULT ActionMonitorDlg::OnReload( WPARAM, LPARAM )
-{
-  _application.Restart();
-  return 0L;
-}
-
-/**
  * \brief Close this instance
  */
 void ActionMonitorDlg::OnTrayExit() 
@@ -573,7 +550,7 @@ void ActionMonitorDlg::OnTrayExit()
  */
 void ActionMonitorDlg::OnTrayReload() 
 {
-  ::PostMessage( m_hWnd, UWM_KEYBOARD_RELOAD, 0, 0 );
+  _application.Restart();
 }
 
 /**

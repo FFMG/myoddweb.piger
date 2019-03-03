@@ -66,7 +66,7 @@ void Application::Close()
   //  close us
   if (_dlg != nullptr )
   {
-    _dlg->Close();
+    _dlg->EndDialog(0);
   }
 }
 
@@ -312,7 +312,7 @@ void Application::CreateActionsList()
   //TODO these really need to move out of here
   //  add the default commands
   _possibleActions->Add(new ActionBye(*this));
-  _possibleActions->Add(new ActionLoad());
+  _possibleActions->Add(new ActionLoad(*this));
   _possibleActions->Add(new ActionVersion(*this));
 }
 

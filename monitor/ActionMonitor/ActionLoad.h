@@ -1,20 +1,29 @@
-// Action.h: interface for the Action class.
+//This file is part of Myoddweb.Piger.
 //
-//////////////////////////////////////////////////////////////////////
-
-#ifndef __ActionLoad_h__
-#define __ActionLoad_h__
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-
+#include "IApplication.h"
 #include "Action.h"
 
-class ActionLoad : public Action
+class ActionLoad final : public Action
 {
 public:
-  ActionLoad();
+  explicit ActionLoad(IApplication& application);
 	virtual ~ActionLoad();
 
   ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const override;
-};
 
-#endif // __Action_h__
+private:
+  IApplication& _application;
+};

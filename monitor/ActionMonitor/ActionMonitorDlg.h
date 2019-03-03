@@ -31,7 +31,6 @@ public:
     CWnd* pParent);
   virtual ~ActionMonitorDlg();
 
-  void Close();
   void Show() override;
   void Hide() override;
   void Active() override;
@@ -77,14 +76,12 @@ protected:
   POINT m_ptMaxValues;
   void CalcMaxes();
 
-  afx_msg LRESULT OnReload          (WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnMessagePumpReady(WPARAM wParam, LPARAM lParam);
   afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
   afx_msg void OnPaint();
   afx_msg void OnTrayExit();
   afx_msg void OnTrayVersion();
   afx_msg void OnTrayReload();
-  afx_msg void OnClose();
   virtual BOOL OnInitDialog();
   afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
