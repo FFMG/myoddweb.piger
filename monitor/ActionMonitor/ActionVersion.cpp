@@ -15,7 +15,6 @@
 #include "stdafx.h"
 #include "ActionVersion.h"
 #include "ActionsCore.h"
-#include "ActiveUserMessageAction.h"
 #include "ActiveVersionAction.h"
 
 /**

@@ -104,9 +104,6 @@
     <ClCompile Include="ActiveByeAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
-    <ClCompile Include="ActiveUserMessageAction.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
     <ClCompile Include="ActiveDefaultAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
@@ -257,9 +254,6 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveByeAction.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="ActiveUserMessageAction.h">
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveDefaultAction.h">

@@ -222,7 +222,6 @@
     <ClCompile Include="ActivePowershellAction.cpp" />
     <ClCompile Include="ActivePythonAction.cpp" />
     <ClCompile Include="ActiveShellAction.cpp" />
-    <ClCompile Include="ActiveUserMessageAction.cpp" />
     <ClCompile Include="ActiveVersionAction.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="CommonWnd.cpp" />
@@ -292,7 +291,6 @@
     <ClInclude Include="ActivePowershellAction.h" />
     <ClInclude Include="ActivePythonAction.h" />
     <ClInclude Include="ActiveShellAction.h" />
-    <ClInclude Include="ActiveUserMessageAction.h" />
     <ClInclude Include="ActiveVersionAction.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="CommonWnd.h" />
