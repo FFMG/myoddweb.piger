@@ -20,6 +20,7 @@
 #include "../api/IVirtualMachines.h"
 #include "ActionMonitorDlg.h"
 #include "HookWnd.h"
+#include "ActionsImmediate.h"
 
 class Application final : public IApplication
 {
@@ -29,7 +30,7 @@ public:
 
   CWnd* Create() override;
 
-  void Destroy() override;
+  void Close() override;
 
   void Show() override;
 
@@ -46,6 +47,8 @@ private:
   void CreateVirtualMachines();
   void CreateIpcListener();
   void CreateHookWindow();
+
+  void Destroy();
 
   CFrameWnd* _taskBar;
 
@@ -78,6 +81,14 @@ private:
    * \brief the hook window.
    */
   HookWnd* _hookWnd;
+
+  /**
+   * \bief start actions that we last started
+   *       we don't normally wait for actions to complete
+   *       in case they are long running
+   *       but we keep track of it, in case we need to kill it.
+   */
+  ActionsImmediate* _startActions;
 
   /**
    * \brief Close the virtual machines windows/scripts

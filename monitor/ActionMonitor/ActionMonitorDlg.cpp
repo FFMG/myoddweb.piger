@@ -25,24 +25,18 @@
  * \see CTrayDialog::CTrayDialog
  * \param application the main application
  * \param actions the list of possible actions.
- * \param virtualMachines the virtual machines
- * \param messagesHandler the messages handler.
  * \param pParent the parent owner of this window
  */
 ActionMonitorDlg::ActionMonitorDlg(
   IApplication& application,
   IActions& actions,
-  IMessagesHandler& messagesHandler,
-  IVirtualMachines& virtualMachines,
   CWnd* pParent)
   : 
   CTrayDialog(ActionMonitorDlg::IDD, pParent),
   m_rWindow(),
   _fontTime(nullptr), 
-  _virtualMachines(virtualMachines),
   _application( application ),
   _actions( actions ),
-  _messagesHandler(messagesHandler),
   m_ptMaxValues()
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
@@ -174,22 +168,12 @@ BOOL ActionMonitorDlg::OnInitDialog()
   // set the fade window
   SetFadeParent( m_hWnd );
 
-  //  setup the hooks and the key
-  InitHook();
-
   // tell everybody that the message pump is ready
   // only once the message pump is ready can we actually send messages
   // this is important to things like IPC Windows.
   ::PostMessage(m_hWnd, UWM_MESSAGE_PUMP_READY, 0, 0);
   
   return TRUE;
-}
-
-/**
- * \brief initialise the hook
- */
-void ActionMonitorDlg::InitHook()
-{
 }
 
 /**
@@ -559,7 +543,7 @@ HGDIOBJ ActionMonitorDlg::SelTimeFont( const HDC hdc )
 LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
 {
   //  do all the actions that are labeled as 'start'
-  App().DoStartActionsList( );
+  _application.ShowStart();
 
   return 0L;
 }
@@ -580,7 +564,7 @@ LRESULT ActionMonitorDlg::OnVersion( WPARAM, LPARAM )
  */
 LRESULT ActionMonitorDlg::OnExit(WPARAM wParam, LPARAM lParam)
 {
-  _application.Destroy();
+  _application.Close();
   return 0L;
 }
 

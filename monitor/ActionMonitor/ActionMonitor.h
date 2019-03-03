@@ -48,18 +48,11 @@ public:
 public:
   void DoReload();
 
-  void DoStartActionsList() const;
-  void DoEndActionsList() const;
-
 private:
   /**
    * \brief if this value is true then we will reload the application
    */
   bool _restartApplication;
-
-private:
-  ActionsImmediate* _startActions;
-  ActionsImmediate* _endActions;
 
 public:
   afx_msg LRESULT OnHookKeyDown(WPARAM wParam, LPARAM lParam);

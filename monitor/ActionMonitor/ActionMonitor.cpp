@@ -25,8 +25,6 @@ END_MESSAGE_MAP()
  */
 CActionMonitorApp::CActionMonitorApp() :
   _restartApplication(false),
-  _startActions(nullptr),
-  _endActions(nullptr),
   _mutex(nullptr),
   _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize(NULL), 
@@ -39,12 +37,6 @@ _application(nullptr)
  */
 CActionMonitorApp::~CActionMonitorApp()
 {
-  // the actions are either finished
-  // or they should have been waited for.
-  // if we did not wait for them, then it is not the destructors fault.
-  // here we will simply destroy.
-  delete _endActions;
-  delete _startActions;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -291,28 +283,7 @@ void CActionMonitorApp::DoReload()
   // but make sure that we restart.
   _restartApplication = true;
   assert(_application != nullptr);
-  _application->Destroy();
-}
-
-/**
- * \brief Execute all the actions that are executed at the start of this app.
- *        Note that the Dialog box is already created so we can show all the messages, (if any).
- */
-void CActionMonitorApp::DoStartActionsList() const
-{
-  assert(_application != nullptr);
-  _application->ShowStart();
-}
-
-/**
- * \brief Execute all the actions that are executed at just before we end the app.
- *        Note that the dialog should still be alive so we can display the messages.
- * \param wait if we want to wait for the actions to finish or not.
- */
-void CActionMonitorApp::DoEndActionsList() const
-{
-  assert(_application != nullptr);
-  _application->ShowEnd();
+  _application->Close();
 }
 
 /**

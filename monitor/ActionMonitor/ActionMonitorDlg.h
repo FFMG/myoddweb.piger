@@ -28,8 +28,6 @@ public:
   explicit ActionMonitorDlg(
     IApplication& application,
     IActions& actions,
-    IMessagesHandler& messagesHandler,
-    IVirtualMachines& virtualMachines, 
     CWnd* pParent);
   virtual ~ActionMonitorDlg();
 
@@ -55,12 +53,7 @@ protected:
   void ShowWindow( BYTE bTrans );         //  show the window, (0 == hide)
   void InitWindow( );                     //  set up the window for the first time
 
-protected:
-  //  set up the hook
-  void InitHook();
-
-protected:
-  bool DisplayCommand( HDC hdc = NULL );
+  bool DisplayCommand( HDC hdc = nullptr );
   void DisplayTime( HDC hdc, RECT &rParent );
   bool ResizeCommandWindow( const RECT &newSize );
   
@@ -70,11 +63,6 @@ protected:
 
 protected:
   /**
-   * \brief the virtual machines.
-   */
-  IVirtualMachines& _virtualMachines;
-
-  /**
    * \brief the applications controller.
    */
   IApplication& _application;
@@ -83,11 +71,6 @@ protected:
    * \brief the actions currently loaded
    */
   IActions& _actions;
-
-  /**
-   * \brief the messages handler
-   */
-  IMessagesHandler& _messagesHandler;
 
   //  ---------------------------------------------------------------------------------
   //  thwe max width/hewight

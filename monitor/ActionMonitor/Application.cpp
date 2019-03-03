@@ -23,38 +23,36 @@
 #include "IpcListener.h"
 #include "ActionsImmediate.h"
 
-Application::Application() :
+Application::Application() : 
+  IApplication(),
   _taskBar(nullptr),
   _messagesHandler(nullptr),
   _possibleActions(nullptr),
   _ipcListener(nullptr),
   _virtualMachines(nullptr),
   _dlg( nullptr ),
-  _hookWnd( nullptr )
+  _hookWnd( nullptr ),
+  _startActions( nullptr)
 {
 }
 
 Application::~Application()
 {
+  // we have to destroy everything.
   Destroy();
-
-  // the memory should be freed!
-  assert(_dlg == nullptr);
-  delete _dlg;
 }
 
-void Application::Destroy()
+void Application::Close()
 {
-  // we cannot destroy _dlg
-  // only once we return from DoModal() can we free the memory.
-
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
 
   // stop and destroy all the running virtual machines.
+  // we need to do that now as we are about to go away
+  // 
   CloseAllVirtualMachines();
 
-  // for them to finish
+  // for them to finish properly
   WaitForHandlersToComplete();
 
   // call the end actions to run
@@ -94,13 +92,11 @@ CWnd* Application::Create()
   // sanity checks
   assert(_taskBar != nullptr);
   assert(_possibleActions != nullptr);
-  assert(_messagesHandler != nullptr);
-  assert(_virtualMachines != nullptr);
   assert(_ipcListener != nullptr);
   assert(_dlg == nullptr);
 
   // create the actual dicali.
-  _dlg = new ActionMonitorDlg( *this, *_possibleActions, *_messagesHandler, *_virtualMachines, _taskBar);
+  _dlg = new ActionMonitorDlg( *this, *_possibleActions, _taskBar);
 
   // the hook window.
   CreateHookWindow();
@@ -115,6 +111,16 @@ void Application::Show()
   // show the dialog box
   _dlg->DoModal();
 
+  // we are now closed, we can destroy everything
+  Destroy();
+}
+
+void Application::Destroy()
+{
+  delete _startActions;
+  _startActions = nullptr;
+
+  // hook wind
   delete _hookWnd;
   _hookWnd = nullptr;
 
@@ -134,14 +140,9 @@ void Application::Show()
   delete _virtualMachines;
   _virtualMachines = nullptr;
 
-  if (_messagesHandler != nullptr)
-  {
-    _messagesHandler->CloseAll();
-
-    // stop all the message handling
-    delete _messagesHandler;
-    _messagesHandler = nullptr;
-  }
+  // stop all the message handling
+  delete _messagesHandler;
+  _messagesHandler = nullptr;
 
   delete _ipcListener;
   _ipcListener = nullptr;
@@ -177,11 +178,16 @@ void Application::ShowStart()
   assert(_virtualMachines != nullptr);
   assert(_dlg != nullptr);
 
+  if( _startActions != nullptr )
+  {
+    _startActions->WaitForAll();
+    delete _startActions;
+    _startActions = nullptr;
+  }
+
   // start the new ones
-  auto startActions = new ActionsImmediate(AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines);
-  startActions->Initialize();
-  startActions->WaitForAll();
-  delete startActions;
+  _startActions = new ActionsImmediate(AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines);
+  _startActions->Initialize();
 }
 
 void Application::ShowVersion()

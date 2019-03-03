@@ -33,5 +33,5 @@ bool ActiveByeAction::OnDeInitialize()
  */
 void ActiveByeAction::OnExecuteInThread()
 {
-  _application.Destroy();
+  _application.Close();
 }

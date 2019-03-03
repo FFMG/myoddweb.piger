@@ -33,9 +33,10 @@ public:
   virtual void Show() = 0;
 
   /**
-   * \brief close the main window, (if open), and destroy all the variables.
+   * \brief close the main window, (if open), and whatever else needs to be closed.
+   *        also send out messages as needed.
    */
-  virtual void Destroy() = 0;
+  virtual void Close() = 0;
 
   /**
    * \brief show the app version number.
