@@ -22,7 +22,7 @@ public:
   IDisplay(const IDisplay&) = delete;
   void operator=( const IDisplay& ) = delete;
 
-  virtual void Show() = 0;
+  virtual void Show(const std::wstring& sCommand) = 0;
   virtual void Hide() = 0;
   virtual void Active() = 0;
   virtual void Inactive() = 0;

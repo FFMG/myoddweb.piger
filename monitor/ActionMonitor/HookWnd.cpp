@@ -143,7 +143,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
       //  reset the last command
       _actions.CurrentActionReset();
-      _display.Show();
+      _display.Show( _actions.ToChar() );
     }
   }
 
@@ -157,7 +157,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
   {
   case VK_BACK:     // backspace 
     _actions.CurrentActionBack();
-    _display.Show();
+    _display.Show( _actions.ToChar() );
     break;
 
   case 0x0A:        // linefeed 
@@ -168,12 +168,12 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
   case VK_ESCAPE:
     _actions.CurrentActionReset();
-    _display.Show();
+    _display.Show( _actions.ToChar() );
     break;
 
   case VK_DOWN:
     _actions.down();
-    _display.Show();
+    _display.Show( _actions.ToChar() );
     break;
 
   case VK_CAPITAL:
@@ -181,7 +181,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
   case VK_UP:
     _actions.up();
-    _display.Show();
+    _display.Show( _actions.ToChar() );
     break;
 
   case VK_SHIFT:
@@ -199,8 +199,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     memset(ks, 0, sizeof(ks));
     GetKeyboardState(ks);
     WORD w;
-    UINT scan;
-    scan = 0;
+    UINT scan = 0;
 
     ks[VK_SHIFT] = 1;
     if ((_keyState & ACTION_SHIFT_DOWN) == ACTION_SHIFT_DOWN)
@@ -220,7 +219,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
 
       //  make sure that the window is visible
       //  This will also force a refresh of the window
-      _display.Show();
+      _display.Show( _actions.ToChar() );
     }
   }
   break;
@@ -273,6 +272,9 @@ LRESULT HookWnd::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
       {
         //  we don't have a valid command.
       }
+
+      // we are hidding the current action
+      _actions.CurrentActionReset();
 
       //  hide the window
       _display.Hide();

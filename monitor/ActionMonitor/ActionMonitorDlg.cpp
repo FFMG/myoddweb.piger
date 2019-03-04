@@ -14,7 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionsCore.h"
-#include "ActionMonitor.h"
 #include "ActionMonitorDlg.h"
 #include "MessagesHandler.h"
 
@@ -29,14 +28,12 @@
  */
 ActionMonitorDlg::ActionMonitorDlg(
   IApplication& application,
-  IActions& actions,
   CWnd* pParent)
   : 
   CTrayDialog(ActionMonitorDlg::IDD, pParent),
   m_rWindow(),
   _fontTime(nullptr), 
   _application( application ),
-  _actions( actions ),
   m_ptMaxValues()
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
@@ -55,14 +52,14 @@ ActionMonitorDlg::~ActionMonitorDlg()
   }
 }
 
-void ActionMonitorDlg::Show()
+void ActionMonitorDlg::Show(const std::wstring& sCommand )
 {
-  ShowWindow(::myodd::config::Get(L"commands\\transparency", 127));
+  ShowWindow(sCommand, ::myodd::config::Get(L"commands\\transparency", 127));
 }
 
 void ActionMonitorDlg::Hide()
 {
-  ShowWindow(0);
+  ShowWindow(L"", 0);
 }
 
 void ActionMonitorDlg::Active()
@@ -168,18 +165,17 @@ BOOL ActionMonitorDlg::OnInitDialog()
  * @param void
  * @return void
  */
-void ActionMonitorDlg::ShowWindow( BYTE bTrans )
+void ActionMonitorDlg::ShowWindow(const std::wstring& sCommand, const BYTE bTrans )
 {
+  // save the command we want to show.
+  _sCommand = sCommand;
+
   if( IsVisible() != bTrans )
   {
     Visible(bTrans);
     SetTransparency( bTrans );
     if( bTrans == 0 )
     {
-      // remove the current action
-      // we are hidding the current action
-      _actions.CurrentActionReset();
-
       //  we need to recalculate the size of the command window
       //  normally when we hide the window it is because we are no longer
       //  typing anything and the text has been removed
@@ -187,7 +183,7 @@ void ActionMonitorDlg::ShowWindow( BYTE bTrans )
       //  so by calling a Display(...) we are forcing a command window resize.
       //  this is handy so that the next time we press the key we wont see a 'flicker'
       //  of the previous command window.
-      DisplayCommand( ); //  return value is ignored.
+      DisplayCommand( sCommand, nullptr ); //  return value is ignored.
     }
     ::ShowWindow( m_hWnd, bTrans>0?SW_SHOW:SW_HIDE );
   }
@@ -252,7 +248,7 @@ void ActionMonitorDlg::OnPaint()
 
 	if (IsIconic())
 	{
-		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
 		// Center icon in client rectangle
 		const auto cxIcon = GetSystemMetrics(SM_CXICON);
@@ -264,37 +260,35 @@ void ActionMonitorDlg::OnPaint()
 
 		// Draw the icon
 		dc.DrawIcon(x, y, m_hIcon);
+    return;
 	}
-	else
-	{
-    if( IsVisible() == 0 )
-    {
-      //  hide the window.
-      ::ShowWindow( m_hWnd, SW_HIDE );
-    }
-    else
-    {
-      auto myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
-      auto hdc = myDC->GetSafeHdc();
+  if( IsVisible() == 0 )
+  {
+    //  hide the window.
+    ::ShowWindow( m_hWnd, SW_HIDE );
+  }
+  else
+  {
+    auto myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
+    auto hdc = myDC->GetSafeHdc();
 
-      // display command will return true if the rectangle size was updated.
-      // if the rectangle, (the display window), changes size then we need to 
-      //  create a new ActionMonitorMemDC as it only knows of the old size and will not update
-      // the new area.
-      //
-      // so by deleting the old memdc we tell the system to reject it and to recalculate
-      // the area from the device context
-      while( DisplayCommand( hdc ) )
-      {
-        //  force the output to the screen now
-        delete myDC;
-        myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
-        hdc  = myDC->GetSafeHdc();
-      }
+    // display command will return true if the rectangle size was updated.
+    // if the rectangle, (the display window), changes size then we need to 
+    //  create a new ActionMonitorMemDC as it only knows of the old size and will not update
+    // the new area.
+    //
+    // so by deleting the old memdc we tell the system to reject it and to recalculate
+    // the area from the device context
+    while( DisplayCommand(_sCommand, hdc ) )
+    {
+      //  force the output to the screen now
       delete myDC;
+      myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
+      hdc  = myDC->GetSafeHdc();
     }
-    CTrayDialog::OnPaint();
-	}
+    delete myDC;
+  }
+  CTrayDialog::OnPaint();
 }
 
 /**
@@ -307,39 +301,41 @@ void ActionMonitorDlg::OnPaint()
  */
 HCURSOR ActionMonitorDlg::OnQueryDragIcon()
 {
-	return (HCURSOR) m_hIcon;
+	return static_cast<HCURSOR>(m_hIcon);
 }
 
 /**
  * \brief Display the current command that will be executing.
- * \param hdc the handle of the device context, (the screen)
+ * \param sCommand the command we want to display
+ * \param hdc handle to the device context, if null we will be using a temp one
  * \return success or not.
  */
-bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
+bool ActionMonitorDlg::DisplayCommand(const std::wstring& sCommand, const HDC hdc )
 {
   // should we even be here?
   if( 0 == IsVisible() )
   {
     return false;
   }
-  //  get the current text as well as the possible commands.
-  //  we pass what ever the user entered to whatever commands are saved.
-  const auto sCommand = _actions.ToChar( );
-  const auto len = sCommand.length();
-
-  HDC localHdc = nullptr;
   if(nullptr == hdc )
   {
-    localHdc = ::GetDC(nullptr);
+    const auto localHdc = ::GetDC(nullptr);
+    if( nullptr == localHdc )
+    {
+      return false;
+    }
+    const auto result = DisplayCommand(sCommand, localHdc);
+    ::ReleaseDC(nullptr, localHdc);
+    return result;
   }
-  else
-  {
-    localHdc = hdc;
-  }
+
+  //  get the current text as well as the possible commands.
+  //  we pass what ever the user entered to whatever commands are saved.
+  const auto len = sCommand.length();
 
   //  get the font that we will be using for display
   //  because of the XML config this is only really used for size.
-  HGDIOBJ pOldFont = SelDisplayFont( localHdc );
+  const auto pOldFont = SelDisplayFont( hdc );
 
   //  we will use 1 rectangle.
   RECT rDraw  = {0,0,0,0};
@@ -350,12 +346,12 @@ bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
   if( 0 == sCommand.length() )
   {
     SIZE sizeText;
-    GetTextExtentPoint32(localHdc, _T("I"), 1, &sizeText);
+    GetTextExtentPoint32(hdc, _T("I"), 1, &sizeText);
     rDraw.bottom = sizeText.cy;
   }
   else
   {
-    myodd::html::html(localHdc, sCommand.c_str() , len, &rDraw, DT_DEFAULT | DT_CALCRECT );
+    myodd::html::html(hdc, sCommand.c_str() , len, &rDraw, DT_DEFAULT | DT_CALCRECT );
   }
  
   // add padding to the bottom pos of the window.
@@ -374,7 +370,7 @@ bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
   //  make sure that the right is also correct
   //  but that should not change.
   rDraw.right         = rDraw.right>m_ptMaxValues.x?m_ptMaxValues.x:rDraw.right;
-  bool bRedraw        = ResizeCommandWindow( rDraw );
+  const auto bRedraw  = ResizeCommandWindow( rDraw );
 
   //  if we are going to redraw this
   //  don't bother outputting anything to the screen
@@ -386,31 +382,26 @@ bool ActionMonitorDlg::DisplayCommand( HDC hdc /*= nullptr*/ )
     // DrawHTML(...) function again.
     if( len > 0 )
     {
-      rDraw.left   = m_rWindow.left  + (int)::myodd::config::Get( L"commands\\pad.x", 2);    //  use the full width, (left right)
-      rDraw.right  = m_rWindow.right - (int)::myodd::config::Get( L"commands\\pad.x", 2);    //  and make sure we tabulate the items, (probably RECT_MIN_TAB).
+      rDraw.left   = m_rWindow.left  + static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));    //  use the full width, (left right)
+      rDraw.right  = m_rWindow.right - static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));    //  and make sure we tabulate the items, (probably RECT_MIN_TAB).
       //  and now we can show the text properly
       //
       // Set the background to transparent
       // This only relly applies to text, but that is what we are showing here.
-      SetBkMode( localHdc, TRANSPARENT );
-      myodd::html::html(localHdc, sCommand.c_str() , sCommand.length(), &rDraw, DT_DEFAULT );
+      SetBkMode( hdc, TRANSPARENT );
+      myodd::html::html(hdc, sCommand.c_str() , sCommand.length(), &rDraw, DT_DEFAULT );
     }
 
     //  
     // Show the time in the top left corner
     // Note that we only show the time if we actually draw the rectangle.
-    DisplayTime( localHdc, rDraw );
+    DisplayTime( hdc, rDraw );
   }// if we are redrawing
 
   //  clean up old fonts
   if ( pOldFont != nullptr)
   {
-    SelectObject( localHdc, pOldFont );
-  }
-
-  if(nullptr == hdc )
-  {
-    ::ReleaseDC(nullptr, localHdc );
+    SelectObject( hdc, pOldFont );
   }
   return bRedraw;
 }

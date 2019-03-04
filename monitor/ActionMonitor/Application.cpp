@@ -107,7 +107,7 @@ void Application::Create()
   assert(_dlg == nullptr);
 
   // create the actual dicali.
-  _dlg = new ActionMonitorDlg( *this, *_possibleActions, _taskBar);
+  _dlg = new ActionMonitorDlg( *this, _taskBar);
 
   // the hook window, we need dlg, so we have to this last.
   // also we do not want to fire the hook before needed.

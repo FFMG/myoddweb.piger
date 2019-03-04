@@ -17,7 +17,6 @@
 #include "FadeWnd.h"
 #include "resource.h"		// main symbols
 #include "../common/trayDialog.h" //  system tray icon item
-#include "../ActionMonitor/IActions.h"
 #include "IApplication.h"
 #include "IDisplay.h"
 
@@ -27,11 +26,10 @@ class ActionMonitorDlg final : public CTrayDialog, FadeWnd, public IDisplay
 public:
   explicit ActionMonitorDlg(
     IApplication& application,
-    IActions& actions,
     CWnd* pParent);
   virtual ~ActionMonitorDlg();
 
-  void Show() override;
+  void Show(const std::wstring& sCommand) override;
   void Hide() override;
   void Active() override;
   void Inactive() override;
@@ -39,20 +37,18 @@ public:
 	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
 
 	// ClassWizard generated virtual function overrides
-	protected:
+protected:
 	void DoDataExchange(CDataExchange* pDX) override;	// DDX/DDV support
 
-// Implementation
-protected:
 	HICON m_hIcon;
 
-protected:
   //  the command window functions
   RECT m_rWindow;                         //  the current position of the window
-  void ShowWindow( BYTE bTrans );         //  show the window, (0 == hide)
+
+  void ShowWindow(const std::wstring& sCommand, BYTE bTrans );         //  show the window, (0 == hide)
   void InitWindow( );                     //  set up the window for the first time
 
-  bool DisplayCommand( HDC hdc = nullptr );
+  bool DisplayCommand( const std::wstring& sCommand, HDC hdc);
   void DisplayTime( HDC hdc, RECT &rParent );
   bool ResizeCommandWindow( const RECT &newSize );
   
@@ -62,14 +58,14 @@ protected:
 
 protected:
   /**
+   * \brief the current command
+   */
+  std::wstring _sCommand;
+
+  /**
    * \brief the applications controller.
    */
   IApplication& _application;
-
-  /**
-   * \brief the actions currently loaded
-   */
-  IActions& _actions;
 
   //  ---------------------------------------------------------------------------------
   //  thwe max width/hewight
