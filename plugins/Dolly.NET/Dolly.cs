@@ -68,7 +68,7 @@ namespace Dolly.NET
       var sentence = sentences[_random.Next(sentences.Length)];
 
       Console.WriteLine($"About to 'Say()' ... {sentence}");
-      _monitor.Say( sentence, 100, 200 );
+      _monitor.Say( sentence, 500, 3000 );
       return Task.FromResult(true);
     }
 
