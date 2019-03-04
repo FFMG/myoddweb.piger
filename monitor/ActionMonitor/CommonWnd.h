@@ -20,6 +20,14 @@ public:
    */
   virtual bool Create();
 
+  /**
+   * \brief get the window handle, it is safe because we do not throw...
+   * \return the created handle.
+   */
+  HWND GetSafeHwnd() const {
+    return _hwnd;
+  }
+
 protected:
   /**
    * \brief Create the class if it does not exist
@@ -31,6 +39,10 @@ protected:
   HWND _hwnd;
 
   virtual LRESULT OnMessage(UINT msg, WPARAM wParam, LPARAM lParam);
+
+  virtual bool OnInitDialog();
+
+  virtual void OnPaint();
 
 private:
   static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

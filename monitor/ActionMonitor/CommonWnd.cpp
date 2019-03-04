@@ -6,12 +6,23 @@ CommonWnd::CommonWnd(const std::wstring& className) :
   _hwnd(nullptr)
 {
   memset(&_wc, 0, sizeof(WNDCLASSEX));
+  _wc.cbSize = sizeof(WNDCLASSEX);
 }
 
 CommonWnd::~CommonWnd()
 {
   // make sure we are closed
   CommonWnd::Close();
+}
+
+bool CommonWnd::OnInitDialog()
+{
+  return true;
+}
+
+void CommonWnd::OnPaint()
+{
+
 }
 
 LRESULT CommonWnd::OnMessage( const UINT msg, const WPARAM wParam, const LPARAM lParam)
@@ -55,6 +66,10 @@ LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPAR
     result = obj->OnMessage(msg, wParam, lParam);
     switch (msg)
     {
+    case WM_PAINT:
+      obj->OnPaint();
+      break;
+
     case WM_CLOSE:
     case WM_DESTROY:
       SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
@@ -117,6 +132,9 @@ bool CommonWnd::Create()
   {
     return false;
   }
+
+  OnInitDialog();
+
   return true;
 }
 
