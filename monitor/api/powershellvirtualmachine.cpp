@@ -5,10 +5,6 @@
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 
-#include <os/ipclistener.h>
-#include <ActionMonitorDlg.h>
-#include <ActionMonitor.h>
-
 #include "powershellvirtualmachine.h"
 
 /**

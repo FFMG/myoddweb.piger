@@ -28,7 +28,8 @@ MessageDlg::MessageDlg()
   : CDialog(MessageDlg::IDD, nullptr),
     FadeWnd(), 
     _totalMilisecondsToShowMessage(0),
-    _elapseMiliSecondsBeforeFadeOut(0)
+    _elapseMiliSecondsBeforeFadeOut(0),
+    _onComplete(nullptr)
 {
 }
 
@@ -247,7 +248,10 @@ void MessageDlg::CloseFromThread()
   }
 
   // close it
-  PostMessage(WM_CLOSE);
+  if (m_hWnd != nullptr)
+  {
+    EndDialog(IDOK);
+  }
 }
 
 /**
@@ -372,7 +376,10 @@ void MessageDlg::FadeCloseWindow()
   _worker.WaitForAllWorkers([&]()
   {
     myodd::wnd::MessagePump(m_hWnd );
-    myodd::wnd::MessagePump(nullptr);
+    if (m_hWnd != nullptr)
+    {
+      myodd::wnd::MessagePump(nullptr);
+    }
     return true;
   });
 }

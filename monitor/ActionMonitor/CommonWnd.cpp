@@ -38,10 +38,9 @@ LRESULT CommonWnd::OnMessage( const UINT msg, const WPARAM wParam, const LPARAM 
     break;
 
   default:
-    return DefWindowProc(_hwnd, msg, wParam, lParam);
+    break;
   }
-  return 0;
-
+  return DefWindowProc(_hwnd, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam)
