@@ -11,7 +11,6 @@
 static UINT UWM_KEYBOARD_CHAR = RegisterWindowMessage(UWM_KEYBOARD_MSG_CHAR);
 static UINT UWM_KEYBOARD_UP = RegisterWindowMessage(UWM_KEYBOARD_MSG_UP);
 static UINT UWM_KEYBOARD_DOWN = RegisterWindowMessage(UWM_KEYBOARD_MSG_DOWN);
-static UINT UWM_MESSAGE_PUMP_READY = RegisterWindowMessage(UWM_MSG_MESSAGE_PUMP_READY);
 
 // IPC messages display.
 static UINT UWM_DISPLAYMESSAGE = RegisterWindowMessage( L"UWM_MSG_DISPLAYMESSAGE" );

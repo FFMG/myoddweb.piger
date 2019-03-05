@@ -68,6 +68,8 @@ public:
    * \brief The maximum memory we want to use when getting clipboard data.
    */
   size_t _maxClipboardSize;
+
+
 private:
   /**
    * \brief the application

@@ -16,16 +16,16 @@
 
 #include "FadeWnd.h"
 #include "resource.h"		// main symbols
-#include "../common/trayDialog.h" //  system tray icon item
 #include "IApplication.h"
 #include "IDisplay.h"
+#include "ITray.h"
 
-class ActionMonitorDlg final : public CTrayDialog, FadeWnd, public IDisplay
+class ActionMonitorDlg final : public CDialog, FadeWnd, public IDisplay
 {
 // Construction
 public:
   explicit ActionMonitorDlg(
-    IApplication& application,
+    ITray& tray,
     CWnd* pParent);
   virtual ~ActionMonitorDlg();
 
@@ -63,9 +63,9 @@ protected:
   std::wstring _sCommand;
 
   /**
-   * \brief the applications controller.
+   * \brief the system tray
    */
-  IApplication& _application;
+  ITray& _tray;
 
   //  ---------------------------------------------------------------------------------
   //  thwe max width/hewight
@@ -75,9 +75,6 @@ protected:
   afx_msg LRESULT OnMessagePumpReady(WPARAM wParam, LPARAM lParam);
   afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
   afx_msg void OnPaint();
-  afx_msg void OnTrayExit();
-  afx_msg void OnTrayVersion();
-  afx_msg void OnTrayReload();
   virtual BOOL OnInitDialog();
   afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()

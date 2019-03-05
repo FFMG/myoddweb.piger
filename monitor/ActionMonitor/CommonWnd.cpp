@@ -1,9 +1,24 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "CommonWnd.h"
 
 CommonWnd::CommonWnd(const std::wstring& className) :
   _szClassName(className ),
-  _hwnd(nullptr)
+  _hwnd( nullptr ),
+  _hinstance( nullptr )
 {
   memset(&_wc, 0, sizeof(WNDCLASSEX));
   _wc.cbSize = sizeof(WNDCLASSEX);
@@ -17,35 +32,28 @@ CommonWnd::~CommonWnd()
 
 bool CommonWnd::OnInitDialog()
 {
+  // we do nothing.
   return true;
 }
 
 void CommonWnd::OnPaint()
 {
-
+  //  do nothing
 }
 
 LRESULT CommonWnd::OnMessage( const UINT msg, const WPARAM wParam, const LPARAM lParam)
 {
-  switch (msg)
-  {
-  case WM_CLOSE:
-    DestroyWindow(_hwnd );
-    break;
-
-  case WM_DESTROY:
-    PostQuitMessage(0);
-    break;
-
-  default:
-    break;
-  }
+  // simply return the default behaviour.
   return DefWindowProc(_hwnd, msg, wParam, lParam);
 }
 
 LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam)
 {
+  //  look for the parent.
   auto obj = reinterpret_cast<CommonWnd*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+
+  // if this is a create message, then we will save the pointer.
+  // the pointer was passed to us while created.
   if (msg == WM_CREATE)
   {
     const auto cs = reinterpret_cast<CREATESTRUCT *>(lParam);
@@ -82,18 +90,18 @@ LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPAR
 bool CommonWnd::CreateClass()
 {
   memset(&_wc, 0, sizeof(WNDCLASSEX));
-  const auto hInstance = GetModuleHandle(nullptr); ;
-  if (GetClassInfoEx(hInstance, _szClassName.c_str(), &_wc))
+  _hinstance = GetModuleHandle(nullptr);
+  if (GetClassInfoEx(_hinstance, _szClassName.c_str(), &_wc))
   {
     return true;
   }
   //Step 1: Registering the Window Class
   _wc.cbSize = sizeof(WNDCLASSEX);
-  _wc.style = 0;
+  _wc.style = CS_HREDRAW | CS_VREDRAW;
   _wc.lpfnWndProc = WndProc;
   _wc.cbClsExtra = 0;
   _wc.cbWndExtra = 0;
-  _wc.hInstance = hInstance;
+  _wc.hInstance = _hinstance;
   _wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
   _wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
   _wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
@@ -121,7 +129,10 @@ bool CommonWnd::Create()
     _szClassName.c_str(),
     _szClassName.c_str(),
     WS_OVERLAPPEDWINDOW,
-    CW_USEDEFAULT, CW_USEDEFAULT, 240, 120,
+    CW_USEDEFAULT, 
+    CW_USEDEFAULT, 
+    CW_USEDEFAULT, 
+    CW_USEDEFAULT,
     nullptr,
     nullptr,
     _wc.hInstance,

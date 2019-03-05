@@ -49,6 +49,7 @@ private:
   void CreateVirtualMachines();
   void CreateIpcListener();
   void CreateHookWindow();
+  void CreateTray();
 
   void Destroy();
 
@@ -68,6 +69,11 @@ private:
    * \brief the IPC Listener.
    */
   IIpcListener* _ipcListener;
+
+  /**
+   * \brief the task tray
+   */
+  ITray* _tray;
 
   /**
    * \brief the virtual machines handler.

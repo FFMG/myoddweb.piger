@@ -32,9 +32,6 @@
     <ClCompile Include="StdAfx.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\TrayDialog.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\api\helperapi.cpp">
       <Filter>api</Filter>
     </ClCompile>
@@ -193,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="ActiveLoadAction.cpp">
       <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="TrayWnd.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ITray.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationTray.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -361,9 +367,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\TrayDialog.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="IApplication.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -376,12 +379,23 @@
     <ClInclude Include="HookWnd.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="IDisplay.h" />
     <ClInclude Include="ActiveVersionAction.h">
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveLoadAction.h">
       <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="TrayWnd.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IDisplay.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ITray.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationTray.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

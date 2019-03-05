@@ -22,6 +22,7 @@
 #include "MessagesHandler.h"
 #include "IpcListener.h"
 #include "ActionsImmediate.h"
+#include "ApplicationTray.h"
 
 Application::Application() : 
   IApplication(),
@@ -33,7 +34,8 @@ Application::Application() :
   _dlg( nullptr ),
   _hookWnd( nullptr ),
   _startActions( nullptr),
-  _restartApplication(false)
+  _restartApplication(false),
+  _tray( nullptr )
 {
 }
 
@@ -100,14 +102,18 @@ void Application::Create()
   // create the virtual machines
   CreateVirtualMachines();
 
+  // create the system tray
+  CreateTray();
+
   // sanity checks
   assert(_taskBar != nullptr);
   assert(_possibleActions != nullptr);
   assert(_ipcListener != nullptr);
+  assert(_tray != nullptr);
   assert(_dlg == nullptr);
 
   // create the actual dicali.
-  _dlg = new ActionMonitorDlg( *this, _taskBar);
+  _dlg = new ActionMonitorDlg( *_tray, _taskBar);
 
   // the hook window, we need dlg, so we have to this last.
   // also we do not want to fire the hook before needed.
@@ -127,6 +133,9 @@ void Application::Show()
 
     // sanity check
     assert(_dlg != nullptr);
+
+    // show the start messages.
+    ShowStart();
 
     // show the dialog box
     _dlg->DoModal();
@@ -173,6 +182,9 @@ void Application::Destroy()
 
   delete _ipcListener;
   _ipcListener = nullptr;
+
+  delete _tray;
+  _tray = nullptr;
 
   delete _dlg;
   _dlg = nullptr;
@@ -256,7 +268,16 @@ void Application::CreateHookWindow()
 
   _hookWnd = new HookWnd(*_dlg, *_possibleActions, *_virtualMachines);
   _hookWnd->Create();
+}
 
+void Application::CreateTray()
+{
+  delete _tray;
+  auto tray = new ApplicationTray();
+  tray->SetApplication(this);
+
+  // we can pass the owneship.
+  _tray = tray;
 }
 
 void Application::CreateVirtualMachines()

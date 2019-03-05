@@ -21,20 +21,20 @@
 
 /**
  * \brief the constructor
- * \see CTrayDialog::CTrayDialog
+ * \see CDialog::CDialog
  * \param application the main application
  * \param actions the list of possible actions.
  * \param pParent the parent owner of this window
  */
 ActionMonitorDlg::ActionMonitorDlg(
-  IApplication& application,
+  ITray& tray,
   CWnd* pParent)
   : 
-  CTrayDialog(ActionMonitorDlg::IDD, pParent),
+  CDialog(ActionMonitorDlg::IDD, pParent),
   m_rWindow(),
   _fontTime(nullptr), 
-  _application( application ),
-  m_ptMaxValues()
+  m_ptMaxValues(),
+  _tray( tray )
 {
   // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
   m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -64,41 +64,35 @@ void ActionMonitorDlg::Hide()
 
 void ActionMonitorDlg::Active()
 {
-  TraySetIcon(IDR_MAINFRAME_ACTIVE);
-  TrayUpdate();
+  _tray.SetActive();
 }
 
 void ActionMonitorDlg::Inactive()
 {
-  TraySetIcon(IDR_MAINFRAME);
-  TrayUpdate();
+  _tray.SetInactive();;
 }
 
 /**
  * todo
- * @see CTrayDialog::DoDataExchange
+ * @see CDialog::DoDataExchange
  * @param void
  * @return void
  */
 void ActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CTrayDialog::DoDataExchange(pDX);
+	CDialog::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(ActionMonitorDlg, CTrayDialog)
+BEGIN_MESSAGE_MAP(ActionMonitorDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-  ON_REGISTERED_MESSAGE(UWM_MESSAGE_PUMP_READY, OnMessagePumpReady )
   ON_WM_WINDOWPOSCHANGING()
-  ON_COMMAND(ID_TRAY_EXIT, OnTrayExit)
-	ON_COMMAND(ID_TRAY_RELOAD, OnTrayReload)
-  ON_COMMAND(ID_TRAY_VERSION, OnTrayVersion)
   ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 /**
  * todo
- * @see CTrayDialog::OnWindowPosChanging
+ * @see CDialog::OnWindowPosChanging
  * @param void
  * @return void
  */
@@ -109,59 +103,37 @@ void ActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
     lpwndpos->flags &= ~SWP_SHOWWINDOW;
   }
   
-  CTrayDialog::OnWindowPosChanging(lpwndpos);
+  CDialog::OnWindowPosChanging(lpwndpos);
 }
 
 /**
  * todo
- * @see CTrayDialog::OnInitDialog
+ * @see CDialog::OnInitDialog
  * @param void
  * @return void
  */
 BOOL ActionMonitorDlg::OnInitDialog()
 {
-	CTrayDialog::OnInitDialog();
+	CDialog::OnInitDialog();
   ModifyStyleEx(WS_EX_APPWINDOW,0); //  no taskbar!
 
   // Set the icon for this dialog.  The framework does this automatically
 	//  when the applications main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
-
-	TraySetIcon(IDR_MAINFRAME);
-
-  myodd::files::Version _ver;
-#ifdef _DEBUG
-  auto strSay = myodd::strings::Format(_T("Action Monitor [Debug]: %d.%d.%d.%d"),
-#else
-  auto strSay = myodd::strings::Format(_T("Action Monitor : %d.%d.%d.%d"),
-#endif
-  _ver.GetFileVersionMajor(),
-  _ver.GetFileVersionMinor(),
-  _ver.GetFileVersionMaintenance(),
-  _ver.GetFileVersionBuild());
-
-	TraySetToolTip( strSay.c_str() );
-  TraySetMenu(IDR_TRAY );
-  TrayShow();
-
+  
   //  set up up the command window for the first time, (hidden)
   InitWindow();
 
   // set the fade window
   SetFadeParent( m_hWnd );
-
-  // tell everybody that the message pump is ready
-  // only once the message pump is ready can we actually send messages
-  // this is important to things like IPC Windows.
-  ::PostMessage(m_hWnd, UWM_MESSAGE_PUMP_READY, 0, 0);
   
   return TRUE;
 }
 
 /**
  * todo
- * @see CTrayDialog::CTrayDialog
+ * @see CDialog::CDialog
  * @param void
  * @return void
  */
@@ -238,7 +210,7 @@ void ActionMonitorDlg::InitWindow( )
  * to draw the icon.  For MFC applications using the document/view model,
  * this is automatically done for you by the framework.
  *
- * @see CTrayDialog::OnPaint
+ * @see CDialog::OnPaint
  * @param none
  * @return none
  */
@@ -288,14 +260,14 @@ void ActionMonitorDlg::OnPaint()
     }
     delete myDC;
   }
-  CTrayDialog::OnPaint();
+  CDialog::OnPaint();
 }
 
 /**
  * The system calls this to obtain the cursor to display while the user drags
  * the minimized window.
  *
- * @see CTrayDialog::OnQueryDragIcon
+ * @see CDialog::OnQueryDragIcon
  * @param void
  * @return void
  */
@@ -509,48 +481,4 @@ HGDIOBJ ActionMonitorDlg::SelTimeFont( const HDC hdc )
   }
 
   return ::SelectObject(hdc, *_fontTime );
-}
-
-/**
- * \brief When we get this message it means that the message pump is now up and running.
- *        this is important for plugins that require the message pump
- *        Like IPC messages.
- * \return unused/reserved
- */
-LRESULT ActionMonitorDlg::OnMessagePumpReady(WPARAM, LPARAM)
-{
-  //  do all the actions that are labeled as 'start'
-  _application.ShowStart();
-
-  return 0L;
-}
-
-/**
- * \brief Close this instance
- */
-void ActionMonitorDlg::OnTrayExit() 
-{
-  _application.Close();
-}
-
-/**
- * Reload the commands, options
- *
- * @param void
- * @return void
- */
-void ActionMonitorDlg::OnTrayReload() 
-{
-  _application.Restart();
-}
-
-/**
- * et the software version number.
- *
- * @param void
- * @return void
- */
-void ActionMonitorDlg::OnTrayVersion()
-{
-  _application.ShowVersion();
 }

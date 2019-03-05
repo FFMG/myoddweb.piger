@@ -1,6 +1,6 @@
 #pragma once
 #include "ActiveAction.h"
-#include "IApplication.h";
+#include "IApplication.h"
 
 class ActiveByeAction final : public ActiveAction
 {
@@ -16,4 +16,3 @@ protected:
 private:
   IApplication& _application;
 };
-
