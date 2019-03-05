@@ -198,7 +198,6 @@
     <ClCompile Include="..\common\ClipboardData.cpp" />
     <ClCompile Include="..\common\ClipboardDropData.cpp" />
     <ClCompile Include="..\common\ClipboardsData.cpp" />
-    <ClCompile Include="..\common\TrayDialog.cpp" />
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="ActionBye.cpp" />
     <ClCompile Include="ActionLoad.cpp" />
@@ -269,7 +268,6 @@
     <ClInclude Include="..\common\ClipboardData.h" />
     <ClInclude Include="..\common\ClipboardDropData.h" />
     <ClInclude Include="..\common\ClipboardsData.h" />
-    <ClInclude Include="..\common\TrayDialog.h" />
     <ClInclude Include="Action.h" />
     <ClInclude Include="ActionBye.h" />
     <ClInclude Include="ActionLoad.h" />

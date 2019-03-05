@@ -38,9 +38,6 @@
     <ClCompile Include="StdAfx.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\TrayDialog.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\api\helperapi.cpp">
       <Filter>api</Filter>
     </ClCompile>
@@ -371,9 +368,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\TrayDialog.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="ActiveVersionAction.h">
