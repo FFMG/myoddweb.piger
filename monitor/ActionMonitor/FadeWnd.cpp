@@ -20,7 +20,7 @@
  */
 FadeWnd::FadeWnd() :
   m_byteVisible( 0 ),
-  m_hFade( nullptr ),
+  _hFadeWindowHandle( nullptr ),
   fontDisplay( nullptr ),
   m_stop( false )
 {
@@ -44,7 +44,7 @@ FadeWnd::~FadeWnd()
  */
 void FadeWnd::SetFadeParent( const HWND hFade )
 {
-  m_hFade = hFade;
+  _hFadeWindowHandle = hFade;
 }
 
 #define WS_EX_LAYERED 0x00080000 
@@ -85,22 +85,21 @@ void FadeWnd::SetTransparency(const unsigned char bTrans) const
   {
     return;
   }
-  ::SetWindowLong(m_hFade, GWL_EXSTYLE, GetWindowLong(m_hFade, GWL_EXSTYLE) | WS_EX_LAYERED);
+  ::SetWindowLong(GetFadeParent(), GWL_EXSTYLE, GetWindowLong(GetFadeParent(), GWL_EXSTYLE) | WS_EX_LAYERED);
+  
   //  range of opacity between 0 and 255
-  g_pSetLayeredWindowAttributes(m_hFade, RGB(255,255,255), static_cast<BYTE>(bTrans), LWA_COLORKEY | LWA_ALPHA);
+  g_pSetLayeredWindowAttributes(GetFadeParent(), RGB(255,255,255), static_cast<BYTE>(bTrans), LWA_COLORKEY | LWA_ALPHA);
 }
 
-
 /**
- * Create and select the font that we want to use
- * Remember that the calling function must re-select the object returned.
- *
- * @param HANDLE the device context we are using to load the font.
- * @return HANDLE of the font currently been used, it is good practice to restore it once done.
+ * \brief set the font we will be using to display the message
+ * \param hdc the device context handle
+ * \param fontSize the size of the font.
+ * \return the created font.
  */
-HGDIOBJ FadeWnd::SelDisplayFont( HDC hdc, UINT fontSize /*= 70*/  )
+HGDIOBJ FadeWnd::SelDisplayFont( const HDC hdc, const UINT fontSize  )
 {
-  if( NULL == fontDisplay )
+  if( nullptr == fontDisplay )
   {
 	  LOGFONT logFont;
 	  memset(&logFont, 0, sizeof(LOGFONT));
@@ -112,10 +111,9 @@ HGDIOBJ FadeWnd::SelDisplayFont( HDC hdc, UINT fontSize /*= 70*/  )
     fontDisplay = new CFont();
 	  if (!fontDisplay->CreateFontIndirect(&logFont))
     {
-		  return NULL;
+		  return nullptr;
 	  }
   }
-
-  HGDIOBJ pOldFont = ::SelectObject(hdc, *fontDisplay );
-  return pOldFont;
+  
+  return ::SelectObject(hdc, *fontDisplay );
 }

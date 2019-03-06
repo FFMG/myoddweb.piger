@@ -109,10 +109,8 @@ bool MessagesHandler::Show(const std::wstring& sText, const long elapseMiliSecon
     const auto messageDlg = new MessageDlg();
     messageDlg->Create(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 
-    // start the fade message and pass a lambda
-    // function so we are called back when the window is deleted
-    // this is so we can remove it from our list here.
-    messageDlg->Show( nullptr );
+    // start the fade message.
+    messageDlg->Show( );
 
     // add the message dialog to the collection.
     AddMessageDialogToCollection(messageDlg);

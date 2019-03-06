@@ -14,62 +14,57 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "FadeWnd.h"
-#include "resource.h"		// main symbols
 #include "threads/workers.h"
+#include "CommonWnd.h"
 
 // MessageDlg dialog
 
-class MessageDlg final : public CDialog, FadeWnd
+class MessageDlg final : public CommonWnd, FadeWnd
 {
-	DECLARE_DYNAMIC(MessageDlg)
-
 public:
   explicit MessageDlg();   // standard constructor
 	virtual ~MessageDlg();
 
-// Dialog Data
-	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
-
-public:
   void Create( const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage);
 
 protected:
-  virtual HGDIOBJ SelDisplayFont( HDC hdc, UINT fontSize = 70 );
 
   myodd::threads::Workers _worker;
   static void Fade(MessageDlg* owner );
   
-protected:
-  long _totalMilisecondsToShowMessage;           //  how fast the text will fade out
-  std::wstring _mStdMessage;                    //  the message
-  long _elapseMiliSecondsBeforeFadeOut;    //  how long before we fade out.
+  long _totalMilisecondsToShowMessage;      //  how fast the text will fade out
+  std::wstring _mStdMessage;                //  the message
+  long _elapseMiliSecondsBeforeFadeOut;     //  how long before we fade out.
 
   void DoFade() const;
 
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-
-	DECLARE_MESSAGE_MAP()
 public:
-  afx_msg void OnPaint();
+  void OnPaint() override;
 
 protected:
+
+  /**
+   * \brief this is the full message window area
+   */
+  RECT _completeRect;
+
+  void RedrawBackground(HDC hdc) const;
+  void RedrawMessage(HDC hdc);
+
   void InitWindowPos();
 
   void CloseFromThread();
 
-  std::function<void(CWnd*)> _onComplete;
-
   void FadeCloseWindow();
 
-  unsigned char GetStartTransparency() const;
+  static unsigned char GetStartTransparency();
 
   void ShowMessageWithNoFadding( long milliseconds ) const;
 
 public:
-  BOOL OnInitDialog() override;
+  bool OnInitDialog() override;
 
-  void Show( std::function<void(CWnd*)> onComplete );
+  void Show();
   
   static void Close(MessageDlg* owner);
 

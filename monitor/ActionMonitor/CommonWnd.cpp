@@ -49,6 +49,8 @@ LRESULT CommonWnd::OnMessage( const UINT msg, const WPARAM wParam, const LPARAM 
 
 LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPARAM wParam, const LPARAM lParam)
 {
+  LRESULT result = 0L;
+
   //  look for the parent.
   auto obj = reinterpret_cast<CommonWnd*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
@@ -62,12 +64,27 @@ LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPAR
       obj = static_cast<CommonWnd*> (cs->lpCreateParams);
       if (obj != nullptr)
       {
+        obj->_hwnd = hwnd;
         SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(obj));
+
+        // call the OnMessage as it might call
+        // DefWindowProc(... ) eventually
+        result = obj->OnMessage(msg, wParam, lParam);
+        if (result == -1L)
+        {
+          obj->_hwnd = nullptr;
+          return result;
+        }
+
+        // then let the user do something
+        obj->OnInitDialog();
+
+        // and return what WM_CREATE was alway going to do.
+        return result;
       }
     }
   }
 
-  LRESULT result = 0L;
   if (obj != nullptr)
   {
     result = obj->OnMessage(msg, wParam, lParam);
@@ -142,9 +159,6 @@ bool CommonWnd::Create()
   {
     return false;
   }
-
-  OnInitDialog();
-
   return true;
 }
 

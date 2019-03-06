@@ -13,7 +13,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
-#include "ActionsCore.h"
+#include "MemDC.h"
 #include "ActionMonitorDlg.h"
 #include "MessagesHandler.h"
 
@@ -307,7 +307,7 @@ bool ActionMonitorDlg::DisplayCommand(const std::wstring& sCommand, const HDC hd
 
   //  get the font that we will be using for display
   //  because of the XML config this is only really used for size.
-  const auto pOldFont = SelDisplayFont( hdc );
+  const auto pOldFont = SelDisplayFont( hdc, 70 );
 
   //  we will use 1 rectangle.
   RECT rDraw  = {0,0,0,0};

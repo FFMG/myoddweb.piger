@@ -14,10 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
-//  flicker free dc.
-#include "MemDC.h"
-#include <mutex>
-
 #define DT_DEFAULT ( DT_NOCLIP | DT_LEFT )
 
 class FadeWnd 
@@ -27,16 +23,20 @@ public:
   virtual ~FadeWnd(void);
 
   void SetFadeParent( HWND hFade );
-  HWND GetFadeParent( ) const{ return m_hFade; }
+  HWND GetFadeParent( ) const{ return _hFadeWindowHandle; }
 
-  virtual HGDIOBJ SelDisplayFont( HDC hdc, UINT fontSize = 70 );
 protected:
-  HWND m_hFade;
+  /**
+   * \brief the window that is being faded.
+   */
+  HWND _hFadeWindowHandle;
+
+  HGDIOBJ SelDisplayFont(HDC hdc, UINT fontSize);
 
 protected:
   BYTE m_byteVisible;
-  inline BYTE IsVisible()const{return m_byteVisible;};
-  inline void Visible( BYTE b ){m_byteVisible = b;};
+  BYTE IsVisible()const{return m_byteVisible;};
+  void Visible( BYTE b ){m_byteVisible = b;};
 
   void SetTransparency( unsigned char bTrans ) const;
 
