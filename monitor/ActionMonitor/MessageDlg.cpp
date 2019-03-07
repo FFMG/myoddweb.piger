@@ -34,6 +34,8 @@ MessageDlg::MessageDlg()
 
 MessageDlg::~MessageDlg()
 {
+  Stop();
+  CommonWnd::Close();
 }
 
 /**
