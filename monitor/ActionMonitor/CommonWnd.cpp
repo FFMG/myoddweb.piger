@@ -168,9 +168,8 @@ bool CommonWnd::Close()
   {
     return false;
   }
-  SendMessage(_hwnd, WM_CLOSE, 0, 0);
+  PostMessage(_hwnd, WM_CLOSE, 0, 0);
   DestroyWindow(_hwnd);
-  SendMessage(_hwnd, WM_QUIT, 0, 0);
   _hwnd = nullptr;
 
   return true;
