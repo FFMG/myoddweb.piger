@@ -133,6 +133,39 @@ bool CommonWnd::CreateClass()
   return true;
 }
 
+/**
+ * \brief create the window and wait 'close'
+ * \return if there was an error or not.
+ */
+bool CommonWnd::CreateAndWait()
+{
+  // first we try and create
+  if( !Create() )
+  {
+    return false;
+  }
+
+  // and now we wait...
+  const auto wait = std::chrono::milliseconds(10);
+  for (;;)
+  {
+    // pump messages
+    myodd::wnd::MessagePump(nullptr);
+
+    // if _hwnd does not exist anymore
+    // then we can get out.
+    if(_hwnd == nullptr )
+    {
+      break;
+    }
+    std::this_thread::yield();
+    std::this_thread::sleep_for(wait);
+  }
+
+  // all good.
+  return true;
+}
+
 bool CommonWnd::Create()
 {
   if (!CreateClass())
@@ -168,9 +201,30 @@ bool CommonWnd::Close()
   {
     return false;
   }
-  PostMessage(_hwnd, WM_CLOSE, 0, 0);
+  SendMessage(_hwnd, WM_CLOSE, 0, 0);
   DestroyWindow(_hwnd);
   _hwnd = nullptr;
 
   return true;
+}
+
+/**
+ * \brief hide the taskbar.
+ */
+void CommonWnd::HideTaskBar() const
+{
+  // hide the window right way
+  // fading will re-show the window.
+  ShowWindow(GetSafeHwnd(), SW_HIDE);
+
+  // set the window style
+  SetWindowLong(GetSafeHwnd(), GWL_STYLE, DS_SETFONT | WS_POPUP);
+
+  auto style = WS_EX_TOOLWINDOW | WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED;
+  style &= ~WS_EX_APPWINDOW;
+  SetWindowLong(GetSafeHwnd(), GWL_EXSTYLE, style); //  no taskbar!
+
+  // show/hide for the style to take effect.
+  ShowWindow(GetSafeHwnd(), SW_SHOW);
+  ShowWindow(GetSafeHwnd(), SW_HIDE);
 }

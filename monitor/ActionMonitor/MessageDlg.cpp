@@ -312,20 +312,7 @@ bool MessageDlg::OnInitDialog()
     return false;
   }
 
-  // hide the window right way
-  // fading will re-show the window.
-  ShowWindow(GetSafeHwnd(), SW_HIDE);
-
-  // set the window style
-  SetWindowLong(GetSafeHwnd(), GWL_STYLE, DS_SETFONT | WS_POPUP );
-
-  auto style = WS_EX_TOOLWINDOW | WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED;
-  style &= ~WS_EX_APPWINDOW;
-  SetWindowLong(GetSafeHwnd(), GWL_EXSTYLE, style ); //  no taskbar!
-
-  // show/hide for the style to take effect.
-  ShowWindow(GetSafeHwnd(), SW_SHOW);
-  ShowWindow(GetSafeHwnd(), SW_HIDE);
+  HideTaskBar();
 
   // tell the fade window who the parent window is.
   SetFadeParent( GetSafeHwnd() );

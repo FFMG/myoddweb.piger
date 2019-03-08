@@ -22,22 +22,16 @@
 /**
  * \brief the constructor
  * \see CDialog::CDialog
- * \param application the main application
- * \param actions the list of possible actions.
- * \param pParent the parent owner of this window
+ * \param tray the system tray
  */
-ActionMonitorDlg::ActionMonitorDlg(
-  ITray& tray,
-  CWnd* pParent)
+ActionMonitorDlg::ActionMonitorDlg( ITray& tray)
   : 
-  CDialog(ActionMonitorDlg::IDD, pParent),
+  CommonWnd( L"ActionMonitorDlg"),
   m_rWindow(),
   _fontTime(nullptr), 
-  m_ptMaxValues(),
-  _tray( tray )
+  _tray( tray ),
+  m_ptMaxValues()
 {
-  // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
-  m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 /**
@@ -73,69 +67,31 @@ void ActionMonitorDlg::Inactive()
 }
 
 /**
- * todo
- * @see CDialog::DoDataExchange
- * @param void
- * @return void
+ * \copydoc
  */
-void ActionMonitorDlg::DoDataExchange(CDataExchange* pDX)
+bool ActionMonitorDlg::OnInitDialog()
 {
-	CDialog::DoDataExchange(pDX);
-}
-
-BEGIN_MESSAGE_MAP(ActionMonitorDlg, CDialog)
-	ON_WM_PAINT()
-	ON_WM_QUERYDRAGICON()
-  ON_WM_WINDOWPOSCHANGING()
-  ON_WM_DESTROY()
-END_MESSAGE_MAP()
-
-/**
- * todo
- * @see CDialog::OnWindowPosChanging
- * @param void
- * @return void
- */
-void ActionMonitorDlg::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
-{
-  if( 0 == IsVisible() )
+  // call the parent now
+  if (!CommonWnd::OnInitDialog())
   {
-    lpwndpos->flags &= ~SWP_SHOWWINDOW;
+    return false;
   }
-  
-  CDialog::OnWindowPosChanging(lpwndpos);
-}
 
-/**
- * todo
- * @see CDialog::OnInitDialog
- * @param void
- * @return void
- */
-BOOL ActionMonitorDlg::OnInitDialog()
-{
-	CDialog::OnInitDialog();
-  ModifyStyleEx(WS_EX_APPWINDOW,0); //  no taskbar!
-
-  // Set the icon for this dialog.  The framework does this automatically
-	//  when the applications main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+  HideTaskBar();
   
   //  set up up the command window for the first time, (hidden)
   InitWindow();
 
   // set the fade window
-  SetFadeParent( m_hWnd );
+  SetFadeParent( GetSafeHwnd() );
   
-  return TRUE;
+  return true;
 }
 
 /**
- * todo
- * @see CDialog::CDialog
- * @param void
- * @return void
+ * \brief show the window with a given text.
+ * \param sCommand the message we want to display in the window.
+ * \param bTrans how transparent we want the window to be.
  */
 void ActionMonitorDlg::ShowWindow(const std::wstring& sCommand, const BYTE bTrans )
 {
@@ -157,19 +113,16 @@ void ActionMonitorDlg::ShowWindow(const std::wstring& sCommand, const BYTE bTran
       //  of the previous command window.
       DisplayCommand( sCommand, nullptr ); //  return value is ignored.
     }
-    ::ShowWindow( m_hWnd, bTrans>0?SW_SHOW:SW_HIDE );
+    ::ShowWindow( GetSafeHwnd(), bTrans>0?SW_SHOW:SW_HIDE );
   }
 
-  ::RedrawWindow(m_hWnd, nullptr, nullptr, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
+  ::RedrawWindow(GetSafeHwnd(), nullptr, nullptr, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
 }
 
 /**
- * Calc the max width/height of the command window given the position the user 
- * has chosen to use.
- * The width is a percentage of the screen.
- *
- * @param none
- * @return none
+ * \brief Calc the max width/height of the command window given the position the user 
+ *        has chosen to use.
+ *        The width is a percentage of the screen.
  */
 void ActionMonitorDlg::CalcMaxes( )
 {
@@ -182,10 +135,7 @@ void ActionMonitorDlg::CalcMaxes( )
 }
 
 /**
- * Create the main window the window is hidden by default.
- *
- * @param none
- * @return none
+ * \brief Create the main window the window is hidden by default.
  */
 void ActionMonitorDlg::InitWindow( )
 {
@@ -197,7 +147,8 @@ void ActionMonitorDlg::InitWindow( )
   m_rWindow.right   = m_ptMaxValues.x;
 
   //  move the window to the top left hand corner 
-  SetWindowPos( &wndTopMost, 
+  SetWindowPos(GetSafeHwnd(),
+               HWND_TOPMOST,
                 m_rWindow.left, 
                 m_rWindow.top, 
                 (m_rWindow.right-m_rWindow.left),
@@ -206,42 +157,21 @@ void ActionMonitorDlg::InitWindow( )
 }
 
 /**
- * If you add a minimize button to your dialog, you will need the code below
- * to draw the icon.  For MFC applications using the document/view model,
- * this is automatically done for you by the framework.
- *
- * @see CDialog::OnPaint
- * @param none
- * @return none
+ * \brief If you add a minimize button to your dialog, you will need the code below
+ *        to draw the icon.  For MFC applications using the document/view model,
+ *        this is automatically done for you by the framework.
  */
 void ActionMonitorDlg::OnPaint() 
 {
-	CPaintDC dc(this); // device context for painting
-
-	if (IsIconic())
-	{
-		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
-
-		// Center icon in client rectangle
-		const auto cxIcon = GetSystemMetrics(SM_CXICON);
-    const auto cyIcon = GetSystemMetrics(SM_CYICON);
-		CRect rect;
-		GetClientRect(&rect);
-    const auto x = (rect.Width() - cxIcon + 1) / 2;
-    const auto y = (rect.Height() - cyIcon + 1) / 2;
-
-		// Draw the icon
-		dc.DrawIcon(x, y, m_hIcon);
-    return;
-	}
   if( IsVisible() == 0 )
   {
     //  hide the window.
-    ::ShowWindow( m_hWnd, SW_HIDE );
+    ::ShowWindow( GetSafeHwnd(), SW_HIDE );
   }
   else
   {
-    auto myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
+    const auto mainHdc = GetDC(GetSafeHwnd());
+    auto myDC = new ActionMonitorMemDC(CDC::FromHandle(mainHdc));
     auto hdc = myDC->GetSafeHdc();
 
     // display command will return true if the rectangle size was updated.
@@ -255,25 +185,11 @@ void ActionMonitorDlg::OnPaint()
     {
       //  force the output to the screen now
       delete myDC;
-      myDC = new ActionMonitorMemDC( CDC::FromHandle(dc.GetSafeHdc()) );
-      hdc  = myDC->GetSafeHdc();
+      myDC = new ActionMonitorMemDC(CDC::FromHandle(mainHdc));
+      hdc = myDC->GetSafeHdc();
     }
     delete myDC;
   }
-  CDialog::OnPaint();
-}
-
-/**
- * The system calls this to obtain the cursor to display while the user drags
- * the minimized window.
- *
- * @see CDialog::OnQueryDragIcon
- * @param void
- * @return void
- */
-HCURSOR ActionMonitorDlg::OnQueryDragIcon()
-{
-	return static_cast<HCURSOR>(m_hIcon);
 }
 
 /**
@@ -327,7 +243,7 @@ bool ActionMonitorDlg::DisplayCommand(const std::wstring& sCommand, const HDC hd
   }
  
   // add padding to the bottom pos of the window.
-  rDraw.bottom        += m_rWindow.top + ( 2* (int)::myodd::config::Get( L"commands\\pad.y", 2));
+  rDraw.bottom        += m_rWindow.top + ( 2* static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2)));
   
   //  make sure that it is within limits
   rDraw.bottom        = rDraw.bottom>m_ptMaxValues.y?m_ptMaxValues.y:rDraw.bottom;
@@ -438,8 +354,9 @@ bool ActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
     memcpy( &m_rWindow, &newSize, sizeof(RECT) );
 
     //  set the window pos and resize the window.
-    SetWindowPos( &wndTopMost, 
-                  m_rWindow.left, 
+    SetWindowPos(GetSafeHwnd(),
+                  HWND_TOPMOST,
+                  m_rWindow.left,
                   m_rWindow.top, 
                   (m_rWindow.right-m_rWindow.left),
                   (m_rWindow.bottom-m_rWindow.top),

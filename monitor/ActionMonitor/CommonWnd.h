@@ -35,6 +35,12 @@ public:
   virtual bool Create();
 
   /**
+   * \brief create the window and wait 'close'
+   * \return if there was an error or not.
+   */
+  virtual bool CreateAndWait();
+
+  /**
    * \brief get the window handle, it is safe because we do not throw...
    * \return the created handle.
    */
@@ -51,6 +57,11 @@ public:
   }
   
 protected:
+  /**
+   * \brief hide the task bar
+   */
+  void HideTaskBar() const;
+
   /**
    * \brief Create the class if it does not exist
    */

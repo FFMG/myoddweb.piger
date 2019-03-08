@@ -13,20 +13,16 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-
 #include "FadeWnd.h"
-#include "resource.h"		// main symbols
-#include "IApplication.h"
 #include "IDisplay.h"
 #include "ITray.h"
+#include "CommonWnd.h"
 
-class ActionMonitorDlg final : public CDialog, FadeWnd, public IDisplay
+class ActionMonitorDlg final : public CommonWnd, public IDisplay, FadeWnd
 {
 // Construction
 public:
-  explicit ActionMonitorDlg(
-    ITray& tray,
-    CWnd* pParent);
+  explicit ActionMonitorDlg( ITray& tray);
   virtual ~ActionMonitorDlg();
 
   void Show(const std::wstring& sCommand) override;
@@ -34,14 +30,8 @@ public:
   void Active() override;
   void Inactive() override;
 
-	enum { IDD = IDD_ACTIONMONITOR_DIALOG };
-
 	// ClassWizard generated virtual function overrides
 protected:
-	void DoDataExchange(CDataExchange* pDX) override;	// DDX/DDV support
-
-	HICON m_hIcon;
-
   //  the command window functions
   RECT m_rWindow;                         //  the current position of the window
 
@@ -72,12 +62,8 @@ protected:
   POINT m_ptMaxValues;
   void CalcMaxes();
 
-  afx_msg LRESULT OnMessagePumpReady(WPARAM wParam, LPARAM lParam);
-  afx_msg void OnWindowPosChanging  (WINDOWPOS FAR* lpwndpos);
-  afx_msg void OnPaint();
-  virtual BOOL OnInitDialog();
-  afx_msg HCURSOR OnQueryDragIcon();
-	DECLARE_MESSAGE_MAP()
+  void OnPaint() override;
+  bool OnInitDialog() override;
 
 protected:
   std::mutex _mutex;

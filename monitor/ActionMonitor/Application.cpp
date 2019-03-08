@@ -26,7 +26,6 @@
 
 Application::Application() : 
   IApplication(),
-  _taskBar(nullptr),
   _messagesHandler(nullptr),
   _possibleActions(nullptr),
   _ipcListener(nullptr),
@@ -68,7 +67,7 @@ void Application::Close()
   //  close us
   if (_dlg != nullptr )
   {
-    _dlg->EndDialog(0);
+    _dlg->Close();
   }
 }
 
@@ -87,9 +86,6 @@ void Application::Create()
   // destroy the old one
   Destroy();
 
-  // create the taskbar
-  CreateTaskBar();
-
   // create the message handler
   CreateMessageHandler();
 
@@ -106,14 +102,13 @@ void Application::Create()
   CreateTray();
 
   // sanity checks
-  assert(_taskBar != nullptr);
   assert(_possibleActions != nullptr);
   assert(_ipcListener != nullptr);
   assert(_tray != nullptr);
   assert(_dlg == nullptr);
 
   // create the actual dicali.
-  _dlg = new ActionMonitorDlg( *_tray, _taskBar);
+  _dlg = new ActionMonitorDlg( *_tray );
 
   // the hook window, we need dlg, so we have to this last.
   // also we do not want to fire the hook before needed.
@@ -138,7 +133,7 @@ void Application::Show()
     ShowStart();
 
     // show the dialog box
-    _dlg->DoModal();
+    _dlg->CreateAndWait();
 
     // we are now closed, we can destroy everything
     Destroy();
@@ -159,13 +154,6 @@ void Application::Destroy()
   // hook wind
   delete _hookWnd;
   _hookWnd = nullptr;
-
-  //  clean up the window.
-  if (_taskBar != nullptr)
-  {
-    _taskBar->DestroyWindow();
-    _taskBar = nullptr;
-  }
 
   // remove the actions
   // we are about to close, we are no longer monitoring anything
@@ -247,16 +235,6 @@ void Application::ShowVersion()
   _messagesHandler->Show(strSay.c_str(), 500, 3000);
 }
 
-void Application::CreateTaskBar()
-{
-  if (_taskBar != nullptr)
-  {
-    _taskBar->DestroyWindow();
-  }
-  _taskBar = new CFrameWnd();
-  _taskBar->Create(nullptr, nullptr, WS_OVERLAPPEDWINDOW);
-}
-
 void Application::CreateHookWindow()
 {
   delete _hookWnd;
@@ -294,14 +272,14 @@ void Application::CreateVirtualMachines()
 
 void Application::CreateIpcListener()
 {
-  assert(_taskBar != nullptr);
+//  assert( _dlg != nullptr);
 
   // remove the old one
   delete _ipcListener;
 
   // create a new one
   _ipcListener = new IpcListener();
-  _ipcListener->Initialize(_taskBar->GetSafeHwnd());
+  _ipcListener->Initialize( nullptr );
 }
 
 /**

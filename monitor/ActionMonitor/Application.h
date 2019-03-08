@@ -43,7 +43,6 @@ public:
 private:
   void Create();
 
-  void CreateTaskBar();
   void CreateActionsList();
   void CreateMessageHandler();
   void CreateVirtualMachines();
@@ -52,8 +51,6 @@ private:
   void CreateTray();
 
   void Destroy();
-
-  CFrameWnd* _taskBar;
 
   /**
    * \brief the messages handler
