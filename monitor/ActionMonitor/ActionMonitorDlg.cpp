@@ -17,8 +17,6 @@
 #include "ActionMonitorDlg.h"
 #include "MessagesHandler.h"
 
-#define RECT_MIN_H 70
-
 /**
  * \brief the constructor
  * \see CDialog::CDialog
@@ -27,11 +25,13 @@
 ActionMonitorDlg::ActionMonitorDlg( ITray& tray)
   : 
   CommonWnd( L"ActionMonitorDlg"),
-  m_rWindow(),
+  FadeWnd(),
   _fontTime(nullptr), 
-  _tray( tray ),
-  m_ptMaxValues()
+  _tray( tray )
+
 {
+  _mainWindowPosition = { 0 };
+  _commandRectangle = { 0 };
 }
 
 /**
@@ -48,12 +48,14 @@ ActionMonitorDlg::~ActionMonitorDlg()
 
 void ActionMonitorDlg::Show(const std::wstring& sCommand )
 {
+  // and now show the text
   ShowWindow(sCommand, ::myodd::config::Get(L"commands\\transparency", 127));
 }
 
 void ActionMonitorDlg::Hide()
 {
-  ShowWindow(L"", 0);
+  // just hide the window.
+  ::ShowWindow(GetSafeHwnd(), SW_HIDE );
 }
 
 void ActionMonitorDlg::Active()
@@ -78,13 +80,10 @@ bool ActionMonitorDlg::OnInitDialog()
   }
 
   HideTaskBar();
-  
-  //  set up up the command window for the first time, (hidden)
-  InitWindow();
 
-  // set the fade window
-  SetFadeParent( GetSafeHwnd() );
-  
+  // tell the fade window who the parent window is.
+  SetFadeParent(GetSafeHwnd());
+
   return true;
 }
 
@@ -95,65 +94,115 @@ bool ActionMonitorDlg::OnInitDialog()
  */
 void ActionMonitorDlg::ShowWindow(const std::wstring& sCommand, const BYTE bTrans )
 {
+  // recalculate everything
+  RecalculateAllRectangles(sCommand);
+
+  // make sure that the window has the correct position
+  RepositionWindow();
+
+  // show the window.
+  if (!IsWindowVisible(GetSafeHwnd()))
+  {
+    ::ShowWindow(GetSafeHwnd(), SW_SHOW);
+  }
+
+  // set the transparency
+  SetTransparency(bTrans );
+
   // save the command we want to show.
   _sCommand = sCommand;
 
-  if( IsVisible() != bTrans )
+  // and force a redraw
+  ::PostMessage( GetSafeHwnd(), WM_PAINT, 0, 0 );
+}
+
+/**
+ * \brief recalculate all the window sizes at once.
+ */
+void ActionMonitorDlg::RecalculateAllRectangles(const std::wstring& sCommand)
+{
+  // first we will need a device context.
+  //  get the size of the windows
+  const auto hdc = ::GetDC( GetSafeHwnd());
+  try
   {
-    Visible(bTrans);
-    SetTransparency( bTrans );
-    if( bTrans == 0 )
-    {
-      //  we need to recalculate the size of the command window
-      //  normally when we hide the window it is because we are no longer
-      //  typing anything and the text has been removed
-      //
-      //  so by calling a Display(...) we are forcing a command window resize.
-      //  this is handy so that the next time we press the key we wont see a 'flicker'
-      //  of the previous command window.
-      DisplayCommand( sCommand, nullptr ); //  return value is ignored.
-    }
-    ::ShowWindow( GetSafeHwnd(), bTrans>0?SW_SHOW:SW_HIDE );
+    // this is what we have to be inside of....
+    _mainWindowPosition = CalculateMinimumRectPosition(sCommand, hdc);
+    _commandRectangle = CalculateCommandRectangle(sCommand, hdc);
   }
-
-  ::RedrawWindow(GetSafeHwnd(), nullptr, nullptr, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
+  catch( ... )
+  {
+    // something broke here
+    // but we still need to free the device context.
+  }
+  ::ReleaseDC(GetSafeHwnd(), hdc);
 }
 
 /**
- * \brief Calc the max width/height of the command window given the position the user 
- *        has chosen to use.
- *        The width is a percentage of the screen.
+ * \brief calculate the minimum window position, that is a window with no text in it.
+ * \param sCommand the command we are waiting for.
+ * \param hdc the handle to the device context we are using
  */
-void ActionMonitorDlg::CalcMaxes( )
+RECT ActionMonitorDlg::CalculateMinimumRectPosition(const std::wstring& sCommand, const HDC hdc )
 {
-  const auto fX = static_cast<float>(GetSystemMetrics(SM_CXSCREEN));
-  const auto fY = static_cast<float>(GetSystemMetrics(SM_CYSCREEN));
+  // const auto top = ::myodd::config::Get(L"commands\\top", 5);
+  // const auto left = ::myodd::config::Get(L"commands\\left", 5);
 
-  //  calc the percentages.
-  m_ptMaxValues.x = static_cast<int>(fX * static_cast<int>(::myodd::config::Get(L"commands\\max.x", 99)) / 100.f);
-  m_ptMaxValues.y = static_cast<int>(fY * static_cast<int>(::myodd::config::Get(L"commands\\max.y", 99)) / 100.f);
+  // get the width of the screen
+  const auto screenWidth = static_cast<float>(GetSystemMetrics(SM_CXSCREEN));
+  const auto screenHeight = static_cast<float>(GetSystemMetrics(SM_CYSCREEN));
+
+  // now calculate a percent of the screen
+  // and that will be our maximum
+  const auto maxScreenWidth = static_cast<int>(screenWidth * static_cast<int>(::myodd::config::Get(L"commands\\max.x", 99)) / 100.f);
+  const auto maxScreenHeight = static_cast<int>(screenHeight * static_cast<int>(::myodd::config::Get(L"commands\\max.y", 99)) / 100.f);
+
+  // the padding on either side is half the difference of 100% of the screen.
+  // and the calculated max
+  const auto paddingScreenWidth = static_cast<int>((screenWidth - maxScreenWidth) / 2);
+  const auto paddingScreenHeight = static_cast<int>((screenHeight - maxScreenHeight) / 2);
+
+  // the padding of the text
+  const auto paddingText = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
+
+  // calculate the text height so we can get the height.
+  // the width does not matter as we will not be using it.
+  // if the command is empty we will pass one character to make sure we have a proper minimum height.
+  const auto nonEmptyCommand = (sCommand.length() == 0 ? L"IM" : sCommand);
+  const auto rectText = CalculateCommandRectangle(nonEmptyCommand, hdc);
+  const auto height = (2*paddingText+rectText.bottom) > maxScreenHeight ? maxScreenHeight : (2*paddingText+rectText.bottom);
+
+  return {
+    paddingScreenWidth,
+    paddingScreenHeight,
+    maxScreenWidth,
+    height + paddingScreenHeight
+  };
 }
 
 /**
- * \brief Create the main window the window is hidden by default.
+ * \brief given the command window, recalculate the total size needed for the window to be displayed.
+ *        it will use the minimum size to make sure that the text is not too small either
+ * \param sCommand the command we are measuring
+ * \param hdc the device context handle.
  */
-void ActionMonitorDlg::InitWindow( )
+RECT ActionMonitorDlg::CalculateCommandRectangle(const std::wstring& sCommand, const HDC hdc)
 {
-  CalcMaxes();
+  //  get the font that we will be using for display
+  //  because of the XML config this is only really used for size.
+  const auto pOldFont = SelDisplayFont(hdc, 70);
 
-  m_rWindow.bottom  = RECT_MIN_H;
-  m_rWindow.left    = ::myodd::config::Get( L"commands\\left", 5);
-  m_rWindow.top     = ::myodd::config::Get( L"commands\\top", 5);
-  m_rWindow.right   = m_ptMaxValues.x;
+  // get the text size
+  RECT rTextRectangle = { 0,0,0,0 };
+  myodd::html::html(hdc, sCommand.c_str(), sCommand.length(), &rTextRectangle, DT_DEFAULT | DT_CALCRECT);
 
-  //  move the window to the top left hand corner 
-  SetWindowPos(GetSafeHwnd(),
-               HWND_TOPMOST,
-                m_rWindow.left, 
-                m_rWindow.top, 
-                (m_rWindow.right-m_rWindow.left),
-                (m_rWindow.bottom-m_rWindow.top),
-                SWP_HIDEWINDOW );
+  // replace the old font.
+  // The resource for it is freed when FramWnd closes.
+  if (pOldFont != nullptr)
+  {
+    SelectObject(hdc, pOldFont);
+  }
+  return rTextRectangle;
 }
 
 /**
@@ -163,216 +212,143 @@ void ActionMonitorDlg::InitWindow( )
  */
 void ActionMonitorDlg::OnPaint() 
 {
-  if( IsVisible() == 0 )
-  {
-    //  hide the window.
-    ::ShowWindow( GetSafeHwnd(), SW_HIDE );
-  }
-  else
-  {
-    const auto mainHdc = GetDC(GetSafeHwnd());
-    auto myDC = new ActionMonitorMemDC(CDC::FromHandle(mainHdc));
-    auto hdc = myDC->GetSafeHdc();
+  const auto mainHdc = ::GetDC(GetSafeHwnd());
+  const auto myDc = new ActionMonitorMemDC(CDC::FromHandle(mainHdc));
+  const auto hdc = myDc->GetSafeHdc();
 
-    // display command will return true if the rectangle size was updated.
-    // if the rectangle, (the display window), changes size then we need to 
-    //  create a new ActionMonitorMemDC as it only knows of the old size and will not update
-    // the new area.
-    //
-    // so by deleting the old memdc we tell the system to reject it and to recalculate
-    // the area from the device context
-    while( DisplayCommand(_sCommand, hdc ) )
-    {
-      //  force the output to the screen now
-      delete myDC;
-      myDC = new ActionMonitorMemDC(CDC::FromHandle(mainHdc));
-      hdc = myDC->GetSafeHdc();
-    }
-    delete myDC;
+  try
+  {
+    // show the background
+    RedrawBackground(hdc);
+
+    // and the command itself 
+    RedrawText( _sCommand, hdc);
+
+    // then draw the clock
+    RedrawTime(hdc);
+  }
+  catch (...)
+  {
+    // something broke
+    // but we must still free thr resources.
+  }
+
+  delete myDc;
+  ReleaseDC(GetSafeHwnd(), mainHdc);
+}
+
+void ActionMonitorDlg::RedrawText(const std::wstring& sCommand, const HDC hdc)
+{
+  // the padding of the text
+  const auto paddingText = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
+
+  // calculate the text height so we can get the height.
+  // the width does not matter as we will not be using it.
+  auto rectText = _commandRectangle;
+  rectText.top += _mainWindowPosition.top+paddingText;
+  rectText.bottom += _mainWindowPosition.bottom + paddingText;
+  rectText.left += _mainWindowPosition.left + paddingText;
+  rectText.right += _mainWindowPosition.right + paddingText;
+
+  //  get the font that we will be using for display
+  //  because of the XML config this is only really used for size.
+  const auto pOldFont = SelDisplayFont(hdc, 70);
+
+  // get the text size
+  myodd::html::html(hdc, sCommand.c_str(), sCommand.length(), &rectText, DT_DEFAULT );
+
+  //  clean up old fonts
+  if (pOldFont != nullptr)
+  {
+    SelectObject(hdc, pOldFont);
   }
 }
 
 /**
- * \brief Display the current command that will be executing.
- * \param sCommand the command we want to display
- * \param hdc handle to the device context, if null we will be using a temp one
- * \return success or not.
+ * \brief resize and move the window if needed.
  */
-bool ActionMonitorDlg::DisplayCommand(const std::wstring& sCommand, const HDC hdc )
+void ActionMonitorDlg::RepositionWindow() const
 {
-  // should we even be here?
-  if( 0 == IsVisible() )
+  RECT rCurrent = { 0 };
+  GetWindowRect(GetSafeHwnd(), &rCurrent);
+  if( 0 == memcmp(&_mainWindowPosition, &rCurrent, sizeof(RECT) ))
   {
-    return false;
-  }
-  if(nullptr == hdc )
-  {
-    const auto localHdc = ::GetDC(nullptr);
-    if( nullptr == localHdc )
-    {
-      return false;
-    }
-    const auto result = DisplayCommand(sCommand, localHdc);
-    ::ReleaseDC(nullptr, localHdc);
-    return result;
+    // nothing has changed.
+    return;
   }
 
-  //  get the current text as well as the possible commands.
-  //  we pass what ever the user entered to whatever commands are saved.
-  const auto len = sCommand.length();
+  //  move the window to the top left hand corner 
+  SetWindowPos(GetSafeHwnd(),
+    HWND_TOPMOST,
+    _mainWindowPosition.left,
+    _mainWindowPosition.top,
+    (_mainWindowPosition.right - _mainWindowPosition.left),
+    (_mainWindowPosition.bottom - _mainWindowPosition.top),
+    SWP_HIDEWINDOW );
+}
 
-  //  get the font that we will be using for display
-  //  because of the XML config this is only really used for size.
-  const auto pOldFont = SelDisplayFont( hdc, 70 );
+/**
+ * \brief draw the background in the device context.
+ *        this is the un-faded background.
+ *        the fade wnd will do the fading for us.
+ * \param hdc the handle to the device context we are working in.
+ */
+void ActionMonitorDlg::RedrawBackground(const HDC hdc) const
+{
+  SetBkMode(hdc, TRANSPARENT);
 
-  //  we will use 1 rectangle.
-  RECT rDraw  = {0,0,0,0};
-  
-  // first we use DT_CALCRECT to get their size rather than drawing them on the screen.
+  const auto colour = ::GetSysColor(COLOR_3DFACE);
+  const auto hBrush = CreateSolidBrush(colour);
 
-  //calculate the width of the string using the classic way
-  if( 0 == sCommand.length() )
-  {
-    SIZE sizeText;
-    GetTextExtentPoint32(hdc, _T("I"), 1, &sizeText);
-    rDraw.bottom = sizeText.cy;
-  }
-  else
-  {
-    myodd::html::html(hdc, sCommand.c_str() , len, &rDraw, DT_DEFAULT | DT_CALCRECT );
-  }
- 
-  // add padding to the bottom pos of the window.
-  rDraw.bottom        += m_rWindow.top + ( 2* static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2)));
-  
-  //  make sure that it is within limits
-  rDraw.bottom        = rDraw.bottom>m_ptMaxValues.y?m_ptMaxValues.y:rDraw.bottom;
-  
-  rDraw.left = m_rWindow.left;
-  rDraw.top = m_rWindow.top;
-  rDraw.right = m_rWindow.right;
+  const RECT zeroSizeWindow = { 0,0, (_mainWindowPosition.right - _mainWindowPosition.left), (_mainWindowPosition.bottom - _mainWindowPosition.top) };
+  FillRect(hdc, &zeroSizeWindow, hBrush);
 
-  //  m_rWindow.top     = //  unchanged - always to of screen
-  //  m_rWindow.left    = //  unchanged - always left hand side
-  //  m_rWindow.right   = //  unchanged, should be full width
-  //  make sure that the right is also correct
-  //  but that should not change.
-  rDraw.right         = rDraw.right>m_ptMaxValues.x?m_ptMaxValues.x:rDraw.right;
-  const auto bRedraw  = ResizeCommandWindow( rDraw );
-
-  //  if we are going to redraw this
-  //  don't bother outputting anything to the screen
-  //  but we need to finish the work with this device context.
-  //  because the new window size is not into effect just yet.
-  if( false == bRedraw )
-  {
-    // if we have no text to display then we have no need to call the
-    // DrawHTML(...) function again.
-    if( len > 0 )
-    {
-      rDraw.left   = m_rWindow.left  + static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));    //  use the full width, (left right)
-      rDraw.right  = m_rWindow.right - static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));    //  and make sure we tabulate the items, (probably RECT_MIN_TAB).
-      //  and now we can show the text properly
-      //
-      // Set the background to transparent
-      // This only relly applies to text, but that is what we are showing here.
-      SetBkMode( hdc, TRANSPARENT );
-      myodd::html::html(hdc, sCommand.c_str() , sCommand.length(), &rDraw, DT_DEFAULT );
-    }
-
-    //  
-    // Show the time in the top left corner
-    // Note that we only show the time if we actually draw the rectangle.
-    DisplayTime( hdc, rDraw );
-  }// if we are redrawing
-
-  //  clean up old fonts
-  if ( pOldFont != nullptr)
-  {
-    SelectObject( hdc, pOldFont );
-  }
-  return bRedraw;
+  DeleteObject(hBrush);
 }
 
 /**
  * \brief add the time at the bottom of the commands window.
  * \param hdc the handle device context
- * \param rParent the parent rectangle.
  */
-void ActionMonitorDlg::DisplayTime( const HDC hdc, RECT &rParent )
+void ActionMonitorDlg::RedrawTime( const HDC hdc )
 {
   //  But only if we want to!
-  if( ::myodd::config::Get( L"commands\\show.time", 1) )
+  if (1 != ::myodd::config::Get(L"commands\\show.time", 1))
   {
-    const auto pOldTime = SelTimeFont( hdc );
-    if(nullptr != pOldTime )
-    {
-      __time64_t long_time;
-      _time64( &long_time ); 
-      struct tm newtime;
-
-      const auto err = _localtime64_s( &newtime, &long_time ); 
-      if (!err)
-      {
-        TCHAR szBuffer[ 256 ];
-        _tcsftime(szBuffer, _countof(szBuffer), _T("%A, %B %d, %Y, %H:%M"), &newtime);
-
-        RECT r      = {0,0,0,0};
-        const auto bufferLen = _tcslen(szBuffer);
-        if( bufferLen > 0 )
-        {
-          DrawText( hdc, szBuffer , bufferLen, &r, DT_DEFAULT | DT_CALCRECT);
-          r.left   = (rParent.right-rParent.left) - (r.right) - 5;
-          r.right  = (rParent.right-rParent.left) - 5;
-          r.top    = (rParent.top);
-          r.bottom = (r.top+r.bottom);
-          DrawText( hdc, szBuffer , bufferLen, &r, DT_DEFAULT );
-        }
-      }// if _tcsftime(...)
-      
-      //  restore the font
-      if( pOldTime != nullptr)
-      {
-        SelectObject( hdc, pOldTime );
-      }
-    }// SelTimeFont(...)
-  }// ::myodd::config::Get( "commands\\show.time", 1)
-}// DisplayTime(...)
-
-/**
- * \brief Resize the command window if need be, (and return true)
- *        Otherwise return false if nothing was changed.
- * \param newSize the new size of the rectangle
- * \return if the window size was changed or not.
- */
-bool ActionMonitorDlg::ResizeCommandWindow( const RECT &newSize )
-{
-  //  compare the structs
-  if( memcmp( &newSize, &m_rWindow, sizeof(RECT)) != 0 )
-  {
-    //  copy the struct
-    memcpy( &m_rWindow, &newSize, sizeof(RECT) );
-
-    //  set the window pos and resize the window.
-    SetWindowPos(GetSafeHwnd(),
-                  HWND_TOPMOST,
-                  m_rWindow.left,
-                  m_rWindow.top, 
-                  (m_rWindow.right-m_rWindow.left),
-                  (m_rWindow.bottom-m_rWindow.top),
-                  SWP_SHOWWINDOW );
-
-    //
-    //  we are not telling the system to redraw the window
-    //  this is not what this function is for!
-    //  all we are doing is resizing it.
-    //
-    return true;
+    return;
   }
 
-  //  nothing was changed
-  return false;
-}
+  const auto pOldTime = SelTimeFont( hdc );
+  if (nullptr == pOldTime)
+  {
+    return;
+  }
+
+  __time64_t longTime;
+  _time64( &longTime ); 
+  struct tm newtime;
+
+  const auto err = _localtime64_s( &newtime, &longTime ); 
+  if (!err)
+  {
+    TCHAR szBuffer[ 256 ];
+    _tcsftime(szBuffer, _countof(szBuffer), _T("%A, %B %d, %Y, %H:%M"), &newtime);
+
+    const auto bufferLen = _tcslen(szBuffer);
+    if( bufferLen > 0 )
+    {
+      RECT rClock = { 0,0,0,0 };
+      DrawText( hdc, szBuffer , bufferLen, &rClock, DT_DEFAULT | DT_CALCRECT);
+      rClock.left   = (_mainWindowPosition.right- _mainWindowPosition.left) - (rClock.right) - 5;
+      rClock.right  = (_mainWindowPosition.right- _mainWindowPosition.left) - 5;
+      rClock.top    = (_mainWindowPosition.top);
+      rClock.bottom = (rClock.top+ rClock.bottom);
+      DrawText( hdc, szBuffer , bufferLen, &rClock, DT_DEFAULT );
+    }
+  }// if _tcsftime(...)
+  
+  SelectObject( hdc, pOldTime );
+}// DisplayTime(...)
 
 /**
  * \brief get the time font.

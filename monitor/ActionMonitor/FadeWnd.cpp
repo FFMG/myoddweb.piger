@@ -19,7 +19,6 @@
  * \brief the constructor
  */
 FadeWnd::FadeWnd() :
-  m_byteVisible( 0 ),
   _hFadeWindowHandle( nullptr ),
   fontDisplay( nullptr ),
   m_stop( false )
@@ -64,7 +63,7 @@ void FadeWnd::SetFadeParent( const HWND hFade )
  * @return none
  */
 typedef BOOL (WINAPI *lpfn) (HWND hWnd, COLORREF cr, BYTE bAlpha, DWORD dwFlags);
-static lpfn g_pSetLayeredWindowAttributes = NULL;
+static lpfn g_pSetLayeredWindowAttributes = nullptr;
 
 /**
  * \brief set the current transparency of this window.
@@ -74,7 +73,7 @@ void FadeWnd::SetTransparency(const unsigned char bTrans) const
 {
   //  get the function pointer for SetLayeredWindowAttributes 
   //  in User32.dll
-  if( g_pSetLayeredWindowAttributes == NULL  )
+  if( g_pSetLayeredWindowAttributes == nullptr  )
   {
     const auto hUser32 = GetModuleHandle(_T("USER32.DLL"));
     g_pSetLayeredWindowAttributes = reinterpret_cast<lpfn>(GetProcAddress(hUser32, "SetLayeredWindowAttributes"));

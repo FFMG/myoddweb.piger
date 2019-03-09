@@ -32,19 +32,22 @@ public:
 
 	// ClassWizard generated virtual function overrides
 protected:
-  //  the command window functions
-  RECT m_rWindow;                         //  the current position of the window
-
   void ShowWindow(const std::wstring& sCommand, BYTE bTrans );         //  show the window, (0 == hide)
-  void InitWindow( );                     //  set up the window for the first time
 
-  bool DisplayCommand( const std::wstring& sCommand, HDC hdc);
-  void DisplayTime( HDC hdc, RECT &rParent );
-  bool ResizeCommandWindow( const RECT &newSize );
-  
   CFont *_fontTime;    //  the time font
 
   HGDIOBJ SelTimeFont( HDC hdc );
+
+  void RedrawTime(HDC hdc );
+  void RedrawBackground(HDC hdc) const;
+  void RedrawText(const std::wstring& sCommand, HDC hdc);
+  void RepositionWindow() const;
+
+  RECT _mainWindowPosition;
+  RECT _commandRectangle;
+  void RecalculateAllRectangles( const std::wstring& sCommand);
+  RECT CalculateMinimumRectPosition(const std::wstring& sCommand, HDC hdc );
+  RECT CalculateCommandRectangle(const std::wstring& sCommand, HDC hdc);
 
 protected:
   /**
@@ -56,11 +59,6 @@ protected:
    * \brief the system tray
    */
   ITray& _tray;
-
-  //  ---------------------------------------------------------------------------------
-  //  thwe max width/hewight
-  POINT m_ptMaxValues;
-  void CalcMaxes();
 
   void OnPaint() override;
   bool OnInitDialog() override;

@@ -42,7 +42,6 @@ public:
   void OnPaint() override;
 
 protected:
-
   /**
    * \brief this is the full message window area
    */

@@ -34,10 +34,6 @@ protected:
   HGDIOBJ SelDisplayFont(HDC hdc, UINT fontSize);
 
 protected:
-  BYTE m_byteVisible;
-  BYTE IsVisible()const{return m_byteVisible;};
-  void Visible( BYTE b ){m_byteVisible = b;};
-
   void SetTransparency( unsigned char bTrans ) const;
 
   CFont *fontDisplay; //  the display font

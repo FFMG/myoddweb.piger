@@ -201,13 +201,6 @@ void MessageDlg::ShowMessageWithNoFadding(const long milliseconds) const
   // sleep a little.
   std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 
-  // is the window still visible?
-  // if not, then there is no point in going any further.
-  if (0 == ::GetWindowLongPtr(GetSafeHwnd(), GWLP_HWNDPARENT))
-  {
-    return;
-  }
-
   // pump the message
   myodd::wnd::MessagePump( GetSafeHwnd() );
 }
@@ -236,8 +229,8 @@ void MessageDlg::CloseFromThread()
 void MessageDlg::OnPaint()
 {
   const auto mainHdc = GetDC(GetSafeHwnd());
-  const auto myDC = new ActionMonitorMemDC(CDC::FromHandle(mainHdc ));
-  const auto hdc = myDC->GetSafeHdc();
+  const auto myDc = new ActionMonitorMemDC(CDC::FromHandle(mainHdc ));
+  const auto hdc = myDc->GetSafeHdc();
 
   try
   {
@@ -253,7 +246,7 @@ void MessageDlg::OnPaint()
     // but we must still free thr resources.
   }
   
-  delete myDC;
+  delete myDc;
   ReleaseDC(GetSafeHwnd(), mainHdc );
 }
 
@@ -299,7 +292,6 @@ void MessageDlg::RedrawBackground( const HDC hdc) const
 
   DeleteObject(hBrush);
 }
-
 
 /**
  * \brief initialise the dialog.
