@@ -15,7 +15,7 @@
 #include "stdafx.h"
 #include "IpcListener.h"
 
-IpcListener::IpcListener() : 
+IpcListener::IpcListener() :
   _ipc(nullptr),
   _mutex( L"Ipc Listener")
 {
@@ -31,7 +31,7 @@ void IpcListener::WaitForAllToComplete()
 {
 }
 
-void IpcListener::Initialize(const HWND hWnd)
+void IpcListener::Initialize()
 {
   if (nullptr == _ipc)
   {
@@ -43,7 +43,7 @@ void IpcListener::Initialize(const HWND hWnd)
     {
       // create the listenner and pass oursleves as the window.
       // so some messages can be routed back to us.
-      _ipc = new myodd::os::IpcListener(CONF_MUTEXT, hWnd);
+      _ipc = new myodd::os::IpcListener(CONF_MUTEXT );
     }
   }
 }

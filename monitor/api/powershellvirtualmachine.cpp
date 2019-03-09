@@ -49,6 +49,21 @@ bool PowershellVirtualMachine::Initialize()
   }
 }
 
+//  handle the send message.
+bool PowershellVirtualMachine::HandleIpcSendMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
+{
+  // we do not handle those
+  return false;
+}
+
+
+//  handle the post message.
+bool PowershellVirtualMachine::HandleIpcPostMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
+{
+  // we do not handle those
+  return false;
+}
+
 /**
  * \brief Handle the various messages.
  * \param ipcRequest the request we received.

@@ -98,6 +98,9 @@ LRESULT CALLBACK CommonWnd::WndProc( const HWND hwnd, const UINT msg, const WPAR
     case WM_DESTROY:
       SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(nullptr));
       break;
+
+    default:
+      return result;
     }
     return result;
   }

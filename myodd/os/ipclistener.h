@@ -13,11 +13,11 @@ namespace myodd {
       /**
        * Create the server.
        */
-      IpcListener( const wchar_t* serverName, void* pParent );
+      IpcListener(const wchar_t* serverName);
       virtual ~IpcListener();
 
       //  add a message handler
-      void AddMessageHandler( IpcMessageHandler& handler);
+      void AddMessageHandler(IpcMessageHandler& handler);
 
       // remove a message handler.
       void RemoveMessageHandler(IpcMessageHandler& handler);
@@ -25,11 +25,15 @@ namespace myodd {
       // the message handler
       bool HandleIpcMessage(const IpcData& ipcRequest, IpcData& ipcResponse) override;
 
-      // wait for the work to finish
-      void WaitForActiveHandlers();
+      //  handle the send message.
+      bool HandleIpcSendMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
+
+      //  handle the post message.
+      bool HandleIpcPostMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
+
     protected:
       // create the window that will receive all the messages.
-      void Create(const wchar_t* serverName, void* pParent);
+      void Create(const wchar_t* serverName);
 
       // the server window.
       void* _pServer;

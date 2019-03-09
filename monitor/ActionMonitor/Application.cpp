@@ -272,14 +272,12 @@ void Application::CreateVirtualMachines()
 
 void Application::CreateIpcListener()
 {
-//  assert( _dlg != nullptr);
-
   // remove the old one
   delete _ipcListener;
 
   // create a new one
   _ipcListener = new IpcListener();
-  _ipcListener->Initialize( nullptr );
+  _ipcListener->Initialize( );
 }
 
 /**

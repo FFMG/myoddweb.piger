@@ -194,7 +194,7 @@ RECT ActionMonitorDlg::CalculateCommandRectangle(const std::wstring& sCommand, c
 
   // get the text size
   RECT rTextRectangle = { 0,0,0,0 };
-  myodd::html::html(hdc, sCommand.c_str(), sCommand.length(), &rTextRectangle, DT_DEFAULT | DT_CALCRECT);
+  myodd::html::html(hdc, sCommand.c_str(), static_cast<int>(sCommand.length()), &rTextRectangle, DT_DEFAULT | DT_CALCRECT);
 
   // replace the old font.
   // The resource for it is freed when FramWnd closes.
@@ -255,7 +255,7 @@ void ActionMonitorDlg::RedrawText(const std::wstring& sCommand, const HDC hdc)
   const auto pOldFont = SelDisplayFont(hdc, 70);
 
   // get the text size
-  myodd::html::html(hdc, sCommand.c_str(), sCommand.length(), &rectText, DT_DEFAULT );
+  myodd::html::html(hdc, sCommand.c_str(), static_cast<int>(sCommand.length()), &rectText, DT_DEFAULT );
 
   //  clean up old fonts
   if (pOldFont != nullptr)
@@ -338,12 +338,12 @@ void ActionMonitorDlg::RedrawTime( const HDC hdc )
     if( bufferLen > 0 )
     {
       RECT rClock = { 0,0,0,0 };
-      DrawText( hdc, szBuffer , bufferLen, &rClock, DT_DEFAULT | DT_CALCRECT);
+      DrawText( hdc, szBuffer , static_cast<int>(bufferLen), &rClock, DT_DEFAULT | DT_CALCRECT);
       rClock.left   = (_mainWindowPosition.right- _mainWindowPosition.left) - (rClock.right) - 5;
       rClock.right  = (_mainWindowPosition.right- _mainWindowPosition.left) - 5;
       rClock.top    = (_mainWindowPosition.top);
       rClock.bottom = (rClock.top+ rClock.bottom);
-      DrawText( hdc, szBuffer , bufferLen, &rClock, DT_DEFAULT );
+      DrawText( hdc, szBuffer , static_cast<int>(bufferLen), &rClock, DT_DEFAULT );
     }
   }// if _tcsftime(...)
   

@@ -37,7 +37,7 @@ namespace myodd {
        * \param pszClassName the class name we will be creating our 'window' with
        * \return success or not.
        */
-      bool CreateClass(const wchar_t* pszClassName);
+      static bool CreateClass(const wchar_t* pszClassName);
 
       struct IpcMessageStruct
       {
@@ -48,16 +48,15 @@ namespace myodd {
       };
 
     public:
-      explicit IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, myodd::threads::Key& mutex, IpcMessageHandler& handler );
+      explicit IpcListenerWnd(const wchar_t* pszClassName, threads::Key& mutex, IpcMessageHandler& handler );
 
     protected:
       static bool MessageStructFromCopyData(const COPYDATASTRUCT& cds, IpcMessageStruct& ipcMessageStructure);
-      LRESULT _WindowProc( const COPYDATASTRUCT& cds);
+      LRESULT _WindowProc( const COPYDATASTRUCT& cds) const;
       LRESULT _WindowProcSend(const COPYDATASTRUCT& cds) const;
       LRESULT _WindowProcPost(const COPYDATASTRUCT& cds) const;
-      LRESULT _WindowProcCopy(const COPYDATASTRUCT& cds);
+      LRESULT _WindowProcCopy(const COPYDATASTRUCT& cds) const;
 
-      HWND _pParentWnd;
       IpcMessageHandler& _handler;
 
     public:

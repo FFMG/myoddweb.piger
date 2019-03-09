@@ -44,8 +44,7 @@ public:
 
   /**
    * \brief Initialize the listener.
-   * \param hWnd the window that will handle the messages
    */
-  virtual void Initialize( HWND hWnd ) = 0;
+  virtual void Initialize() = 0;
 };
 

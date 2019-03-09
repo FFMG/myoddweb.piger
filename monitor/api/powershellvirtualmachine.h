@@ -17,6 +17,12 @@ public:
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
 
+  //  handle the send message.
+  bool HandleIpcSendMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
+
+  //  handle the post message.
+  bool HandleIpcPostMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
+
   int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
   void Destroy() override;
   bool Initialize() override;

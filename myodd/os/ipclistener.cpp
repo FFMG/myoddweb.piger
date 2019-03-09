@@ -20,12 +20,12 @@
 
 namespace myodd {
   namespace os {
-    IpcListener::IpcListener(const wchar_t* serverName, void* parent) :
+    IpcListener::IpcListener(const wchar_t* serverName) :
       _pServer(nullptr),
       _mutex(L"IpcListener")
     {
       // create the server
-      Create(serverName, parent);
+      Create(serverName);
     }
 
     IpcListener::~IpcListener()
@@ -53,9 +53,8 @@ namespace myodd {
     /**
      * \brief Create the server window that will be listening to messages.
      * \param serverName the server name we wish to use.
-     * \param pParent the parent that we want to pass the messages to.
      */
-    void IpcListener::Create(const wchar_t* serverName, void* pParent)
+    void IpcListener::Create(const wchar_t* serverName)
     {
       // make sure we are only creating this once.
       if (nullptr == _pServer)
@@ -63,29 +62,7 @@ namespace myodd {
         threads::Lock guard(_mutex);
         if (nullptr == _pServer)
         {
-          _pServer = new IpcListenerWnd(serverName, static_cast<HWND>(pParent), _mutex, *this);
-        }
-      }
-    }
-
-    // wait for the work to finish
-    void IpcListener::WaitForActiveHandlers()
-    {
-      if (nullptr == _pServer)
-      {
-        return;
-      }
-
-      const auto hWnd = static_cast<IpcListenerWnd*>(_pServer)->GetSafeHwnd();
-      //  lock up to make sure we only do one at a time
-      MSG msg;
-      while (PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
-      {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-        if (0 == ::GetWindowLongPtr(hWnd, GWLP_HWNDPARENT))
-        {
-          break;
+          _pServer = new IpcListenerWnd(serverName, _mutex, *this);
         }
       }
     }
@@ -188,5 +165,50 @@ namespace myodd {
       return false;
     }
 
+    //  handle the send message.
+    bool IpcListener::HandleIpcSendMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
+    {
+      // lock us in
+      threads::Lock guard(_mutex);
+
+      // go around and try and get someone to handle the message.
+      for (auto it = _messageHandlers.begin(); it != _messageHandlers.end(); ++it)
+      {
+        // the message handler
+        auto& handler = *(*it);
+
+        if (handler.HandleIpcSendMessage( msg, wParam, lParam))
+        {
+          // handled.
+          return true;
+        }
+      }
+
+      // if we are here, we never found anything.
+      return false;
+    }
+
+    //  handle the post message.
+    bool IpcListener::HandleIpcPostMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
+    {
+      // lock us in
+      threads::Lock guard(_mutex);
+
+      // go around and try and get someone to handle the message.
+      for (auto it = _messageHandlers.begin(); it != _messageHandlers.end(); ++it)
+      {
+        // the message handler
+        auto& handler = *(*it);
+
+        if (handler.HandleIpcPostMessage(msg, wParam, lParam))
+        {
+          // handled.
+          return true;
+        }
+      }
+
+      // if we are here, we never found anything.
+      return false;
+    }
   }
 }

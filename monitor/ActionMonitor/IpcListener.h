@@ -16,6 +16,7 @@
 #include "IIpcListener.h"
 #include "threads/lock.h"
 #include "os/ipclistener.h"
+#include "CommonWnd.h"
 
 class IpcListener final : public IIpcListener
 {
@@ -26,7 +27,7 @@ public:
   void WaitForAllToComplete() override;
   void Add(myodd::os::IpcMessageHandler& handler) override;
   void Remove(myodd::os::IpcMessageHandler& handler) override;
-  void Initialize(HWND hWnd) override;
+  void Initialize() override;
 
 private:
 
