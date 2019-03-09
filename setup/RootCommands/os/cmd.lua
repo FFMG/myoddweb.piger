@@ -20,10 +20,10 @@ if thisFolder == false  then
   else
     local thisWord = am_getCommand( 1 );
     if thisWord == "home" or thisWord == "h" then
-      am_say( "<i>Going to <b>home</b> drive</i>.", 100, 2000 )
+      am_say( "<i>Going to <b>home</b> drive</i>.", 500, 3000 )
       am_execute( "cmd.exe", "/k \"title Piger Rules!! & @cd %HOMEDRIVE%\\ & %HOMEDRIVE%\"", true );
     elseif thisWord == "system" or thisWord == "s" then
-      am_say( "<i>Going to <b>system</b> drive</i>.", 100, 2000 )
+      am_say( "<i>Going to <b>system</b> drive</i>.", 500, 3000 )
       am_execute( "cmd.exe", "/k \"title Piger Rules!! & @cd %SYSTEMDRIVE%\\ & %SYSTEMDRIVE%\"", true );
     else
       am_execute( "cmd.exe", "/k \"title Piger Rules!! & echo Unknown command:" .. thisWord .. "\"", true );
