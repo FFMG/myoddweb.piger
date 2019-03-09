@@ -275,17 +275,17 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
     myodd::os::ARCHITECTURE pe = myodd::os::GetImageArchitecture(pluginFile);
     if (pe == myodd::os::ARCHITECTURE_UNKNOWN)
     {
-      api.Say(_T("<b>Error : </b> Plugin could not be loaded."), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded."), 500, 3000);
     }
     else
     if (pe != _moduleArchitecture )
     {
-      api.Say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 500, 3000);
     }
     else
     {
       //  it is not unknown, but somehow we could not load it.
-      api.Say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 500, 3000);
     }
     return -1;
   }
@@ -294,7 +294,7 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   auto pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
   if (NULL == pfMsg )
   {
-    api.Say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
+    api.Say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 500, 3000);
     return -1;
   }
 

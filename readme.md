@@ -92,7 +92,7 @@ namespace Am
 
     public void Go()
     {
-      _am.Say( "Hello World!", 3000, 5 );
+      _am.Say( "Hello World!", 500, 3000 );
     }
   }
 }
@@ -115,7 +115,7 @@ Read more [code examples/notes](scripts/powershell.md).
 
   # give a message
   # we use '| out-null' so we don't output the result of the message.
-  $am.Say( "Run - calc ...", 400, 10 ) | out-null
+  $am.Say( "Run - calc ...", 500, 3000 ) | out-null
 
   # Launch the application
   # use the second parameter for arguments and 
@@ -173,7 +173,7 @@ import module, **import am**, (only usable within Piger of course).
     import am;
 
     # give a message
-    am.say( "Run - calc ...", 400, 10 );
+    am.say( "Run - calc ...", 500, 3000);
 
     # Launch the application
     # use the second parameter for arguments and 
