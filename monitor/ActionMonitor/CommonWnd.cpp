@@ -137,19 +137,19 @@ bool CommonWnd::CreateClass()
 }
 
 /**
- * \brief create the window and wait 'close'
+ * \brief Wait for a 'close' message.
  * \return if there was an error or not.
  */
-bool CommonWnd::CreateAndWait()
+bool CommonWnd::Wait()
 {
   // first we try and create
-  if( !Create() )
+  if( nullptr == GetSafeHwnd() )
   {
     return false;
   }
 
   // and now we wait...
-  const auto wait = std::chrono::milliseconds(10);
+  const auto wait = std::chrono::milliseconds(5);
   for (;;)
   {
     // pump messages

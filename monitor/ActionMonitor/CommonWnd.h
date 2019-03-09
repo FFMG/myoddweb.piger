@@ -35,10 +35,10 @@ public:
   virtual bool Create();
 
   /**
-   * \brief create the window and wait 'close'
+   * \brief Wait for a 'close' message.
    * \return if there was an error or not.
    */
-  virtual bool CreateAndWait();
+  virtual bool Wait();
 
   /**
    * \brief get the window handle, it is safe because we do not throw...

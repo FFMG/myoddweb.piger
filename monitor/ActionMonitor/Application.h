@@ -41,7 +41,8 @@ public:
   void ShowEnd() override;
 
 private:
-  void Create();
+  void CreateBase();
+  void CreateForRestart();
 
   void CreateActionsList();
   void CreateMessageHandler();
@@ -49,8 +50,11 @@ private:
   void CreateIpcListener();
   void CreateHookWindow();
   void CreateTray();
+  
+  void DestroyBase();
+  void DestroyForRestart();
 
-  void Destroy();
+  void PrepareForClose();
 
   /**
    * \brief the messages handler
@@ -94,11 +98,6 @@ private:
    *       but we keep track of it, in case we need to kill it.
    */
   ActionsImmediate* _startActions;
-
-  /**
-   * \brief if this value is true then we will reload the application
-   */
-  bool _restartApplication;
 
   /**
    * \brief Close the virtual machines windows/scripts

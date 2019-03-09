@@ -33,7 +33,6 @@ Application::Application() :
   _dlg( nullptr ),
   _hookWnd( nullptr ),
   _startActions( nullptr),
-  _restartApplication(false),
   _tray( nullptr )
 {
 }
@@ -41,7 +40,8 @@ Application::Application() :
 Application::~Application()
 {
   // we have to destroy everything.
-  Destroy();
+  DestroyForRestart();
+  DestroyBase();
 }
 
 void Application::Close()
@@ -49,6 +49,19 @@ void Application::Close()
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
 
+  // prepare for closing
+  PrepareForClose();
+
+  // and then close
+  if (_dlg != nullptr)
+  {
+    _dlg->Close();
+  }
+
+}
+
+void Application::PrepareForClose()
+{
   // stop and destroy all the running virtual machines.
   // we need to do that now as we are about to go away
   // 
@@ -63,12 +76,6 @@ void Application::Close()
   // wait all the active windows.
   // those are the ones created by the end Action list.
   WaitForHandlersToComplete();
-
-  //  close us
-  if (_dlg != nullptr )
-  {
-    _dlg->Close();
-  }
 }
 
 void Application::Restart()
@@ -76,16 +83,32 @@ void Application::Restart()
   // log that we are restarting
   myodd::log::LogMessage(_T("Piger is restarting."));
 
-  // close it
-  _restartApplication = true;
-  Close();
+  // prepare to close.
+  PrepareForClose();
+
+  // remove the old stuff
+  // and recreate it right away
+  DestroyForRestart();
+  CreateForRestart();
+
+  // and then show the new start message.
+  ShowStart();
 }
 
-void Application::Create()
+void Application::CreateBase()
 {
   // destroy the old one
-  Destroy();
+  DestroyBase();
 
+  // create the system tray
+  CreateTray();
+
+  // create the actual dicali.
+  _dlg = new ActionMonitorDlg(*_tray);
+}
+
+void Application::CreateForRestart()
+{
   // create the message handler
   CreateMessageHandler();
 
@@ -98,17 +121,11 @@ void Application::Create()
   // create the virtual machines
   CreateVirtualMachines();
 
-  // create the system tray
-  CreateTray();
-
   // sanity checks
   assert(_possibleActions != nullptr);
   assert(_ipcListener != nullptr);
   assert(_tray != nullptr);
-  assert(_dlg == nullptr);
-
-  // create the actual dicali.
-  _dlg = new ActionMonitorDlg( *_tray );
+  assert(_dlg != nullptr);
 
   // the hook window, we need dlg, so we have to this last.
   // also we do not want to fire the hook before needed.
@@ -118,35 +135,29 @@ void Application::Create()
 void Application::Show()
 {
   // show the dialog box and wait for it to complete.
-  for (;;)
-  {
-    // assume that we will not restart the app.
-    _restartApplication = false;
+ 
+  // create everything
+  CreateBase();
+  CreateForRestart();
 
-    // create everything
-    Create();
+  // sanity check
+  assert(_dlg != nullptr);
 
-    // sanity check
-    assert(_dlg != nullptr);
+  // show the dialog box
+  _dlg->Create();
 
-    // show the start messages.
-    ShowStart();
+  // show the start messages.
+  ShowStart();
 
-    // show the dialog box
-    _dlg->CreateAndWait();
+  // wait for everything to finish
+  _dlg->Wait();
 
-    // we are now closed, we can destroy everything
-    Destroy();
-
-    // are we done here?
-    if(_restartApplication == false )
-    {
-      break;
-    }
-  }
+  // we are now closed, we can destroy everything
+  DestroyForRestart();
+  DestroyBase();
 }
 
-void Application::Destroy()
+void Application::DestroyForRestart()
 {
   delete _startActions;
   _startActions = nullptr;
@@ -170,7 +181,10 @@ void Application::Destroy()
 
   delete _ipcListener;
   _ipcListener = nullptr;
+}
 
+void Application::DestroyBase()
+{
   delete _tray;
   _tray = nullptr;
 
