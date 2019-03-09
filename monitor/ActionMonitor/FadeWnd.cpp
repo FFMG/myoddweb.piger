@@ -15,12 +15,32 @@
 #include "stdafx.h"
 #include "FadeWnd.h"
 
+#ifndef WS_EX_LAYERED
+#define WS_EX_LAYERED 0x00080000 
+#endif
+#ifndef LWA_COLORKEY
+#define LWA_COLORKEY 0x00000001 // Use color as the transparency color.
+#endif
+#ifndef LWA_COLORKEY
+#define LWA_ALPHA    0x00000002 // Use bAlpha to determine the opacity of the layer
+#endif
+
+/**
+ * Some code to set the background transparent
+ * It ranges from 0 -> 255
+ *
+ * @version 0.1
+ * @return none
+ */
+typedef BOOL(WINAPI *lpfn) (HWND hWnd, COLORREF cr, BYTE bAlpha, DWORD dwFlags);
+static lpfn g_pSetLayeredWindowAttributes = nullptr;
+
 /**
  * \brief the constructor
  */
 FadeWnd::FadeWnd() :
   _hFadeWindowHandle( nullptr ),
-  fontDisplay( nullptr ),
+  _fontDisplay( nullptr ),
   m_stop( false )
 {
 }
@@ -30,10 +50,10 @@ FadeWnd::FadeWnd() :
  */
 FadeWnd::~FadeWnd()
 {
-  if( fontDisplay )
+  if(_fontDisplay)
   {
-    fontDisplay->DeleteObject();
-    delete fontDisplay;
+    DeleteObject(_fontDisplay);
+    _fontDisplay = nullptr;
   }
 }
 
@@ -45,25 +65,6 @@ void FadeWnd::SetFadeParent( const HWND hFade )
 {
   _hFadeWindowHandle = hFade;
 }
-
-#define WS_EX_LAYERED 0x00080000 
-#ifndef LWA_COLORKEY
-  #define LWA_COLORKEY 0x00000001 // Use color as the transparency color.
-#endif
-
-#ifndef LWA_COLORKEY
-  #define LWA_ALPHA    0x00000002 // Use bAlpha to determine the opacity of the layer
-#endif
-
-/**
- * Some code to set the background transparent
- * It ranges from 0 -> 255 
- *
- * @version 0.1
- * @return none
- */
-typedef BOOL (WINAPI *lpfn) (HWND hWnd, COLORREF cr, BYTE bAlpha, DWORD dwFlags);
-static lpfn g_pSetLayeredWindowAttributes = nullptr;
 
 /**
  * \brief set the current transparency of this window.
@@ -98,7 +99,7 @@ void FadeWnd::SetTransparency(const unsigned char bTrans) const
  */
 HGDIOBJ FadeWnd::SelDisplayFont( const HDC hdc, const UINT fontSize  )
 {
-  if( nullptr == fontDisplay )
+  if( nullptr == _fontDisplay)
   {
 	  LOGFONT logFont;
 	  memset(&logFont, 0, sizeof(LOGFONT));
@@ -107,12 +108,12 @@ HGDIOBJ FadeWnd::SelDisplayFont( const HDC hdc, const UINT fontSize  )
 	  logFont.lfItalic	=	FALSE;
 	  lstrcpy(logFont.lfFaceName, _T("Veranda") ); 
 
-    fontDisplay = new CFont();
-	  if (!fontDisplay->CreateFontIndirect(&logFont))
+    _fontDisplay = CreateFontIndirect(&logFont);
+    if( nullptr == _fontDisplay )
     {
-		  return nullptr;
-	  }
+      return nullptr;
+    }
   }
   
-  return ::SelectObject(hdc, *fontDisplay );
+  return ::SelectObject(hdc, _fontDisplay );
 }

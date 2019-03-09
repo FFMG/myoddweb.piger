@@ -36,7 +36,7 @@ protected:
 protected:
   void SetTransparency( unsigned char bTrans ) const;
 
-  CFont *fontDisplay; //  the display font
+  HFONT _fontDisplay; //  the display font
 
   //
   void Stop() {
