@@ -103,18 +103,18 @@ void Application::CreateBase()
   // create the system tray
   CreateTray();
 
+  // create the messages handler.
+  CreateMessageHandler();
+
+  // create the messages/listener.
+  CreateIpcListener();
+
   // create the actual dicali.
   _dlg = new ActionMonitorDlg(*_tray);
 }
 
 void Application::CreateForRestart()
 {
-  // create the message handler
-  CreateMessageHandler();
-
-  // create the messages/listener.
-  CreateIpcListener();
-
   // create the possible actions
   CreateActionsList();
 
@@ -174,17 +174,17 @@ void Application::DestroyForRestart()
   // stop the virtuall machines
   delete _virtualMachines;
   _virtualMachines = nullptr;
+}
 
+void Application::DestroyBase()
+{
   // stop all the message handling
   delete _messagesHandler;
   _messagesHandler = nullptr;
 
   delete _ipcListener;
   _ipcListener = nullptr;
-}
 
-void Application::DestroyBase()
-{
   delete _tray;
   _tray = nullptr;
 
@@ -284,6 +284,9 @@ void Application::CreateVirtualMachines()
   _virtualMachines = new VirtualMachines(*_possibleActions, *_messagesHandler, *_ipcListener);
 }
 
+/**
+ * \brief the IPC messages handler from the virtual machines.
+ */
 void Application::CreateIpcListener()
 {
   // remove the old one
