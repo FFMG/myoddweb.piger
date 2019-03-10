@@ -29,11 +29,11 @@ Application::Application() :
   _messagesHandler(nullptr),
   _possibleActions(nullptr),
   _ipcListener(nullptr),
+  _tray( nullptr ),
   _virtualMachines(nullptr),
   _dlg( nullptr ),
   _hookWnd( nullptr ),
-  _startActions( nullptr),
-  _tray( nullptr )
+  _startActions( nullptr)
 {
 }
 
@@ -44,6 +44,9 @@ Application::~Application()
   DestroyBase();
 }
 
+/**
+ * \brief close the main application
+ */
 void Application::Close()
 {
   // log that we are closing down
@@ -60,6 +63,56 @@ void Application::Close()
 
 }
 
+/**
+ * \brief reload all the actions and re-create the base/actions/machines etc...
+ */
+void Application::Restart()
+{
+  // log that we are restarting
+  myodd::log::LogMessage(_T("Piger is restarting."));
+
+  // prepare to close.
+  PrepareForClose();
+
+  // remove the old stuff
+  // and recreate it right away
+  DestroyForRestart();
+  CreateForRestart();
+
+  // and then show the new start message.
+  ShowStart();
+}
+
+void Application::Show()
+{
+  // show the dialog box and wait for it to complete.
+ 
+  // create everything
+  CreateBase();
+  CreateForRestart();
+
+  // sanity check
+  assert(_dlg != nullptr);
+
+  // show the dialog box
+  _dlg->Create();
+
+  // show the start messages.
+  ShowStart();
+
+  // wait for everything to finish
+  _dlg->Wait();
+
+  // we are now closed, we can destroy everything
+  DestroyForRestart();
+  DestroyBase();
+}
+
+/**
+ * \brief called before we destroy the variable to wait for certain actions/machines to complete
+ *        we will send them messages to close/stop what they are doing
+ *        so we do not destroy anything while threads are still running.
+ */
 void Application::PrepareForClose()
 {
   // stop and destroy all the running virtual machines.
@@ -78,23 +131,49 @@ void Application::PrepareForClose()
   WaitForHandlersToComplete();
 }
 
-void Application::Restart()
+/**
+ * \brief create variables that are destroyed on application reload.
+ */
+void Application::DestroyForRestart()
 {
-  // log that we are restarting
-  myodd::log::LogMessage(_T("Piger is restarting."));
+  delete _startActions;
+  _startActions = nullptr;
 
-  // prepare to close.
-  PrepareForClose();
+  // hook wind
+  delete _hookWnd;
+  _hookWnd = nullptr;
 
-  // remove the old stuff
-  // and recreate it right away
-  DestroyForRestart();
-  CreateForRestart();
+  // remove the actions
+  // we are about to close, we are no longer monitoring anything
+  delete _possibleActions;
+  _possibleActions = nullptr;
 
-  // and then show the new start message.
-  ShowStart();
+  // stop the virtuall machines
+  delete _virtualMachines;
+  _virtualMachines = nullptr;
 }
 
+/**
+ * \brief destroy all the variables that are unique to the application
+ *        they are, (normally), only created once.
+ */
+void Application::DestroyBase()
+{
+  // stop all the message handling
+  delete _messagesHandler;
+  _messagesHandler = nullptr;
+
+  delete _ipcListener;
+  _ipcListener = nullptr;
+
+  delete _tray;
+  _tray = nullptr;
+
+  delete _dlg;
+  _dlg = nullptr;
+}
+
+#pragma region Create variables
 void Application::CreateBase()
 {
   // destroy the old one
@@ -130,123 +209,6 @@ void Application::CreateForRestart()
   // the hook window, we need dlg, so we have to this last.
   // also we do not want to fire the hook before needed.
   CreateHookWindow();
-}
-
-void Application::Show()
-{
-  // show the dialog box and wait for it to complete.
- 
-  // create everything
-  CreateBase();
-  CreateForRestart();
-
-  // sanity check
-  assert(_dlg != nullptr);
-
-  // show the dialog box
-  _dlg->Create();
-
-  // show the start messages.
-  ShowStart();
-
-  // wait for everything to finish
-  _dlg->Wait();
-
-  // we are now closed, we can destroy everything
-  DestroyForRestart();
-  DestroyBase();
-}
-
-void Application::DestroyForRestart()
-{
-  delete _startActions;
-  _startActions = nullptr;
-
-  // hook wind
-  delete _hookWnd;
-  _hookWnd = nullptr;
-
-  // remove the actions
-  // we are about to close, we are no longer monitoring anything
-  delete _possibleActions;
-  _possibleActions = nullptr;
-
-  // stop the virtuall machines
-  delete _virtualMachines;
-  _virtualMachines = nullptr;
-}
-
-void Application::DestroyBase()
-{
-  // stop all the message handling
-  delete _messagesHandler;
-  _messagesHandler = nullptr;
-
-  delete _ipcListener;
-  _ipcListener = nullptr;
-
-  delete _tray;
-  _tray = nullptr;
-
-  delete _dlg;
-  _dlg = nullptr;
-}
-
-void Application::ShowEnd()
-{
-  // do we have anything to show.
-  if( _dlg == nullptr )
-  {
-    return;
-  }
-
-  // sanity check
-  assert(_possibleActions != nullptr);
-  assert(_virtualMachines != nullptr);
-
-  // start the new ones
-  auto endActions = new ActionsImmediate(AM_DIRECTORY_OUT, *_possibleActions, *_virtualMachines);
-  endActions->Initialize();
-  endActions->WaitForAll();
-  delete endActions;
-  endActions = nullptr;
-}
-
-void Application::ShowStart()
-{
-  // sanity check
-  assert(_possibleActions != nullptr);
-  assert(_virtualMachines != nullptr);
-  assert(_dlg != nullptr);
-
-  if( _startActions != nullptr )
-  {
-    _startActions->WaitForAll();
-    delete _startActions;
-    _startActions = nullptr;
-  }
-
-  // start the new ones
-  _startActions = new ActionsImmediate(AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines);
-  _startActions->Initialize();
-
-  // we do not want to wait for start messages
-  // we will continue in case of long running stat processes.
-  // it is bad to have blocking scripts anyway
-  // rather have a script to call another process.
-}
-
-void Application::ShowVersion()
-{
-  myodd::files::Version ver;
-  const auto strSay = myodd::strings::Format(_T("<b>Version : </b>%d.%d.%d.%d"),
-    ver.GetFileVersionMajor(),
-    ver.GetFileVersionMinor(),
-    ver.GetFileVersionMaintenance(),
-    ver.GetFileVersionBuild());
-
-  assert(_messagesHandler != nullptr);
-  _messagesHandler->Show(strSay.c_str(), 500, 3000);
 }
 
 void Application::CreateHookWindow()
@@ -329,6 +291,7 @@ void Application::CreateActionsList()
   _possibleActions->Add(new ActionLoad(*this));
   _possibleActions->Add(new ActionVersion(*this));
 }
+#pragma endregion
 
 /**
  * \brief destroy all the virtual machines.
@@ -359,3 +322,62 @@ void Application::WaitForHandlersToComplete() const
     _messagesHandler->WaitForAllToComplete();
   }
 }
+
+#pragma region Show common messages
+void Application::ShowEnd()
+{
+  // do we have anything to show.
+  if (_dlg == nullptr)
+  {
+    return;
+  }
+
+  // sanity check
+  assert(_possibleActions != nullptr);
+  assert(_virtualMachines != nullptr);
+
+  // start the new ones
+  auto endActions = new ActionsImmediate(AM_DIRECTORY_OUT, *_possibleActions, *_virtualMachines);
+  endActions->Initialize();
+  endActions->WaitForAll();
+  delete endActions;
+  endActions = nullptr;
+}
+
+void Application::ShowStart()
+{
+  // sanity check
+  assert(_possibleActions != nullptr);
+  assert(_virtualMachines != nullptr);
+  assert(_dlg != nullptr);
+
+  if (_startActions != nullptr)
+  {
+    _startActions->WaitForAll();
+    delete _startActions;
+    _startActions = nullptr;
+  }
+
+  // start the new ones
+  _startActions = new ActionsImmediate(AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines);
+  _startActions->Initialize();
+
+  // we do not want to wait for start messages
+  // we will continue in case of long running stat processes.
+  // it is bad to have blocking scripts anyway
+  // rather have a script to call another process.
+}
+
+void Application::ShowVersion()
+{
+  myodd::files::Version ver;
+  const auto strSay = myodd::strings::Format(_T("<b>Version : </b>%d.%d.%d.%d"),
+    ver.GetFileVersionMajor(),
+    ver.GetFileVersionMinor(),
+    ver.GetFileVersionMaintenance(),
+    ver.GetFileVersionBuild());
+
+  assert(_messagesHandler != nullptr);
+  _messagesHandler->Show(strSay.c_str(), 500, 3000);
+}
+#pragma endregion
