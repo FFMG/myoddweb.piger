@@ -260,23 +260,23 @@ int PowershellVirtualMachine::Execute(const ActiveAction& action, const std::wst
   //
   //  execute a script now.
   HANDLE hProcess = nullptr;
-  if (psApi->Execute(szPath.c_str(), arguments.c_str(), true, &hProcess))
-  {
-    // it seems to have run, but according to MS it is possible that we do not get a valid process.
-    if (hProcess != nullptr)
-    {
-      {
-        //  lock us in
-        myodd::threads::Lock lock(_mutex);
-        psApi->SetHandle(hProcess);
-      }
-      
-      WaitForApi(uuid);
-    }
-  }
-  else
+  if (!psApi->Execute(szPath.c_str(), arguments.c_str(), true, &hProcess))
   {
     myodd::log::LogError(_T("I was unable to start powershell : '%s'"), arguments.c_str());
+    return 0;
+  }
+
+  // it seems to have run, but according to MS it is possible that we do not get a valid process.
+  if (hProcess != nullptr)
+  {
+    //  lock us in
+    myodd::threads::Lock lock(_mutex);
+    psApi->SetHandle(hProcess);
+    // release the lock so we can wait
+    lock.Release();
+
+    // then wait for it to be done.
+    WaitForApi(uuid);
   }
 
   // if we are here, it worked.
@@ -477,39 +477,74 @@ bool PowershellVirtualMachine::IsPowershell3Installed()
 }
 
 /**
+ * \brief check if an api is still valid/exists
+ * \param uuid the api we are checking
+   * \return the handle if the api is valid/exists.
+ */
+HANDLE PowershellVirtualMachine::IsApiStillValid(const std::wstring& uuid)
+{
+  //  lock us in
+  myodd::threads::Lock lock(_mutex);
+  const auto api = FindApi(uuid);
+
+  // do we have that api?
+  if (api == nullptr)
+  {
+    // no
+    return nullptr;
+  }
+
+  // get the handle.
+  return api->GetHandle();
+}
+
+/**
+ * \brief wait for all the apis to complete.
+ */
+void PowershellVirtualMachine::WaitForAllApis()
+{
+  const auto sleepForMilliseconds = std::chrono::milliseconds(10);
+  for (;;)
+  {
+    //  lock us in so we can get the count.
+    myodd::threads::Lock lock(_mutex);
+    if( _apis.size() == 0 )
+    {
+      // the lock will be released
+      break;
+    }
+    // release the lock while we wait
+    lock.Release();
+
+    // give threads a chance to run...
+    std::this_thread::yield();
+    std::this_thread::sleep_for(sleepForMilliseconds);
+
+    // wait a bit
+    myodd::wnd::MessagePump(nullptr);
+  }
+}
+
+/**
 * \brief Wait for an API to complete, (or be removed).
 * \param uuid the uuid that we want to wait for.
 */
 void PowershellVirtualMachine::WaitForApi(const std::wstring& uuid)
 {
-  HANDLE hProcess = nullptr;
+  const auto millisecondsToWait = 500;
   for (;;)
   {
+    const auto hProcess = IsApiStillValid(uuid);
+    if( nullptr == hProcess )
     {
-      //  lock us in
-      myodd::threads::Lock lock(_mutex);
-      const auto api = FindApi(uuid);
-
-      // do we have that api?
-      if( api == nullptr )
-      {
-        // no
-        return;
-      }
-
-      // get the handle.
-      hProcess = api->GetHandle();
-
-      // do we have a handle?
-      if (hProcess == nullptr)
-      {
-        // no
-        return;
-      }
+      // we can get out of this now
+      // as the api is no longer valid
+      // or has been cleared.
+      break;
     }
 
     // wait for it to finish... a little.
-    auto singleObject = WaitForSingleObject(hProcess, 1000);
+    const auto singleObject = WaitForSingleObject(hProcess, millisecondsToWait );
 
     // if we didn't timeout then something else happened.
     if (WAIT_TIMEOUT != singleObject)
@@ -518,12 +553,16 @@ void PowershellVirtualMachine::WaitForApi(const std::wstring& uuid)
       {
         myodd::log::LogWarning(_T("There was an error running powershell.") );
       }
+      CloseHandle(hProcess);
       break;
     }
-  }
-  CloseHandle(hProcess);
 
-  // we can now remove this api
+    // wait a bit
+    myodd::wnd::MessagePump(nullptr);
+  }
+
+  // if we are here the api either does not exist
+  // or it is now complete, we can now remove this api
   RemoveApi(uuid);
 }
 
@@ -560,6 +599,12 @@ void PowershellVirtualMachine::Destroy()
       myodd::log::LogError(_T("There was a problem deleting a powershellApi : %s"), it->first);
     }
   }
+
+  // release the lock
+  lock.Release();
+
+  // wait for all the apis to complete.
+  WaitForAllApis();
 
   //  we can now remove the apis.
   RemoveApis();

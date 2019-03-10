@@ -44,12 +44,20 @@ private:
   typedef std::map<std::wstring, PowershellApi*> Apis;
   Apis _apis;
 
+  /**
+   * \brief check if an api is still valid/exists
+   * \param uuid the api we are checking
+   * \return the handle if the api is valid/exists.
+   */
+  HANDLE IsApiStillValid(const std::wstring& uuid);
+
   PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
   PowershellApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();
 
   void WaitForApi(const std::wstring& uuid);
+  void WaitForAllApis();
 
   static bool IsPowershell3Installed();
   static bool Powershell3Path(MYODD_STRING& szPath);
