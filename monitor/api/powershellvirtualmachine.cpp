@@ -1,98 +1,22 @@
 #include "stdafx.h"
 
 #ifdef ACTIONMONITOR_PS_PLUGIN
-#include <boost/uuid/uuid.hpp>            // uuid class
-#include <boost/uuid/uuid_generators.hpp> // generators
-#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
-
 #include "powershellvirtualmachine.h"
 
 /**
  * \copydoc
  */
 PowershellVirtualMachine::PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  IVirtualMachine( actions, messagesHandler, iIpcListener ),
-  _initialized( false ),
-  _mutex( L"Powershell Virtual Machine")
+  ExecuteVirtualMachine( actions, messagesHandler, iIpcListener )
 {
 }
 
 PowershellVirtualMachine::~PowershellVirtualMachine()
 {
-  if (_initialized)
-  {
-    GetIpcListener().Remove(*this);
-    _initialized = false;
-  }
-
-  //  Remove all the apis
-  RemoveApis();
 }
 
-// create the IPC server
-bool PowershellVirtualMachine::Initialize()
+bool PowershellVirtualMachine::HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
 {
-  if( _initialized == true )
-  {
-    return true;
-  }
-
-  try
-  {
-    GetIpcListener().Add(*this);
-    _initialized = true;
-    return true;
-  }
-  catch( ... )
-  {
-    return false;
-  }
-}
-
-//  handle the send message.
-bool PowershellVirtualMachine::HandleIpcSendMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
-{
-  // we do not handle those
-  return false;
-}
-
-
-//  handle the post message.
-bool PowershellVirtualMachine::HandleIpcPostMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
-{
-  // we do not handle those
-  return false;
-}
-
-/**
- * \brief Handle the various messages.
- * \param ipcRequest the request we received.
- * \param ipcResponse if we send a response, this will be the container.
- * \return boolean if we handled the message or not.
- */
-bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
-{
-  //  we must have 2 arguments
-  // #1 is the uiid
-  // #2 is the function name
-  const auto argumentCount = ipcRequest.GetNumArguments();
-  if ( argumentCount < 2)
-  {
-    //  this is not for us
-    return false;
-  }
-
-  //  lock us in to prevent the api from going away
-  myodd::threads::Lock lock(_mutex);
-
-  // get the uuid
-  const auto uuid = ipcRequest.Get<std::wstring>(0);
-  const auto psApi = FindApi(uuid);
-  if (nullptr == psApi)
-  {
-    return false;
-  }
-
   //  get the function name
   const auto functionName = ipcRequest.Get<std::wstring>(1);
 
@@ -104,123 +28,115 @@ bool PowershellVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReq
   // Say
   if (functionName == L"Say")
   {
-    return psApi->Say(shiftedRequest, ipcResponse);
+    return api.Say(shiftedRequest, ipcResponse);
   }
 
   // Version number
   if (functionName == L"Version")
   {
-    return psApi->Version(shiftedRequest, ipcResponse);
+    return api.Version(shiftedRequest, ipcResponse);
   }
 
   // get the app version number.
   if (functionName == L"GetVersion")
   {
-    return psApi->GetVersion(shiftedRequest, ipcResponse);
+    return api.GetVersion(shiftedRequest, ipcResponse);
   }
 
   // log a message
   if (functionName == L"Log")
   {
-    return psApi->Log(shiftedRequest, ipcResponse);
+    return api.Log(shiftedRequest, ipcResponse);
   }
 
   // execute a process
   if (functionName == L"Execute")
   {
-    return psApi->Execute(shiftedRequest, ipcResponse);
+    return api.Execute(shiftedRequest, ipcResponse);
   }
 
   // get the number of commands
   if (functionName == L"GetCommandCount")
   {
-    return psApi->GetCommandCount(shiftedRequest, ipcResponse);
+    return api.GetCommandCount(shiftedRequest, ipcResponse);
   }
 
   // get a command by index.
   if (functionName == L"GetCommand")
   {
-    return psApi->GetCommand(shiftedRequest, ipcResponse);
+    return api.GetCommand(shiftedRequest, ipcResponse);
   }
 
   // get the selected string
   if (functionName == L"GetString")
   {
-    return psApi->GetString(shiftedRequest, ipcResponse);
+    return api.GetString(shiftedRequest, ipcResponse);
   }
 
   // get a selected file
   if (functionName == L"GetFile")
   {
-    return psApi->GetFile(shiftedRequest, ipcResponse);
+    return api.GetFile(shiftedRequest, ipcResponse);
   }
 
   // get the selected folder.
   if (functionName == L"GetFolder")
   {
-    return psApi->GetFolder(shiftedRequest, ipcResponse);
+    return api.GetFolder(shiftedRequest, ipcResponse);
   }
 
   // get the selected folder.
   if (functionName == L"GetUrl")
   {
-    return psApi->GetUrl(shiftedRequest, ipcResponse);
+    return api.GetUrl(shiftedRequest, ipcResponse);
   }
 
   // Actions
   if (functionName == L"FindAction")
   {
-    return psApi->FindAction(shiftedRequest, ipcResponse);
+    return api.FindAction(shiftedRequest, ipcResponse);
   }
   if (functionName == L"RemoveAction")
   {
-    return psApi->RemoveAction(shiftedRequest, ipcResponse);
+    return api.RemoveAction(shiftedRequest, ipcResponse);
   }
   if (functionName == L"AddAction")
   {
-    return psApi->AddAction(shiftedRequest, ipcResponse);
+    return api.AddAction(shiftedRequest, ipcResponse);
   }
   // get this action name
   if (functionName == L"GetAction")
   {
-    return psApi->GetAction(shiftedRequest, ipcResponse);
+    return api.GetAction(shiftedRequest, ipcResponse);
   }
 
   // get the foreground window
   if (functionName == L"GetForegroundWindow")
   {
-    return psApi->GetForegroundWindow(shiftedRequest, ipcResponse);
+    return api.GetForegroundWindow(shiftedRequest, ipcResponse);
   }
   //  if we are here then it is an unknown function.
   return false;
 }
 
-int PowershellVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
+bool PowershellVirtualMachine::Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile)
 {
-  Initialize();
-
-  //  create uuid and andd it to our list.
-  const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  auto psApi = AddApi(uuid, action );
-
   //  do we have powerhsell3?
   if (!IsPowershell3Installed())
   {
     const auto errorMsg = _T("Powersell 3 is not installed, so we cannot run this script!");
-    psApi->Say(errorMsg, 3000, 5);
+    api.Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
-    RemoveApi(uuid);
-    return 0;
+    return false;
   }
 
-  MYODD_STRING szPath;
+  std::wstring szPath;
   if( !Powershell3Path(szPath) )
   {
-    const auto errorMsg = _T("Powersell 3 could not be found in the installed path, so we cannot run this script!");
-    psApi->Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"Powersell 3 could not be found in the installed path, so we cannot run this script!";
+    api.Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
-    RemoveApi(uuid);
-    return 0;
+    return false;
   }
 
   // get the powershell dll path
@@ -229,12 +145,9 @@ int PowershellVirtualMachine::Execute(const ActiveAction& action, const std::wst
   if (!myodd::files::FileExists(dllFullpath))
   {
     const auto errorMsg = _T("I was unable to find the ActionMonitor dll, I cannot execute this script.");
-    psApi->Say(errorMsg, 3000, 5);
+    api.Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
-
-    // did not find the command let
-    RemoveApi(uuid);
-    return 0;
+    return false;
   }
 
   auto dllInterfacesFullpath = myodd::files::GetAppPath(true);
@@ -242,16 +155,13 @@ int PowershellVirtualMachine::Execute(const ActiveAction& action, const std::wst
   if (!myodd::files::FileExists(dllInterfacesFullpath))
   {
     const auto errorMsg = _T("I was unable to find the ActionMonitor.Interfaces dll, I cannot execute this script.");
-    psApi->Say(errorMsg, 3000, 5);
+    api.Say(errorMsg, 3000, 5);
     myodd::log::LogError(errorMsg);
-
-    // did not find the command let
-    RemoveApi(uuid);
-    return 0;
+    return false;
   }
 
   //  prepare the arguments.
-  auto arguments = GetCommandLineArguments( action, dllFullpath, dllInterfacesFullpath, pluginFile, uuid );
+  auto arguments = GetCommandLineArguments( action, dllFullpath, dllInterfacesFullpath, pluginFile, api.GetUniqeId() );
   
   //
   // it is very important that we do not use out locks here!
@@ -260,27 +170,21 @@ int PowershellVirtualMachine::Execute(const ActiveAction& action, const std::wst
   //
   //  execute a script now.
   HANDLE hProcess = nullptr;
-  if (!psApi->Execute(szPath.c_str(), arguments.c_str(), true, &hProcess))
+  if (!api.Execute(szPath.c_str(), arguments.c_str(), true, &hProcess))
   {
     myodd::log::LogError(_T("I was unable to start powershell : '%s'"), arguments.c_str());
-    return 0;
+    return false;
   }
 
   // it seems to have run, but according to MS it is possible that we do not get a valid process.
-  if (hProcess != nullptr)
+  if (hProcess == nullptr)
   {
-    //  lock us in
-    myodd::threads::Lock lock(_mutex);
-    psApi->SetHandle(hProcess);
-    // release the lock so we can wait
-    lock.Release();
-
-    // then wait for it to be done.
-    WaitForApi(uuid);
+    return false;
   }
+  api.SetHandle(hProcess);
 
   // if we are here, it worked.
-  return 1;
+  return true;
 }
 
 /**
@@ -318,101 +222,6 @@ MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(
 bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
 {
   return myodd::files::IsExtension(file, _T("ps1"));
-}
-
-/**
- * \brief Add an API to our current list, we cannot add duplicates!
- * \param uuid the unique Id we are adding
- * \param action the matching action for this Id.
- * \return the powershell API that manages the action
- */
-ExecuteApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action )
-{
-  //  lock us in
-  myodd::threads::Lock lock(_mutex);
-
-  //  does it exist already
-  const auto it = _apis.find(uuid);
-  if (it != _apis.end())
-  {
-    //  yes it does, so just return what we have.
-    return it->second;
-  }
-
-  //  create the powershell api.
-  const auto psApi = new PowershellApi(action, GetActions(), GetMessagesHandler() );
-
-  // add it to the array
-  _apis[uuid] = psApi;
-
-  // return the new psApi
-  return psApi;
-}
-
-ExecuteApi* PowershellVirtualMachine::FindApi(const std::wstring& uuid) const
-{
-  //  look for it
-  const auto it = _apis.find(uuid);
-  if (it == _apis.end())
-  {
-    //  does not seem to exist.
-    return nullptr;
-  }
-
-  //  return the api
-  return it->second;
-}
-
-/**
- * \brief Remove a single api from our list of apis.
- * \param uuid the uuid we want to remove.
- */
-void PowershellVirtualMachine::RemoveApi(const std::wstring& uuid)
-{
-  //  lock us in
-  myodd::threads::Lock lock(_mutex);
-
-  //  look for it
-  auto it = _apis.find(uuid);
-  if (it == _apis.end())
-  {
-    //  does not seem to exist.
-    return;
-  }
-
-  // delete the api
-  delete it->second;
-
-  // remove it from the map
-  _apis.erase(it);
-}
-
-/**
- * Remove all the created apis.
- */
-void PowershellVirtualMachine::RemoveApis()
-{
-  //  lock us in
-  myodd::threads::Lock lock(_mutex);
-
-  //  delete all the pointers
-  for (auto it = _apis.begin(); it != _apis.end(); ++it)
-  {
-    try
-    {
-      //  delete it.
-      delete it->second;
-    }
-    catch (const std::exception&)
-    {
-      //  there was a problem...
-      //  but we have to carry on to delete the others.
-      myodd::log::LogError(_T("There was a problem deleting a powershellApi : %s"), it->first);
-    }
-  }
-
-  //  reset the api map
-  _apis.clear();
 }
 
 /**
@@ -476,137 +285,8 @@ bool PowershellVirtualMachine::IsPowershell3Installed()
   return (dwValue == 1 );
 }
 
-/**
- * \brief check if an api is still valid/exists
- * \param uuid the api we are checking
-   * \return the handle if the api is valid/exists.
- */
-HANDLE PowershellVirtualMachine::IsApiStillValid(const std::wstring& uuid)
+ExecuteApi* PowershellVirtualMachine::CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages)
 {
-  //  lock us in
-  myodd::threads::Lock lock(_mutex);
-  const auto api = FindApi(uuid);
-
-  // do we have that api?
-  if (api == nullptr)
-  {
-    // no
-    return nullptr;
-  }
-
-  // get the handle.
-  return api->GetHandle();
-}
-
-/**
- * \brief wait for all the apis to complete.
- */
-void PowershellVirtualMachine::WaitForAllApis()
-{
-  const auto sleepForMilliseconds = std::chrono::milliseconds(10);
-  for (;;)
-  {
-    //  lock us in so we can get the count.
-    myodd::threads::Lock lock(_mutex);
-    if( _apis.size() == 0 )
-    {
-      // the lock will be released
-      break;
-    }
-    // release the lock while we wait
-    lock.Release();
-
-    // give threads a chance to run...
-    std::this_thread::yield();
-    std::this_thread::sleep_for(sleepForMilliseconds);
-
-    // wait a bit
-    myodd::wnd::MessagePump(nullptr);
-  }
-}
-
-/**
-* \brief Wait for an API to complete, (or be removed).
-* \param uuid the uuid that we want to wait for.
-*/
-void PowershellVirtualMachine::WaitForApi(const std::wstring& uuid)
-{
-  const auto millisecondsToWait = 500;
-  for (;;)
-  {
-    const auto hProcess = IsApiStillValid(uuid);
-    if( nullptr == hProcess )
-    {
-      // we can get out of this now
-      // as the api is no longer valid
-      // or has been cleared.
-      break;
-    }
-
-    // wait for it to finish... a little.
-    const auto singleObject = WaitForSingleObject(hProcess, millisecondsToWait );
-
-    // if we didn't timeout then something else happened.
-    if (WAIT_TIMEOUT != singleObject)
-    {
-      if (NO_ERROR != singleObject)
-      {
-        myodd::log::LogWarning(_T("There was an error running powershell.") );
-      }
-      CloseHandle(hProcess);
-      break;
-    }
-
-    // wait a bit
-    myodd::wnd::MessagePump(nullptr);
-  }
-
-  // if we are here the api either does not exist
-  // or it is now complete, we can now remove this api
-  RemoveApi(uuid);
-}
-
-/**
- * Destroy all the currently running scripts.
- */
-void PowershellVirtualMachine::Destroy()
-{
-  //  are we initialised?
-  if( !_initialized )
-  {
-    return;
-  }
-
-  //  lock us in
-  myodd::threads::Lock lock(_mutex);
-
-  //  close all the handles.
-  for (auto it = _apis.begin(); it != _apis.end(); ++it)
-  {
-    try
-    {
-      const auto hProcess = it->second->GetHandle();
-      if( hProcess )
-      {
-        CloseHandle(hProcess);
-        it->second->SetHandle(nullptr);
-      }
-    }
-    catch (const std::exception&)
-    {
-      //  there was a problem...
-      //  but we have to carry on to delete the others.
-      myodd::log::LogError(_T("There was a problem deleting a powershellApi : %s"), it->first);
-    }
-  }
-
-  // release the lock
-  lock.Release();
-
-  // wait for all the apis to complete.
-  WaitForAllApis();
-
-  //  we can now remove the apis.
-  RemoveApis();
+  return new PowershellApi(uuid, action, actions, messages);
 }
 #endif /*ACTIONMONITOR_PS_PLUGIN*/

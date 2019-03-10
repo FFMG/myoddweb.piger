@@ -14,13 +14,12 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "StdAfx.h"
 #include "ShellApi.h"
-#include "pluginVirtualMachine.h"
 
 /**
  * \copydoc 
  */
-ShellApi::ShellApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
-  ExecuteApi(action, actions, messagesHandler )
+ShellApi::ShellApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+  ExecuteApi(uuid, action, actions, messagesHandler )
 {
 }
 

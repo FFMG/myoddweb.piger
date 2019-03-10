@@ -18,7 +18,7 @@
 class ExecuteApi : public HelperApi
 {
 protected:
-  ExecuteApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messages);
+  ExecuteApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages);
 
 public:
   ~ExecuteApi();
@@ -52,7 +52,14 @@ public:
   virtual bool RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const = 0;
 
   virtual bool GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const = 0;
+
+  const std::wstring& GetUniqeId() const
+  {
+    return _uuid;
+  }
 private:
+  const std::wstring _uuid;
+  
   HANDLE _hProcess;
 };
 

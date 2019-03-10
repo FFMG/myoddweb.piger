@@ -169,6 +169,7 @@
     <ClCompile Include="..\api\csapi.cpp" />
     <ClCompile Include="..\api\csvirtualmachine.cpp" />
     <ClCompile Include="..\api\ExecuteApi.cpp" />
+    <ClCompile Include="..\api\executevirtualmachine.cpp" />
     <ClCompile Include="..\api\helperapi.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -252,6 +253,7 @@
     <ClInclude Include="..\api\csapi.h" />
     <ClInclude Include="..\api\csvirtualmachine.h" />
     <ClInclude Include="..\api\ExecuteApi.h" />
+    <ClInclude Include="..\api\executevirtualmachine.h" />
     <ClInclude Include="..\api\helperapi.h" />
     <ClInclude Include="..\api\IVirtualMachine.h" />
     <ClInclude Include="..\api\IVirtualMachines.h" />

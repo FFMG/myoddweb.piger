@@ -203,6 +203,9 @@
     <ClCompile Include="..\api\ExecuteApi.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="..\api\executevirtualmachine.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\api\helperapi.h">
@@ -401,6 +404,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\api\ExecuteApi.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\executevirtualmachine.h">
       <Filter>api</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,6 +14,11 @@ CsVirtualMachine::~CsVirtualMachine()
 {
 }
 
+ExecuteApi* CsVirtualMachine::CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages)
+{
+  return new CsApi(uuid, action, actions, messages);
+}
+
 /**
  * \brief Check if a given file extension is used by this API or not.
  * \param file the file we are checking

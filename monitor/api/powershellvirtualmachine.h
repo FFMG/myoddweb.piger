@@ -1,13 +1,8 @@
 #pragma once
 #ifdef ACTIONMONITOR_PS_PLUGIN
-#include "IVirtualMachine.h"
-#include <map>
-#include <mutex>
-#include <os/ipcmessagehandler.h>
-#include <threads/lock.h>
-#include "powershellapi.h"
+#include "executevirtualmachine.h"
 
-class PowershellVirtualMachine : public myodd::os::IpcMessageHandler, public IVirtualMachine
+class PowershellVirtualMachine : public ExecuteVirtualMachine
 {
 public:
   explicit PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
@@ -15,50 +10,12 @@ public:
 
   static bool IsExt(const MYODD_STRING& file);
 
-  bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
-
-  //  handle the send message.
-  bool HandleIpcSendMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
-
   //  handle the post message.
-  bool HandleIpcPostMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
-
-  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
-  void Destroy() override;
-  bool Initialize() override;
+  bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
+  bool Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
 
 private:
-  /**
-   * \brief if we initialized the virtual machine
-   */
-  bool _initialized;
-
-  /**
-   * \brief the mutex we are using.
-   */
-  myodd::threads::Key _mutex;
-
-  /**
-   * \brief the collection of created apis.
-   */
-  typedef std::map<std::wstring, ExecuteApi*> Apis;
-  Apis _apis;
-
-  /**
-   * \brief check if an api is still valid/exists
-   * \param uuid the api we are checking
-   * \return the handle if the api is valid/exists.
-   */
-  HANDLE IsApiStillValid(const std::wstring& uuid);
-
-  ExecuteApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
-  ExecuteApi* FindApi(const std::wstring& uuid) const;
-  void RemoveApi(const std::wstring& uuid );
-  void RemoveApis();
-
-  void WaitForApi(const std::wstring& uuid);
-  void WaitForAllApis();
-
   static bool IsPowershell3Installed();
   static bool Powershell3Path(MYODD_STRING& szPath);
 

@@ -13,60 +13,32 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-#include "IVirtualMachine.h"
 #ifdef ACTIONMONITOR_S_PLUGIN
+#include "ExecuteVirtualMachine.h"
+#include "ExecuteApi.h"
 
-#include <map>
-#include <mutex>
-#include <os/ipcmessagehandler.h>
-#include <threads/lock.h>
-#include "shellapi.h"
-
-class ShellVirtualMachine final : public myodd::os::IpcMessageHandler, public IVirtualMachine
+class ShellVirtualMachine final : public ExecuteVirtualMachine
 {
 public:
   explicit ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~ShellVirtualMachine();
-  bool Initialize() override;
 
   static bool IsExt(const std::wstring& file);
 
-  bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
-
-  //  handle the send message.
-  bool HandleIpcSendMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
-
-  //  handle the post message.
-  bool HandleIpcPostMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
-
-  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
-  void Destroy() override;
+  bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
+  bool Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
 
 protected:
-  bool _initialized;
-
-  myodd::threads::Key _mutex;
-
-  typedef std::map<std::wstring, ExecuteApi*> APIS;
-  APIS _apis;
-
-  ExecuteApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
-  ExecuteApi* FindApi(const std::wstring& uuid) const;
-  void RemoveApi(const std::wstring& uuid );
-  void RemoveApis();
-
-  void WaitForApi(const std::wstring& uuid);
-
   static bool ShellPath(std::wstring& szPath);
 
-protected:
   /**
    * \brief create the full command line argument that will be passed to powershell
    * \param action the action we are working with
    * \param pluginPath the path to the plugin
    * \param uuid the unique id
    */
-  virtual std::wstring GetCommandLineArguments(
+  std::wstring GetCommandLineArguments(
     const ActiveAction& action,
     const std::wstring& pluginPath,
     const std::wstring& uuid
