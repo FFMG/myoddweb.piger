@@ -312,7 +312,7 @@ bool ShellVirtualMachine::IsExt(const std::wstring& file)
  * \param action the matching action for this Id.
  * \return the shell API that manages the action
  */
-ShellApi* ShellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action)
+ExecuteApi* ShellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action)
 {
   //  lock us in
   myodd::threads::Lock lock(_mutex);
@@ -335,7 +335,7 @@ ShellApi* ShellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveActi
   return psApi;
 }
 
-ShellApi* ShellVirtualMachine::FindApi(const std::wstring& uuid) const
+ExecuteApi* ShellVirtualMachine::FindApi(const std::wstring& uuid) const
 {
   //  look for it
   const auto it = _apis.find(uuid);

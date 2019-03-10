@@ -326,7 +326,7 @@ bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
  * \param action the matching action for this Id.
  * \return the powershell API that manages the action
  */
-PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action )
+ExecuteApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action )
 {
   //  lock us in
   myodd::threads::Lock lock(_mutex);
@@ -349,7 +349,7 @@ PowershellApi* PowershellVirtualMachine::AddApi(const std::wstring& uuid, const 
   return psApi;
 }
 
-PowershellApi* PowershellVirtualMachine::FindApi(const std::wstring& uuid) const
+ExecuteApi* PowershellVirtualMachine::FindApi(const std::wstring& uuid) const
 {
   //  look for it
   const auto it = _apis.find(uuid);

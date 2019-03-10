@@ -41,7 +41,7 @@ private:
   /**
    * \brief the collection of created apis.
    */
-  typedef std::map<std::wstring, PowershellApi*> Apis;
+  typedef std::map<std::wstring, ExecuteApi*> Apis;
   Apis _apis;
 
   /**
@@ -51,8 +51,8 @@ private:
    */
   HANDLE IsApiStillValid(const std::wstring& uuid);
 
-  PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
-  PowershellApi* FindApi(const std::wstring& uuid) const;
+  ExecuteApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
+  ExecuteApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();
 

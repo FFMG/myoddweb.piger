@@ -47,11 +47,11 @@ protected:
 
   myodd::threads::Key _mutex;
 
-  typedef std::map<std::wstring, ShellApi*> APIS;
+  typedef std::map<std::wstring, ExecuteApi*> APIS;
   APIS _apis;
 
-  ShellApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
-  ShellApi* FindApi(const std::wstring& uuid) const;
+  ExecuteApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
+  ExecuteApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();
 

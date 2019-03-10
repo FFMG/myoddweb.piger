@@ -7,8 +7,7 @@
  * \copydoc
  */
 PowershellApi::PowershellApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
-  HelperApi(action, actions, messagesHandler ), 
-  _hProcess( nullptr )
+  ExecuteApi(action, actions, messagesHandler )
 {
 }
 
@@ -28,7 +27,7 @@ PowershellApi::~PowershellApi()
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_MODULE = 0;
   const auto ARGUMENT_ARGS = 1;
@@ -43,16 +42,16 @@ bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   if (argumentCount < 1 || argumentCount > 3)
   {
     auto errorMsg = _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_MODULE) || !ipcRequest.IsString(ARGUMENT_ARGS))
   {
     auto errorMsg = _T("<b>Error : </b> The first and second parameters must be strings.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -62,8 +61,8 @@ bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
     if (!ipcRequest.IsInt(ARGUMENT_PRIVILEGED))
     {
       auto errorMsg = _T("<b>Error : </b> The third argument, (privileged), can only be true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     isPrivileged = (ipcRequest.Get<unsigned int>(ARGUMENT_PRIVILEGED) == 1);
@@ -73,7 +72,7 @@ bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   auto cmdLine = ipcRequest.Get<std::wstring>( ARGUMENT_ARGS);
 
   // run the query
-  bool result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr);
+  const auto result = HelperApi::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr);
 
   // push the result.
   ipcResponse.Add( result ? 1 : 0);
@@ -82,24 +81,12 @@ bool PowershellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   if (false == result)
   {
     auto errorMsg = _T("<b>Error : </b> There was an error executing the request, please check the parameters.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
   }
 
   // return the number of results
   return true;
-}
-
-/**
- * Overide function to execute a process.
- * @param const wchar_t* module the module we want to execute.
- * @param const wchar_t* cmdLine the arguments to pass to this module.
- * @param bool isPrivileged, HANDLE* hProcess if not null, the handle of the created process.
- * @return bool success or not.
- */
-bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const
-{
-  return __super::Execute(module, cmdLine, isPrivileged, hProcess);
 }
 
 /**
@@ -109,7 +96,7 @@ bool PowershellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool 
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_ACTION = 0;
   const auto ARGUMENT_PATH = 1;
@@ -121,24 +108,24 @@ bool PowershellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::I
   if (argumentCount != 2)
   {
     auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_ACTION))
   {
     auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_PATH))
   {
     auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -147,7 +134,7 @@ bool PowershellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::I
   auto szPath = ipcRequest.Get<std::wstring>( ARGUMENT_PATH);
 
   // add it, (or try).
-  auto result = __super::AddAction(szAction.c_str(), szPath.c_str());
+  const auto result = HelperApi::AddAction(szAction.c_str(), szPath.c_str());
 
   // return if it works.
   ipcResponse.Add(result ? 1 : 0);
@@ -163,7 +150,7 @@ bool PowershellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::I
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_ACTION = 0;
   const auto ARGUMENT_PATH = 1;
@@ -175,24 +162,24 @@ bool PowershellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os
   if (argumentCount != 2)
   {
     auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString ( ARGUMENT_ACTION ))
   {
     auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString( ARGUMENT_PATH))
   {
     auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -201,7 +188,7 @@ bool PowershellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os
   auto szPath = ipcRequest.Get<std::wstring>( ARGUMENT_PATH);
 
   // remove it, (or try).
-  auto result = __super::RemoveAction(szAction.c_str(), szPath.c_str());
+  const auto result = HelperApi::RemoveAction(szAction.c_str(), szPath.c_str());
 
   // return if it works.
   ipcResponse.Add(result ? 1 : 0);
@@ -216,7 +203,7 @@ bool PowershellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_INDEX = 0;
   const auto ARGUMENT_ACTION = 1;
@@ -228,24 +215,24 @@ bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::
   if (argumentCount != 2)
   {
     auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_INDEX))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'index' must be a number");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'index' must be a number");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_ACTION))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -253,9 +240,9 @@ bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::
   auto action = ipcRequest.Get<std::wstring>(ARGUMENT_ACTION);
 
   MYODD_STRING sValue = _T("");
-  if (!__super::FindAction(idx, action.c_str(), sValue))
+  if (!HelperApi::FindAction(idx, action.c_str(), sValue))
   {
-    __super::Log(AM_LOG_WARNING, _T("Could not find action at given index"));
+    HelperApi::Log(AM_LOG_WARNING, _T("Could not find action at given index"));
 
     //  just return false.
     ipcResponse.Add(0);
@@ -278,19 +265,19 @@ bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0)
   {
-    auto errorMsg = _T("<b>Error : </b> The 'GetForegroundWindow' function does not take any arguments.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The 'GetForegroundWindow' function does not take any arguments.");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   // get the foreground window.
-  auto hwnd = __super::GetForegroundWindow();
+  const auto hwnd = HelperApi::GetForegroundWindow();
 
   // return it as an int.
   ipcResponse.Add(reinterpret_cast<int64_t>(hwnd));
@@ -299,45 +286,40 @@ bool PowershellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, my
   return true;
 }
 
-bool PowershellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
-{
-  return __super::Say(msg, nElapse, nFadeOut);
-}
-
 /**
  * Output a message on the screen.
  * @param const myodd::os::IpcData& ipcRequest the request as was passed to us.
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_TEXT = 0;
   const auto ARGUMENT_ELAPSE = 1;
   const auto ARGUMENT_FADEOUT = 2;
 
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 2 || argumentCount > 3)
   {
-    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_TEXT))
   {
-    auto errorMsg = _T("<b>Error : </b> The first argument must be a string.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The first argument must be a string.");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt( ARGUMENT_ELAPSE))
   {
-    auto errorMsg = _T("<b>Error : </b> The elapse parameters must be an integer.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The elapse parameters must be an integer.");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -345,9 +327,9 @@ bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
   auto elapse = ipcRequest.Get<unsigned int>(ARGUMENT_ELAPSE);
   if (elapse == 0)
   {
-    auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -356,16 +338,16 @@ bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
   {
     if (!ipcRequest.IsInt(ARGUMENT_FADEOUT))
     {
-      auto errorMsg = _T("<b>Error : </b> The fadout parameters must be an integer.");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = _T("<b>Error : </b> The fadout parameters must be an integer.");
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     fade = ipcRequest.Get<unsigned int>(ARGUMENT_FADEOUT);
   }
 
   // add the boolean response.
-  auto b = __super::Say(message.c_str(), elapse, fade);
+  const auto b = HelperApi::Say(message.c_str(), elapse, fade);
   ipcResponse.Add( b );
   return b;
 }
@@ -376,14 +358,14 @@ bool PowershellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0 )
   {
     auto errorMsg = _T("<b>Error : </b> The 'Version' function does not take any arguments.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -400,22 +382,22 @@ bool PowershellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not
  */
-bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0)
   {
-    auto errorMsg = _T("<b>Error : </b> The 'GetCommandCount' function does not take any arguments.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The 'GetCommandCount' function does not take any arguments.");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   // get it
-  size_t nSize = __super::GetCommandCount();
+  const auto nSize = HelperApi::GetCommandCount();
 
   //  add it to the response
-  ipcResponse.Add( (int64_t)nSize );
+  ipcResponse.Add( static_cast<int64_t>(nSize) );
 
   // success.
   return true;
@@ -429,24 +411,24 @@ bool PowershellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd:
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return boolean success or not
  */
-bool PowershellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_NUMBER = 0;
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount != 1 || !ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
     auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>GetCommand( <b>index</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
-  unsigned int idx = ipcRequest.Get<unsigned int>(ARGUMENT_NUMBER);
-  MYODD_STRING sValue;
-  if (!__super::GetCommand(idx, sValue))
+  const auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_NUMBER);
+  std::wstring sValue;
+  if (!HelperApi::GetCommand(idx, sValue))
   {
-    auto errorMsg = _T("Trying to get an argument past the number of arguments.");
-    __super::Log(AM_LOG_WARNING, errorMsg);
+    const auto errorMsg = _T("Trying to get an argument past the number of arguments.");
+    HelperApi::Log(AM_LOG_WARNING, errorMsg);
 
     // return that there was an error.
     ipcResponse.Add(0);
@@ -465,22 +447,22 @@ bool PowershellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return boolean success or not
  */
-bool PowershellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount != 0)
   {
-    auto errorMsg = _T("<b>Error : </b>.<br>Format is <i>GetAction( )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b>.<br>Format is <i>GetAction( )</i>");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
-  MYODD_STRING sValue;
-  if (!__super::GetAction(sValue))
+  std::wstring sValue;
+  if (!HelperApi::GetAction(sValue))
   {
-    auto errorMsg = _T("Trying to get the action name/value.");
-    __super::Log(AM_LOG_WARNING, errorMsg);
+    const auto errorMsg = _T("Trying to get the action name/value.");
+    HelperApi::Log(AM_LOG_WARNING, errorMsg);
 
     // return that there was an error.
     ipcResponse.Add(0);
@@ -501,36 +483,36 @@ bool PowershellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::I
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return boolean success or not
  */
-bool PowershellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_QUOTE = 0;
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 1)
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Getstring' does not take more than one parameter");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The function 'Getstring' does not take more than one parameter");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   // the quote
-  bool bQuote = true;
+  auto bQuote = true;
   if (argumentCount == 1)
   {
     if (!ipcRequest.IsInt( ARGUMENT_QUOTE ))
     {
-      auto errorMsg = _T("The first parameter must be a boolean.");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = _T("The first parameter must be a boolean.");
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<int>(ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
-  if (!__super::GetString(sValue, bQuote))
+  std::wstring sValue = L"";
+  if (!HelperApi::GetString(sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Could not get any selected string."));
+    HelperApi::Log(AM_LOG_WARNING, _T("Could not get any selected string."));
 
     // return that there was an error.
     ipcResponse.Add(0);
@@ -551,26 +533,26 @@ bool PowershellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::I
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return boolean success or not
  */
-bool PowershellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   //  the arguments.
   const auto ARGUMENT_NUMBER = 0;
   const auto ARGUMENT_QUOTE = 1;
 
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
-    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -578,23 +560,23 @@ bool PowershellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   auto idx = ipcRequest.Get<unsigned int>( ARGUMENT_NUMBER );
 
   // the quote
-  bool bQuote = true;
+  auto bQuote = true;
   if (argumentCount == 2)
   {
     if (!ipcRequest.IsInt( ARGUMENT_QUOTE))
     {
-      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<signed int>(ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
-  if (!__super::GetFile(idx, sValue, bQuote))
+  std::wstring sValue = L"";
+  if (!HelperApi::GetFile(idx, sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested file index."));
+    HelperApi::Log(AM_LOG_WARNING, _T("Unable to get the requested file index."));
 
     ipcResponse.Add(0);
     return true;
@@ -614,30 +596,30 @@ bool PowershellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return boolean success or not
  */
-bool PowershellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_NUMBER = 0;
   const auto ARGUMENT_QUOTE = 1;
 
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Getfolder' takes 1 or 2 parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The function 'Getfolder' takes 1 or 2 parameters");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
-    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b>[, quote] )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b>[, quote] )</i>");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   //  the number.
-  auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_NUMBER);
+  const auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_NUMBER);
 
   // the quote
   auto bQuote = true;
@@ -645,18 +627,18 @@ bool PowershellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::I
   {
     if (!ipcRequest.IsInt(ARGUMENT_QUOTE))
     {
-      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<unsigned int>(ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
-  if (!__super::GetFolder(idx, sValue, bQuote))
+  std::wstring sValue = L"";
+  if (!HelperApi::GetFolder(idx, sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested folder index."));
+    HelperApi::Log(AM_LOG_WARNING, _T("Unable to get the requested folder index."));
 
     //  just return false.
     ipcResponse.Add(0);
@@ -682,20 +664,20 @@ bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcD
   const auto ARGUMENT_NUMBER = 0;
   const auto ARGUMENT_QUOTE = 1;
 
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
   {
-    auto errorMsg = _T("<b>Error : </b> The function 'Geturl' takes 1 or 2 parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> The function 'Geturl' takes 1 or 2 parameters");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
-    auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -708,18 +690,18 @@ bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcD
   {
     if (!ipcRequest.IsInt(ARGUMENT_QUOTE))
     {
-      auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<unsigned int>(ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
-  if (!__super::GetUrl(idx, sValue, bQuote))
+  std::wstring sValue = L"";
+  if (!HelperApi::GetUrl(idx, sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested url index."));
+    HelperApi::Log(AM_LOG_WARNING, _T("Unable to get the requested url index."));
 
     //  just return false.
     ipcResponse.Add(0);
@@ -739,21 +721,21 @@ bool PowershellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcD
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return boolean success or not
  */
-bool PowershellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
-  auto argumentCount = ipcRequest.GetNumArguments();
+  const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0)
   {
     auto errorMsg = _T("<b>Error : </b> The function 'GetVersion' does not take any parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
-  MYODD_STRING sValue = _T("");
-  if (!__super::GetVersion(sValue))
+  std::wstring sValue = L"";
+  if (!HelperApi::GetVersion(sValue))
   {
-    __super::Log(AM_LOG_ERROR, _T("Unable to get the version number"));
+    HelperApi::Log(AM_LOG_ERROR, _T("Unable to get the version number"));
 
     //could not get it.
     return false;
@@ -772,7 +754,7 @@ bool PowershellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::
  * @param myodd::os::IpcData& ipcResponse the container that will have the response.
  * @return bool success or not.
  */
-bool PowershellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse)
+bool PowershellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const
 {
   const auto ARGUMENT_LOGTYPE = 0;
   const auto ARGUMENT_MESSAGE = 1;
@@ -784,51 +766,33 @@ bool PowershellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData
   if (argumentCount != 2)
   {
     auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_LOGTYPE))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'logtype' must be a number");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'logtype' must be a number");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_MESSAGE))
   {
-    auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'message' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'message' must be a string");
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   auto logType = ipcRequest.Get<unsigned int>( ARGUMENT_LOGTYPE );
   auto action = ipcRequest.Get<std::wstring>( ARGUMENT_MESSAGE );
 
-  __super::Log(logType, action.c_str());
+  HelperApi::Log(logType, action.c_str());
 
   // success.
   ipcResponse.Add(1);
   return true;
-}
-
-/**
- * Set this API handle.
- * @param HANDLE process the process we are setting.
- */
-void PowershellApi::SetHandle(HANDLE process)
-{
-  _hProcess = process;
-}
-
-/**
- * Get the current handle value.
- * @return HANDLE the current handle.
- */
-HANDLE PowershellApi::GetHandle() const
-{
-  return _hProcess;
 }

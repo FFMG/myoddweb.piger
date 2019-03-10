@@ -200,6 +200,9 @@
     <ClCompile Include="ApplicationTray.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\api\ExecuteApi.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\api\helperapi.h">
@@ -396,6 +399,9 @@
     </ClInclude>
     <ClInclude Include="ApplicationTray.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\ExecuteApi.h">
+      <Filter>api</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
