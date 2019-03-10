@@ -244,7 +244,6 @@ BOOL CActionMonitorApp::InitInstance()
   // set the cliboard size.
   InitMaxClipboardSize();
 
-
   CreateAndShowActionDialog();
 
   // always return false

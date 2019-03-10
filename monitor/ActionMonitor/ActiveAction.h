@@ -10,10 +10,11 @@
 class ActiveAction : public Action
 {
 public:
-  ActiveAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActiveAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
 	virtual ~ActiveAction();
 
-  DISALLOW_COPY_AND_ASSIGN(ActiveAction);
+  ActiveAction(const ActiveAction&) = delete;
+  void operator=(const ActiveAction&) = delete;
 
   // ----------------------------
   const Clipboard& GetClipboard() const { return *_clipboard; }
@@ -27,15 +28,15 @@ public:
    * this is the command line arguments as given by the user.
    * So if the action is ""learn" and the user typed "Lea aaaa bbbb"
    * the command line is aaaa bbbb and the command is "learn"
-   * \return const MYODD_STRING& the command line.
+   * \return the command line.
    */
-  const MYODD_STRING& CommandLine() const {
+  const std::wstring& CommandLine() const {
     return _szCommandLine;
   }
 
   /**
    * check if this is a privileged command
-   * \return bool
+   * \return if the running action is privileged, (admin), or not.
    */
   bool IsPrivileged() const {
     return _isPrivileged;
@@ -43,7 +44,7 @@ public:
 
   /** 
    * Get the window that is/was the top most at the time the command was enteered.
-   * return HWND the window at the time the call was made.
+   * return the handle of window at the time the call was made.
    */
   HWND TopHWnd() const
   {
@@ -61,7 +62,7 @@ protected:
 private:
   // the current clipboard.
   Clipboard* _clipboard;
-  MYODD_STRING _szCommandLine;
+  std::wstring _szCommandLine;
   bool _isPrivileged;
   HWND _hTopHWnd;
 
@@ -79,10 +80,10 @@ private:
     Temp
   };
 
-  void UpdateEnvironmentVariables();
-  void UpdateEnvironmentValue( const VariableType variableType ) const;
-  void UpdateEnvironmentPath();
-  void UpdateEnvironmentTmp();
-  void UpdateEnvironmentTemp();
+  void UpdateEnvironmentVariables() const;
+  void UpdateEnvironmentValue( VariableType variableType ) const;
+  void UpdateEnvironmentPath() const;
+  void UpdateEnvironmentTmp() const;
+  void UpdateEnvironmentTemp() const;
   void UpdateEnvironmentPathExt() const;
 };

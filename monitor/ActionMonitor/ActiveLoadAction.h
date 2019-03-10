@@ -14,7 +14,7 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "ActiveAction.h"
-#include "IApplication.h";
+#include "IApplication.h"
 
 class ActiveLoadAction final : public ActiveAction
 {

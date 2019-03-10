@@ -3,7 +3,6 @@
 #ifdef ACTIONMONITOR_API_PLUGIN
 
 #include "PluginVirtualMachine.h"
-#include "ActionMonitor.h"
 #include "amplugin\ampluginprivate.h"
 
 /**
@@ -19,9 +18,7 @@ PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& 
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief destructor
  */
 PluginVirtualMachine::~PluginVirtualMachine()
 {
@@ -96,9 +93,7 @@ bool PluginVirtualMachine::Initialize()
 }
 
 /**
-* Todo
-* @param void
-* @return void
+* \brief register all the valid actions and the correcponding functions.
 */
 void PluginVirtualMachine::InitializeFunctions()
 {
@@ -412,10 +407,8 @@ void PluginVirtualMachine::Destroy()
 }
 
 /**
-* Todo
-* @see __super::version
-* @param void
-* @return void
+* \brief get the version number of application monitor
+* \return the version number.
 */
 double PluginVirtualMachine::Version()
 {
@@ -423,27 +416,24 @@ double PluginVirtualMachine::Version()
 }
 
 /**
-* Todo
-* @see __super::say
-* @param void
-* @param void
-* @param void
-* @return void
+* \brief output a fading message
+* \param sText the message to output
+* \param elapseMiliSecondsBeforeFadeOut how long we want to show the message before fade out.
+* \param totalMilisecondsToShowMessage how long we want to display the message, including fade out.
 */
-bool PluginVirtualMachine::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
+bool PluginVirtualMachine::Say(const wchar_t* sText, const unsigned int elapseMiliSecondsBeforeFadeOut, const unsigned int totalMilisecondsToShowMessage)
 {
-  return GetApi().Say(msg, nElapse, nFadeOut);
+  return GetApi().Say(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 }
 
 /**
-* Todo
-* @see __super::getCommand
-* @param void
-* @param void
-* @param void
-* @return void
-*/
-size_t PluginVirtualMachine::GetCommand(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer)
+ * \brief get a command and pass it to the buffer.
+ * \param idx the index number of the command we are after.
+ * \param nBufferLength the max length of the buffer.
+ * \param lpBuffer the data container
+ * \return the actual size of the command.
+ */
+size_t PluginVirtualMachine::GetCommand(const UINT idx, const DWORD nBufferLength, wchar_t* lpBuffer)
 {
   return GetApi().GetCommand( idx, nBufferLength, lpBuffer);
 }

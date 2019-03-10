@@ -295,6 +295,8 @@ void Application::CreateActionsList()
 
 /**
  * \brief destroy all the virtual machines.
+ *        we send them all a message to end what they are doing
+ *        or we detach from them all so we no longer can handle their requests.
  */
 void Application::CloseAllVirtualMachines() const
 {

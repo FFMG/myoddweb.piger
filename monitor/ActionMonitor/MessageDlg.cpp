@@ -43,7 +43,7 @@ MessageDlg::~MessageDlg()
  * \see CDialog::Create
  * \param sText the text we want to display
  * \param elapseMiliSecondsBeforeFadeOut how long we want to display the message for before we fade out.
- * \param totalMilisecondsToShowMessage how long we want the message to be displayed before fading out.
+ * \param totalMilisecondsToShowMessage how long we want the message to be displayed including before fading out.
  */
 void MessageDlg::Create(const std::wstring& sText, const long elapseMiliSecondsBeforeFadeOut, const long totalMilisecondsToShowMessage)
 {

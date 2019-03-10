@@ -1,15 +1,12 @@
-// Action.cpp: implementation of the Action class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include "stdafx.h"
 #include "ActiveAction.h"
 #include "ActionMonitor.h"
 #include "../myodd/threads/threads.h"
 
 /**
- * The contructor
+ * The constructor
  * \param src the action that is now active.
+ * \param virtualMachines all the current virtual machines.
  * \param hTopHWnd the window that was on top at the time the command was given.
  * \param szCommandLine the given command line that is, the words after the command itself
  * \param isPrivileged if this action is privileged or not.
@@ -17,14 +14,14 @@
 ActiveAction::ActiveAction(const Action& src,
                            IVirtualMachines& virtualMachines,
                            const HWND hTopHWnd,
-                           const MYODD_STRING& szCommandLine, 
+                           const std::wstring& szCommandLine,
                            const bool isPrivileged) : 
   Action( src ), 
+  _virtualMachines( virtualMachines ),
   _clipboard(nullptr),
   _szCommandLine( szCommandLine ),
   _isPrivileged( isPrivileged ),
-  _hTopHWnd( hTopHWnd ),
-  _virtualMachines( virtualMachines )
+  _hTopHWnd( hTopHWnd )
 {
 }
 
@@ -108,7 +105,7 @@ bool ActiveAction::ReadFile(LPCTSTR pyFile, std::string& script) const
 
   errno_t err;
   FILE *fp;
-  if (err = fopen_s(&fp, T_T2A(pyFile), "rt"))
+  if ((err = fopen_s(&fp, T_T2A(pyFile), "rt")))
   {
     return false;
   }
@@ -117,13 +114,13 @@ bool ActiveAction::ReadFile(LPCTSTR pyFile, std::string& script) const
   // Note that we are no longer in the realm of UNICODE here.
   // We are using Multi Byte data.
   static const UINT FILE_READ_SIZE = 100;
-  size_t  count, total = 0;
+  size_t total = 0;
   while (!feof(fp))
   {
     // Attempt to read
     char buffer[FILE_READ_SIZE + 1];
     memset(buffer, '\0', FILE_READ_SIZE + 1);
-    count = fread(buffer, sizeof(char), FILE_READ_SIZE, fp);
+    const auto count = fread(buffer, sizeof(char), FILE_READ_SIZE, fp);
 
     buffer[count] = '\0';
 
@@ -147,7 +144,7 @@ bool ActiveAction::ReadFile(LPCTSTR pyFile, std::string& script) const
   return true;
 }
 
-void ActiveAction::UpdateEnvironmentVariables()
+void ActiveAction::UpdateEnvironmentVariables() const
 {
   // the path
   UpdateEnvironmentPath();
@@ -169,9 +166,9 @@ void ActiveAction::UpdateEnvironmentVariables()
 void ActiveAction::UpdateEnvironmentValue(const VariableType variableType) const
 {
   // values we will be using
-  MYODD_STRING keyConfig;
-  MYODD_STRING keyName;
-  auto expandValue = false;
+  std::wstring keyConfig;
+  std::wstring keyName;
+  bool expandValue;
   
   // set the values depending on the type.
   switch (variableType)
@@ -205,7 +202,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType) const
     return;
   }
 
-  MYODD_STRING configName = _T("os\\setenvironment\\") + keyConfig;
+  const auto configName = L"os\\setenvironment\\" + keyConfig;
   if (::myodd::config::Get(configName, 1) != 1)
   {
     return;
@@ -265,7 +262,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType) const
  * Update the environment variables path
  * to make sure it is up to date.
  */
-void ActiveAction::UpdateEnvironmentPath()
+void ActiveAction::UpdateEnvironmentPath() const
 {
   UpdateEnvironmentValue(ActiveAction::Path);
 }
@@ -283,7 +280,7 @@ void ActiveAction::UpdateEnvironmentPathExt() const
  * Update the environment variables temp path
  * to make sure it is up to date.
  */
-void ActiveAction::UpdateEnvironmentTemp()
+void ActiveAction::UpdateEnvironmentTemp() const
 {
   UpdateEnvironmentValue(ActiveAction::Temp);
 }
@@ -292,7 +289,7 @@ void ActiveAction::UpdateEnvironmentTemp()
 * Update the environment variables path
 * to make sure it is up to date.
 */
-void ActiveAction::UpdateEnvironmentTmp()
+void ActiveAction::UpdateEnvironmentTmp() const
 {
   UpdateEnvironmentValue( ActiveAction::Tmp );
 }

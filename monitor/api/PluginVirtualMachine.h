@@ -2,16 +2,11 @@
 #include "IVirtualMachine.h"
 
 #ifdef ACTIONMONITOR_API_PLUGIN
-
 #include "PluginApi.h"
-#include "ActiveAction.h"
 #include <map>
-#include <thread>
-#include <mutex>
 #include "../threads/lock.h"
 #include "os/os.h"
 #include "amplugin/ampluginprivate.h"
-
 
 class PluginVirtualMachine final : public IVirtualMachine
 {
@@ -73,7 +68,7 @@ public:
   static double Version();
   static size_t GetCommandCount();
 
-  static bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut);
+  static bool Say(const wchar_t* sText, unsigned int elapseMiliSecondsBeforeFadeOut, unsigned int totalMilisecondsToShowMessage);
   static bool ExecuteInPlugin(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
   static int GetString(DWORD nBufferLength, wchar_t* lpBuffer, bool bQuote);
   static size_t GetCommand(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer);
