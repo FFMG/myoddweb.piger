@@ -13,10 +13,10 @@
 
 #include "Python.h"
 
-class PyApi : public HelperApi
+class PyApi final : public HelperApi
 {
 public:
-  PyApi( const ActiveAction& action, std::string script, PyThreadState* mainThreadState );
+  PyApi( const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler, std::string script, PyThreadState* mainThreadState );
   virtual ~PyApi() = default;
 
 public:

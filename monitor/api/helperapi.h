@@ -1,6 +1,22 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
 #include "ActiveAction.h"
+#include "IMessagesHandler.h"
+#include "IActions.h"
 
 /**
  * Helper function used to make new APIs easier to create and most of them more standard.
@@ -12,7 +28,7 @@
 class HelperApi
 {
 public:
-  explicit HelperApi(const ActiveAction& action );
+  explicit HelperApi( const ActiveAction& action, IActions& actions, IMessagesHandler& messages );
   virtual ~HelperApi() = default;
 
 private:
@@ -23,12 +39,22 @@ private:
    */
   const ActiveAction& _action;
 
+  /**
+   * \brief the messages handler
+   */
+  IMessagesHandler& _messagesHandler;
+
+  /**
+   * \brief all the actions
+   */
+  IActions& _actions;
+
 protected:
   // helper function
   static std::wstring Widen(const std::string& str);
   
   // display a message onto the screen.
-  virtual bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const;
+  virtual bool Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const;
   
   // get a command by index
   // return false if it does not exist
@@ -68,16 +94,16 @@ protected:
 
   // add a set of command to the list of commands.
   // note that we do hardly any checks to see of the command already exists
-  static bool AddAction(const wchar_t* szText, const wchar_t* szPath );
+  bool AddAction(const wchar_t* szText, const wchar_t* szPath ) const;
 
   // remove an action, if more than one action is found
   // then the path will be compared against.
-  static bool RemoveAction(const wchar_t* szText, const wchar_t* szPath );
+  bool RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const;
 
   // find an action, we return true when we find it
   // there can be more than one action with the same name.
-  static bool FindAction( unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath );
+  bool FindAction( unsigned int idx, const wchar_t* szText, std::wstring& stdPath ) const;
 
   // log a message to the log file.
-  static void Log(unsigned int logType, const wchar_t* lpText);
+  static void Log(unsigned int logType, const wchar_t* lpText );
 };

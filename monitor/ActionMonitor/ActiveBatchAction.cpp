@@ -9,8 +9,8 @@
 * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
 * @param bool isPrivileged if this action is privileged or not.
 */
-ActiveBatchAction::ActiveBatchAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine) :
-  ActiveAction(src, hTopHWnd, szCommandLine, true)
+ActiveBatchAction::ActiveBatchAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine) :
+  ActiveAction(src, virtualMachines, hTopHWnd, szCommandLine, true)
 {
 }
 
@@ -39,7 +39,7 @@ void ActiveBatchAction::OnExecuteInThread()
   std::vector<MYODD_STRING> argv;
   argv.push_back( _T("cmd") );
 
-  auto arguments = myodd::strings::Format(_T("/c %s %s"), szFile.c_str(), GetCommandLine());
+  const auto arguments = myodd::strings::Format(_T("/c %s %s"), szFile.c_str(), GetCommandLine());
   argv.push_back(arguments);
   Execute(argv, IsPrivileged(), nullptr);
 }

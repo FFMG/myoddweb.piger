@@ -14,32 +14,25 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "Action.h"
-#include <mutex>
+#include <threads/lock.h>
+#include "IActions.h"
 
 // the name of protected directories
-static LPCTSTR AM_DIRECTORY_IN  = _T("__in");           //  dir of actions that will run at start
-static LPCTSTR AM_DIRECTORY_OUT = _T("__out");          //  dir of actions that will run at exit time
-static LPCTSTR AM_DIRECTORY_TMP = _T("__tmp");          //  dir that will not be run/loaded - used for files/app needed by other actions
-static LPCTSTR AM_DIRECTORY_PLUGIN = _T("__plugins");   //  dir that will not be run/loaded - used for files/app needed by other actions
+static const wchar_t* AM_DIRECTORY_IN  = L"__in";           //  dir of actions that will run at start
+static const wchar_t* AM_DIRECTORY_OUT = L"__out";          //  dir of actions that will run at exit time
+static const wchar_t* AM_DIRECTORY_TMP = L"__tmp";          //  dir that will not be run/loaded - used for files/app needed by other actions
+static const wchar_t* AM_DIRECTORY_PLUGIN = L"__plugins";   //  dir that will not be run/loaded - used for files/app needed by other actions
 
-class Actions  
+class Actions : public IActions
 {
 public:
 	Actions();
 	virtual ~Actions();
 
-  bool Add( Action* action );
-  bool Add( LPCTSTR szText, LPCTSTR szPath );
-  bool Remove( LPCTSTR szText, LPCTSTR szPath );
-  bool Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath );
-
-  MYODD_STRING toChar( ) const;
-
 protected:
   DISALLOW_COPY_AND_ASSIGN(Actions);
 
 protected:
-
   struct COMMANDS_VALUE
   {
     std::wstring color;
@@ -50,7 +43,7 @@ protected:
       bItalic(0)
     {
     }
-    COMMANDS_VALUE( MYODD_STRING c, bool b, bool i ) :
+    COMMANDS_VALUE(std::wstring c, bool b, bool i ) :
       bBold( b), bItalic( i ), color( c ) 
     {
     }
@@ -58,29 +51,19 @@ protected:
     DISALLOW_COPY_AND_ASSIGN(COMMANDS_VALUE);
   };
 
-  static MYODD_STRING toChar( const MYODD_STRING& s, const COMMANDS_VALUE& cv );
+  static std::wstring toChar( const std::wstring& s, const COMMANDS_VALUE& cv );
   void GetCommandValue( const std::wstring& lpName, COMMANDS_VALUE& cv ) const;
 
 protected:
   //  vectors containing all the commands we can call
   typedef std::vector<Action*> array_of_actions;
   typedef array_of_actions::const_iterator array_of_actions_it;
-  array_of_actions m_Actions;
-  array_of_actions m_ActionsMatch;
+  array_of_actions _actions;
+  array_of_actions _actionsMatch;
 
-  array_of_actions::const_iterator Find( const MYODD_STRING& szText, const MYODD_STRING& szPath );
-public:
-  //  select one item down in the list
-  void down();
+  array_of_actions::const_iterator Find( const std::wstring& szText, const std::wstring& szPath );
 
-  //  select one item up in the list
-  void up();
-
-protected:
   virtual void ParseDirectory( LPCTSTR  rootDir, LPCTSTR  extentionDir );
-
-public:
-  virtual void Init();
 
 protected:
   // clear the search string and posible actions match list.
@@ -89,12 +72,8 @@ protected:
   // the command currently chosen
   size_t m_uCommand;
 
-public:
-  const Action* GetCommand( MYODD_STRING* cmdLine = nullptr ) const;
-  void SetAction( Action* tmpAction );
-
 protected:
-  Action* m_tmpAction;
+  Action* _actionCurrentlySelected;
 
 public:
   /**
@@ -106,23 +85,35 @@ public:
    */
   const std::wstring& getActionAsTyped() const
   { 
-    return m_sActionAsTyped;
+    return _sActionAsTyped;
   }
 
-  void CurrentActionReset();
-  void CurrentActionAdd( TCHAR c );
-  void CurrentActionBack();
+  void CurrentActionReset() override;
+  void CurrentActionAdd( wchar_t c ) override;
+  void CurrentActionBack() override;
+  void SetAction(Action* tmpAction) override;
+  const Action* GetCommand() override;
+  std::wstring GetCommandLine() override;
+  std::wstring ToChar() override;
+  void down() override;
+  void up() override;
+  void Initialize() override;
+  bool Add(Action* action) override;
+  bool Remove(const std::wstring& szText, const std::wstring& szPath) override;
+  const Action* Find(const std::wstring& szText, unsigned int idx ) override;
 
   void ClearAll();
 protected:
   // this is the text that the user is currently typing
-  MYODD_STRING m_sActionAsTyped;
+  std::wstring _sActionAsTyped;
 
 protected:
   size_t BuildMatchList( );
-  size_t BuildMatchList( std::vector<MYODD_STRING>& exploded );
+  size_t BuildMatchList( std::vector<std::wstring>& exploded );
 
   virtual bool IsReservedDir(const wchar_t*) const;
 
-  std::mutex _mutex;
+  myodd::threads::Key _mutexActions;
+  myodd::threads::Key _mutexActionTemp;
+  myodd::threads::Key _mutexActionsMatch;
 };

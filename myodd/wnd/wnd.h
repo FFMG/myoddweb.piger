@@ -8,12 +8,14 @@
  * for example getwindowtext() or setchecked() and so forth.
  */
 #include "../common/includes.h"
-#include "../string/string.h"
+#include <atlbase.h>
 #include <map>
 
 // -- Forward declaration.
 namespace myodd{ namespace wnd{
   typedef std::map< HWND, bool> MYODD_WINDOWS_STATE;
+
+  void MessagePump(HWND hwnd);
 
   // -- Strings
   MYODD_STRING GetText( HWND hwndParent, WORD id, bool bTrim = true ); 

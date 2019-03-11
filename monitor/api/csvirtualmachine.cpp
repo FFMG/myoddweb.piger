@@ -5,13 +5,18 @@
 #include <os/ipclistener.h>
 #include "csvirtualmachine.h"
 
-CsVirtualMachine::CsVirtualMachine() :
-  PowershellVirtualMachine()
+CsVirtualMachine::CsVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  PowershellVirtualMachine( actions, messagesHandler, iIpcListener )
 {
 }
 
 CsVirtualMachine::~CsVirtualMachine()
 {
+}
+
+ExecuteApi* CsVirtualMachine::CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages)
+{
+  return new CsApi(uuid, action, actions, messages);
 }
 
 /**

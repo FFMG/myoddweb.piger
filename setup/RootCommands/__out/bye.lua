@@ -1,1 +1,1 @@
-am_say( "Piger is shutting Down", 100, 5 )
+am_say( "Piger is shutting Down", 500, 3000 )

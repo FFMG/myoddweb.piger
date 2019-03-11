@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{91d4a086-0f07-4bec-bfc2-a1e78923ac3b}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{ab4c89ee-b3e5-4abb-99fc-f0b7f7b7043a}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{3aedcdba-eaf4-4440-8b41-4ae16449e868}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
@@ -19,31 +11,32 @@
     <Filter Include="actions">
       <UniqueIdentifier>{2d953d28-c23a-43e2-b110-37b4ec827e8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{91d4a086-0f07-4bec-bfc2-a1e78923ac3b}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionMonitor.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="ActionMonitorDlg.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="ActionsImmediate.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\common\Clipboard.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="FadeWnd.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="MessageDlg.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="StdAfx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\TrayDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\api\helperapi.cpp">
       <Filter>api</Filter>
@@ -67,13 +60,13 @@
       <Filter>api</Filter>
     </ClCompile>
     <ClCompile Include="..\common\ClipboardData.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\common\ClipboardDropData.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\common\ClipboardsData.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="Action.cpp">
       <Filter>actions</Filter>
@@ -106,9 +99,6 @@
       <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="ActiveByeAction.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="ActiveUserMessageAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="ActiveDefaultAction.cpp">
@@ -153,43 +143,71 @@
     <ClCompile Include="..\api\shellvirtualmachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="MessagesHandler.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="MessagesHandlerWnd.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IMessagesHandler.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\VirtualMachines.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\IVirtualMachine.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="IActions.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="IIpcListener.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IpcListener.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\IVirtualMachines.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveVersionAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonWnd.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="HookWnd.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IApplication.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="IDisplay.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveLoadAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplicationTray.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ITray.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="TrayWnd.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\ExecuteApi.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+    <ClCompile Include="..\api\executevirtualmachine.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="ActionMonitor.rc">
-      <Filter>Source Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ActionMonitor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionMonitorDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ActionsImmediate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\Clipboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FadeWnd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MemDC.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MessageDlg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StdAfx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\TrayDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\api\helperapi.h">
       <Filter>api</Filter>
     </ClInclude>
@@ -202,9 +220,6 @@
     <ClInclude Include="..\api\pluginapi.h">
       <Filter>api</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\api\PluginVirtualMachine.h">
       <Filter>api</Filter>
     </ClInclude>
@@ -216,15 +231,6 @@
     </ClInclude>
     <ClInclude Include="..\api\PythonVirtualMachine.h">
       <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\ClipboardData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\ClipboardDropData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\ClipboardsData.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActiveActions.h">
       <Filter>actions</Filter>
@@ -260,9 +266,6 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveByeAction.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="ActiveUserMessageAction.h">
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveDefaultAction.h">
@@ -307,6 +310,108 @@
     <ClInclude Include="..\api\shellvirtualmachine.h">
       <Filter>api</Filter>
     </ClInclude>
+    <ClInclude Include="..\api\VirtualMachines.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\IVirtualMachine.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="IActions.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\IVirtualMachines.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionMonitor.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionMonitorDlg.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionsImmediate.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Clipboard.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ClipboardData.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ClipboardDropData.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\ClipboardsData.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeWnd.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IIpcListener.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IMessagesHandler.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IpcListener.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MemDC.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageDlg.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MessagesHandler.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="MessagesHandlerWnd.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveVersionAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonWnd.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="HookWnd.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IApplication.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="IDisplay.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveLoadAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplicationTray.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ITray.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="TrayWnd.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\ExecuteApi.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="..\api\executevirtualmachine.h">
+      <Filter>api</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ActionMonitor.ico">
@@ -320,5 +425,10 @@
     <None Include="res\ActionMonitor.rc2">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ActionMonitor.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

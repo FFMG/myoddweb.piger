@@ -362,7 +362,7 @@ void Clipboard::CopyDataFromForgroundWindow( CWnd* cPossibleWindow  )
   SendInput( 2, input, sizeof(INPUT) ) ; 
 
   //  let the key be pressed for a short while. 
-  Sleep(200);
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
   input[0].ki.dwFlags = 
   input[1].ki.dwFlags = KEYEVENTF_KEYUP ;
@@ -372,7 +372,7 @@ void Clipboard::CopyDataFromForgroundWindow( CWnd* cPossibleWindow  )
   //  give the window half a chance to finish their work.
   //  and more importantly get, (when we call sleep), we surrender our thread call to give other threads
   //  a chance to do their work.
-  Sleep(200);
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
 }
 
 /**

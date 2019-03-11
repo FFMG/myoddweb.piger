@@ -5,9 +5,7 @@
 #include "stdafx.h"
 #include "Actions.h"
 #include <io.h>
-
-//  the Dll hooks, (for the pause)
-#include "threads/lock.h"
+#include <threads/lock.h>
 
 
 //////////////////////////////////////////////////////////////////////
@@ -16,8 +14,11 @@
 // -------------------------------------------------------------
 Actions::Actions() : 
   m_uCommand( 0 ),
-  m_tmpAction( nullptr ),
-  m_sActionAsTyped( _T("" ) )
+  _actionCurrentlySelected( nullptr ),
+  _sActionAsTyped( L"" ),
+  _mutexActions( L"Actions"),
+  _mutexActionsMatch( L"Actions - Match"),
+  _mutexActionTemp( L"Action - Temp")
 {
 }
 
@@ -32,14 +33,14 @@ void Actions::ClearAll()
 {
   {
     //  get the lock
-    myodd::threads::Lock guard(_mutex);
+    myodd::threads::Lock guard( _mutexActions );
 
     //  delete all the pointers.
-    for (auto it = m_Actions.begin(); it != m_Actions.end(); ++it)
+    for (auto it = _actions.begin(); it != _actions.end(); ++it)
     {
       delete *it;
     }
-    m_Actions.clear();
+    _actions.clear();
   }
 
   //  clear all the searches.
@@ -47,38 +48,30 @@ void Actions::ClearAll()
 }
 
 /**
- * Find a certain action given the name and index number.
- * This is because we can have more than one action with the same name.
- * @param UINT the index number we are looking for.
- * @param LPCTSTR the action name we are after.
- * @param MYODD_STRING& if found, the path of the action.
- * @return bool if the action was found or not.
+ * \brief Find a certain action given the name and index number.
+ *        This is because we can have more than one action with the same name.
+ * \param szText the action name we are after.
+ * \param idx the index number we are looking for.
+ * \return Action or nullptr if the action was found or not.
  */
-bool Actions::Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath )
+const Action* Actions::Find(const std::wstring& szText, unsigned int idx )
 {
-  if( NULL == szText )
-  {
-    // this is not valid
-    return false;
-  }
-
   //  get the lock
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutexActions);
 
   UINT currentIdx = 0;
-  size_t size = m_Actions.size();
-  for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
+  const auto size = _actions.size();
+  for( auto it = _actions.begin(); it < _actions.end(); ++it )
   {
-    const Action &a = *(*i);
+    const auto& action = *(*it);
     // is it the command we were after?
-    if( myodd::strings::Compare( a.Command(), szText, false ) == 0 )
+    if( myodd::strings::Compare(action.Command(), szText, false ) == 0 )
     {
       // but is it the right index?
       if( idx == currentIdx )
       {
         // this is what we were looking for.
-        stdPath = a.File();
-        return true;
+        return *it;
       }
 
       // look for the next index.
@@ -96,9 +89,9 @@ bool Actions::Find( UINT idx, LPCTSTR szText, MYODD_STRING& stdPath )
  * @param const MYODD_STRING& szPath the path for that command.
  * @return Actions::array_of_actions_it the iterator for that command, (if there is one).
  */
-Actions::array_of_actions_it Actions::Find(const MYODD_STRING& szText, const MYODD_STRING& szPath )
+Actions::array_of_actions_it Actions::Find(const std::wstring& szText, const std::wstring& szPath )
 {
-  MYODD_STRING stdExpendedPath;
+  std::wstring stdExpendedPath;
   if (!myodd::files::ExpandEnvironment(szPath, stdExpendedPath))
   {
     //  probably not a valid file for us to work with.
@@ -107,127 +100,104 @@ Actions::array_of_actions_it Actions::Find(const MYODD_STRING& szText, const MYO
   }
 
   //  get the lock
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutexActions);
 
   // loop around looking for the matching action.
-  size_t size = m_Actions.size();
-  for( array_of_actions_it i = m_Actions.begin(); i < m_Actions.end(); i++ )
+  auto size = _actions.size();
+  for( auto it = _actions.begin(); it < _actions.end(); ++it )
   {
-    const Action &a = *(*i);
+    const auto& a = *(*it);
 
     //  the command cannot be NULL
     if( myodd::strings::Compare( a.Command(), szText, false ) == 0 )
     {
       if( myodd::strings::Compare(a.File(), stdExpendedPath, false) == 0 )
       {
-        return i;
+        return it;
       }
     }
   }
   
   //  not found
-  return m_Actions.end();
+  return _actions.end();
 }
 
 /**
  * \brief Add an action name and path to the vector
- * \param szText the name of the action the user will enter.
- * \param szPath the path of the file that will be executed.
+ * \param action the action we want to add.
  * \return bool success or not.
- */
-bool Actions::Add(LPCTSTR szText, LPCTSTR szPath)
-{
-  //  sanity check
-  if (szText == nullptr || _tcslen(szText) == 0)
-  {
-    return false;
-  }
-
-  const auto action = new Action(szText, szPath);
-  if (!Add(action))
-  {
-    delete action;
-    return false;
-  }
-  return true;
-}
-
-/**
- * Add an action name and path to the vector
- * @param const Action& the action we want to add.
- * @return bool success or not.
  */
 bool Actions::Add( Action* action )
 {
-  if (NULL == action)
+  if (nullptr == action)
   {
     return false;
   }
 
   //  get the lock
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutexActions);
 
-  array_of_actions_it it = Find(action->Command(), action->File() );
-  if( it != m_Actions.end() )
+  const auto it = Find(action->Command(), action->File() );
+  if( it != _actions.end() )
   {
     // this item already exists
     return false;
   }
   
   // we can add the new item now
-  m_Actions.push_back( action );
+  _actions.push_back( action );
 
   // make sure we have not reached our limit this can be changed in the config file
   // but if you have more than 2048 then we might have problems with loading speed, memory and so forth.
-  ASSERT( m_Actions.size() <= (size_t)::myodd::config::Get( L"paths\\maxcommand", 2048 ) );
+  ASSERT( _actions.size() <= static_cast<size_t>(::myodd::config::Get(L"paths\\maxcommand", 2048)) );
   
   // the action was added.
   return true;
 }
 
 /**
- * Remove a single command
- * @param LPCTSTR the name of the action the user will enter.
- * @param LPCTSTR the path of the file that will be executed.
- * @return bool success or not, if it does not exit we return false.
+ * \brief try and remove a single command
+ * \param szText the name of the action the user will enter.
+ * \param szPath the path of the file that will be executed.
+ * \return success or not, if it does not exit we return false.
  */
-bool Actions::Remove( LPCTSTR szText, LPCTSTR szPath )
+bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
 {
+  //  get the lock
+  myodd::threads::Lock guard(_mutexActions);
+
   //  look for this path and this command.
-  array_of_actions_it it = Find( szText, szPath );
-  if( it == m_Actions.end() )
+  const auto it = Find( szText, szPath );
+  if( it == _actions.end() )
   {
     // this item does not exits
     return false;
   }
 
-  //  get the lock
-  myodd::threads::Lock guard(_mutex);
-
   // delete the no longer used action.
   delete *it;
 
   // ajust erase it
-  m_Actions.erase( it );
+  _actions.erase( it );
 
   // all good.
   return true;
 }
 
 // ------------------------------------------------------------------------------------
-MYODD_STRING Actions::toChar(  const MYODD_STRING& s, const COMMANDS_VALUE& cv )
+std::wstring Actions::toChar(  const std::wstring& s, const COMMANDS_VALUE& cv )
 {
   if( s.length() == 0 )
   {
     return _T("");
   }
 
-  MYODD_STRING sBold     = _T("");
-  MYODD_STRING sItalic   = _T("");
-  MYODD_STRING sColor    = _T("");
+  std::wstring sBold     = _T("");
+  std::wstring sItalic   = _T("");
+  std::wstring sColor    = _T("");
   
-  MYODD_STRING sBold_c   = _T("");
-  MYODD_STRING sItalic_c = _T("");
+  std::wstring sBold_c   = _T("");
+  std::wstring sItalic_c = _T("");
   
   sBold     = cv.bBold? _T("<b>"): _T("");
   sBold_c   = cv.bBold? _T("</b>"): _T("");
@@ -240,7 +210,7 @@ MYODD_STRING Actions::toChar(  const MYODD_STRING& s, const COMMANDS_VALUE& cv )
     sColor    = _T(" color='#") + cv.color + _T("'");;
   }
   
-  MYODD_STRING ret = _T("");
+  std::wstring ret = _T("");
   //ret += _T("<font") + sColor + _T(">");
   ret +=  sBold;
   ret +=    sItalic;
@@ -256,10 +226,10 @@ MYODD_STRING Actions::toChar(  const MYODD_STRING& s, const COMMANDS_VALUE& cv )
 void Actions::GetCommandValue(const std::wstring& lpName, COMMANDS_VALUE& cv ) const
 {
   // get the path
-  std::wstring fullPath = ::myodd::strings::Format( L"commands\\%s", lpName.c_str() );
+  const auto fullPath = ::myodd::strings::Format( L"commands\\%s", lpName.c_str() );
 
   // get the value
-  auto get = ::myodd::config::Get(fullPath + L".color", cv.color);
+  const auto get = ::myodd::config::Get(fullPath + L".color", cv.color);
   cv.color    = static_cast<const wchar_t*>(get);
   cv.bBold    = ::myodd::config::Get( fullPath + L".bold", cv.bBold);
   cv.bItalic  = ::myodd::config::Get( fullPath + L".italic", cv.bItalic );
@@ -267,14 +237,14 @@ void Actions::GetCommandValue(const std::wstring& lpName, COMMANDS_VALUE& cv ) c
 
 // -------------------------------------------------------------
 /**
- * Get all the possible commands and match them with the string given
- * We can use common regexs to match what we are looking for
- * (.*)sometext(.*)that(.*)ignores(.*)spaces
+ * \brief Get all the possible commands and match them with the string given
+ *        We can use common regexs to match what we are looking for
+ *        (.*)sometext(.*)that(.*)ignores(.*)spaces
  *
- * remember that we need to escape all the '.' that are in the commands, (file names can have special chars).
- * If a user is looking for "google.bat" are they looking for "google\.bat" or "google(.*)bat" or "google(.)bat"?
+ *        remember that we need to escape all the '.' that are in the commands, (file names can have special chars).
+ *        If a user is looking for "google.bat" are they looking for "google\.bat" or "google(.*)bat" or "google(.)bat"?
  */
-MYODD_STRING Actions::toChar( ) const
+std::wstring Actions::ToChar()
 {
   //  get the current command, colors and style
   COMMANDS_VALUE cv( _T("000000"), 0, 0 );
@@ -288,15 +258,17 @@ MYODD_STRING Actions::toChar( ) const
   COMMANDS_VALUE cvSel( _T("808000"), 1, 1 );
   GetCommandValue( _T("selected"), cvSel );
 
+  myodd::threads::Lock guard(_mutexActionsMatch );
+
   //  the return string
   //  we keep it as global 'cause we are returning it.
   auto szCurrentView = toChar( getActionAsTyped(), cv );
   size_t count =  0;
-  for ( auto it =  m_ActionsMatch.begin(); it != m_ActionsMatch.end(); ++it )
+  for ( auto it =  _actionsMatch.begin(); it != _actionsMatch.end(); ++it )
   {
     //  we need a break after the previous line, (even for the current action)
     szCurrentView += _T("<br>");
-    const Action &acc = *(*it);
+    const auto& acc = *(*it);
 
     szCurrentView += toChar( acc.Command(), (count==m_uCommand) ? cvSel:cvDef );
     ++count;
@@ -312,29 +284,28 @@ MYODD_STRING Actions::toChar( ) const
 void Actions::ClearSearch()
 {
   //  get the lock
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_mutexActionsMatch);
 
   // reset the posible matches
   // we don't delete all the pointers.
   // because they do no belong to it.
-  m_ActionsMatch.clear();
+  _actionsMatch.clear();
 
   // and the currently selected command
   m_uCommand = 0;
 }
 
 /**
- * Create a list of possible commands
- * the problem is when the user enters arguments.
+ * \brief Create a list of possible commands
+ *        the problem is when the user enters arguments.
  *
- * for a google command - 
- * 'goog' - would match.
- * But
- * 'goog french victories' - would not macth.
- * we would need to do a regex like {goog.*}|{french*victories}
+ *        for a google command - 
+ *        'goog' - would match.
+ *        But
+ *        'goog french victories' - would not macth.
+ *        we would need to do a regex like {goog.*}|{french*victories}
  *
- * @param  none.
- * @return size_t the number of items that we matched.
+ * \return size_t the number of items that we matched.
  */
 size_t Actions::BuildMatchList( )
 {
@@ -354,10 +325,10 @@ size_t Actions::BuildMatchList( )
   }
 
   // Prepare the regex string.
-  MYODD_STRING regEx( getActionAsTyped() );
+  const auto regEx( getActionAsTyped() );
 
   //  explode all the 'words'
-  std::vector<MYODD_STRING> exploded;
+  std::vector<std::wstring> exploded;
   myodd::strings::Explode(  exploded, regEx, _T(' ') );
 
   // go back and look for as many matches as possible.
@@ -385,23 +356,19 @@ size_t Actions::BuildMatchList( )
 }
 
 /**
- * Given a number of (partial)words find a list of actions that would match.
- *
- * @param std::vector<MYODD_STRING>& the list of partial|full words.
- * @return size_t the number of items we matched.
+ * \brief Given a number of (partial)words find a list of actions that would match.
+ * \param exploded the list of partial|full words.
+ * \return the number of items we matched.
  */
-size_t Actions::BuildMatchList( std::vector<MYODD_STRING>& exploded )
+size_t Actions::BuildMatchList( std::vector<std::wstring>& exploded )
 {
-  //  get the lock
-  myodd::threads::Lock guard(_mutex);
-
   // we only want to check the first word in the command
   // so if the user passes
   // 'go french victories' then only the command 'google' should match
   // otherwise we might match other commands, 'french' or 'victories', (there are hundreds!)
-  MYODD_STRING wildAction = _T( "" );
-  std::vector<MYODD_STRING> wildActions;
-  for( std::vector<MYODD_STRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
+  std::wstring wildAction = L"";
+  std::vector<std::wstring> wildActions;
+  for( auto it = exploded.begin(); it != exploded.end(); ++it )
   {
     wildActions.push_back( _T("(") + *it + _T("\\S*)") );
   }
@@ -410,71 +377,82 @@ size_t Actions::BuildMatchList( std::vector<MYODD_STRING>& exploded )
   // make sure it is a the begining of the file.
   wildAction = _T( "^" ) + wildAction + _T( ".*" );
 
+  auto size = 0;
+  //  get the lock
+  myodd::threads::Lock guard(_mutexActions);
+
   //  the regex _should_ be {aaa}|{bbb} 
   //  but what we will do is search each exploded items one by one
-  for ( array_of_actions::const_iterator it = m_Actions.begin(); it != m_Actions.end(); ++it )
+  for (auto it = _actions.begin(); it != _actions.end(); ++it)
   {
+    ++size;
+
     //  get the possible command.
-    const Action& acc = *(*it);
-    
+    const auto& acc = *(*it);
+
     //  look for that one item.
-    if( myodd::strings::wildcmp( (wildAction), acc.Command()) )
+    if (myodd::strings::wildcmp((wildAction), acc.Command()))
     {
-      m_ActionsMatch.push_back( *it );
+      myodd::threads::Lock guardMatch(_mutexActionsMatch);
+      _actionsMatch.push_back(*it);
     }
   }
-
-  // re-order them?
-  // Steve : I guess they are already in some order since they are housed
-  //         in a windows folder, so perhaps no need to do any further ordering
-  return m_ActionsMatch.size();
+  return size;
 }
 
 // -------------------------------------------------------------
 void Actions::SetAction( Action* tmpAction )
 {
   // Reset the commands so there is no confusion
-  m_sActionAsTyped = _T("");
+  _sActionAsTyped = L"";
   BuildMatchList( );
 
-  m_tmpAction = tmpAction;
+  myodd::threads::Lock guardMatch(_mutexActionTemp);
+  _actionCurrentlySelected = tmpAction;
   if( tmpAction )
   {
-    m_sActionAsTyped = tmpAction->Command();
+    _sActionAsTyped = tmpAction->Command();
   }
 }
 
 // -------------------------------------------------------------
 //  get the currently selected command
-const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
+const Action* Actions::GetCommand()
 {
   //  do we have a posible action?
-  if( m_tmpAction )
   {
-    return m_tmpAction;
+    myodd::threads::Lock guardMatch(_mutexActionTemp);
+    if (_actionCurrentlySelected)
+    {
+      return _actionCurrentlySelected;
+    }
   }
+  myodd::threads::Lock guard(_mutexActionsMatch);
 
   //  do we have a potential action?
   // if not, then return NULL
-  if( m_uCommand >= m_ActionsMatch.size() )
+  if (m_uCommand >= _actionsMatch.size())
   {
-    return NULL;
+    return nullptr;
   }
 
   //  get the current action.
-  const Action* action = m_ActionsMatch[ m_uCommand ];
+  const Action* action = _actionsMatch[m_uCommand];
+  return action;
+}
 
-  // Add the command line if we have anything.
-  if (cmdLine == NULL)
+std::wstring Actions::GetCommandLine()
+{
+  const auto action = GetCommand();
+  if( nullptr == action )
   {
-    return action;
+    return L"";
   }
-  (*cmdLine) = _T("");
 
   // how many words are in the command?
   const auto lpAction = action->Command().c_str();
   std::vector<std::wstring> exploded;
-  const auto nSize = myodd::strings::Explode( exploded, m_sActionAsTyped, L' ' );
+  const auto nSize = myodd::strings::Explode( exploded, _sActionAsTyped, L' ' );
 
   // we now need to see how many of those words are present in the select
   // so if the actual command is 
@@ -483,9 +461,10 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
   // but the user selected the command and typed 
   // 'goo home'
   // then we need to remove only 'goo' as the other character make part of the command line.
-  MYODD_STRING wildAction = _T( "" );
-  std::vector<MYODD_STRING> wildActions;
-  for( std::vector<MYODD_STRING>::const_iterator it = exploded.begin(); it != exploded.end(); ++it )
+  std::wstring wildAction = L"";
+  std::wstring commandLine = L"";
+  std::vector<std::wstring> wildActions;
+  for( auto it = exploded.begin(); it != exploded.end(); ++it )
   {
     wildActions.push_back( _T("(") + *it + _T("\\S*)") );
     wildAction = myodd::strings::implode( wildActions, _T( "\\s+" ) );
@@ -494,20 +473,18 @@ const Action* Actions::GetCommand( MYODD_STRING* cmdLine /*= NULL*/ ) const
     if( !myodd::strings::wildcmp( (wildAction).c_str(), lpAction ) )
     {
       // this no longer match, so any words afterward make up the command.
-      (*cmdLine) = wildAction = myodd::strings::implode( _T( " " ), it, exploded.end() );
+      commandLine = wildAction = myodd::strings::implode( _T( " " ), it, exploded.end() );
       break;
     }
   }
 
   // trim the unneeded chars.
-  myodd::strings::Trim( (*cmdLine) );
-
-  // return what we have.
-  return action;
+  myodd::strings::Trim( commandLine );
+  return commandLine;
 }
 
 // -------------------------------------------------------------
-void Actions::Init()
+void Actions::Initialize()
 {
   //  get the root directory
   std::wstring commandsPath = ::myodd::config::Get( L"paths\\commands", L"" );
@@ -523,11 +500,14 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   // make sure that we do not have too many actions
   // this is a sign that something is broken
   // or that we are reading the root directory
-  if( m_Actions.size() > (size_t)::myodd::config::Get( L"paths\\maxcommand", 2048 ) )
   {
-    ASSERT( 0 ); // you have reached the limit!
-                 // it is pointless to try and add more command.
-    return;
+    myodd::threads::Lock guard(_mutexActions);
+    if (_actions.size() > static_cast<size_t>(::myodd::config::Get(L"paths\\maxcommand", 2048)))
+    {
+      ASSERT(0); // you have reached the limit!
+                   // it is pointless to try and add more command.
+      return;
+    }
   }
 
   // make sure that the path that we have is valid.
@@ -586,7 +566,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
           continue;
         }
         
-        MYODD_STRING subPath( extentionPath );
+        std::wstring subPath( extentionPath );
         subPath += fdata.name;
         myodd::files::AddTrailingBackSlash( subPath );
 
@@ -595,10 +575,10 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
       }
 
       //  ok add this command
-      MYODD_STRING szFullPath( directory);
+      auto szFullPath( directory);
       szFullPath += fdata.name;
 
-      MYODD_STRING szName( fdata.name);
+      std::wstring szName( fdata.name);
       szName = myodd::strings::lower(szName );
       
       //  if we don't want to show the extension then strip it.
@@ -607,7 +587,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
         myodd::files::StripExtension( szName );
       }        
 
-      Add( szName.c_str(), szFullPath.c_str() );
+      Add( new Action( szName, szFullPath));
     }while( _tfindnext( ffhandle, &fdata ) == 0 );
 
     _findclose( ffhandle );
@@ -619,8 +599,9 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
 // -------------------------------------------------------------
 void Actions::down()
 {
+  myodd::threads::Lock guard(_mutexActionsMatch);
   m_uCommand++;
-  if(m_uCommand>=m_ActionsMatch.size())
+  if(m_uCommand>=_actionsMatch.size())
   {
     m_uCommand = 0;
   }
@@ -629,9 +610,10 @@ void Actions::down()
 // -------------------------------------------------------------
 void Actions::up()
 {
+  myodd::threads::Lock guard(_mutexActionsMatch);
   if (m_uCommand == 0)
   {
-    m_uCommand = (m_ActionsMatch.size());
+    m_uCommand = (_actionsMatch.size());
   }
   m_uCommand--;
 }
@@ -670,7 +652,7 @@ bool Actions::IsReservedDir(const wchar_t* name ) const
  */
 void Actions::CurrentActionAdd( TCHAR c )
 {
-  m_sActionAsTyped += c;
+  _sActionAsTyped += c;
 
   //  look for possible matches
   BuildMatchList( );
@@ -684,9 +666,9 @@ void Actions::CurrentActionAdd( TCHAR c )
 void Actions::CurrentActionBack( )
 {
   // don't step back too much.
-  if( m_sActionAsTyped.length() > 0 )
+  if( _sActionAsTyped.length() > 0 )
   {
-    m_sActionAsTyped = m_sActionAsTyped.substr( 0, m_sActionAsTyped.length()-1 );
+    _sActionAsTyped = _sActionAsTyped.substr( 0, _sActionAsTyped.length()-1 );
 
     // now that we made a small change look for possible matches
     BuildMatchList( );
@@ -696,7 +678,7 @@ void Actions::CurrentActionBack( )
 // ------------------------------------------------------------------------------------
 void Actions::CurrentActionReset()
 {
-  m_sActionAsTyped = _T("");
+  _sActionAsTyped = _T("");
 
   //  look for possible matches
   BuildMatchList( );

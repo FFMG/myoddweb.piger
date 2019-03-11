@@ -21,11 +21,12 @@ public:
   /**
    * \brief The Shell constructor
    * \param src the action that is now active.
+   * \param virtualMachines, the virutal machines.
    * \param hTopHWnd the window that was on top at the time the command was given.
    * \param szCommandLine the given command line that is, the words after the command itself
    * \param isPrivileged if this action is privileged or not.
    */
-  ActiveShellAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActiveShellAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
 
   /**
    * \brief default destructor

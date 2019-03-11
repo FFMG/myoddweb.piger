@@ -8,8 +8,8 @@ import sys
 try:
     import ctypes
     
-    am.say("All good.", 10, 10 )
+    am.say("All good.", 500, 3000 )
     ctypes.windll.user32.LockWorkStation();
 except:
-    am.say("""Could not import the standard "ctypes" module.Please check your PYTHONPATH environment variable.""", 10, 10 )
+    am.say("""Could not import the standard "ctypes" module.Please check your PYTHONPATH environment variable.""", 500, 3000 )
     sys.exit(1)

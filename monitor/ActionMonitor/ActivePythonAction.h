@@ -1,15 +1,15 @@
 #pragma once
 #include "ActiveAction.h"
-class ActivePythonAction :
+class ActivePythonAction final :
   public ActiveAction
 {
 public:
-  ActivePythonAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActivePythonAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
   virtual ~ActivePythonAction();
 
 protected:
-  virtual bool OnInitialize();
-  virtual bool OnDeInitialize();
-  virtual void OnExecuteInThread();
+  bool OnInitialize() override;
+  bool OnDeInitialize() override;
+  void OnExecuteInThread() override;
 };
 

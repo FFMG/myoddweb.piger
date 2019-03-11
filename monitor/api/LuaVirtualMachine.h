@@ -1,4 +1,5 @@
 #pragma once
+#include "IVirtualMachine.h"
 
 #ifdef ACTIONMONITOR_API_LUA
 
@@ -7,15 +8,17 @@
 // support for LUA
 #include "luaapi.h"
 
-class LuaVirtualMachine
+class LuaVirtualMachine final : public IVirtualMachine
 {
 public:
-  LuaVirtualMachine(void);
-  virtual ~LuaVirtualMachine(void);
+  explicit LuaVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  ~LuaVirtualMachine();
   
-  int ExecuteInThread(const MYODD_STRING& szFile, LuaApi* api );
-
   static bool IsExt(const MYODD_STRING& file );
+
+  int Execute( const ActiveAction& action, const std::wstring& pluginFile) override;
+  void Destroy() override{};
+  bool Initialize() override { return true; };
 
 protected:
   lua_State* CreateState(LuaApi* api );
@@ -23,10 +26,6 @@ protected:
   void Dispose();
 
 protected:
-  std::mutex _mutex;
-  typedef std::map<lua_State*, LuaApi*> state_api;
-  state_api _lua_Api;
-
   static LuaApi& GetApi(lua_State* lua);
 
 public:

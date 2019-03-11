@@ -17,10 +17,10 @@ static const double ACTIONMONITOR_API_LUA_VERSION = 3.5;
 #include "../string/string.h"
 
 /**
- * \brief Todo
- * \param action the action that we are calling
+ * \copydoc
  */
-LuaApi::LuaApi(const ActiveAction& action) : HelperApi( action )
+LuaApi::LuaApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) : 
+HelperApi( action, actions, messagesHandler )
 {
 }
 

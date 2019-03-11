@@ -5,10 +5,9 @@
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
-#define IDD_ACTIONMONITOR_DIALOG        102
 #define IDR_MAINFRAME                   128
 #define IDR_MAINFRAME_ACTIVE            129
-#define IDR_TRAY                        134
+#define IDR_TRAY                        130
 #define ID_TRAY_EXIT                    32771
 #define ID_TRAY_RELOAD                  32772
 #define ID_TRAY_SAVE                    32773
@@ -19,9 +18,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        135
+#define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1003
-#define _APS_NEXT_SYMED_VALUE           104
+#define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

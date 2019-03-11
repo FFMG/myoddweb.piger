@@ -4,11 +4,10 @@
 #include "pluginVirtualMachine.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \copydoc
  */
-PluginApi::PluginApi(const ActiveAction& action) : HelperApi(action )
+PluginApi::PluginApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
+  HelperApi(action, actions, messagesHandler )
 {
 }
 
@@ -35,18 +34,18 @@ double PluginApi::Version ( )
 }
 
 /**
- * Todo
- * @see __super::say
- * @param void
- * @param void
- * @param void
- * @return void
+ * \brief Output a message on the screen
+ * \see __super::Say
+ * \param sText what to say
+ * \param elapseMiliSecondsBeforeFadeOut how long to say it for before we fade out
+ * \param totalMilisecondsToShowMessage how long to show it for.
+ * \return bool success or not.
  */
-bool PluginApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
+bool PluginApi::Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const
 {
   // display the message
   // and we can now display the message.
-  return __super::Say( msg, nElapse, nFadeOut );
+  return __super::Say(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 }
 
 /**

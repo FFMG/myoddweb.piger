@@ -11,12 +11,10 @@
 static UINT UWM_KEYBOARD_CHAR = RegisterWindowMessage(UWM_KEYBOARD_MSG_CHAR);
 static UINT UWM_KEYBOARD_UP = RegisterWindowMessage(UWM_KEYBOARD_MSG_UP);
 static UINT UWM_KEYBOARD_DOWN = RegisterWindowMessage(UWM_KEYBOARD_MSG_DOWN);
-static UINT UWM_KEYBOARD_RELOAD = RegisterWindowMessage(UWM_KEYBOARD_MSG_RELOAD);
-static UINT UWM_KEYBOARD_VERSION = RegisterWindowMessage(UWM_KEYBOARD_MSG_VERSION);
-static UINT UWM_MESSAGE_PUMP_READY = RegisterWindowMessage(UWM_MSG_MESSAGE_PUMP_READY);
 
 // IPC messages display.
 static UINT UWM_DISPLAYMESSAGE = RegisterWindowMessage( L"UWM_MSG_DISPLAYMESSAGE" );
+static UINT UWM_WAITFORALLMESSAGES = RegisterWindowMessage(L"UWM_WAITFORALLMESSAGES");
 
 //  some core functions
 static LPCTSTR ACTION_CORE_BYE = _T("this.bye");       //  close the app

@@ -1,11 +1,22 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "StdAfx.h"
 #include "helperapi.h"
 
 #include <locale>
 #include <sstream>
-
-#include "../ActionMonitor/ActionMonitor.h"
-#include "../ActionMonitor/ActionMonitorDlg.h"
 
 //  the clipboard code
 #include "../common/Clipboard.h"
@@ -13,8 +24,13 @@
 /**
  * \brief the constructor
  * \param action the action being called
+ * \param actions all the actions
+ * \param messagesHandler the interface to show messages
  */
-HelperApi::HelperApi(const ActiveAction& action) : _action( action )
+HelperApi::HelperApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+  _action( action ),
+  _actions( actions),
+  _messagesHandler(messagesHandler)
 {
 }
 
@@ -29,36 +45,14 @@ const Clipboard& HelperApi::GetClipboard() const
 
 /**
  * \brief Display a message on the string.
- * \param msg the message we want to display.
- * \param nElapse how long, (in ms), we are displaying the message for.
- * \param nFadeOut how fast we want to fade out.
+ * \param sText the message we want to display.
+ * \param elapseMiliSecondsBeforeFadeOut how long, (in ms), we are displaying the message for.
+ * \param totalMilisecondsToShowMessage how fast we want to fade out.
  * \return bool if the message was displayed properly or if there was an error.
  */
-bool HelperApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
+bool HelperApi::Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const
 {
-  if( nullptr == msg )
-  {
-    return false;
-  }
-
-  if( 0 == nElapse )
-  {
-    return false;
-  }
-
-  // it is possible for a rogue thread to try and display a message
-  // even after we have shutdown everything.
-  // if the dlg is no longer active then we will not display anything.
-  ActionMonitorDlg* pThis = static_cast<ActionMonitorDlg*>(App().GetMainWnd());
-  if( !ActionMonitorDlg::IsRunning() )
-  {
-    return false;
-  }
-
-  // simply display the message.
-  pThis->DisplayMessage( msg, nElapse, nFadeOut );
-
-  return true;
+  return _messagesHandler.Show(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 }
 
 /**
@@ -377,7 +371,7 @@ bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, const b
  * @param szPath the full path of the command that will be executed.
  * @return bool if the action was added properly or not.
  */
-bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
+bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath ) const
 {
   if( nullptr == szText || _tcslen(szText) == 0 )
   {
@@ -390,7 +384,7 @@ bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
     // only internal commands have null paths
     return false;
   }
-  return App().PossibleActions().Add( szText, szPath );
+  return _actions.Add( new Action(szText, szPath ) );
 }
 
 /**
@@ -400,7 +394,7 @@ bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath )
  * \param szPath the path of the action we are removing.
  * \return bool if the action was removed or not.
  */
-bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
+bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const
 {
   if( nullptr == szText || _tcslen(szText) == 0 )
   {
@@ -413,23 +407,30 @@ bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath )
     // only internal commands have null paths
     return false;
   }
-  return App().PossibleActions().Remove( szText, szPath );
+  return _actions.Remove( szText, szPath );
 }
 
 /**
  * \brief Find an action to see if it exists already
- * @param idx the index of the action we are looking for.
- * @param szText the name of the command we want to find
- * @param stdPath if the action exists, return the path for it.
- * @return bool if the action exits or not.
+ * \param idx the index of the action we are looking for.
+ * \param szText the name of the command we want to find
+ * \param stdPath if the action exists, return the path for it.
+ * \return if the action exits or not.
  */
-bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, MYODD_STRING& stdPath )
+bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, std::wstring& stdPath ) const
 {
   if( nullptr == szText )
   {
     return false;
   }
-  return App().PossibleActions().Find( idx, szText, stdPath );
+  const auto action = _actions.Find( szText, idx );
+  if( nullptr == action )
+  {
+    return false;
+  }
+
+  stdPath = action->File();
+  return true;
 }
 
 /** 

@@ -14,6 +14,7 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
+#include <threads/lock.h>
 #include "Actions.h"
 #include "ActiveActions.h"
 
@@ -21,21 +22,41 @@ class ActionsImmediate final :
   public Actions, ActiveActions
 {
 public:
-  explicit ActionsImmediate( const wchar_t* subDir );
+  explicit ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines);
   virtual ~ActionsImmediate() = default;
 
-public:
-  void Init() override;
+  ActionsImmediate(const ActionsImmediate&) = delete;
+  void operator=(const ActionsImmediate&) = delete;
+
+  void Initialize() override;
   void WaitForAll();
 
 protected:
-  //  no reserved directories here.
-  bool IsReservedDir( const wchar_t*)const override { return false;}
+  void DoThem();
 
-protected:
+private:
+  /**
+   * \brief no reserved directories here.
+   */
+  bool IsReservedDir(const wchar_t*)const override { return false; }
+
   /**
    * \brief the sub directory that contains the actions we want to run.
    */
-  const std::wstring m_subDir;
-  void DoThem();
+  const std::wstring _directoryToParse;
+
+  /**
+   * \brief the parent actions.
+   */
+  IActions& _parentActions;
+
+  /**
+   * \brief all the virtual machines.
+   */
+  IVirtualMachines& _virtualMachines;
+
+  /**
+   * \brief the mutex that manages the runners
+   */
+  myodd::threads::Key _mutex;
 };

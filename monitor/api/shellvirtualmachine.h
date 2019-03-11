@@ -14,52 +14,31 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #ifdef ACTIONMONITOR_S_PLUGIN
+#include "ExecuteVirtualMachine.h"
+#include "ExecuteApi.h"
 
-#include <map>
-#include <mutex>
-#include <os/ipcmessagehandler.h>
-#include "shellapi.h"
-
-class ShellVirtualMachine final : public myodd::os::IpcMessageHandler
+class ShellVirtualMachine final : public ExecuteVirtualMachine
 {
 public:
-  ShellVirtualMachine();
+  explicit ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~ShellVirtualMachine();
 
-  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action);
   static bool IsExt(const std::wstring& file);
 
-  bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
-
-  void DestroyScripts();
+  bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
+  bool Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
 
 protected:
-  void Initialize();
-
-  bool _initialized;
-
-  std::mutex _mutex;
-
-  typedef std::map<std::wstring, ShellApi*> APIS;
-  APIS _apis;
-
-  ShellApi* AddApi(const std::wstring& uuid, const ActiveAction& action);
-  ShellApi* FindApi(const std::wstring& uuid) const;
-  void RemoveApi(const std::wstring& uuid );
-  void RemoveApis();
-
-  void WaitForApi(const std::wstring& uuid);
-
   static bool ShellPath(std::wstring& szPath);
 
-protected:
   /**
    * \brief create the full command line argument that will be passed to powershell
    * \param action the action we are working with
    * \param pluginPath the path to the plugin
    * \param uuid the unique id
    */
-  virtual std::wstring GetCommandLineArguments(
+  std::wstring GetCommandLineArguments(
     const ActiveAction& action,
     const std::wstring& pluginPath,
     const std::wstring& uuid

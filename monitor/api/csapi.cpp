@@ -1,13 +1,10 @@
 #include "StdAfx.h"
-
 #include "csapi.h"
-#include "pluginVirtualMachine.h"
 
 /**
- * \brief constructor
- * \param action the action being called.
+ * \copydoc
  */
-CsApi::CsApi(const ActiveAction& action) :
-  PowershellApi(action )
+CsApi::CsApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
+  PowershellApi(uuid, action, actions, messagesHandler )
 {
 }

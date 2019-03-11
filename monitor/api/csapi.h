@@ -8,10 +8,10 @@
 // this is the version number for that particular API
 static const std::wstring ACTIONMONITOR_CS_PLUGIN_VERSION = L"0.1";
 
-class CsApi : public PowershellApi
+class CsApi final : public PowershellApi
 {
 public:
-  CsApi(const ActiveAction& action);
+  CsApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler );
   virtual ~CsApi() = default;
 };
 

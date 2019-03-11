@@ -1,41 +1,21 @@
 #pragma once
 #ifdef ACTIONMONITOR_PS_PLUGIN
+#include "executevirtualmachine.h"
 
-#include <map>
-#include <mutex>
-#include <os/ipcmessagehandler.h>
-#include "powershellapi.h"
-
-class PowershellVirtualMachine : public myodd::os::IpcMessageHandler
+class PowershellVirtualMachine : public ExecuteVirtualMachine
 {
 public:
-  PowershellVirtualMachine();
+  explicit PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~PowershellVirtualMachine();
 
-  int ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action);
   static bool IsExt(const MYODD_STRING& file);
 
-  bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
+  //  handle the post message.
+  bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
+  bool Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
 
-  void DestroyScripts();
-
-protected:
-  void Initialize();
-
-  bool _initialized;
-
-  std::mutex _mutex;
-
-  typedef std::map<std::wstring, PowershellApi*> APIS;
-  APIS _apis;
-
-  PowershellApi* AddApi(const std::wstring& uuid, const ActiveAction& action);
-  PowershellApi* FindApi(const std::wstring& uuid) const;
-  void RemoveApi(const std::wstring& uuid );
-  void RemoveApis();
-
-  void WaitForApi(const std::wstring& uuid);
-
+private:
   static bool IsPowershell3Installed();
   static bool Powershell3Path(MYODD_STRING& szPath);
 

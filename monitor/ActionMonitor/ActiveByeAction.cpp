@@ -1,15 +1,13 @@
 #include "stdafx.h"
 #include "ActiveByeAction.h"
 #include "ActionMonitor.h"
-#include "ActionMonitorDlg.h"
 
 /**
- * Constructor
- * @param const Action& src the parent action
- * @param HWND hTopHWnd the top window at the time of the call.
+ * \copydoc
  */
-ActiveByeAction::ActiveByeAction(const Action& src, HWND hTopHWnd ) :
-  ActiveAction( src, hTopHWnd, L"", false  )
+ActiveByeAction::ActiveByeAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
+  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  ),
+  _application( application )
 {
 }
 
@@ -35,24 +33,5 @@ bool ActiveByeAction::OnDeInitialize()
  */
 void ActiveByeAction::OnExecuteInThread()
 {
-  // close all the active windows
-  // we no longer need them.
-  auto pThis = static_cast<ActionMonitorDlg*>(App().GetMainWnd());
-  pThis->KillAllActiveWindows();
-
-  // let the end actions proceed.
-  // we are creating a thread within a thread.
-  App().DoEndActionsList( true );
-
-  // while the app is running, we might still have some windows
-  // that are still visible.
-  // so before closing anything we have to wait for them to complete.
-  pThis->WaitForActiveWindows();
-
-  //  close us
-  auto pWnd = App().GetMainWnd();
-  if (pWnd)
-  {
-    pWnd->PostMessage(WM_CLOSE, 0, 0);
-  }
+  _application.Close();
 }

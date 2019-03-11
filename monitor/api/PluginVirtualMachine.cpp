@@ -3,142 +3,97 @@
 #ifdef ACTIONMONITOR_API_PLUGIN
 
 #include "PluginVirtualMachine.h"
-#include "ActionMonitor.h"
-#include "../threads/lock.h"
 #include "amplugin\ampluginprivate.h"
 
 /**
- * Todo
- * @param void
- * @return void
+ * \copydoc
  */
-PluginVirtualMachine::PluginVirtualMachine() : 
-  _amPlugin( nullptr )
+PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine( actions, messagesHandler, iIpcListener ),
+  _amPlugin( nullptr ),
+  _containerKey( L"Plugins Container")
 {
   //  get our own module architecture.
   _moduleArchitecture = myodd::os::GetImageArchitecture( nullptr );
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief destructor
  */
 PluginVirtualMachine::~PluginVirtualMachine()
 {
-  //  destroy all the plugins.
-  DestroyPlugins();
-
+  VirtualMachineLists<std::thread::id, PluginApi>::Instance().Dispose();
   // remove the plugins list
   delete _amPlugin;
 }
 
 /**
- * Remove the current thread API from our list.
- * @param PluginApi* api the api we wish to remove.
- * @return bool if the item was removed or not.
+ * \brief Remove the current thread API from our list.
+ * \param api the api we wish to remove.
+ * \return if the item was removed or not.
  */
 bool PluginVirtualMachine::DisposeApi(PluginApi* api)
 {
-  // lock it
-  myodd::threads::Lock guard( _mutex );
-  
-  // find this thread
-  for (ListOfPlugins::const_iterator it = _apis.begin();
-    it != _apis.end();
-    ++it)
-  {
-    if (it->second == api)
-    {
-      // the thread id should be this one.
-      if( it->first != std::this_thread::get_id() )
-      {
-        myodd::log::LogError(_T("Removed an Api from the list of plugin, but the one we removed was not from this thread id."));
-      }
-
-      // remove it.
-      _apis.erase(it);
-
-      // we found it.
-      return true;
-    }
-  }
-
-  // we did not find it.
-  return false;
+  return VirtualMachineLists<std::thread::id, PluginApi>::Instance().Dispose(api);
 }
 
 /**
- * Add an api to our current list of plugins.
- * this must be in thread
- * @param PluginApi* api the api we would like to add.
+ * \brief Add an api to our current list of plugins.
+ *        this must be in thread
+ * \param api the api we would like to add.
  */
 void PluginVirtualMachine::AddApi(PluginApi* api)
 {
-  // lock it
-  myodd::threads::Lock guard(_mutex);
-
-  ListOfPlugins::const_iterator it = _apis.find(std::this_thread::get_id());
-  if (it != _apis.end())
-  {
-    // we are trying to add an api
-    // to more than one thread.
-    throw - 1;
-  }
-
-  // add it
-  _apis[std::this_thread::get_id()] = api;
+  VirtualMachineLists<std::thread::id, PluginApi>::Instance().AddApi(std::this_thread::get_id(), api );
 }
 
+/**
+ * \brief Called by the plugins to find the currently running action.
+ * \return get the plugin api so we can call helper functions.
+ */
 PluginApi& PluginVirtualMachine::GetApi()
 {
-#ifndef ACTIONMONITOR_API_PLUGIN
-  throw - 1;
-#else
-  // get our current self.
-  PluginVirtualMachine* pvm = App().GetPluginVirtualMachine();
-
-  // for now, get the first value...
-  // @todo, we need to get the actual thread id running.
-  ListOfPlugins::const_iterator it = pvm->_apis.find(std::this_thread::get_id());
-  if (it == pvm->_apis.end() )
-  {
-    throw -1;
-  }
-  return *(it->second);
-#endif
+  return VirtualMachineLists<std::thread::id, PluginApi>::Instance().GetApi(std::this_thread::get_id());
 }
 
 /**
- * Todo
- * @param void
- * @return void
+ * \brief Initialize the virtual machine
+ * \return bool success or not.
  */
-void PluginVirtualMachine::Initialize()
+bool PluginVirtualMachine::Initialize()
 {
   //  only do it once
-  if (_amPlugin == NULL)
+  if (_amPlugin != nullptr)
   {
-    //  get the lock.
-    myodd::threads::Lock guard(_mutex);
-
-    // double lock...
-    if (_amPlugin == NULL)
-    {
-      //  we can now create it.
-      _amPlugin = new AmPluginPrivate();
-
-      // register our Plugin functions.
-      InitializeFunctions();
-    }
+    return true;
   }
 
+  //  get the lock.
+  myodd::threads::Lock guard(_pluginKey);
+
+  // double lock...
+  if (_amPlugin != nullptr)
+  {
+    return true;
+  }
+
+  try
+  {
+    //  we can now create it.
+    _amPlugin = new AmPluginPrivate();
+
+    // register our Plugin functions.
+    InitializeFunctions();
+    return true;
+  }
+  catch( ... )
+  {
+    return false;
+  }
 }
 
 /**
-* Todo
-* @param void
-* @return void
+* \brief register all the valid actions and the correcponding functions.
 */
 void PluginVirtualMachine::InitializeFunctions()
 {
@@ -147,7 +102,7 @@ void PluginVirtualMachine::InitializeFunctions()
   Register(_T("getCommand"), PluginVirtualMachine::GetCommand);
   Register(_T("getAction"), PluginVirtualMachine::GetAction);
   Register(_T("getCommandCount"), PluginVirtualMachine::GetCommandCount);
-  Register(_T("execute"), PluginVirtualMachine::Execute);
+  Register(_T("execute"), PluginVirtualMachine::ExecuteInPlugin);
   Register(_T("getString"), PluginVirtualMachine::GetString);
   Register(_T("getFile"), PluginVirtualMachine::GetFile);
   Register(_T("getFolder"), PluginVirtualMachine::GetFolder);
@@ -168,7 +123,9 @@ void PluginVirtualMachine::InitializeFunctions()
  */
 bool PluginVirtualMachine::Register( LPCTSTR what, void* with )
 {
-  if( !_amPlugin )
+  Initialize();
+  myodd::threads::Lock guard(_pluginKey);
+  if( nullptr == _amPlugin )
   {
     return false;
   }
@@ -192,15 +149,15 @@ bool PluginVirtualMachine::IsExt(const MYODD_STRING& file )
  * @param void
  * @return void
  */
-PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const MYODD_STRING& s)
+PluginVirtualMachine::PLUGIN_THREAD* PluginVirtualMachine::Find( const std::wstring& s)
 {
   //  get the lock.
-  myodd::threads::Lock guard( _mutex );
+  myodd::threads::Lock guard( _containerKey );
 
-  PLUGIN_CONTAINER::const_iterator iter = m_pluginsContainer.find( s );
-  if( iter == m_pluginsContainer.end() )
+  const auto iter = _pluginsContainer.find( s );
+  if( iter == _pluginsContainer.end() )
   {
-    return NULL;
+    return nullptr;
   }
 
   // return what was found.
@@ -220,9 +177,9 @@ HMODULE PluginVirtualMachine::ExpandLoadLibrary( LPCTSTR lpFile )
   if( !myodd::files::ExpandEnvironment( lpFile, lpExpandFile ) )
   {
     //  something broke.
-    return NULL;
+    return nullptr;
   }
-  HMODULE hMod = LoadLibrary( lpExpandFile );
+  auto hMod = LoadLibrary( lpExpandFile );
   delete [] lpExpandFile;
   return hMod;
 }
@@ -266,15 +223,10 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
   return result;
 }
 
-/**
- * Todo
- * @param void
- * @return void
- */
-int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction& action )
+int PluginVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
 {
   Initialize();
-  if (NULL == _amPlugin)
+  if (nullptr == _amPlugin)
   {
     // the plugin manager was not created?
     // or could not be created properly
@@ -282,11 +234,11 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile, const ActiveAction
   }
 
   // add the api to the list.
-  auto api = new PluginApi(action);
+  auto api = new PluginApi(action, GetActions(), GetMessagesHandler() );
   AddApi( api );
 
   // execute this plugin
-  auto result = ExecuteInThread(pluginFile);
+  const auto result = ExecuteInThread(pluginFile.c_str() );
 
   // dispose of the api
   if( false == DisposeApi( api ) )
@@ -318,17 +270,17 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
     myodd::os::ARCHITECTURE pe = myodd::os::GetImageArchitecture(pluginFile);
     if (pe == myodd::os::ARCHITECTURE_UNKNOWN)
     {
-      api.Say(_T("<b>Error : </b> Plugin could not be loaded."), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded."), 500, 3000);
     }
     else
     if (pe != _moduleArchitecture )
     {
-      api.Say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded, the architecture of the plugin does not match our own!"), 500, 3000);
     }
     else
     {
       //  it is not unknown, but somehow we could not load it.
-      api.Say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 3000, 5);
+      api.Say(_T("<b>Error : </b> Plugin could not be loaded, are some required dlls missing?"), 500, 3000);
     }
     return -1;
   }
@@ -337,17 +289,17 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
   auto pfMsg = (PFUNC_MSG)GetProcAddress( hModule, "am_Msg");
   if (NULL == pfMsg )
   {
-    api.Say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 3000, 5 );
+    api.Say( _T("<b>Error : </b> Missing Function '<i>am_Msg</i>' )</i>"), 500, 3000);
     return -1;
   }
 
-  PLUGIN_THREAD* f = new PLUGIN_THREAD;
-  f-> hModule = hModule;
-  f-> fnMsg   = pfMsg;
+  auto pluginThread = new PLUGIN_THREAD;
+  pluginThread-> hModule = hModule;
+  pluginThread-> fnMsg   = pfMsg;
 
   //  get the lock.
-  myodd::threads::Lock guard(_mutex);
-  m_pluginsContainer[ pluginFile ] = f;
+  myodd::threads::Lock guard( _containerKey );
+  _pluginsContainer[ pluginFile ] = pluginThread;
 
   // assume error 
   auto result = AM_RESP_NONE;
@@ -389,10 +341,10 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
 void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
 {
   //  get the lock.
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guard(_containerKey );
 
-  PLUGIN_CONTAINER::const_iterator iter = m_pluginsContainer.find( plugin );
-  if( iter == m_pluginsContainer.end() )
+  const auto iter = _pluginsContainer.find( plugin );
+  if( iter == _pluginsContainer.end() )
   {
     return;
   }
@@ -400,7 +352,7 @@ void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
   try
   {
     //  try and destroy it.
-    PLUGIN_THREAD* f = iter->second;
+    const auto f = iter->second;
  
     // destroy
     f-> fnMsg( AM_MSG_DEINIT, 0, 0 );
@@ -414,7 +366,7 @@ void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
   }
 
   //  remove it from the list.
-  m_pluginsContainer.erase( iter );
+  _pluginsContainer.erase( iter );
 }
 
 /**
@@ -422,18 +374,18 @@ void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
  * @param void
  * @return void
  */
-void PluginVirtualMachine::DestroyPlugins()
+void PluginVirtualMachine::Destroy()
 {
   //  get the lock.
-  myodd::threads::Lock guard(_mutex);
+  myodd::threads::Lock guardContainer( _containerKey);
 
   //  we must clear all the thread.
-  for( PLUGIN_CONTAINER::const_iterator it = m_pluginsContainer.begin(); 
-       it != m_pluginsContainer.end(); 
+  for( auto it = _pluginsContainer.begin(); 
+       it != _pluginsContainer.end(); 
        ++it 
      )
   {
-    PLUGIN_THREAD* f = it->second;
+    auto f = it->second;
 
     // destroy
     f-> fnMsg( AM_MSG_DEINIT, 0, 0 );
@@ -447,14 +399,16 @@ void PluginVirtualMachine::DestroyPlugins()
   }// for each modules.
 
   // and remove everything
-  m_pluginsContainer.erase( m_pluginsContainer.begin(), m_pluginsContainer.end() );
+  _pluginsContainer.erase( _pluginsContainer.begin(), _pluginsContainer.end() );
+
+  myodd::threads::Lock guardPlugin(_pluginKey);
+  delete _amPlugin;
+  _amPlugin = nullptr;
 }
 
 /**
-* Todo
-* @see __super::version
-* @param void
-* @return void
+* \brief get the version number of application monitor
+* \return the version number.
 */
 double PluginVirtualMachine::Version()
 {
@@ -462,27 +416,24 @@ double PluginVirtualMachine::Version()
 }
 
 /**
-* Todo
-* @see __super::say
-* @param void
-* @param void
-* @param void
-* @return void
+* \brief output a fading message
+* \param sText the message to output
+* \param elapseMiliSecondsBeforeFadeOut how long we want to show the message before fade out.
+* \param totalMilisecondsToShowMessage how long we want to display the message, including fade out.
 */
-bool PluginVirtualMachine::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut)
+bool PluginVirtualMachine::Say(const wchar_t* sText, const unsigned int elapseMiliSecondsBeforeFadeOut, const unsigned int totalMilisecondsToShowMessage)
 {
-  return GetApi().Say(msg, nElapse, nFadeOut);
+  return GetApi().Say(sText, elapseMiliSecondsBeforeFadeOut, totalMilisecondsToShowMessage);
 }
 
 /**
-* Todo
-* @see __super::getCommand
-* @param void
-* @param void
-* @param void
-* @return void
-*/
-size_t PluginVirtualMachine::GetCommand(UINT idx, DWORD nBufferLength, wchar_t* lpBuffer)
+ * \brief get a command and pass it to the buffer.
+ * \param idx the index number of the command we are after.
+ * \param nBufferLength the max length of the buffer.
+ * \param lpBuffer the data container
+ * \return the actual size of the command.
+ */
+size_t PluginVirtualMachine::GetCommand(const UINT idx, const DWORD nBufferLength, wchar_t* lpBuffer)
 {
   return GetApi().GetCommand( idx, nBufferLength, lpBuffer);
 }
@@ -518,7 +469,7 @@ size_t PluginVirtualMachine::GetCommandCount()
 * @param bool isPrivileged if we need administrator privilege to run this.
 * @return void
 */
-bool PluginVirtualMachine::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
+bool PluginVirtualMachine::ExecuteInPlugin(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged )
 {
   return GetApi().Execute(module, cmdLine, isPrivileged, nullptr );
 }

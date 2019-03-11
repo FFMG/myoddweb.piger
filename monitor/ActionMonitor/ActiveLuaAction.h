@@ -4,7 +4,7 @@ class ActiveLuaAction :
   public ActiveAction
 {
 public:
-  ActiveLuaAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActiveLuaAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
   virtual ~ActiveLuaAction();
 
 protected:

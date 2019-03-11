@@ -14,7 +14,8 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
-#include <map>
+#include <vector>
+#include <threads/lock.h>
 #include "activeaction.h"
 #include "threads/workers.h"
 
@@ -24,17 +25,27 @@ public:
   ActiveActions();
 	virtual ~ActiveActions();
 
+  ActiveActions(const ActiveActions&) = delete;
+  void operator=(const ActiveActions&) = delete;
+
   void QueueAndExecute( ActiveAction* activeAction );
 
-  static void Execute(ActiveAction* runner, ActiveActions* parent );
+private:
+  static void Execute(ActiveAction* runner, ActiveActions* parent);
 
-protected:
-  DISALLOW_COPY_AND_ASSIGN(ActiveActions);
+  /**
+   * \brief the mutex that manages the runners
+   */
+  myodd::threads::Key _mutexRunner;
 
-protected:
-  std::mutex _mutex;
-  typedef std::map<ActiveAction*, ActiveAction*> Runners;
+  /**
+   * \brief the collection of runners.
+   */
+  typedef std::vector<ActiveAction*> Runners;
   Runners _runners;
 
+  /**
+   * \brief look for and remove a runner.
+   */
   void RemoveRunner(ActiveAction* runner);
 };

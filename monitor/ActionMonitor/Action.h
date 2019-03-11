@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "../api/IVirtualMachines.h"
 
 class ActiveAction;
 class Action  
@@ -22,11 +23,11 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  virtual ActiveAction* CreateActiveAction(CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const;
+  virtual ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const;
 
   // Same as CreateActiveAction( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  ActiveAction* CreateActiveActionDirect(CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionDirect( IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged ) const;
 
   /**
    * \brief get the command string
@@ -39,7 +40,7 @@ public:
   size_t Len() const { return _szCommand.length();}
 
 protected:
-  ActiveAction* CreateActiveActionWithNoCommandLine(CWnd* pWnd, bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionWithNoCommandLine(IVirtualMachines& virtualMachines, CWnd* pWnd, bool isPrivileged ) const;
 
   /**
    * \brief convert a multi line piece of text to a single line.

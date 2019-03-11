@@ -16,47 +16,37 @@
 
 // add the APLI libs
 #ifdef ACTIONMONITOR_S_PLUGIN
-#include "helperapi.h"
+#include "ExecuteApi.h"
 #include <string>
 
 // this is the version number for that particular API
 static const std::wstring ACTIONMONITOR_S_PLUGIN_VERSION = L"0.1";
 
-class ShellApi final : public HelperApi
+class ShellApi final : public ExecuteApi
 {
 public:
-  explicit ShellApi(const ActiveAction& action);
+  explicit ShellApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler );
   virtual ~ShellApi() = default;
 
 public:
-  bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const override;
+  bool Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool Version (const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
 
-  bool Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool Version (const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
+  bool Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
 
-  bool Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;
+  bool FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
+  bool RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
 
-  bool FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-  bool RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-
-  bool GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const;
-
-  void SetHandle(HANDLE process);
-  HANDLE GetHandle() const;
-
-private:
-  HANDLE _hProcess;
+  bool GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) const override;
 };
-
 #endif

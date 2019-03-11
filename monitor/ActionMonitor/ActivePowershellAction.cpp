@@ -1,16 +1,16 @@
 #include "stdafx.h"
 #include "ActivePowershellAction.h"
-#include "ActionMonitor.h"
 
 /**
- * The powershell contructor
- * @param const Action& src the action that is now active.
- * @param HWND hTopHWnd the window that was on top at the time the command was given.
- * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
- * @param bool isPrivileged if this action is privileged or not.
+ * \brief The powershell constructor
+ * \param src the action that is now active.
+ * \param virtualMachines the virtual machines
+ * \param hTopHWnd the window that was on top at the time the command was given.
+ * \param szCommandLine the given command line that is, the words after the command itself
+ * \param isPrivileged if this action is privileged or not.
  */
-ActivePowershellAction::ActivePowershellAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
-  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
+ActivePowershellAction::ActivePowershellAction(const Action& src, IVirtualMachines& virtualMachines, const HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+  ActiveAction( src, virtualMachines, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 
@@ -33,11 +33,11 @@ bool ActivePowershellAction::OnInitialize()
 void ActivePowershellAction::OnExecuteInThread()
 {
   //  the file.
-  const MYODD_STRING& szFile = File();
+  const auto& szFile = File();
 
   // create the Python Api.
-  auto pvm = App().GetPowershellVirtualMachine();
+  auto& pvm = _virtualMachines.Get(IVirtualMachines::Type::Powershell );
   
   // we can now execute the thread.
-  pvm->ExecuteInThread( szFile.c_str(), *this );
+  pvm.Execute(*this, szFile );
 }

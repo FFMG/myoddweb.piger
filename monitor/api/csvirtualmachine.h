@@ -3,15 +3,16 @@
 
 #include "csapi.h"
 
-class CsVirtualMachine : public PowershellVirtualMachine
+class CsVirtualMachine final : public PowershellVirtualMachine
 {
 public:
-  CsVirtualMachine();
+  explicit CsVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~CsVirtualMachine();
 
   static bool IsExt(const MYODD_STRING& file);
 
-
+  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
+  
 protected:
   /**
    * \brief create the full command line argument that will be passed to powershell

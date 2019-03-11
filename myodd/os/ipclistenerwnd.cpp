@@ -20,17 +20,38 @@
 
 namespace myodd {
 namespace os {
-  IpcListenerWnd::IpcListenerWnd(const wchar_t* pszClassName, HWND pParent, std::mutex& mutex, IpcMessageHandler& handler) :
+  IpcListenerWnd::IpcListenerWnd(const wchar_t* pszClassName, threads::Key& mutex, IpcMessageHandler& handler) :
     _mutex( mutex ),
-    _pParentWnd(pParent),
     _handler( handler )
   {
+    if( !CreateClass(pszClassName) )
+    {
+      throw "Can't register IpcListener window class.";
+    }
+
+    // one way or another the class was created.
+    // so we can create our listener accordingly.
+    if (!CWnd::CreateEx(0, pszClassName, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
+    {
+      throw "Can't create IpcListener window.";
+    }
+
+    CWnd::UpdateWindow();
+
+    // save this pointer
+    SetWindowLongPtr(GetSafeHwnd(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+  }
+
+  bool IpcListenerWnd::CreateClass(const wchar_t* pszClassName)
+  {
     //  the instance of this module
-    const auto hInstance = ::GetModuleHandle( nullptr );
-    WNDCLASSEX wcx; 
+    const auto hInstance = ::GetModuleHandle(nullptr);
+    WNDCLASSEX wcx;
+    memset(&wcx, 0, sizeof(WNDCLASSEX));
+
     if (GetClassInfoEx(hInstance, pszClassName, &wcx))
     {
-      throw "The server already exists.";
+      return true;
     }
 
     wcx.cbSize = sizeof(wcx);
@@ -42,31 +63,15 @@ namespace os {
     wcx.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
     wcx.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcx.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
-    wcx.lpszMenuName = L"MainMenu";
+    wcx.lpszMenuName = nullptr;
     wcx.lpszClassName = pszClassName;
-    wcx.hIconSm = static_cast<HICON>(LoadImage(hInstance,
-                                               MAKEINTRESOURCE(5),
-                                               IMAGE_ICON,
-                                               GetSystemMetrics(SM_CXSMICON),
-                                               GetSystemMetrics(SM_CYSMICON),
-                                               LR_DEFAULTCOLOR));
+    wcx.hIconSm = LoadIcon(nullptr, IDI_APPLICATION);
 
     if (!RegisterClassEx(&wcx))
     {
-      throw "Can't register IpcListener window class.";
+      return false;
     }
-
-    // one way or another the class was created.
-    // so we can create our listener accordingly.
-    if (!this->CWnd::CreateEx(0, pszClassName, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr))
-    {
-      throw "Can't create IpcListener window.";
-    }
-
-    this->CWnd::UpdateWindow();
-
-    // save this pointer
-    SetWindowLongPtr(GetSafeHwnd(), GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
+    return true;
   }
 
   bool IpcListenerWnd::MessageStructFromCopyData(const COPYDATASTRUCT& cds, IpcMessageStruct& ipcMessageStructure)
@@ -88,7 +93,7 @@ namespace os {
     return true;
   }
 
-  LRESULT CALLBACK IpcListenerWnd::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+  LRESULT CALLBACK IpcListenerWnd::WindowProc(const HWND hwnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam)
   {
     //  is it a copy data message?
     // if not, then it is just a message for this window.
@@ -98,7 +103,7 @@ namespace os {
       return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
-    auto wndClass = reinterpret_cast<IpcListenerWnd *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+    const auto wndClass = reinterpret_cast<IpcListenerWnd *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
     if (nullptr == wndClass)
     {
       // pass this to whatever window that is.
@@ -119,12 +124,7 @@ namespace os {
     {
       return 0;
     }
-
-#if defined(_WIN64)
-    return ::SendMessage(_pParentWnd, ims.uMsg, ims.wParam, ims.lParam);
-#else
-    return ::SendMessage(_pParentWnd, ims.uMsg, static_cast<unsigned int>(ims.wParam), static_cast<long>(ims.lParam));
-#endif // X64
+    return _handler.HandleIpcSendMessage(ims.uMsg, static_cast<unsigned int>(ims.wParam), static_cast<long>(ims.lParam));
   }
 
   LRESULT IpcListenerWnd::_WindowProcPost(const COPYDATASTRUCT& cds) const
@@ -136,15 +136,11 @@ namespace os {
       return 0;
     }
 
-    // pass this to the parent window
-#if defined(_WIN64)
-    return ::PostMessage(_pParentWnd, ims.uMsg, ims.wParam, ims.lParam);
-#else
-    return ::PostMessage(_pParentWnd, ims.uMsg, static_cast<unsigned int>(ims.wParam), static_cast<long>(ims.lParam));
-#endif // X64
+    // pass this to the handler
+    return _handler.HandleIpcPostMessage(ims.uMsg, ims.wParam, ims.lParam);
   }
 
-  LRESULT IpcListenerWnd::_WindowProcCopy(const COPYDATASTRUCT& cds)
+  LRESULT IpcListenerWnd::_WindowProcCopy(const COPYDATASTRUCT& cds) const
   {
     try
     {
@@ -168,7 +164,7 @@ namespace os {
 
       // try and open the file map, it should be opened by the sender.
       // if not, then there is an error somewhere.
-      auto hMapFile = OpenFileMappingW(FILE_MAP_ALL_ACCESS, false, ipcRequest.GetGuid().c_str());
+      const auto hMapFile = OpenFileMappingW(FILE_MAP_ALL_ACCESS, false, ipcRequest.GetGuid().c_str());
       if (hMapFile == nullptr)
       {
         // we _did_ get a guid, but we could not open it.
@@ -177,7 +173,7 @@ namespace os {
       }
 
       //  get the buffer.
-      auto pBuf = static_cast<unsigned char*>(MapViewOfFile(hMapFile, // handle to map object
+      const auto pBuf = static_cast<unsigned char*>(MapViewOfFile(hMapFile, // handle to map object
         FILE_MAP_ALL_ACCESS,  // read/write permission
         0,
         0,
@@ -187,7 +183,7 @@ namespace os {
       if (pBuf != nullptr)
       {
         //  get the response pointer.
-        auto pData = ipcResponse.GetPtr();
+        const auto pData = ipcResponse.GetPtr();
 
         // the data size, we must make sure it is 4bytes
         // a signed int in c# is 4 bytes and should also be in c++
@@ -215,33 +211,26 @@ namespace os {
     return 1;
   }
 
-  LRESULT IpcListenerWnd::_WindowProc(const COPYDATASTRUCT& cds)
+  LRESULT IpcListenerWnd::_WindowProc(const COPYDATASTRUCT& cds) const
   {
-    if (nullptr != _pParentWnd)
+    // lock the thread
+    threads::Lock autoLock(_mutex);
+
+    // then simply reconstruct the message
+    switch (static_cast<IpcMessageType>(cds.dwData))
     {
-      // lock the thread
-      threads::Lock autoLock(_mutex);
+    case IpcMessageType::Send:
+      return _WindowProcSend(cds);
 
-      // now that we have the lock, do we still have a window?
-      if (nullptr != _pParentWnd)
-      {
-        // then simply reconstruct the message
-        switch (static_cast<IpcMessageType>(cds.dwData))
-        {
-        case IpcMessageType::Send:
-          return _WindowProcSend(cds);
+    case IpcMessageType::Post:
+      return _WindowProcPost(cds);
 
-        case IpcMessageType::Post:
-          return _WindowProcPost(cds);
+    case IpcMessageType::Copy:
+      return _WindowProcCopy(cds);
 
-        case IpcMessageType::Copy:
-          return _WindowProcCopy(cds);
-
-        default:
-          //  unknown message type
-          break;
-        }
-      }
+    default:
+      //  unknown message type
+      break;
     }
 
     // if we reach this then we have an unknwon type or the window is no longer valid..

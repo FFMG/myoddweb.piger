@@ -9,8 +9,8 @@
  * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
  * @param bool isPrivileged if this action is privileged or not.
  */
-ActiveDefaultAction::ActiveDefaultAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
-  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
+ActiveDefaultAction::ActiveDefaultAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+  ActiveAction( src, virtualMachines, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 

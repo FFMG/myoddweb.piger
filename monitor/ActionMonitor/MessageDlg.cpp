@@ -14,62 +14,45 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "MessageDlg.h"
+#include "MemDC.h"
 
-IMPLEMENT_DYNAMIC(MessageDlg, CDialog)
+#define MAX_TRANSPARENCY (unsigned char)255
+#define DEFAULT_TRANSPARENCY (unsigned char)127
 
 /**
  * \brief the constructor
  * \see CDialog::CDialog
- * \param pParent the parent window.
  */
-MessageDlg::MessageDlg(CWnd* pParent /*=NULL*/)
-  : CDialog(MessageDlg::IDD, pParent),
+MessageDlg::MessageDlg()
+  : CommonWnd( L"MessageDlg" ),
     FadeWnd(), 
-    _mNFadeOut(0),
-    _mNElapse(0)
+    _totalMilisecondsToShowMessage(0),
+    _elapseMiliSecondsBeforeFadeOut(0)
 {
+  _completeRect = { 0,0,0,0 };
 }
 
-/**
- * Todo
- * \see CDialog::DoDataExchange
- * \param pDX the data exchange being processed.
- * \return void
- */
-void MessageDlg::DoDataExchange(CDataExchange* pDX)
+MessageDlg::~MessageDlg()
 {
-	CDialog::DoDataExchange(pDX);
-}
-
-BEGIN_MESSAGE_MAP(MessageDlg, CDialog)
-  ON_WM_PAINT()
-  ON_WM_CLOSE()
-END_MESSAGE_MAP()
-
-/**
- * \brief the dialog is about to destroy itself.
- * \see CDialog::PostNcDestroy
- */
-void MessageDlg::PostNcDestroy()
-{
-  delete this;
+  Stop();
+  CommonWnd::Close();
 }
 
 /**
  * \brief called when the window is being created, we can then set our own values.
  * \see CDialog::Create
  * \param sText the text we want to display
- * \param nElapse how long we want to display the message for
- * \param nFadeOut where the fade start from.
+ * \param elapseMiliSecondsBeforeFadeOut how long we want to display the message for before we fade out.
+ * \param totalMilisecondsToShowMessage how long we want the message to be displayed including before fading out.
  */
-void MessageDlg::Create(const std::wstring& sText, const int nElapse, const int nFadeOut)
+void MessageDlg::Create(const std::wstring& sText, const long elapseMiliSecondsBeforeFadeOut, const long totalMilisecondsToShowMessage)
 {
   //  save the value
-  _mNFadeOut = nFadeOut;
+  _totalMilisecondsToShowMessage = totalMilisecondsToShowMessage;
   _mStdMessage = sText;
-  _mNElapse = nElapse;
+  _elapseMiliSecondsBeforeFadeOut = elapseMiliSecondsBeforeFadeOut;
 
-  __super::Create( MessageDlg::IDD );
+  __super::Create();
 }
 
 /**
@@ -78,11 +61,11 @@ void MessageDlg::Create(const std::wstring& sText, const int nElapse, const int 
 void MessageDlg::InitWindowPos()
 {
   //  get the size of the windows
-  const auto hdc = ::GetDC( m_hWnd );
+  const auto hdc = ::GetDC( GetSafeHwnd() );
 
   //  get the font that we will be using for display
   //  because of the XML config this is only really used for size.
-  const auto pOldFont = SelDisplayFont( hdc );
+  const auto pOldFont = SelDisplayFont( hdc, 35 );
 
   RECT r = {0,0,0,0};
   myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
@@ -104,27 +87,18 @@ void MessageDlg::InitWindowPos()
   //  pad a little
   widthM  += 2 * static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
   heightM += 2 * static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
-
-
+  
   //  move the window to the top left hand corner 
-  SetWindowPos( &wndTopMost, 
+  SetWindowPos(GetSafeHwnd(),
+                HWND_TOPMOST,
                 (width - widthM/2), 
                 (height - heightM/2), 
                 (widthM), 
                 (heightM), 
                 SWP_HIDEWINDOW );
-}
 
-/**
- * \brief set the font we will be using to display the message
- * \param hdc the device context handle
- * \param fontSize the size of the font.
- * \return the created font.
- */
-HGDIOBJ MessageDlg::SelDisplayFont(const HDC hdc, UINT fontSize )
-{
-  // TODO replace magic number.
-  return __super::SelDisplayFont( hdc, 35 );
+  // save the full rectangle
+  _completeRect = { 0,0, widthM, heightM };
 }
 
 /**
@@ -160,39 +134,75 @@ void MessageDlg::Fade(MessageDlg* owner )
 /**
  * \brief do the actual fading.
  */
-void MessageDlg::DoFade()
+void MessageDlg::DoFade() const
 {
-  // 0 means that we move right away
-  if (_mNFadeOut <= 0)
+  // if we do not want to show the message, we might as well hide it right away.
+  if ((_totalMilisecondsToShowMessage+_elapseMiliSecondsBeforeFadeOut) <= 0)
   {
     return;
   }
 
-  const auto bStart = ::myodd::config::Get(L"commands\\transparency", 127);
-  for (auto b = bStart; b > 0; --b)
+  // where we want the transparancy to start from, (we will end at zero)
+  const auto startTransparency = GetStartTransparency();
+
+  // if we want to show the message for a total of _totalMilisecondsToShowMessage
+  // but we want to wait for _elapseMiliSecondsBeforeFadeOut before we go
+  // how many milliseconds do we have before we need to fade out.
+  const auto timeLeftForFadeOutMilliseconds = _totalMilisecondsToShowMessage - _elapseMiliSecondsBeforeFadeOut;
+
+  // and given that we have 'startTransparency' steps to fade out in
+  // the number of milliseconds between each steps is ...
+  // the sleep time _could_ be zero
+  const auto waitTimeBetweenFadeStepsInMilliseconds = static_cast<long>(static_cast<double>(timeLeftForFadeOutMilliseconds) / static_cast<double>(startTransparency));
+
+  // show the message without any fadding.
+  for (auto timeToSleptInMilliseconds = 0;
+    timeToSleptInMilliseconds < _elapseMiliSecondsBeforeFadeOut;
+    timeToSleptInMilliseconds += (waitTimeBetweenFadeStepsInMilliseconds <= 0 ? 1 : waitTimeBetweenFadeStepsInMilliseconds)
+    )
   {
-    Transparent(b);
-    const auto d = (GetTickCount() + _mNFadeOut);
-    while (d > GetTickCount())
+    // if we have been asked to stop ... then stop right away.
+    if (Stopped())
     {
-      if (0 == ::GetWindowLongPtr(m_hWnd, GWLP_HWNDPARENT))
-      {
-        break;
-      }
-
-      //  are we stopping everything?
-      // then bail out now!
-      if (Stopped())
-      {
-        return;
-      }
-      MessagePump(m_hWnd);
-
-      Sleep(0);
-
-      MessagePump(nullptr);
+      return;
     }
+
+    // then show the window a little.
+    ShowMessageWithNoFadding(waitTimeBetweenFadeStepsInMilliseconds);
   }
+  
+  // we can now start fading down toward 'hidden' so the total time
+  // should be near our target time of '_totalMilisecondsToShowMessage'
+  for (auto currentTransparancy = startTransparency; 
+       currentTransparancy > 0; 
+       --currentTransparancy)
+  {
+    // if we have been asked to stop ... then stop right away.
+    if (Stopped())
+    {
+      return;
+    }
+
+    // set the transparancy
+    SetTransparency(currentTransparancy);
+
+    // show the message a little bit more.
+    ShowMessageWithNoFadding(waitTimeBetweenFadeStepsInMilliseconds);
+  }
+}
+
+void MessageDlg::ShowMessageWithNoFadding(const long milliseconds) const
+{
+  if (milliseconds <= 0)
+  {
+    return;
+  }
+
+  // sleep a little.
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+
+  // pump the message
+  myodd::wnd::MessagePump( GetSafeHwnd() );
 }
 
 /**
@@ -201,30 +211,15 @@ void MessageDlg::DoFade()
  */
 void MessageDlg::CloseFromThread()
 {
-  // call the complete function.
-  // so we can tell all that we are done here.
-  _onComplete(this);
+  CommonWnd::Close();
 
   // close it
-  PostMessage(WM_CLOSE);
-
-  // complete whatever needs to be done
-  MessagePump(m_hWnd);
-
-  // wait a little.
-  Sleep(0);
-
-  // and let the other threads process their messages.
-  MessagePump(nullptr);
-}
-
-/**
- * \brief called when the dialog is closing, (this is the main app).
- * \see CTrayDialog::OnClose
- */
-void MessageDlg::OnClose()
-{
-  DestroyWindow();
+  //_worker.WaitForAllWorkers([&]()
+  // {
+  //   myodd::wnd::MessagePump(GetSafeHwnd());
+  //   myodd::wnd::MessagePump(nullptr);
+  //   return true;
+  // });
 }
 
 /**
@@ -233,71 +228,143 @@ void MessageDlg::OnClose()
  */
 void MessageDlg::OnPaint()
 {
-  CPaintDC dc(this); // device context for painting
+  const auto mainHdc = GetDC(GetSafeHwnd());
+  const auto myDc = new ActionMonitorMemDC(CDC::FromHandle(mainHdc ));
+  const auto hdc = myDc->GetSafeHdc();
 
-  const auto hdc = dc.GetSafeHdc();
+  try
+  {
+    // show the background
+    RedrawBackground(hdc);
+
+    // the text
+    RedrawMessage(hdc);
+  }
+  catch(...)
+  {
+    // something broke
+    // but we must still free thr resources.
+  }
+  
+  delete myDc;
+  ReleaseDC(GetSafeHwnd(), mainHdc );
+}
+
+/**
+ * \brief draw the message in the device context.
+ * \param hdc the handle to the device context we are working in.
+ */
+void MessageDlg::RedrawMessage(const HDC hdc)
+{
   //  get the font that we will be using for display
   //  because of the XML config this is only really used for size.
-  const auto pOldFont = SelDisplayFont( hdc );
+  const auto pOldFont = SelDisplayFont(hdc, 35 );
 
-  RECT r = {0,0,0,0};
-  myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
+  RECT r = { 0,0,0,0 };
+  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT);
 
   //  pad a little
   r.left += static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
-  r.top  += static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
+  r.top += static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
 
-  SetBkMode( hdc, TRANSPARENT );
-  myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, DT_DEFAULT );
+  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, DT_DEFAULT);
 
   //  clean up old fonts
-  if ( pOldFont != nullptr )
+  if (pOldFont != nullptr)
   {
-    SelectObject( hdc, pOldFont );
+    SelectObject(hdc, pOldFont);
   }
 }
 
 /**
- * \brief initialise the dialog.
- * \see CDialog::OnInitDialog
+ * \brief draw the background in the device context.
+ *        this is the un-faded background.
+ *        the fade wnd will do the fading for us.
+ * \param hdc the handle to the device context we are working in.
  */
-BOOL MessageDlg::OnInitDialog()
+void MessageDlg::RedrawBackground( const HDC hdc) const
 {
-  __super::OnInitDialog();
+  SetBkMode(hdc, TRANSPARENT);
 
-  SetFadeParent( m_hWnd );
+  const auto colour = ::GetSysColor(COLOR_3DFACE);
+  const auto hBrush = CreateSolidBrush(colour);
+  FillRect(hdc, &_completeRect, hBrush);
 
-  ModifyStyleEx(WS_EX_APPWINDOW,0); //  no taskbar!
+  DeleteObject(hBrush);
+}
+
+/**
+ * \brief initialise the dialog.
+ */
+bool MessageDlg::OnInitDialog()
+{
+  // call the parent now
+  if( !CommonWnd::OnInitDialog() )
+  {
+    return false;
+  }
+
+  HideTaskBar();
+
+  // tell the fade window who the parent window is.
+  SetFadeParent( GetSafeHwnd() );
 
   // move the window at the right place/size
   InitWindowPos();
 
-  // fade the window a little.
-  ShowWindow( SW_HIDE );
-
-  return TRUE;
+  // all done.
+  return true;
 }
 
 /**
  * \brief start the thread to fade the window.
  */
-void MessageDlg::FadeShowWindow(std::function<void(CWnd*)> onComplete)
+void MessageDlg::Show()
 {
   // fade the window a little.
-  ShowWindow(SW_SHOW);
-  Transparent( ::myodd::config::Get( L"commands\\transparency", 127) );
-
-  // save the complete callback function
-  _onComplete = onComplete;
+  ShowWindow(GetSafeHwnd(), SW_SHOW);
+  SetTransparency( GetStartTransparency() );
 
   // start the worker.
   _worker.QueueWorker(&MessageDlg::Fade, this);
 }
 
 /**
+ * \brief get the start transparency and make sure that it falls within range.
+ * \return safe start transparency
+ */
+unsigned char MessageDlg::GetStartTransparency()
+{
+  const auto transparency = ::myodd::config::Get(L"commands\\transparency", DEFAULT_TRANSPARENCY);
+  if( transparency < 0 )
+  {
+    return DEFAULT_TRANSPARENCY;
+  }
+  return transparency > MAX_TRANSPARENCY ? DEFAULT_TRANSPARENCY : transparency;
+}
+
+/**
+ * \brief kill the window and wait for it to complete.
+ *        this is a static function so we can call it with workers.
+ * \param owner the owner of the window we are closing.
+ */
+void MessageDlg::Close(MessageDlg* owner)
+{
+  try
+  {
+    owner->FadeCloseWindow();
+  }
+  catch(...)
+  {
+    // it is posible that the deleted window
+    // tried to close the message
+  }
+}
+
+/**
  * \brief kill the window and wait for it to complete.
  */
-void MessageDlg::FadeKillWindow()
+void MessageDlg::FadeCloseWindow()
 {
   // are we done already?
   if ( !IsRunning() )
@@ -311,9 +378,15 @@ void MessageDlg::FadeKillWindow()
   Stop();
 
   // pump the remaining messages
-  MessagePump( m_hWnd );
-  MessagePump( nullptr );
 
-  // then wait for everything to finish.
-  _worker.WaitForAllWorkers();
+  // wait for all the workers to finish.
+  _worker.WaitForAllWorkers([&]()
+  {
+    myodd::wnd::MessagePump(GetSafeHwnd() );
+    if (GetSafeHwnd() != nullptr)
+    {
+      myodd::wnd::MessagePump(nullptr);
+    }
+    return true;
+  });
 }

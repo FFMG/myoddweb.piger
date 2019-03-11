@@ -14,16 +14,18 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionsImmediate.h"
-#include "ActionMonitor.h"
-#include "ActionMonitorDlg.h"
 
 /**
  * \brief Constructor
- * \param subDir subDir the directory we want to parse.
+ * \param directoryToParse the directory with the actions we want to do immidiately.
+ * \param parentActions the parent actions.
  */
-ActionsImmediate::ActionsImmediate(const wchar_t* subDir ) :
+ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines) :
   Actions(),
-  m_subDir( subDir )
+  _directoryToParse( directoryToParse ),
+  _parentActions( parentActions ),
+  _mutex( L"Actions - Immediate"),
+  _virtualMachines( virtualMachines )
 {
 
 }
@@ -32,12 +34,12 @@ ActionsImmediate::ActionsImmediate(const wchar_t* subDir ) :
  * \brief Initialise all the actions so we can start doing them.
  *        Go around the directory and look for possible actions.
  */
-void ActionsImmediate::Init()
+void ActionsImmediate::Initialize()
 {
   std::wstring sPath = ::myodd::config::Get( L"paths\\commands", L"");
   if( myodd::files::ExpandEnvironment( sPath, sPath ) )
   {
-    ParseDirectory( sPath.c_str(), m_subDir.c_str() );
+    ParseDirectory( sPath.c_str(), _directoryToParse.c_str() );
   }
 
   //  we must now do all the actions
@@ -49,15 +51,16 @@ void ActionsImmediate::Init()
  */
 void ActionsImmediate::DoThem(  )
 {
+  myodd::threads::Lock guard(_mutex);
   const auto isPrivileged = true;
-  for( auto it = m_Actions.begin(); it != m_Actions.end(); ++it )
+  for( auto it = _actions.begin(); it != _actions.end(); ++it )
   {
     // we must be carefull that we replace all the values properly
     // recover properly even in a crash so we can reset the posible Action
     try
     {
       // The action.
-      const auto action = *it;
+      const auto& action = *it;
 
       // We must tell the APIs who the current action will be
       // this one is because some APIs need to know the name of the current command
@@ -65,12 +68,12 @@ void ActionsImmediate::DoThem(  )
       //
       // we cannot replace 'possibleActions' with 'this' as the APIs might
       // actually add or remove commands.
-      App().PossibleActions().SetAction( action );
+      _parentActions.SetAction( action );
 
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'CreateActiveAction(...)' function
       // and go directly to 'Launch(...)'
-      QueueAndExecute( action->CreateActiveActionDirect( nullptr, L"" , isPrivileged ) );
+      QueueAndExecute( action->CreateActiveActionDirect( _virtualMachines, nullptr, L"" , isPrivileged ) );
     }
     catch( ... )
     {
@@ -79,7 +82,7 @@ void ActionsImmediate::DoThem(  )
   }// for loop
 
   // reset the current action to the default.
-  App().PossibleActions().SetAction( nullptr );
+  _parentActions.SetAction( nullptr );
 }
 
 /**
@@ -88,6 +91,10 @@ void ActionsImmediate::DoThem(  )
 void ActionsImmediate::WaitForAll()
 {
   // wait for all the workers to finish.
-  WaitForAllWorkers();
+  WaitForAllWorkers([]()
+  {
+    myodd::wnd::MessagePump(nullptr);
+    return true;
+  });
 }
 

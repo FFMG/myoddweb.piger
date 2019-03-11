@@ -14,49 +14,20 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionMonitor.h"
-#include "ActionMonitorDlg.h"
 #include "ActionsImmediate.h"
-
-#include "ActionBye.h"
-#include "ActionLoad.h"
-#include "ActionVersion.h"
+#include "Application.h"
 
 BEGIN_MESSAGE_MAP(CActionMonitorApp, CWinApp)
-	//{{AFX_MSG_MAP(CActionMonitorApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 /**
- *The constructor.
+ * \brief The constructor.
  */
 CActionMonitorApp::CActionMonitorApp() :
-  _startActions(nullptr), 
-_endActions(nullptr),
-  m_hMutex(nullptr),
+  _mutex(nullptr),
   _cwndLastForegroundWindow(nullptr),
-  _maxClipboardSize( NULL )
-#ifdef ACTIONMONITOR_API_LUA
-  , _possibleActions(nullptr), 
-  _lvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_API_PY
-  , _pvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_API_PLUGIN
-  , _plugvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  , _psvm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_S_PLUGIN
-  , _svm(nullptr)
-#endif
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  , _csvm(nullptr)
-#endif
+  _maxClipboardSize(NULL), 
+_application(nullptr)
 {
 }
 
@@ -65,104 +36,8 @@ _endActions(nullptr),
  */
 CActionMonitorApp::~CActionMonitorApp()
 {
-  // the actions are either finished
-  // or they should have been waited for.
-  // if we did not wait for them, then it is not the destructors fault.
-  // here we will simply destroy.
-  delete _endActions;
-  delete _startActions;
-
-#ifdef ACTIONMONITOR_API_LUA
-  delete _lvm;
-  _lvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_API_PY
-  delete _pvm;
-  _pvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_API_PLUGIN
-  delete _plugvm;
-  _plugvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  delete _psvm;
-  _psvm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_S_PLUGIN
-  delete _svm;
-  _svm = nullptr;
-#endif
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  delete _csvm;
-  _csvm = nullptr;
-#endif
 }
 
-#ifdef ACTIONMONITOR_API_LUA
-LuaVirtualMachine* CActionMonitorApp::GetLuaVirtualMachine()
-{
-  if (_lvm == nullptr)
-  {
-    _lvm = new LuaVirtualMachine();
-  }
-  return _lvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_API_PY
-PythonVirtualMachine* CActionMonitorApp::GetPythonVirtualMachine()
-{
-  if (_pvm == nullptr)
-  {
-    _pvm = new PythonVirtualMachine();
-  }
-  return _pvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_API_PLUGIN
-PluginVirtualMachine* CActionMonitorApp::GetPluginVirtualMachine()
-{
-  if (_plugvm == nullptr)
-  {
-    _plugvm = new PluginVirtualMachine();
-  }
-  return _plugvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
-PowershellVirtualMachine* CActionMonitorApp::GetPowershellVirtualMachine()
-{
-  if (_psvm == nullptr)
-  {
-    _psvm = new PowershellVirtualMachine();
-  }
-  return _psvm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_S_PLUGIN
-ShellVirtualMachine* CActionMonitorApp::GetShellVirtualMachine()
-{
-  if (_svm == nullptr)
-  {
-    _svm = new ShellVirtualMachine();
-  }
-  return _svm;
-}
-#endif
-
-#ifdef ACTIONMONITOR_CS_PLUGIN
-CsVirtualMachine* CActionMonitorApp::GetCsVirtualMachine()
-{
-  if (_csvm == nullptr)
-  {
-    _csvm = new CsVirtualMachine();
-  }
-  return _csvm;
-}
-#endif
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CActionMonitorApp object
 CActionMonitorApp theApp;
@@ -210,12 +85,12 @@ void CActionMonitorApp::SetLastForegroundWindow( CWnd* window )
  */
 bool CActionMonitorApp::CanStartApp()
 {
-  m_hMutex = CreateMutex(nullptr,   // default security attributes
+  _mutex = CreateMutex(nullptr,   // default security attributes
                           FALSE,  // initially not owned
                           CONF_MUTEXT 
                          );
 
-  if (m_hMutex == nullptr)
+  if (_mutex == nullptr)
   {
     TRACE("CreateMutex error: %d\n", GetLastError());
     return false;
@@ -226,8 +101,8 @@ bool CActionMonitorApp::CanStartApp()
   switch (lErr)
   {
   case ERROR_ALREADY_EXISTS:
-    CloseHandle(m_hMutex);
-    m_hMutex = nullptr;
+    CloseHandle(_mutex);
+    _mutex = nullptr;
     return false;
 
   case ERROR_SUCCESS:
@@ -295,7 +170,7 @@ BOOL CActionMonitorApp::InitInstance()
 
   // can we start running now?
   // if not then there is a problem.
-  if( !CanStartApp( ) )
+  if (!CanStartApp())
   {
     return FALSE;
   }
@@ -309,13 +184,13 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::geo::Test();
   myodd::math::Test();
   myodd::files::Test();
-  
-	AfxEnableControlContainer();
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+  AfxEnableControlContainer();
+
+  // Standard initialization
+  // If you are not using these features and wish to reduce the size
+  //  of your final executable, you should remove from the following
+  //  the specific initialization routines you do not need.
 
   //  load the command line
   //  --d xxxxxxx    : path of all the root comands
@@ -323,7 +198,7 @@ BOOL CActionMonitorApp::InitInstance()
   myodd::desc desc;
   desc.add_options()
 #ifdef UNICODE
-    ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
+  ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
     ("d", myodd::po::wvalue<std::wstring>(), "the full path of the root commands.")
 #else
     ("c", myodd::po::wvalue<std::string>(), "the oath of the config file.")
@@ -336,7 +211,7 @@ BOOL CActionMonitorApp::InitInstance()
 #else
   TCHAR** args = __argv;
 #endif
-  myodd::variables vm( __argc, args, desc );
+  myodd::variables vm(__argc, args, desc);
 
   // We need to init the registry so that everybody can use it.
   if (!InitConfig(vm))
@@ -346,7 +221,7 @@ BOOL CActionMonitorApp::InitInstance()
   }
 
   // if the user passed something then it will override what we have
-  if( 1 == vm.count( "d") )
+  if (1 == vm.count("d"))
   {
     // get the path
 #ifdef UNICODE
@@ -357,143 +232,35 @@ BOOL CActionMonitorApp::InitInstance()
     const auto lpPath = sAPath.c_str();
 
     //  set it in case next time we have nothing
-    myodd::config::Set( L"paths\\commands", lpPath );
+    myodd::config::Set(L"paths\\commands", lpPath);
   }
 
   // setup the log
   InitLog();
-  
+
   // we now need to add the default reserved paths.
   InitReservedPaths();
 
   // set the cliboard size.
   InitMaxClipboardSize();
 
-  auto noTaskBar = new CFrameWnd();
-  noTaskBar->Create(nullptr, nullptr,WS_OVERLAPPEDWINDOW);
+  CreateAndShowActionDialog();
 
-	ActionMonitorDlg dlg( noTaskBar );
-	m_pMainWnd = &dlg;
-
-  // create the possible actions
-  BuildActionsList( );
-
-  const auto nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
-	}
-
-  //  clean up the window.
-  noTaskBar->DestroyWindow();
-
-  // remove the actions
-  // we are about to close, we are no longer monitoring anything
-  delete _possibleActions;
-
-	//  Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pupszCmdLine.
-	return FALSE;
+  // always return false
+  return FALSE;
 }
 
-/**
- * \brief (Re)build a list of possible actions.
- */
-void CActionMonitorApp::BuildActionsList()
+bool CActionMonitorApp::CreateAndShowActionDialog()
 {
-  //  remove the old one
-  delete _possibleActions;
+  delete _application;
+  _application = new Application();
 
-  //  create a new one.
-  _possibleActions = new Actions( );
-
-  //  parse the directory for all possible files.
-  _possibleActions->Init();
-
-  //TODO these really need to move out of here
-  //  add the default commands
-  _possibleActions->Add( new ActionBye() );
-  _possibleActions->Add( new ActionLoad() );
-  _possibleActions->Add( new ActionVersion() );
+  _application->Show();
+  delete _application;
+  _application = nullptr;
+  return true;
 }
 
-/**
- * \brief Execute all the actions that are executed at the start of this app.
- *        Note that the Dialog box is already created so we can show all the messages, (if any).
- * \param wait if we want to wait for the actions to finish or not.
- */
-void CActionMonitorApp::DoStartActionsList(const bool wait)
-{
-  // wait for whatever is still running
-  WaitForStartActionsToComplete();
-
-  // start the new ones
-  _startActions = new ActionsImmediate(AM_DIRECTORY_IN);
-  _startActions->Init();
-
-  // wait if needed.
-  if (wait)
-  {
-    WaitForStartActionsToComplete();
-  }
-}
-
-/**
- * \brief Execute all the actions that are executed at just before we end the app.
- *        Note that the dialog should still be alive so we can display the messages.
- * \param wait if we want to wait for the actions to finish or not.
- */
-void CActionMonitorApp::DoEndActionsList(const bool wait)
-{
-  // wait for whatever is still running
-  WaitForEndActionsToComplete();
-
-  // start the new ones
-  _endActions = new ActionsImmediate( AM_DIRECTORY_OUT );
-  _endActions->Init();
-
-  // wait if needed.
-  if (wait)
-  {
-    WaitForEndActionsToComplete();
-  }
-}
-
-/**
- * \brief wait for the actions to complete and cleanup.
- */
-void CActionMonitorApp::WaitForEndActionsToComplete()
-{
-  if (_endActions == nullptr)
-  {
-    return;
-  }
-  _endActions->WaitForAll();
-  delete _endActions;
-  _endActions = nullptr;
-
-}
-
-/**
- * \brief wait for the actions to complete and cleanup.
- */
-void CActionMonitorApp::WaitForStartActionsToComplete()
-{
-  if (_startActions == nullptr)
-  {
-    return;
-  }
-  _startActions->WaitForAll();
-  delete _startActions;
-  _startActions = nullptr;
-
-}
 /**
  * \brief Set the max clipboard size that we don't want to use more of.
  *        depending on the windows version/memory available.
@@ -504,7 +271,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
   _maxClipboardSize = 0;
 
   // the path
-  const MYODD_STRING path = _T("clipboard\\maxmemory");
+  const auto path = L"clipboard\\maxmemory";
 
   //  does the value exist?
   if (!myodd::config::Contains(path))
@@ -632,50 +399,15 @@ int CActionMonitorApp::ExitInstance()
   myodd::config::Close();
 
   //  this should never not be null.
-  if (m_hMutex)
+  if (_mutex)
   {
     // releaste the mutex
-    ReleaseMutex(m_hMutex);
+    ReleaseMutex(_mutex);
 
     //  close the mutext
-    CloseHandle(m_hMutex);
+    CloseHandle(_mutex);
   }
-  m_hMutex = nullptr;
+  _mutex = nullptr;
 
   return CWinApp::ExitInstance();
-}
-
-/**
- * Destroy the active actions.
- * @return non.
- */
-void CActionMonitorApp::DestroyActiveActions()
-{
-#ifdef ACTIONMONITOR_API_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto pg = GetPluginVirtualMachine();
-  pg->DestroyPlugins();
-#endif // ACTIONMONITOR_API_PLUGIN
-
-#ifdef ACTIONMONITOR_PS_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto ps = GetPowershellVirtualMachine();
-  ps->DestroyScripts();
-#endif // ACTIONMONITOR_PS_PLUGIN
-
-#ifdef ACTIONMONITOR_S_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto s = GetShellVirtualMachine();
-  s->DestroyScripts();
-#endif // ACTIONMONITOR_S_PLUGIN
-
-#ifdef ACTIONMONITOR_CS_PLUGIN
-  // We have to kill all the API plugins.
-  // they should be all done and completed.
-  auto cs = GetCsVirtualMachine();
-  cs->DestroyScripts();
-#endif // ACTIONMONITOR_CS_PLUGIN
 }

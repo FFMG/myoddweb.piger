@@ -14,20 +14,18 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "StdAfx.h"
 #include "ShellApi.h"
-#include "pluginVirtualMachine.h"
 
 /**
- * \param action the action triggering this event.
+ * \copydoc 
  */
-ShellApi::ShellApi(const ActiveAction& action) : 
-  HelperApi(action ), 
-  _hProcess( nullptr )
+ShellApi::ShellApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+  ExecuteApi(uuid, action, actions, messagesHandler )
 {
 }
 
 /**
  * \brief Execute a certain application/script.
- * \see __super::Execute
+ * \see HelperApi::Execute
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -46,17 +44,17 @@ bool ShellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 3)
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am_execute( module [, commandLine [, privileged])</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_MODULE) || !ipcRequest.IsString(ARGUMENT_ARGS))
   {
-    const auto errorMsg = _T("<b>Error : </b> The first and second parameters must be strings.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The first and second parameters must be strings.";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -65,9 +63,9 @@ bool ShellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
   {
     if (!ipcRequest.IsInt(ARGUMENT_PRIVILEGED))
     {
-      const auto errorMsg = _T("<b>Error : </b> The third argument, (privileged), can only be true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = L"<b>Error : </b> The third argument, (privileged), can only be true|false";
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     isPrivileged = (ipcRequest.Get<unsigned int>(ARGUMENT_PRIVILEGED) == 1);
@@ -77,7 +75,7 @@ bool ShellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
   auto cmdLine = ipcRequest.Get<std::wstring>( ARGUMENT_ARGS);
 
   // run the query
-  const auto result = __super::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr);
+  const auto result = HelperApi::Execute(module.c_str(), cmdLine.c_str(), isPrivileged, nullptr);
 
   // push the result.
   ipcResponse.Add( result ? 1 : 0);
@@ -85,9 +83,9 @@ bool ShellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
   // tell the user it did not work
   if (false == result)
   {
-    const auto errorMsg = _T("<b>Error : </b> There was an error executing the request, please check the parameters.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> There was an error executing the request, please check the parameters.";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
   }
 
   // return the number of results
@@ -95,21 +93,8 @@ bool ShellApi::Execute(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
 }
 
 /**
- * \brief Override function to execute a process.
- * \param module the module we want to execute.
- * \param cmdLine the arguments to pass to this module.
- * \param isPrivileged if we need to elevate this module or not.
- * \param hProcess if not null, the handle of the created process.
- * \return bool success or not.
- */
-bool ShellApi::Execute(const wchar_t* module, const wchar_t* cmdLine, const bool isPrivileged, HANDLE* hProcess) const
-{
-  return __super::Execute(module, cmdLine, isPrivileged, hProcess);
-}
-
-/**
  * \brief Add an action to the list of actions.
- * \see __super::AddAction
+ * \see HelperApi::AddAction
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -125,25 +110,25 @@ bool ShellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
   // we must have 2 items
   if (argumentCount != 2)
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing values.<br>Format is <i>am_addAction( <b>action</b>, <b>path</b> )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_ACTION))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'action' must be a string";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_PATH))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'path' must be a string";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -152,7 +137,7 @@ bool ShellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
   auto szPath = ipcRequest.Get<std::wstring>( ARGUMENT_PATH);
 
   // add it, (or try).
-  const auto result = __super::AddAction(szAction.c_str(), szPath.c_str());
+  const auto result = HelperApi::AddAction(szAction.c_str(), szPath.c_str());
 
   // return if it works.
   ipcResponse.Add(result ? 1 : 0);
@@ -163,7 +148,7 @@ bool ShellApi::AddAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
 
 /**
  * \brief Remove an action from the list
- * \see __super::RemovedAction
+ * \see HelperApi::RemovedAction
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -179,25 +164,25 @@ bool ShellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   // we must have 1 or 2
   if (argumentCount != 2)
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing values.<br>Format is <i>am_removeAction( <b>action</b>, <b>path</b> )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString ( ARGUMENT_ACTION ))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'action' must be a string";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString( ARGUMENT_PATH))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'path' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'path' must be a string";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -206,7 +191,7 @@ bool ShellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
   auto szPath = ipcRequest.Get<std::wstring>( ARGUMENT_PATH);
 
   // remove it, (or try).
-  const auto result = __super::RemoveAction(szAction.c_str(), szPath.c_str());
+  const auto result = HelperApi::RemoveAction(szAction.c_str(), szPath.c_str());
 
   // return if it works.
   ipcResponse.Add(result ? 1 : 0);
@@ -217,7 +202,7 @@ bool ShellApi::RemoveAction(const myodd::os::IpcData& ipcRequest, myodd::os::Ipc
 
 /**
  * \brief Find an action to see if it already exists.
- * \see __super::FindAction
+ * \see HelperApi::FindAction
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -233,35 +218,35 @@ bool ShellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
   // we must have 2 arguments.
   if (argumentCount != 2)
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing values.<br>Format is <i>am_findAction( <b>index</b>, <b>action</b> )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_INDEX))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'index' must be a number");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'index' must be a number";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_ACTION))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'action' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'action' must be a string";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   const auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_INDEX);
   const auto action = ipcRequest.Get<std::wstring>(ARGUMENT_ACTION);
 
-  MYODD_STRING sValue = _T("");
-  if (!__super::FindAction(idx, action.c_str(), sValue))
+  std::wstring sValue = L"";
+  if (!HelperApi::FindAction(idx, action.c_str(), sValue))
   {
-    __super::Log(AM_LOG_WARNING, _T("Could not find action at given index"));
+    HelperApi::Log(AM_LOG_WARNING, L"Could not find action at given index");
 
     //  just return false.
     ipcResponse.Add(0);
@@ -279,7 +264,7 @@ bool ShellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
 
 /**
  * \brief Get the foreground window that had ownership when the action was called.
- * \see __super::GetForegroundWindow
+ * \see HelperApi::GetForegroundWindow
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -289,14 +274,14 @@ bool ShellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::
   auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0)
   {
-    auto errorMsg = _T("<b>Error : </b> The 'GetForegroundWindow' function does not take any arguments.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The 'GetForegroundWindow' function does not take any arguments.";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   // get the foreground window.
-  auto hwnd = __super::GetForegroundWindow();
+  auto hwnd = HelperApi::GetForegroundWindow();
 
   // return it as an int.
   ipcResponse.Add(reinterpret_cast<int64_t>(hwnd));
@@ -307,20 +292,7 @@ bool ShellApi::GetForegroundWindow(const myodd::os::IpcData& ipcRequest, myodd::
 
 /**
  * \brief Output a message on the screen
- * \see __super::Say
- * \param msg what to say
- * \param nElapse how long to say it for
- * \param nFadeOut how quickly we will fadeout
- * \return bool success or not.
- */
-bool ShellApi::Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const
-{
-  return __super::Say(msg, nElapse, nFadeOut);
-}
-
-/**
- * \brief Output a message on the screen
- * \see __super::Say
+ * \see HelperApi::Say
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -334,25 +306,25 @@ bool ShellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipc
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 2 || argumentCount > 3)
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_TEXT))
   {
-    const auto errorMsg = _T("<b>Error : </b> The first argument must be a string.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The first argument must be a string.";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt( ARGUMENT_ELAPSE))
   {
-    const auto errorMsg = _T("<b>Error : </b> The elapse parameters must be an integer.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The elapse parameters must be an integer.";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -360,9 +332,9 @@ bool ShellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipc
   const auto elapse = ipcRequest.Get<unsigned int>(ARGUMENT_ELAPSE);
   if (elapse == 0)
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing <i>Elapse</i> time.<br>Format is <i>Say( msg, <b>elapse</b>[, fade=0])</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -371,23 +343,23 @@ bool ShellApi::Say(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipc
   {
     if (!ipcRequest.IsInt(ARGUMENT_FADEOUT))
     {
-      const auto errorMsg = _T("<b>Error : </b> The fadout parameters must be an integer.");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = L"<b>Error : </b> The fadout parameters must be an integer.";
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     fade = ipcRequest.Get<unsigned int>(ARGUMENT_FADEOUT);
   }
 
   // add the boolean response.
-  const auto b = __super::Say(message.c_str(), elapse, fade);
+  const auto b = HelperApi::Say(message.c_str(), elapse, fade);
   ipcResponse.Add( b );
   return b;
 }
 
 /**
  * \brief Get this API version number
- * \see __super::GetForegroundWindow
+ * \see HelperApi::GetForegroundWindow
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -397,9 +369,9 @@ bool ShellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0 )
   {
-    auto errorMsg = _T("<b>Error : </b> The 'Version' function does not take any arguments.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The 'Version' function does not take any arguments.";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -411,7 +383,7 @@ bool ShellApi::Version(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
 
 /**
  * \brief Get the number of commands
- * \see __super::GetCommandCount
+ * \see HelperApi::GetCommandCount
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -421,14 +393,14 @@ bool ShellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0)
   {
-    const auto errorMsg = _T("<b>Error : </b> The 'GetCommandCount' function does not take any arguments.");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The 'GetCommandCount' function does not take any arguments.";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   // get it
-  const auto nSize = __super::GetCommandCount();
+  const auto nSize = HelperApi::GetCommandCount();
 
   //  add it to the response
   ipcResponse.Add( static_cast<int64_t>(nSize) );
@@ -440,7 +412,7 @@ bool ShellApi::GetCommandCount(const myodd::os::IpcData& ipcRequest, myodd::os::
 
 /**
  * \brief Get a command by index, return false if it does not exist.
- * \see __super::GetCommand
+ * \see HelperApi::GetCommand
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -451,18 +423,18 @@ bool ShellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount != 1 || !ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>GetCommand( <b>index</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing index number.<br>Format is <i>GetCommand( <b>index</b> )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   const auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_NUMBER);
   std::wstring sValue;
-  if (!__super::GetCommand(idx, sValue))
+  if (!HelperApi::GetCommand(idx, sValue))
   {
-    const auto errorMsg = _T("Trying to get an argument past the number of arguments.");
-    __super::Log(AM_LOG_WARNING, errorMsg);
+    const auto errorMsg = L"Trying to get an argument past the number of arguments.";
+    HelperApi::Log(AM_LOG_WARNING, errorMsg);
 
     // return that there was an error.
     ipcResponse.Add(0);
@@ -476,7 +448,7 @@ bool ShellApi::GetCommand(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
 
 /**
  * \brief Get an action by index.
- * \see __super::GetAction
+ * \see HelperApi::GetAction
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -486,17 +458,17 @@ bool ShellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount != 0)
   {
-    const auto errorMsg = _T("<b>Error : </b>.<br>Format is <i>GetAction( )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b>.<br>Format is <i>GetAction( )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   std::wstring sValue;
-  if (!__super::GetAction(sValue))
+  if (!HelperApi::GetAction(sValue))
   {
-    const auto errorMsg = _T("Trying to get the action name/value.");
-    __super::Log(AM_LOG_WARNING, errorMsg);
+    const auto errorMsg = L"Trying to get the action name/value.";
+    HelperApi::Log(AM_LOG_WARNING, errorMsg);
 
     // return that there was an error.
     ipcResponse.Add(0);
@@ -512,7 +484,7 @@ bool ShellApi::GetAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
 
 /**
  * \brief Get the string under the caret
- * \see __super::GetString
+ * \see HelperApi::GetString
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -523,9 +495,9 @@ bool ShellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 1)
   {
-    const auto errorMsg = _T("<b>Error : </b> The function 'Getstring' does not take more than one parameter");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The function 'Getstring' does not take more than one parameter";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -535,18 +507,18 @@ bool ShellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
   {
     if (!ipcRequest.IsInt( ARGUMENT_QUOTE ))
     {
-      const auto errorMsg = _T("The first parameter must be a boolean.");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = L"The first parameter must be a boolean.";
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<int>(ARGUMENT_QUOTE));
   }
 
   std::wstring sValue = L"";
-  if (!__super::GetString(sValue, bQuote))
+  if (!HelperApi::GetString(sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Could not get any selected string."));
+    HelperApi::Log(AM_LOG_WARNING, L"Could not get any selected string.");
 
     // return that there was an error.
     ipcResponse.Add(0);
@@ -562,7 +534,7 @@ bool ShellApi::GetString(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
 
 /**
  * \brief Get the current file under the caret
- * \see __super::GetFile
+ * \see HelperApi::GetFile
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -576,17 +548,17 @@ bool ShellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
   {
-    const auto errorMsg = _T("<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The function 'Getfile' takes 1 or 2 parameters";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing index number.<br>Format is <i>am_getfile( <b>index</b>[, quote])</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -599,18 +571,18 @@ bool ShellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
   {
     if (!ipcRequest.IsInt( ARGUMENT_QUOTE))
     {
-      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = L"<b>Error : </b> The second parameter must be a boolean true|false";
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<signed int>(ARGUMENT_QUOTE));
   }
 
   std::wstring sValue = L"";
-  if (!__super::GetFile(idx, sValue, bQuote))
+  if (!HelperApi::GetFile(idx, sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested file index."));
+    HelperApi::Log(AM_LOG_WARNING, L"Unable to get the requested file index.");
 
     ipcResponse.Add(0);
     return true;
@@ -625,7 +597,7 @@ bool ShellApi::GetFile(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData&
 
 /**
  * \brief Get a currently selected folder, if there is one.
- * \see __super::GetFolder
+ * \see HelperApi::GetFolder
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -638,17 +610,17 @@ bool ShellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
   {
-    const auto errorMsg = _T("<b>Error : </b> The function 'Getfolder' takes 1 or 2 parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The function 'Getfolder' takes 1 or 2 parameters";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b>[, quote] )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing index number.<br>Format is <i>am_getfolder( <b>index</b>[, quote] )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -661,18 +633,18 @@ bool ShellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
   {
     if (!ipcRequest.IsInt(ARGUMENT_QUOTE))
     {
-      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = L"<b>Error : </b> The second parameter must be a boolean true|false";
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<unsigned int>(ARGUMENT_QUOTE));
   }
 
   std::wstring sValue = L"";
-  if (!__super::GetFolder(idx, sValue, bQuote))
+  if (!HelperApi::GetFolder(idx, sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested folder index."));
+    HelperApi::Log(AM_LOG_WARNING, L"Unable to get the requested folder index.");
 
     //  just return false.
     ipcResponse.Add(0);
@@ -688,7 +660,7 @@ bool ShellApi::GetFolder(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDat
 
 /**
  * \brief Get the currently selected url, if there is one.
- * \see __super::GetUrl
+ * \see HelperApi::GetUrl
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -701,17 +673,17 @@ bool ShellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& 
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount < 1 || argumentCount > 2)
   {
-    const auto errorMsg = _T("<b>Error : </b> The function 'Geturl' takes 1 or 2 parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The function 'Geturl' takes 1 or 2 parameters";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_NUMBER))
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing index number.<br>Format is <i>am_geturl( <b>index</b> )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
@@ -724,18 +696,18 @@ bool ShellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& 
   {
     if (!ipcRequest.IsInt(ARGUMENT_QUOTE))
     {
-      const auto errorMsg = _T("<b>Error : </b> The second parameter must be a boolean true|false");
-      __super::Log(AM_LOG_ERROR, errorMsg);
-      __super::Say(errorMsg, 3000, 5);
+      const auto errorMsg = L"<b>Error : </b> The second parameter must be a boolean true|false";
+      HelperApi::Log(AM_LOG_ERROR, errorMsg);
+      HelperApi::Say(errorMsg, 3000, 5);
       return false;
     }
     bQuote = (1 == ipcRequest.Get<unsigned int>(ARGUMENT_QUOTE));
   }
 
   std::wstring sValue = L"";
-  if (!__super::GetUrl(idx, sValue, bQuote))
+  if (!HelperApi::GetUrl(idx, sValue, bQuote))
   {
-    __super::Log(AM_LOG_WARNING, _T("Unable to get the requested url index."));
+    HelperApi::Log(AM_LOG_WARNING, L"Unable to get the requested url index.");
 
     //  just return false.
     ipcResponse.Add(0);
@@ -751,7 +723,7 @@ bool ShellApi::GetUrl(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& 
 
 /**
  * \brief Get the version of action monitor
- * \see __super::GetVersion
+ * \see HelperApi::GetVersion
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -761,16 +733,16 @@ bool ShellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
   const auto argumentCount = ipcRequest.GetNumArguments();
   if (argumentCount > 0)
   {
-    const auto errorMsg = _T("<b>Error : </b> The function 'GetVersion' does not take any parameters");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> The function 'GetVersion' does not take any parameters";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   std::wstring sValue = L"";
-  if (!__super::GetVersion(sValue))
+  if (!HelperApi::GetVersion(sValue))
   {
-    __super::Log(AM_LOG_ERROR, _T("Unable to get the version number"));
+    HelperApi::Log(AM_LOG_ERROR, L"Unable to get the version number");
 
     //could not get it.
     return false;
@@ -785,7 +757,7 @@ bool ShellApi::GetVersion(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
 
 /**
  * \brief Log a message
- * \see __super::Log
+ * \see HelperApi::Log
  * \param ipcRequest the request as was passed to us.
  * \param ipcResponse the container that will have the response.
  * \return bool success or not.
@@ -801,52 +773,34 @@ bool ShellApi::Log(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipc
   // we must have 2 items
   if (argumentCount != 2)
   {
-    const auto errorMsg = _T("<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsInt(ARGUMENT_LOGTYPE))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'logtype' must be a number");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'logtype' must be a number";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   if (!ipcRequest.IsString(ARGUMENT_MESSAGE))
   {
-    const auto errorMsg = _T("<b>Error : </b> Invalid argument type, the 'message' must be a string");
-    __super::Log(AM_LOG_ERROR, errorMsg);
-    __super::Say(errorMsg, 3000, 5);
+    const auto errorMsg = L"<b>Error : </b> Invalid argument type, the 'message' must be a string";
+    HelperApi::Log(AM_LOG_ERROR, errorMsg);
+    HelperApi::Say(errorMsg, 3000, 5);
     return false;
   }
 
   const auto logType = ipcRequest.Get<unsigned int>( ARGUMENT_LOGTYPE );
   const auto action = ipcRequest.Get<std::wstring>( ARGUMENT_MESSAGE );
 
-  __super::Log(logType, action.c_str());
+  HelperApi::Log(logType, action.c_str());
 
   // success.
   ipcResponse.Add(1);
   return true;
-}
-
-/**
- * \brief Set this API handle.
- * \param process 
- */
-void ShellApi::SetHandle( const HANDLE process)
-{
-  _hProcess = process;
-}
-
-/**
- * \brief Get the current handle value.
- * \return HANDLE the current handle.
- */
-HANDLE ShellApi::GetHandle() const
-{
-  return _hProcess;
 }

@@ -1,41 +1,47 @@
-// Action.cpp: implementation of the Action class.
+//This file is part of Myoddweb.Piger.
 //
-//////////////////////////////////////////////////////////////////////
-
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActionVersion.h"
 #include "ActionsCore.h"
-#include "ActiveUserMessageAction.h"
+#include "ActiveVersionAction.h"
 
 /**
- * todo
- * @param void
- * @return void
+ * \brief Constructor
+ * \param application the application to close the app
  */
-ActionVersion::ActionVersion( ) : Action( ACTION_CORE_VERSION, L"")
+ActionVersion::ActionVersion(IApplication& application) :
+  Action( ACTION_CORE_VERSION, L""),
+  _application(application)
 {
 }
 
 /**
- * Destructor
- * @param void
- * @return void
+ * \copydoc
  */
 ActionVersion::~ActionVersion()
 {
 }
 
 /**
- * Run the command, we take into account the current selection and command parameters given.
- * @param const MYODD_STRING& szCommandLine the command line argument.
- * @param bool isPrivileged if we need administrator privilege to run this.
- * @return BOOL true.
+ * \copydoc
  */
-ActiveAction* ActionVersion::CreateActiveAction(CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+ActiveAction* ActionVersion::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
-  HWND hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : NULL;
+  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
 
   //  display the version.
-  return new ActiveUserMessageAction(*this, hTopHWnd, UWM_KEYBOARD_VERSION);
+  return new ActiveVersionAction(_application, *this, virtualMachines, hTopHWnd);
 }

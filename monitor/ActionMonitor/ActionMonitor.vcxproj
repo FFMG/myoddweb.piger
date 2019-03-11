@@ -167,9 +167,13 @@
   <ItemGroup>
     <ClCompile Include="..\api\csapi.cpp" />
     <ClCompile Include="..\api\csvirtualmachine.cpp" />
+    <ClCompile Include="..\api\ExecuteApi.cpp" />
+    <ClCompile Include="..\api\executevirtualmachine.cpp" />
     <ClCompile Include="..\api\helperapi.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="..\api\IVirtualMachine.cpp" />
+    <ClCompile Include="..\api\IVirtualMachines.cpp" />
     <ClCompile Include="..\api\luaapi.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -191,11 +195,11 @@
     </ClCompile>
     <ClCompile Include="..\api\shellapi.cpp" />
     <ClCompile Include="..\api\shellvirtualmachine.cpp" />
+    <ClCompile Include="..\api\VirtualMachines.cpp" />
     <ClCompile Include="..\common\Clipboard.cpp" />
     <ClCompile Include="..\common\ClipboardData.cpp" />
     <ClCompile Include="..\common\ClipboardDropData.cpp" />
     <ClCompile Include="..\common\ClipboardsData.cpp" />
-    <ClCompile Include="..\common\TrayDialog.cpp" />
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="ActionBye.cpp" />
     <ClCompile Include="ActionLoad.cpp" />
@@ -213,18 +217,33 @@
     <ClCompile Include="ActiveCsAction.cpp" />
     <ClCompile Include="ActiveDefaultAction.cpp" />
     <ClCompile Include="ActiveExeAction.cpp" />
+    <ClCompile Include="ActiveLoadAction.cpp" />
     <ClCompile Include="ActiveLuaAction.cpp" />
     <ClCompile Include="ActivePluginAction.cpp" />
     <ClCompile Include="ActivePowershellAction.cpp" />
     <ClCompile Include="ActivePythonAction.cpp" />
     <ClCompile Include="ActiveShellAction.cpp" />
-    <ClCompile Include="ActiveUserMessageAction.cpp" />
+    <ClCompile Include="ActiveVersionAction.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ApplicationTray.cpp" />
+    <ClCompile Include="CommonWnd.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
+    <ClCompile Include="HookWnd.cpp" />
+    <ClCompile Include="IActions.cpp" />
+    <ClCompile Include="IApplication.cpp" />
+    <ClCompile Include="IDisplay.cpp" />
+    <ClCompile Include="IIpcListener.cpp" />
+    <ClCompile Include="IMessagesHandler.cpp" />
+    <ClCompile Include="IpcListener.cpp" />
+    <ClCompile Include="ITray.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
+    <ClCompile Include="MessagesHandler.cpp" />
+    <ClCompile Include="MessagesHandlerWnd.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TrayWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ActionMonitor.rc" />
@@ -232,7 +251,11 @@
   <ItemGroup>
     <ClInclude Include="..\api\csapi.h" />
     <ClInclude Include="..\api\csvirtualmachine.h" />
+    <ClInclude Include="..\api\ExecuteApi.h" />
+    <ClInclude Include="..\api\executevirtualmachine.h" />
     <ClInclude Include="..\api\helperapi.h" />
+    <ClInclude Include="..\api\IVirtualMachine.h" />
+    <ClInclude Include="..\api\IVirtualMachines.h" />
     <ClInclude Include="..\api\luaapi.h" />
     <ClInclude Include="..\api\LuaVirtualMachine.h" />
     <ClInclude Include="..\api\pluginapi.h" />
@@ -244,11 +267,11 @@
     <ClInclude Include="..\api\PythonVirtualMachine.h" />
     <ClInclude Include="..\api\shellapi.h" />
     <ClInclude Include="..\api\shellvirtualmachine.h" />
+    <ClInclude Include="..\api\VirtualMachines.h" />
     <ClInclude Include="..\common\Clipboard.h" />
     <ClInclude Include="..\common\ClipboardData.h" />
     <ClInclude Include="..\common\ClipboardDropData.h" />
     <ClInclude Include="..\common\ClipboardsData.h" />
-    <ClInclude Include="..\common\TrayDialog.h" />
     <ClInclude Include="Action.h" />
     <ClInclude Include="ActionBye.h" />
     <ClInclude Include="ActionLoad.h" />
@@ -267,18 +290,33 @@
     <ClInclude Include="ActiveCsAction.h" />
     <ClInclude Include="ActiveDefaultAction.h" />
     <ClInclude Include="ActiveExeAction.h" />
+    <ClInclude Include="ActiveLoadAction.h" />
     <ClInclude Include="ActiveLuaAction.h" />
     <ClInclude Include="ActivePluginAction.h" />
     <ClInclude Include="ActivePowershellAction.h" />
     <ClInclude Include="ActivePythonAction.h" />
     <ClInclude Include="ActiveShellAction.h" />
-    <ClInclude Include="ActiveUserMessageAction.h" />
+    <ClInclude Include="ActiveVersionAction.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="ApplicationTray.h" />
+    <ClInclude Include="CommonWnd.h" />
     <ClInclude Include="FadeWnd.h" />
+    <ClInclude Include="HookWnd.h" />
+    <ClInclude Include="IActions.h" />
+    <ClInclude Include="IApplication.h" />
+    <ClInclude Include="IDisplay.h" />
+    <ClInclude Include="IIpcListener.h" />
+    <ClInclude Include="IMessagesHandler.h" />
+    <ClInclude Include="IpcListener.h" />
+    <ClInclude Include="ITray.h" />
     <ClInclude Include="MemDC.h" />
     <ClInclude Include="MessageDlg.h" />
+    <ClInclude Include="MessagesHandler.h" />
+    <ClInclude Include="MessagesHandlerWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TrayWnd.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\ActionMonitor.ico" />
