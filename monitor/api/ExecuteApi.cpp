@@ -30,7 +30,7 @@ ExecuteApi::~ExecuteApi()
  * \brief Set this API handle.
  * \param process the process handle we are setting.
  */
-void ExecuteApi::SetHandle(HANDLE process)
+void ExecuteApi::SetHandle(const HANDLE process)
 {
   _hProcess = process;
 }

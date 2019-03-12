@@ -1,7 +1,4 @@
 #include "stdafx.h"
-#include <boost/uuid/uuid.hpp>            // uuid class
-#include <boost/uuid/uuid_generators.hpp> // generators
-#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include "executevirtualmachine.h"
 
 /**
@@ -53,7 +50,6 @@ bool ExecuteVirtualMachine::HandleIpcSendMessage(const unsigned int msg, const u
   return false;
 }
 
-
 //  handle the post message.
 bool ExecuteVirtualMachine::HandleIpcPostMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
 {
@@ -99,8 +95,8 @@ int ExecuteVirtualMachine::Execute(const ActiveAction& action, const std::wstrin
   Initialize();
 
   //  create uuid and andd it to our list.
-  const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  auto api = AddApi(uuid, action );
+  const auto uuid = myodd::strings::MakeUuid4();
+  const auto api = AddApi(uuid, action );
   if( !Execute( *api, action, pluginFile ))
   {
     RemoveApi(uuid);
