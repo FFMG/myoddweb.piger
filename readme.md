@@ -1,9 +1,9 @@
-# Description [![release](https://img.shields.io/badge/release-v0.9.0.5-brightgreen.png?style=default)](https://github.com/FFMG/myoddweb.piger/releases/latest)
+# Description [![release](https://img.shields.io/badge/release-v0.9.1.0-brightgreen.png?style=default)](https://github.com/FFMG/myoddweb.piger/releases/latest)
 
 Piger is a Keyboard Launcher allowing you to run your own commands from your keyboard. Highlight a word hold the caps lock key and simply type 'Google' to search for it in your browser. You can create your own commands, in LUA, Python, C++ and more.
 
 You can start Typing [Caps Lock] + "Wi" and you will have options like ...
- 
+
 - Winword
 - Wireshark
 - Winrar
@@ -32,17 +32,17 @@ All the configuration of piger is contained in the profile.xml file.
 
 ### Commandline arguments
 
-- --c [configpath] 
-The full path of the config 
-- --d [commandspath]    
+- --c [configpath]
+The full path of the config
+- --d [commandspath]
 The full path of the commands directory.
 
 ### For extra points...
 
 - Write your own script, (see below).
-	- For Python, add the *.py extension
-	- For Lua, add the *.lua extension
-	- For batch files, add the *.bat extension
+  - For Python, add the *.py extension
+  - For Lua, add the *.lua extension
+  - For batch files, add the *.bat extension
 - Put it in the Command folders, (select "Rootcommand" as an action).
 - Select the "this.reload" action.
 - Admire your handy work.
@@ -53,7 +53,7 @@ Piger is aimed at people that like to write their own plugins, so by default it 
 
 It is up to you, to create awesome plugins that fit **your** needs.
 
-# Usage
+## Usage
 
 Simple create your own actions/plugins and make them behave as you wish, for example, create a "google" command, (see below).
 
@@ -61,20 +61,21 @@ Then, after startup, simply press the [Caps Lock] button and type "go...", (you 
 
 Of course, the main aim is for you to write your own plugins rather than been spoon-fed actions ...
 
-## Scripts
+### Scripts
 
+- [.NET usage](scripts/dotnet.md)
 - [C# usage](scripts/csharp.md)
 - [Powershell usage](scripts/powershell.md)
 
-# Scripting your own commands.
+## Scripting your own commands
 
-## C Sharp/C#
+### C Sharp
 
 Read more about the [C# scripts](scripts/csharp.md)
 
-### Example
+#### Example
 
-#### Hello world
+##### Hello world
 
 ```csharp
 using System;
@@ -98,15 +99,15 @@ namespace Am
 }
 ```
 
-## Powershell
+### Powershell
 
 Read more [code examples/notes](scripts/powershell.md).
 
 **_If_** you have powershell 3 installed, (and you should have if you have a decent version of windows installed), then you can run powershell scripts.
 
-### Example
+#### Example
 
-#### Calculator.ps1
+##### Calculator.ps1
 
 ```ps1
   #
@@ -136,11 +137,11 @@ Read more [code examples/notes](scripts/powershell.md).
   # Powershell will close automatically...
 ```
 
-## Python
+### Python
 
 Read more about the [Powershell scripts](scripts/powershell.md)
 
-### Code
+#### Code
 
 import module, **import am**, (only usable within Piger of course).
 
@@ -165,9 +166,9 @@ import module, **import am**, (only usable within Piger of course).
   - Message = 4
   - System = 5
 
-### Example
+#### Example
 
-#### Calculator.py
+##### Calculator.py
 
     # import the action monitor, (am), module.
     import am;
@@ -183,9 +184,9 @@ import module, **import am**, (only usable within Piger of course).
     # log that all is good.
     am.log( 1, "Launched calculator" );
 
-## Lua
+### Lua
 
-### Code
+#### Code
 - am_say( what, elapse, fade ), display a message
 - am_version, get the LUA version been used.
 - am_getCommand( idx ), get a typed command, if the user selects something like "*google world*", then command #0 is "google" and command #1 is "world".
@@ -207,9 +208,9 @@ import module, **import am**, (only usable within Piger of course).
   - Message = 4
   - System = 5
 
-### Example
+#### Example
 
-#### Calculator.lua
+##### Calculator.lua
 
 Launch the default calculator.
 
@@ -224,7 +225,7 @@ Launch the default calculator.
     -- log that all is good.
     am_log( 1, "Launched calculator" );
 
-#### Google.lua
+##### Google.lua
 
 Launch the explorer and navigate to the Google site, if one or more words are highlighted then those words will be searched.
 
@@ -265,7 +266,7 @@ Launch the explorer and navigate to the Google site, if one or more words are hi
   end
 ```
 
-## Batch files (*\*.bat/\*.cmd/\*.com*)
+### Batch files (*\*.bat/\*.cmd/\*.com*)
 
 Windows batch files are just executed, they have no access to any of the plugins functions.
 
@@ -279,19 +280,19 @@ If you don't want the script to be elevated, simply create a lua/powershell/pyth
 
 Look at 'calc.lua' example and replace it with your own batch file. 
 
-### Example
+#### Example
 
-#### RootCommands.bat
+##### RootCommands.bat
 
 Navigate to the root commands folder.
 
     START explorer /e,%appdata%\MyOddWeb\ActionMonitor\RootCommands\
 
-# Debuging
+## Debuging
 
 To debug piger you will need a 'debug' action folder, "%appdata%\myoddweb\ActionMonitor_d\RootCommands\"
 
-## Remark
+### Remark
 
 If you are writing your own plugin, note that debug and release versions don't play well together, do be careful when you are trying to mix and match.
 
@@ -301,22 +302,15 @@ As a rule, remove all the actions and just leave your own plugin that you are de
 
 ### What version of Python is needed?
 
-None, Python **3.5** is embedded in Piger, so it does not matter if you have python or not, it will all work just fine.
+None, Python **3.7** is embedded in Piger, so it does not matter if you have python or not, it will all work just fine.
+
+Of course your script has to be able to run on 3.x
 
 ### Can I submit scripts/plugins
 
 **Yes!** please, we want as many scripts as possible, we will add the best ones to the setup and have a list of all the scripts, (or maybe have a separate setup with all the plugins/scripts).
 
 Just send us a message with your scripts.
-
-# Special folders
-
-## Root command
-All your commands are located in your rootcommand folder, (%appdata%\myoddweb\ActionMonitor\RootCommands\ by default).
-
-At statup all the actions/plugins are loaded. A file will have the command name.
-
-For example, the file "**google.lua**" will create a command called "**google**" and the code in "google.lua" will be executed when that action is called. 
 
 ### How to debug
 
@@ -330,9 +324,9 @@ Use the '*%appdata%\myoddweb\ActionMonitor_d\RootCommands\__in*' folder to debug
 
 ### Plugin is not loading
 
-If you get an error loading a plugin, **it is almost certainly** because your plugin was build in x86 and you are trying to debug it with an x64 plugin. 
+If you get an error loading a plugin, **it is almost certainly** because your plugin was build in x86 and you are trying to debug it with an x64 plugin.
 
-### Keyboard shortcut is not always picked up.
+### Keyboard shortcut is not always picked up
 
 This happens when you are not debuging in 'Elevated mode', basically you need to debug as an admin.
 
@@ -340,16 +334,28 @@ If you are using visual studio, simply restart the IDE, but be sure to run as Ad
 
 **NB**: In release mode, the app auto-elevates itself.
 
+## Special folders
+
+### Root command
+
+All your commands are located in your rootcommand folder, (%appdata%\myoddweb\ActionMonitor\RootCommands\ by default).
+
+At statup all the actions/plugins are loaded. A file will have the command name.
+
+For example, the file "**google.lua**" will create a command called "**google**" and the code in "google.lua" will be executed when that action is called. 
+
 ### Sub folders
 
 All sub folders are parsed, a file in the folder "**\os\calc.lua**" will create a command "**calc**"
 
 #### __in
+
 Anything in this folder, actions, plugins are loaded/called at startup.    
 
 This allows your plugin to add/remove actions.
 
 #### __out
+
 As with the above, actions listed in that folder are called when piger closes.
 
 This allows for cleanup for example.
