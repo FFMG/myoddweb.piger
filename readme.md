@@ -69,13 +69,43 @@ Of course, the main aim is for you to write your own plugins rather than been sp
 
 ## Scripting your own commands
 
+### .NET, (4.5.2 or later)
+
+Read more about the [.NET scripts](scripts/dotnet.md)
+
+#### Example
+
+```csharp
+namespace Dolly.NET
+{
+  public class Dolly : IAction
+  {
+    /// <summary>
+    /// The action monitor instance.
+    /// </summary>
+    private IActionMonitor _monitor;
+
+    public Task<bool> GoAsync(CancellationToken token)
+    {
+      // start your action
+      return Task.FromResult(true);
+    }
+
+    public Task InitializeAsync(IActionMonitor monitor, CancellationToken token)
+    {
+      //  get things ready, initialize values and so on. 
+      _monitor = monitor ?? throw new ArgumentNullException( nameof(monitor));
+      return Task.FromResult(0);
+    }
+  }
+}
+```
+
 ### C Sharp
 
 Read more about the [C# scripts](scripts/csharp.md)
 
 #### Example
-
-##### Hello world
 
 ```csharp
 using System;
