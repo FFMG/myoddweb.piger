@@ -19,7 +19,7 @@
 class ActiveLoadAction final : public ActiveAction
 {
 public:
-  ActiveLoadAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd );
+  ActiveLoadAction(IApplication& application, const Action& src, HWND hTopHWnd );
   virtual ~ActiveLoadAction();
 
 protected:

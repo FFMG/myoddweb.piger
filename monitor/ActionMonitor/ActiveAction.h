@@ -19,12 +19,11 @@
 
 // the clipboard data at the time we createed it.
 #include "../common/clipboard.h"
-#include "../api/IVirtualMachines.h"
 
 class ActiveAction : public Action
 {
 public:
-  ActiveAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
+  ActiveAction(const Action& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
 	virtual ~ActiveAction();
 
   ActiveAction(const ActiveAction&) = delete;
@@ -69,9 +68,6 @@ protected:
   virtual void OnExecuteInThread() = 0;
   virtual bool OnInitialize() = 0;
   virtual bool OnDeInitialize() = 0;
-
-protected:
-  IVirtualMachines& _virtualMachines;
 
 private:
   // the current clipboard.

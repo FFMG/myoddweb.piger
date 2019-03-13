@@ -17,18 +17,14 @@
 #include "ActionMonitor.h"
 #include "activeaction.h"
 #include "activepythonaction.h"
-#include "activeluaaction.h"
-#include "activepluginaction.h"
+#include "ActiveVirtualMachineAction.h"
 #include "activedefaultaction.h"
 #include "activebatchaction.h"
 #include "activecmdaction.h"
 #include "activecomaction.h"
 #include "activeexeaction.h"
-#include "activeshellAction.h"
 
 #include "os/os.h"
-#include "ActivePowershellAction.h"
-#include "ActiveCsAction.h"
 
 /**
  * \brief Constructor
@@ -372,7 +368,8 @@ bool Action::Execute(const std::vector<std::wstring>& argv, const bool isPrivile
 /**
  * \brief Launch a single action with all the command line arguments.
  * TODO : The API calls ignore the values been passed to them, so we should first check that we have all the values.
- * \param pWnd the last forground window.
+ * \param virtualMachines the virtual machines manager.
+ * \param pWnd the last foreground window.
  * \param szCommandLine the command and the arguments we are launching this file with.
  * \param isPrivileged if we need administrator privilege to run this.
  * \return TRUE|FALSE success or not.
@@ -393,7 +390,8 @@ ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines
   //
   if (LuaVirtualMachine::IsExt(_szFile ))
   {
-    auto ala = new ActiveLuaAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
+    auto& virtualMachine = virtualMachines.Get(IVirtualMachines::Type::Lua);
+    auto ala = new ActiveVirtualMachineAction(*this, virtualMachine, hTopHWnd, szCommandLine, isPrivileged);
     if (ala->Initialize())
     {
       return ala;
@@ -409,7 +407,8 @@ ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines
   //
   if (PythonVirtualMachine::IsExt(_szFile))
   {
-    auto apa = new ActivePythonAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
+    auto& virtualMachine = virtualMachines.Get(IVirtualMachines::Type::Python);
+    auto apa = new ActivePythonAction(*this, virtualMachine, hTopHWnd, szCommandLine, isPrivileged);
     if(apa->Initialize() )
     { 
       return apa;
@@ -425,7 +424,8 @@ ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines
   //
   if (PowershellVirtualMachine::IsExt(_szFile))
   {
-    auto apa = new ActivePowershellAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
+    auto& virtualMachine = virtualMachines.Get(IVirtualMachines::Type::Powershell);
+    auto apa = new ActiveVirtualMachineAction(*this, virtualMachine, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
     {
       return apa;
@@ -441,7 +441,8 @@ ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines
   //
   if (ShellVirtualMachine::IsExt(_szFile))
   {
-    auto asa = new ActiveShellAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
+    auto& virtualMachine = virtualMachines.Get(IVirtualMachines::Type::Shell);
+    auto asa = new ActiveVirtualMachineAction(*this, virtualMachine, hTopHWnd, szCommandLine, isPrivileged);
     if (asa->Initialize())
     {
       return asa;
@@ -457,7 +458,8 @@ ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines
   //
   if (CsVirtualMachine::IsExt(_szFile))
   {
-    auto acsa = new ActiveCsAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
+    auto& virtualMachine = virtualMachines.Get(IVirtualMachines::Type::CSharp);
+    auto acsa = new ActiveVirtualMachineAction(*this, virtualMachine, hTopHWnd, szCommandLine, isPrivileged);
     if (acsa->Initialize())
     {
       return acsa;
@@ -473,7 +475,8 @@ ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines
   //
   if (PluginVirtualMachine::IsExt(_szFile))
   {
-    auto apa = new ActivePluginAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
+    auto& virtualMachine = virtualMachines.Get(IVirtualMachines::Type::LegacyPlugin);
+    auto apa = new ActiveVirtualMachineAction(*this, virtualMachine, hTopHWnd, szCommandLine, isPrivileged);
     if (apa->Initialize())
     {
       return apa;
@@ -487,21 +490,21 @@ ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines
   // Batch files...
   if( myodd::files::IsExtension (_szFile, _T("bat")))
   {
-    return new ActiveBatchAction(*this, virtualMachines, hTopHWnd, szCommandLine );
+    return new ActiveBatchAction(*this, hTopHWnd, szCommandLine );
   }
   if (myodd::files::IsExtension(_szFile, _T("cmd")))
   {
-    return new ActiveCmdAction(*this, virtualMachines, hTopHWnd, szCommandLine);
+    return new ActiveCmdAction(*this, hTopHWnd, szCommandLine);
   }
   if (myodd::files::IsExtension(_szFile, _T("com")))
   {
-    return new ActiveComAction(*this, virtualMachines, hTopHWnd, szCommandLine);
+    return new ActiveComAction(*this, hTopHWnd, szCommandLine);
   }
   if (myodd::files::IsExtension(_szFile, _T("exe")))
   {
-    return new ActiveExeAction(*this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged);
+    return new ActiveExeAction(*this, hTopHWnd, szCommandLine, isPrivileged);
   }
 
   // run the default action.
-  return new ActiveDefaultAction( *this, virtualMachines, hTopHWnd, szCommandLine, isPrivileged );
+  return new ActiveDefaultAction( *this, hTopHWnd, szCommandLine, isPrivileged );
 }

@@ -43,5 +43,5 @@ ActiveAction* ActionVersion::CreateActiveAction(IVirtualMachines& virtualMachine
   const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
 
   //  display the version.
-  return new ActiveVersionAction(_application, *this, virtualMachines, hTopHWnd);
+  return new ActiveVersionAction(_application, *this, hTopHWnd);
 }

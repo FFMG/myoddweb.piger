@@ -19,7 +19,7 @@
 class ActiveVersionAction final : public ActiveAction
 {
 public:
-  ActiveVersionAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd );
+  ActiveVersionAction(IApplication& application, const Action& src, HWND hTopHWnd );
   virtual ~ActiveVersionAction();
 
 protected:

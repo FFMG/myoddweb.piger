@@ -19,8 +19,8 @@
 /**
  * \copydoc
  */
-ActiveVersionAction::ActiveVersionAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
-  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  ),
+ActiveVersionAction::ActiveVersionAction(IApplication& application, const Action& src, const HWND hTopHWnd ) :
+  ActiveAction( src, hTopHWnd, L"", false  ),
   _application( application )
 {
 }

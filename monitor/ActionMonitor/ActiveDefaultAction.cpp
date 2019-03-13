@@ -23,8 +23,8 @@
  * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
  * @param bool isPrivileged if this action is privileged or not.
  */
-ActiveDefaultAction::ActiveDefaultAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
-  ActiveAction( src, virtualMachines, hTopHWnd, szCommandLine, isPrivileged )
+ActiveDefaultAction::ActiveDefaultAction(const Action& src, const HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 
@@ -49,7 +49,7 @@ void ActiveDefaultAction::OnExecuteInThread()
   // we need to log that we are going to run this as a default.
   // we should always try and create an ActiveAction for each known extensions.
   // otherwise, who knows how this will run, (for example and swf extension might not be able to run).
-  auto szFile = File();
+  const auto szFile = File();
   auto szExt = myodd::files::GetExtension( szFile );;
   auto szCommand = Command();
   myodd::log::LogWarning(_T("Will try and execute the command '%s' from file '%s'"), szExt.c_str(), szCommand.c_str());

@@ -41,5 +41,5 @@ ActiveAction* ActionBye::CreateActiveAction(IVirtualMachines& virtualMachines, C
 {
   //  get the last forground window handle
   const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
-  return new ActiveByeAction( _application, *this, virtualMachines, hTopHWnd );
+  return new ActiveByeAction( _application, *this, hTopHWnd );
 }

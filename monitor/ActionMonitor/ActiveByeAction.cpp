@@ -1,12 +1,11 @@
 #include "stdafx.h"
 #include "ActiveByeAction.h"
-#include "ActionMonitor.h"
 
 /**
  * \copydoc
  */
-ActiveByeAction::ActiveByeAction(IApplication& application, const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd ) :
-  ActiveAction( src, virtualMachines, hTopHWnd, L"", false  ),
+ActiveByeAction::ActiveByeAction(IApplication& application, const Action& src, HWND hTopHWnd ) :
+  ActiveAction( src, hTopHWnd, L"", false  ),
   _application( application )
 {
 }
