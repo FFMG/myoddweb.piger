@@ -23,7 +23,7 @@ public:
   explicit ActionBye(IApplication& application);
 	virtual ~ActionBye();
 
-  ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const override;
+  ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const override;
 
 private:
   IApplication& _application;
