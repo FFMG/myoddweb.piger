@@ -13,7 +13,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-#include "Action.h"
+#include "IAction.h"
 #include <threads/lock.h>
 #include "IActions.h"
 
@@ -29,8 +29,8 @@ public:
 	Actions();
 	virtual ~Actions();
 
-protected:
-  DISALLOW_COPY_AND_ASSIGN(Actions);
+  Actions(const Actions&) = delete;
+  void operator=(const Actions&) = delete;
 
 protected:
   struct COMMANDS_VALUE
@@ -56,7 +56,7 @@ protected:
 
 protected:
   //  vectors containing all the commands we can call
-  typedef std::vector<Action*> array_of_actions;
+  typedef std::vector<IAction*> array_of_actions;
   typedef array_of_actions::const_iterator array_of_actions_it;
   array_of_actions _actions;
   array_of_actions _actionsMatch;
@@ -72,8 +72,7 @@ protected:
   // the command currently chosen
   size_t m_uCommand;
 
-protected:
-  Action* _actionCurrentlySelected;
+  IAction* _actionCurrentlySelected;
 
 public:
   /**
@@ -91,16 +90,16 @@ public:
   void CurrentActionReset() override;
   void CurrentActionAdd( wchar_t c ) override;
   void CurrentActionBack() override;
-  void SetAction(Action* tmpAction) override;
-  const Action* GetCommand() override;
+  void SetAction(IAction* tmpAction) override;
+  const IAction* GetCommand() override;
   std::wstring GetCommandLine() override;
   std::wstring ToChar() override;
   void down() override;
   void up() override;
   void Initialize() override;
-  bool Add(Action* action) override;
+  bool Add(IAction* action) override;
   bool Remove(const std::wstring& szText, const std::wstring& szPath) override;
-  const Action* Find(const std::wstring& szText, unsigned int idx ) override;
+  const IAction* Find(const std::wstring& szText, unsigned int idx ) override;
 
   void ClearAll();
 protected:

@@ -40,16 +40,14 @@ Action::Action()
  * \param szPath the full path of the action that we will execute.
  * \return none
  */
-Action::Action(const std::wstring& szCommand, const std::wstring& szPath )
+Action::Action(const std::wstring& szCommand, const std::wstring& szPath ) : 
+  Action()
 {
   if(szCommand.length() == 0 )
   {
     //  we cannot have nullptr commands.
     throw -1;
   }
-
-  //  reset everything
-  Reset();
 
   // set the command and make sure it is valid.
   _szCommand = szCommand;
@@ -85,9 +83,9 @@ Action::Action(const std::wstring& szCommand, const std::wstring& szPath )
  * @version 0.1
  * @return none
  */
-Action::Action( const Action&action)
+Action::Action( const Action&action) : 
+  Action()
 {
-  Reset();
   *this = action;
 }
 
@@ -127,6 +125,7 @@ void Action::SetCommandPath(const std::wstring& szPath )
 
 /**
  * \brief Run the command, we take into account the current selection and command parameters given.
+ * \param virtualMachines the virtual machine.
  * \param pWnd the last foreground window.
  * \param szCommandLine the command line argument.
  * \param isPrivileged if we need administrator privilege to run this.

@@ -1,24 +1,15 @@
-// Actions.cpp: implementation of the Actions class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include "stdafx.h"
 #include "Actions.h"
 #include <io.h>
 #include <threads/lock.h>
 
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-// -------------------------------------------------------------
 Actions::Actions() : 
   m_uCommand( 0 ),
   _actionCurrentlySelected( nullptr ),
   _sActionAsTyped( L"" ),
   _mutexActions( L"Actions"),
-  _mutexActionsMatch( L"Actions - Match"),
-  _mutexActionTemp( L"Action - Temp")
+  _mutexActionTemp( L"Action - Temp"),
+  _mutexActionsMatch( L"Actions - Match")
 {
 }
 
@@ -54,7 +45,7 @@ void Actions::ClearAll()
  * \param idx the index number we are looking for.
  * \return Action or nullptr if the action was found or not.
  */
-const Action* Actions::Find(const std::wstring& szText, unsigned int idx )
+const IAction* Actions::Find(const std::wstring& szText, unsigned int idx )
 {
   //  get the lock
   myodd::threads::Lock guard(_mutexActions);
@@ -127,7 +118,7 @@ Actions::array_of_actions_it Actions::Find(const std::wstring& szText, const std
  * \param action the action we want to add.
  * \return bool success or not.
  */
-bool Actions::Add( Action* action )
+bool Actions::Add( IAction* action )
 {
   if (nullptr == action)
   {
@@ -401,7 +392,7 @@ size_t Actions::BuildMatchList( std::vector<std::wstring>& exploded )
 }
 
 // -------------------------------------------------------------
-void Actions::SetAction( Action* tmpAction )
+void Actions::SetAction( IAction* tmpAction )
 {
   // Reset the commands so there is no confusion
   _sActionAsTyped = L"";
@@ -417,7 +408,7 @@ void Actions::SetAction( Action* tmpAction )
 
 // -------------------------------------------------------------
 //  get the currently selected command
-const Action* Actions::GetCommand()
+const IAction* Actions::GetCommand()
 {
   //  do we have a posible action?
   {
@@ -437,7 +428,7 @@ const Action* Actions::GetCommand()
   }
 
   //  get the current action.
-  const Action* action = _actionsMatch[m_uCommand];
+  const IAction* action = _actionsMatch[m_uCommand];
   return action;
 }
 

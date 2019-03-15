@@ -13,28 +13,14 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-#include "IAction.h"
 
-class IActions
+class IActiveAction
 {
 public:
-	IActions();
-	virtual ~IActions();
+  IActiveAction();
 
-  IActions(const IActions&) = delete;
-  void operator=( const IActions& ) = delete;
+  void operator=(const IActiveAction& ) = delete;
+  IActiveAction( const IActiveAction&) = delete;
 
-  virtual void CurrentActionReset() = 0;
-  virtual void CurrentActionAdd(wchar_t c) = 0;
-  virtual void CurrentActionBack() = 0;
-  virtual void SetAction(IAction* tmpAction) = 0;
-  virtual const IAction* GetCommand() = 0;
-  virtual std::wstring GetCommandLine() = 0;
-  virtual std::wstring ToChar() = 0;
-  virtual void down() = 0;
-  virtual void up() = 0;
-  virtual void Initialize() = 0;
-  virtual bool Add(IAction* action) = 0;
-  virtual bool Remove(const std::wstring& szText, const std::wstring& szPath) = 0;
-  virtual const IAction* Find(const std::wstring& szText, unsigned int idx) = 0;
+	virtual ~IActiveAction() = default;
 };

@@ -16,9 +16,10 @@
 
 #include <vector>
 #include "../api/IVirtualMachines.h"
+#include "IAction.h"
 
 class ActiveAction;
-class Action  
+class Action : public IAction
 {
   /**
    * \brief default constructor is private
@@ -30,6 +31,7 @@ public:
   Action( const Action&);
   Action( const std::wstring& szCommand, const std::wstring& szPath );
 
+public:
 	virtual ~Action() = default;
 
   void Reset();
@@ -37,17 +39,22 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  virtual ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const;
+  ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const override;
 
   // Same as CreateActiveAction( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  ActiveAction* CreateActiveActionDirect( IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged ) const;
+  ActiveAction* CreateActiveActionDirect( IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged ) const override;
 
   /**
    * \brief get the command string
    */
-  const std::wstring& Command() const;
-  
+  const std::wstring& Command() const override;
+
+  /**
+   * \brief the full filename/path and extension.
+   */
+  const std::wstring& File() const override { return _szFile; }
+
   /**
    * \brief the length of the command.
    */
@@ -64,9 +71,6 @@ protected:
   std::wstring ToSingleLine( const wchar_t* text  ) const;
 
 public:
-  // ----------------------------
-  //  this is the full file name + extensions
-  const std::wstring& File() const { return _szFile; }
 
   static bool Execute( const std::vector<std::wstring>& argv, bool isPrivileged, HANDLE* hProcess );
 
