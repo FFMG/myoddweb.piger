@@ -16,11 +16,12 @@
 
 // the parent action.
 #include "Action.h"
+#include "IActiveAction.h"
 
 // the clipboard data at the time we createed it.
 #include "../common/clipboard.h"
 
-class ActiveAction : public Action
+class ActiveAction : public Action, public IActiveAction
 {
 public:
   ActiveAction(const Action& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
@@ -33,9 +34,9 @@ public:
   const Clipboard& GetClipboard() const { return *_clipboard; }
 
   // ----------------------------
-  void ExecuteInThread();
-  bool Initialize();
-  bool DeInitialize();
+  void ExecuteInThread() override;
+  bool Initialize() override;
+  bool DeInitialize() override;
 
   /**
    * this is the command line arguments as given by the user.

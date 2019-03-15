@@ -51,7 +51,7 @@ ActiveActions::~ActiveActions()
  * \brief Add an item to our list of workers and queue.
  * \param activeAction the action we want to queue, this can be NULL
  */
-void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
+void ActiveActions::QueueAndExecute(IActiveAction* activeAction )
 {
   //  it could be NULL.
   if (nullptr == activeAction)
@@ -81,7 +81,7 @@ void ActiveActions::QueueAndExecute( ActiveAction* activeAction )
  * \brief Remove an active action form the list of actions.
  * \param runner the runner we would like to remove from the list.
  */
-void ActiveActions::RemoveRunner( ActiveAction* runner )
+void ActiveActions::RemoveRunner(IActiveAction* runner )
 {
   //  lock it.
   myodd::threads::Lock guard(_mutexRunner);
@@ -109,7 +109,7 @@ void ActiveActions::RemoveRunner( ActiveAction* runner )
  * \param runner the action we will be running.
  * \param parent the parent actions holder so we can clean up once complete.
  */
-void ActiveActions::Execute( ActiveAction* runner, ActiveActions* parent )
+void ActiveActions::Execute(IActiveAction* runner, ActiveActions* parent )
 {
   //  do the action.
   (*runner).ExecuteInThread();

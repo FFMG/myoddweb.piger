@@ -131,7 +131,7 @@ void Action::SetCommandPath(const std::wstring& szPath )
  * \param isPrivileged if we need administrator privilege to run this.
  * \return BOOL true.
  */
-ActiveAction* Action::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
+IActiveAction* Action::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
 {
   //  not sure how to do that...
   if ( Len() == 0)
@@ -146,7 +146,7 @@ ActiveAction* Action::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd
   //  if we are here then we are going to load a user command
   //
   //  If the user did not pass any arguments/command line then we must get them from the clipboard.
-  ActiveAction* aa;
+  IActiveAction* aa;
   if( szCommandLine.length() == 0 )
   {
     aa = CreateActiveActionWithNoCommandLine( virtualMachines, pWnd, isPrivileged);
@@ -165,11 +165,12 @@ ActiveAction* Action::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd
 
 /**
  * \brief Try and do it when we have no command line
+ * \param virtualMachines
  * \param pWnd the last foreground window.
  * \param isPrivileged if this action is privileged or not.
  * \return bool success or not.
  */
-ActiveAction* Action::CreateActiveActionWithNoCommandLine(IVirtualMachines& virtualMachines, CWnd* pWnd, const bool isPrivileged ) const
+IActiveAction* Action::CreateActiveActionWithNoCommandLine(IVirtualMachines& virtualMachines, CWnd* pWnd, const bool isPrivileged ) const
 {
   //  the command line we will try and make.
   std::wstring szCommandLine = L"";
@@ -373,7 +374,7 @@ bool Action::Execute(const std::vector<std::wstring>& argv, const bool isPrivile
  * \param isPrivileged if we need administrator privilege to run this.
  * \return TRUE|FALSE success or not.
  */
-ActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
+IActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, const bool isPrivileged) const
 {
   // sanity check
   if (0 == _szFile.length())

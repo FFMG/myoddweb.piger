@@ -17,8 +17,8 @@
 #include <vector>
 #include "../api/IVirtualMachines.h"
 #include "IAction.h"
+#include "IActiveAction.h"
 
-class ActiveAction;
 class Action : public IAction
 {
   /**
@@ -39,11 +39,11 @@ public:
 
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
-  ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const override;
+  IActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const override;
 
   // Same as CreateActiveAction( ... ) but we don't get anything from the clipboard
   // only will use what was given to us without further checks.
-  ActiveAction* CreateActiveActionDirect( IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged ) const override;
+  IActiveAction* CreateActiveActionDirect( IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged ) const override;
 
   /**
    * \brief get the command string
@@ -61,7 +61,7 @@ public:
   size_t Len() const { return _szCommand.length();}
 
 protected:
-  ActiveAction* CreateActiveActionWithNoCommandLine(IVirtualMachines& virtualMachines, CWnd* pWnd, bool isPrivileged ) const;
+  IActiveAction* CreateActiveActionWithNoCommandLine(IVirtualMachines& virtualMachines, CWnd* pWnd, bool isPrivileged ) const;
 
   /**
    * \brief convert a multi line piece of text to a single line.

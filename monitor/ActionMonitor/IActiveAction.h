@@ -23,4 +23,8 @@ public:
   IActiveAction( const IActiveAction&) = delete;
 
 	virtual ~IActiveAction() = default;
+
+  virtual void ExecuteInThread() = 0;
+  virtual bool Initialize() = 0;
+  virtual bool DeInitialize() = 0;
 };

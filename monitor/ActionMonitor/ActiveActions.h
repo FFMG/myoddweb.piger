@@ -16,7 +16,7 @@
 
 #include <vector>
 #include <threads/lock.h>
-#include "activeaction.h"
+#include "IActiveaction.h"
 #include "threads/workers.h"
 
 class ActiveActions : protected myodd::threads::Workers
@@ -28,10 +28,10 @@ public:
   ActiveActions(const ActiveActions&) = delete;
   void operator=(const ActiveActions&) = delete;
 
-  void QueueAndExecute( ActiveAction* activeAction );
+  void QueueAndExecute(IActiveAction* activeAction );
 
 private:
-  static void Execute(ActiveAction* runner, ActiveActions* parent);
+  static void Execute(IActiveAction* runner, ActiveActions* parent);
 
   /**
    * \brief the mutex that manages the runners
@@ -41,11 +41,11 @@ private:
   /**
    * \brief the collection of runners.
    */
-  typedef std::vector<ActiveAction*> Runners;
+  typedef std::vector<IActiveAction*> Runners;
   Runners _runners;
 
   /**
    * \brief look for and remove a runner.
    */
-  void RemoveRunner(ActiveAction* runner);
+  void RemoveRunner(IActiveAction* runner);
 };
