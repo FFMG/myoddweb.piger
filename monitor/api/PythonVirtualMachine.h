@@ -8,7 +8,7 @@
 class PythonVirtualMachine final : public IVirtualMachine
 {
 public:
-  explicit PythonVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener );
+  explicit PythonVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& ipcListener );
   ~PythonVirtualMachine();
   bool Initialize() override;
 

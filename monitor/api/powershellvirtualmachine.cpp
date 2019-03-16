@@ -6,8 +6,8 @@
 /**
  * \copydoc
  */
-PowershellVirtualMachine::PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  ExecuteVirtualMachine( actions, messagesHandler, iIpcListener )
+PowershellVirtualMachine::PowershellVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  ExecuteVirtualMachine( application, messagesHandler, iIpcListener )
 {
 }
 
@@ -285,8 +285,8 @@ bool PowershellVirtualMachine::IsPowershell3Installed()
   return (dwValue == 1 );
 }
 
-ExecuteApi* PowershellVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages)
+ExecuteApi* PowershellVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages)
 {
-  return new PowershellApi(uuid, action, actions, messages);
+  return new PowershellApi(uuid, action, application, messages);
 }
 #endif /*ACTIONMONITOR_PS_PLUGIN*/

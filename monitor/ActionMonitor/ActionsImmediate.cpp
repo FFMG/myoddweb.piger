@@ -17,11 +17,12 @@
 
 /**
  * \brief Constructor
+ * \param application the application manager
  * \param directoryToParse the directory with the actions we want to do immidiately.
  * \param parentActions the parent actions.
  */
-ActionsImmediate::ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines) :
-  Actions(),
+ActionsImmediate::ActionsImmediate(IApplication& application, const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines) :
+  Actions(application),
   _directoryToParse( directoryToParse ),
   _parentActions( parentActions ),
   _mutex( L"Actions - Immediate"),

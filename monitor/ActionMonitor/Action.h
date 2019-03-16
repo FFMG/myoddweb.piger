@@ -14,7 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
-#include <vector>
 #include "../api/IVirtualMachines.h"
 #include "IAction.h"
 #include "IActiveAction.h"
@@ -24,12 +23,12 @@ class Action : public IAction
   /**
    * \brief default constructor is private
    */
-  Action();
+  Action(IApplication& application);
 
 public:
   const Action& operator=(const Action& );
   Action( const Action&);
-  Action( const std::wstring& szCommand, const std::wstring& szPath );
+  Action(IApplication& application, const std::wstring& szCommand, const std::wstring& szPath );
 
 public:
 	virtual ~Action() = default;
@@ -64,15 +63,16 @@ protected:
   IActiveAction* CreateActiveActionWithNoCommandLine(IVirtualMachines& virtualMachines, CWnd* pWnd, bool isPrivileged ) const;
 
   /**
+   * \brief the application manager.
+   */
+  IApplication& _application;
+
+  /**
    * \brief convert a multi line piece of text to a single line.
    * \param text the multi line text
    * \return the converted text
    */
   std::wstring ToSingleLine( const wchar_t* text  ) const;
-
-public:
-
-  static bool Execute( const std::vector<std::wstring>& argv, bool isPrivileged, HANDLE* hProcess );
 
 private:  
   std::wstring _szCommand;  //  the command line only.

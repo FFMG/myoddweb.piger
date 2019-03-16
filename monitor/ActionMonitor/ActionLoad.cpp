@@ -22,8 +22,7 @@
  * \param application the application to close the app
  */
 ActionLoad::ActionLoad(IApplication& application) :
-  Action( ACTION_CORE_LOAD, L""),
-  _application(application)
+  Action( application, ACTION_CORE_LOAD, L"")
 {
 }
 

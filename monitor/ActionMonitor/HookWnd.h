@@ -17,7 +17,8 @@
 #include "IDisplay.h"
 #include "IActions.h"
 #include "../api/IVirtualMachines.h"
-#include "IActiveAction.h"
+#include "threads/workers.h"
+#include "ActiveActionsRunner.h"
 
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
@@ -26,7 +27,7 @@
 
 #define SPECIAL_KEY VK_CAPITAL
 
-class HookWnd final : public CommonWnd, IActiveAction
+class HookWnd final : public CommonWnd, protected myodd::threads::Workers
 {
 public:
   explicit HookWnd(IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines);
@@ -61,5 +62,8 @@ protected:
 
   static bool IsSpecialKeyDown();
   static bool IsSpecialKey(const WPARAM wParam);
-};
 
+private:
+  ActiveActionsRunner* _activeActionsRunner;
+  
+};

@@ -16,7 +16,8 @@
 
 #include "IActiveAction.h"
 #include "IMessagesHandler.h"
-#include "IActions.h"
+#include "IApplication.h"
+#include "IAction.h"
 #include "../common/clipboard.h"
 
 /**
@@ -29,7 +30,7 @@
 class HelperApi
 {
 public:
-  explicit HelperApi( const IActiveAction& action, IActions& actions, IMessagesHandler& messages );
+  explicit HelperApi( const IActiveAction& action, IApplication& application, IMessagesHandler& messages );
   virtual ~HelperApi() = default;
 
 private:
@@ -41,14 +42,14 @@ private:
   const IActiveAction& _action;
 
   /**
+   * \brief the application.
+   */
+  IApplication& _application;
+
+  /**
    * \brief the messages handler
    */
   IMessagesHandler& _messagesHandler;
-
-  /**
-   * \brief all the actions
-   */
-  IActions& _actions;
 
 protected:
   // helper function
@@ -63,7 +64,7 @@ protected:
 
   // get the action given by the user
   // this is useful in case a plugin creates more than one action.
-  bool GetAction( MYODD_STRING& sValue ) const;
+  bool GetAction( std::wstring& sValue ) const;
 
   // get the number of commands.
   size_t GetCommandCount() const;
@@ -91,19 +92,19 @@ protected:
   virtual bool GetUrl ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
 
   // get the action monitor version number.
-  static bool GetVersion(MYODD_STRING& sValue);
+  static bool GetVersion(std::wstring& sValue);
 
   // add a set of command to the list of commands.
   // note that we do hardly any checks to see of the command already exists
-  bool AddAction(const wchar_t* szText, const wchar_t* szPath ) const;
+  bool AddAction(const std::wstring& szText, const std::wstring& szPath ) const;
 
   // remove an action, if more than one action is found
   // then the path will be compared against.
-  bool RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const;
+  bool RemoveAction(const std::wstring& szText, const std::wstring& szPath ) const;
 
   // find an action, we return true when we find it
   // there can be more than one action with the same name.
-  bool FindAction( unsigned int idx, const wchar_t* szText, std::wstring& stdPath ) const;
+  const IAction* FindAction( unsigned int idx, const std::wstring& szText ) const;
 
   // log a message to the log file.
   static void Log(unsigned int logType, const wchar_t* lpText );

@@ -15,8 +15,8 @@ static const double ACTIONMONITOR_API_PY_VERSION = 3.1;
 /**
  * \copydoc
  */
-PyApi::PyApi(const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler, std::string script, PyThreadState* mainThreadState) :
-  HelperApi(action, actions, messagesHandler),
+PyApi::PyApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler, std::string script, PyThreadState* mainThreadState) :
+  HelperApi(action, application, messagesHandler),
   _script(std::move(script)),
   _mainThreadState(mainThreadState)
 {
@@ -473,8 +473,8 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
       return Fail();
     }
 
-    MYODD_STRING sValue = _T("");
-    if (!__super::FindAction(idx, HelperApi::Widen(szText).c_str(), sValue))
+    const auto action = HelperApi::FindAction(idx, HelperApi::Widen(szText));
+    if (action == nullptr )
     {
       // we have nothing
       return Py_BuildValue("b", false);
@@ -482,7 +482,7 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
 
     USES_CONVERSION;
     // we have a string
-    return Py_BuildValue("s", T_T2A(sValue.c_str()));
+    return Py_BuildValue("s", T_T2A(action->File().c_str()));
   }
   catch( ... )
   {

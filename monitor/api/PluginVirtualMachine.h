@@ -11,7 +11,7 @@
 class PluginVirtualMachine final : public IVirtualMachine
 {
 public:
-  PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  PluginVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~PluginVirtualMachine();
 
   int Execute(const IActiveAction& action, const std::wstring& pluginFile) override;

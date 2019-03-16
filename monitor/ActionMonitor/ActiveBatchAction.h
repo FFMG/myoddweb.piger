@@ -19,7 +19,7 @@ class ActiveBatchAction final :
   public ActiveAction
 {
 public:
-  ActiveBatchAction(const IAction& src, HWND hTopHWnd, const std::wstring& szCommandLine);
+  ActiveBatchAction(IApplication& application, const IAction& src, HWND hTopHWnd, const std::wstring& szCommandLine);
   virtual ~ActiveBatchAction();
 
 protected:

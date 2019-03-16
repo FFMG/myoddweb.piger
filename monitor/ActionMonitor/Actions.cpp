@@ -2,8 +2,10 @@
 #include "Actions.h"
 #include <io.h>
 #include <threads/lock.h>
+#include "Action.h"
 
-Actions::Actions() : 
+Actions::Actions( IApplication& application ) :
+  _application( application ),
   m_uCommand( 0 ),
   _actionCurrentlySelected( nullptr ),
   _sActionAsTyped( L"" ),
@@ -578,7 +580,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
         myodd::files::StripExtension( szName );
       }        
 
-      Add( new Action( szName, szFullPath));
+      Add( new Action( _application ,szName, szFullPath));
     }while( _tfindnext( ffhandle, &fdata ) == 0 );
 
     _findclose( ffhandle );

@@ -14,9 +14,10 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "IMessagesHandler.h"
-#include "IActions.h"
+#include "IApplication.h"
 #include "IActiveAction.h"
 #include "IIpcListener.h"
+#include "IApplication.h"
 
 template <class Key, class Value>
 class VirtualMachineLists
@@ -141,7 +142,7 @@ protected:
 class IVirtualMachine
 {
 public:
-  explicit IVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  explicit IVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~IVirtualMachine();
 
   IVirtualMachine(const IVirtualMachine&) = delete;
@@ -175,9 +176,9 @@ protected:
     return _messagesHandler;
   }
 
-  IActions& GetActions() const
+  IApplication& GetApplication() const
   {
-    return _actions;
+    return _application;
   }
 
   IIpcListener& GetIpcListener() const
@@ -191,9 +192,9 @@ private:
   IMessagesHandler& _messagesHandler;
 
   /**
-   * \param the collection of actions
+   * \param the applications manager
    */
-  IActions& _actions;
+  IApplication& _application;
 
   /**
    * \brief the ipc listener.

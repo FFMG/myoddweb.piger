@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "IVirtualMachine.h"
 
-IVirtualMachine::IVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  _actions(actions),
+IVirtualMachine::IVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  _application(application),
   _messagesHandler( messagesHandler ),
   _ipcListener( iIpcListener )
 {

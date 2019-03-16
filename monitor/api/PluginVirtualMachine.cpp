@@ -8,8 +8,8 @@
 /**
  * \copydoc
  */
-PluginVirtualMachine::PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  IVirtualMachine( actions, messagesHandler, iIpcListener ),
+PluginVirtualMachine::PluginVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine( application, messagesHandler, iIpcListener ),
   _amPlugin( nullptr ),
   _containerKey( L"Plugins Container")
 {
@@ -234,7 +234,7 @@ int PluginVirtualMachine::Execute(const IActiveAction& action, const std::wstrin
   }
 
   // add the api to the list.
-  auto api = new PluginApi(action, GetActions(), GetMessagesHandler() );
+  auto api = new PluginApi(action, GetApplication(), GetMessagesHandler() );
   AddApi( api );
 
   // execute this plugin

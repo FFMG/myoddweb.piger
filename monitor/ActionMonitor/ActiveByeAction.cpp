@@ -19,7 +19,7 @@
  * \copydoc
  */
 ActiveByeAction::ActiveByeAction(IApplication& application, const IAction& src, HWND hTopHWnd ) :
-  ActiveAction( src, hTopHWnd, L"", false  ),
+  ActiveAction( application, src, hTopHWnd, L"", false  ),
   _application( application )
 {
 }

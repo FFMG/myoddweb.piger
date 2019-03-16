@@ -1,13 +1,12 @@
 #include "StdAfx.h"
 
 #include "PluginApi.h"
-#include "pluginVirtualMachine.h"
 
 /**
  * \copydoc
  */
-PluginApi::PluginApi(const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
-  HelperApi(action, actions, messagesHandler )
+PluginApi::PluginApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler) :
+  HelperApi(action, application, messagesHandler )
 {
 }
 
@@ -291,12 +290,12 @@ bool PluginApi::FindAction
   wchar_t* lpBuffer
 ) const
 {
-  MYODD_STRING stdActionPath;
-  if( !__super::FindAction( idx, lpCommand, stdActionPath ) )
+  const auto action = HelperApi::FindAction(idx, lpCommand);
+  if( nullptr == action )
   {
     return false;
   }
-  wcsncpy_s( lpBuffer, nBufferLength, stdActionPath.c_str(), nBufferLength );
+  wcsncpy_s( lpBuffer, nBufferLength, action->File().c_str(), nBufferLength );
   return true;
 }
 

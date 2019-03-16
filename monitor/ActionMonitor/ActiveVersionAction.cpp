@@ -14,13 +14,12 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "ActiveVersionAction.h"
-#include "ActionMonitor.h"
 
 /**
  * \copydoc
  */
 ActiveVersionAction::ActiveVersionAction(IApplication& application, const IAction& src, const HWND hTopHWnd ) :
-  ActiveAction( src, hTopHWnd, L"", false  ),
+  ActiveAction( application, src, hTopHWnd, L"", false  ),
   _application( application )
 {
 }

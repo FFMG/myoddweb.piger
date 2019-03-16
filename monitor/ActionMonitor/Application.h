@@ -40,6 +40,14 @@ public:
 
   void ShowEnd() override;
 
+  bool AddAction(IAction* action) override;
+
+  bool RemoveAction(const std::wstring& szText, const std::wstring& szPath) const override;
+
+  const IAction* FindAction(unsigned int idx, const std::wstring& szText) const override;
+
+  bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const override;
+
 private:
   void CreateBase();
   void CreateForRestart();

@@ -5,7 +5,7 @@
 class PowershellVirtualMachine : public ExecuteVirtualMachine
 {
 public:
-  explicit PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  explicit PowershellVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~PowershellVirtualMachine();
 
   static bool IsExt(const MYODD_STRING& file);
@@ -13,7 +13,7 @@ public:
   //  handle the post message.
   bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
   bool Execute(ExecuteApi& api, const IActiveAction& action, const std::wstring& pluginFile) override;
-  ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages) override;
 
 private:
   static bool IsPowershell3Installed();

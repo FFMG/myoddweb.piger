@@ -7,8 +7,8 @@
 /**
  * \copydoc
  */
-ShellVirtualMachine::ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  ExecuteVirtualMachine( actions, messagesHandler, iIpcListener)
+ShellVirtualMachine::ShellVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  ExecuteVirtualMachine( application, messagesHandler, iIpcListener)
 {
 }
 
@@ -246,9 +246,9 @@ bool ShellVirtualMachine::ShellPath(std::wstring& szPath)
   return true;
 }
 
-ExecuteApi* ShellVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages)
+ExecuteApi* ShellVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages)
 {
-  return new ShellApi(uuid, action, actions, messages);
+  return new ShellApi(uuid, action, application, messages);
 }
 
 #endif /*ACTIONMONITOR_S_PLUGIN*/

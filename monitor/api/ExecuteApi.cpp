@@ -15,8 +15,8 @@
 #include "stdafx.h"
 #include "ExecuteApi.h"
 
-ExecuteApi::ExecuteApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages) :
-  HelperApi(action, actions, messages),
+ExecuteApi::ExecuteApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages) :
+  HelperApi(action, application, messages),
   _uuid(uuid),
   _hProcess(nullptr)
 {

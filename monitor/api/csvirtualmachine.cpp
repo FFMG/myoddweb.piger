@@ -2,11 +2,10 @@
 #include <fstream>
 #ifdef ACTIONMONITOR_CS_PLUGIN
 
-#include <os/ipclistener.h>
 #include "csvirtualmachine.h"
 
-CsVirtualMachine::CsVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  PowershellVirtualMachine( actions, messagesHandler, iIpcListener )
+CsVirtualMachine::CsVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  PowershellVirtualMachine( application, messagesHandler, iIpcListener )
 {
 }
 
@@ -14,9 +13,9 @@ CsVirtualMachine::~CsVirtualMachine()
 {
 }
 
-ExecuteApi* CsVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages)
+ExecuteApi* CsVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages)
 {
-  return new CsApi(uuid, action, actions, messages);
+  return new CsApi(uuid, action, application, messages);
 }
 
 /**

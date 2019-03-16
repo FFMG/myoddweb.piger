@@ -25,7 +25,7 @@ static const std::wstring ACTIONMONITOR_S_PLUGIN_VERSION = L"0.1";
 class ShellApi final : public ExecuteApi
 {
 public:
-  explicit ShellApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler );
+  explicit ShellApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler );
   virtual ~ShellApi() = default;
 
 public:

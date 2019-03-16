@@ -16,6 +16,7 @@
 #include "IAction.h"
 #include <threads/lock.h>
 #include "IActions.h"
+#include "IApplication.h"
 
 // the name of protected directories
 static const wchar_t* AM_DIRECTORY_IN  = L"__in";           //  dir of actions that will run at start
@@ -26,13 +27,18 @@ static const wchar_t* AM_DIRECTORY_PLUGIN = L"__plugins";   //  dir that will no
 class Actions : public IActions
 {
 public:
-	Actions();
+	Actions( IApplication& application );
 	virtual ~Actions();
 
   Actions(const Actions&) = delete;
   void operator=(const Actions&) = delete;
 
 protected:
+  /**
+   * \brief the application manager.
+   */
+  IApplication& _application;
+
   struct COMMANDS_VALUE
   {
     std::wstring color;

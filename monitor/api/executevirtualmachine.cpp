@@ -20,8 +20,8 @@
 /**
  * \copydoc
  */
-ExecuteVirtualMachine::ExecuteVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  IVirtualMachine( actions, messagesHandler, iIpcListener ),
+ExecuteVirtualMachine::ExecuteVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine( application, messagesHandler, iIpcListener ),
   _initialized( false ),
   _mutex( L"Execute Virtual Machine")
 {
@@ -147,7 +147,7 @@ ExecuteApi* ExecuteVirtualMachine::AddApi(const std::wstring& uuid, const IActiv
   }
 
   //  create the powershell api.
-  const auto api = CreateApi(uuid, action, GetActions(), GetMessagesHandler() );
+  const auto api = CreateApi(uuid, action, GetApplication(), GetMessagesHandler() );
 
   // add it to the array
   _apis[uuid] = api;

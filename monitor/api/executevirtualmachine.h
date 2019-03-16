@@ -8,7 +8,7 @@
 class ExecuteVirtualMachine : public myodd::os::IpcMessageHandler, public IVirtualMachine
 {
 public:
-  explicit ExecuteVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  explicit ExecuteVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~ExecuteVirtualMachine();
 
   bool HandleIpcMessage(const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
@@ -23,7 +23,7 @@ public:
   int Execute(const IActiveAction& action, const std::wstring& pluginFile) override;
   virtual bool Execute(ExecuteApi& api, const IActiveAction& action, const std::wstring& pluginFile) = 0;
 
-  virtual ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages) = 0;
+  virtual ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages) = 0;
 
   void Destroy() override;
   bool Initialize() override;

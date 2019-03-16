@@ -8,12 +8,15 @@ HookWnd::HookWnd( IDisplay& display, IActions& actions, IVirtualMachines& virtua
   _virtualMachines(virtualMachines),
   _actions(actions),
   _display(display),
-  _keyState(ACTION_NONE)
+  _keyState(ACTION_NONE),
+  _activeActionsRunner( nullptr )
 {
+  _activeActionsRunner = new ActiveActionsRunner();
 }
 
 HookWnd::~HookWnd()
 {
+  delete _activeActionsRunner;
 }
 
 
@@ -265,7 +268,7 @@ LRESULT HookWnd::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
           //  do the action now
           //  we might not have any, but that's not for us to decides :).
           const auto pWnd = CActionMonitorApp::GetLastForegroundWindow();
-          QueueAndExecute(action->CreateActiveAction(_virtualMachines, pWnd, szCommandLine, false));
+          _activeActionsRunner->QueueAndExecute(action->CreateActiveAction(_virtualMachines, pWnd, szCommandLine, false));
         }
       }
       catch (...)

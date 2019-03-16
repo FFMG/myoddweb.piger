@@ -5,7 +5,7 @@ class ActiveExeAction :
   public ActiveAction
 {
 public:
-  ActiveExeAction(const IAction& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActiveExeAction(IApplication& application, const IAction& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
   virtual ~ActiveExeAction();
 
 protected:

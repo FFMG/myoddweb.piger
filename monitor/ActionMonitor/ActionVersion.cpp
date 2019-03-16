@@ -22,8 +22,7 @@
  * \param application the application to close the app
  */
 ActionVersion::ActionVersion(IApplication& application) :
-  Action( ACTION_CORE_VERSION, L""),
-  _application(application)
+  Action( application, ACTION_CORE_VERSION, L"")
 {
 }
 

@@ -7,8 +7,8 @@
 /**
  * \copydoc
  */
-LuaVirtualMachine::LuaVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  IVirtualMachine(actions, messagesHandler, iIpcListener )
+LuaVirtualMachine::LuaVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine(application, messagesHandler, iIpcListener )
 {
 }
 
@@ -89,7 +89,7 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
 
 int LuaVirtualMachine::Execute(const IActiveAction& action, const std::wstring& pluginFile)
 {
-  const auto api = new LuaApi(action, GetActions(), GetMessagesHandler() );
+  const auto api = new LuaApi(action, GetApplication(), GetMessagesHandler() );
   try
   {
     const auto lua = CreateState(api);

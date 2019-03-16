@@ -11,7 +11,7 @@
 class LuaVirtualMachine final : public IVirtualMachine
 {
 public:
-  explicit LuaVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  explicit LuaVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   ~LuaVirtualMachine();
   
   static bool IsExt(const MYODD_STRING& file );

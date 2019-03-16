@@ -22,8 +22,7 @@
  * \param application the application to close the app
  */
 ActionBye::ActionBye(IApplication& application ) : 
-  Action( ACTION_CORE_BYE, L"" ),
-  _application(application)
+  Action( application, ACTION_CORE_BYE, L"" )
 {
 }
 

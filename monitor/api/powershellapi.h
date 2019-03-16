@@ -11,7 +11,7 @@ static const std::wstring ACTIONMONITOR_PS_PLUGIN_VERSION = L"0.1";
 class PowershellApi : public ExecuteApi
 {
 public:
-  PowershellApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler);
+  PowershellApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler);
   virtual ~PowershellApi();
 
 public:

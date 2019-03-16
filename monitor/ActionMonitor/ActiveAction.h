@@ -13,8 +13,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-
-// the parent action.
+#include "IApplication.h"
 #include "IAction.h"
 #include "IActiveAction.h"
 
@@ -24,7 +23,7 @@
 class ActiveAction : public IActiveAction
 {
 public:
-  ActiveAction(const IAction& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
+  ActiveAction(IApplication& application, const IAction& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
 	virtual ~ActiveAction();
 
   ActiveAction(const ActiveAction&) = delete;
@@ -48,7 +47,7 @@ public:
    */
   const std::wstring& Command() const override
   {
-    return L"";
+    return _action.Command();
   };
 
   // ----------------------------
@@ -76,7 +75,18 @@ public:
   /**
    * \brief the full filename/path and extension.
    */
-  const std::wstring& File() const override { return L""; }
+  const std::wstring& File() const override
+  {
+    return _action.File();
+  }
+
+  /**
+   * \brief the full filename/path and extension.
+   */
+  bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const
+  {
+    return _application.Execute( argv, isPrivileged, hProcess );
+  }
 
 protected:
   virtual void OnExecuteInThread() = 0;
@@ -84,6 +94,14 @@ protected:
   virtual bool OnDeInitialize() = 0;
 
 private:
+  /**
+   * \brief the application manager.
+   */
+  IApplication& _application;
+
+  /**
+   * \brief the action that is now active
+   */
   const IAction& _action;
 
   // the current clipboard.

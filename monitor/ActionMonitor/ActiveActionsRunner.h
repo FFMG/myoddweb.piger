@@ -14,14 +14,36 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
-#include "Action.h"
-#include "IApplication.h"
+#include "IActiveAction.h"
+#include "threads/workers.h"
 
-class ActionBye final : public Action
+class ActiveActionsRunner : protected myodd::threads::Workers
 {
 public:
-  explicit ActionBye(IApplication& application);
-	virtual ~ActionBye();
+  ActiveActionsRunner();
+	virtual ~ActiveActionsRunner();
 
-  IActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const override;
+  ActiveActionsRunner(const ActiveActionsRunner&) = delete;
+  void operator=(const ActiveActionsRunner&) = delete;
+
+  void QueueAndExecute(IActiveAction* activeAction );
+
+private:
+  static void Execute(IActiveAction* runner, ActiveActionsRunner* parent);
+
+  /**
+   * \brief the mutex that manages the runners
+   */
+  myodd::threads::Key _mutexRunner;
+
+  /**
+   * \brief the collection of runners.
+   */
+  typedef std::vector<IActiveAction*> Runners;
+  Runners _runners;
+
+  /**
+   * \brief look for and remove a runner.
+   */
+  void RemoveRunner(IActiveAction* runner);
 };

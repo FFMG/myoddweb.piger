@@ -9,8 +9,8 @@
  * @param const MYODD_STRING& szCommandLine the given command line that is, the words after the command itself
  * @param bool isPrivileged if this action is privileged or not.
  */
-ActiveExeAction::ActiveExeAction(const IAction& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
-  ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
+ActiveExeAction::ActiveExeAction(IApplication& application, const IAction& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+  ActiveAction( application, src, hTopHWnd, szCommandLine, isPrivileged )
 {
 }
 

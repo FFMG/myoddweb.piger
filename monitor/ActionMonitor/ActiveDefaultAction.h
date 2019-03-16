@@ -19,7 +19,7 @@ class ActiveDefaultAction final :
   public ActiveAction
 {
 public:
-  ActiveDefaultAction(const IAction& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
+  ActiveDefaultAction(IApplication& application, const IAction& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
   virtual ~ActiveDefaultAction();
 
 protected:
