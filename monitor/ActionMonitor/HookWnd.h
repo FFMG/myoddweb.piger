@@ -17,7 +17,7 @@
 #include "IDisplay.h"
 #include "IActions.h"
 #include "../api/IVirtualMachines.h"
-#include "ActiveActions.h"
+#include "IActiveAction.h"
 
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
@@ -26,7 +26,7 @@
 
 #define SPECIAL_KEY VK_CAPITAL
 
-class HookWnd final : public CommonWnd, ActiveActions
+class HookWnd final : public CommonWnd, IActiveAction
 {
 public:
   explicit HookWnd(IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines);

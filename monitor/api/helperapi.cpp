@@ -27,7 +27,7 @@
  * \param actions all the actions
  * \param messagesHandler the interface to show messages
  */
-HelperApi::HelperApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+HelperApi::HelperApi(const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
   _action( action ),
   _actions( actions),
   _messagesHandler(messagesHandler)

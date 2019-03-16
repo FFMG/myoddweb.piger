@@ -50,7 +50,7 @@ void LuaVirtualMachine::Dispose(lua_State* lua)
 
 /**
  * Create a new lua state
- * @param ActiveAction* action the current action
+ * @param IActiveAction* action the current action
  * @return lua_State* a newly created lua state,
  */
 lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
@@ -87,7 +87,7 @@ lua_State* LuaVirtualMachine::CreateState(LuaApi* api)
   return lua;
 }
 
-int LuaVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
+int LuaVirtualMachine::Execute(const IActiveAction& action, const std::wstring& pluginFile)
 {
   const auto api = new LuaApi(action, GetActions(), GetMessagesHandler() );
   try

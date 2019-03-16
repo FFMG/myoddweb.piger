@@ -20,10 +20,10 @@ public:
   //  handle the post message.
   bool HandleIpcPostMessage(unsigned int msg, unsigned __int64 wParam, __int64 lParam) override;
 
-  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
-  virtual bool Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile) = 0;
+  int Execute(const IActiveAction& action, const std::wstring& pluginFile) override;
+  virtual bool Execute(ExecuteApi& api, const IActiveAction& action, const std::wstring& pluginFile) = 0;
 
-  virtual ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) = 0;
+  virtual ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages) = 0;
 
   void Destroy() override;
   bool Initialize() override;
@@ -52,7 +52,7 @@ private:
    */
   HANDLE IsApiStillValid(const std::wstring& uuid);
 
-  ExecuteApi* AddApi(const std::wstring& uuid, const ActiveAction& action );
+  ExecuteApi* AddApi(const std::wstring& uuid, const IActiveAction& action );
   ExecuteApi* FindApi(const std::wstring& uuid) const;
   void RemoveApi(const std::wstring& uuid );
   void RemoveApis();

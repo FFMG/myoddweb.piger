@@ -12,8 +12,8 @@ public:
 
   //  handle the post message.
   bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
-  bool Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile) override;
-  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
+  bool Execute(ExecuteApi& api, const IActiveAction& action, const std::wstring& pluginFile) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
 
 private:
   static bool IsPowershell3Installed();
@@ -29,7 +29,7 @@ protected:
    * \param uuid the unique id
    */
   virtual MYODD_STRING GetCommandLineArguments(
-    const ActiveAction& action,
+    const IActiveAction& action,
     const std::wstring& dllFullPath,
     const std::wstring& dllInterfaceFullPath,
     const std::wstring& pluginPath,

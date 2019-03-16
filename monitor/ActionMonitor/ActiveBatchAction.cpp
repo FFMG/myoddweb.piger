@@ -21,7 +21,7 @@
 * \param hTopHWnd the window that was on top at the time the command was given.
 * \param szCommandLine the given command line that is, the words after the command itself
 */
-ActiveBatchAction::ActiveBatchAction(const Action& src, const HWND hTopHWnd, const std::wstring& szCommandLine) :
+ActiveBatchAction::ActiveBatchAction(const IAction& src, const HWND hTopHWnd, const std::wstring& szCommandLine) :
   ActiveAction(src, hTopHWnd, szCommandLine, true)
 {
 }

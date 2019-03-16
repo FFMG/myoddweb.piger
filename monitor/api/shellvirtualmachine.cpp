@@ -120,7 +120,7 @@ bool ShellVirtualMachine::HandleIpcMessage(ExecuteApi& api, const myodd::os::Ipc
   return false;
 }
 
-bool ShellVirtualMachine::Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile)
+bool ShellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& action, const std::wstring& pluginFile)
 {
 
   // get the path of the exe
@@ -182,7 +182,7 @@ bool ShellVirtualMachine::Execute(ExecuteApi& api, const ActiveAction& action, c
  * \param uuid the unique id
  */
 std::wstring ShellVirtualMachine::GetCommandLineArguments(
-  const ActiveAction& action,
+  const IActiveAction& action,
   const std::wstring& pluginPath,
   const std::wstring& uuid
 ) const
@@ -246,7 +246,7 @@ bool ShellVirtualMachine::ShellPath(std::wstring& szPath)
   return true;
 }
 
-ExecuteApi* ShellVirtualMachine::CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages)
+ExecuteApi* ShellVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages)
 {
   return new ShellApi(uuid, action, actions, messages);
 }

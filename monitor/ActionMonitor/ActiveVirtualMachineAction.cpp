@@ -9,7 +9,7 @@
  * \param szCommandLine the given command line that is, the words after the command itself
  * \param isPrivileged if this action is privileged or not.
  */
-ActiveVirtualMachineAction::ActiveVirtualMachineAction(const Action& src, IVirtualMachine& virtualMachine, const HWND hTopHWnd, const std::wstring& szCommandLine, const bool isPrivileged) :
+ActiveVirtualMachineAction::ActiveVirtualMachineAction(const IAction& src, IVirtualMachine& virtualMachine, const HWND hTopHWnd, const std::wstring& szCommandLine, const bool isPrivileged) :
   ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged ),
   _virtualMachine( virtualMachine )
 {

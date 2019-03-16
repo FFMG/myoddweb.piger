@@ -15,7 +15,7 @@
 #pragma once
 #include "IMessagesHandler.h"
 #include "IActions.h"
-#include "ActiveAction.h"
+#include "IActiveAction.h"
 #include "IIpcListener.h"
 
 template <class Key, class Value>
@@ -153,7 +153,7 @@ public:
    * \param pluginFile the location of the action, (as it might not be the same as the action itself)
    * \return a number related to the virtual machine.
    */
-  virtual int Execute(const ActiveAction& action, const std::wstring& pluginFile) = 0;
+  virtual int Execute(const IActiveAction& action, const std::wstring& pluginFile) = 0;
 
   /**
    * \brief Tell the virtual machine to stop all the running actions and destroy them

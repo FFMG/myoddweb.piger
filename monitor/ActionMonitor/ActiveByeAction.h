@@ -19,7 +19,7 @@
 class ActiveByeAction final : public ActiveAction
 {
 public:
-  ActiveByeAction(IApplication& application, const Action& src, HWND hTopHWnd );
+  ActiveByeAction(IApplication& application, const IAction& src, HWND hTopHWnd );
   virtual ~ActiveByeAction();
 
 protected:

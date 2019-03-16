@@ -6,7 +6,7 @@
 /**
  * \copydoc
  */
-PowershellApi::PowershellApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+PowershellApi::PowershellApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
   ExecuteApi(uuid, action, actions, messagesHandler )
 {
 }

@@ -23,7 +23,7 @@ public:
   void RemoveApi(std::thread::id id);
 
   void Destroy() override {};
-  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
+  int Execute(const IActiveAction& action, const std::wstring& pluginFile) override;
 
 private:
   bool m_isInitialized;

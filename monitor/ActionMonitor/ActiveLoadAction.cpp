@@ -19,7 +19,7 @@
 /**
  * \copydoc
  */
-ActiveLoadAction::ActiveLoadAction(IApplication& application, const Action& src, HWND hTopHWnd ) :
+ActiveLoadAction::ActiveLoadAction(IApplication& application, const IAction& src, HWND hTopHWnd ) :
   ActiveAction( src, hTopHWnd, L"", false  ),
   _application( application )
 {

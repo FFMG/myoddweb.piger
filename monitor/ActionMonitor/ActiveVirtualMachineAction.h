@@ -4,7 +4,7 @@ class ActiveVirtualMachineAction :
   public ActiveAction
 {
 public:
-  ActiveVirtualMachineAction(const Action& src, IVirtualMachine& virtualMachine, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
+  ActiveVirtualMachineAction(const IAction& src, IVirtualMachine& virtualMachine, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
   virtual ~ActiveVirtualMachineAction();
 
 protected:

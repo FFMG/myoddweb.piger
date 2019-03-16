@@ -22,7 +22,7 @@
  * \param szCommandLine the given command line that is, the words after the command itself
  * \param isPrivileged if this action is privileged or not.
  */
-ActiveDefaultAction::ActiveDefaultAction(const Action& src, const HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged) :
+ActiveDefaultAction::ActiveDefaultAction(const IAction& src, const HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged) :
   ActiveAction( src, hTopHWnd, szCommandLine, isPrivileged )
 {
 }

@@ -216,7 +216,7 @@ bool PythonVirtualMachine::ReadFile(const std::wstring& pyFile, std::string& scr
   return true;
 }
 
-int PythonVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
+int PythonVirtualMachine::Execute(const IActiveAction& action, const std::wstring& pluginFile)
 {
   // Python is not thread safe 
   // and windows cannot lock the file properly

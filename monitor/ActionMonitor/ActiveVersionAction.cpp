@@ -19,7 +19,7 @@
 /**
  * \copydoc
  */
-ActiveVersionAction::ActiveVersionAction(IApplication& application, const Action& src, const HWND hTopHWnd ) :
+ActiveVersionAction::ActiveVersionAction(IApplication& application, const IAction& src, const HWND hTopHWnd ) :
   ActiveAction( src, hTopHWnd, L"", false  ),
   _application( application )
 {

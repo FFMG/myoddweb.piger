@@ -14,7 +14,7 @@ CsVirtualMachine::~CsVirtualMachine()
 {
 }
 
-ExecuteApi* CsVirtualMachine::CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages)
+ExecuteApi* CsVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IActions& actions, IMessagesHandler& messages)
 {
   return new CsApi(uuid, action, actions, messages);
 }
@@ -38,7 +38,7 @@ bool CsVirtualMachine::IsExt(const MYODD_STRING& file)
  * \param uuid the unique id
  */
 MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
-  const ActiveAction& action,
+  const IActiveAction& action,
   const std::wstring& dllFullPath,
   const std::wstring& dllInterfaceFullPath,
   const std::wstring& pluginPath,

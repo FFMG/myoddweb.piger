@@ -19,7 +19,7 @@ static const double ACTIONMONITOR_API_LUA_VERSION = 3.5;
 /**
  * \copydoc
  */
-LuaApi::LuaApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) : 
+LuaApi::LuaApi(const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
 HelperApi( action, actions, messagesHandler )
 {
 }

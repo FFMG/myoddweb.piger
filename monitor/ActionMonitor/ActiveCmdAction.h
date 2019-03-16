@@ -2,11 +2,11 @@
 #include "ActiveAction.h"
 #include "../string/string.h"
 
-class ActiveCmdAction :
+class ActiveCmdAction final :
   public ActiveAction
 {
 public:
-  ActiveCmdAction(const Action& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine);
+  ActiveCmdAction(const IAction& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine);
   virtual ~ActiveCmdAction();
 
 protected:

@@ -14,7 +14,7 @@ public:
   PluginVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~PluginVirtualMachine();
 
-  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
+  int Execute(const IActiveAction& action, const std::wstring& pluginFile) override;
   void Destroy() override;
   bool Initialize() override;
 

@@ -37,7 +37,7 @@ ActionVersion::~ActionVersion()
 /**
  * \copydoc
  */
-ActiveAction* ActionVersion::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+IActiveAction* ActionVersion::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
   const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;

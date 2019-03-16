@@ -13,6 +13,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
+#include "../common/clipboard.h"
 
 class IActiveAction
 {
@@ -27,4 +28,33 @@ public:
   virtual void ExecuteInThread() = 0;
   virtual bool Initialize() = 0;
   virtual bool DeInitialize() = 0;
+
+  /**
+   * \brief get the command string
+   */
+  virtual const std::wstring& Command() const = 0;
+
+  /**
+   * \brief the clipboard, as it was, when the action became active.
+   */
+  virtual const Clipboard& GetClipboard() const = 0;
+
+  /**
+   * \brief this is the command line arguments as given by the user.
+   * So if the action is ""learn" and the user typed "Lea aaaa bbbb"
+   * the command line is aaaa bbbb and the command is "learn"
+   * \return the command line.
+   */
+  virtual const std::wstring& CommandLine() const = 0;
+
+  /**
+   * \brief the full filename/path and extension.
+   */
+  virtual const std::wstring& File() const = 0;
+
+  /**
+   * Get the window that is/was the top most at the time the command was entered.
+   * return the handle of window at the time the call was made.
+   */
+  virtual HWND TopHWnd() const = 0;
 };

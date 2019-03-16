@@ -107,7 +107,7 @@ bool ExecuteVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReques
   return HandleIpcMessage( *api, ipcRequest, ipcResponse );
 }
 
-int ExecuteVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
+int ExecuteVirtualMachine::Execute(const IActiveAction& action, const std::wstring& pluginFile)
 {
   Initialize();
 
@@ -133,7 +133,7 @@ int ExecuteVirtualMachine::Execute(const ActiveAction& action, const std::wstrin
  * \param action the matching action for this Id.
  * \return the API that manages the action
  */
-ExecuteApi* ExecuteVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action )
+ExecuteApi* ExecuteVirtualMachine::AddApi(const std::wstring& uuid, const IActiveAction& action )
 {
   //  lock us in
   myodd::threads::Lock lock(_mutex);

@@ -14,9 +14,10 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 
-#include "ActiveAction.h"
+#include "IActiveAction.h"
 #include "IMessagesHandler.h"
 #include "IActions.h"
+#include "../common/clipboard.h"
 
 /**
  * Helper function used to make new APIs easier to create and most of them more standard.
@@ -28,7 +29,7 @@
 class HelperApi
 {
 public:
-  explicit HelperApi( const ActiveAction& action, IActions& actions, IMessagesHandler& messages );
+  explicit HelperApi( const IActiveAction& action, IActions& actions, IMessagesHandler& messages );
   virtual ~HelperApi() = default;
 
 private:
@@ -37,7 +38,7 @@ private:
   /**
    * \brief the action that we are running
    */
-  const ActiveAction& _action;
+  const IActiveAction& _action;
 
   /**
    * \brief the messages handler

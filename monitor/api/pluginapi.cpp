@@ -6,7 +6,7 @@
 /**
  * \copydoc
  */
-PluginApi::PluginApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
+PluginApi::PluginApi(const IActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
   HelperApi(action, actions, messagesHandler )
 {
 }

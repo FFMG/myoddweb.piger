@@ -223,7 +223,7 @@ int PluginVirtualMachine::ExecuteInThread(LPCTSTR pluginFile)
   return result;
 }
 
-int PluginVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
+int PluginVirtualMachine::Execute(const IActiveAction& action, const std::wstring& pluginFile)
 {
   Initialize();
   if (nullptr == _amPlugin)

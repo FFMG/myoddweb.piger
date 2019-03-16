@@ -15,28 +15,23 @@
 #pragma once
 
 // the parent action.
-#include "Action.h"
+#include "IAction.h"
 #include "IActiveAction.h"
 
 // the clipboard data at the time we createed it.
 #include "../common/clipboard.h"
 
-class ActiveAction : public Action, public IActiveAction
+class ActiveAction : public IActiveAction
 {
 public:
-  ActiveAction(const Action& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
+  ActiveAction(const IAction& src, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
 	virtual ~ActiveAction();
 
   ActiveAction(const ActiveAction&) = delete;
   void operator=(const ActiveAction&) = delete;
 
   // ----------------------------
-  const Clipboard& GetClipboard() const { return *_clipboard; }
-
-  // ----------------------------
-  void ExecuteInThread() override;
-  bool Initialize() override;
-  bool DeInitialize() override;
+  const Clipboard& GetClipboard() const override { return *_clipboard; }
 
   /**
    * this is the command line arguments as given by the user.
@@ -44,9 +39,22 @@ public:
    * the command line is aaaa bbbb and the command is "learn"
    * \return the command line.
    */
-  const std::wstring& CommandLine() const {
+  const std::wstring& CommandLine() const override {
     return _szCommandLine;
   }
+
+  /**
+   * \brief get the command string
+   */
+  const std::wstring& Command() const override
+  {
+    return L"";
+  };
+
+  // ----------------------------
+  void ExecuteInThread() override;
+  bool Initialize() override;
+  bool DeInitialize() override;
 
   /**
    * check if this is a privileged command
@@ -60,10 +68,15 @@ public:
    * Get the window that is/was the top most at the time the command was enteered.
    * return the handle of window at the time the call was made.
    */
-  HWND TopHWnd() const
+  HWND TopHWnd() const override
   {
     return _hTopHWnd;
   }
+
+  /**
+   * \brief the full filename/path and extension.
+   */
+  const std::wstring& File() const override { return L""; }
 
 protected:
   virtual void OnExecuteInThread() = 0;
@@ -71,6 +84,8 @@ protected:
   virtual bool OnDeInitialize() = 0;
 
 private:
+  const IAction& _action;
+
   // the current clipboard.
   Clipboard* _clipboard;
   std::wstring _szCommandLine;
