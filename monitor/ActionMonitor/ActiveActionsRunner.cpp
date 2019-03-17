@@ -78,6 +78,18 @@ void ActiveActionsRunner::QueueAndExecute(IActiveAction* activeAction )
   QueueWorker(&ActiveActionsRunner::Execute, activeAction, this );
 }
 
+bool ActiveActionsRunner::IsActiveActionRunning(IActiveAction* action)
+{
+  //  lock it.
+  myodd::threads::Lock guard(_mutexRunner);
+
+  // find it
+  const auto it = std::find(_runners.begin(), _runners.end(), action);
+
+  // if it exists, it is running.
+  return (it != _runners.end());
+}
+
 /**
  * \brief Remove an active action form the list of actions.
  * \param runner the runner we would like to remove from the list.

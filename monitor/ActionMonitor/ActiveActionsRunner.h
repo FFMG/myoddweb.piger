@@ -28,6 +28,8 @@ public:
 
   void QueueAndExecute(IActiveAction* activeAction );
 
+  bool IsActiveActionRunning(IActiveAction* action);
+
 private:
   static void Execute(IActiveAction* runner, ActiveActionsRunner* parent);
 

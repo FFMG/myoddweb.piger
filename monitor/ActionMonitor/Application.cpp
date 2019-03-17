@@ -561,19 +561,41 @@ bool Application::ExecuteCurrentAction()
 
   try
   {
-    // get the command line
-    const auto szCommandLine = _possibleActions->GetCommandLine();
-
-    //  do the action now
-    //  we might not have any, but that's not for us to decides :).
     const auto pWnd = GetLastForegroundWindow();
-    _activeActionsRunner->QueueAndExecute(action->CreateActiveAction(*_virtualMachines, pWnd, szCommandLine, false));
-    return true;
+    const auto commandLine = _possibleActions->GetCommandLine();
+    const auto activeAction = action->CreateActiveAction(*_virtualMachines, pWnd, commandLine, false);
+    return ExecuteActiveAction(activeAction);
   }
   catch( ... )
   {
     return false;
   }
+}
+
+bool Application::ExecuteActiveAction( IActiveAction* action) const
+{
+  try
+  {
+    if( nullptr == _activeActionsRunner )
+    {
+      return false;
+    }
+    _activeActionsRunner->QueueAndExecute(action);
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool Application::IsActiveActionRunning(IActiveAction* action) const
+{
+  if (nullptr == _activeActionsRunner)
+  {
+    return false;
+  }
+  return _activeActionsRunner->IsActiveActionRunning( action);
 }
 
 void Application::SetLastForegroundWindow()

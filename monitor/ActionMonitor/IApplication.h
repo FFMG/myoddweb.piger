@@ -87,6 +87,10 @@ public:
    */
   virtual bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const = 0;
 
+  virtual bool ExecuteActiveAction( IActiveAction* action ) const = 0;
+
+  virtual bool IsActiveActionRunning( IActiveAction* action) const = 0;
+
   virtual bool ExecuteCurrentAction() = 0;
 
   virtual CWnd* GetLastForegroundWindow() const = 0;

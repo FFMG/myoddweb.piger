@@ -49,6 +49,10 @@ public:
 
   bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const override;
 
+  bool ExecuteActiveAction( IActiveAction* action) const override;
+
+  bool IsActiveActionRunning(IActiveAction* action) const override;
+
   bool ExecuteCurrentAction() override;
 
   CWnd* GetLastForegroundWindow() const override;

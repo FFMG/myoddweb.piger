@@ -74,7 +74,11 @@ void ActionsImmediate::DoThem(  )
       // do the action, we don't have any arguments to pass to the action
       // so we bypass the 'CreateActiveAction(...)' function
       // and go directly to 'Launch(...)'
-      QueueAndExecute( action->CreateActiveActionDirect( _virtualMachines, nullptr, L"" , isPrivileged ) );
+      const auto activeAction = action->CreateActiveActionDirect(_virtualMachines, nullptr, L"", isPrivileged);
+      if( _application.ExecuteActiveAction( activeAction ) )
+      {
+        _runningActions.push_back(activeAction);
+      }
     }
     catch( ... )
     {
@@ -91,11 +95,35 @@ void ActionsImmediate::DoThem(  )
  */
 void ActionsImmediate::WaitForAll()
 {
-  // wait for all the workers to finish.
-  WaitForAllWorkers([]()
+  const auto sleepForMilliseconds = std::chrono::milliseconds(10);
+  for(;;)
   {
+    // lock us in while we are getting info on the running action
+    myodd::threads::Lock guard(_mutex);
+
+    // get the first running action
+    const auto it = _runningActions.begin();
+    if( it == _runningActions.end() )
+    {
+      // we are done.
+      break;
+    }
+
+    // is it still running?
+    if( !_application.IsActiveActionRunning( *it ) )
+    {
+      // no, it is not, so we can move on.
+      _runningActions.erase(it);
+      continue;
+    }
+
+    // we are done with the action
+    guard.Release();
+
+    // so wait a little for messages to progress.
     myodd::wnd::MessagePump(nullptr);
-    return true;
-  });
+    std::this_thread::yield();
+    std::this_thread::sleep_for(sleepForMilliseconds);
+  }
 }
 

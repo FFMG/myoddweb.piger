@@ -18,7 +18,7 @@
 /**
  * \brief Constructor.
  */
-ActiveActions::ActiveActions() : ActiveActionsRunner()
+ActiveActions::ActiveActions()
 {
 }
 

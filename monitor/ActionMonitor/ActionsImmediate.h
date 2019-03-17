@@ -46,6 +46,11 @@ private:
   const std::wstring _directoryToParse;
 
   /**
+   * \brief the actions that we started.
+   */
+  std::vector<IActiveAction*> _runningActions;
+
+  /**
    * \brief the parent actions.
    */
   IActions& _parentActions;
