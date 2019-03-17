@@ -16,6 +16,7 @@
 #include "CommonWnd.h"
 #include "IDisplay.h"
 #include "IActions.h"
+#include "IApplication.h"
 #include "../api/IVirtualMachines.h"
 #include "threads/workers.h"
 #include "ActiveActionsRunner.h"
@@ -30,7 +31,7 @@
 class HookWnd final : public CommonWnd, protected myodd::threads::Workers
 {
 public:
-  explicit HookWnd(IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines);
+  explicit HookWnd(IApplication& application, IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines);
   ~HookWnd();
 
   bool Close() override;
@@ -57,13 +58,14 @@ protected:
    */
   IDisplay& _display;
 
+  /**
+   * \brief the application manager.
+   */
+  IApplication& _application;
+
   //  the state of our special key
   unsigned long _keyState;
 
   static bool IsSpecialKeyDown();
   static bool IsSpecialKey(const WPARAM wParam);
-
-private:
-  ActiveActionsRunner* _activeActionsRunner;
-  
 };

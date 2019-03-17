@@ -86,4 +86,10 @@ public:
    * \param hProcess the created handle so we can close it
    */
   virtual bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const = 0;
+
+  virtual bool ExecuteCurrentAction() = 0;
+
+  virtual CWnd* GetLastForegroundWindow() const = 0;
+
+  virtual void SetLastForegroundWindow() = 0;
 };

@@ -25,7 +25,6 @@ END_MESSAGE_MAP()
  */
 CActionMonitorApp::CActionMonitorApp() :
   _mutex(nullptr),
-  _cwndLastForegroundWindow(nullptr),
   _maxClipboardSize(NULL), 
 _application(nullptr)
 {
@@ -51,14 +50,6 @@ CActionMonitorApp& App()
   return theApp; 
 };
 
-/**
- * \brief get the last foregound window.
- * \return void
- */
-CWnd* CActionMonitorApp::GetLastForegroundWindow()
-{
-  return App()._cwndLastForegroundWindow;
-}
 
 /**
  * Get the max clipboard size.
@@ -66,16 +57,6 @@ CWnd* CActionMonitorApp::GetLastForegroundWindow()
 size_t CActionMonitorApp::GetMaxClipboardMemory()
 {
   return App()._maxClipboardSize;
-}
-
-/**
- * Set the value of the last window.
- * \param window the new 'last' window.
- * \return void
- */
-void CActionMonitorApp::SetLastForegroundWindow( CWnd* window )
-{
-  App()._cwndLastForegroundWindow = window;
 }
 
 /**

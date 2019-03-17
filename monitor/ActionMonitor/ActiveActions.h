@@ -13,10 +13,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-
-#include "ActiveActionsRunner.h"
-
-class ActiveActions : protected ActiveActionsRunner
+class ActiveActions
 {
 public:
   ActiveActions();

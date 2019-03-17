@@ -56,6 +56,7 @@ void ActionMonitorDlg::Hide()
 {
   // just hide the window.
   ::ShowWindow(GetSafeHwnd(), SW_HIDE );
+  ::UpdateWindow(GetSafeHwnd());
 }
 
 void ActionMonitorDlg::Active()
@@ -104,6 +105,7 @@ void ActionMonitorDlg::ShowWindow(const std::wstring& sCommand, const BYTE bTran
   if (!IsWindowVisible(GetSafeHwnd()))
   {
     ::ShowWindow(GetSafeHwnd(), SW_SHOW);
+    ::UpdateWindow(GetSafeHwnd());
   }
 
   // set the transparency

@@ -1,24 +1,22 @@
 #include "stdafx.h"
 #include "HookWnd.h"
 #include <ActionsCore.h>
-#include "ActionMonitor.h"
 
-HookWnd::HookWnd( IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines) :
+HookWnd::HookWnd( IApplication& application, IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines) :
   CommonWnd(L"ActionMonitorHookWndClass"),
   _virtualMachines(virtualMachines),
   _actions(actions),
   _display(display),
   _keyState(ACTION_NONE),
-  _activeActionsRunner( nullptr )
+  _application( application )
 {
-  _activeActionsRunner = new ActiveActionsRunner();
 }
 
 HookWnd::~HookWnd()
 {
-  delete _activeActionsRunner;
+  //  if closed aready this will be ignored.
+  Close();
 }
-
 
 /**
  * \brief return if the current special key is down.
@@ -137,7 +135,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     {
       // we need to save the last forground window
       // because showing our dialog box will change things a bit.
-      CActionMonitorApp::SetLastForegroundWindow( CWnd::GetForegroundWindow());
+      _application.SetLastForegroundWindow( );
 
       //  tell the system to no longer accept any more key
       _keyState |= ACTION_MAINKEY_DOWN;
@@ -246,41 +244,18 @@ LRESULT HookWnd::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
       //  do that next time we come around here we don't do it again
       _keyState &= ~ACTION_MAINKEY_DOWN;
 
-      //  tell the system that we can now accept key press
-      hook_RejectKeyboad(FALSE);
-      _display.Inactive();
-
-      try
-      {
-        //  We use the Actions to find the actual command
-        //  because either it is an exact match, (and it doesn't matter)
-        //  or it is not an exact match and this is what we meant to use
-        // 
-        //  so if the user enters 'goo french victories'
-        //  we will use the first command 'google' with the arguments 'french victories'
-        //
-        //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
-        const auto action = _actions.GetCommand();
-        if (nullptr != action)
-        {
-          const auto szCommandLine = _actions.GetCommandLine();
-
-          //  do the action now
-          //  we might not have any, but that's not for us to decides :).
-          const auto pWnd = CActionMonitorApp::GetLastForegroundWindow();
-          _activeActionsRunner->QueueAndExecute(action->CreateActiveAction(_virtualMachines, pWnd, szCommandLine, false));
-        }
-      }
-      catch (...)
-      {
-        //  we don't have a valid command.
-      }
+      // execute the command
+      _application.ExecuteCurrentAction();
 
       // we are hidding the current action
       _actions.CurrentActionReset();
 
       //  hide the window
       _display.Hide();
+
+      //  tell the system that we can now accept key press
+      hook_RejectKeyboad(FALSE);
+      _display.Inactive();
     }
   }
 

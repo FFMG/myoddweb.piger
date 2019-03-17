@@ -21,6 +21,7 @@
 #include "ActionMonitorDlg.h"
 #include "HookWnd.h"
 #include "ActionsImmediate.h"
+#include "ActiveActionsRunner.h"
 
 class Application final : public IApplication
 {
@@ -48,6 +49,12 @@ public:
 
   bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const override;
 
+  bool ExecuteCurrentAction() override;
+
+  CWnd* GetLastForegroundWindow() const override;
+
+  void SetLastForegroundWindow() override;
+
 private:
   void CreateBase();
   void CreateForRestart();
@@ -58,11 +65,14 @@ private:
   void CreateIpcListener();
   void CreateHookWindow();
   void CreateTray();
+  void CreateActiveActionsRunner();
   
   void DestroyBase();
   void DestroyForRestart();
 
   void PrepareForClose();
+
+  CWnd* _lastForegroundWindow;
 
   /**
    * \brief the messages handler
@@ -98,6 +108,11 @@ private:
    * \brief the hook window.
    */
   HookWnd* _hookWnd;
+
+  /**
+   * \brief the actions runner/executor
+   */
+  ActiveActionsRunner* _activeActionsRunner;
 
   /**
    * \bief start actions that we last started

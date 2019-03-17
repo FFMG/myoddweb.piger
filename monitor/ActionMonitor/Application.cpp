@@ -24,16 +24,18 @@
 #include "ActionsImmediate.h"
 #include "ApplicationTray.h"
 
-Application::Application() : 
-  IApplication(),
+Application::Application() :
+  IApplication(), 
+  _lastForegroundWindow(nullptr),
   _messagesHandler(nullptr),
   _possibleActions(nullptr),
   _ipcListener(nullptr),
-  _tray( nullptr ),
+  _tray(nullptr),
   _virtualMachines(nullptr),
-  _dlg( nullptr ),
-  _hookWnd( nullptr ),
-  _startActions( nullptr)
+  _dlg(nullptr),
+  _hookWnd(nullptr),
+  _activeActionsRunner(nullptr),
+  _startActions(nullptr)
 {
 }
 
@@ -136,10 +138,15 @@ void Application::PrepareForClose()
  */
 void Application::DestroyForRestart()
 {
+  // the running active actions
+  delete _activeActionsRunner;
+  _activeActionsRunner = nullptr;
+
+  // the start actions
   delete _startActions;
   _startActions = nullptr;
 
-  // hook wind
+  // hook window
   delete _hookWnd;
   _hookWnd = nullptr;
 
@@ -197,6 +204,9 @@ void Application::CreateForRestart()
   // create the possible actions
   CreateActionsList();
 
+  // the actions runner
+  CreateActiveActionsRunner();
+
   // create the virtual machines
   CreateVirtualMachines();
 
@@ -220,7 +230,7 @@ void Application::CreateHookWindow()
   assert(_possibleActions != nullptr);
   assert(_virtualMachines != nullptr);
 
-  _hookWnd = new HookWnd(*_dlg, *_possibleActions, *_virtualMachines);
+  _hookWnd = new HookWnd(*this, *_dlg, *_possibleActions, *_virtualMachines);
   _hookWnd->Create();
 }
 
@@ -271,6 +281,15 @@ void Application::CreateMessageHandler()
 }
 
 /**
+ * \brief (Re)build the active action runner.
+ */
+void Application::CreateActiveActionsRunner()
+{
+  delete _activeActionsRunner;
+  _activeActionsRunner = new ActiveActionsRunner();
+}
+
+/**
  * \brief (Re)build a list of possible actions.
  */
 void Application::CreateActionsList()
@@ -293,7 +312,7 @@ void Application::CreateActionsList()
 #pragma endregion
 
 /**
- * \brief destroy all the virtual machines.
+ * \brief Close all the virtual machines.
  *        we send them all a message to end what they are doing
  *        or we detach from them all so we no longer can handle their requests.
  */
@@ -511,4 +530,58 @@ const IAction* Application::FindAction(unsigned int idx, const std::wstring& szT
     return nullptr;
   }
   return _possibleActions->Find(szText, idx );
+}
+
+bool Application::ExecuteCurrentAction()
+{
+  if( nullptr == _possibleActions)
+  {
+    return false;
+  }
+  if( nullptr == _virtualMachines )
+  {
+    return false;
+  }
+
+  //  We use the Actions to find the actual command
+  //  because either it is an exact match, (and it doesn't matter)
+  //  or it is not an exact match and this is what we meant to use
+  // 
+  //  so if the user enters 'goo french victories'
+  //  we will use the first command 'google' with the arguments 'french victories'
+  //
+  //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
+
+  // if there is an active action, get it.
+  const auto action = _possibleActions->GetCommand();
+  if (nullptr == action)
+  {
+    return false;
+  }
+
+  try
+  {
+    // get the command line
+    const auto szCommandLine = _possibleActions->GetCommandLine();
+
+    //  do the action now
+    //  we might not have any, but that's not for us to decides :).
+    const auto pWnd = GetLastForegroundWindow();
+    _activeActionsRunner->QueueAndExecute(action->CreateActiveAction(*_virtualMachines, pWnd, szCommandLine, false));
+    return true;
+  }
+  catch( ... )
+  {
+    return false;
+  }
+}
+
+void Application::SetLastForegroundWindow()
+{
+  _lastForegroundWindow = CWnd::GetForegroundWindow();
+}
+
+CWnd* Application::GetLastForegroundWindow() const
+{
+  return _lastForegroundWindow;
 }

@@ -230,4 +230,5 @@ void CommonWnd::HideTaskBar() const
   // show/hide for the style to take effect.
   ShowWindow(GetSafeHwnd(), SW_SHOW);
   ShowWindow(GetSafeHwnd(), SW_HIDE);
+  ::UpdateWindow(GetSafeHwnd());
 }

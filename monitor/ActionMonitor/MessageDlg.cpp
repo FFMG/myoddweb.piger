@@ -323,6 +323,7 @@ void MessageDlg::Show()
 {
   // fade the window a little.
   ShowWindow(GetSafeHwnd(), SW_SHOW);
+  ::UpdateWindow(GetSafeHwnd());
   SetTransparency( GetStartTransparency() );
 
   // start the worker.

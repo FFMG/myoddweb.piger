@@ -190,7 +190,7 @@ IActiveAction* Action::CreateActiveActionWithNoCommandLine(IVirtualMachines& vir
     //  there will probably only be a conflict with explorer, (of any flavor)
     //  that could copy text and/or file names.
     //
-    const auto foregroundWnd = CActionMonitorApp::GetLastForegroundWindow();
+    const auto foregroundWnd = _application.GetLastForegroundWindow();
     Clipboard clipboard(foregroundWnd, maxClipboardMemory );
 
     // any other values are rejected, (bitmaps and so on).

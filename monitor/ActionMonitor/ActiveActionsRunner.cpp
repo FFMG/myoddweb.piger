@@ -18,7 +18,8 @@
 /**
  * \brief Constructor.
  */
-ActiveActionsRunner::ActiveActionsRunner() : _mutexRunner( L"Active Action Runner")
+ActiveActionsRunner::ActiveActionsRunner() : 
+  _mutexRunner( L"Active Action Runner")
 {
 }
 

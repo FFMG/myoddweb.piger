@@ -15,7 +15,6 @@
 #include "stdafx.h"
 #include "executevirtualmachine.h"
 #include "ActionBye.h"
-#include "ActiveDefaultAction.h"
 
 /**
  * \copydoc
