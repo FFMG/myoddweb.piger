@@ -32,7 +32,7 @@ class HookWnd final : public CommonWnd, protected myodd::threads::Workers
 {
 public:
   explicit HookWnd(IApplication& application, IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines);
-  ~HookWnd();
+  virtual ~HookWnd();
 
   bool Close() override;
   bool Create() override;
