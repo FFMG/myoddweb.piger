@@ -160,7 +160,6 @@ IActiveAction* Action::CreateActiveAction(IVirtualMachines& virtualMachines, CWn
 
   // now that we are back from calling the plugin, restore the keyboard state.
   hook_RejectKeyboad( bThen );
-
   return aa;
 }
 

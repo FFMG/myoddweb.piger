@@ -22,6 +22,7 @@
 #include "HookWnd.h"
 #include "ActionsImmediate.h"
 #include "ActiveActionsRunner.h"
+#include <queue>
 
 class Application final : public IApplication
 {
@@ -127,6 +128,11 @@ private:
   ActionsImmediate* _startActions;
 
   /**
+   * \brief the main thread id
+   */
+  const std::thread::id _threadId;
+
+  /**
    * \brief Close the virtual machines windows/scripts
    *        This is normally done when we want to close the application.
    */
@@ -136,5 +142,18 @@ private:
    * \brief Wait for the active windows to complete.
    */
   void WaitForHandlersToComplete() const;
+
+  enum ApplicationMsgs {
+    MsgNone,
+    MsgDestroy,
+    MsgClose,
+    MsgRestart,
+    MsgVersion
+  };
+
+  myodd::threads::Key _mutex;
+  std::queue<ApplicationMsgs> _messages;
+  void Push(ApplicationMsgs loopMessage);
+  ApplicationMsgs Pop();
 };
 

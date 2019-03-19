@@ -25,7 +25,7 @@
 #include "ApplicationTray.h"
 
 Application::Application() :
-  IApplication(), 
+  IApplication(),
   _lastForegroundWindow(nullptr),
   _messagesHandler(nullptr),
   _possibleActions(nullptr),
@@ -35,7 +35,8 @@ Application::Application() :
   _dlg(nullptr),
   _hookWnd(nullptr),
   _activeActionsRunner(nullptr),
-  _startActions(nullptr)
+  _startActions(nullptr),
+  _threadId(std::this_thread::get_id())
 {
 }
 
@@ -51,18 +52,20 @@ Application::~Application()
  */
 void Application::Close()
 {
+  if (_threadId != std::this_thread::get_id())
+  {
+    Push(MsgClose);
+    return;
+  }
+
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
 
   // prepare for closing
   PrepareForClose();
 
-  // and then close
-  if (_dlg != nullptr)
-  {
-    _dlg->Close();
-  }
-
+  // then close
+  Push(MsgDestroy);
 }
 
 /**
@@ -70,6 +73,12 @@ void Application::Close()
  */
 void Application::Restart()
 {
+  if (_threadId != std::this_thread::get_id())
+  {
+    Push(MsgRestart);
+    return;
+  }
+
   // log that we are restarting
   myodd::log::LogMessage(_T("Piger is restarting."));
 
@@ -103,11 +112,58 @@ void Application::Show()
   ShowStart();
 
   // wait for everything to finish
-  _dlg->Wait();
+  const auto wait = std::chrono::milliseconds(5);
+  for (;;)
+  {
+    // pump messages
+    myodd::wnd::MessagePump(nullptr);
+
+    const auto msg = Pop();
+    if( msg == MsgDestroy)
+    {
+      if (_dlg != nullptr)
+      {
+        _dlg->Close();
+      }
+      break;
+    }
+    if (msg == MsgRestart)
+    {
+      Restart();
+    }
+    if (msg == MsgClose)
+    {
+      Close();
+    }
+    if (msg == MsgVersion)
+    {
+      ShowVersion();
+    }
+    std::this_thread::yield();
+    std::this_thread::sleep_for(wait);
+  }
 
   // we are now closed, we can destroy everything
   DestroyForRestart();
   DestroyBase();
+}
+
+void Application::Push(ApplicationMsgs loopMessage)
+{
+  myodd::threads::Lock guard(_mutex);
+  _messages.emplace(loopMessage);
+}
+
+Application::ApplicationMsgs Application::Pop()
+{
+  myodd::threads::Lock guard(_mutex);
+  if( _messages.empty())
+  {
+    return MsgNone;
+  }
+  const auto message = _messages.front();
+  _messages.pop();
+  return message;
 }
 
 /**
@@ -138,10 +194,6 @@ void Application::PrepareForClose()
  */
 void Application::DestroyForRestart()
 {
-  // the running active actions
-  delete _activeActionsRunner;
-  _activeActionsRunner = nullptr;
-
   // the start actions
   delete _startActions;
   _startActions = nullptr;
@@ -166,6 +218,10 @@ void Application::DestroyForRestart()
  */
 void Application::DestroyBase()
 {
+  // the running active actions
+  delete _activeActionsRunner;
+  _activeActionsRunner = nullptr;
+
   // stop all the message handling
   delete _messagesHandler;
   _messagesHandler = nullptr;
@@ -189,6 +245,9 @@ void Application::CreateBase()
   // create the system tray
   CreateTray();
 
+  // the actions runner
+  CreateActiveActionsRunner();
+
   // create the messages handler.
   CreateMessageHandler();
 
@@ -203,9 +262,6 @@ void Application::CreateForRestart()
 {
   // create the possible actions
   CreateActionsList();
-
-  // the actions runner
-  CreateActiveActionsRunner();
 
   // create the virtual machines
   CreateVirtualMachines();
@@ -390,6 +446,12 @@ void Application::ShowStart()
 
 void Application::ShowVersion()
 {
+  if (_threadId != std::this_thread::get_id())
+  {
+    Push(MsgVersion);
+    return;
+  }
+
   myodd::files::Version ver;
   const auto strSay = myodd::strings::Format(_T("<b>Version : </b>%d.%d.%d.%d"),
     ver.GetFileVersionMajor(),
