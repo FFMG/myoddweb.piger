@@ -16,7 +16,6 @@
 #include "IIpcListener.h"
 #include "threads/lock.h"
 #include "os/ipclistener.h"
-#include "CommonWnd.h"
 
 class IpcListener final : public IIpcListener
 {
