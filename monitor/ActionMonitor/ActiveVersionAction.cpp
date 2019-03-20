@@ -46,5 +46,5 @@ bool ActiveVersionAction::OnDeInitialize()
  */
 void ActiveVersionAction::OnExecuteInThread()
 {
-  _application.ShowVersion();
+  _application.Version();
 }

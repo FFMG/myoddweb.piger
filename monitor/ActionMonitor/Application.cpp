@@ -23,6 +23,7 @@
 #include "IpcListener.h"
 #include "ActionsImmediate.h"
 #include "ApplicationTray.h"
+#include <functional>
 
 Application::Application() :
   IApplication(),
@@ -36,7 +37,7 @@ Application::Application() :
   _hookWnd(nullptr),
   _activeActionsRunner(nullptr),
   _startActions(nullptr),
-  _threadId(std::this_thread::get_id())
+  _messages( nullptr )
 {
 }
 
@@ -52,20 +53,19 @@ Application::~Application()
  */
 void Application::Close()
 {
-  if (_threadId != std::this_thread::get_id())
-  {
-    Push(MsgClose);
-    return;
-  }
+  _messages->Post(L"Close");
+}
 
+void Application::OnClose()
+{
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
 
   // prepare for closing
   PrepareForClose();
 
-  // then close
-  Push(MsgDestroy);
+  // close it
+  _messages->Close();
 }
 
 /**
@@ -73,12 +73,11 @@ void Application::Close()
  */
 void Application::Restart()
 {
-  if (_threadId != std::this_thread::get_id())
-  {
-    Push(MsgRestart);
-    return;
-  }
+  _messages->Post(L"Restart");
+}
 
+void Application::OnRestart()
+{
   // log that we are restarting
   myodd::log::LogMessage(_T("Piger is restarting."));
 
@@ -92,6 +91,20 @@ void Application::Restart()
 
   // and then show the new start message.
   ShowStart();
+}
+
+/**
+ * \brief reload all the actions and re-create the base/actions/machines etc...
+ */
+void Application::Version()
+{
+  _messages->Post(L"Version");
+}
+
+void Application::OnVersion()
+{
+  // Show the version
+  ShowVersion();
 }
 
 void Application::Show()
@@ -111,59 +124,12 @@ void Application::Show()
   // show the start messages.
   ShowStart();
 
-  // wait for everything to finish
-  const auto wait = std::chrono::milliseconds(5);
-  for (;;)
-  {
-    // pump messages
-    myodd::wnd::MessagePump(nullptr);
-
-    const auto msg = Pop();
-    if( msg == MsgDestroy)
-    {
-      if (_dlg != nullptr)
-      {
-        _dlg->Close();
-      }
-      break;
-    }
-    if (msg == MsgRestart)
-    {
-      Restart();
-    }
-    if (msg == MsgClose)
-    {
-      Close();
-    }
-    if (msg == MsgVersion)
-    {
-      ShowVersion();
-    }
-    std::this_thread::yield();
-    std::this_thread::sleep_for(wait);
-  }
+  // then wait.
+  _messages->Wait();
 
   // we are now closed, we can destroy everything
   DestroyForRestart();
   DestroyBase();
-}
-
-void Application::Push(ApplicationMsgs loopMessage)
-{
-  myodd::threads::Lock guard(_mutex);
-  _messages.emplace(loopMessage);
-}
-
-Application::ApplicationMsgs Application::Pop()
-{
-  myodd::threads::Lock guard(_mutex);
-  if( _messages.empty())
-  {
-    return MsgNone;
-  }
-  const auto message = _messages.front();
-  _messages.pop();
-  return message;
 }
 
 /**
@@ -182,7 +148,7 @@ void Application::PrepareForClose()
   WaitForHandlersToComplete();
 
   // call the end actions to run
-  ShowEnd();
+  ShowClose();
 
   // wait all the active windows.
   // those are the ones created by the end Action list.
@@ -234,6 +200,9 @@ void Application::DestroyBase()
 
   delete _dlg;
   _dlg = nullptr;
+
+  delete _messages;
+  _messages = nullptr;
 }
 
 #pragma region Create variables
@@ -241,6 +210,9 @@ void Application::CreateBase()
 {
   // destroy the old one
   DestroyBase();
+
+  // create the messages handler
+  CreateMessages();
 
   // create the system tray
   CreateTray();
@@ -288,6 +260,15 @@ void Application::CreateHookWindow()
 
   _hookWnd = new HookWnd(*this, *_dlg, *_possibleActions, *_virtualMachines);
   _hookWnd->Create();
+}
+
+void Application::CreateMessages()
+{
+  delete _messages;
+  _messages = new myodd::threads::Messages();
+  _messages->AddFunction(std::bind(&Application::OnClose, this), L"Close");
+  _messages->AddFunction(std::bind(&Application::OnRestart, this), L"Restart");
+  _messages->AddFunction(std::bind(&Application::OnVersion, this), L"Version");
 }
 
 void Application::CreateTray()
@@ -400,7 +381,7 @@ void Application::WaitForHandlersToComplete() const
 }
 
 #pragma region Show common messages
-void Application::ShowEnd()
+void Application::ShowClose()
 {
   // do we have anything to show.
   if (_dlg == nullptr)
@@ -446,12 +427,6 @@ void Application::ShowStart()
 
 void Application::ShowVersion()
 {
-  if (_threadId != std::this_thread::get_id())
-  {
-    Push(MsgVersion);
-    return;
-  }
-
   myodd::files::Version ver;
   const auto strSay = myodd::strings::Format(_T("<b>Version : </b>%d.%d.%d.%d"),
     ver.GetFileVersionMajor(),

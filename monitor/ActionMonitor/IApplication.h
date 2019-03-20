@@ -43,17 +43,7 @@ public:
   /**
    * \brief show the app version number.
    */
-  virtual void ShowVersion() = 0;
-
-  /**
-   * \brief show all the start actions
-   */
-  virtual void ShowStart() = 0;
-
-  /**
-   * \brief show all the end actions
-   */
-  virtual void ShowEnd() = 0;
+  virtual void Version() = 0;
 
   /**
    * \brief Add an action to our list of actions.

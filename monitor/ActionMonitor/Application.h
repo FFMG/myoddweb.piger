@@ -23,6 +23,7 @@
 #include "ActionsImmediate.h"
 #include "ActiveActionsRunner.h"
 #include <queue>
+#include "threads/messages.h"
 
 class Application final : public IApplication
 {
@@ -34,13 +35,9 @@ public:
 
   void Restart() override;
 
+  void Version() override;
+
   void Show() override;
-
-  void ShowVersion() override;
-
-  void ShowStart() override;
-
-  void ShowEnd() override;
 
   bool AddAction(IAction* action) override;
 
@@ -61,6 +58,15 @@ public:
   void SetLastForegroundWindow() override;
 
 private:
+  void OnVersion();
+  void ShowVersion();
+
+  void OnRestart();
+  void ShowStart();
+
+  void OnClose();
+  void ShowClose();
+
   void CreateBase();
   void CreateForRestart();
 
@@ -71,6 +77,7 @@ private:
   void CreateHookWindow();
   void CreateTray();
   void CreateActiveActionsRunner();
+  void CreateMessages();
   
   void DestroyBase();
   void DestroyForRestart();
@@ -128,11 +135,6 @@ private:
   ActionsImmediate* _startActions;
 
   /**
-   * \brief the main thread id
-   */
-  const std::thread::id _threadId;
-
-  /**
    * \brief Close the virtual machines windows/scripts
    *        This is normally done when we want to close the application.
    */
@@ -143,17 +145,6 @@ private:
    */
   void WaitForHandlersToComplete() const;
 
-  enum ApplicationMsgs {
-    MsgNone,
-    MsgDestroy,
-    MsgClose,
-    MsgRestart,
-    MsgVersion
-  };
-
-  myodd::threads::Key _mutex;
-  std::queue<ApplicationMsgs> _messages;
-  void Push(ApplicationMsgs loopMessage);
-  ApplicationMsgs Pop();
+  myodd::threads::Messages* _messages;
 };
 
