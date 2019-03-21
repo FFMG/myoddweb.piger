@@ -19,16 +19,17 @@ namespace myodd {
       for (; _close == false ;)
       {
 #ifdef _WIN32
-        // Handle Windows Message Loop
         MSG msg;
-        while (GetMessage(&msg, NULL, 0, 0) > 0)
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) > 0)
         {
           TranslateMessage(&msg);
           DispatchMessage(&msg);
         }
 #endif
+        // process one message.
         ProcessOne();
 
+        // wait a bit
         std::this_thread::yield();
         std::this_thread::sleep_for(wait);
       }

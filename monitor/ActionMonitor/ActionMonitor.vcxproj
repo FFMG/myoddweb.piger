@@ -210,6 +210,7 @@
     <ClCompile Include="ActionVersion.cpp" />
     <ClCompile Include="ActiveAction.cpp" />
     <ClCompile Include="ActiveActions.cpp" />
+    <ClCompile Include="ActiveActionsRunner.cpp" />
     <ClCompile Include="ActiveBatchAction.cpp" />
     <ClCompile Include="ActiveByeAction.cpp" />
     <ClCompile Include="ActiveCmdAction.cpp" />
@@ -225,7 +226,9 @@
     <ClCompile Include="CommonWnd.cpp" />
     <ClCompile Include="FadeWnd.cpp" />
     <ClCompile Include="HookWnd.cpp" />
+    <ClCompile Include="IAction.cpp" />
     <ClCompile Include="IActions.cpp" />
+    <ClCompile Include="IActiveAction.cpp" />
     <ClCompile Include="IApplication.cpp" />
     <ClCompile Include="IDisplay.cpp" />
     <ClCompile Include="IIpcListener.cpp" />
@@ -279,6 +282,7 @@
     <ClInclude Include="ActionVersion.h" />
     <ClInclude Include="ActiveAction.h" />
     <ClInclude Include="ActiveActions.h" />
+    <ClInclude Include="ActiveActionsRunner.h" />
     <ClInclude Include="ActiveBatchAction.h" />
     <ClInclude Include="ActiveByeAction.h" />
     <ClInclude Include="ActiveCmdAction.h" />
@@ -294,7 +298,9 @@
     <ClInclude Include="CommonWnd.h" />
     <ClInclude Include="FadeWnd.h" />
     <ClInclude Include="HookWnd.h" />
+    <ClInclude Include="IAction.h" />
     <ClInclude Include="IActions.h" />
+    <ClInclude Include="IActiveAction.h" />
     <ClInclude Include="IApplication.h" />
     <ClInclude Include="IDisplay.h" />
     <ClInclude Include="IIpcListener.h" />
