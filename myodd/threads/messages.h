@@ -55,9 +55,9 @@ namespace myodd {
       int AddFunctionNoCheck(Function function, int msgId);
 
       /**
-       * \brief process one message in the queue.
+       * \brief process the messages in the queue.
        */
-      void ProcessOne();
+      bool ProcessQueue();
 
       /**
        * \brief pop a message out of the queue

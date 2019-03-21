@@ -26,8 +26,8 @@ namespace myodd {
           DispatchMessage(&msg);
         }
 #endif
-        // process one message.
-        ProcessOne();
+        // process the message queue.
+        ProcessQueue();
 
         // wait a bit
         std::this_thread::yield();
@@ -35,18 +35,21 @@ namespace myodd {
       }
     }
 
-    void Messages::ProcessOne()
+    void Messages::ProcessQueue()
     {
-      const auto msgId = Pop();
-      if (msgId == -1)
+      for (;;)
       {
-        return;
-      }
+        const auto msgId = Pop();
+        if (msgId == -1)
+        {
+          return;
+        }
 
-      const auto functions = CloneFunctions(msgId);
-      for (auto function : functions)
-      {
-        function();
+        const auto functions = CloneFunctions(msgId);
+        for (auto function : functions)
+        {
+          function();
+        }
       }
     }
 
