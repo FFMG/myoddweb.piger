@@ -57,7 +57,7 @@ namespace myodd {
       /**
        * \brief process the messages in the queue.
        */
-      bool ProcessQueue();
+      void ProcessQueue();
 
       /**
        * \brief pop a message out of the queue
