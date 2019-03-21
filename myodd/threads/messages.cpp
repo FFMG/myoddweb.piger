@@ -18,8 +18,15 @@ namespace myodd {
       const auto wait = std::chrono::milliseconds(5);
       for (; _close == false ;)
       {
-        myodd::wnd::MessagePump(nullptr);
-
+#ifdef _WIN32
+        // Handle Windows Message Loop
+        MSG msg;
+        while (GetMessage(&msg, NULL, 0, 0) > 0)
+        {
+          TranslateMessage(&msg);
+          DispatchMessage(&msg);
+        }
+#endif
         ProcessOne();
 
         std::this_thread::yield();
