@@ -28,7 +28,7 @@ namespace myodd {
        * \param function the function we want to add
        * \param message the message we want to monitor
        */
-      int AddFunction(Function function, const std::wstring& message);
+      int AddFunction( const Function& function, const std::wstring& message);
 
       /**
        * \brief post a message 
@@ -52,7 +52,7 @@ namespace myodd {
        * \param function the function we want to add
        * \param msgId the message id we are adding the function for.
        */
-      int AddFunctionNoCheck(Function function, int msgId);
+      int AddFunctionNoCheck(const Function& function, int msgId);
 
       /**
        * \brief process the messages in the queue.

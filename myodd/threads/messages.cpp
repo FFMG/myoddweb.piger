@@ -39,12 +39,16 @@ namespace myodd {
     {
       for (;;)
       {
+        // get the oldest message in the queue.
         const auto msgId = Pop();
         if (msgId == -1)
         {
+          // no more messages in the queue.
           return;
         }
 
+        // get the messages for that id.
+        // we clone the functions so we can call them outside the lock.
         const auto functions = CloneFunctions(msgId);
         for (auto function : functions)
         {
@@ -60,7 +64,7 @@ namespace myodd {
 
     std::vector<Messages::Function> Messages::CloneFunctions(int msgId)
     {
-      myodd::threads::Lock guard(_key);
+      Lock guard(_key);
 
       // we have an id, so we need to call the functions for it.
       const auto functions = _messagesFunctions.find(msgId);
@@ -73,7 +77,7 @@ namespace myodd {
 
     int Messages::Pop()
     {
-      myodd::threads::Lock guard(_key);
+      Lock guard(_key);
       if (_queue.empty())
       {
         return -1;
@@ -85,17 +89,19 @@ namespace myodd {
 
     void Messages::Post(const std::wstring& message)
     {
+      // get the current message id
       const auto msgId = GetMessageId(message, false );
       if( msgId == -1 )
       {
         return;
       }
 
-      myodd::threads::Lock guard(_key);
+      // lock us in so we can add the value.
+      Lock guard(_key);
       _queue.push(msgId);
     }
 
-    int Messages::AddFunction(Function function, const std::wstring& message)
+    int Messages::AddFunction(const Function& function, const std::wstring& message)
     {
       // get the message id.
       const auto msgId = GetMessageId(message, true );
@@ -104,7 +110,7 @@ namespace myodd {
       return AddFunctionNoCheck(function, msgId);
     }
 
-    int Messages::AddFunctionNoCheck(Function function, int msgId)
+    int Messages::AddFunctionNoCheck(const Function& function, int msgId)
     {
       _messagesFunctions[msgId].push_back(function);
 
@@ -115,7 +121,7 @@ namespace myodd {
     int Messages::GetMessageId(const std::wstring& message, bool addIfMissing)
     {
       // lock us in
-      myodd::threads::Lock guard(_key);
+      Lock guard(_key);
 
       // first get the id of the messages
       const auto msgAndId = _messages.find(message);
@@ -129,7 +135,7 @@ namespace myodd {
         return -1;
       }
 
-      auto msgId = _messages.size();
+      const auto msgId = static_cast<int>(_messages.size());
       _messages[message] = msgId;
 
       // return the id 
