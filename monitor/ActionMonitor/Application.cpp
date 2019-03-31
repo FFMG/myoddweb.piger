@@ -23,17 +23,21 @@
 #include "IpcListener.h"
 #include "ActionsImmediate.h"
 #include "ApplicationTray.h"
+#include <functional>
 
-Application::Application() : 
+Application::Application() :
   IApplication(),
+  _lastForegroundWindow(nullptr),
   _messagesHandler(nullptr),
   _possibleActions(nullptr),
   _ipcListener(nullptr),
-  _tray( nullptr ),
+  _tray(nullptr),
   _virtualMachines(nullptr),
-  _dlg( nullptr ),
-  _hookWnd( nullptr ),
-  _startActions( nullptr)
+  _dlg(nullptr),
+  _hookWnd(nullptr),
+  _activeActionsRunner(nullptr),
+  _startActions(nullptr),
+  _messages( nullptr )
 {
 }
 
@@ -49,24 +53,30 @@ Application::~Application()
  */
 void Application::Close()
 {
+  _messages->Post(L"Close");
+}
+
+void Application::OnClose()
+{
   // log that we are closing down
   myodd::log::LogMessage(_T("Piger is shutting down."));
 
   // prepare for closing
   PrepareForClose();
 
-  // and then close
-  if (_dlg != nullptr)
-  {
-    _dlg->Close();
-  }
-
+  // close it
+  _messages->Close();
 }
 
 /**
  * \brief reload all the actions and re-create the base/actions/machines etc...
  */
 void Application::Restart()
+{
+  _messages->Post(L"Restart");
+}
+
+void Application::OnRestart()
 {
   // log that we are restarting
   myodd::log::LogMessage(_T("Piger is restarting."));
@@ -81,6 +91,20 @@ void Application::Restart()
 
   // and then show the new start message.
   ShowStart();
+}
+
+/**
+ * \brief reload all the actions and re-create the base/actions/machines etc...
+ */
+void Application::Version()
+{
+  _messages->Post(L"Version");
+}
+
+void Application::OnVersion()
+{
+  // Show the version
+  ShowVersion();
 }
 
 void Application::Show()
@@ -100,8 +124,8 @@ void Application::Show()
   // show the start messages.
   ShowStart();
 
-  // wait for everything to finish
-  _dlg->Wait();
+  // then wait.
+  _messages->Wait();
 
   // we are now closed, we can destroy everything
   DestroyForRestart();
@@ -124,7 +148,7 @@ void Application::PrepareForClose()
   WaitForHandlersToComplete();
 
   // call the end actions to run
-  ShowEnd();
+  ShowClose();
 
   // wait all the active windows.
   // those are the ones created by the end Action list.
@@ -136,10 +160,11 @@ void Application::PrepareForClose()
  */
 void Application::DestroyForRestart()
 {
+  // the start actions
   delete _startActions;
   _startActions = nullptr;
 
-  // hook wind
+  // hook window
   delete _hookWnd;
   _hookWnd = nullptr;
 
@@ -159,6 +184,10 @@ void Application::DestroyForRestart()
  */
 void Application::DestroyBase()
 {
+  // the running active actions
+  delete _activeActionsRunner;
+  _activeActionsRunner = nullptr;
+
   // stop all the message handling
   delete _messagesHandler;
   _messagesHandler = nullptr;
@@ -171,6 +200,9 @@ void Application::DestroyBase()
 
   delete _dlg;
   _dlg = nullptr;
+
+  delete _messages;
+  _messages = nullptr;
 }
 
 #pragma region Create variables
@@ -179,8 +211,14 @@ void Application::CreateBase()
   // destroy the old one
   DestroyBase();
 
+  // create the messages handler
+  CreateMessages();
+
   // create the system tray
   CreateTray();
+
+  // the actions runner
+  CreateActiveActionsRunner();
 
   // create the messages handler.
   CreateMessageHandler();
@@ -220,8 +258,17 @@ void Application::CreateHookWindow()
   assert(_possibleActions != nullptr);
   assert(_virtualMachines != nullptr);
 
-  _hookWnd = new HookWnd(*_dlg, *_possibleActions, *_virtualMachines);
+  _hookWnd = new HookWnd(*this, *_dlg, *_possibleActions, *_virtualMachines);
   _hookWnd->Create();
+}
+
+void Application::CreateMessages()
+{
+  delete _messages;
+  _messages = new myodd::threads::Messages();
+  _messages->AddFunction(std::bind(&Application::OnClose, this), L"Close");
+  _messages->AddFunction(std::bind(&Application::OnRestart, this), L"Restart");
+  _messages->AddFunction(std::bind(&Application::OnVersion, this), L"Version");
 }
 
 void Application::CreateTray()
@@ -237,13 +284,12 @@ void Application::CreateTray()
 void Application::CreateVirtualMachines()
 {
   // sanity checks
-  assert(_possibleActions != nullptr);
   assert(_messagesHandler != nullptr);
   assert(_ipcListener != nullptr);
 
   // stop the virtuall machines
   delete _virtualMachines;
-  _virtualMachines = new VirtualMachines(*_possibleActions, *_messagesHandler, *_ipcListener);
+  _virtualMachines = new VirtualMachines(*this, *_messagesHandler, *_ipcListener);
 }
 
 /**
@@ -272,6 +318,15 @@ void Application::CreateMessageHandler()
 }
 
 /**
+ * \brief (Re)build the active action runner.
+ */
+void Application::CreateActiveActionsRunner()
+{
+  delete _activeActionsRunner;
+  _activeActionsRunner = new ActiveActionsRunner();
+}
+
+/**
  * \brief (Re)build a list of possible actions.
  */
 void Application::CreateActionsList()
@@ -280,7 +335,7 @@ void Application::CreateActionsList()
   delete _possibleActions;
 
   //  create a new one.
-  _possibleActions = new Actions();
+  _possibleActions = new Actions( *this );
 
   //  parse the directory for all possible files.
   _possibleActions->Initialize();
@@ -294,7 +349,7 @@ void Application::CreateActionsList()
 #pragma endregion
 
 /**
- * \brief destroy all the virtual machines.
+ * \brief Close all the virtual machines.
  *        we send them all a message to end what they are doing
  *        or we detach from them all so we no longer can handle their requests.
  */
@@ -326,7 +381,7 @@ void Application::WaitForHandlersToComplete() const
 }
 
 #pragma region Show common messages
-void Application::ShowEnd()
+void Application::ShowClose()
 {
   // do we have anything to show.
   if (_dlg == nullptr)
@@ -339,7 +394,7 @@ void Application::ShowEnd()
   assert(_virtualMachines != nullptr);
 
   // start the new ones
-  auto endActions = new ActionsImmediate(AM_DIRECTORY_OUT, *_possibleActions, *_virtualMachines);
+  auto endActions = new ActionsImmediate(*this, AM_DIRECTORY_OUT, *_possibleActions, *_virtualMachines);
   endActions->Initialize();
   endActions->WaitForAll();
   delete endActions;
@@ -361,7 +416,7 @@ void Application::ShowStart()
   }
 
   // start the new ones
-  _startActions = new ActionsImmediate(AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines);
+  _startActions = new ActionsImmediate(*this, AM_DIRECTORY_IN, *_possibleActions, *_virtualMachines);
   _startActions->Initialize();
 
   // we do not want to wait for start messages
@@ -383,3 +438,209 @@ void Application::ShowVersion()
   _messagesHandler->Show(strSay.c_str(), 500, 3000);
 }
 #pragma endregion
+
+/**
+ * \brief Execute a file.
+ *        We will expend all the environment variables as needed.
+ * \param argv [0] the file path, [1] the arguments to launch with, (optional).
+ * \param isPrivileged if we need administrator privilege to run this.
+ * \param hProcess if this value is not nullptr, we will return the handle of the started process.
+ *               it is then up to the calling application to close this handle when done with it...
+ * \return bool true|false success or not.
+ */
+bool Application::Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const
+{
+  // get the number of arguments.
+  const auto argc = argv.size();
+
+  // sanity check
+  if (argc < 1 || argc > 2)
+  {
+    ASSERT(0); //  wrong number of arguments.
+    return false;
+  }
+
+  LPTSTR argvModule = nullptr;
+  LPTSTR argvCmd = nullptr;
+
+  // get the module name, (what we are running).
+  // Expand the values that might have been passed.
+  if (!myodd::files::ExpandEnvironment(argv[0].c_str(), argvModule))
+  {
+    myodd::log::LogError(_T("Could not execute statement: Unable to expand command line '%s'"), argv[0].c_str());
+    return false;
+  }
+
+  // But we might also have a command line item.
+  if (2 == argc)
+  {
+    // Expand the values that might have been passed.
+    if (!myodd::files::ExpandEnvironment(argv[1].c_str(), argvCmd))
+    {
+      myodd::log::LogError(_T("Could not execute statement: Unable to expand arguments '%s'"), argv[1].c_str());
+      delete[] argvModule;
+      return false;
+    }
+  }
+
+  //
+  // ShellExecuteEx
+  // https://msdn.microsoft.com/en-us/library/windows/desktop/bb759784(v=vs.85).aspx 
+  //
+  SHELLEXECUTEINFO sei = {};
+  sei.cbSize = sizeof(sei);     // in, required, sizeof of this structure
+  sei.fMask = SEE_MASK_DEFAULT; // in, SEE_MASK_XXX values
+  sei.hwnd = nullptr;           // in, optional
+  sei.lpFile = argvModule;      // in, either this value or lpIDList must be specified
+  sei.lpParameters = argvCmd;   // in, optional
+  sei.lpDirectory = nullptr;    // in, optional
+  sei.nShow = SW_NORMAL;        // in, required
+  //sei.hInstApp;               // out when SEE_MASK_NOCLOSEPROCESS is specified
+  //sei.lpIDList;               // in, valid when SEE_MASK_IDLIST is specified, PCIDLIST_ABSOLUTE, for use with SEE_MASK_IDLIST & SEE_MASK_INVOKEIDLIST
+  //sei.lpClass;                // in, valid when SEE_MASK_CLASSNAME is specified
+  //sei.hkeyClass;              // in, valid when SEE_MASK_CLASSKEY is specified
+  //sei.dwHotKey;               // in, valid when SEE_MASK_HOTKEY is specified
+  if (isPrivileged == true && !myodd::os::IsElevated())
+  {
+    sei.lpVerb = _T("runas"); // in, optional when unspecified the default verb is choosen
+  }
+  else
+  {
+    //  launch as a normal file.
+    sei.lpVerb = _T("open");  // in, optional when unspecified the default verb is choosen
+  }
+
+  // did the user pass a handle?
+  // if they did then they want to take ownership of the process and close the handle.
+  if (hProcess != nullptr)
+  {
+    sei.fMask = SEE_MASK_NOCLOSEPROCESS; // in, SEE_MASK_XXX values
+  }
+
+  // Assume error
+  auto result = false;
+  if (!ShellExecuteEx(&sei))
+  {
+    myodd::log::LogError(_T("Could not execute statement: could not execute '%s'"), argvModule);
+    myodd::log::LogError(_T("Could not execute statement: Last error '%d'"), ::GetLastError());
+  }
+  else
+  {
+    result = true;
+    if (hProcess != nullptr)
+    {
+      // return the handle.
+      *hProcess = sei.hProcess;
+    }
+  }
+
+  // clean up the expended variable.
+  delete[] argvCmd;
+  delete[] argvModule;
+
+  // return what we found
+  return result;
+}
+
+bool Application::AddAction(IAction* action)
+{
+  if( nullptr == _possibleActions )
+  {
+    return false;
+  }
+  return _possibleActions->Add(action);
+}
+
+bool Application::RemoveAction(const std::wstring& szText, const std::wstring& szPath) const
+{
+  if (nullptr == _possibleActions)
+  {
+    return false;
+  }
+  return _possibleActions->Remove(szText, szPath );
+}
+
+const IAction* Application::FindAction(unsigned int idx, const std::wstring& szText) const
+{
+  if (nullptr == _possibleActions)
+  {
+    return nullptr;
+  }
+  return _possibleActions->Find(szText, idx );
+}
+
+bool Application::ExecuteCurrentAction()
+{
+  if( nullptr == _possibleActions)
+  {
+    return false;
+  }
+  if( nullptr == _virtualMachines )
+  {
+    return false;
+  }
+
+  //  We use the Actions to find the actual command
+  //  because either it is an exact match, (and it doesn't matter)
+  //  or it is not an exact match and this is what we meant to use
+  // 
+  //  so if the user enters 'goo french victories'
+  //  we will use the first command 'google' with the arguments 'french victories'
+  //
+  //  we use getCommand in case the user has chosen number 1, 2 ... in the list of possible commands 
+
+  // if there is an active action, get it.
+  const auto action = _possibleActions->GetCommand();
+  if (nullptr == action)
+  {
+    return false;
+  }
+
+  try
+  {
+    const auto pWnd = GetLastForegroundWindow();
+    const auto commandLine = _possibleActions->GetCommandLine();
+    const auto activeAction = action->CreateActiveAction(*_virtualMachines, pWnd, commandLine, false);
+    return ExecuteActiveAction(activeAction);
+  }
+  catch( ... )
+  {
+    return false;
+  }
+}
+
+bool Application::ExecuteActiveAction( IActiveAction* action) const
+{
+  try
+  {
+    if( nullptr == _activeActionsRunner )
+    {
+      return false;
+    }
+    _activeActionsRunner->QueueAndExecute(action);
+    return true;
+  }
+  catch (...)
+  {
+    return false;
+  }
+}
+
+bool Application::IsActiveActionRunning(IActiveAction* action) const
+{
+  if (nullptr == _activeActionsRunner)
+  {
+    return false;
+  }
+  return _activeActionsRunner->IsActiveActionRunning( action);
+}
+
+void Application::SetLastForegroundWindow()
+{
+  _lastForegroundWindow = CWnd::GetForegroundWindow();
+}
+
+CWnd* Application::GetLastForegroundWindow() const
+{
+  return _lastForegroundWindow;
+}

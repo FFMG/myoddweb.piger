@@ -16,8 +16,10 @@
 #include "CommonWnd.h"
 #include "IDisplay.h"
 #include "IActions.h"
+#include "IApplication.h"
 #include "../api/IVirtualMachines.h"
-#include "ActiveActions.h"
+#include "threads/workers.h"
+#include "ActiveActionsRunner.h"
 
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
@@ -26,11 +28,11 @@
 
 #define SPECIAL_KEY VK_CAPITAL
 
-class HookWnd final : public CommonWnd, ActiveActions
+class HookWnd final : public CommonWnd, protected myodd::threads::Workers
 {
 public:
-  explicit HookWnd(IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines);
-  ~HookWnd();
+  explicit HookWnd(IApplication& application, IDisplay& display, IActions& actions, IVirtualMachines& virtualMachines);
+  virtual ~HookWnd();
 
   bool Close() override;
   bool Create() override;
@@ -56,10 +58,14 @@ protected:
    */
   IDisplay& _display;
 
+  /**
+   * \brief the application manager.
+   */
+  IApplication& _application;
+
   //  the state of our special key
   unsigned long _keyState;
 
   static bool IsSpecialKeyDown();
   static bool IsSpecialKey(const WPARAM wParam);
 };
-

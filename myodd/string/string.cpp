@@ -44,6 +44,79 @@ void Test()
 #endif
 
 /**
+ * \brief get a random string given a length and a source
+ * \param source the list of characters we will be randomly choosing from
+ * \param len the total length we want the string t
+ * \return a random string made of 'source' characters.
+ */
+std::wstring RandomString(const std::wstring& source, const int len)
+{
+  // sanity checks.
+  if( len == 0 )
+  {
+    return L"";
+  }
+  if( len<0 )
+  {
+    throw std::invalid_argument("The required string cannt be less than zero in lenght.");
+  }
+  const auto lengthOfSource = source.length();
+  if( lengthOfSource ==  0 )
+  {
+    throw std::invalid_argument("The source must have at least one character!");
+  }
+
+  std::wstring result = L"";
+  for (auto i = 0; i < len; ++i) 
+  {
+    result += source[rand() % (lengthOfSource - 1)];
+  }
+  return result;
+}
+
+/**
+ * \brief generate a Version 4 uuid
+ * \see https://en.wikipedia.org/wiki/Universally_unique_identifier#Format for more details
+ * \return the version 4 uuid.
+ */
+std::wstring MakeUuid4()
+{
+  // a guid has hex numbers.
+  const auto source = L"0123456789abcdef";
+  std::wstring guid = L"";
+
+  // format 8-4-4-4-12 (xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx)
+  // https://en.wikipedia.org/wiki/Universally_unique_identifier#Format
+  for( auto i = 0; i < 5; ++i )
+  {
+    switch( i )
+    {
+    case 0:
+      guid += RandomString(source, 8);
+      guid += L"-";
+      break;
+
+    case 2:
+      // as we are version 4, we will add our version number.
+      guid += L"4" + RandomString(source, 3);
+      guid += L"-";
+      break;
+
+    case 4:
+      guid += RandomString(source, 12);
+      // this is the end
+      break;
+
+    default:
+      guid += RandomString(source, 4);
+      guid += L"-";
+      break;
+    }
+  }
+  return guid;
+}
+
+/**
  * Explode a string that is separated with '\0' chars.
  * This is used with items like GetPrivateProfileString( ... ) when we want to list all the keys.
  * @param std::vector<MYODD_STRING>& the return container.
@@ -248,7 +321,7 @@ int32_t Compare( const MYODD_STRING& lhs, const MYODD_STRING& rhs, bool caseSens
   }
 
 #ifdef _UNICODE
-  return wcsicmp( lhs.c_str(), rhs.c_str() );
+  return _wcsicmp( lhs.c_str(), rhs.c_str() );
 #else
   return stricmp(lhs.c_str(), rhs.c_str());
 #endif

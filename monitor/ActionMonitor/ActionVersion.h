@@ -23,8 +23,5 @@ public:
   explicit ActionVersion(IApplication& application);
 	virtual ~ActionVersion();
 
-  ActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const override;
-
-private:
-  IApplication& _application;
+  IActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const override;
 };

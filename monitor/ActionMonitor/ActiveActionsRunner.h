@@ -13,29 +13,39 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-#include "ActiveAction.h"
 
-class ActiveShellAction final : public ActiveAction
+#include "IActiveAction.h"
+#include "threads/workers.h"
+
+class ActiveActionsRunner : protected myodd::threads::Workers
 {
 public:
-  /**
-   * \brief The Shell constructor
-   * \param src the action that is now active.
-   * \param virtualMachines, the virutal machines.
-   * \param hTopHWnd the window that was on top at the time the command was given.
-   * \param szCommandLine the given command line that is, the words after the command itself
-   * \param isPrivileged if this action is privileged or not.
-   */
-  ActiveShellAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActiveActionsRunner();
+	virtual ~ActiveActionsRunner();
+
+  ActiveActionsRunner(const ActiveActionsRunner&) = delete;
+  void operator=(const ActiveActionsRunner&) = delete;
+
+  void QueueAndExecute(IActiveAction* activeAction );
+
+  bool IsActiveActionRunning(IActiveAction* action);
+
+private:
+  static void Execute(IActiveAction* runner, ActiveActionsRunner* parent);
 
   /**
-   * \brief default destructor
+   * \brief the mutex that manages the runners
    */
-  virtual ~ActiveShellAction() = default;
+  myodd::threads::Key _mutexRunner;
 
-protected:
-  bool OnInitialize() override;
-  bool OnDeInitialize() override;
-  void OnExecuteInThread() override;
+  /**
+   * \brief the collection of runners.
+   */
+  typedef std::vector<IActiveAction*> Runners;
+  Runners _runners;
+
+  /**
+   * \brief look for and remove a runner.
+   */
+  void RemoveRunner(IActiveAction* runner);
 };
-

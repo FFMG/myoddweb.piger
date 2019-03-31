@@ -14,6 +14,21 @@
 namespace myodd{ namespace strings{
   void Test();  //  test data
 
+  /**
+   * \brief get a random string given a length and a source
+   * \param source the list of characters we will be randomly choosing from
+   * \param len the total length we want the string t
+   * \return a random string made of 'source' characters.
+   */
+  std::wstring RandomString(const std::wstring& source, int len);
+
+  /**
+   * \brief generate a Version 4 uuid
+   * \see https://en.wikipedia.org/wiki/Universally_unique_identifier#Format for more details
+   * \return the version 4 uuid.
+   */
+  std::wstring MakeUuid4();
+
   // check if a string is empty.
   bool IsEmptyString(const wchar_t* s );
   bool IsEmptyString( const std::wstring& s );

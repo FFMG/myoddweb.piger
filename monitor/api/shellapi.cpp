@@ -18,8 +18,8 @@
 /**
  * \copydoc 
  */
-ShellApi::ShellApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
-  ExecuteApi(uuid, action, actions, messagesHandler )
+ShellApi::ShellApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler ) :
+  ExecuteApi(uuid, action, application, messagesHandler )
 {
 }
 
@@ -243,8 +243,8 @@ bool ShellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
   const auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_INDEX);
   const auto action = ipcRequest.Get<std::wstring>(ARGUMENT_ACTION);
 
-  std::wstring sValue = L"";
-  if (!HelperApi::FindAction(idx, action.c_str(), sValue))
+  const auto actionptr = HelperApi::FindAction(idx, action );
+  if (actionptr == nullptr )
   {
     HelperApi::Log(AM_LOG_WARNING, L"Could not find action at given index");
 
@@ -256,7 +256,7 @@ bool ShellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::IpcDa
   }
 
   // otherwise push the string
-  ipcResponse.Add(sValue);
+  ipcResponse.Add( actionptr->File() );
 
   // one return variable.
   return true;

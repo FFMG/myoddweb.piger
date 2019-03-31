@@ -34,16 +34,10 @@ public:
   void InitMaxClipboardSize();
 
 public:
-  static CWnd* GetLastForegroundWindow();
-  static void SetLastForegroundWindow( CWnd *w);
-
   static size_t GetMaxClipboardMemory();
 
 public:
   bool CreateAndShowActionDialog();
-
-public:
-  afx_msg LRESULT OnHookKeyDown(WPARAM wParam, LPARAM lParam);
 
   //  virtual int ExitInstance();
   int ExitInstance() override;
@@ -55,20 +49,15 @@ public:
   static void SelfElavate();
 
   /**
-   * \brief the handle of the mutex
+   * \brief the handle of the mutex, this is to ensure that we only have once 
+   *        instance of the app running at a time.
    */
   HANDLE _mutex;
-
-  /**
-   * \brief CWnd* The window that last had the focus when we pressed the special key.
-   */
-  CWnd* _cwndLastForegroundWindow;
 
   /**
    * \brief The maximum memory we want to use when getting clipboard data.
    */
   size_t _maxClipboardSize;
-
 
 private:
   /**

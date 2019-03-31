@@ -13,13 +13,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-
-#include <vector>
-#include <threads/lock.h>
-#include "activeaction.h"
-#include "threads/workers.h"
-
-class ActiveActions : protected myodd::threads::Workers
+class ActiveActions
 {
 public:
   ActiveActions();
@@ -27,25 +21,4 @@ public:
 
   ActiveActions(const ActiveActions&) = delete;
   void operator=(const ActiveActions&) = delete;
-
-  void QueueAndExecute( ActiveAction* activeAction );
-
-private:
-  static void Execute(ActiveAction* runner, ActiveActions* parent);
-
-  /**
-   * \brief the mutex that manages the runners
-   */
-  myodd::threads::Key _mutexRunner;
-
-  /**
-   * \brief the collection of runners.
-   */
-  typedef std::vector<ActiveAction*> Runners;
-  Runners _runners;
-
-  /**
-   * \brief look for and remove a runner.
-   */
-  void RemoveRunner(ActiveAction* runner);
 };

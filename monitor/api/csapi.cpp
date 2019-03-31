@@ -4,7 +4,7 @@
 /**
  * \copydoc
  */
-CsApi::CsApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) :
-  PowershellApi(uuid, action, actions, messagesHandler )
+CsApi::CsApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler) :
+  PowershellApi(uuid, action, application, messagesHandler )
 {
 }

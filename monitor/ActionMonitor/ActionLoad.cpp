@@ -22,8 +22,7 @@
  * \param application the application to close the app
  */
 ActionLoad::ActionLoad(IApplication& application) :
-  Action( ACTION_CORE_LOAD, L""),
-  _application(application)
+  Action( application, ACTION_CORE_LOAD, L"")
 {
 }
 
@@ -37,11 +36,11 @@ ActionLoad::~ActionLoad()
 /**
  * \copydoc
  */
-ActiveAction* ActionLoad::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+IActiveAction* ActionLoad::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
   const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
 
   //  display the version.
-  return new ActiveLoadAction(_application, *this, virtualMachines, hTopHWnd);
+  return new ActiveLoadAction(_application, *this, hTopHWnd);
 }

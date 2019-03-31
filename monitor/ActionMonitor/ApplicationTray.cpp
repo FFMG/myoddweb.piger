@@ -85,7 +85,7 @@ void ApplicationTray::OnTrayExit()
 void ApplicationTray::OnTrayVersion()
 {
   assert(_application != nullptr);
-  _application->ShowVersion();
+  _application->Version();
 }
 
 void ApplicationTray::OnTrayReload()

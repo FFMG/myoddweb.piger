@@ -12,26 +12,12 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
-#pragma once
-#include "IIpcListener.h"
-#include "threads/lock.h"
-#include "os/ipclistener.h"
+#include "stdafx.h"
+#include "IActiveAction.h"
 
-class IpcListener final : public IIpcListener
+/**
+ * \brief Constructor
+ */
+IActiveAction::IActiveAction()
 {
-public:
-  IpcListener();
-  virtual ~IpcListener();
-
-  void WaitForAllToComplete() override;
-  void Add(myodd::os::IpcMessageHandler& handler) override;
-  void Remove(myodd::os::IpcMessageHandler& handler) override;
-  void Initialize() override;
-
-private:
-
-  myodd::os::IpcListener* _ipc;
-
-  myodd::threads::Key _mutex;
-};
-
+}

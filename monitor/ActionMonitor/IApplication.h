@@ -13,6 +13,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
+#include "IAction.h"
+
 class IApplication
 {
 public:
@@ -41,16 +43,67 @@ public:
   /**
    * \brief show the app version number.
    */
-  virtual void ShowVersion() = 0;
+  virtual void Version() = 0;
 
   /**
-   * \brief show all the start actions
+   * \brief Add an action to our list of actions.
+   * \param action the action we are adding.
+   * \return success or not.
    */
-  virtual void ShowStart() = 0;
+  virtual bool AddAction(IAction* action) = 0;
 
   /**
-   * \brief show all the end actions
+   * \brief Remove an action, if more than one action is found
+   *        Then the path will be compared against.
+   * \param szText the action we want to remove
+   * \param szPath the path of the action we are removing.
+   * \return bool if the action was removed or not.
    */
-  virtual void ShowEnd() = 0;
+  virtual bool RemoveAction( const std::wstring& szText, const std::wstring& szPath) const = 0;
+
+  /**
+   * \brief Find an action to see if it exists already
+   * \param idx the index of the action we are looking for.
+   * \param szText the name of the command we want to find
+   * \return if the action exits or not.
+   */
+  virtual const IAction* FindAction(unsigned int idx, const std::wstring& szText) const = 0;
+
+  /**
+   * \brief ask the os to execute a command
+   * \param argv the arguments we will be using/passing, (the first argument is the exe/batch/cmd itself)
+   * \param isPrivileged if set to true, we will try and elevate the application
+   * \param hProcess the created handle so we can close it
+   * \return false if there was an error or not.
+   */
+  virtual bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const = 0;
+
+  /**
+   * \brief Execute a created active action and take ownership of the pointer.
+   * \param action the action we want to add 
+   * \return false if there was an error or not.
+   */
+  virtual bool ExecuteActiveAction( IActiveAction* action ) const = 0;
+
+  /**
+   * \brief check if an active action is still currently running or not
+   * \param action the action we are looking for.
+   */
+  virtual bool IsActiveActionRunning( IActiveAction* action) const = 0;
+
+  /**
+   * \brief find and execute the currently selected action, if we have one
+   * \return false if there was an error or if we have no selected action.
+   */
+  virtual bool ExecuteCurrentAction() = 0;
+
+  /**
+   * \brief get the last known foreground window.
+   */
+  virtual CWnd* GetLastForegroundWindow() const = 0;
+
+  /**
+   * \brief instruct the application to save the current foreground window.
+   */
+  virtual void SetLastForegroundWindow() = 0;
 };
-

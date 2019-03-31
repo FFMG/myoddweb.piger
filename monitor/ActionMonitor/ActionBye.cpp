@@ -22,8 +22,7 @@
  * \param application the application to close the app
  */
 ActionBye::ActionBye(IApplication& application ) : 
-  Action( ACTION_CORE_BYE, L"" ),
-  _application(application)
+  Action( application, ACTION_CORE_BYE, L"" )
 {
 }
 
@@ -37,9 +36,9 @@ ActionBye::~ActionBye()
 /**
  * \copydoc
  */
-ActiveAction* ActionBye::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const
+IActiveAction* ActionBye::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const
 {
   //  get the last forground window handle
   const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
-  return new ActiveByeAction( _application, *this, virtualMachines, hTopHWnd );
+  return new ActiveByeAction( _application, *this, hTopHWnd );
 }

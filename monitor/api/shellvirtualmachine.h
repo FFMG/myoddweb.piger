@@ -20,14 +20,14 @@
 class ShellVirtualMachine final : public ExecuteVirtualMachine
 {
 public:
-  explicit ShellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  explicit ShellVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~ShellVirtualMachine();
 
   static bool IsExt(const std::wstring& file);
 
   bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
-  bool Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile) override;
-  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
+  bool Execute(ExecuteApi& api, const IActiveAction& action, const std::wstring& pluginFile) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages) override;
 
 protected:
   static bool ShellPath(std::wstring& szPath);
@@ -39,7 +39,7 @@ protected:
    * \param uuid the unique id
    */
   std::wstring GetCommandLineArguments(
-    const ActiveAction& action,
+    const IActiveAction& action,
     const std::wstring& pluginPath,
     const std::wstring& uuid
   ) const;

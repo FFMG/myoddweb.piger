@@ -353,6 +353,9 @@
     <ClCompile Include="config\data.cpp">
       <Filter>Config</Filter>
     </ClCompile>
+    <ClCompile Include="threads\messages.cpp">
+      <Filter>threads</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -515,6 +518,9 @@
     </ClInclude>
     <ClInclude Include="string\formatter.h">
       <Filter>string</Filter>
+    </ClInclude>
+    <ClInclude Include="threads\messages.h">
+      <Filter>threads</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

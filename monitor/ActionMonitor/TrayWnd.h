@@ -14,13 +14,12 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
 #include "CommonWnd.h"
-#include "ITray.h"
 
 class TrayWnd final : public CommonWnd
 {
 public:
   explicit TrayWnd( HICON active, HICON inactive );
-  ~TrayWnd();
+  virtual ~TrayWnd();
 
   /**
    * \brief Set the menu handler.

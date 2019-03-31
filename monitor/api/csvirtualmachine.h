@@ -6,12 +6,12 @@
 class CsVirtualMachine final : public PowershellVirtualMachine
 {
 public:
-  explicit CsVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
+  explicit CsVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~CsVirtualMachine();
 
   static bool IsExt(const MYODD_STRING& file);
 
-  ExecuteApi* CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages) override;
+  ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages) override;
   
 protected:
   /**
@@ -23,7 +23,7 @@ protected:
    * \param uuid the unique id
    */
   MYODD_STRING GetCommandLineArguments(
-    const ActiveAction& action, 
+    const IActiveAction& action,
     const std::wstring& dllFullPath,
     const std::wstring& dllInterfaceFullPath,
     const std::wstring& pluginPath, 

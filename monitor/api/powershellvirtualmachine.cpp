@@ -6,8 +6,8 @@
 /**
  * \copydoc
  */
-PowershellVirtualMachine::PowershellVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  ExecuteVirtualMachine( actions, messagesHandler, iIpcListener )
+PowershellVirtualMachine::PowershellVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  ExecuteVirtualMachine( application, messagesHandler, iIpcListener )
 {
 }
 
@@ -119,7 +119,7 @@ bool PowershellVirtualMachine::HandleIpcMessage(ExecuteApi& api, const myodd::os
   return false;
 }
 
-bool PowershellVirtualMachine::Execute(ExecuteApi& api, const ActiveAction& action, const std::wstring& pluginFile)
+bool PowershellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& action, const std::wstring& pluginFile)
 {
   //  do we have powerhsell3?
   if (!IsPowershell3Installed())
@@ -196,7 +196,7 @@ bool PowershellVirtualMachine::Execute(ExecuteApi& api, const ActiveAction& acti
  * \param uuid the unique id
  */
 MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(
-  const ActiveAction& action,
+  const IActiveAction& action,
   const std::wstring& dllFullPath,
   const std::wstring& dllInterfaceFullPath,
   const std::wstring& pluginPath,
@@ -285,8 +285,8 @@ bool PowershellVirtualMachine::IsPowershell3Installed()
   return (dwValue == 1 );
 }
 
-ExecuteApi* PowershellVirtualMachine::CreateApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages)
+ExecuteApi* PowershellVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages)
 {
-  return new PowershellApi(uuid, action, actions, messages);
+  return new PowershellApi(uuid, action, application, messages);
 }
 #endif /*ACTIONMONITOR_PS_PLUGIN*/

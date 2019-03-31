@@ -6,8 +6,8 @@
 /**
  * \copydoc
  */
-PowershellApi::PowershellApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
-  ExecuteApi(uuid, action, actions, messagesHandler )
+PowershellApi::PowershellApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler ) :
+  ExecuteApi(uuid, action, application, messagesHandler )
 {
 }
 
@@ -239,8 +239,8 @@ bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::
   auto idx = ipcRequest.Get<unsigned int>(ARGUMENT_INDEX);
   auto action = ipcRequest.Get<std::wstring>(ARGUMENT_ACTION);
 
-  MYODD_STRING sValue = _T("");
-  if (!HelperApi::FindAction(idx, action.c_str(), sValue))
+  const auto actionptr = HelperApi::FindAction(idx, action);
+  if (nullptr == actionptr )
   {
     HelperApi::Log(AM_LOG_WARNING, _T("Could not find action at given index"));
 
@@ -252,7 +252,7 @@ bool PowershellApi::FindAction(const myodd::os::IpcData& ipcRequest, myodd::os::
   }
 
   // otherwise push the string
-  ipcResponse.Add(sValue);
+  ipcResponse.Add( actionptr->File() );
 
   // one return variable.
   return true;

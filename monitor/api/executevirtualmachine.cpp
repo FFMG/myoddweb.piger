@@ -1,14 +1,26 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
-#include <boost/uuid/uuid.hpp>            // uuid class
-#include <boost/uuid/uuid_generators.hpp> // generators
-#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include "executevirtualmachine.h"
+#include "ActionBye.h"
 
 /**
  * \copydoc
  */
-ExecuteVirtualMachine::ExecuteVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
-  IVirtualMachine( actions, messagesHandler, iIpcListener ),
+ExecuteVirtualMachine::ExecuteVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener) :
+  IVirtualMachine( application, messagesHandler, iIpcListener ),
   _initialized( false ),
   _mutex( L"Execute Virtual Machine")
 {
@@ -37,6 +49,7 @@ bool ExecuteVirtualMachine::Initialize()
   try
   {
     GetIpcListener().Add(*this);
+    
     _initialized = true;
     return true;
   }
@@ -52,7 +65,6 @@ bool ExecuteVirtualMachine::HandleIpcSendMessage(const unsigned int msg, const u
   // we do not handle those
   return false;
 }
-
 
 //  handle the post message.
 bool ExecuteVirtualMachine::HandleIpcPostMessage(const unsigned int msg, const unsigned __int64 wParam, const __int64 lParam)
@@ -94,13 +106,13 @@ bool ExecuteVirtualMachine::HandleIpcMessage(const myodd::os::IpcData& ipcReques
   return HandleIpcMessage( *api, ipcRequest, ipcResponse );
 }
 
-int ExecuteVirtualMachine::Execute(const ActiveAction& action, const std::wstring& pluginFile)
+int ExecuteVirtualMachine::Execute(const IActiveAction& action, const std::wstring& pluginFile)
 {
   Initialize();
 
   //  create uuid and andd it to our list.
-  const auto uuid = boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
-  auto api = AddApi(uuid, action );
+  const auto uuid = myodd::strings::MakeUuid4();
+  const auto api = AddApi(uuid, action );
   if( !Execute( *api, action, pluginFile ))
   {
     RemoveApi(uuid);
@@ -120,7 +132,7 @@ int ExecuteVirtualMachine::Execute(const ActiveAction& action, const std::wstrin
  * \param action the matching action for this Id.
  * \return the API that manages the action
  */
-ExecuteApi* ExecuteVirtualMachine::AddApi(const std::wstring& uuid, const ActiveAction& action )
+ExecuteApi* ExecuteVirtualMachine::AddApi(const std::wstring& uuid, const IActiveAction& action )
 {
   //  lock us in
   myodd::threads::Lock lock(_mutex);
@@ -134,7 +146,7 @@ ExecuteApi* ExecuteVirtualMachine::AddApi(const std::wstring& uuid, const Active
   }
 
   //  create the powershell api.
-  const auto api = CreateApi(uuid, action, GetActions(), GetMessagesHandler() );
+  const auto api = CreateApi(uuid, action, GetApplication(), GetMessagesHandler() );
 
   // add it to the array
   _apis[uuid] = api;

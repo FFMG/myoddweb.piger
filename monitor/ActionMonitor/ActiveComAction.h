@@ -6,7 +6,7 @@ class ActiveComAction :
   public ActiveAction
 {
 public:
-  ActiveComAction(const Action& src, IVirtualMachines& virtualMachines, HWND hTopHWnd, const MYODD_STRING& szCommandLine);
+  ActiveComAction(IApplication& application, const IAction& src, HWND hTopHWnd, const MYODD_STRING& szCommandLine);
   virtual ~ActiveComAction();
 
 protected:

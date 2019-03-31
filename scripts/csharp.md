@@ -1,8 +1,12 @@
 # C Sharp Example
 
+The c# script is not a compiled .NET but a c# script that will be executed.
+
+If you want to run a .NET application, have a look at [the .NET script](dotnet.md)
+
 ## Expected format
 
-### Clas name
+### Class name
 
 The expected class is `ActionMonitor.Plugin.{YourCommandName}`
 

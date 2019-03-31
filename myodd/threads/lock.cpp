@@ -20,14 +20,14 @@ namespace myodd {
     {
       try
       {
-        __OUT( L"---------------- Getting lock %s\n", _key._name.c_str() );
+        __OUT( L"Getting lock %s\n", _key._name.c_str() );
         _guard = new std::lock_guard<std::mutex>(_key);
       }
       catch (const std::system_error&) 
       {
         // and error is thrown if we are trying re-entry.
       }
-      __OUT(L"---------------- Got lock %s\n", _key._name.c_str());
+      __OUT(L"Got lock %s\n", _key._name.c_str());
     }
 
     /**
@@ -45,7 +45,7 @@ namespace myodd {
     {
       delete _guard;
       _guard = nullptr;
-      __OUT(L"---------------- Released lock %s\n", _key._name.c_str());
+      __OUT(L"Released lock %s\n", _key._name.c_str());
     }
   }
 }

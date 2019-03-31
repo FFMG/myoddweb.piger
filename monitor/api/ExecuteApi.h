@@ -18,7 +18,7 @@
 class ExecuteApi : public HelperApi
 {
 protected:
-  ExecuteApi(const std::wstring& uuid, const ActiveAction& action, IActions& actions, IMessagesHandler& messages);
+  ExecuteApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages);
 
 public:
   ~ExecuteApi();

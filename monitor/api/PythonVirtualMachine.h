@@ -8,7 +8,7 @@
 class PythonVirtualMachine final : public IVirtualMachine
 {
 public:
-  explicit PythonVirtualMachine(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener );
+  explicit PythonVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& ipcListener );
   ~PythonVirtualMachine();
   bool Initialize() override;
 
@@ -23,7 +23,7 @@ public:
   void RemoveApi(std::thread::id id);
 
   void Destroy() override {};
-  int Execute(const ActiveAction& action, const std::wstring& pluginFile) override;
+  int Execute(const IActiveAction& action, const std::wstring& pluginFile) override;
 
 private:
   bool m_isInitialized;

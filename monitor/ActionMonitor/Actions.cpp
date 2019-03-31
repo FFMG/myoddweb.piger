@@ -1,24 +1,17 @@
-// Actions.cpp: implementation of the Actions class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include "stdafx.h"
 #include "Actions.h"
 #include <io.h>
 #include <threads/lock.h>
+#include "Action.h"
 
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-// -------------------------------------------------------------
-Actions::Actions() : 
+Actions::Actions( IApplication& application ) :
+  _application( application ),
   m_uCommand( 0 ),
   _actionCurrentlySelected( nullptr ),
   _sActionAsTyped( L"" ),
   _mutexActions( L"Actions"),
-  _mutexActionsMatch( L"Actions - Match"),
-  _mutexActionTemp( L"Action - Temp")
+  _mutexActionTemp( L"Action - Temp"),
+  _mutexActionsMatch( L"Actions - Match")
 {
 }
 
@@ -54,13 +47,12 @@ void Actions::ClearAll()
  * \param idx the index number we are looking for.
  * \return Action or nullptr if the action was found or not.
  */
-const Action* Actions::Find(const std::wstring& szText, unsigned int idx )
+const IAction* Actions::Find(const std::wstring& szText, unsigned int idx )
 {
   //  get the lock
   myodd::threads::Lock guard(_mutexActions);
 
   UINT currentIdx = 0;
-  const auto size = _actions.size();
   for( auto it = _actions.begin(); it < _actions.end(); ++it )
   {
     const auto& action = *(*it);
@@ -80,14 +72,14 @@ const Action* Actions::Find(const std::wstring& szText, unsigned int idx )
   }
 
   // if we are here, we did not find the right action.
-  return false;
+  return nullptr;
 }
 
 /**
- * Look for a command/path in the list of actions.
- * @param const MYODD_STRING& szText the command we are looking for.
- * @param const MYODD_STRING& szPath the path for that command.
- * @return Actions::array_of_actions_it the iterator for that command, (if there is one).
+ * \brief ook for a command/path in the list of actions.
+ * \param szText the command we are looking for.
+ * \param szPath the path for that command.
+ * \return Actions::array_of_actions_it the iterator for that command, (if there is one).
  */
 Actions::array_of_actions_it Actions::Find(const std::wstring& szText, const std::wstring& szPath )
 {
@@ -103,7 +95,6 @@ Actions::array_of_actions_it Actions::Find(const std::wstring& szText, const std
   myodd::threads::Lock guard(_mutexActions);
 
   // loop around looking for the matching action.
-  auto size = _actions.size();
   for( auto it = _actions.begin(); it < _actions.end(); ++it )
   {
     const auto& a = *(*it);
@@ -127,7 +118,7 @@ Actions::array_of_actions_it Actions::Find(const std::wstring& szText, const std
  * \param action the action we want to add.
  * \return bool success or not.
  */
-bool Actions::Add( Action* action )
+bool Actions::Add( IAction* action )
 {
   if (nullptr == action)
   {
@@ -185,52 +176,36 @@ bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
 }
 
 // ------------------------------------------------------------------------------------
-std::wstring Actions::toChar(  const std::wstring& s, const COMMANDS_VALUE& cv )
+std::wstring Actions::ToChar(  const std::wstring& s, const CommandsValue& cv )
 {
   if( s.length() == 0 )
   {
-    return _T("");
-  }
-
-  std::wstring sBold     = _T("");
-  std::wstring sItalic   = _T("");
-  std::wstring sColor    = _T("");
-  
-  std::wstring sBold_c   = _T("");
-  std::wstring sItalic_c = _T("");
-  
-  sBold     = cv.bBold? _T("<b>"): _T("");
-  sBold_c   = cv.bBold? _T("</b>"): _T("");
-  
-  sItalic   = cv.bItalic?_T("<i>"): _T("");
-  sItalic_c = cv.bItalic?_T("</i>"): _T("");
-  
-  if( cv.color.length() > 0 )
-  {
-    sColor    = _T(" color='#") + cv.color + _T("'");;
+    return L"";
   }
   
-  std::wstring ret = _T("");
-  //ret += _T("<font") + sColor + _T(">");
+  const auto sBold     = cv.bBold? L"<b>": L"";
+  const auto sBoldC    = cv.bBold? L"</b>": L"";
+  
+  const auto sItalic   = cv.bItalic? L"<i>": L"";
+  const auto sItalicC  = cv.bItalic? L"</i>": L"";
+    
+  std::wstring ret = L"";
   ret +=  sBold;
-  ret +=    sItalic;
-  ret +=    s;
-  ret +=    sItalic_c;
-  ret +=  sBold_c;
-  //ret +=  _T("</font>");
+  ret +=  sItalic;
+  ret +=  s;
+  ret +=  sItalicC;
+  ret +=  sBoldC;
 
   return ret;
 }
 
 // -------------------------------------------------------------
-void Actions::GetCommandValue(const std::wstring& lpName, COMMANDS_VALUE& cv ) const
+void Actions::GetCommandValue(const std::wstring& lpName, CommandsValue& cv )
 {
   // get the path
   const auto fullPath = ::myodd::strings::Format( L"commands\\%s", lpName.c_str() );
 
   // get the value
-  const auto get = ::myodd::config::Get(fullPath + L".color", cv.color);
-  cv.color    = static_cast<const wchar_t*>(get);
   cv.bBold    = ::myodd::config::Get( fullPath + L".bold", cv.bBold);
   cv.bItalic  = ::myodd::config::Get( fullPath + L".italic", cv.bItalic );
 }
@@ -247,52 +222,62 @@ void Actions::GetCommandValue(const std::wstring& lpName, COMMANDS_VALUE& cv ) c
 std::wstring Actions::ToChar()
 {
   //  get the current command, colors and style
-  COMMANDS_VALUE cv( _T("000000"), 0, 0 );
-  GetCommandValue( _T("current"), cv );
+  CommandsValue cv(  false, false );
+  GetCommandValue( L"current", cv );
 
   // the default item
-  COMMANDS_VALUE cvDef( _T("000000"), 0, 0 );
-  GetCommandValue( _T("default"), cvDef );
+  CommandsValue cvDef( false, false );
+  GetCommandValue( L"default", cvDef );
 
   // and the selected item
-  COMMANDS_VALUE cvSel( _T("808000"), 1, 1 );
-  GetCommandValue( _T("selected"), cvSel );
+  CommandsValue cvSel( true, true );
+  GetCommandValue( L"selected", cvSel );
 
   myodd::threads::Lock guard(_mutexActionsMatch );
 
   //  the return string
   //  we keep it as global 'cause we are returning it.
-  auto szCurrentView = toChar( getActionAsTyped(), cv );
+  auto szCurrentView = ToChar( GetActionAsTyped(), cv );
   size_t count =  0;
   for ( auto it =  _actionsMatch.begin(); it != _actionsMatch.end(); ++it )
   {
     //  we need a break after the previous line, (even for the current action)
-    szCurrentView += _T("<br>");
+    szCurrentView += L"<br>";
     const auto& acc = *(*it);
 
-    szCurrentView += toChar( acc.Command(), (count==m_uCommand) ? cvSel:cvDef );
+    szCurrentView += ToChar( acc.Command(), (count==m_uCommand) ? cvSel:cvDef );
     ++count;
   }
   return szCurrentView;
 }
 
 /**
- * Clear all the strings/actions matches.
- * @param none
- * @return none
+ * \brief Clear all the strings/actions matches.
  */
 void Actions::ClearSearch()
 {
   //  get the lock
   myodd::threads::Lock guard(_mutexActionsMatch);
 
-  // reset the posible matches
+  // reset the possible matches
   // we don't delete all the pointers.
   // because they do no belong to it.
   _actionsMatch.clear();
 
   // and the currently selected command
   m_uCommand = 0;
+}
+
+/**
+ * \brief Get the current action as it was entered by the user.
+ *        This is the action that the user typed in.
+ *        So if the action is "Google" but the user typed if "Goo" then we will only return "Goo"
+ *
+ * \return The current action as typed by the user.
+ */
+const std::wstring& Actions::GetActionAsTyped() const
+{
+  return _sActionAsTyped;
 }
 
 /**
@@ -305,107 +290,126 @@ void Actions::ClearSearch()
  *        'goog french victories' - would not macth.
  *        we would need to do a regex like {goog.*}|{french*victories}
  *
- * \return size_t the number of items that we matched.
+ * \return the possible actions.
  */
-size_t Actions::BuildMatchList( )
+Actions::array_of_actions Actions::GetListOfPossibleCommands( )
+{
+  //  we need some basic string to search
+  // if we have nothing to search, then there is no point in going further.
+  if( GetActionAsTyped().length() == 0 )
+  {
+    return array_of_actions();
+  }
+
+  //  explode all the 'words'
+  std::vector<std::wstring> wordsTyped;
+  myodd::strings::Explode(wordsTyped, GetActionAsTyped(), L' ' );
+
+  // go back and look for as many matches as possible.
+  // so if the command is "Google Earth" and we type "Goo Ear" we don't return commands with only "Goo" in them.
+  array_of_actions aoa;
+  while(wordsTyped.size() >= 1 )
+  {
+    // get the posible actions for the words.
+    const auto possibleCommands = GetListOfPossibleCommands(wordsTyped);
+    for ( auto possibleCommand = possibleCommands.begin(); possibleCommand != possibleCommands.end(); ++ possibleCommand )
+    {
+      if( aoa.end() != std::find( aoa.begin(), aoa.end(), *possibleCommand))
+      {
+        continue;
+      }
+      aoa.push_back( *possibleCommand );
+    }
+
+    // remove one word and find what else _could_ match.
+    wordsTyped.erase(wordsTyped.end() -1 );
+  }
+  return aoa;
+}
+
+void Actions::RebuildPosibleListOfActions()
 {
   // save our current position
-  // so that if the user has selected the second item in the list
-  // we still show the second item, even if the list has changed.
-  size_t uSave = m_uCommand;
+// so that if the user has selected the second item in the list
+// we still show the second item, even if the list has changed.
+  auto uSave = m_uCommand;
 
   //  remove the previous list of items.
   ClearSearch();
 
-  //  we need some basic string to search
-  // if we have nothing to search, then there is no point in going further.
-  if( getActionAsTyped().length() == 0 )
-  {
-    return 0;
-  }
-
-  // Prepare the regex string.
-  const auto regEx( getActionAsTyped() );
-
-  //  explode all the 'words'
-  std::vector<std::wstring> exploded;
-  myodd::strings::Explode(  exploded, regEx, _T(' ') );
-
-  // go back and look for as many matches as possible.
-  // so if the command is "Google Earth" and we type "Goo Ear" we don't return commands with only "Goo" in them.
-  size_t matchSize = 0;
-
-  while( matchSize == 0 && exploded.size() >= 1 )
-  {
-    matchSize = BuildMatchList( exploded );
-    if( 0 == matchSize )
-    {
-      exploded.erase( exploded.end() -1 );
-    }
-  }
+  // get the possible list of commands.
+  const auto aoa = GetListOfPossibleCommands();
 
   // make sure that we are withing our new limits.
-  while( uSave > matchSize )
+  auto matchSize = aoa.size();
+  if( matchSize == 0 )
   {
-    --uSave;
+    return;
   }
+
+  uSave = uSave > matchSize ? matchSize : uSave;
+
+  //  get the lock
+  myodd::threads::Lock guard(_mutexActionsMatch);
+
+  // reset the possible matches
+  // we don't delete all the pointers.
+  // because they do no belong to it.
+  _actionsMatch = aoa;
 
   // and set it.
   m_uCommand = uSave;
-  return matchSize;
 }
 
 /**
- * \brief Given a number of (partial)words find a list of actions that would match.
- * \param exploded the list of partial|full words.
- * \return the number of items we matched.
+ * \brief Given a number of (partial)words find a list of actions that would/could match.
+ * \param wordsTyped the list of partial|full words.
+ * \return the list of actions that match our list.
  */
-size_t Actions::BuildMatchList( std::vector<std::wstring>& exploded )
+Actions::array_of_actions Actions::GetListOfPossibleCommands( std::vector<std::wstring>& wordsTyped)
 {
   // we only want to check the first word in the command
   // so if the user passes
   // 'go french victories' then only the command 'google' should match
   // otherwise we might match other commands, 'french' or 'victories', (there are hundreds!)
-  std::wstring wildAction = L"";
   std::vector<std::wstring> wildActions;
-  for( auto it = exploded.begin(); it != exploded.end(); ++it )
+  for( auto it = wordsTyped.begin(); it != wordsTyped.end(); ++it )
   {
-    wildActions.push_back( _T("(") + *it + _T("\\S*)") );
+    wildActions.push_back( L"(" + *it + L"\\S*)" );
   }
-  
-  wildAction = myodd::strings::implode( wildActions, _T( "\\s+" ) );
-  // make sure it is a the begining of the file.
-  wildAction = _T( "^" ) + wildAction + _T( ".*" );
 
-  auto size = 0;
+  // create the regex to look for the word.
+  auto wildAction = myodd::strings::implode( wildActions, L"\\s+" );
+
+  // make sure it is a the begining of the file.
+  wildAction = L"^" + wildAction + L".*";
+
   //  get the lock
   myodd::threads::Lock guard(_mutexActions);
 
   //  the regex _should_ be {aaa}|{bbb} 
   //  but what we will do is search each exploded items one by one
+  array_of_actions aoa;
   for (auto it = _actions.begin(); it != _actions.end(); ++it)
   {
-    ++size;
-
     //  get the possible command.
     const auto& acc = *(*it);
 
     //  look for that one item.
     if (myodd::strings::wildcmp((wildAction), acc.Command()))
     {
-      myodd::threads::Lock guardMatch(_mutexActionsMatch);
-      _actionsMatch.push_back(*it);
+      aoa.push_back(*it);
     }
   }
-  return size;
+  return aoa;
 }
 
 // -------------------------------------------------------------
-void Actions::SetAction( Action* tmpAction )
+void Actions::SetAction( IAction* tmpAction )
 {
   // Reset the commands so there is no confusion
   _sActionAsTyped = L"";
-  BuildMatchList( );
+  RebuildPosibleListOfActions();
 
   myodd::threads::Lock guardMatch(_mutexActionTemp);
   _actionCurrentlySelected = tmpAction;
@@ -417,9 +421,9 @@ void Actions::SetAction( Action* tmpAction )
 
 // -------------------------------------------------------------
 //  get the currently selected command
-const Action* Actions::GetCommand()
+const IAction* Actions::GetCommand()
 {
-  //  do we have a posible action?
+  //  do we have a possible action?
   {
     myodd::threads::Lock guardMatch(_mutexActionTemp);
     if (_actionCurrentlySelected)
@@ -437,7 +441,7 @@ const Action* Actions::GetCommand()
   }
 
   //  get the current action.
-  const Action* action = _actionsMatch[m_uCommand];
+  const IAction* action = _actionsMatch[m_uCommand];
   return action;
 }
 
@@ -452,7 +456,7 @@ std::wstring Actions::GetCommandLine()
   // how many words are in the command?
   const auto lpAction = action->Command().c_str();
   std::vector<std::wstring> exploded;
-  const auto nSize = myodd::strings::Explode( exploded, _sActionAsTyped, L' ' );
+  myodd::strings::Explode( exploded, _sActionAsTyped, L' ' );
 
   // we now need to see how many of those words are present in the select
   // so if the actual command is 
@@ -466,14 +470,14 @@ std::wstring Actions::GetCommandLine()
   std::vector<std::wstring> wildActions;
   for( auto it = exploded.begin(); it != exploded.end(); ++it )
   {
-    wildActions.push_back( _T("(") + *it + _T("\\S*)") );
-    wildAction = myodd::strings::implode( wildActions, _T( "\\s+" ) );
-    wildAction = _T( "^" ) + wildAction + _T( ".*" );
+    wildActions.push_back( L"(" + *it + L"\\S*)" );
+    wildAction = myodd::strings::implode( wildActions, L"\\s+" );
+    wildAction = L"^" + wildAction + L".*";
 
     if( !myodd::strings::wildcmp( (wildAction).c_str(), lpAction ) )
     {
       // this no longer match, so any words afterward make up the command.
-      commandLine = wildAction = myodd::strings::implode( _T( " " ), it, exploded.end() );
+      commandLine = wildAction = myodd::strings::implode( L" ", it, exploded.end() );
       break;
     }
   }
@@ -490,7 +494,7 @@ void Actions::Initialize()
   std::wstring commandsPath = ::myodd::config::Get( L"paths\\commands", L"" );
   if( myodd::files::ExpandEnvironment(commandsPath, commandsPath) )
   {
-    ParseDirectory(commandsPath.c_str(), _T("") );
+    ParseDirectory(commandsPath.c_str(), L"" );
   }
 }
 
@@ -534,7 +538,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   //  *.bat, *.exe, *.pl
   //  but I am not sure we really need to restrict anything
   // it is up to the user to ensure that they have 
-  auto sPath = directory + _T("*.*");
+  auto sPath = directory + L"*.*";
 
   LPTSTR fullPath = NULL;
   if( !myodd::files::ExpandEnvironment( sPath.c_str(), fullPath ) )
@@ -543,12 +547,12 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   }
   
   _tfinddata_t fdata;
-  intptr_t ffhandle = _tfindfirst( fullPath, &fdata );
+  const auto ffhandle = _tfindfirst( fullPath, &fdata );
   if( ffhandle != -1 )
   {
     do
     {
-      if( _tcscmp(fdata.name, _T(".") ) == 0 || _tcscmp(fdata.name, _T("..")) == 0)
+      if( _tcscmp(fdata.name, L"." ) == 0 || _tcscmp(fdata.name, L"..") == 0)
       {
         continue;
       }
@@ -587,7 +591,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
         myodd::files::StripExtension( szName );
       }        
 
-      Add( new Action( szName, szFullPath));
+      Add( new Action( _application ,szName, szFullPath));
     }while( _tfindnext( ffhandle, &fdata ) == 0 );
 
     _findclose( ffhandle );
@@ -630,38 +634,39 @@ bool Actions::IsReservedDir(const wchar_t* name ) const
   {
     return true;
   }
-  else if( _tcscmp(AM_DIRECTORY_OUT, name ) == 0 )  //  out directory, items that are automatically run at close time
+
+  if( _tcscmp(AM_DIRECTORY_OUT, name ) == 0 )  //  out directory, items that are automatically run at close time
   {
     return true;
   }
-  else if( _tcscmp(AM_DIRECTORY_TMP, name ) == 0 )  //  temp directory
+
+  if( _tcscmp(AM_DIRECTORY_TMP, name ) == 0 )  //  temp directory
   {
     return true;
   }
-  else if( _tcscmp(AM_DIRECTORY_PLUGIN, name ) == 0 )  //  plugin directory
+  
+  if( _tcscmp(AM_DIRECTORY_PLUGIN, name ) == 0 )  //  plugin directory
   {
     return true;
   }
+
   return false;
 }
 
 /**
- * Add a single character to the current command.
- * @param TCHAR the character we are adding.
- * @return none
+ * \brief Add a single character to the current command.
+ * \param characterToAdd the character we are adding.
  */
-void Actions::CurrentActionAdd( TCHAR c )
+void Actions::CurrentActionAdd(const wchar_t characterToAdd )
 {
-  _sActionAsTyped += c;
+  _sActionAsTyped += characterToAdd;
 
   //  look for possible matches
-  BuildMatchList( );
+  RebuildPosibleListOfActions();
 }
 
 /**
- * Step back/remove one single character.
- * @param none
- * @return none
+ * \brief Step back/remove one single character.
  */
 void Actions::CurrentActionBack( )
 {
@@ -671,15 +676,15 @@ void Actions::CurrentActionBack( )
     _sActionAsTyped = _sActionAsTyped.substr( 0, _sActionAsTyped.length()-1 );
 
     // now that we made a small change look for possible matches
-    BuildMatchList( );
+    RebuildPosibleListOfActions( );
   }
 }
 
 // ------------------------------------------------------------------------------------
 void Actions::CurrentActionReset()
 {
-  _sActionAsTyped = _T("");
+  _sActionAsTyped = L"";
 
   //  look for possible matches
-  BuildMatchList( );
+  RebuildPosibleListOfActions( );
 }

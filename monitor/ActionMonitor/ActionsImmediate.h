@@ -22,7 +22,7 @@ class ActionsImmediate final :
   public Actions, ActiveActions
 {
 public:
-  explicit ActionsImmediate(const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines);
+  explicit ActionsImmediate(IApplication& application, const std::wstring& directoryToParse, IActions& parentActions, IVirtualMachines& virtualMachines);
   virtual ~ActionsImmediate() = default;
 
   ActionsImmediate(const ActionsImmediate&) = delete;
@@ -44,6 +44,11 @@ private:
    * \brief the sub directory that contains the actions we want to run.
    */
   const std::wstring _directoryToParse;
+
+  /**
+   * \brief the actions that we started.
+   */
+  std::vector<IActiveAction*> _runningActions;
 
   /**
    * \brief the parent actions.

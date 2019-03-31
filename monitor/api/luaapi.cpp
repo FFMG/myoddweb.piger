@@ -19,8 +19,8 @@ static const double ACTIONMONITOR_API_LUA_VERSION = 3.5;
 /**
  * \copydoc
  */
-LuaApi::LuaApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler) : 
-HelperApi( action, actions, messagesHandler )
+LuaApi::LuaApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler) :
+HelperApi( action, application, messagesHandler )
 {
 }
 
@@ -796,11 +796,11 @@ int LuaApi::FindAction( lua_State *lua ) const
     return 1;
   }
 
-  const auto idx = (unsigned int)lua_tointeger (lua, ARGUMENT_INDEX);
+  const auto idx = static_cast<unsigned int>(lua_tointeger (lua, ARGUMENT_INDEX));
   const auto action = myodd::strings::String2WString(lua_tostring(lua, ARGUMENT_ACTION));
 
-  MYODD_STRING sValue = _T("");
-  if( !__super::FindAction( idx, action.c_str(), sValue ) )
+  const auto actionptr = HelperApi::FindAction(idx, action);
+  if( nullptr == actionptr )
   {
     __super::Log(AM_LOG_WARNING, _T("Could not find action at given index"));
 
@@ -812,7 +812,7 @@ int LuaApi::FindAction( lua_State *lua ) const
   }
 
   // otherwise push the string
-  const auto asValue = myodd::strings::WString2String(sValue);
+  const auto asValue = myodd::strings::WString2String(actionptr->File() );
   lua_pushstring(lua, asValue.c_str());
 
   // one return variable.

@@ -20,17 +20,18 @@
 
 //  the clipboard code
 #include "../common/Clipboard.h"
+#include "Action.h"
 
 /**
  * \brief the constructor
  * \param action the action being called
- * \param actions all the actions
+ * \param application the application
  * \param messagesHandler the interface to show messages
  */
-HelperApi::HelperApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler ) :
+HelperApi::HelperApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler ) :
   _action( action ),
-  _actions( actions),
-  _messagesHandler(messagesHandler)
+  _messagesHandler(messagesHandler),
+  _application(application)
 {
 }
 
@@ -195,12 +196,12 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, const boo
 
   // prepare each items to be returned.
   // 
-  std::vector<MYODD_STRING> argv;
+  std::vector<std::wstring> argv;
 
   // we must have at least the module
   if( nullptr == module )
   {
-    argv.push_back( _T("") );
+    argv.push_back( L"" );
   }
   else
   {
@@ -213,7 +214,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, const boo
   }
   
   // Execute the command +  module
-  return Action::Execute( argv, isPrivileged, hProcess );
+  return _application.Execute( argv, isPrivileged, hProcess );
 }
 
 /**
@@ -371,20 +372,20 @@ bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, const b
  * @param szPath the full path of the command that will be executed.
  * @return bool if the action was added properly or not.
  */
-bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath ) const
+bool HelperApi::AddAction(const std::wstring& szText, const std::wstring& szPath ) const
 {
-  if( nullptr == szText || _tcslen(szText) == 0 )
+  if( szText.length() == 0 )
   {
     //  this cannot be valid
     return false;
   }
-  if( nullptr == szPath || _tcslen(szPath) == 0 )
+  if( szPath.length() == 0 )
   {
     //  this cannot be valid
     // only internal commands have null paths
     return false;
   }
-  return _actions.Add( new Action(szText, szPath ) );
+  return _application.AddAction( new Action(_application, szText, szPath ) );
 }
 
 /**
@@ -394,43 +395,31 @@ bool HelperApi::AddAction(const wchar_t* szText, const wchar_t* szPath ) const
  * \param szPath the path of the action we are removing.
  * \return bool if the action was removed or not.
  */
-bool HelperApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath ) const
+bool HelperApi::RemoveAction(const std::wstring& szText, const std::wstring& szPath ) const
 {
-  if( nullptr == szText || _tcslen(szText) == 0 )
+  if( szText.length() == 0 )
   {
     //  this cannot be valid
     return false;
   }
-  if(nullptr == szPath || _tcslen(szPath) == 0 )
+  if(szPath.length() == 0 )
   {
     //  this cannot be valid
     // only internal commands have null paths
     return false;
   }
-  return _actions.Remove( szText, szPath );
+  return _application.RemoveAction( szText, szPath );
 }
 
 /**
  * \brief Find an action to see if it exists already
  * \param idx the index of the action we are looking for.
  * \param szText the name of the command we want to find
- * \param stdPath if the action exists, return the path for it.
  * \return if the action exits or not.
  */
-bool HelperApi::FindAction(const unsigned int idx, const wchar_t* szText, std::wstring& stdPath ) const
+const IAction* HelperApi::FindAction(const unsigned int idx, const std::wstring& szText ) const
 {
-  if( nullptr == szText )
-  {
-    return false;
-  }
-  const auto action = _actions.Find( szText, idx );
-  if( nullptr == action )
-  {
-    return false;
-  }
-
-  stdPath = action->File();
-  return true;
+  return _application.FindAction(idx, szText);
 }
 
 /** 

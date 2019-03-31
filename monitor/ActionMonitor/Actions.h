@@ -13,9 +13,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #pragma once
-#include "Action.h"
+#include "IAction.h"
 #include <threads/lock.h>
 #include "IActions.h"
+#include "IApplication.h"
 
 // the name of protected directories
 static const wchar_t* AM_DIRECTORY_IN  = L"__in";           //  dir of actions that will run at start
@@ -26,37 +27,42 @@ static const wchar_t* AM_DIRECTORY_PLUGIN = L"__plugins";   //  dir that will no
 class Actions : public IActions
 {
 public:
-	Actions();
+	Actions( IApplication& application );
 	virtual ~Actions();
 
-protected:
-  DISALLOW_COPY_AND_ASSIGN(Actions);
+  Actions(const Actions&) = delete;
+  void operator=(const Actions&) = delete;
 
 protected:
-  struct COMMANDS_VALUE
+  /**
+   * \brief the application manager.
+   */
+  IApplication& _application;
+
+  struct CommandsValue
   {
-    std::wstring color;
     bool bBold;
     bool bItalic;
-    COMMANDS_VALUE() :
-      bBold  (0),
-      bItalic(0)
+    CommandsValue() :
+      bBold  (false),
+      bItalic(false)
     {
     }
-    COMMANDS_VALUE(std::wstring c, bool b, bool i ) :
-      bBold( b), bItalic( i ), color( c ) 
+    CommandsValue( const bool bold, const bool italic ) :
+      bBold( bold ), bItalic( italic ) 
     {
     }
-  protected:
-    DISALLOW_COPY_AND_ASSIGN(COMMANDS_VALUE);
+
+    CommandsValue(CommandsValue&) = delete;
+    void operator=(CommandsValue&) = delete;
   };
 
-  static std::wstring toChar( const std::wstring& s, const COMMANDS_VALUE& cv );
-  void GetCommandValue( const std::wstring& lpName, COMMANDS_VALUE& cv ) const;
+  static std::wstring ToChar( const std::wstring& s, const CommandsValue& cv );
+  static void GetCommandValue( const std::wstring& lpName, CommandsValue& cv );
 
 protected:
   //  vectors containing all the commands we can call
-  typedef std::vector<Action*> array_of_actions;
+  typedef std::vector<IAction*> array_of_actions;
   typedef array_of_actions::const_iterator array_of_actions_it;
   array_of_actions _actions;
   array_of_actions _actionsMatch;
@@ -66,14 +72,13 @@ protected:
   virtual void ParseDirectory( LPCTSTR  rootDir, LPCTSTR  extentionDir );
 
 protected:
-  // clear the search string and posible actions match list.
+  // clear the search string and possible actions match list.
   void ClearSearch();
 
   // the command currently chosen
   size_t m_uCommand;
 
-protected:
-  Action* _actionCurrentlySelected;
+  IAction* _actionCurrentlySelected;
 
 public:
   /**
@@ -83,24 +88,21 @@ public:
    *
    * \return The current action as typed by the user.
    */
-  const std::wstring& getActionAsTyped() const
-  { 
-    return _sActionAsTyped;
-  }
+  const std::wstring& GetActionAsTyped() const;
 
   void CurrentActionReset() override;
-  void CurrentActionAdd( wchar_t c ) override;
+  void CurrentActionAdd( wchar_t characterToAdd ) override;
   void CurrentActionBack() override;
-  void SetAction(Action* tmpAction) override;
-  const Action* GetCommand() override;
+  void SetAction(IAction* tmpAction) override;
+  const IAction* GetCommand() override;
   std::wstring GetCommandLine() override;
   std::wstring ToChar() override;
   void down() override;
   void up() override;
   void Initialize() override;
-  bool Add(Action* action) override;
+  bool Add(IAction* action) override;
   bool Remove(const std::wstring& szText, const std::wstring& szPath) override;
-  const Action* Find(const std::wstring& szText, unsigned int idx ) override;
+  const IAction* Find(const std::wstring& szText, unsigned int idx ) override;
 
   void ClearAll();
 protected:
@@ -108,8 +110,9 @@ protected:
   std::wstring _sActionAsTyped;
 
 protected:
-  size_t BuildMatchList( );
-  size_t BuildMatchList( std::vector<std::wstring>& exploded );
+  void RebuildPosibleListOfActions();
+  array_of_actions GetListOfPossibleCommands( );
+  array_of_actions GetListOfPossibleCommands( std::vector<std::wstring>& wordsTyped );
 
   virtual bool IsReservedDir(const wchar_t*) const;
 

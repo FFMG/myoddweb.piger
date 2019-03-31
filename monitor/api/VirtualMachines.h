@@ -1,10 +1,11 @@
 #pragma once
 #include "IVirtualMachines.h"
+#include "IApplication.h"
 
 class VirtualMachines final : public IVirtualMachines
 {
 public:
-  explicit VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener);
+  explicit VirtualMachines(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& ipcListener);
   ~VirtualMachines();
 
   // prevent copies.
@@ -21,9 +22,9 @@ private:
   IMessagesHandler& _messagesHandler;
 
   /**
-   * \brief the actions handler
+   * \brief the applications handler.
    */
-  IActions& _actions;
+  IApplication& _application;
 
   /**
    * \brief the ipc listener

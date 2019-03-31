@@ -5,19 +5,19 @@
 
 /**
  * The constructor
+ * \param application
  * \param src the action that is now active.
- * \param virtualMachines all the current virtual machines.
  * \param hTopHWnd the window that was on top at the time the command was given.
  * \param szCommandLine the given command line that is, the words after the command itself
  * \param isPrivileged if this action is privileged or not.
  */
-ActiveAction::ActiveAction(const Action& src,
-                           IVirtualMachines& virtualMachines,
+ActiveAction::ActiveAction(IApplication& application,
+                           const IAction& src,
                            const HWND hTopHWnd,
                            const std::wstring& szCommandLine,
                            const bool isPrivileged) : 
-  Action( src ), 
-  _virtualMachines( virtualMachines ),
+  _application(application),
+  _action( src ), 
   _clipboard(nullptr),
   _szCommandLine( szCommandLine ),
   _isPrivileged( isPrivileged ),
@@ -52,8 +52,8 @@ void ActiveAction::CreateClipboard()
   //
   // so copy the text that the user could have currently selected or copy the name of the file that is probably selected
   // tell the clipboard to copy the data of the last known foreground window.
-  CWnd* cwnd = CActionMonitorApp::GetLastForegroundWindow();
-  size_t maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
+  const auto cwnd = _application.GetLastForegroundWindow();
+  const auto maxClipboardMemory = CActionMonitorApp::GetMaxClipboardMemory();
   _clipboard = new Clipboard(cwnd, maxClipboardMemory);
 }
 

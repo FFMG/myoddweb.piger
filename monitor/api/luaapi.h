@@ -22,7 +22,7 @@ extern "C"
 class LuaApi final : public HelperApi
 {
 public:
-  LuaApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler);
+  LuaApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler);
   virtual ~LuaApi();
 
 public:

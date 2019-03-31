@@ -6,7 +6,7 @@ class MessagesHandlerWnd final : public CommonWnd
 {
 public:
   MessagesHandlerWnd();
-  ~MessagesHandlerWnd();
+  virtual ~MessagesHandlerWnd();
 
   bool Show(IMessagesHandler& parent, const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const;
   bool WaitForAllToComplete(IMessagesHandler& parent) const;

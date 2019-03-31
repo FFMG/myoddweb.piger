@@ -92,12 +92,6 @@
     <ClCompile Include="ActivePythonAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
-    <ClCompile Include="ActiveLuaAction.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
-    <ClCompile Include="ActivePluginAction.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
     <ClCompile Include="ActiveByeAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
@@ -106,9 +100,6 @@
     </ClCompile>
     <ClCompile Include="..\api\powershellvirtualmachine.cpp">
       <Filter>api</Filter>
-    </ClCompile>
-    <ClCompile Include="ActivePowershellAction.cpp">
-      <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="..\api\powershellapi.cpp">
       <Filter>api</Filter>
@@ -125,17 +116,11 @@
     <ClCompile Include="ActiveExeAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
-    <ClCompile Include="ActiveCsAction.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
     <ClCompile Include="..\api\csapi.cpp">
       <Filter>api</Filter>
     </ClCompile>
     <ClCompile Include="..\api\csvirtualmachine.cpp">
       <Filter>api</Filter>
-    </ClCompile>
-    <ClCompile Include="ActiveShellAction.cpp">
-      <Filter>actions</Filter>
     </ClCompile>
     <ClCompile Include="..\api\shellapi.cpp">
       <Filter>api</Filter>
@@ -206,6 +191,18 @@
     <ClCompile Include="..\api\executevirtualmachine.cpp">
       <Filter>api</Filter>
     </ClCompile>
+    <ClCompile Include="ActiveVirtualMachineAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="IAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="IActiveAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveActionsRunner.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\api\helperapi.h">
@@ -259,12 +256,6 @@
     <ClInclude Include="ActivePythonAction.h">
       <Filter>actions</Filter>
     </ClInclude>
-    <ClInclude Include="ActiveLuaAction.h">
-      <Filter>actions</Filter>
-    </ClInclude>
-    <ClInclude Include="ActivePluginAction.h">
-      <Filter>actions</Filter>
-    </ClInclude>
     <ClInclude Include="ActiveByeAction.h">
       <Filter>actions</Filter>
     </ClInclude>
@@ -273,9 +264,6 @@
     </ClInclude>
     <ClInclude Include="..\api\powershellvirtualmachine.h">
       <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="ActivePowershellAction.h">
-      <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="..\api\powershellapi.h">
       <Filter>api</Filter>
@@ -292,17 +280,11 @@
     <ClInclude Include="ActiveExeAction.h">
       <Filter>actions</Filter>
     </ClInclude>
-    <ClInclude Include="ActiveCsAction.h">
-      <Filter>actions</Filter>
-    </ClInclude>
     <ClInclude Include="..\api\csapi.h">
       <Filter>api</Filter>
     </ClInclude>
     <ClInclude Include="..\api\csvirtualmachine.h">
       <Filter>api</Filter>
-    </ClInclude>
-    <ClInclude Include="ActiveShellAction.h">
-      <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="..\api\shellapi.h">
       <Filter>api</Filter>
@@ -411,6 +393,18 @@
     </ClInclude>
     <ClInclude Include="..\api\executevirtualmachine.h">
       <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveVirtualMachineAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="IAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="IActiveAction.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveActionsRunner.h">
+      <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

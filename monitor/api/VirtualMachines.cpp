@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "VirtualMachines.h"
 
-VirtualMachines::VirtualMachines(IActions& actions, IMessagesHandler& messagesHandler, IIpcListener& ipcListener) :
+VirtualMachines::VirtualMachines(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& ipcListener) :
   IVirtualMachines(),
   _messagesHandler( messagesHandler ),
-  _actions(actions),
+  _application(application),
   _ipcListener(ipcListener),
   _key( L"Virtual machines" )
 {
@@ -41,37 +41,37 @@ IVirtualMachine& VirtualMachines::Get(IVirtualMachines::Type type)
   }
 
   // it does not, we need to add it here.
-  IVirtualMachine* vm = nullptr;
+  IVirtualMachine* vm;
   switch( type )
   {
 #ifdef ACTIONMONITOR_API_LUA
   case Type::Lua:
-    vm = new LuaVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    vm = new LuaVirtualMachine(_application, _messagesHandler, _ipcListener);
     break;
 #endif
 #ifdef ACTIONMONITOR_API_PY
   case Type::Python:
-    vm = new PythonVirtualMachine(_actions, _messagesHandler, _ipcListener);;
+    vm = new PythonVirtualMachine(_application, _messagesHandler, _ipcListener);;
     break;
 #endif
 #ifdef ACTIONMONITOR_API_PLUGIN
   case Type::LegacyPlugin:
-    vm = new PluginVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    vm = new PluginVirtualMachine(_application, _messagesHandler, _ipcListener);
     break;
 #endif
 #ifdef ACTIONMONITOR_PS_PLUGIN
   case Type::Powershell:
-    vm = new PowershellVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    vm = new PowershellVirtualMachine(_application, _messagesHandler, _ipcListener);
     break;
 #endif
 #ifdef ACTIONMONITOR_CS_PLUGIN
   case Type::CSharp:
-    vm = new CsVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    vm = new CsVirtualMachine(_application, _messagesHandler, _ipcListener);
     break;
 #endif
 #ifdef ACTIONMONITOR_S_PLUGIN
   case Type::Shell:
-    vm = new ShellVirtualMachine(_actions, _messagesHandler, _ipcListener);
+    vm = new ShellVirtualMachine(_application, _messagesHandler, _ipcListener);
     break;
 #endif
 

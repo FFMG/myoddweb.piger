@@ -7,10 +7,10 @@
 // this is the version number for that particular API
 static const double ACTIONMONITOR_API_PLUGIN_VERSION = 0.1f;
 
-class PluginApi : public HelperApi
+class PluginApi final : public HelperApi
 {
 public:
-  PluginApi(const ActiveAction& action, IActions& actions, IMessagesHandler& messagesHandler);
+  PluginApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler);
   virtual ~PluginApi();
 
 public:

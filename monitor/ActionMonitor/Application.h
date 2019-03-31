@@ -21,6 +21,9 @@
 #include "ActionMonitorDlg.h"
 #include "HookWnd.h"
 #include "ActionsImmediate.h"
+#include "ActiveActionsRunner.h"
+#include <queue>
+#include "threads/messages.h"
 
 class Application final : public IApplication
 {
@@ -32,15 +35,38 @@ public:
 
   void Restart() override;
 
+  void Version() override;
+
   void Show() override;
 
-  void ShowVersion() override;
+  bool AddAction(IAction* action) override;
 
-  void ShowStart() override;
+  bool RemoveAction(const std::wstring& szText, const std::wstring& szPath) const override;
 
-  void ShowEnd() override;
+  const IAction* FindAction(unsigned int idx, const std::wstring& szText) const override;
+
+  bool Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const override;
+
+  bool ExecuteActiveAction( IActiveAction* action) const override;
+
+  bool IsActiveActionRunning(IActiveAction* action) const override;
+
+  bool ExecuteCurrentAction() override;
+
+  CWnd* GetLastForegroundWindow() const override;
+
+  void SetLastForegroundWindow() override;
 
 private:
+  void OnVersion();
+  void ShowVersion();
+
+  void OnRestart();
+  void ShowStart();
+
+  void OnClose();
+  void ShowClose();
+
   void CreateBase();
   void CreateForRestart();
 
@@ -50,11 +76,15 @@ private:
   void CreateIpcListener();
   void CreateHookWindow();
   void CreateTray();
+  void CreateActiveActionsRunner();
+  void CreateMessages();
   
   void DestroyBase();
   void DestroyForRestart();
 
   void PrepareForClose();
+
+  CWnd* _lastForegroundWindow;
 
   /**
    * \brief the messages handler
@@ -92,6 +122,11 @@ private:
   HookWnd* _hookWnd;
 
   /**
+   * \brief the actions runner/executor
+   */
+  ActiveActionsRunner* _activeActionsRunner;
+
+  /**
    * \bief start actions that we last started
    *       we don't normally wait for actions to complete
    *       in case they are long running
@@ -109,5 +144,7 @@ private:
    * \brief Wait for the active windows to complete.
    */
   void WaitForHandlersToComplete() const;
+
+  myodd::threads::Messages* _messages;
 };
 
