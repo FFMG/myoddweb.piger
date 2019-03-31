@@ -39,26 +39,26 @@ protected:
    */
   IApplication& _application;
 
-  struct COMMANDS_VALUE
+  struct CommandsValue
   {
-    std::wstring color;
     bool bBold;
     bool bItalic;
-    COMMANDS_VALUE() :
-      bBold  (0),
-      bItalic(0)
+    CommandsValue() :
+      bBold  (false),
+      bItalic(false)
     {
     }
-    COMMANDS_VALUE(std::wstring c, bool b, bool i ) :
-      bBold( b), bItalic( i ), color( c ) 
+    CommandsValue( const bool bold, const bool italic ) :
+      bBold( bold ), bItalic( italic ) 
     {
     }
-  protected:
-    DISALLOW_COPY_AND_ASSIGN(COMMANDS_VALUE);
+
+    CommandsValue(CommandsValue&) = delete;
+    void operator=(CommandsValue&) = delete;
   };
 
-  static std::wstring toChar( const std::wstring& s, const COMMANDS_VALUE& cv );
-  void GetCommandValue( const std::wstring& lpName, COMMANDS_VALUE& cv ) const;
+  static std::wstring ToChar( const std::wstring& s, const CommandsValue& cv );
+  static void GetCommandValue( const std::wstring& lpName, CommandsValue& cv );
 
 protected:
   //  vectors containing all the commands we can call
@@ -72,7 +72,7 @@ protected:
   virtual void ParseDirectory( LPCTSTR  rootDir, LPCTSTR  extentionDir );
 
 protected:
-  // clear the search string and posible actions match list.
+  // clear the search string and possible actions match list.
   void ClearSearch();
 
   // the command currently chosen
@@ -88,13 +88,10 @@ public:
    *
    * \return The current action as typed by the user.
    */
-  const std::wstring& getActionAsTyped() const
-  { 
-    return _sActionAsTyped;
-  }
+  const std::wstring& GetActionAsTyped() const;
 
   void CurrentActionReset() override;
-  void CurrentActionAdd( wchar_t c ) override;
+  void CurrentActionAdd( wchar_t characterToAdd ) override;
   void CurrentActionBack() override;
   void SetAction(IAction* tmpAction) override;
   const IAction* GetCommand() override;
@@ -113,8 +110,9 @@ protected:
   std::wstring _sActionAsTyped;
 
 protected:
-  size_t BuildMatchList( );
-  size_t BuildMatchList( std::vector<std::wstring>& exploded );
+  void RebuildPosibleListOfActions();
+  array_of_actions GetListOfPossibleCommands( );
+  array_of_actions GetListOfPossibleCommands( std::vector<std::wstring>& wordsTyped );
 
   virtual bool IsReservedDir(const wchar_t*) const;
 
