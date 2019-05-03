@@ -7,8 +7,8 @@ HookWnd::HookWnd( IApplication& application, IDisplay& display, IActions& action
   _virtualMachines(virtualMachines),
   _actions(actions),
   _display(display),
-  _keyState(ACTION_NONE),
-  _application( application )
+  _application( application ),
+  _keyState(ACTION_NONE)
 {
 }
 
@@ -36,7 +36,6 @@ bool HookWnd::IsSpecialKey(const WPARAM wParam)
 {
   return (wParam == SPECIAL_KEY);
 }
-
 
 LRESULT HookWnd::OnMessage(const UINT msg, const WPARAM wParam, const LPARAM lParam)
 {
@@ -121,8 +120,8 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
   TRACE("KeyDown 0x%x\n", wParam);
 
   /**
-   * The WM_KEYDOWN message is posted to the window with the keyboard focus when a nonsystem key is pressed.
-   * A nonsystem key is a key that is pressed when the ALT key is not pressed.
+   * The WM_KEYDOWN message is posted to the window with the keyboard focus when a non-system key is pressed.
+   * A non-system key is a key that is pressed when the ALT key is not pressed.
    */
 
    //  if it is the special key then tell the system that from now own
@@ -200,7 +199,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     memset(ks, 0, sizeof(ks));
     GetKeyboardState(ks);
     WORD w;
-    UINT scan = 0;
+    const UINT scan = 0;
 
     ks[VK_SHIFT] = 1;
     if ((_keyState & ACTION_SHIFT_DOWN) == ACTION_SHIFT_DOWN)
@@ -273,8 +272,8 @@ LRESULT HookWnd::OnHookKeyUp(WPARAM wParam, LPARAM lParam)
   }
 
   /**
-   * The WM_KEYUP message is posted to the window with the keyboard focus when a nonsystem key is released.
-   * A nonsystem key is a key that is pressed when the ALT key is not pressed,
+   * The WM_KEYUP message is posted to the window with the keyboard focus when a non-system key is released.
+   * A non-system key is a key that is pressed when the ALT key is not pressed,
    * or a keyboard key that is pressed when a window has the keyboard focus.
    */
   return 0L;

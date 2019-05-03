@@ -19,7 +19,6 @@
 #include "IApplication.h"
 #include "../api/IVirtualMachines.h"
 #include "threads/workers.h"
-#include "ActiveActionsRunner.h"
 
 #define ACTION_NONE           0x000
 #define ACTION_MAINKEY_DOWN   0x001
@@ -38,7 +37,7 @@ public:
   bool Create() override;
 
 protected:
-  LRESULT OnHookKeyChar(WPARAM wParam, LPARAM lParam);
+  static LRESULT OnHookKeyChar(WPARAM wParam, LPARAM lParam);
   LRESULT OnHookKeyDown(WPARAM wParam, LPARAM lParam);
   LRESULT OnHookKeyUp(WPARAM wParam, LPARAM lParam);
   LRESULT OnMessage(UINT msg, WPARAM wParam, LPARAM lParam) override;
@@ -54,7 +53,7 @@ protected:
   IActions& _actions;
 
   /**
-   * \brief the class that will recieve show/hide requests.
+   * \brief the class that will receive show/hide requests.
    */
   IDisplay& _display;
 
@@ -67,5 +66,5 @@ protected:
   unsigned long _keyState;
 
   static bool IsSpecialKeyDown();
-  static bool IsSpecialKey(const WPARAM wParam);
+  static bool IsSpecialKey( WPARAM wParam);
 };

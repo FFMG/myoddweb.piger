@@ -12,10 +12,10 @@ protected:
   static LRESULT CALLBACK CallLowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 public:
-  BOOL AddHwnd( HWND hWnd, WPARAM vK );
-  BOOL RemoveHwnd( HWND hWnd );
-  BOOL RejectKeyboadInputs( BOOL bReject  );
-  BOOL RejectKeyboadInputs( )const;
+  bool AddHwnd( HWND hWnd, WPARAM vKey);
+  bool RemoveHwnd( HWND hWnd );
+  bool RejectKeyboadInputs(bool bReject  );
+  bool RejectKeyboadInputs( )const;
 
 protected:
   //  key structure so we can prevent similar keys from repeating too often
@@ -37,7 +37,7 @@ protected:
     LAST_KEY(UINT m, DWORD k, DWORD t =0 ) : m_msg(m), m_dwKey(k), m_tick( t ){}
 
     //  we don't compare the time!!
-    bool similar( DWORD msg, DWORD dwKey ) const
+    bool Similar( const DWORD msg, const DWORD dwKey ) const
     { 
       return (m_msg == msg && m_dwKey == dwKey);
     }
@@ -67,17 +67,17 @@ protected:
    */
   LAST_KEY	m_lk;
 
-  HHOOK GetHHOOK() const{ return m_hhook;} 
-  void SetHHOOK( HHOOK hh ){ m_hhook = hh;} 
-  BOOL CreateHooks();
-  BOOL ClearHooks();
+  HHOOK GetHhook() const{ return m_hhook;} 
+  void SetHhook(const HHOOK hh ){ m_hhook = hh;} 
+  bool CreateHooks();
+  bool ClearHooks();
 
-  BOOL IsSpecialKey( const WPARAM wParam ) const;
+  bool IsSpecialKey( WPARAM wParam ) const;
   LRESULT HandleMessage( const UINT msg, const WPARAM wParam, const LPARAM lParam );
-  LAST_KEY GetLastKey( DWORD dwCurrentMilli );
+  LAST_KEY GetLastKey( DWORD dwCurrentMilli ) const;
   void SetLastKey( const LAST_KEY& lk );
 
-  BOOL m_bRejectKeyBoardInputs;
+  bool m_bRejectKeyBoardInputs;
   HHOOK m_hhook;
 
   // the keys and windows.
@@ -86,7 +86,7 @@ protected:
   /**
    * return if we are handling that code or not.
    */
-  BOOL HandleHook (int nCode );
+  static bool HandleHook (int nCode );
 };
 
 extern KeyboardMonitor* keyboardMonitor;

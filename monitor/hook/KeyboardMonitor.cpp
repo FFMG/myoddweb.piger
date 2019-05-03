@@ -5,49 +5,48 @@
 
 KeyboardMonitor* keyboardMonitor;
 
-KeyboardMonitor::KeyboardMonitor( HANDLE hModule ) :
+KeyboardMonitor::KeyboardMonitor(const HANDLE hModule ) :
   m_hModule( hModule ),
-  m_hhook( NULL ),
-  m_bRejectKeyBoardInputs( FALSE )
+  m_bRejectKeyBoardInputs(false),
+  m_hhook(nullptr)
 {
   UWM_KEYBOARD_CHAR = RegisterWindowMessage(UWM_KEYBOARD_MSG_CHAR);
   UWM_KEYBOARD_UP   = RegisterWindowMessage(UWM_KEYBOARD_MSG_UP);
   UWM_KEYBOARD_DOWN = RegisterWindowMessage(UWM_KEYBOARD_MSG_DOWN);
 }
 
-KeyboardMonitor::~KeyboardMonitor(void)
+KeyboardMonitor::~KeyboardMonitor()
 {
   ClearHooks();
 }
 
 // -----------------------------------------------------------------------
-BOOL KeyboardMonitor::HandleHook (int nCode )
+bool KeyboardMonitor::HandleHook ( const int nCode )
 {
   if(nCode < 0 || HC_ACTION != nCode )
   {
-    return FALSE;
+    return false;
   }
-  return TRUE;
+  return true;
 }
 
 // -----------------------------------------------------------------------
 LRESULT CALLBACK KeyboardMonitor::CallLowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
   //  are we handling that hook?
-  if( FALSE == keyboardMonitor->HandleHook( nCode ))
+  if(false == keyboardMonitor->HandleHook( nCode ))
   {
-    return CallNextHookEx( keyboardMonitor->GetHHOOK(), nCode, wParam, lParam);
+    return CallNextHookEx( keyboardMonitor->GetHhook(), nCode, wParam, lParam);
   }
   
   // By returning a non-zero value from the hook procedure, the
   // message does not get passed to the target window
-  KBDLLHOOKSTRUCT *pkbhs = (KBDLLHOOKSTRUCT *) lParam;
-  int error=GetLastError();   
+  const auto *pkbhs = reinterpret_cast<KBDLLHOOKSTRUCT *>(lParam);
   switch (nCode)
   {
   case HC_ACTION:
     {
-      LRESULT hHandle = keyboardMonitor->HandleMessage( wParam, pkbhs->vkCode, pkbhs->dwExtraInfo );
+      const auto hHandle = keyboardMonitor->HandleMessage( wParam, pkbhs->vkCode, pkbhs->dwExtraInfo );
       switch ( hHandle )
       {
       case 1: //  the key was handled by someone
@@ -56,7 +55,7 @@ LRESULT CALLBACK KeyboardMonitor::CallLowLevelKeyboardProc(int nCode, WPARAM wPa
           //  other processes are supposed to ignore WM_NULL
           //  this is not full proof, (we might not be the first hook in the queue), but the odds of 
           //  multiple hooks all trying to do the same thing is limited.
-          if( keyboardMonitor->RejectKeyboadInputs() == TRUE )
+          if( keyboardMonitor->RejectKeyboadInputs() == true)
           {
             return 1;
           }
@@ -64,6 +63,9 @@ LRESULT CALLBACK KeyboardMonitor::CallLowLevelKeyboardProc(int nCode, WPARAM wPa
         break;
 
       case 0:
+        break;
+
+      default:
         break;
       }
     }
@@ -81,24 +83,27 @@ LRESULT CALLBACK KeyboardMonitor::CallLowLevelKeyboardProc(int nCode, WPARAM wPa
   default:
     break;
   }
-  return CallNextHookEx ( keyboardMonitor->GetHHOOK(), nCode, wParam, lParam);
+  return CallNextHookEx ( keyboardMonitor->GetHhook(), nCode, wParam, lParam);
 }// CallLowLevelKeyboardProc
 
-// -----------------------------------------------------------------------
-// Just look if one of the windows expects that key
-BOOL KeyboardMonitor::IsSpecialKey( const WPARAM wParam ) const
+/**
+ * \brief check if the given param means that the one of the special key was pressed.
+ * \param wParam the key we are checking against.
+ * \return if the given key is a special key or not.
+ */
+bool KeyboardMonitor::IsSpecialKey( const WPARAM wParam ) const
 {
-  for( std::map< HWND, WPARAM >::const_iterator it = m_mapWindows.begin(); it != m_mapWindows.end(); ++it )
+  for(auto it = m_mapWindows.begin(); it != m_mapWindows.end(); ++it )
   {
     if( wParam == it->second )
     {
       //  yes, this window uses that key.
-      return TRUE;  
+      return true;  
     }
   }
 
   // if we are here we never found it.
-  return FALSE;
+  return false;
 }
 
 // -----------------------------------------------------------------------
@@ -119,10 +124,10 @@ LRESULT KeyboardMonitor::HandleMessage
   }
 
 	//	get the number of milli secs from start of system
-	DWORD tick	=	GetTickCount();
+	const auto tick	=	GetTickCount();
 	//
 	//	do not allow items to be too quick
-  if( GetLastKey( tick ) .similar( msg, wParam)  )
+  if( GetLastKey( tick ) .Similar( msg, wParam)  )
 	{	
     //	the key we just entered has been repeated too soon for us and is rejected.
 		// TRACE( "<< Repeat Key >>\n" );
@@ -132,10 +137,10 @@ LRESULT KeyboardMonitor::HandleMessage
   // it is not uncommon for apps to request the last key more than once.
   SetLastKey( LAST_KEY(msg, wParam, tick) );
 
-  LRESULT lResult = 0L; //  assume that nobody will handle it.
-  for( std::map< HWND, WPARAM >::const_iterator it = m_mapWindows.begin(); it != m_mapWindows.end(); ++it )
+  auto lResult = 0L; //  assume that nobody will handle it.
+  for( auto it = m_mapWindows.begin(); it != m_mapWindows.end(); ++it )
   {
-    HWND hWnd = it->first;
+    const auto hWnd = it->first;
     switch( msg )
     {
     case WM_KEYDOWN:
@@ -165,9 +170,9 @@ LRESULT KeyboardMonitor::HandleMessage
 }
 
 // -----------------------------------------------------------------------
-BOOL KeyboardMonitor::RejectKeyboadInputs( BOOL bReject  )
+bool KeyboardMonitor::RejectKeyboadInputs(bool bReject  )
 {
-  BOOL bThen = m_bRejectKeyBoardInputs;
+  const auto bThen = m_bRejectKeyBoardInputs;
   m_bRejectKeyBoardInputs = bReject;
   return bThen;
 }
@@ -178,7 +183,7 @@ BOOL KeyboardMonitor::RejectKeyboadInputs( BOOL bReject  )
  *
  * @return bool return true if we are rejecting all keyboard inputs.
  */
-BOOL KeyboardMonitor::RejectKeyboadInputs( ) const
+bool KeyboardMonitor::RejectKeyboadInputs( ) const
 {
   return m_bRejectKeyBoardInputs;
 }
@@ -190,13 +195,13 @@ void KeyboardMonitor::SetLastKey( const LAST_KEY& lk )
 }
 
 /**
- * if the last DWORD used was more than 100 milli secs ago we can assume that it is a new key
+ * \brief if the last DWORD used was more than 100 milliseconds ago we can assume that it is a new key
  * so we just return an empty key.
  *
- * @param DWORD the current time so we can compare if the last key was a long time ago, 
- * @return LAST_KEY the last key that was saved.
+ * \param dwCurrentMilli the current time so we can compare if the last key was a long time ago, 
+ * \return LAST_KEY the last key that was saved.
  */
-KeyboardMonitor::LAST_KEY KeyboardMonitor::GetLastKey( DWORD dwCurrentMilli)
+KeyboardMonitor::LAST_KEY KeyboardMonitor::GetLastKey( const DWORD dwCurrentMilli) const
 {
 	if( (dwCurrentMilli - m_lk.tick() ) > 100 /* 100 milli seconds*/)
 	{
@@ -213,13 +218,13 @@ KeyboardMonitor::LAST_KEY KeyboardMonitor::GetLastKey( DWORD dwCurrentMilli)
 }
 
 // -----------------------------------------------------------------------
-BOOL KeyboardMonitor::RemoveHwnd( HWND hWnd )
+bool KeyboardMonitor::RemoveHwnd( const HWND hWnd )
 {
-  std::map< HWND, WPARAM >::const_iterator iter = m_mapWindows.find( hWnd );
+  const auto iter = m_mapWindows.find( hWnd );
   if( iter == m_mapWindows.end() )
   {
     //  don't know that item
-    return FALSE;
+    return false;
   }
 
   // remove it
@@ -232,68 +237,68 @@ BOOL KeyboardMonitor::RemoveHwnd( HWND hWnd )
   }
 
   // if we are here then we still have some hooks needed.
-  return TRUE;
+  return true;
 }
 
 // -----------------------------------------------------------------------
-BOOL KeyboardMonitor::CreateHooks()
+bool KeyboardMonitor::CreateHooks()
 {
   // have we already created the hooks?
-  if( NULL != GetHHOOK() )
+  if(nullptr != GetHhook() )
   {
-    return TRUE;
+    return true;
   }
 
   //  hook into the low level keyboard message
-  HHOOK hookllKey = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)CallLowLevelKeyboardProc, (HINSTANCE)m_hModule,0);  
+  const auto hookllKey = SetWindowsHookEx(WH_KEYBOARD_LL, static_cast<HOOKPROC>(CallLowLevelKeyboardProc), static_cast<HINSTANCE>(m_hModule),0);  
 
   //  make sure that they are all created properly.
-  if( hookllKey == NULL )
+  if( hookllKey == nullptr)
   {
-    return FALSE;
+    return false;
   }
 
   // save the value
-  SetHHOOK( hookllKey );
+  SetHhook( hookllKey );
 
-  return TRUE;
+  return true;
 }
 
 // -----------------------------------------------------------------------
-BOOL KeyboardMonitor::ClearHooks( )
+bool KeyboardMonitor::ClearHooks( )
 {
-  if( NULL == GetHHOOK() )
+  if( nullptr == GetHhook() )
   {
     //  we were not hooked in the first place.
-    return FALSE;
+    return false;
   }
 
 
-  BOOL bResult = UnhookWindowsHookEx( GetHHOOK() );
+  const auto bResult = UnhookWindowsHookEx( GetHhook() );
 
-  //  what ever happened, (True or False), the user no longer wants that hook.
-  SetHHOOK( NULL );
+  //  what ever happened, (true or False), the user no longer wants that hook.
+  SetHhook(nullptr);
 
   return bResult;
 }
 
 // -----------------------------------------------------------------------
-BOOL KeyboardMonitor::AddHwnd( HWND hWnd, WPARAM vKey )
+bool KeyboardMonitor::AddHwnd( const HWND hWnd, const WPARAM vKey )
 {
   if( !CreateHooks() )
   {
-    return FALSE;
+    return false;
   }
 
   //  do we aready have that window?
-  std::map< HWND, WPARAM >::const_iterator iter = m_mapWindows.find( hWnd );
+  const auto iter = m_mapWindows.find( hWnd );
   if( iter != m_mapWindows.end() )
   {
-    return FALSE; //  already exists.
+    return false; //  already exists.
   }
   
   // this is new so we need to add it here.
   m_mapWindows[ hWnd ] = vKey;
 
-  return TRUE;  //  this was added.
+  return true;  //  this was added.
 }

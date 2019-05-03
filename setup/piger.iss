@@ -149,7 +149,7 @@ Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: only
 Filename: {tmp}\vc_redist.x86.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2017 Redistributables...(Please wait a few minutes); Check: "not IsWin64"
 Filename: {tmp}\vc_redist.x64.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2017 Redistributables...(Please wait a few minutes); Check: IsWin64
 
-Filename: {app}\ActionMonitor.exe; Description: {cm:LaunchProgram,Piger}; Flags: nowait postinstall skipifsilent
+Filename: {app}\ActionMonitor.exe; Description: {cm:LaunchProgram,Piger}; Flags: nowait postinstall
 
 [Icons]
 Name: {group}\Piger; Filename: {app}\ActionMonitor.exe
