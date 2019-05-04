@@ -3,29 +3,25 @@
 
 static Tokens m_tokens;
 
-Parser::Parser( HDC hdc ) : 
+Parser::Parser( const HDC hdc ) : 
   mSaveDC( -1 ),
-  mFont( 0 )
+  mFont( nullptr )
 {
   Init( hdc );
 }
 
-Parser::~Parser(void)
+Parser::~Parser()
 {
-  assert( mFont == 0 ); //  forgot to call deinit?
+  assert( mFont == nullptr ); //  forgot to call deinit?
   Clear();
 }
 
 /**
- * Delete all the tags/text that we have/
- * @param none
- * @return none
+ * \brief Delete all the tags/text that we have/
  */
 void Parser::Clear()
 {
-  HTML_CONTAINER::iterator it = m_data.begin();
-  HTML_CONTAINER::iterator end = m_data.end();
-  for (; it != end; ++it)
+  for (auto it = m_data.begin(); it != m_data.end(); ++it)
   {
     delete *it;
   }
@@ -33,10 +29,10 @@ void Parser::Clear()
 }
 
 /**
- * Parse a string and build an array of HTML tags/text and so on.
- * @param const MYODD_CHAR* the string we are parsing.
- * @param int the number of characters we want to parse.
- * @return const Parser::HTML_CONTAINER& a container with all html the tags and text.
+ * \brief Parse a string and build an array of HTML tags/text and so on.
+ * \param lpString the string we are parsing.
+ * \param nCount the number of characters we want to parse.
+ * \return const Parser::HTML_CONTAINER& a container with all html the tags and text.
  */
 const Parser::HTML_CONTAINER& Parser::Parse(const MYODD_CHAR* lpString, int nCount )
 {
@@ -49,14 +45,14 @@ const Parser::HTML_CONTAINER& Parser::Parse(const MYODD_CHAR* lpString, int nCou
   // use the len of the string
   nCount = nCount < 0 ? _tcslen( lpString ) : nCount;
 
-  const MYODD_CHAR* limit = lpString+nCount;
-  const MYODD_CHAR* ptr = lpString;
-  const MYODD_CHAR* begin  = ptr;
-  const MYODD_CHAR* end    = ptr;
+  auto limit = lpString+nCount;
+  auto ptr = lpString;
+  auto begin  = ptr;
+  auto end    = ptr;
   while (*ptr && end != limit ) 
   {
     // look for the opening tag '<'
-    if ((end = _tcschr (begin, '<')) != 0)
+    if ((end = _tcschr (begin, '<')) != nullptr)
     {
       // assign the value from wherever we come from to here.
       // if the tag is the very first one, then there is no need to assign that value.
@@ -68,7 +64,7 @@ const Parser::HTML_CONTAINER& Parser::Parse(const MYODD_CHAR* lpString, int nCou
       // if we have reached our limit no need to look further.
       if ( begin != limit )
       {
-        if ((end = _tcschr (begin, '>')) != 0)
+        if ((end = _tcschr (begin, '>')) != nullptr)
         {
           ++end;  //  include the closing tag.
           end = end > limit ? limit : end;
@@ -95,19 +91,18 @@ const Parser::HTML_CONTAINER& Parser::Parse(const MYODD_CHAR* lpString, int nCou
 }
 
 /**
- * Add a string to the array of HTMLDATA 
- * @param const MYODD_CHAR* the start of the string
- * @param const MYODD_CHAR* the end of the string 
- * @param bool if this is a tag or not.
- * @return none.
+ * \brief Add a string to the array of HTMLDATA 
+ * \param begin the start of the string
+ * \param end the end of the string 
+ * \param isHtmlTag if this is a tag or not.
  */
-void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, bool isHtmlTag )
+void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, const bool isHtmlTag )
 {
   // an empty string, no need to do it.
   if( begin == end )
     return;
 
-  HTMLDATA* hd = new HTMLDATA;
+  const auto hd = new HTMLDATA;
   hd->mIsHtmlTag = isHtmlTag;
 
   if( isHtmlTag )
@@ -138,9 +133,9 @@ void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, bool isHtmlTag 
     
     // look for the matching token for that tag
     // the token is what does the basic string transformation.
-    for( Tokens::const_iterator it = m_tokens.begin();
+    for( auto it = m_tokens.begin();
       it != m_tokens.end();
-      it++ )
+      ++it )
     {
       if( (*it)->IsToken( hd->text.c_str(), (end-begin) ))
       {
@@ -179,13 +174,13 @@ void CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const MYODD_CHAR* szTe
   {
     nLen = szText ? _tcslen(szText) : 0;
   }
-  long& lHeight = size.cy;
-  long& lWidth = size.cx;
+  auto& lHeight = size.cy;
+  auto& lWidth = size.cx;
 
-  HFONT hFont = (HFONT)::GetCurrentObject(hDCScreen, OBJ_FONT);
-  HDC hDCMem=CreateCompatibleDC(hDCScreen);
+  const auto hFont = static_cast<HFONT>(::GetCurrentObject(hDCScreen, OBJ_FONT));
+  const auto hDCMem=CreateCompatibleDC(hDCScreen);
 
-  HFONT hFontOld=(HFONT)SelectObject(hDCMem,hFont);
+  const auto hFontOld=static_cast<HFONT>(SelectObject(hDCMem, hFont));
 
   //calculate the width of the string using the classic way
   SIZE sizeText;
@@ -200,7 +195,7 @@ void CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const MYODD_CHAR* szTe
   lHeight=sizeText.cy;//lHeight==0 if the text is empty, so try GetTextMetrics below!
   lWidth=sizeText.cx;
 
-  if(NULL==szText || _T('\0')==szText[0])
+  if(nullptr==szText || _T('\0')==szText[0])
   {
     TEXTMETRIC tm;
     GetTextMetrics(hDCMem,&tm);//this helps if the text is empty!
@@ -230,31 +225,31 @@ void CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const MYODD_CHAR* szTe
   //enough to fit the text
   RECT rect={0,0,lWidth+sizeLastCharacter.cx,lHeight};
 
-  HBITMAP hBitmap= CreateCompatibleBitmap ( hDCMem,
+  const auto hBitmap= CreateCompatibleBitmap ( hDCMem,
     rect.right-rect.left,
     rect.bottom-rect.top);
 
-  HBITMAP hOldBitmap=(HBITMAP)SelectObject ( hDCMem, hBitmap );
+  const auto hOldBitmap=static_cast<HBITMAP>(SelectObject(hDCMem, hBitmap));
 
   //fill with white
-  FillRect(hDCMem,&rect,(HBRUSH)GetStockObject(WHITE_BRUSH));
+  FillRect(hDCMem,&rect,static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)));
   DrawText(hDCMem,szText,nLen,&rect,DT_LEFT|DT_TOP|DT_SINGLELINE|DT_NOPREFIX);
 
-  int iXmax=0;
-  BOOL bFound=FALSE;
+  auto iXmax=0;
+  auto bFound=false;
   for(int x=rect.right-1;x>=0 && !bFound ;x--)	
   {
-    for (int y=0;y<=rect.bottom-1 && !bFound;y++)	
+    for (auto y=0;y<=rect.bottom-1 && !bFound;y++)	
     {
 
-      COLORREF rgbColor=GetPixel(hDCMem,x,y);
+      const auto rgbColor=GetPixel(hDCMem,x,y);
 
       if(rgbColor!=RGB(255,255,255))
       {
         //found a non-white pixel, save the horizontal position
         //and exit the loop. Job finished.
         iXmax=x;
-        bFound=TRUE;
+        bFound=true;
       }
     }//endfor
   }//endfor	
@@ -268,19 +263,19 @@ void CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const MYODD_CHAR* szTe
   DeleteDC(hDCMem);
 }
 
-void Parser::Init( HDC hdc )
+void Parser::Init( const HDC hdc )
 {
   // save the dc so we can restore it when we are done.
   mSaveDC = SaveDC( hdc );
 
   // get the current font
-  HFONT hFont = (HFONT)::GetCurrentObject(hdc, OBJ_FONT);
+  const auto hFont = static_cast<HFONT>(::GetCurrentObject(hdc, OBJ_FONT));
   
   // and the current log font.
   ::GetObject(hFont, sizeof(LOGFONT), &mLogFont );
 }
 
-void Parser::DeInit( HDC hdc )
+void Parser::DeInit( const HDC hdc )
 {
   if( -1 != mSaveDC )
   {
@@ -292,19 +287,19 @@ void Parser::DeInit( HDC hdc )
   if( mFont )
   {
     DeleteObject( mFont );
-    mFont = 0;
+    mFont = nullptr;
   }
 }
 
-SIZE Parser::Apply( HDC hdc, 
+SIZE Parser::Apply( const HDC hdc, 
                     const Parser::HTMLDATA* hd, 
                     RECT& rect,
                     const RECT& givenRect,
-                    UINT uFormat 
+                    const UINT uFormat 
                   )
 {
-  const MYODD_CHAR* lpString = hd->text.c_str();
-  int lpStringLen  = hd->text.length();
+  const auto lpString = hd->text.c_str();
+  const auto lpStringLen  = hd->text.length();
 
   SIZE size = {0};
 
@@ -314,7 +309,7 @@ SIZE Parser::Apply( HDC hdc,
     // this function does single lines only
     // but when asked to parse from beginning to end we are 
     // given the token that caused us to go to the next line
-    LOGFONT lf = GetCurrentLogFont();
+    auto lf = GetCurrentLogFont();
     if( hd->mIsEnd )
     {
       hd->mToken->pop( lf );
@@ -394,7 +389,7 @@ void Parser::ApplyFont( HDC hdc, const LOGFONT& lf )
   }
 
   // do we already have a font?
-  HFONT hFont = ::CreateFontIndirect( &lf );
+  const auto hFont = ::CreateFontIndirect( &lf );
 
   // select that font
   SelectObject(hdc, hFont );

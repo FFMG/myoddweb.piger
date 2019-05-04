@@ -1,4 +1,4 @@
-# Description [![release](https://img.shields.io/badge/release-v0.9.2.1-brightgreen.png?style=default)](https://github.com/FFMG/myoddweb.piger/releases/latest)
+# Description [![release](https://img.shields.io/badge/release-v0.9.2.2-brightgreen.png?style=default)](https://github.com/FFMG/myoddweb.piger/releases/latest)
 
 Piger is a Keyboard Launcher allowing you to run your own commands from your keyboard. Highlight a word hold the caps lock key and simply type 'Google' to search for it in your browser. You can create your own commands, in LUA, Python, C++ and more.
 
