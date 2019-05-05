@@ -1,0 +1,16 @@
+VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+ 
+The installer have been downloaded from the official download link listed on <https://github.com/FFMG/myoddweb.piger/releases/latest>
+and can be verified like this:
+ 
+1. Download the following installer (x64 and x86): <https://github.com/FFMG/myoddweb.piger/releases/latest/>
+2. You can use one of the following methods to obtain the checksum
+  - Use powershell function 'Get-Filehash'
+  - Use chocolatey utility 'checksum.exe'
+ 
+  checksum type: 
+    sha256: bbc9c8f6581bfce487731be0c3803578b5979459eaee5a2b9be64ca6c431bac0
+ 
+File 'LICENSE.txt' is obtained from <https://github.com/FFMG/myoddweb.piger/blob/master/LICENSE>

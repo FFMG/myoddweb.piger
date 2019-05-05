@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>myoddweb.piger</id>
+    <version>0.9.2.2</version>
+    <title>myoddweb.piger (Install)</title>
+    <iconUrl>https://github.com/FFMG/myoddweb.piger/blob/master/monitor/ActionMonitor/res/ActionMonitor.ico</iconUrl>
+    <authors>FFMG</authors>
+    <projectUrl>https://github.com/FFMG/myoddweb.piger</projectUrl>
+    <copyright>2019 Myoddweb.com</copyright>
+    <licenseUrl>https://raw.githubusercontent.com/FFMG/myoddweb.piger/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <projectSourceUrl></projectSourceUrl>
+    <packageSourceUrl>https://github.com/FFMG/myoddweb.piger/archive/0.9.2.2.tar.gz</packageSourceUrl>
+    <tags>myoddweb.piger keyboard python batch-files powershell csharp csharp-script cpp scripting</tags>
+    <summary>Piger is a Keystroke Launcher allowing you to run your own commands from your keyboard.</summary>
+    <description>Piger is a Keystroke Launcher allowing you to run your own commands from your keyboard. Highlight a word hold the caps lock key and simply type 'Google' to search for it in your browser. You can create your own commands, in C#, Powershell, (+3), Python, LUA, C++ and more.</description>
+    <releaseNotes>
+## New this version
+- Added a sample "`Dolly .NET`" sample app to show how to write .NET scripts/plugins.
+  - Created Action Monitor Shell to run .NET apps
+  - Updated interface to run an `IAction`
+- Added `BitLocker.cs` to show how C Sharp plugins can be written
+- Added .NET 4.5.2 interface `ActionMonitor.Interfaces.dll`
+- Renamed `AMPowerShellCmdLets.dll` to `ActionMonitor.dll`
+- Added support for [C#](https://github.com/FFMG/myoddweb.piger/scripts/csharp.md) commands
+- Updated the way we link to Python, (using the more 'standard' way).
+- Using vs2017, (kept old vs2015 solution file for now).
+  - c++11
+- Started removing support for `std::string`, everything now has to use unicode, (but some older code still lurks around until I find it).
+
+### Miscellaneous 
+- Updated [SQLite](https://www.sqlite.org/download.html)
+  - 3.26 [0.9.0.4]
+  - 3.20.1 [0.9.0.3]
+  - 3.18 [0.9.0.1]
+- Updated [LUA](https://www.lua.org/download.html) 
+  - 5.3.5 [0.9.0.4]
+  - 5.3.4 [0.9.0.2]
+- Updated [Python](https://www.python.org/downloads/) 
+  - 3.7.2 [0.9.0.4]
+- Updated [Google Test](https://github.com/google/googletest)
+  - 1.8.1 [0.9.0.4]
+
+## Bug fixes
+- If the screen size changes, (new screen, remote desktop and so on), the command window size could be wrong.
+- [Bitlocker scripts (ps)](https://github.com/FFMG/myoddweb.piger/issues/44)
+- [lua code node passing quoted arguments?](https://github.com/FFMG/myoddweb.piger/issues/48)
+- [Fixed a bug where certain 'load' scripts could freeze the Monitor](https://github.com/FFMG/myoddweb.piger/issues/52)    
+    </releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

@@ -248,3 +248,6 @@ _Pvt_Extensions
 /plugins/amplugin64d.lib
 *.exe
 *.~is
+
+/setup/chocolatey/*.nupkg
+/setup/chocolatey/tools/*.exe
