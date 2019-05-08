@@ -6,7 +6,7 @@ How do I create packages? See https://chocolatey.org/docs/create-packages
 
 - Edit the `myoddweb.piger.nuspec`
   - Set the version number
-  - set the packageSourceUrl
+  - set the package Source Url to https://github.com/FFMG/myoddweb.piger
   - Update the release notes
   
 - Edit the chocolateyinstall.ps1
@@ -20,8 +20,21 @@ How do I create packages? See https://chocolatey.org/docs/create-packages
 - Type `choco pack`
 - Test the install
 
-## Test the install
+## Test
+### The install
+You might need to run the uninstall first.
 
-`choco install myoddweb.piger -dv -s .`
+Run `choco install myoddweb.piger -dv -s .`
+
+### The uninstall
 
 `choco uninstall myoddweb.piger -dv -s .`
+
+# Push
+
+in the folder where the nuspec was created....
+
+set the apikey `choco apikey --key xxxxx-yyyyyy-zzzz --source https://push.chocolatey.org/`
+you can get it from the account mage of chocolatey(https://chocolatey.org/account).
+
+run `choco push myoddweb.piger.x.y.z.nupkg --source https://push.chocolatey.org/`, (make sure you change the name of the nupkg file name)

@@ -10,8 +10,7 @@
     <copyright>2019 Myoddweb.com</copyright>
     <licenseUrl>https://raw.githubusercontent.com/FFMG/myoddweb.piger/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectSourceUrl></projectSourceUrl>
-    <packageSourceUrl>https://github.com/FFMG/myoddweb.piger/archive/0.9.2.2.tar.gz</packageSourceUrl>
+    <packageSourceUrl>https://github.com/FFMG/myoddweb.piger</packageSourceUrl>
     <tags>myoddweb.piger keyboard python batch-files powershell csharp csharp-script cpp scripting</tags>
     <summary>Piger is a Keystroke Launcher allowing you to run your own commands from your keyboard.</summary>
     <description>Piger is a Keystroke Launcher allowing you to run your own commands from your keyboard. Highlight a word hold the caps lock key and simply type 'Google' to search for it in your browser. You can create your own commands, in C#, Powershell, (+3), Python, LUA, C++ and more.</description>
