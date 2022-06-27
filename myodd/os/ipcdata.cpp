@@ -1,5 +1,4 @@
 #include "ipcdata.h"
-#include <afxwin.h>
 #include <../string/string.h>
 #include <inttypes.h>
 
