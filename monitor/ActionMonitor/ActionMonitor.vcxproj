@@ -68,7 +68,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/;$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -126,7 +126,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/;$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

@@ -18,15 +18,15 @@ To build the code you might need to update some third party libraries from time 
 
 ### Notes
 
-- In the example below, the version is Python 3.7.2 and the files are unpacked in that folder.
+- In the example below, the version is Python 3.10.5 and the files are unpacked in that folder.
 Make sure that you use the correct folder name for whatever future versions you use.
 - Make sure you delete any old `pyconfig.h` that might be lurking around
 
 ### Setup
 
-Download the lates source code from [https://www.python.org/downloads/release/](https://www.python.org/downloads/release/)
+Download the lates source code from [https://www.python.org/downloads/source/](https://www.python.org/downloads/source/)
 The file is called something like "Gzipped source tarball"
-It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.7.2\`
+It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.10.5\`
 
 - look for pythoncore.vcxproj
   - copy it as "pythoncore86.vcxproj"
@@ -37,8 +37,8 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
 #### zlib
 
 - Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.11).
-- Unpack that version to the `.\api\python\Python-3.7.2\externals`, (you might need to create the folder `externals`)
-- The folder should look something like `.\api\python\Python-3.7.2\externals\zlib-1.2.11\`
+- Unpack that version to the `.\api\python\Python-3.10.5\externals`, (you might need to create the folder `externals`)
+- The folder should look something like `.\api\python\Python-3.10.5\externals\zlib-1.2.11\`
 
 **NB**: You must make sure that the the project `$(zlibDir)` is pointing to the same version of zlib and that the name of the folder.
 
@@ -60,7 +60,7 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
   
 ### The projects that need Python-3
 
-- Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/`, (just make sure that the paths are valid).  
+- Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/`, (just make sure that the paths are valid).  
 
 ## Google test
 
