@@ -6,9 +6,9 @@
 
 // support for Python
 # if defined(_DEBUG)
-#   pragma comment(lib,"python37_d.lib")
+#   pragma comment(lib,"python310_d.lib")
 # elif defined(Py_LIMITED_API)
-#   pragma comment(lib,"python37.lib")
+#   pragma comment(lib,"python310.lib")
 # endif /* _DEBUG */
 
 #include "Python.h"
