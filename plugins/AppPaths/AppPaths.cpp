@@ -130,21 +130,34 @@ void AppPaths::QueryKeyValues
       case REG_MULTI_SZ:
       case REG_EXPAND_SZ:
         {
-          WCHAR* sz = new WCHAR[ cchDataSize+1];
-          memset( sz, 0, cchDataSize+1);
-
-          retCode = RegQueryValueEx( hOpenKey, 
-            achValue, 
-            NULL, 
-            NULL, 
-            (LPBYTE)sz,
-            &cchDataSize);
-
-          if (retCode == ERROR_SUCCESS) 
+          auto* sz = new WCHAR[ cchDataSize+1];
+          try
           {
-            values[ lower(achValue) ] = lower(sz);
+            memset(sz, 0, cchDataSize + 1);
+
+            retCode = RegQueryValueEx(hOpenKey,
+              achValue,
+              NULL,
+              NULL,
+              (LPBYTE)sz,
+              &cchDataSize);
+
+            if (retCode == ERROR_SUCCESS)
+            {
+              values[lower(achValue)] = lower(sz);
+            }
+            delete[] sz;
+            sz = nullptr;
           }
-          delete [] sz;
+          catch( ... )
+          {
+            //  did we throw?
+            if (nullptr != sz)
+            {
+              delete[] sz;
+            }
+            throw;
+          }
         }
         break;
 

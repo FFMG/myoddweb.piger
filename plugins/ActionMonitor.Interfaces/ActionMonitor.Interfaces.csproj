@@ -40,7 +40,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(TargetDir)..\x86" /Y
+    <PostBuildEvent>if not exist "$(TargetDir)..\x86\" mkdir "$(TargetDir)..\x86\"
+if not exist "$(TargetDir)..\x64\" mkdir "$(TargetDir)..\x64\"
+xcopy "$(TargetDir)*.*" "$(TargetDir)..\x86" /Y
 xcopy "$(TargetDir)*.*" "$(TargetDir)..\x64" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
