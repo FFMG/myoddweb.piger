@@ -51,7 +51,7 @@ IVirtualMachine& VirtualMachines::Get(IVirtualMachines::Type type)
 #endif
 #ifdef ACTIONMONITOR_API_PY
   case Type::Python:
-    vm = new PythonVirtualMachine(_application, _messagesHandler, _ipcListener);;
+    vm = new PythonVirtualMachine(_application, _messagesHandler, _ipcListener);
     break;
 #endif
 #ifdef ACTIONMONITOR_API_PLUGIN
