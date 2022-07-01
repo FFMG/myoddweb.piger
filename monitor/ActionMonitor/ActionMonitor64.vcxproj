@@ -106,7 +106,7 @@
       <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>call postbuild.bat "$(TargetDir)"</Command>
+      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -160,8 +160,7 @@
       <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

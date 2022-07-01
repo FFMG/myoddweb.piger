@@ -33,12 +33,37 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
   - copy it as "pythoncore64.vcxproj"
   - copy it as "pythoncore86.vcxproj.filters"
   - copy it as "pythoncore64.vcxproj.filters"
+  
+Download the actual python from [https://www.python.org/downloads/release/python-3105/](https://www.python.org/downloads/release/python-3105/)
+
+- Install the x86 version (pay attention to install location)
+  - Select "Download debugging symbols"
+  - Select "Download debug binaries"
+  - Delete all the files in \includes\python86d\	  
+    - copy all the *_d.pyd files, *_d.dll, *.lib from the python install directory, (Python\DLLs)
+	  Make sure you do not copy the *_d.* files
+- Remove/Uninstall the x86 version
+
+- Install the x64 version
+  - Select "Download debugging symbols"
+  - Select "Download debug binaries"
+  - Delete all the files in \includes\python64d\	  
+    - copy all the *_d.pyd files, *_d.dll, *.lib from the python install directory, (Python\DLLs)
+	  Make sure you do not copy the *_d.* files
+- Remove/Uninstall the x64 version
+
+- Download the Windows embeddable package (x86) 
+  - Delete all the files in \includes\python86\
+  - Copy all the content of the package to \includes\python86\
+- Download the Windows embeddable package (x64) 
+  - Delete all the files in \includes\python64\
+  - Copy all the content of the package to \includes\python86\
 
 #### zlib
 
-- Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.11).
+- Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.12).
 - Unpack that version to the `.\api\python\Python-3.10.5\externals`, (you might need to create the folder `externals`)
-- The folder should look something like `.\api\python\Python-3.10.5\externals\zlib-1.2.11\`
+- The folder should look something like `.\api\python\Python-3.10.5\externals\zlib-1.2.12\`
 
 **NB**: You must make sure that the the project `$(zlibDir)` is pointing to the same version of zlib and that the name of the folder.
 
@@ -46,13 +71,13 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
 
   - delete pythoncore86
   - delete pythoncore64
-  - locate and add the project you just copied
+  - locate and add the project you just created
     - pythoncore86
     - pythoncore64
 
 - For the x64 delete the x86 configuration
 - For the x86 delete the x64 configuration
-- Set the output Directory for all configurations to $(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\ ($(BuildPath))
+- Set the output Directory for all configurations to $(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\
 
 - Build 
   - the debug x64 should output to .\Output\Debug\x64
@@ -61,6 +86,9 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
 ### The projects that need Python-3
 
 - Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/`, (just make sure that the paths are valid).  
+- Update all the code that inlcude something like, "python310_d.lib", (or whatever the previous version might be)
+  - pyapi.h (include the lib)
+  - PythonVirtualMachine.cpp (include the zip file)
 
 ## Google test
 
