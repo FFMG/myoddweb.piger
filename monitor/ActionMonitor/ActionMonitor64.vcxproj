@@ -331,9 +331,6 @@
     <ProjectReference Include="..\api\lua\lua64.vcxproj">
       <Project>{460c4fcf-0baa-4e9b-90c3-e7dc57e75fa6}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\api\python\Python-3.10.5\PCbuild\pythoncore64.vcxproj">
-      <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\hook\hook64.vcxproj">
       <Project>{ffd7c5cb-0cb2-4550-8cef-dee9aaad388a}</Project>
     </ProjectReference>
