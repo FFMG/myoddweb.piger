@@ -2,6 +2,8 @@
 
 #ifdef ACTIONMONITOR_API_PY
 
+#define PY_SSIZE_T_CLEAN
+
 #include "helperapi.h"
 
 // support for Python

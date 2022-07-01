@@ -52,8 +52,10 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
+
     char* msg;
-    auto slen = 0;
+    Py_ssize_t slen = 0;
     auto nElapse = 0;
     auto nFadeOut = 0;
 
@@ -101,6 +103,8 @@ PyObject* PyApi::Version (PyObject *self, PyObject *args)
  */
 PyObject* PyApi::GetCommand(PyObject *self, PyObject *args) const
 {
+  PyErr_Clear();
+
   unsigned idx = 0;
   // get the index number
   if (!PyArg_ParseTuple(args, "I", &idx))
@@ -171,6 +175,8 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
+
     char* module = nullptr;
     char* cmdLine = nullptr;
     const auto isPrivileged = 0;
@@ -208,6 +214,8 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args) const
  */
 PyObject* PyApi::GetString(PyObject *self, PyObject *args) const
 {
+  PyErr_Clear();
+
   auto iQuote = 1;
   if (!PyArg_ParseTuple(args, "|p", &iQuote))  
   {
@@ -238,6 +246,8 @@ PyObject* PyApi::GetFile(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
+
     unsigned idx = 0;
     auto iQuote = 1;
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
@@ -274,6 +284,8 @@ PyObject* PyApi::GetFolder(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
+
     unsigned idx = 0;
     auto iQuote = 1;
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
@@ -310,6 +322,8 @@ PyObject* PyApi::GetUrl(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
+
     unsigned idx = 0;
     auto iQuote = 1;
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
@@ -346,6 +360,7 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
     char* szText = nullptr;
     char* szPath = nullptr;
 
@@ -376,6 +391,7 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
     char* szText = nullptr;
     char* szPath = nullptr;
 
@@ -406,6 +422,7 @@ PyObject* PyApi::Log(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
     unsigned int logType = 0;
     char* szText = nullptr;
 
@@ -465,6 +482,7 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
 {
   try
   {
+    PyErr_Clear();
     unsigned idx = 0;
     char* szText = nullptr;
     if (!PyArg_ParseTuple(args, "Is", &idx, &szText))
