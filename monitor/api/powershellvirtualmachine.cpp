@@ -140,7 +140,7 @@ bool PowershellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& act
   }
 
   // get the powershell dll path
-  const auto& dllFullpath = myodd::files::GetAppPath(true);
+  auto dllFullpath = myodd::files::GetAppPath(true);
   myodd::files::Join(dllFullpath, dllFullpath, _T("ActionMonitor.dll"));
   if (!myodd::files::FileExists(dllFullpath))
   {
@@ -150,7 +150,7 @@ bool PowershellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& act
     return false;
   }
 
-  const auto& dllInterfacesFullpath = myodd::files::GetAppPath(true);
+  auto dllInterfacesFullpath = myodd::files::GetAppPath(true);
   myodd::files::Join(dllInterfacesFullpath, dllInterfacesFullpath, _T("ActionMonitor.Interfaces.dll"));
   if (!myodd::files::FileExists(dllInterfacesFullpath))
   {

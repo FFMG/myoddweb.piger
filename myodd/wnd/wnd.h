@@ -18,7 +18,7 @@ namespace myodd{ namespace wnd{
   void MessagePump(HWND hwnd);
 
   // -- Strings
-  const std::wstring& GetText( HWND hwndParent, WORD id, bool bTrim = true ) const; 
+  const std::wstring GetText( HWND hwndParent, WORD id, bool bTrim = true ); 
 
   // -- numbers.
   int GetInt      ( HWND hwndParent, WORD id, int iDefault=0 ); 

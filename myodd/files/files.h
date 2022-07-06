@@ -70,7 +70,7 @@ std::wstring GetFileName( const std::wstring& givenPath, bool bExpand = true );
 std::wstring GetBaseFromFile(const wchar_t* lpPath, bool bExpand = true, bool bAddTrailing = true );
 std::wstring GetBaseFromFile( const std::wstring& stdPath, bool bExpand = true, bool bAddTrailing = true );
 
-const std::wstring& GetAppPath( bool bAddTrailing =true) const;
+const std::wstring GetAppPath( bool bAddTrailing =true);
 
 bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, const std::wstring& givenOrigin );
 

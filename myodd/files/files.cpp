@@ -46,21 +46,21 @@ void Test()
 #ifdef _DEBUG
 {
   wchar_t* lpdest = nullptr;
-  std::wstring appPath = GetAppPath( false );
+  auto appPath = GetAppPath( false );
   ASSERT( ExpandEnvironment( FILE_APPPATH, lpdest ) );
   ASSERT( _tcsicmp( lpdest, appPath.c_str() ) == 0 );
   delete [] lpdest;
-  ASSERT( ExpandEnvironment( _T("%AppPath%"), lpdest ) );   //  case insensitive
+  ASSERT( ExpandEnvironment( L"%AppPath%", lpdest ) );   //  case insensitive
   ASSERT( _tcsicmp( lpdest, appPath.c_str() ) == 0 );
   delete [] lpdest;
   lpdest = nullptr;
-  ASSERT( ExpandEnvironment( _T("%AppPath%\\somedir\\somefile.txt"), lpdest ) );   //  case insensitive
-  std::wstring s = appPath + _T("\\somedir\\somefile.txt" );
+  ASSERT( ExpandEnvironment( L"%AppPath%\\somedir\\somefile.txt", lpdest ) );   //  case insensitive
+  std::wstring s = appPath + L"\\somedir\\somefile.txt";
   ASSERT( _tcsicmp( lpdest, s.c_str() ) == 0 );
   delete [] lpdest;
   lpdest = nullptr;
 
-  ASSERT( UnExpandEnvironment( _T("%systemdrive%"), lpdest ) );
+  ASSERT( UnExpandEnvironment( L"%systemdrive%", lpdest ) );
   delete [] lpdest;
 
   ASSERT( UnExpandEnvironment( appPath.c_str(), lpdest ) );
@@ -96,20 +96,20 @@ void AddExtension(std::wstring& filename, const std::wstring& extension, bool st
     StripExtension(filename); //  remove the current extension.
   }
 
-  if( *filename.rbegin() == _T('.') )
+  if( *filename.rbegin() == L'.' )
   {
     filename = filename.substr( 0, filename.length() -1 );
   }
 
   // do we have a dot in the extension?
   // we already know the size is not 0
-  if( *extension.begin() == _T('.') )
+  if( *extension.begin() == L'.' )
   {
     filename += extension;
   }
   else
   {
-    filename += _T('.') + extension;
+    filename += L'.' + extension;
   }
 }
 
@@ -156,15 +156,11 @@ std::wstring GetExtension( const std::wstring& filename )
   _TrimDeadChars(filenameCopy);
 
   // look for the last '.'
-  auto pos = filenameCopy.find_last_of( _T('.') );
+  auto pos = filenameCopy.find_last_of( L'.' );
 
   // we don't want to return extensions like 'htaccess' from a file '.htaccess'
   // this is because the file name itself is '.htaccess' with no extention.
-#ifdef _UNICODE
   return (pos > 0 && pos != std::wstring::npos ? filenameCopy.substr( pos+1 ) : L"" );
-#else
-  return (pos > 0 && pos != std::string::npos ? filenameCopy.substr(pos + 1) : "");
-#endif
 }
 
 /**
@@ -193,18 +189,13 @@ bool IsExtension( const std::wstring& fOriginal, const std::wstring& fExt )
   }
 
   // escape the characters.
-  e = strings::Replace( e, _T("\\."), _T("." ));     //  in case the user escaped it already
+  e = strings::Replace( e, L"\\.", L"." );     //  in case the user escaped it already
 
   // escape all the other characters.
   e = myodd::regex::Regex2::Escape(e);
-  auto stdMatches = _T("^(.*)\\.(") + e + _T(")$");
-#ifdef _UNICODE
+  auto stdMatches = L"^(.*)\\.(" + e + L")$";
   boost::wsmatch matches;
   const boost::wregex aStringregex( stdMatches.c_str(), boost::regex_constants::icase );
-#else
-  boost::smatch matches;
-  const boost::regex aStringregex( stdMatches.c_str(), boost::regex_constants::icase );
-#endif
 
   if (boost::regex_match(f, matches, aStringregex))
   {
@@ -334,7 +325,7 @@ bool UnExpandEnvironment(const wchar_t* lpSrc, wchar_t*& dest )
   std::wstring stdSrc = lpSrc;
 
   //  we don't want the trailing back slash
-  static std::wstring appPath = GetAppPath( false );
+  auto appPath = GetAppPath( false );
   if( std::wstring::npos != strings::Find( lpSrc, appPath, 0, false ) )
   {
     // we have to expand the app path first
@@ -432,7 +423,7 @@ bool ExpandEnvironment(const wchar_t* lpSrc, wchar_t*& dest )
   if( std::wstring::npos != strings::Find( lpSrc, FILE_APPPATH, 0, false) )
   {
     //  we don't want the trailing back slash
-    static std::wstring appPath = GetAppPath( false );
+    static auto appPath = GetAppPath( false );
 
     //  replace the string
     stdSrc = strings::Replace( stdSrc, FILE_APPPATH, appPath, false );
@@ -1133,7 +1124,7 @@ bool GetFileInformationByName(const wchar_t* file, BY_HANDLE_FILE_INFORMATION& i
  * @param bool add the trailing backslash or remove it.
  * @return std::wstring the path of the current exe.
  */
-const std::wstring& GetAppPath( bool bAddtrailing /*=true*/) const
+const std::wstring GetAppPath( bool bAddtrailing /*=true*/)
 {
   std::wstring sReturn = L"";
   auto lpBuffer = new wchar_t[ T_MAX_PATH ];
@@ -1435,11 +1426,7 @@ void CleanFileName( std::wstring& dirtyFileName )
     auto found = dirtyFileName.find_first_of(badChars);
 
     // did we find it?
-#ifdef _UNICODE
     if( std::wstring::npos == found )
-#else
-    if (std::wstring::npos == found)
-#endif
     {
       break;
     }
@@ -1599,11 +1586,7 @@ std::wstring GetFileName( const std::wstring& givenPath, bool bExpand /*= true*/
 
   // now go back and create the parent directory.
   auto pos = copyOfGivenPath.find_last_of(_T('\\'));
-#ifdef _UNICODE
   return (pos != std::wstring::npos ? copyOfGivenPath.substr(pos + 1) : L"");
-#else
-  return (pos != std::string::npos ? copyOfGivenPath.substr(pos + 1) : "");
-#endif
 }
 
 /**
@@ -2087,11 +2070,6 @@ wchar_t* Byte2Char
   FileEncode fileEncoding 
 )
 {
-#ifndef _UNICODE
-  char* tbuf = new char( len +1);
-  memset( tbuf, 0, len );
-  memcpy( tbuf, buf, len );
-#else
   std::wstring convertedString = _T("");
   switch( fileEncoding )
   {
@@ -2152,7 +2130,6 @@ wchar_t* Byte2Char
   lstrcpy(tbuf, convertedString.c_str());
 
   return tbuf;
-#endif
 }
 
 /** 
@@ -2172,22 +2149,12 @@ long GetFileSizeInBytes( const std::wstring& stdFullPathFileName )
   // http://linux.die.net/man/2/stat
   // https://msdn.microsoft.com/en-us/library/14h5k7ff(VS.71).aspx
   long fileSize = -1;
-#ifdef UNICODE
   struct _stat64i32 filestatus;
   if (-1 == _wstat(cleannedFileName.c_str(), &filestatus))
   {
     return fileSize;
   }
   fileSize = static_cast<long>(filestatus.st_size);
-#else
-  struct stat filestatus;
-  if (-1 == stat(cleannedFileName.c_str(), &filestatus))
-  {
-    return fileSize;
-  }
-  fileSize = static_cast<long>filestatus.st_size;
-#endif // UNICODE
-
   return static_cast<long>(filestatus.st_size);
 }
 
