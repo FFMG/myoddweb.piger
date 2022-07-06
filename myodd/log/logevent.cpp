@@ -67,21 +67,21 @@ namespace myodd { namespace log {
   /**
   * Log an event
   * @param LogType the type of the event been logged
-  * @param const MYODD_CHAR* the unformatted buffer.
+  * @param const wchar_t* the unformatted buffer.
   * @param va_list the list of arguments we will add to the buffer.
   * @return
   */
-  void LogEvent::Log(LogType uiType, const MYODD_CHAR* pszLine, va_list argp)
+  void LogEvent::Log(LogType uiType, const wchar_t* pszLine, va_list argp)
   {
     ASSERT(pszLine != NULL);
 
-    MYODD_CHAR* buffer = NULL;
+    wchar_t* buffer = NULL;
     int len = _vsctprintf(pszLine, argp);
     if (len >0)
     {
       // _vscprintf doesn't count + 1; terminating '\0'
       ++len;
-      buffer = new MYODD_CHAR[len];
+      buffer = new wchar_t[len];
       _vsntprintf_s(buffer, len, len, pszLine, argp);
     }
 
@@ -95,10 +95,10 @@ namespace myodd { namespace log {
   /**
   * Log an event
   * @param LogType the type of the event been logged
-  * @param const MYODD_CHAR* the unformatted buffer.
+  * @param const wchar_t* the unformatted buffer.
   * @return
   */
-  void LogEvent::Log(LogType uiType, const MYODD_CHAR* pszLine )
+  void LogEvent::Log(LogType uiType, const wchar_t* pszLine )
   {
     ASSERT(pszLine != NULL);
 
@@ -114,10 +114,10 @@ namespace myodd { namespace log {
   * Log a message and send notifications.
   * This assumes that we have the thread lock.
   * @param LogType the message been logged.
-  * @param const MYODD_CHAR* the text been logged.
+  * @param const wchar_t* the text been logged.
   * @return none
   */
-  void LogEvent::LogInLockedThread(LogType uiType, const MYODD_CHAR* pszLine)
+  void LogEvent::LogInLockedThread(LogType uiType, const wchar_t* pszLine)
   {
     //  then we need to notify all this new message.
     MYODD_LPARAM lParam;
@@ -200,10 +200,10 @@ namespace myodd { namespace log {
   /**
   * Log an entry to the file.
   * @param unsigned int uiType the log type
-  * @param const MYODD_CHAR* the line we are adding.
+  * @param const wchar_t* the line we are adding.
   * @return
   */
-  bool LogEvent::LogToFile(LogType uiType, const MYODD_CHAR* pszLine)
+  bool LogEvent::LogToFile(LogType uiType, const wchar_t* pszLine)
   {
     // Lock the thread
     myodd::threads::AutoLock autoLock(*this);

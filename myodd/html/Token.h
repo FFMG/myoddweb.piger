@@ -14,7 +14,7 @@ public:
   virtual ~Token(){};
 
   // if this is the token we are looking for.
-  bool IsToken(const MYODD_CHAR* lpString, __int64 nLen ) const;
+  bool IsToken(const wchar_t* lpString, __int64 nLen ) const;
   
   // apply the style
   void push( LOGFONT& logFont );
@@ -34,7 +34,7 @@ protected:
   virtual void OnPop( LOGFONT& logFont ) = 0;
 
   // if this is the token we are looking for.
-  virtual bool OnIsToken(const MYODD_CHAR* lpString, __int64 nLen ) const = 0;
+  virtual bool OnIsToken(const wchar_t* lpString, __int64 nLen ) const = 0;
 
 private:
   int m_depth;

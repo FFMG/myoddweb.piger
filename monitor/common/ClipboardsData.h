@@ -9,25 +9,25 @@ public:
 
   const ClipboardsData& operator=(const ClipboardsData& rhs);
 
-  void SetText(const MYODD_STRING& text );
-  void AddPossibleFileName(const MYODD_STRING& possibleFilename);
+  void SetText(const std::wstring& text );
+  void AddPossibleFileName(const std::wstring& possibleFilename);
   void Reset();
 
 public:
   // accessors.
-  bool GetFolder(MYODD_STRING& sText, size_t idx, bool bQuote ) const;
-  bool GetFile(MYODD_STRING& sText, size_t idx, bool bQuote) const;
-  bool GetUrl(MYODD_STRING& sText, size_t idx, bool bQuotec) const;
+  bool GetFolder(std::wstring& sText, size_t idx, bool bQuote ) const;
+  bool GetFile(std::wstring& sText, size_t idx, bool bQuote) const;
+  bool GetUrl(std::wstring& sText, size_t idx, bool bQuotec) const;
 
-  bool GetTextFromClipboard(MYODD_STRING& sText, bool bQuote ) const;
-  bool GetText(MYODD_STRING& sText, bool bQuote ) const;
-
-protected:
-  static MYODD_STRING Quote( const MYODD_STRING& sSrc, bool bQuote );
+  bool GetTextFromClipboard(std::wstring& sText, bool bQuote ) const;
+  bool GetText(std::wstring& sText, bool bQuote ) const;
 
 protected:
-  MYODD_STRING _text;
+  static std::wstring Quote( const std::wstring& sSrc, bool bQuote );
+
+protected:
+  std::wstring _text;
   
-  typedef std::map<MYODD_STRING, MYODD_STRING > DataFiles;
+  typedef std::map<std::wstring, std::wstring > DataFiles;
   DataFiles _fileNames;
 };

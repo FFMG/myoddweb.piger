@@ -23,7 +23,7 @@ namespace myodd {
   class variables : public boost::program_options::variables_map
   {
   public:
-    variables( int argc, MYODD_CHAR* args[], const desc& d, bool allow_unregistered = true );
+    variables( int argc, wchar_t* args[], const desc& d, bool allow_unregistered = true );
   };
 } //  myodd
 

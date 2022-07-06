@@ -39,10 +39,10 @@ bool SetFocus( HWND hwndParent, WORD id )
  * Set the text to a given window.
  * @param HWND the parent window we are setting the text to.
  * @param WORD the id of the window.
- * @param const MYODD_CHAR* the text we want to set.
+ * @param const wchar_t* the text we want to set.
  * @return bool true|false if the value is set or not.
  */
-bool SetText( HWND hwndParent, WORD id, const MYODD_CHAR* lp )
+bool SetText( HWND hwndParent, WORD id, const wchar_t* lp )
 {
   HWND hwnd = _getDlgItem( hwndParent, id );
   if( NULL == hwnd )
@@ -56,10 +56,10 @@ bool SetText( HWND hwndParent, WORD id, const MYODD_CHAR* lp )
  * Set the text to a given window.
  * @param HWND the parent window we are setting the text to.
  * @param WORD the id of the window.
- * @param const MYODD_STRING& the text we want to set.
+ * @param const std::wstring& the text we want to set.
  * @return bool true|false if the value is set or not.
  */
-bool SetText( HWND hwndParent, WORD id, const MYODD_STRING& s )
+bool SetText( HWND hwndParent, WORD id, const std::wstring& s )
 {
   return SetText( hwndParent, id, s.c_str() );
 }
@@ -108,7 +108,7 @@ int GetInt( HWND hwndParent, WORD id, int iDefault/*=0*/ )
   }
 
   // get the text
-  MYODD_STRING s = GetText( hwndParent, id );
+  const auto& s = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -143,7 +143,7 @@ long GetLong( HWND hwndParent, WORD id, long lDefault/*=0*/ )
   }
 
   // get the text
-  MYODD_STRING s = GetText( hwndParent, id );
+  const auto & = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -178,7 +178,7 @@ double GetDouble( HWND hwndParent, WORD id, double dDefault/*=0*/ )
   }
 
   // get the text
-  MYODD_STRING s = GetText( hwndParent, id );
+  const auto & = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -199,9 +199,9 @@ double GetDouble( HWND hwndParent, WORD id, double dDefault/*=0*/ )
  * @param HWND the parent window that holds the control
  * @param WORD the ID of the control we are getting the text from.
  * @param bool if we want to trim the return value.
- * @return MYODD_STRING the value been held by the control.
+ * @return std::wstring the value been held by the control.
  */
-MYODD_STRING GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ )
+const std::wstring& GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ ) const
 {
   HWND hwnd = _getDlgItem( hwndParent, id );
   if( NULL == hwnd )
@@ -213,11 +213,11 @@ MYODD_STRING GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ )
   int lenght = GetWindowTextLength( hwnd );
 
   // get the text
-  MYODD_CHAR* t = new MYODD_CHAR[ (lenght+1)*sizeof(MYODD_CHAR) ];
-  memset( t, 0, (lenght+1)*sizeof(MYODD_CHAR) );
-  GetWindowText( hwnd, t,(lenght+1)*sizeof(MYODD_CHAR) );
+  wchar_t* t = new wchar_t[ (lenght+1)*sizeof(wchar_t) ];
+  memset( t, 0, (lenght+1)*sizeof(wchar_t) );
+  GetWindowText( hwnd, t,(lenght+1)*sizeof(wchar_t) );
 
-  MYODD_STRING returnValue = t;
+  std::wstring returnValue = t;
   delete [] t;
 
   if( bTrim )
@@ -301,10 +301,10 @@ bool ShowWindow( HWND hwndParent, WORD id, bool bShow )
  * @param HWND the window we are setting the text for.
  * @param WORD the ID of the button we are 'enabeling'
  * @param const double the double we are setting the text for.
- * @param const MYODD_CHAR* the format of the text.
+ * @param const wchar_t* the format of the text.
  * @return boolean success or not
  */
-bool SetText( HWND hwndParent, WORD id, double d, const MYODD_CHAR* pszFormat)
+bool SetText( HWND hwndParent, WORD id, double d, const wchar_t* pszFormat)
 {
   HWND hwnd = _getDlgItem( hwndParent, id );
   if( NULL == hwnd )
@@ -323,11 +323,11 @@ bool SetText( HWND hwndParent, WORD id, double d, const MYODD_CHAR* pszFormat)
 */
 void MakeValidInt( HWND hWndParent, WORD id )
 {
-  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
+  std::wstring sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, false ) )
   {
     // the new value
-    MYODD_STRING sActual = myodd::strings::ToString( _tstoi(sValue.c_str()) );
+    std::wstring sActual = myodd::strings::ToString( _tstoi(sValue.c_str()) );
     
     // set it.
     myodd::wnd::SetText( hWndParent, id, sActual );
@@ -386,7 +386,7 @@ void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
   }
 
   // now make sure that it is withing ranges.
-  const auto nActual = myodd::math::Convert<const MYODD_STRING&, int>( sValue );
+  const auto nActual = myodd::math::Convert<const std::wstring&, int>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax );
@@ -415,7 +415,7 @@ void MakeValidIntRange( HWND hWndParent, WORD id, int nMin, int nMax )
 */
 void MakeValidUInt( HWND hWndParent, WORD id )
 {
-  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
+  std::wstring sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, false ) )
   {
     int iActual = _tstoi(sValue.c_str());
@@ -424,7 +424,7 @@ void MakeValidUInt( HWND hWndParent, WORD id )
       iActual = 0;
     }
 
-    MYODD_STRING sActual = myodd::strings::ToString( iActual );
+    std::wstring sActual = myodd::strings::ToString( iActual );
     myodd::wnd::SetText( hWndParent, id, sActual );
 
     int nStartChar = (int)sActual.length();
@@ -439,12 +439,12 @@ void MakeValidUInt( HWND hWndParent, WORD id )
  * @param WORD the ID of the control we are checking.
  * @param double the min valid value, (if less than that it will be set to the min value).
  * @param double the max valid value, (if more than that it will be set to that max value).
- * @param const MYODD_CHAR* the format we will use in case we need to re-write the text
+ * @param const wchar_t* the format we will use in case we need to re-write the text
  * @return none.
 */
-void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, const MYODD_CHAR* lpszFormat )
+void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, const wchar_t* lpszFormat )
 {
-  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
+  std::wstring sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, true ) )
   {
     sValue = myodd::strings::ToString( _tstof( sValue.c_str()), lpszFormat );
@@ -456,7 +456,7 @@ void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, c
   }
 
   // now make sure that it is withing ranges.
-  const auto nActual = myodd::math::Convert<const MYODD_STRING&, double>( sValue );
+  const auto nActual = myodd::math::Convert<const std::wstring&, double>( sValue );
   if( nActual > nMax )
   {
     sValue = myodd::strings::ToString( nMax, lpszFormat );
@@ -481,15 +481,15 @@ void MakeValidDoubleRange( HWND hWndParent, WORD id, double nMin, double nMax, c
  * Make sure that the value entered by the user is a valid double.
  * @param HWND the parent window we want to ensure the ID is an double
  * @param WORD the ID of the control we are checking.
- * @param const MYODD_CHAR* the format we will use in case we need to re-write the text
+ * @param const wchar_t* the format we will use in case we need to re-write the text
  * @return none.
 */
-void MakeValidDouble( HWND hWndParent, WORD id, const MYODD_CHAR* lpszFormat )
+void MakeValidDouble( HWND hWndParent, WORD id, const wchar_t* lpszFormat )
 {
-  MYODD_STRING sValue = myodd::wnd::GetText( hWndParent, id );
+  std::wstring sValue = myodd::wnd::GetText( hWndParent, id );
   if( !myodd::strings::IsNumeric( sValue, true ) )
   {
-    MYODD_STRING sActual = myodd::strings::ToString( _tstof(sValue.c_str()), lpszFormat );
+    std::wstring sActual = myodd::strings::ToString( _tstof(sValue.c_str()), lpszFormat );
     myodd::wnd::SetText( hWndParent, id, sValue );
 
     int nStartChar = (int)sValue.length();

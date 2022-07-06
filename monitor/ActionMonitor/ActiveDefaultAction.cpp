@@ -54,7 +54,7 @@ void ActiveDefaultAction::OnExecuteInThread()
   myodd::log::LogWarning(_T("Will try and execute the command '%s' from file '%s'"), szExt.c_str(), szCommand.c_str());
 
 	//  join the two items together.
-	std::vector<MYODD_STRING> argv;
+	std::vector<std::wstring> argv;
 	argv.push_back( szFile);
 	argv.push_back( GetCommandLine() );
 	Execute(argv, IsPrivileged(), nullptr );

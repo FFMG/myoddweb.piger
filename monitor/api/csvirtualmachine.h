@@ -9,7 +9,7 @@ public:
   explicit CsVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~CsVirtualMachine();
 
-  static bool IsExt(const MYODD_STRING& file);
+  static bool IsExt(const std::wstring& file);
 
   ExecuteApi* CreateApi(const std::wstring& uuid, const IActiveAction& action, IApplication& application, IMessagesHandler& messages) override;
   
@@ -22,7 +22,7 @@ protected:
    * \param pluginPath the path to the plugin
    * \param uuid the unique id
    */
-  MYODD_STRING GetCommandLineArguments(
+  std::wstring GetCommandLineArguments(
     const IActiveAction& action,
     const std::wstring& dllFullPath,
     const std::wstring& dllInterfaceFullPath,

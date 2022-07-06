@@ -14,7 +14,7 @@ public:
   explicit LuaVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   ~LuaVirtualMachine();
   
-  static bool IsExt(const MYODD_STRING& file );
+  static bool IsExt(const std::wstring& file );
 
   int Execute( const IActiveAction& action, const std::wstring& pluginFile) override;
   void Destroy() override{};

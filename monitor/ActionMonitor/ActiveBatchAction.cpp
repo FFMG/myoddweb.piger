@@ -48,7 +48,7 @@ void ActiveBatchAction::OnExecuteInThread()
   auto szFile = File();
 
   //  join the two items together.
-  std::vector<MYODD_STRING> argv;
+  std::vector<std::wstring> argv;
   argv.push_back( _T("cmd") );
 
   const auto arguments = myodd::strings::Format(_T("/c %s %s"), szFile.c_str(), GetCommandLine());

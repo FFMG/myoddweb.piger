@@ -26,7 +26,7 @@ void Token::pop( LOGFONT& logFont )
   }
 }
 
-bool Token::IsToken(const MYODD_CHAR* lpString, __int64 nLen ) const
+bool Token::IsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( !lpString )
   {

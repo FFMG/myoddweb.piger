@@ -15,8 +15,8 @@ public:
   struct HTMLDATA
   {
     HTMLDATA() : mIsHtmlTag(false), mToken(0), mIsEnd(false){};
-    MYODD_STRING text;
-    MYODD_STRING attributes;
+    std::wstring text;
+    std::wstring attributes;
     bool mIsHtmlTag;
     bool mIsEnd;
     Token* mToken;
@@ -24,7 +24,7 @@ public:
   typedef std::vector<HTMLDATA*> HTML_CONTAINER;
   HTML_CONTAINER m_data;
 
-  const HTML_CONTAINER& Parse(const MYODD_CHAR* lpString, int nCount );
+  const HTML_CONTAINER& Parse(const wchar_t* lpString, int nCount );
   const HTML_CONTAINER& Tree() const{
     return m_data;
   };
@@ -55,6 +55,6 @@ private:
   void ApplyFont( HDC hdc, const LOGFONT& lf );
 
 private:
-  void Add(const MYODD_CHAR* begin, LPCTSTR end, bool isHtmlTag );
+  void Add(const wchar_t* begin, LPCTSTR end, bool isHtmlTag );
   void Clear();
 };

@@ -37,69 +37,69 @@ namespace myodd{ namespace strings{
   bool IsEmptyString(const std::string& s);
 
   // converst to lower case.
-  MYODD_CHAR lower(MYODD_CHAR c );
-  MYODD_STRING lower(const MYODD_STRING& s);
+  const wchar_t lower(wchar_t c ) const;
+  const std::wstring& lower(const std::wstring& s) const;
 
   // search and replace
-  MYODD_STRING Replace( const MYODD_STRING& haystack, const MYODD_STRING& needle, const MYODD_STRING& replace, bool caseSensitive = true );
-  int32_t Find(const MYODD_STRING& haystack, const MYODD_STRING& needle, const uint32_t from = 0, bool caseSensitive = true );
+  std::wstring Replace( const std::wstring& haystack, const std::wstring& needle, const std::wstring& replace, bool caseSensitive = true );
+  int32_t Find(const std::wstring& haystack, const std::wstring& needle, const uint32_t from = 0, bool caseSensitive = true );
 
-  int32_t Compare( const MYODD_STRING& lhs, const MYODD_STRING& rhs, bool caseSensitive = true);
+  int32_t Compare( const std::wstring& lhs, const std::wstring& rhs, bool caseSensitive = true);
 
   // explode with a '\0' char
   size_t explode_by_null_char
     (
-    std::vector<MYODD_STRING>& ret,
-    const MYODD_CHAR* s_keys,
+    std::vector<std::wstring>& ret,
+    const wchar_t* s_keys,
     size_t nLen
     );
 
   // explode a string with a set of delimiter characters
   size_t Explode
     (
-    std::vector<MYODD_STRING>& ret,
-    const MYODD_STRING& s, 
-    MYODD_CHAR strDelimit,
+    std::vector<std::wstring>& ret,
+    const std::wstring& s, 
+    wchar_t strDelimit,
     int nCount = MYODD_MAX_INT32,
     bool bAddEmpty = true
     );
 
   // implode a string
-  MYODD_STRING implode
+  std::wstring implode
     (
-    const std::vector<MYODD_STRING> &s, 
-    const MYODD_STRING& glue,
+    const std::vector<std::wstring> &s, 
+    const std::wstring& glue,
     int iFromPiece = 0,
     int iToPiece = -1
     );
 
   // implode a string
-  MYODD_STRING implode
+  std::wstring implode
     (
-    const MYODD_STRING& glue,
-    std::vector<MYODD_STRING>::const_iterator itStart,
-    std::vector<MYODD_STRING>::const_iterator itEnd
+    const std::wstring& glue,
+    std::vector<std::wstring>::const_iterator itStart,
+    std::vector<std::wstring>::const_iterator itEnd
     );
 
   // regex compare.
-  bool wildcmp(const MYODD_CHAR* wild, const MYODD_CHAR* string);
-  bool wildcmp(const MYODD_STRING& wild, const MYODD_STRING& string);
+  bool wildcmp(const wchar_t* wild, const wchar_t* string);
+  bool wildcmp(const std::wstring& wild, const std::wstring& string);
 
-  bool IntToString( MYODD_STRING& value, int i, const MYODD_CHAR* pszFormat );
-  bool FloatToString( MYODD_STRING& value, float f, const MYODD_CHAR* pszFormat );
-  bool DoubleToString( MYODD_STRING& value, double d, const MYODD_CHAR* pszFormat );
-  bool StringToString( MYODD_STRING& value, const MYODD_CHAR* s, const MYODD_CHAR* pszFormat );
+  bool IntToString( std::wstring& value, int i, const wchar_t* pszFormat );
+  bool FloatToString( std::wstring& value, float f, const wchar_t* pszFormat );
+  bool DoubleToString( std::wstring& value, double d, const wchar_t* pszFormat );
+  bool StringToString( std::wstring& value, const wchar_t* s, const wchar_t* pszFormat );
 
   /**
    * Convert a double variables to a string with the option of a format.
    *
    * @param double the number we are converting to a string.
-   * @return MYODD_STRING the converted int
+   * @return std::wstring the converted int
    */
   template<typename T>
-  inline MYODD_STRING ToString( T t, const MYODD_CHAR* pszFormat  )
+  inline std::wstring ToString( T t, const wchar_t* pszFormat  )
   {
-    MYODD_STRING s;
+    std::wstring s;
     IntToString( s, static_cast<int>(t), pszFormat );
     return s;
   }
@@ -107,12 +107,12 @@ namespace myodd{ namespace strings{
   /**
    * Allow a string to be formated.
    * @param double the number we are converting to a string.
-   * @return MYODD_STRING the converted int
+   * @return std::wstring the converted int
    */
   template<>
-  inline MYODD_STRING ToString<const MYODD_CHAR*>(const MYODD_CHAR* l, const MYODD_CHAR* pszFormat )
+  inline std::wstring ToString<const wchar_t*>(const wchar_t* l, const wchar_t* pszFormat )
   {
-    MYODD_STRING s;
+    std::wstring s;
     StringToString( s, l, pszFormat );
     return s;
   }
@@ -120,9 +120,9 @@ namespace myodd{ namespace strings{
   /**
    * Allow a string to be formated.
    * @param double the number we are converting to a string.
-   * @return MYODD_STRING the converted int
+   * @return std::wstring the converted int
    */
-  inline MYODD_STRING ToString(const MYODD_CHAR* l )
+  inline std::wstring ToString(const wchar_t* l )
   {
     return l;
   }
@@ -130,13 +130,13 @@ namespace myodd{ namespace strings{
   /**
    * Convert a double variables to a string with the option of a format.
    * @param double the number we are converting to a string.
-   * @param const MYODD_CHAR* 
-   * @return MYODD_STRING the converted int
+   * @param const wchar_t* 
+   * @return std::wstring the converted int
    */
   template<>
-  inline MYODD_STRING ToString<double>( double d, const MYODD_CHAR* pszFormat )
+  inline std::wstring ToString<double>( double d, const wchar_t* pszFormat )
   {
-    MYODD_STRING s;
+    std::wstring s;
     DoubleToString( s, d, pszFormat );
     return s;
   }
@@ -145,26 +145,26 @@ namespace myodd{ namespace strings{
    * Convert a float variables to a string with the option of a format.
    *
    * @param double the number we are converting to a string.
-   * @return MYODD_STRING the converted int
+   * @return std::wstring the converted int
    */
   template<>
-  inline MYODD_STRING ToString<float>( float f, const MYODD_CHAR* pszFormat  )
+  inline std::wstring ToString<float>( float f, const wchar_t* pszFormat  )
   {
-    MYODD_STRING s;
+    std::wstring s;
     FloatToString( s, f, pszFormat );
     return s;
   }
 
-  MYODD_STRING Format(const MYODD_CHAR* pszFormat, ... );
+  std::wstring Format(const wchar_t* pszFormat, ... );
 
   /**
   * Convert many variables to a string.
   *
   * @param varied the number we are converting to a string.
-  * @return MYODD_STRING the converted int
+  * @return std::wstring the converted int
   */
   template<typename T>
-  inline MYODD_STRING ToString( const T& x)
+  inline std::wstring ToString( const T& x)
   {
     try
     {
@@ -186,26 +186,26 @@ namespace myodd{ namespace strings{
   }
 
   template<>
-  inline MYODD_STRING ToString<MYODD_STRING>( const MYODD_STRING& x)
+  inline std::wstring ToString<std::wstring>( const std::wstring& x)
   {
     return x;
   }
 
   template<>
-  inline MYODD_STRING ToString<MYODD_CHAR*>( const LPTSTR& x)
+  inline std::wstring ToString<wchar_t*>( const LPTSTR& x)
   {
     return x;
   }
 
 #ifdef _UNICODE
   template<>
-  inline MYODD_STRING ToString<LPSTR>( const LPSTR& x)
+  inline std::wstring ToString<LPSTR>( const LPSTR& x)
   {
     USES_CONVERSION;
     return A2T( x );
   }
   template<>
-  inline MYODD_STRING ToString<std::string>( const std::string& x)
+  inline std::wstring ToString<std::string>( const std::string& x)
   {
     USES_CONVERSION;
     return A2T( x.c_str() );
@@ -213,15 +213,15 @@ namespace myodd{ namespace strings{
 #endif
 
   // check if the given string is a 
-  bool IsNumeric( const MYODD_STRING& s, bool allowDecimal = true);
+  bool IsNumeric( const std::wstring& s, bool allowDecimal = true);
 
   // Trims
-  void Trim( MYODD_STRING& str, const MYODD_CHAR* chars = _T( " " ) );
-  void TrimRight( MYODD_STRING& str, const MYODD_CHAR* chars );
-  void TrimLeft( MYODD_STRING& str, const MYODD_CHAR* chars );
+  void Trim( std::wstring& str, const wchar_t* chars = _T( " " ) ) const;
+  void TrimRight( std::wstring& str, const wchar_t* chars ) const;
+  void TrimLeft( std::wstring& str, const wchar_t* chars ) const;
 
-  MYODD_CHAR* _tcsistr(const MYODD_STRING& string, const MYODD_STRING& strCharSet);
-  MYODD_CHAR* _tcsistr(const MYODD_CHAR* string, const MYODD_CHAR* strCharSet);
+  wchar_t* _tcsistr(const std::wstring& string, const std::wstring& strCharSet);
+  wchar_t* _tcsistr(const wchar_t* string, const wchar_t* strCharSet);
 
   // Get the string length
   template<typename T>
@@ -240,7 +240,7 @@ namespace myodd{ namespace strings{
 } //  strings
 } //  myodd
 
-#   define T_MAX_PATH (MAX_PATH*sizeof(MYODD_CHAR))
+#   define T_MAX_PATH (MAX_PATH*sizeof(wchar_t))
 #   ifdef _UNICODE
 #     define T_A2T(p) A2T(p)
 #     define T_T2A(p) T2A(p)

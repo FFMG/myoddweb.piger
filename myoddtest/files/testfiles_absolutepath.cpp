@@ -34,7 +34,7 @@ TEST_P(MyOddFilesAbsolutePath, TestAbsolutePath)
   auto relative2 = relative;
   auto origin2 = origin;
 
-  MYODD_STRING dest;
+  std::wstring dest;
   ASSERT_EQ(result, myodd::files::GetAbsolutePath(dest, relative, origin ));
   if (result)
   {
@@ -125,12 +125,12 @@ INSTANTIATE_TEST_CASE_P(TestUNC, MyOddFilesAbsolutePath,
 
 TEST(TestAbsolutePathExpandValues, TestExpendingValues )
 {
-  MYODD_STRING exp;
+  std::wstring exp;
   exp = _T("%appdata%\\Test");
   myodd::files::ExpandEnvironment( exp, exp);
   myodd::files::UnExpandEnvironment(exp, exp);
 
-  MYODD_STRING dest;
+  std::wstring dest;
   ASSERT_TRUE( myodd::files::GetAbsolutePath(dest, L"\\Test", L"%appdata%"));
   ASSERT_EQ(exp, dest);
 

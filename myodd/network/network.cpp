@@ -7,14 +7,14 @@
 
 namespace myodd{ namespace net{
   // -------------------------------------------------------------------
-  LONG GetRegKey(HKEY key, const MYODD_CHAR* subkey, MYODD_CHAR* retdata)
+  LONG GetRegKey(HKEY key, const wchar_t* subkey, wchar_t* retdata)
   {
     HKEY hkey;
     LONG retval = RegOpenKeyEx(key, subkey, 0, KEY_QUERY_VALUE, &hkey);
 
     if (retval == ERROR_SUCCESS) {
       long datasize = MAX_PATH;
-      MYODD_CHAR data[MAX_PATH];
+      wchar_t data[MAX_PATH];
       RegQueryValue(hkey, NULL, data, &datasize);
       lstrcpy(retdata,data);
       RegCloseKey(hkey);
@@ -25,13 +25,13 @@ namespace myodd{ namespace net{
 
   /**
   * Go to a given URL using the user default browser/options
-  * @param const MYODD_CHAR* the path we want to go to.
+  * @param const wchar_t* the path we want to go to.
   * @param int how we want to display the bowser. @see http://msdn.microsoft.com/en-us/library/bb762153(VS.85).aspx
   * @return HINSTANCE if < than 32 then there was a problem.
   */
-  HINSTANCE GoToURL(const MYODD_CHAR* lpUrl, int showcmd)
+  HINSTANCE GoToURL(const wchar_t* lpUrl, int showcmd)
   {
-    MYODD_CHAR key[MAX_PATH + MAX_PATH];
+    wchar_t key[MAX_PATH + MAX_PATH];
 
     // First try ShellExecute()
     HINSTANCE result = ShellExecute(NULL, _T("open"), lpUrl, NULL,NULL, showcmd);
@@ -45,7 +45,7 @@ namespace myodd{ namespace net{
 
         if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) 
         {
-          MYODD_CHAR *pos;
+          wchar_t *pos;
           pos = _tcsstr(key, _T("\"%1\""));
           if (pos == NULL)                      // No quotes found
           {
@@ -73,20 +73,20 @@ namespace myodd{ namespace net{
 
   /**
   * Read an entire file off the interent
-  * @param const MYODD_CHAR* the URL of the file we are getting.
+  * @param const wchar_t* the URL of the file we are getting.
   * @param void* the buffer that will contain the data we are getting.
   * @param unsigned long the max number of bytes we can read
   * @param unsigned long the actual number of bytes read. 
-  * @param const MYODD_CHAR* the agent to send to the site.
+  * @param const wchar_t* the agent to send to the site.
   * @return bool if we managed to read the file or not.
   */
   bool InternetReadWholeFile
   ( 
-    const MYODD_CHAR* lpUrl,
+    const wchar_t* lpUrl,
     void* lpBuffer,
     unsigned int dwNumberOfBytesToRead, 
     unsigned int* lpNumberOfBytesRead, 
-    const MYODD_CHAR* lpszAgent /*= _T("myodd getfile")*/
+    const wchar_t* lpszAgent /*= _T("myodd getfile")*/
   )
   {
     HINTERNET hInet = InternetOpen(lpszAgent, INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, NULL);
@@ -139,7 +139,7 @@ namespace myodd{ namespace net{
       InternetGetLastResponseInfo(&code,NULL,&size_needed);
       if( size_needed > 0 )
       {
-        MYODD_CHAR *message = new TCHAR[size_needed + 1];
+        wchar_t *message = new TCHAR[size_needed + 1];
         InternetGetLastResponseInfo(&code,message,&size_needed);
         delete [] message;
       }
@@ -152,11 +152,11 @@ namespace myodd{ namespace net{
 
   /**
    * Get the network name of the machine and the IP addresses if available.
-   * @param MYODD_STRING& the name of the machine on the network.
-   * @param MYODD_STRING& the IP address of the machine.
+   * @param std::wstring& the name of the machine on the network.
+   * @param std::wstring& the IP address of the machine.
    * @return bool if we managed to get the details or not.
    */
-  bool GetLocalNetworkInfo( MYODD_STRING& networkName, MYODD_STRING& networkIP )
+  bool GetLocalNetworkInfo( std::wstring& networkName, std::wstring& networkIP )
   {
     WSADATA wsaData;
     char name[255];
@@ -183,17 +183,17 @@ namespace myodd{ namespace net{
 
   /**
    * Ping a host name/IP
-   * @param const MYODD_STRING the host name we are looking for.
+   * @param const std::wstring the host name we are looking for.
    * @param int the max number of attempts to try.
-   * @param std::vector<MYODD_STRING>* a container where the aliases will be loaded, (if there are any).
+   * @param std::vector<std::wstring>* a container where the aliases will be loaded, (if there are any).
    * @return bool if we were able to get some data from the given address.
    */
   bool ping
   ( 
-    const MYODD_STRING& host, 
+    const std::wstring& host, 
     int maxAttempts /*= 3*/,
-    std::vector<MYODD_STRING>* m_pAliases /*= NULL*/,
-    std::vector<MYODD_STRING>* m_pAddress /*= NULL*/
+    std::vector<std::wstring>* m_pAliases /*= NULL*/,
+    std::vector<std::wstring>* m_pAddress /*= NULL*/
   )
   {
     //  cleanup if needed.

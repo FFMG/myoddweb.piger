@@ -3,7 +3,7 @@
 #include "logevent.h"
 
 namespace myodd{ namespace log{
-  void LogDebug( LogType uiType, const MYODD_CHAR* pszFmt, ...)
+  void LogDebug( LogType uiType, const wchar_t* pszFmt, ...)
   {
 #ifdef _DEBUG
     va_list argp;
@@ -17,7 +17,7 @@ namespace myodd{ namespace log{
 #endif
   }
 
-  void Log(const MYODD_CHAR* pszFmt, ...)
+  void Log(const wchar_t* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -25,7 +25,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogSuccess(const MYODD_CHAR* pszFmt, ...)
+  void LogSuccess(const wchar_t* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -33,7 +33,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogError(const MYODD_CHAR* pszFmt, ...)
+  void LogError(const wchar_t* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -41,7 +41,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogWarning(const MYODD_CHAR* pszFmt, ...)
+  void LogWarning(const wchar_t* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -49,7 +49,7 @@ namespace myodd{ namespace log{
 	  va_end(argp);
   }
 
-  void LogMessage(const MYODD_CHAR* pszFmt, ...)
+  void LogMessage(const wchar_t* pszFmt, ...)
   {
 	  va_list argp;
 	  va_start(argp, pszFmt);
@@ -59,11 +59,11 @@ namespace myodd{ namespace log{
 
   /**
    * Log a system message.
-   * @param const MYODD_CHAR* the string message we are logging.
+   * @param const wchar_t* the string message we are logging.
    * @param ... params in the message.
    * @return none
    */
-  void LogSystem(const MYODD_CHAR* pszFmt, ...)
+  void LogSystem(const wchar_t* pszFmt, ...)
   {
     va_list argp;
     va_start(argp, pszFmt);
@@ -87,9 +87,9 @@ namespace myodd{ namespace log{
   /**
    * Get the current logfile.
    * @param none
-   * @return MYODD_STRING get the current log file.
+   * @return std::wstring get the current log file.
    */
-  const MYODD_STRING& GetCurrentLogFile()
+  const std::wstring& GetCurrentLogFile()
   {
     return LogEvent::Instance().GetCurrentLogFile();
   }

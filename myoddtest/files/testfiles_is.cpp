@@ -213,7 +213,7 @@ INSTANTIATE_TEST_CASE_P(TestInvalidUrls, MyOddFilesIsUrl,
 TEST(TestIsDirectory, TestTempDirectory)
 {
   // get the temp directory
-  MYODD_STRING tempDirectory;
+  std::wstring tempDirectory;
   if (!myodd::files::ExpandEnvironment(_T("%temp%"), tempDirectory))
   {
     FAIL();
@@ -225,7 +225,7 @@ TEST(TestIsDirectory, TestTempDirectory)
   // but not a file.
   ASSERT_FALSE(myodd::files::IsFile(tempDirectory));
 
-  MYODD_STRING file;
+  std::wstring file;
   myodd::files::Join(file, tempDirectory, Uuid());
 
   // not yet a file
@@ -254,7 +254,7 @@ TEST(TestIsDirectory, TestTempDirectory)
 TEST(TestIsDirectory, TestTempDirectoryExpanded)
 {
   // get the temp directory
-  MYODD_STRING tempDirectory;
+  std::wstring tempDirectory;
   if (!myodd::files::ExpandEnvironment(_T("%temp%"), tempDirectory))
   {
     FAIL();
@@ -267,13 +267,13 @@ TEST(TestIsDirectory, TestTempDirectoryExpanded)
   ASSERT_FALSE(myodd::files::IsFile(_T("%temp%")));
 
   auto uuid = Uuid();
-  MYODD_STRING file;
+  std::wstring file;
   myodd::files::Join(file, _T("%temp%"), uuid );
 
   // not yet a file
   ASSERT_FALSE(myodd::files::IsFile(file));
 
-  MYODD_STRING fileActual;
+  std::wstring fileActual;
   myodd::files::Join(fileActual, tempDirectory, uuid );
 
   // create it

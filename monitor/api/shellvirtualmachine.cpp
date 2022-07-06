@@ -134,7 +134,7 @@ bool ShellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& action, 
   }
 
   // get the action monitor dll path
-  auto dllFullpath = myodd::files::GetAppPath(true);
+  const auto& dllFullpath = myodd::files::GetAppPath(true);
   myodd::files::Join(dllFullpath, dllFullpath, L"ActionMonitor.dll");
   if (!myodd::files::FileExists(dllFullpath))
   {
@@ -144,7 +144,7 @@ bool ShellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& action, 
     return false;
   }
 
-  auto dllInterfacesFullpath = myodd::files::GetAppPath(true);
+  const auto& dllInterfacesFullpath = myodd::files::GetAppPath(true);
   myodd::files::Join(dllInterfacesFullpath, dllInterfacesFullpath, L"ActionMonitor.Interfaces.dll");
   if (!myodd::files::FileExists(dllInterfacesFullpath))
   {
@@ -227,7 +227,7 @@ bool ShellVirtualMachine::ShellPath(std::wstring& szPath)
   }
 
   // get the app path
-  const auto appPath = myodd::files::GetAppPath();
+  const auto& appPath = myodd::files::GetAppPath();
 
   // and then add the exe to it.
   myodd::files::Join(szPath, appPath, L"ActionMonitor.Shell.exe");

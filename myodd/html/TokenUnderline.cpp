@@ -11,7 +11,7 @@ TokenUnderline::~TokenUnderline()
 }
 
 // if this is the token we are looking for.
-bool TokenUnderline::OnIsToken(const MYODD_CHAR* lpString, __int64 nLen ) const
+bool TokenUnderline::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {
