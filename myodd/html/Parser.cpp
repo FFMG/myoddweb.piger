@@ -34,7 +34,7 @@ void Parser::Clear()
  * \param nCount the number of characters we want to parse.
  * \return const Parser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const Parser::HTML_CONTAINER& Parser::Parse(const MYODD_CHAR* lpString, int nCount )
+const Parser::HTML_CONTAINER& Parser::Parse(const wchar_t* lpString, int nCount )
 {
   Clear();
   if( !lpString )
@@ -96,7 +96,7 @@ const Parser::HTML_CONTAINER& Parser::Parse(const MYODD_CHAR* lpString, int nCou
  * \param end the end of the string 
  * \param isHtmlTag if this is a tag or not.
  */
-void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, const bool isHtmlTag )
+void Parser::Add(const wchar_t* begin, const wchar_t* end, const bool isHtmlTag )
 {
   // an empty string, no need to do it.
   if( begin == end )
@@ -119,7 +119,7 @@ void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, const bool isHt
     }
 
     // just get the name skip the attributes.
-    const MYODD_CHAR* space = _tcschr (begin, ' ');
+    const wchar_t* space = _tcschr (begin, ' ');
     if( space && space < end )
     {
       hd->attributes.assign( space+1, end );
@@ -160,15 +160,15 @@ void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, const bool isHt
     myodd::strings::Replace( hd->text, _T("&lt;"), _T("<"), false);
     myodd::strings::Replace( hd->text, _T("&gt;"), _T(">"), false);
     myodd::strings::Replace( hd->text, _T("&amp;"), _T("&"), false);
-    myodd::strings::Replace( hd->text, _T("&deg;"),  MYODD_STRING(1, MYODD_CHAR(176)), false);    //  degree
-    myodd::strings::Replace( hd->text, _T("&plusmn;"),  MYODD_STRING(1, MYODD_CHAR(177)), false); //  Plus/minus symbol
+    myodd::strings::Replace( hd->text, _T("&deg;"),  std::wstring(1, wchar_t(176)), false);    //  degree
+    myodd::strings::Replace( hd->text, _T("&plusmn;"),  std::wstring(1, wchar_t(177)), false); //  Plus/minus symbol
   }
 
   // add this to the list.
   m_data.push_back( hd );
 }
 
-void CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const MYODD_CHAR* szText, int nLen )
+void CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
 {
   if( nLen == -1 )
   {

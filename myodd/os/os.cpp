@@ -66,12 +66,12 @@ ARCHITECTURE GetImageArchitecture(IMAGE_DOS_HEADER *pDosHd)
   return architecture;
 }
 
-ARCHITECTURE GetImageArchitecture(const MYODD_STRING& modulePath)
+ARCHITECTURE GetImageArchitecture(const std::wstring& modulePath)
 {
   return GetImageArchitecture(modulePath.c_str());
 }
 
-ARCHITECTURE GetImageArchitecture(const MYODD_CHAR* modulePath)
+ARCHITECTURE GetImageArchitecture(const wchar_t* modulePath)
 {
   // is it for us?
   if (NULL == modulePath)

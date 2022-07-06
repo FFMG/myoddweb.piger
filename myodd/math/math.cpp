@@ -59,7 +59,7 @@ void Test()
   assert( ToBase10( _T("100"), 36 ) == 1296 );
 
   // the other way around.
-  MYODD_STRING ret = _T("");                         // base 36
+  std::wstring ret = _T("");                         // base 36
   ToBase( ret, 10, 36 );
   assert( ret == _T("A") );
   ToBase( ret, 100, 36 );
@@ -401,11 +401,11 @@ double AngleOf2Points( const Vector& pt1, const Vector& pt2 )
  * Convert a string to an integer.
  * The function returns -1 if there is any problem!
  * 
- * @param const MYODD_CHAR* the string we are converting.
+ * @param const wchar_t* the string we are converting.
  * @param BYTE the base we are converting from.
  * @return int the converted number.
  */
-int __fastcall ToBase10(const MYODD_CHAR* udata, BYTE fromBase)
+int __fastcall ToBase10(const wchar_t* udata, BYTE fromBase)
 {
   //  sanity check
   // 1- We only support base 2 -> 36
@@ -420,16 +420,16 @@ int __fastcall ToBase10(const MYODD_CHAR* udata, BYTE fromBase)
     return -1; // Cannot convert NULL value.
   }
 
-  static const MYODD_CHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+  static const wchar_t numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
   size_t udatalen = myodd::strings::Length( udata );
 
   long digitValue = 0;
   int retVal = 0;
-  MYODD_CHAR digits[ sizeof(numdigits)+1 ];
-  MYODD_CHAR *dataVal;
+  wchar_t digits[ sizeof(numdigits)+1 ];
+  wchar_t *dataVal;
 
   //copy the data to our variable
-  MYODD_CHAR* data = new MYODD_CHAR[udatalen+1];
+  wchar_t* data = new wchar_t[udatalen+1];
   _tcscpy_s(data, udatalen+1, udata);
   //convert it to upper case
 
@@ -466,11 +466,11 @@ int __fastcall ToBase10(const MYODD_CHAR* udata, BYTE fromBase)
 
 /**
  * Convert a base 10 number to a given BASE.
- * @param MYODD_STRING& the container to the return value.
+ * @param std::wstring& the container to the return value.
  * @param unsigned int the base 10 number.
  * @return NULL|string the converted number.
  */
-const MYODD_CHAR* __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE base)
+const wchar_t* __fastcall ToBase( std::wstring& ret, unsigned int base10number, BYTE base)
 {
   //  reset the return value.
   ret = _T("");
@@ -484,11 +484,11 @@ const MYODD_CHAR* __fastcall ToBase( MYODD_STRING& ret, unsigned int base10numbe
   //  no need to try to convert 0.
   if( 0 != base10number )
   {
-    static const MYODD_CHAR numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    static const wchar_t numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     long digitValue = 0;
     
     // copy only the numbers we need, (depending on the base).
-    MYODD_CHAR digits[sizeof(numdigits) + 1];
+    wchar_t digits[sizeof(numdigits) + 1];
     memset(digits, 0, sizeof(digits));
     _tcsncpy_s(digits, numdigits, base);
     while(base10number)
@@ -537,20 +537,20 @@ int random_range(int lowest_number, int highest_number)
 }
 
 /**
- * string conversions of MYODD_STRING
+ * string conversions of std::wstring
  * @see _tstof
- * @param const MYODD_STRING& the number we want to convert.
+ * @param const std::wstring& the number we want to convert.
  * @return double the double conversion of the string
  */
-double std_tstof(const MYODD_STRING& s)
+double std_tstof(const std::wstring& s)
 {
   return _tstof( s.c_str() );
 }
 
 /**
- * string conversions of MYODD_STRING
+ * string conversions of std::wstring
  * @see _tstol
- * @param const MYODD_STRING& the number we want to convert.
+ * @param const std::wstring& the number we want to convert.
  * @return long the long conversion of the string
  */
 template<>
@@ -626,12 +626,12 @@ double Convert<const std::string&, double>(const std::string& src)
 }
 
 /**
- * string conversions of MYODD_STRING
+ * string conversions of std::wstring
  * @see _tstoi
- * @param const MYODD_STRING& the number we want to convert.
+ * @param const std::wstring& the number we want to convert.
  * @return int the int conversion of the string
  */
-int std_tstoi(const MYODD_STRING& s)
+int std_tstoi(const std::wstring& s)
 {
   return _tstoi( s.c_str() );
 }

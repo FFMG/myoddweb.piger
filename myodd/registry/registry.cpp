@@ -6,8 +6,8 @@
 namespace myodd{ namespace reg{
   bool	DeleteFullPath
   ( 
-    const MYODD_CHAR* lpSubKey,
-    const MYODD_CHAR* section,
+    const wchar_t* lpSubKey,
+    const wchar_t* section,
     HKEY hkey 
   )
   {
@@ -44,9 +44,9 @@ namespace myodd{ namespace reg{
 
   bool SaveStringFullPath
   ( 
-    const MYODD_CHAR* lpSubKey,
-    const MYODD_CHAR* section,
-    const MYODD_CHAR* newVal,
+    const wchar_t* lpSubKey,
+    const wchar_t* section,
+    const wchar_t* newVal,
     HKEY hkey, 
     unsigned long *dwRet
   )
@@ -101,8 +101,8 @@ namespace myodd{ namespace reg{
 
   bool SaveDWORDFullPath
   ( 
-    const MYODD_CHAR* lpSubKey,
-    const MYODD_CHAR* section,
+    const wchar_t* lpSubKey,
+    const wchar_t* section,
     unsigned long newVal,
 	  HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, 
     unsigned long *dwRet
@@ -155,9 +155,9 @@ namespace myodd{ namespace reg{
   //	load a String value with Full path
   bool	LoadStringFullPath
   ( 
-    const MYODD_CHAR* lpSubKey,
-    const MYODD_CHAR* section,
-    MYODD_STRING &oldVal, 
+    const wchar_t* lpSubKey,
+    const wchar_t* section,
+    std::wstring &oldVal, 
     HKEY hkey /*= HKEY_LOCAL_MACHINE*/, 
     unsigned long *dwRet
   ) 
@@ -167,7 +167,7 @@ namespace myodd{ namespace reg{
 		  //
 		  //	success or not
 		  LONG ret = ERROR_SUCCESS;
-      unsigned long dwDataSize = sizeof( MYODD_STRING );
+      unsigned long dwDataSize = sizeof( std::wstring );
 		  //
 		  //	Open the registery
 		  HKEY hOpenKey;
@@ -180,7 +180,7 @@ namespace myodd{ namespace reg{
 		  //	try to load what was saved
 		  if (ret == ERROR_SUCCESS)
 		  {
-        MYODD_CHAR* pszBuffer = NULL;
+        wchar_t* pszBuffer = NULL;
   			
 			  // Get the size of the counter.
 			  ret = RegQueryValueEx( hOpenKey,
@@ -195,7 +195,7 @@ namespace myodd{ namespace reg{
 				  if( dwDataSize > 0 )
 				  {
 					  // Allocate memory for the buffer.
-					  pszBuffer = new MYODD_CHAR[ dwDataSize ];
+					  pszBuffer = new wchar_t[ dwDataSize ];
 
 					  ret = RegQueryValueEx( hOpenKey, 
 										     section, 
@@ -248,8 +248,8 @@ namespace myodd{ namespace reg{
 
   bool LoadDWORDFullPath
   ( 
-    const MYODD_CHAR* lpSubKey,
-    const MYODD_CHAR* section,
+    const wchar_t* lpSubKey,
+    const wchar_t* section,
     unsigned long &oldVal,
     HKEY hRootKey /*= HKEY_LOCAL_MACHINE*/, 
     unsigned long *dwRet

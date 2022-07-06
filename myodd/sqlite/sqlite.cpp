@@ -21,7 +21,7 @@ namespace myodd{ namespace sqlite{
  * @param int if the pointer is not NULL the result will be returned.
  * @return sqlite3* the value of the opened db or NULL if there was a problem.
  */
-sqlite3* open( const MYODD_CHAR* dbName, int* nResult /*= NULL*/ )
+sqlite3* open( const wchar_t* dbName, int* nResult /*= NULL*/ )
 {
   sqlite3* db = NULL;
   int rc = SQLITE_OK;
@@ -59,13 +59,13 @@ bool close(sqlite3* db, int* nResult /*= NULL*/ )
 /**
  * Check if a table already exists.
  * @param sqlite3* an open database
- * @param MYODD_CHAR* the name of the table we are looking for.
+ * @param wchar_t* the name of the table we are looking for.
  * @return bool if the table exists or not.
  */
 bool tableExists
   ( 
   sqlite3* db, 
-    MYODD_CHAR* table_name
+    wchar_t* table_name
   )
 {
   // sanity check.
@@ -83,9 +83,9 @@ bool tableExists
   char** szResult;
 
   // create the select that we will call.
-  static const MYODD_CHAR* pszSelect = _T("SELECT name FROM sqlite_master WHERE type='table' and name='%s';");
-  size_t nLen = (_tcslen( pszSelect ) + _tcslen( table_name )) * sizeof(MYODD_CHAR);
-  MYODD_CHAR* pszSelectFull = new MYODD_CHAR[ nLen+ sizeof(MYODD_CHAR)];
+  static const wchar_t* pszSelect = _T("SELECT name FROM sqlite_master WHERE type='table' and name='%s';");
+  size_t nLen = (_tcslen( pszSelect ) + _tcslen( table_name )) * sizeof(wchar_t);
+  wchar_t* pszSelectFull = new wchar_t[ nLen+ sizeof(wchar_t)];
   _stprintf_s( pszSelectFull, nLen, pszSelect, table_name );
 
   // look for the table, if anything is found then the table exits.
@@ -111,14 +111,14 @@ bool tableExists
 /**
  * Execute one or more query with return values.
  * @param sqlite3* an open database
- * @param const MYODD_CHAR* the queries we want to run
+ * @param const wchar_t* the queries we want to run
  * @param SQL_DATA_CONTAINER& a container that will have all the info about each queries.
  * @return bool success or not if there was an eorror, (all errors are in SQL_DATA_CONTAINER);
  */
 bool execWithReturn
 ( 
   sqlite3* db, 
-  const MYODD_CHAR* szSql,
+  const wchar_t* szSql,
   SQL_DATA_CONTAINER& sqlDataContainer 
 )
 {
@@ -126,7 +126,7 @@ bool execWithReturn
   sqlDataContainer.clear();
 
   sqlite3_stmt *pStmt = NULL;
-  const MYODD_CHAR* szLeftover;
+  const wchar_t* szLeftover;
   int rc = SQLITE_ERROR;
   while( szSql && _tcslen(szSql) > 0 )
   {
@@ -166,7 +166,7 @@ bool execWithReturn
     if( SQLITE_OK != rc )
     {
       // get the error message.
-      sqlData.szErrorMessage = (const MYODD_CHAR*)myodd_sqlite_errmsg( db );
+      sqlData.szErrorMessage = (const wchar_t*)myodd_sqlite_errmsg( db );
 
       //  there was an error, we cannot go any further.
       sqlite3_finalize(pStmt);
@@ -180,7 +180,7 @@ bool execWithReturn
     // get the cols names for the query we ran.
     for( int i = 0; i < nCol; ++i )
     {
-      const MYODD_CHAR* szName = (MYODD_CHAR*)myodd_sqlite_column_name( pStmt, i );
+      const wchar_t* szName = (wchar_t*)myodd_sqlite_column_name( pStmt, i );
       sqlData.sqlRowName.push_back( szName );
     }
 
@@ -193,7 +193,7 @@ bool execWithReturn
       sqlRow.reserve( nCol );
       for( int i = 0; i < nCol; ++i )
       {
-        const MYODD_CHAR* sz = (MYODD_CHAR *)myodd_sqlite_column_text(pStmt, i);
+        const wchar_t* sz = (wchar_t *)myodd_sqlite_column_text(pStmt, i);
         sqlRow.push_back( sz ? sz : _T("NULL") );
       }
     };
@@ -211,7 +211,7 @@ bool execWithReturn
 /**
  * Execute a query directly
  * @param sqlite3* an open database
- * @param const MYODD_CHAR* the query we want to run
+ * @param const wchar_t* the query we want to run
  * @param sqlite_callback a call back function for every returned row.
  * @param MYODD_LPARAM a param that will be passed as first param to our call back function.
  * @return bool success or not if there was an error
@@ -219,7 +219,7 @@ bool execWithReturn
 bool exec
 ( 
   sqlite3* db, 
-  const MYODD_CHAR* sql,
+  const wchar_t* sql,
   sqlite_callback fn /*= NULL*/, 
   MYODD_LPARAM lparam /*= NULL*/
 )

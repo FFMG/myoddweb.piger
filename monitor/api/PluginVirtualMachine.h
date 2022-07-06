@@ -18,11 +18,11 @@ public:
   void Destroy() override;
   bool Initialize() override;
 
-  static bool IsExt(const MYODD_STRING& file );
+  static bool IsExt(const std::wstring& file );
 
   bool Register( LPCTSTR, void* );
 
-  void ErasePlugin( const MYODD_STRING& plugin);
+  void ErasePlugin( const std::wstring& plugin);
 
 protected:
   bool DisposeApi(PluginApi* api);
@@ -56,7 +56,7 @@ protected:
   myodd::threads::Key _pluginKey;
 
   // map of all the functions.
-  typedef std::map< MYODD_STRING, PLUGIN_THREAD*> PLUGIN_CONTAINER;
+  typedef std::map< std::wstring, PLUGIN_THREAD*> PLUGIN_CONTAINER;
   PLUGIN_CONTAINER _pluginsContainer;
 
   // find a module

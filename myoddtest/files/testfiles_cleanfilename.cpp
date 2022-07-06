@@ -24,7 +24,7 @@ TEST_P(MyOddFilesCleanFileName, TestCleanFilename)
   auto given = GetParam().given;
   auto expected = GetParam().expected;
 
-  MYODD_STRING dest;
+  std::wstring dest;
   myodd::files::CleanFileName(given);
   ASSERT_EQ(expected, given);
 }

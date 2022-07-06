@@ -5,7 +5,7 @@ class ActivePythonAction final :
   public ActiveVirtualMachineAction
 {
 public:
-  ActivePythonAction(IApplication& application, const IAction& src, IVirtualMachine& virtualMachine, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged);
+  ActivePythonAction(IApplication& application, const IAction& src, IVirtualMachine& virtualMachine, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged);
   virtual ~ActivePythonAction();
 
 protected:

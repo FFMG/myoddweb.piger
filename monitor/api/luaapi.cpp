@@ -196,7 +196,7 @@ int LuaApi::GetCommand (lua_State *lua) const
   }
 
   const auto idx = static_cast<unsigned int>(lua_tointeger (lua, ARGUMENT_NUMBER));
-  MYODD_STRING sValue;
+  std::wstring sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
     const auto errorMsg = _T("Trying to get an argument past the number of arguments.");
@@ -235,7 +235,7 @@ int LuaApi::GetAction (lua_State *lua) const
     return 1;
   }
 
-  MYODD_STRING sValue;
+  std::wstring sValue;
   if( !__super::GetAction( sValue ) )
   {
     const auto errorMsg = _T("Trying to get the action name/value.");
@@ -377,7 +377,7 @@ int LuaApi::Getstring( lua_State *lua ) const
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetString( sValue, bQuote ) )
   {
     __super::Log(AM_LOG_WARNING, _T("Could not get any selected string."));
@@ -416,7 +416,7 @@ int LuaApi::GetVersion( lua_State *lua ) const
     return 1;
   }
 
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetVersion( sValue ) )
   {
     __super::Log(AM_LOG_ERROR, _T("Unable to get the version number") );
@@ -490,7 +490,7 @@ int LuaApi::GetFile( lua_State *lua ) const
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetFile( idx, sValue, bQuote ) )
   {
     __super::Log(AM_LOG_WARNING, _T("Unable to get the requested file index."));
@@ -561,7 +561,7 @@ int LuaApi::GetFolder( lua_State *lua ) const
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetFolder( idx, sValue, bQuote ) )
   {
     __super::Log(AM_LOG_WARNING, _T("Unable to get the requested folder index."));
@@ -632,7 +632,7 @@ int LuaApi::GetUrl( lua_State *lua ) const
     bQuote = (1 == lua_toboolean(lua, ARGUMENT_QUOTE));
   }
 
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetUrl( idx, sValue, bQuote) )
   {
     __super::Log(AM_LOG_WARNING, _T("Unable to get the requested url index."));

@@ -11,7 +11,7 @@ TokenItalic::~TokenItalic()
 }
 
 // if this is the token we are looking for.
-bool TokenItalic::OnIsToken(const MYODD_CHAR* lpString, __int64 nLen ) const
+bool TokenItalic::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {

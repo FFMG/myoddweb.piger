@@ -132,7 +132,7 @@ int LuaVirtualMachine::Execute(const IActiveAction& action, const std::wstring& 
  * \param file the file we are checking
  * \return true|false if the given extension is LUA or not.
  */
-bool LuaVirtualMachine::IsExt(const MYODD_STRING& file )
+bool LuaVirtualMachine::IsExt(const std::wstring& file )
 {
   return myodd::files::IsExtension(file, _T("lua"));
 }

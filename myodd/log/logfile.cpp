@@ -11,8 +11,8 @@
 // the maxfile size we want to use.
 static size_t MAX_FILE_SIZE_IN_MEGABYTES = 5;
 
-static const MYODD_CHAR* LogFile_default_Prefix = _T("myodd");
-static const MYODD_CHAR* LogFile_default_Extention = _T("log");
+static const wchar_t* LogFile_default_Prefix = _T("myodd");
+static const wchar_t* LogFile_default_Extention = _T("log");
 
 namespace myodd{ namespace log{
   LogFile::LogFile() : 
@@ -94,12 +94,12 @@ namespace myodd{ namespace log{
       for ( unsigned int i = 0;; ++i )
       {
         //  get the log file.
-        MYODD_CHAR szDateLogStarted[40] = {};
+        wchar_t szDateLogStarted[40] = {};
         _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y-%m-%d"), &_tStarted );
 
         // add a number if the file number is > 0
         // so we will create more than one file for today if need be.
-        MYODD_CHAR szFileCount[10] = {};
+        wchar_t szFileCount[10] = {};
         if (i > 0) 
         {
           swprintf(szFileCount, _T("-%u"), i);
@@ -302,10 +302,10 @@ namespace myodd{ namespace log{
   /**
    * Log an entry to the file.
    * @param unsigned int uiType the log type
-   * @param const MYODD_CHAR* the line we are adding.
+   * @param const wchar_t* the line we are adding.
    * @return bool success or not.
    */
-  bool LogFile::LogToFile( unsigned int uiType, const MYODD_CHAR* pszLine )
+  bool LogFile::LogToFile( unsigned int uiType, const wchar_t* pszLine )
   {
     //  are we logging?
     if (m_sCurrentFile.empty())
@@ -327,20 +327,20 @@ namespace myodd{ namespace log{
       // get the current date so we can add it to the log.
       auto tStarted = GetCurrentTimeStruct();
 
-      MYODD_CHAR szDateLogStarted[40];
+      wchar_t szDateLogStarted[40];
       _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y/%m/%d %H:%M:%S"), &tStarted );
 
       //  build the return message.
-      MYODD_STRING stdMsg = szDateLogStarted;
+      std::wstring stdMsg = szDateLogStarted;
       stdMsg += _T(" ") + myodd::strings::ToString( uiType, _T("%04d") );
       stdMsg += _T(" ");
       stdMsg += (pszLine ? pszLine : _T(""));
       stdMsg += _T("\r\n");
 
-      const MYODD_CHAR* pszMsg = stdMsg.c_str();
+      const wchar_t* pszMsg = stdMsg.c_str();
 
       // get the total size of what we are about to write..
-      size_t uToWrite = _tcslen(pszMsg) * sizeof(MYODD_CHAR);
+      size_t uToWrite = _tcslen(pszMsg) * sizeof(wchar_t);
 
       //  then we can write to the file.
       size_t uWritten = fwrite(pszMsg, 1, uToWrite, m_fp);

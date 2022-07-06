@@ -14,16 +14,16 @@
 
 namespace myodd{ namespace net{
   // go to a site, launch the user browser.
-  HINSTANCE GoToURL(const MYODD_CHAR* lpUrl, int showcmd);
+  HINSTANCE GoToURL(const wchar_t* lpUrl, int showcmd);
   
   // read an internet file
-  bool InternetReadWholeFile(const MYODD_CHAR* lpUrl, void* lpBuffer, unsigned int dwNumberOfBytesToRead, unsigned int* lpNumberOfBytesRead, LPCTSTR lpszAgent );
+  bool InternetReadWholeFile(const wchar_t* lpUrl, void* lpBuffer, unsigned int dwNumberOfBytesToRead, unsigned int* lpNumberOfBytesRead, LPCTSTR lpszAgent );
 
   //  get information about ourselves.
-  bool GetLocalNetworkInfo( MYODD_STRING& networkName, MYODD_STRING& networkIP );
+  bool GetLocalNetworkInfo( std::wstring& networkName, std::wstring& networkIP );
 
   //  ping a HOST/IP address.
-  bool ping( const MYODD_STRING& host, int maxAttempts = 3, std::vector<MYODD_STRING>* m_pAliases = NULL, std::vector<MYODD_STRING>* m_pAddress = NULL );
+  bool ping( const std::wstring& host, int maxAttempts = 3, std::vector<std::wstring>* m_pAliases = NULL, std::vector<std::wstring>* m_pAddress = NULL );
 } //  net
 } //  myodd
 #endif // __Network_h__ 

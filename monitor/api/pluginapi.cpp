@@ -58,7 +58,7 @@ bool PluginApi::Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeO
 size_t PluginApi::GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer ) const
 {
   // first get the command
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetCommand( idx, sValue ) )
   {
     return 0;
@@ -87,7 +87,7 @@ size_t PluginApi::GetCommand(unsigned int idx, unsigned int nBufferLength, wchar
  */
 int PluginApi::GetAction(unsigned int nBufferLength, wchar_t* lpBuffer ) const
 {
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetAction( sValue ) )
   {
     return 0;
@@ -141,7 +141,7 @@ bool PluginApi::Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPr
  */
 int PluginApi::GetString(unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote ) const
 {
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetString ( sValue, bQuote ) )
   {
     return 0;
@@ -166,7 +166,7 @@ int PluginApi::GetString(unsigned int nBufferLength, wchar_t* lpBuffer, bool bQu
  */
 int PluginApi::GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const
 {
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetFile(idx, sValue, bQuote ) )
   {
     return 0;
@@ -191,7 +191,7 @@ int PluginApi::GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lp
  */
 int PluginApi::GetFolder (unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const
 {
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetFolder (idx, sValue, bQuote ) )
   {
     return 0;
@@ -216,7 +216,7 @@ int PluginApi::GetFolder (unsigned int idx, unsigned int nBufferLength, wchar_t*
  */
 int PluginApi::GetUrl(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer, bool bQuote) const
 {
-  MYODD_STRING sValue = _T("");
+  std::wstring sValue = _T("");
   if( !__super::GetUrl (idx, sValue, bQuote ) )
   {
     return 0;
@@ -265,7 +265,7 @@ bool PluginApi::RemoveAction(const wchar_t* szText, const wchar_t* szPath ) cons
  */
 bool PluginApi::GetVersion(unsigned int nBufferLength, wchar_t* lpBuffer ) const
 {
-  MYODD_STRING stdVersion;
+  std::wstring stdVersion;
   if( !__super::GetVersion( stdVersion ) )
   {
     return false;

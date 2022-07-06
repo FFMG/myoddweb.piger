@@ -111,7 +111,7 @@ bool PythonVirtualMachine::Initialize()
   if (embedded)
   {
     // try and load the python core files.
-    MYODD_STRING exe_dir = myodd::files::GetAppPath(true);
+    const auto& exe_dir = myodd::files::GetAppPath(true);
     std::wstring python_path;
     myodd::files::Join(python_path, exe_dir, L"python\\python310.zip");
     Py_SetPath(python_path.c_str());
@@ -121,7 +121,7 @@ bool PythonVirtualMachine::Initialize()
   Py_Initialize();
   if (embedded)
   {
-    MYODD_STRING exe_dir = myodd::files::GetAppPath(true);
+    const auto& exe_dir = myodd::files::GetAppPath(true);
     std::wstring python_path1;
     myodd::files::Join(python_path1, exe_dir, L"python\\");
 
@@ -255,10 +255,10 @@ int PythonVirtualMachine::Execute(const IActiveAction& action, const std::wstrin
 
 /**
  * Check if a given file extension is used by this API or not.
- * @param const MYODD_STRING& file the file we are checking
+ * @param const std::wstring& file the file we are checking
  * @return bool true|false if the given extension is LUA or not.
  */
-bool PythonVirtualMachine::IsExt(const MYODD_STRING& file )
+bool PythonVirtualMachine::IsExt(const std::wstring& file )
 {
   return myodd::files::IsExtension(file, _T("py"));
 }

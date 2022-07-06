@@ -136,10 +136,10 @@ bool PluginVirtualMachine::Register( LPCTSTR what, void* with )
 
 /**
  * Check if a given file extension is used by this API or not.
- * @param const MYODD_STRING& file the file we are checking
+ * @param const std::wstring& file the file we are checking
  * @return bool true|false if the given extension is LUA or not.
  */
-bool PluginVirtualMachine::IsExt(const MYODD_STRING& file )
+bool PluginVirtualMachine::IsExt(const std::wstring& file )
 {
   return myodd::files::IsExtension(file, _T("amp"));
 }
@@ -338,7 +338,7 @@ int PluginVirtualMachine::Create( LPCTSTR pluginFile )
  * Look for a single plugin and remove it from the list.
  * We do not wait for the thread to end, we simply kill it.
  */
-void PluginVirtualMachine::ErasePlugin( const MYODD_STRING& plugin)
+void PluginVirtualMachine::ErasePlugin( const std::wstring& plugin)
 {
   //  get the lock.
   myodd::threads::Lock guard(_containerKey );
