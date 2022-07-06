@@ -17,7 +17,7 @@ namespace myodd{ namespace log{
 
     bool Initialise(const std::wstring& lpPath, const std::wstring& lpPrefix, const std::wstring& lpExtention, size_t maxFileSize );
     bool IsOpen() const;
-    bool LogToFile( unsigned int uiType, const MYODD_CHAR* pszLine );
+    bool LogToFile( unsigned int uiType, const wchar_t* pszLine );
     const std::wstring& GetCurrentLogFile() const{
       return m_sCurrentFile;
     }

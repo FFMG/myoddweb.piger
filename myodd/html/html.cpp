@@ -96,14 +96,14 @@ namespace myodd{ namespace html{
   /**
    * Output HTML formated text to the screen.
    * @param HDC the device context handle.
-   * @param const MYODD_CHAR* the string we want to output.
+   * @param const wchar_t* the string we want to output.
    * @param int the number of characters we want to display.
    * @param LPRECT the rectangle where we want to draw, or the size of the rectangle.
    * @param UINT the format on how we would like to display the text.
    * @return SIZE the height and width the the output text.
    */
   SIZE html(HDC     hdc,        // handle of device context
-            const MYODD_CHAR* lpString,   // address of string to draw
+            const wchar_t* lpString,   // address of string to draw
             int     nCount,     // string length, in characters
             LPRECT  lpRect,     // address of structure with formatting dimensions
             UINT    uFormat     // text-drawing flags

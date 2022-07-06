@@ -31,15 +31,15 @@ void RemoveTrailingBackSlash( std::wstring& szPath);
 void AddTrailingBackSlash( std::wstring& subPath );
 
 // expand the environment variables.
-bool ExpandEnvironment(const MYODD_CHAR* src, MYODD_CHAR*& dest );
+bool ExpandEnvironment(const wchar_t* src, wchar_t*& dest );
 bool ExpandEnvironment( const std::wstring& src, std::wstring& dest );
 
 // un-expand the path and replace environment variables.
-bool UnExpandEnvironment(const MYODD_CHAR* src, MYODD_CHAR*& dest );
+bool UnExpandEnvironment(const wchar_t* src, wchar_t*& dest );
 bool UnExpandEnvironment( const std::wstring& src, std::wstring& dest );
 
 // create a full path variable.
-bool CreateFullDirectory(const MYODD_CHAR* c, bool bIsFile );
+bool CreateFullDirectory(const wchar_t* c, bool bIsFile );
 bool CreateFullDirectory( const std::wstring& c, bool bIsFile );
 
 bool IsDirectory( const std::wstring& givenDirectory );
@@ -48,26 +48,26 @@ bool IsDot( const std::wstring& givenFile );
 bool IsFile( const std::wstring& givenFile );
 
 bool FileExists( const std::wstring& c );
-bool FileExists(const MYODD_CHAR* c );
+bool FileExists(const wchar_t* c );
 
 bool DirectoryExists( const std::wstring& c );
-bool DirectoryExists( const MYODD_CHAR* c );
+bool DirectoryExists( const wchar_t* c );
 
-bool DeleteFile(const MYODD_CHAR* c );
+bool DeleteFile(const wchar_t* c );
 bool DeleteFile( const std::wstring& c );
 
 bool CopyFile( const std::wstring& lpExistingFileName, const std::wstring& lpNewFileName, unsigned long* dwErr = 0 );
-bool CopyFile(const MYODD_CHAR* lpExistingFileName, const MYODD_CHAR* lpNewFileName, unsigned long* dwErr = 0 );
+bool CopyFile(const wchar_t* lpExistingFileName, const wchar_t* lpNewFileName, unsigned long* dwErr = 0 );
 
 bool HasFileInformationChanged( const std::wstring& file, const BY_HANDLE_FILE_INFORMATION& info );
-bool HasFileInformationChanged(const MYODD_CHAR* file, const BY_HANDLE_FILE_INFORMATION& info );
+bool HasFileInformationChanged(const wchar_t* file, const BY_HANDLE_FILE_INFORMATION& info );
 
 bool GetFileInformationByName( const std::wstring& file, BY_HANDLE_FILE_INFORMATION& info );
-bool GetFileInformationByName(const MYODD_CHAR* file, BY_HANDLE_FILE_INFORMATION& info );
+bool GetFileInformationByName(const wchar_t* file, BY_HANDLE_FILE_INFORMATION& info );
 
 std::wstring GetFileName( const std::wstring& givenPath, bool bExpand = true );
 
-std::wstring GetBaseFromFile(const MYODD_CHAR* lpPath, bool bExpand = true, bool bAddTrailing = true );
+std::wstring GetBaseFromFile(const wchar_t* lpPath, bool bExpand = true, bool bAddTrailing = true );
 std::wstring GetBaseFromFile( const std::wstring& stdPath, bool bExpand = true, bool bAddTrailing = true );
 
 std::wstring GetAppPath( bool bAddTrailing =true);
@@ -76,20 +76,20 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
 
 void CleanFileName( std::wstring& dirtyFileName );
 
-bool GetFullTempFileName( std::wstring& stdFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt );
-bool GetFullTempFileName(MYODD_CHAR*& lpFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt );
+bool GetFullTempFileName( std::wstring& stdFileName, const wchar_t* lpPrefix, const wchar_t* lpExt );
+bool GetFullTempFileName(wchar_t*& lpFileName, const wchar_t* lpPrefix, const wchar_t* lpExt );
 
-bool GetFullTempFileName( std::wstring& stdFullPathFileName, const MYODD_CHAR* lpFileName );
-bool GetFullTempFileName(MYODD_CHAR*& lpFullPathFileName, const MYODD_CHAR* lpFileName );
+bool GetFullTempFileName( std::wstring& stdFullPathFileName, const wchar_t* lpFileName );
+bool GetFullTempFileName(wchar_t*& lpFullPathFileName, const wchar_t* lpFileName );
 
 long GetFileSizeInBytes( const std::wstring& stdFullPathFileName);
 
 size_t GetKeys
 ( 
-  const MYODD_CHAR* lpFileName,
+  const wchar_t* lpFileName,
   std::vector<std::wstring>& tokens,
-  const MYODD_CHAR* lpAppName,
-  const MYODD_CHAR* lpWild = nullptr
+  const wchar_t* lpAppName,
+  const wchar_t* lpWild = nullptr
 );
 
 enum FileEncode {
@@ -104,10 +104,10 @@ enum FileEncode {
   uniEnd
 };
 
-FileEncode DetermineEncoding(const MYODD_CHAR* file, int* npSkip = nullptr );
-MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos = -1, __int64 nEndPos = -1 );
+FileEncode DetermineEncoding(const wchar_t* file, int* npSkip = nullptr );
+wchar_t* ReadFile(const wchar_t* file, __int64 nStartPos = -1, __int64 nEndPos = -1 );
 
-MYODD_CHAR* Byte2Char( const char* buf, size_t len, FileEncode fileEncoding );
+wchar_t* Byte2Char( const char* buf, size_t len, FileEncode fileEncoding );
 
 void Join( std::wstring& returnPath, const std::wstring& pathPartA, const std::wstring& pathPartB );
 
@@ -115,7 +115,7 @@ void Join( std::wstring& returnPath, const std::wstring& pathPartA, const std::w
 class Version
 {
 public:
-  Version(const MYODD_CHAR* lpFileName = nullptr);
+  Version(const wchar_t* lpFileName = nullptr);
   virtual ~Version();
 
   unsigned short GetFileVersionMajor()        const{ return m_fileVersionMajor;}
@@ -125,7 +125,7 @@ public:
   const SYSTEMTIME& GetFileSystemTime()       const{ return m_fileSystemFime;};
 
 private:
-  void DetermineFileVersion(const MYODD_CHAR* lpFileName );
+  void DetermineFileVersion(const wchar_t* lpFileName );
 
   unsigned short m_fileVersionMajor;
   unsigned short m_fileVersionMinor;

@@ -120,14 +120,14 @@ std::wstring MakeUuid4()
  * Explode a string that is separated with '\0' chars.
  * This is used with items like GetPrivateProfileString( ... ) when we want to list all the keys.
  * @param std::vector<std::wstring>& the return container.
- * @param const MYODD_CHAR* the string with null chars '\0' finished by '\0\0'
+ * @param const wchar_t* the string with null chars '\0' finished by '\0\0'
  * @param size_t the length of the string. 
  * @return int the number of items returned.
  */
 size_t explode_by_null_char
 (
   std::vector<std::wstring>& ret,
-  const MYODD_CHAR* s_keys,
+  const wchar_t* s_keys,
   size_t nLen
 )
 {
@@ -157,7 +157,7 @@ size_t explode_by_null_char
  * Explode a given string given a delimiter string
  * @param std::vector<std::wstring>& the return container.
  * @param std::wstring the string we want to explode
- * @param const MYODD_CHAR* Set of delimiter characters.
+ * @param const wchar_t* Set of delimiter characters.
  * @param int nCount the max number of items we want to return.
  *                   If the limit parameter is zero, then this is treated as 1.
  * @param bool bAddEmpty if we want to add empty params or not.
@@ -167,7 +167,7 @@ size_t Explode
 (
   std::vector<std::wstring>& ret,
   const std::wstring& s, 
-  MYODD_CHAR strDelimit,
+  wchar_t strDelimit,
   int nCount /*=MYODD_MAX_INT32*/,
   bool bAddEmpty /*= true*/
 )
@@ -432,7 +432,7 @@ int32_t Find
 std::wstring lower(const std::wstring& s)
 {
   std::wstring ret = _T("");
-  BOOST_FOREACH(MYODD_CHAR tch, s )
+  BOOST_FOREACH(wchar_t tch, s )
   {
     ret += lower( tch );
   }
@@ -442,10 +442,10 @@ std::wstring lower(const std::wstring& s)
 /**
  * convert single char to lower case.
  *
- * @param MYODD_CHAR the character we want to convert.
- * @return MYODD_CHAR the lower char character
+ * @param wchar_t the character we want to convert.
+ * @return wchar_t the lower char character
  */
-MYODD_CHAR lower(MYODD_CHAR c )
+wchar_t lower(wchar_t c )
 {
   if( c >= _T('A') && c <= _T('Z') )
   {
@@ -459,8 +459,8 @@ MYODD_CHAR lower(MYODD_CHAR c )
  * little bit more powerful.
  * Or at least something that follows the regex standard(s).
  *
- * @param const MYODD_CHAR* the wild search, something like "^(5){1}"
- * @param const MYODD_CHAR* the string we will be comparing against.
+ * @param const wchar_t* the wild search, something like "^(5){1}"
+ * @param const wchar_t* the string we will be comparing against.
  * @return int
  */
 bool wildcmp(const std::wstring& wild, const std::wstring& string)
@@ -473,11 +473,11 @@ bool wildcmp(const std::wstring& wild, const std::wstring& string)
  * little bit more powerful.
  * Or at least something that follows the regex standard(s).
  *
- * @param const MYODD_CHAR* the wild search, something like "^(5){1}"
- * @param const MYODD_CHAR* the string we will be comparing against.
+ * @param const wchar_t* the wild search, something like "^(5){1}"
+ * @param const wchar_t* the string we will be comparing against.
  * @return int 
  */
-bool wildcmp(const MYODD_CHAR* wild, const MYODD_CHAR* string)
+bool wildcmp(const wchar_t* wild, const wchar_t* string)
 {
   try
   {
@@ -585,10 +585,10 @@ bool IsNumeric( const std::wstring& s, bool allowDecimal /*= true*/ )
 /**
  * Trim left && right character(s)
  * @param std::wstring& str the string we want to edit.
- * @param const MYODD_CHAR* the char(s) we want to trim off.
+ * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void Trim( std::wstring& str, const MYODD_CHAR* chars /*= _T( " " )*/ )
+void Trim( std::wstring& str, const wchar_t* chars /*= _T( " " )*/ )
 {
   TrimLeft( str, chars );
   TrimRight( str, chars );
@@ -597,10 +597,10 @@ void Trim( std::wstring& str, const MYODD_CHAR* chars /*= _T( " " )*/ )
 /**
  * Trim right character(s)
  * @param std::wstring& str the string we want to edit.
- * @param const MYODD_CHAR* the char(s) we want to trim off.
+ * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void TrimRight( std::wstring& str, const MYODD_CHAR* chars )
+void TrimRight( std::wstring& str, const wchar_t* chars )
 {
   if (!str.empty())
   {
@@ -619,10 +619,10 @@ void TrimRight( std::wstring& str, const MYODD_CHAR* chars )
 /**
  * Trim left character(s)
  * @param std::wstring& str the string we want to edit.
- * @param const MYODD_CHAR* the char(s) we want to trim off.
+ * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void TrimLeft( std::wstring& str, const MYODD_CHAR* chars )
+void TrimLeft( std::wstring& str, const wchar_t* chars )
 {
   if (!str.empty())
   {
@@ -643,13 +643,13 @@ void TrimLeft( std::wstring& str, const MYODD_CHAR* chars )
  * _tcsistr() will search by ignoring the case of those characters 
  * that fall in the ANSI range a-z and A-Z.
  * @see ::_tcsstr( ... )
- * @param const MYODD_CHAR* nul-terminated string to search
- * @param const MYODD_CHAR* nul-terminated string to search for
- * @return MYODD_CHAR* - if successful, returns a pointer to the first 
+ * @param const wchar_t* nul-terminated string to search
+ * @param const wchar_t* nul-terminated string to search for
+ * @return wchar_t* - if successful, returns a pointer to the first 
  *                  occurrence of strCharSet in string;  otherwise, 
  *                  returns NULL
  */ 
-MYODD_CHAR* _tcsistr(const MYODD_CHAR* string, const MYODD_CHAR* strCharSet)
+wchar_t* _tcsistr(const wchar_t* string, const wchar_t* strCharSet)
 {
   size_t nLen = _tcslen(strCharSet);
 
@@ -663,7 +663,7 @@ MYODD_CHAR* _tcsistr(const MYODD_CHAR* string, const MYODD_CHAR* strCharSet)
 	if (*string == _T('\0'))
 		string = NULL;
 
-	return (MYODD_CHAR*)string;
+	return (wchar_t*)string;
 }
 
 /**
@@ -674,11 +674,11 @@ MYODD_CHAR* _tcsistr(const MYODD_CHAR* string, const MYODD_CHAR* strCharSet)
  * @see _tcsistr( ... )
  * @param const std::wstring& string to search
  * @param const std::wstring& string to search for
- * @return MYODD_CHAR* - if successful, returns a pointer to the first 
+ * @return wchar_t* - if successful, returns a pointer to the first 
  *                  occurrence of strCharSet in string;  otherwise, 
  *                  returns NULL
  */ 
-MYODD_CHAR* _tcsistr(const std::wstring& string, const std::wstring& strCharSet)
+wchar_t* _tcsistr(const std::wstring& string, const std::wstring& strCharSet)
 {
   return _tcsistr( string.c_str(), strCharSet.c_str() );
 }
@@ -758,10 +758,10 @@ bool IsEmptyString(const std::string& src )
  * Convert a double value to an string given a format.
  * @param std::wstring& 
  * @param float the number we want to use.
- * @param const MYODD_CHAR*|NULL the format we want to use the float with.
+ * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool IntToString( std::wstring& value, int i, const MYODD_CHAR* pszFormat )
+bool IntToString( std::wstring& value, int i, const wchar_t* pszFormat )
 {
   try
   {
@@ -783,10 +783,10 @@ bool IntToString( std::wstring& value, int i, const MYODD_CHAR* pszFormat )
  * Convert a double value to an string given a format.
  * @param std::wstring& 
  * @param float the number we want to use.
- * @param const MYODD_CHAR*|NULL the format we want to use the float with.
+ * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool DoubleToString( std::wstring& value, double d, const MYODD_CHAR* pszFormat )
+bool DoubleToString( std::wstring& value, double d, const wchar_t* pszFormat )
 {
   try
   {
@@ -808,10 +808,10 @@ bool DoubleToString( std::wstring& value, double d, const MYODD_CHAR* pszFormat 
  * Convert a float value to an string given a format.
  * @param std::wstring& 
  * @param float the number we want to use.
- * @param const MYODD_CHAR*|NULL the format we want to use the float with.
+ * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool FloatToString( std::wstring& value, float f, const MYODD_CHAR* pszFormat )
+bool FloatToString( std::wstring& value, float f, const wchar_t* pszFormat )
 {
   try
   {
@@ -832,11 +832,11 @@ bool FloatToString( std::wstring& value, float f, const MYODD_CHAR* pszFormat )
 /**
  * Convert a float value to an string given a format.
  * @param std::wstring& the return value.
- * @param const MYODD_CHAR* the string we would like to format.
- * @param const MYODD_CHAR*|NULL the format we want to use the float with.
+ * @param const wchar_t* the string we would like to format.
+ * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool StringToString( std::wstring& value, const MYODD_CHAR* l, const MYODD_CHAR* pszFormat )
+bool StringToString( std::wstring& value, const wchar_t* l, const wchar_t* pszFormat )
 {
   try
   {
@@ -880,7 +880,7 @@ std::string WString2String(const std::wstring& ws2Convert)
   return converterX.to_bytes(ws2Convert);
 }
 
-std::wstring Format(const MYODD_CHAR* pszFormat, ... )
+std::wstring Format(const wchar_t* pszFormat, ... )
 {
   va_list argp;
   va_start(argp, pszFormat);
@@ -902,7 +902,7 @@ std::wstring Format(const MYODD_CHAR* pszFormat, ... )
   std::wstring result = _T("");
 
   // create the new buffer.
-  MYODD_CHAR* buffer = new MYODD_CHAR[len];
+  wchar_t* buffer = new wchar_t[len];
   if( _vsntprintf_s(buffer, len, len, pszFormat, argp) > 0 )
   {
     // set the return the value

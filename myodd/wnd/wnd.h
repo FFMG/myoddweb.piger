@@ -30,15 +30,15 @@ namespace myodd{ namespace wnd{
   void MakeValidUInt( HWND hwndParent, WORD id );
   void MakeValidInt( HWND hwndParent, WORD id ); 
   void MakeValidIntRange(HWND hwndParent, WORD id, int nMin, int nMax );
-  void MakeValidDouble( HWND hwndParent, WORD id, const MYODD_CHAR* lpszFormat = _T("%f") );
-  void MakeValidDoubleRange( HWND hwndParent, WORD id, double nMin, double nMax, const MYODD_CHAR* lpszFormat = _T("%f") );
+  void MakeValidDouble( HWND hwndParent, WORD id, const wchar_t* lpszFormat = _T("%f") );
+  void MakeValidDoubleRange( HWND hwndParent, WORD id, double nMin, double nMax, const wchar_t* lpszFormat = _T("%f") );
 
   bool SetFocus( HWND hwndParent, WORD id );
 
   bool SetText( HWND hwndParent, WORD id, const std::wstring& s );
-  bool SetText( HWND hwndParent, WORD id, const MYODD_CHAR* lp );
+  bool SetText( HWND hwndParent, WORD id, const wchar_t* lp );
   bool SetText( HWND hwndParent, WORD id, int i );
-  bool SetText( HWND hwndParent, WORD id, double d, const MYODD_CHAR* pszFormat );
+  bool SetText( HWND hwndParent, WORD id, double d, const wchar_t* pszFormat );
 
   // -- windows helpers.
   bool EnableWindow(HWND hWndParent, WORD id, bool bEnable );

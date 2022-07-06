@@ -50,7 +50,7 @@ namespace myodd{ namespace geo{
 
   void decimalToDegree( double n, int &degree, int &minute, double &second);
 
-  double positionToDecimal(const MYODD_CHAR* lpPos );
+  double positionToDecimal(const wchar_t* lpPos );
 
   // --------------------
   // conversions.

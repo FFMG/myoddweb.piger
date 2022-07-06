@@ -14,7 +14,7 @@ namespace myodd{ namespace os{
   } ARCHITECTURE;
 
   ARCHITECTURE GetImageArchitecture(const std::wstring& modulePath);
-  ARCHITECTURE GetImageArchitecture(const MYODD_CHAR* modulePath);
+  ARCHITECTURE GetImageArchitecture(const wchar_t* modulePath);
 
   // check if the current process is elevated or not.
   bool IsElevated();

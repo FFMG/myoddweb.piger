@@ -12,6 +12,6 @@ namespace myodd {
       System,
     };
 
-    typedef void(*LogEventCallback)(LogType uiType, const MYODD_CHAR* pszLine, void* pContext);
+    typedef void(*LogEventCallback)(LogType uiType, const wchar_t* pszLine, void* pContext);
   }
 }

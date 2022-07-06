@@ -14,10 +14,10 @@
 
 namespace myodd{ namespace net{
   // go to a site, launch the user browser.
-  HINSTANCE GoToURL(const MYODD_CHAR* lpUrl, int showcmd);
+  HINSTANCE GoToURL(const wchar_t* lpUrl, int showcmd);
   
   // read an internet file
-  bool InternetReadWholeFile(const MYODD_CHAR* lpUrl, void* lpBuffer, unsigned int dwNumberOfBytesToRead, unsigned int* lpNumberOfBytesRead, LPCTSTR lpszAgent );
+  bool InternetReadWholeFile(const wchar_t* lpUrl, void* lpBuffer, unsigned int dwNumberOfBytesToRead, unsigned int* lpNumberOfBytesRead, LPCTSTR lpszAgent );
 
   //  get information about ourselves.
   bool GetLocalNetworkInfo( std::wstring& networkName, std::wstring& networkIP );

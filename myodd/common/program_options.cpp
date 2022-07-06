@@ -15,7 +15,7 @@ namespace myodd {
   variables::variables
   ( 
     int argc, 
-    MYODD_CHAR* args[],
+    wchar_t* args[],
     const desc& d,
     bool allow_unregistered /*= true*/
   )
