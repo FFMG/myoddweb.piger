@@ -62,8 +62,9 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
     // the last argument is optional
     if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
     {
-      Say( L"<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>");
-
+      __super::Log(AM_LOG_ERROR, L"Python: Say( ... ) Missing or more values or invalid format.");
+      Say(L"<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>");
+      
       //  just return false.
       return Fail();
     }
@@ -75,8 +76,16 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
     // return true.
     return Py_BuildValue("b", result);
   }
+  catch (const std::exception& ex)
+  {
+    const auto log = myodd::strings::Format(L"Python: Say( ... ) threw an '%s'", HelperApi::Widen( ex.what()).c_str() );
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
   catch(...)
   {
+    __super::Log(AM_LOG_ERROR, L"Python: Say( ... ) threw an unknown exception" );
     return Fail();
   }
 }
