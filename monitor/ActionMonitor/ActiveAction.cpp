@@ -209,7 +209,7 @@ void ActiveAction::UpdateEnvironmentValue(const VariableType variableType) const
   }
 
   // get the value
-  MYODD_STRING sValue;
+  std::wstring sValue;
   if (!myodd::reg::LoadStringFullPath(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), keyName.c_str(), sValue, HKEY_LOCAL_MACHINE))
   {
     return;

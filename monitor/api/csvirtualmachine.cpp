@@ -23,7 +23,7 @@ ExecuteApi* CsVirtualMachine::CreateApi(const std::wstring& uuid, const IActiveA
  * \param file the file we are checking
  * \return bool true|false if the given extension is powershell or not.
  */
-bool CsVirtualMachine::IsExt(const MYODD_STRING& file)
+bool CsVirtualMachine::IsExt(const std::wstring& file)
 {
   return myodd::files::IsExtension(file, _T("CS"));
 }
@@ -36,7 +36,7 @@ bool CsVirtualMachine::IsExt(const MYODD_STRING& file)
  * \param pluginPath the path to the plugin
  * \param uuid the unique id
  */
-MYODD_STRING CsVirtualMachine::GetCommandLineArguments(
+std::wstring CsVirtualMachine::GetCommandLineArguments(
   const IActiveAction& action,
   const std::wstring& dllFullPath,
   const std::wstring& dllInterfaceFullPath,

@@ -15,7 +15,7 @@ namespace log {
   public:
     virtual ~LogEvent(void);
 
-    const MYODD_STRING& GetCurrentLogFile() const {
+    const std::wstring& GetCurrentLogFile() const {
       return m_logFile.GetCurrentLogFile();
     }
 
@@ -55,7 +55,7 @@ namespace log {
         _szLogLine = lm._szLogLine;
         _uiType = lm._uiType;
       }
-      MYODD_STRING _szLogLine;
+      std::wstring _szLogLine;
       LogType _uiType;
     };
 

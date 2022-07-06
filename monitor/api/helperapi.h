@@ -60,7 +60,7 @@ protected:
   
   // get a command by index
   // return false if it does not exist
-  bool GetCommand( unsigned int idx, MYODD_STRING& sValue ) const;
+  bool GetCommand( unsigned int idx, std::wstring& sValue ) const;
 
   // get the action given by the user
   // this is useful in case a plugin creates more than one action.
@@ -77,19 +77,19 @@ protected:
   virtual HWND GetForegroundWindow() const;
 
   // get the currently selected text, or false if none.
-  virtual bool GetString (MYODD_STRING& sValue, bool bQuote) const;
+  virtual bool GetString (std::wstring& sValue, bool bQuote) const;
   
   // get one of x _file_ currently selected by index.
   // if 3 files and 4 folders are selected, only the files are counted.
-  virtual bool GetFile( unsigned int idx, MYODD_STRING& sValue, bool bQuote ) const;
+  virtual bool GetFile( unsigned int idx, std::wstring& sValue, bool bQuote ) const;
 
   // get one of x _folders_ currently selected by index.
   // if 3 files and 4 folders are selected, only the folders are counted.
-  virtual bool GetFolder ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
+  virtual bool GetFolder ( unsigned int idx, std::wstring& sValue, bool bQuote) const;
 
   // get one of x _URL_ currently selected by index.
   // note that this is only syntax check, we don't actually check if the URL resolves.
-  virtual bool GetUrl ( unsigned int idx, MYODD_STRING& sValue, bool bQuote) const;
+  virtual bool GetUrl ( unsigned int idx, std::wstring& sValue, bool bQuote) const;
 
   // get the action monitor version number.
   static bool GetVersion(std::wstring& sValue);

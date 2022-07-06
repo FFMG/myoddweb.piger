@@ -157,7 +157,7 @@ namespace myodd{ namespace reg{
   ( 
     const MYODD_CHAR* lpSubKey,
     const MYODD_CHAR* section,
-    MYODD_STRING &oldVal, 
+    std::wstring &oldVal, 
     HKEY hkey /*= HKEY_LOCAL_MACHINE*/, 
     unsigned long *dwRet
   ) 
@@ -167,7 +167,7 @@ namespace myodd{ namespace reg{
 		  //
 		  //	success or not
 		  LONG ret = ERROR_SUCCESS;
-      unsigned long dwDataSize = sizeof( MYODD_STRING );
+      unsigned long dwDataSize = sizeof( std::wstring );
 		  //
 		  //	Open the registery
 		  HKEY hOpenKey;

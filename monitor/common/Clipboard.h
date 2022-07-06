@@ -24,12 +24,12 @@ protected:
   void Init(CWnd* mainWnd);
 
 public:
-  bool GetTextFromClipboard( MYODD_STRING& sText, bool bQuote ) const;
-  bool GetText( MYODD_STRING& sText, bool bQuote ) const;
+  bool GetTextFromClipboard( std::wstring& sText, bool bQuote ) const;
+  bool GetText( std::wstring& sText, bool bQuote ) const;
 
-  bool GetFolder( MYODD_STRING& sText, size_t idx, bool bQuote ) const;
-  bool GetFile( MYODD_STRING& sText, size_t idx, bool bQuote ) const;
-  bool GetUrl( MYODD_STRING& sText, size_t idx, bool bQuote ) const;
+  bool GetFolder( std::wstring& sText, size_t idx, bool bQuote ) const;
+  bool GetFile( std::wstring& sText, size_t idx, bool bQuote ) const;
+  bool GetUrl( std::wstring& sText, size_t idx, bool bQuote ) const;
   
 protected:  
   typedef std::vector<ClipboardData *> V_CF;
@@ -40,8 +40,8 @@ protected:
   void ParseClipboard( V_CF& cf );
 
   void ResetClipBoardData();
-  void AddFileName( const MYODD_STRING& s );
-  void SetText(const MYODD_STRING& s);
+  void AddFileName( const std::wstring& s );
+  void SetText(const std::wstring& s);
 
 protected:
   HRESULT GetNameFromPIDL

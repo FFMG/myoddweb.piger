@@ -152,11 +152,11 @@ namespace myodd{ namespace net{
 
   /**
    * Get the network name of the machine and the IP addresses if available.
-   * @param MYODD_STRING& the name of the machine on the network.
-   * @param MYODD_STRING& the IP address of the machine.
+   * @param std::wstring& the name of the machine on the network.
+   * @param std::wstring& the IP address of the machine.
    * @return bool if we managed to get the details or not.
    */
-  bool GetLocalNetworkInfo( MYODD_STRING& networkName, MYODD_STRING& networkIP )
+  bool GetLocalNetworkInfo( std::wstring& networkName, std::wstring& networkIP )
   {
     WSADATA wsaData;
     char name[255];
@@ -183,17 +183,17 @@ namespace myodd{ namespace net{
 
   /**
    * Ping a host name/IP
-   * @param const MYODD_STRING the host name we are looking for.
+   * @param const std::wstring the host name we are looking for.
    * @param int the max number of attempts to try.
-   * @param std::vector<MYODD_STRING>* a container where the aliases will be loaded, (if there are any).
+   * @param std::vector<std::wstring>* a container where the aliases will be loaded, (if there are any).
    * @return bool if we were able to get some data from the given address.
    */
   bool ping
   ( 
-    const MYODD_STRING& host, 
+    const std::wstring& host, 
     int maxAttempts /*= 3*/,
-    std::vector<MYODD_STRING>* m_pAliases /*= NULL*/,
-    std::vector<MYODD_STRING>* m_pAddress /*= NULL*/
+    std::vector<std::wstring>* m_pAliases /*= NULL*/,
+    std::vector<std::wstring>* m_pAddress /*= NULL*/
   )
   {
     //  cleanup if needed.

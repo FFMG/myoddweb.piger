@@ -63,7 +63,7 @@ bool HelperApi::Say(const std::wstring& sText, long elapseMiliSecondsBeforeFadeO
  * \param sValue the returned value.
  * \return boolean false if it does not exist
  */
-bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue ) const
+bool HelperApi::GetCommand(const unsigned int idx, std::wstring& sValue ) const
 {
   try
   {
@@ -86,7 +86,7 @@ bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue ) const
     else
     {
       // get the number of elements.
-      std::vector<MYODD_STRING> params;
+      std::vector<std::wstring> params;
       myodd::strings::Explode( params, szCommandLine , _T(' '), MYODD_MAX_INT32, false );
 
       // because the std::vector is 0 based
@@ -120,7 +120,7 @@ bool HelperApi::GetCommand(const unsigned int idx, MYODD_STRING& sValue ) const
  * \param sValue the value will be put here.
  * \return bool if we were able to get the command or not.
  */
-bool HelperApi::GetAction( MYODD_STRING& sValue ) const
+bool HelperApi::GetAction(std::wstring& sValue ) const
 {
   try
   {
@@ -168,7 +168,7 @@ size_t HelperApi::GetCommandCount() const
     }
 
     // get the action commands and get the number of argument .
-    std::vector<MYODD_STRING> params;
+    std::vector<std::wstring> params;
     return myodd::strings::Explode(  params, szCommandLine, _T(' '), MYODD_MAX_INT32, false );
   }
   catch( ... )
@@ -222,7 +222,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, const boo
  * \param sValue the return string that will contain the FULL version number.
  * \return bool true|false
  */
-bool HelperApi::GetVersion (MYODD_STRING& sValue )
+bool HelperApi::GetVersion (std::wstring& sValue )
 {
   myodd::files::Version ver;
   sValue = myodd::strings::Format( _T("%d.%d.%d.%d"),
@@ -239,12 +239,12 @@ bool HelperApi::GetVersion (MYODD_STRING& sValue )
  * \param bQuote if we want to quote the text or not.
  * \return bool if we have a string selected or not.
  */
-bool HelperApi::GetString (MYODD_STRING& sValue, const bool bQuote) const
+bool HelperApi::GetString (std::wstring& sValue, const bool bQuote) const
 {
   try
   {
     const auto& clipBoard = GetClipboard( );
-    MYODD_STRING sClipBoard = _T("");
+    std::wstring sClipBoard = _T("");
     if( !clipBoard.GetText( sClipBoard, bQuote ) )
     {
       // we have nothing.
@@ -275,13 +275,13 @@ bool HelperApi::GetString (MYODD_STRING& sValue, const bool bQuote) const
  * \param bQuote if we want to quote or not.
  * \return bool success or not if there are no more files
  */
-bool HelperApi::GetFile(const unsigned int idx, MYODD_STRING& sValue, const bool bQuote) const
+bool HelperApi::GetFile(const unsigned int idx, std::wstring& sValue, const bool bQuote) const
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
-    MYODD_STRING sClipBoard = _T("");
+    std::wstring sClipBoard = _T("");
     if( !clipBoard.GetFile( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
@@ -306,13 +306,13 @@ bool HelperApi::GetFile(const unsigned int idx, MYODD_STRING& sValue, const bool
  * \param bQuote if we want to quote the string or not.
  * \return bool success or not if there are no more URLs
  */
-bool HelperApi::GetUrl (const unsigned int idx, MYODD_STRING& sValue, const bool bQuote) const
+bool HelperApi::GetUrl (const unsigned int idx, std::wstring& sValue, const bool bQuote) const
 {
   try
   {
     const auto& clipBoard = GetClipboard( );
 
-    MYODD_STRING sClipBoard = _T("");
+    std::wstring sClipBoard = _T("");
     if( !clipBoard.GetUrl( sClipBoard, idx, bQuote ) )
     {
       // could not find anything
@@ -340,13 +340,13 @@ bool HelperApi::GetUrl (const unsigned int idx, MYODD_STRING& sValue, const bool
  * \param bQuote if we want to quote the string or not.
  * \return bool success or not, we return false when there are no more folders.
  */
-bool HelperApi::GetFolder (const unsigned int idx, MYODD_STRING& sValue, const bool bQuote) const
+bool HelperApi::GetFolder (const unsigned int idx, std::wstring& sValue, const bool bQuote) const
 {
   try
   {
     const Clipboard& clipBoard = GetClipboard( );
 
-    MYODD_STRING sClipBoard = _T("");
+    std::wstring sClipBoard = _T("");
     if( !clipBoard.GetFolder( sClipBoard, idx, bQuote ) )
     {
       // could not find anything

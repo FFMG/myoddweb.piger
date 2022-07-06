@@ -37,7 +37,7 @@ const Clipboard& Clipboard::operator=(const Clipboard& rhs)
  * \param bQuote the container that will, (maybe), have hold our return string.
  * \return BOOL TRUE if we have something to return.
  */
-bool Clipboard::GetTextFromClipboard(MYODD_STRING& sText, const bool bQuote ) const
+bool Clipboard::GetTextFromClipboard(std::wstring& sText, const bool bQuote ) const
 {
   return _clipboardData.GetTextFromClipboard(sText, bQuote);
 }
@@ -48,7 +48,7 @@ bool Clipboard::GetTextFromClipboard(MYODD_STRING& sText, const bool bQuote ) co
  * \param bQuote if want want to add a quote around the returned text.
  * \return BOOL true if we have Data or FALSE if not.
  */
-bool Clipboard::GetText( MYODD_STRING& sText, const bool bQuote ) const
+bool Clipboard::GetText( std::wstring& sText, const bool bQuote ) const
 {
   return _clipboardData.GetText(sText, bQuote);
 }
@@ -60,7 +60,7 @@ bool Clipboard::GetText( MYODD_STRING& sText, const bool bQuote ) const
  * @param int the filename number/index we are looking for.
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool Clipboard::GetFile( MYODD_STRING& sText, size_t idx, bool bQuote ) const
+bool Clipboard::GetFile( std::wstring& sText, size_t idx, bool bQuote ) const
 {
   return _clipboardData.GetFile(sText, idx, bQuote );
 }
@@ -72,7 +72,7 @@ bool Clipboard::GetFile( MYODD_STRING& sText, size_t idx, bool bQuote ) const
  * @param int the folder number/index we are looking for.
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool Clipboard::GetFolder( MYODD_STRING& sText, size_t idx, bool bQuote ) const
+bool Clipboard::GetFolder( std::wstring& sText, size_t idx, bool bQuote ) const
 {
   return _clipboardData.GetFolder(sText, idx, bQuote );
 }
@@ -84,7 +84,7 @@ bool Clipboard::GetFolder( MYODD_STRING& sText, size_t idx, bool bQuote ) const
  * @param int the URL number/index we are looking for.
  * @return BOOL true if we have Data or FALSE if not.
  */
-bool Clipboard::GetUrl( MYODD_STRING& sText, size_t idx, bool bQuote ) const
+bool Clipboard::GetUrl( std::wstring& sText, size_t idx, bool bQuote ) const
 {
   return _clipboardData.GetUrl(sText, idx, bQuote );
 }
@@ -199,8 +199,8 @@ void Clipboard::ParseClipboard( V_CF& s_cf )
       case CF_HDROP:
         {
           ClipboardDropData* cdd = (ClipboardDropData*)cf->data;
-          const std::vector<MYODD_STRING>& files = cdd->Files();
-          for (std::vector<MYODD_STRING>::const_iterator it = files.begin(); it != files.end(); ++it)
+          const std::vector<std::wstring>& files = cdd->Files();
+          for (std::vector<std::wstring>::const_iterator it = files.begin(); it != files.end(); ++it)
           {
             AddFileName( *it );
           }
@@ -449,9 +449,9 @@ void Clipboard::GetCurrentData
 
 /**
  * Add a filename to our list of filenames.
- * @param const MYODD_STRING& fileName the filename we want to add.
+ * @param const std::wstring& fileName the filename we want to add.
  */
-void Clipboard::AddFileName(const MYODD_STRING& fileName)
+void Clipboard::AddFileName(const std::wstring& fileName)
 {
   // add it to our list.
   _clipboardData.AddPossibleFileName(fileName);
@@ -459,9 +459,9 @@ void Clipboard::AddFileName(const MYODD_STRING& fileName)
 
 /**
 * Add a filename to our list of filenames.
-* @param const MYODD_STRING& fileName the filename we want to add.
+* @param const std::wstring& fileName the filename we want to add.
 */
-void Clipboard::SetText(const MYODD_STRING& srcText)
+void Clipboard::SetText(const std::wstring& srcText)
 {
   //  set the text value.
   _clipboardData.SetText(srcText);

@@ -111,7 +111,7 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args) const
     return Fail();
   }
 
-  MYODD_STRING sValue;
+  std::wstring sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
     //  just return false.
@@ -132,7 +132,7 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args) const
  */
 PyObject* PyApi::GetAction(PyObject *self, PyObject *args) const
 {
-  MYODD_STRING sValue;
+  std::wstring sValue;
   if( !__super::GetAction( sValue ) )
   {
     //  just return false.
@@ -215,7 +215,7 @@ PyObject* PyApi::GetString(PyObject *self, PyObject *args) const
     return Fail();
   }
 
-  MYODD_STRING sValue;
+  std::wstring sValue;
   if( !__super::GetString( sValue, iQuote == 1) )
   {
     // we have nothing
@@ -246,7 +246,7 @@ PyObject* PyApi::GetFile(PyObject *self, PyObject *args) const
       return Fail();
     }
 
-    MYODD_STRING sValue;
+    std::wstring sValue;
     if (!__super::GetFile(idx, sValue, (iQuote == 1)))
     {
       // return false, nothing was found.
@@ -282,7 +282,7 @@ PyObject* PyApi::GetFolder(PyObject *self, PyObject *args) const
       return Fail();
     }
 
-    MYODD_STRING sValue;
+    std::wstring sValue;
     if (!__super::GetFolder(idx, sValue, (iQuote == 1)))
     {
       // return false, nothing was found.
@@ -318,7 +318,7 @@ PyObject* PyApi::GetUrl(PyObject *self, PyObject *args) const
       return Fail();
     }
 
-    MYODD_STRING sValue;
+    std::wstring sValue;
     if (!__super::GetUrl(idx, sValue, (iQuote == 1)))
     {
       // return false, nothing was found.
@@ -437,7 +437,7 @@ PyObject* PyApi::GetVersion(PyObject *self, PyObject *args) const
 {
   try
   {
-    MYODD_STRING sValue = _T("");
+    std::wstring sValue = _T("");
     if (!__super::GetVersion(sValue))
     {
       // we have nothing

@@ -195,7 +195,7 @@ bool PowershellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& act
  * \param pluginPath the path to the plugin
  * \param uuid the unique id
  */
-MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(
+std::wstring PowershellVirtualMachine::GetCommandLineArguments(
   const IActiveAction& action,
   const std::wstring& dllFullPath,
   const std::wstring& dllInterfaceFullPath,
@@ -219,7 +219,7 @@ MYODD_STRING PowershellVirtualMachine::GetCommandLineArguments(
  * \param file the file we are checking
  * \return bool true|false if the given extension is powershell or not.
  */
-bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
+bool PowershellVirtualMachine::IsExt(const std::wstring& file)
 {
   return myodd::files::IsExtension(file, _T("ps1"));
 }
@@ -229,7 +229,7 @@ bool PowershellVirtualMachine::IsExt(const MYODD_STRING& file)
  * \param szPath the path, if we find it.
  * \return boolean if we managed to locate the exe
  */
-bool PowershellVirtualMachine::Powershell3Path(MYODD_STRING& szPath)
+bool PowershellVirtualMachine::Powershell3Path(std::wstring& szPath)
 {
   // does it even exist?
   if (!IsPowershell3Installed())
@@ -240,7 +240,7 @@ bool PowershellVirtualMachine::Powershell3Path(MYODD_STRING& szPath)
   }
 
   //  the return path.
-  MYODD_STRING szRegPath = _T("");
+  std::wstring szRegPath = _T("");
   if (!myodd::reg::LoadStringFullPath(_T("SOFTWARE\\Microsoft\\PowerShell\\3\\PowerShellEngine"), _T("ApplicationBase"), szRegPath, HKEY_LOCAL_MACHINE))
   {
     // this does not make sense.

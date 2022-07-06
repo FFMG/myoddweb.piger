@@ -22,5 +22,5 @@ public:
   explicit ActionLoad(IApplication& application);
 	virtual ~ActionLoad();
 
-  IActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) const override;
+  IActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const override;
 };

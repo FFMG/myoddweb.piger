@@ -31,7 +31,7 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  void write<MYODD_STRING>( const MYODD_STRING& item, unsigned char*& pData, size_t& ulOffset );
+  void write<std::wstring>( const std::wstring& item, unsigned char*& pData, size_t& ulOffset );
 
   template <typename T>
   void write( const T*& item, unsigned char*& pData, size_t& ulOffset )
@@ -60,7 +60,7 @@ namespace myodd{ namespace offset{
   }
 
   template<>
-  bool read<MYODD_STRING>( MYODD_STRING& item, const void* pData, size_t& ulOffset, size_t uiMaxSize );
+  bool read<std::wstring>( std::wstring& item, const void* pData, size_t& ulOffset, size_t uiMaxSize );
 
   template<typename T>
   bool read( T*& item, const void* pData, size_t& ulOffset, size_t uiMaxSize )

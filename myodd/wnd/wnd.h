@@ -18,7 +18,7 @@ namespace myodd{ namespace wnd{
   void MessagePump(HWND hwnd);
 
   // -- Strings
-  MYODD_STRING GetText( HWND hwndParent, WORD id, bool bTrim = true ); 
+  std::wstring GetText( HWND hwndParent, WORD id, bool bTrim = true ); 
 
   // -- numbers.
   int GetInt      ( HWND hwndParent, WORD id, int iDefault=0 ); 
@@ -35,7 +35,7 @@ namespace myodd{ namespace wnd{
 
   bool SetFocus( HWND hwndParent, WORD id );
 
-  bool SetText( HWND hwndParent, WORD id, const MYODD_STRING& s );
+  bool SetText( HWND hwndParent, WORD id, const std::wstring& s );
   bool SetText( HWND hwndParent, WORD id, const MYODD_CHAR* lp );
   bool SetText( HWND hwndParent, WORD id, int i );
   bool SetText( HWND hwndParent, WORD id, double d, const MYODD_CHAR* pszFormat );

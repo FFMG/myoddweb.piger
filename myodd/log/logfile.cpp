@@ -331,7 +331,7 @@ namespace myodd{ namespace log{
       _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y/%m/%d %H:%M:%S"), &tStarted );
 
       //  build the return message.
-      MYODD_STRING stdMsg = szDateLogStarted;
+      std::wstring stdMsg = szDateLogStarted;
       stdMsg += _T(" ") + myodd::strings::ToString( uiType, _T("%04d") );
       stdMsg += _T(" ");
       stdMsg += (pszLine ? pszLine : _T(""));

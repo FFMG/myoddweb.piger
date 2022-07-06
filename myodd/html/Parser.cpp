@@ -160,8 +160,8 @@ void Parser::Add(const MYODD_CHAR* begin, const MYODD_CHAR* end, const bool isHt
     myodd::strings::Replace( hd->text, _T("&lt;"), _T("<"), false);
     myodd::strings::Replace( hd->text, _T("&gt;"), _T(">"), false);
     myodd::strings::Replace( hd->text, _T("&amp;"), _T("&"), false);
-    myodd::strings::Replace( hd->text, _T("&deg;"),  MYODD_STRING(1, MYODD_CHAR(176)), false);    //  degree
-    myodd::strings::Replace( hd->text, _T("&plusmn;"),  MYODD_STRING(1, MYODD_CHAR(177)), false); //  Plus/minus symbol
+    myodd::strings::Replace( hd->text, _T("&deg;"),  std::wstring(1, MYODD_CHAR(176)), false);    //  degree
+    myodd::strings::Replace( hd->text, _T("&plusmn;"),  std::wstring(1, MYODD_CHAR(177)), false); //  Plus/minus symbol
   }
 
   // add this to the list.

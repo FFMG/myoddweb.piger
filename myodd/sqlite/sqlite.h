@@ -7,14 +7,14 @@
 #include "../string/string.h"
 #include <vector>
 
-typedef std::vector<MYODD_STRING> SQL_ROW;  //  one row
+typedef std::vector<std::wstring> SQL_ROW;  //  one row
 typedef std::vector<SQL_ROW> SQL_ROWS;     //  many rows.
 struct SQL_DATA
 {
   SQL_ROW sqlRowName;
   SQL_ROWS sqlRowsData;
   int nErrorCode;
-  MYODD_STRING szErrorMessage;
+  std::wstring szErrorMessage;
   unsigned long ulQueryTimeMS;
 };
 

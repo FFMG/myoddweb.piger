@@ -8,7 +8,7 @@ public:
   explicit PowershellVirtualMachine(IApplication& application, IMessagesHandler& messagesHandler, IIpcListener& iIpcListener);
   virtual ~PowershellVirtualMachine();
 
-  static bool IsExt(const MYODD_STRING& file);
+  static bool IsExt(const std::wstring& file);
 
   //  handle the post message.
   bool HandleIpcMessage(ExecuteApi& api, const myodd::os::IpcData& ipcRequest, myodd::os::IpcData& ipcResponse) override;
@@ -17,7 +17,7 @@ public:
 
 private:
   static bool IsPowershell3Installed();
-  static bool Powershell3Path(MYODD_STRING& szPath);
+  static bool Powershell3Path(std::wstring& szPath);
 
 protected:
   /**
@@ -28,7 +28,7 @@ protected:
    * \param pluginPath the path to the plugin
    * \param uuid the unique id
    */
-  virtual MYODD_STRING GetCommandLineArguments(
+  virtual std::wstring GetCommandLineArguments(
     const IActiveAction& action,
     const std::wstring& dllFullPath,
     const std::wstring& dllInterfaceFullPath,

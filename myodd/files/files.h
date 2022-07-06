@@ -15,79 +15,79 @@ namespace myodd{ namespace files{
 void Test();  //  test data
 
 // remove the file extension
-void StripExtension( MYODD_STRING& filename );
-void AddExtension( MYODD_STRING& filename, const MYODD_STRING& extension, bool strip_current_if_exists );
+void StripExtension( std::wstring& filename );
+void AddExtension( std::wstring& filename, const std::wstring& extension, bool strip_current_if_exists );
 
-MYODD_STRING GetExtension( const MYODD_STRING& filename );
-bool IsExtension(const MYODD_STRING& fOriginal, const MYODD_STRING& fExt);
+std::wstring GetExtension( const std::wstring& filename );
+bool IsExtension(const std::wstring& fOriginal, const std::wstring& fExt);
 
 // remove a leading back slash
-void RemoveLeadingBackSlash( MYODD_STRING& szPath);
+void RemoveLeadingBackSlash( std::wstring& szPath);
 
 // remove a trialling back slash
-void RemoveTrailingBackSlash( MYODD_STRING& szPath);
+void RemoveTrailingBackSlash( std::wstring& szPath);
 
 // add a trialling backlash
-void AddTrailingBackSlash( MYODD_STRING& subPath );
+void AddTrailingBackSlash( std::wstring& subPath );
 
 // expand the environment variables.
 bool ExpandEnvironment(const MYODD_CHAR* src, MYODD_CHAR*& dest );
-bool ExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest );
+bool ExpandEnvironment( const std::wstring& src, std::wstring& dest );
 
 // un-expand the path and replace environment variables.
 bool UnExpandEnvironment(const MYODD_CHAR* src, MYODD_CHAR*& dest );
-bool UnExpandEnvironment( const MYODD_STRING& src, MYODD_STRING& dest );
+bool UnExpandEnvironment( const std::wstring& src, std::wstring& dest );
 
 // create a full path variable.
 bool CreateFullDirectory(const MYODD_CHAR* c, bool bIsFile );
-bool CreateFullDirectory( const MYODD_STRING& c, bool bIsFile );
+bool CreateFullDirectory( const std::wstring& c, bool bIsFile );
 
-bool IsDirectory( const MYODD_STRING& givenDirectory );
-bool IsURL( const MYODD_STRING& givenUrl );
-bool IsDot( const MYODD_STRING& givenFile );
-bool IsFile( const MYODD_STRING& givenFile );
+bool IsDirectory( const std::wstring& givenDirectory );
+bool IsURL( const std::wstring& givenUrl );
+bool IsDot( const std::wstring& givenFile );
+bool IsFile( const std::wstring& givenFile );
 
-bool FileExists( const MYODD_STRING& c );
+bool FileExists( const std::wstring& c );
 bool FileExists(const MYODD_CHAR* c );
 
-bool DirectoryExists( const MYODD_STRING& c );
+bool DirectoryExists( const std::wstring& c );
 bool DirectoryExists( const MYODD_CHAR* c );
 
 bool DeleteFile(const MYODD_CHAR* c );
-bool DeleteFile( const MYODD_STRING& c );
+bool DeleteFile( const std::wstring& c );
 
-bool CopyFile( const MYODD_STRING& lpExistingFileName, const MYODD_STRING& lpNewFileName, unsigned long* dwErr = 0 );
+bool CopyFile( const std::wstring& lpExistingFileName, const std::wstring& lpNewFileName, unsigned long* dwErr = 0 );
 bool CopyFile(const MYODD_CHAR* lpExistingFileName, const MYODD_CHAR* lpNewFileName, unsigned long* dwErr = 0 );
 
-bool HasFileInformationChanged( const MYODD_STRING& file, const BY_HANDLE_FILE_INFORMATION& info );
+bool HasFileInformationChanged( const std::wstring& file, const BY_HANDLE_FILE_INFORMATION& info );
 bool HasFileInformationChanged(const MYODD_CHAR* file, const BY_HANDLE_FILE_INFORMATION& info );
 
-bool GetFileInformationByName( const MYODD_STRING& file, BY_HANDLE_FILE_INFORMATION& info );
+bool GetFileInformationByName( const std::wstring& file, BY_HANDLE_FILE_INFORMATION& info );
 bool GetFileInformationByName(const MYODD_CHAR* file, BY_HANDLE_FILE_INFORMATION& info );
 
-MYODD_STRING GetFileName( const MYODD_STRING& givenPath, bool bExpand = true );
+std::wstring GetFileName( const std::wstring& givenPath, bool bExpand = true );
 
-MYODD_STRING GetBaseFromFile(const MYODD_CHAR* lpPath, bool bExpand = true, bool bAddTrailing = true );
-MYODD_STRING GetBaseFromFile( const MYODD_STRING& stdPath, bool bExpand = true, bool bAddTrailing = true );
+std::wstring GetBaseFromFile(const MYODD_CHAR* lpPath, bool bExpand = true, bool bAddTrailing = true );
+std::wstring GetBaseFromFile( const std::wstring& stdPath, bool bExpand = true, bool bAddTrailing = true );
 
-MYODD_STRING GetAppPath( bool bAddTrailing =true);
+std::wstring GetAppPath( bool bAddTrailing =true);
 
-bool GetAbsolutePath( MYODD_STRING& dest, const MYODD_STRING& givenRelative, const MYODD_STRING& givenOrigin );
+bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, const std::wstring& givenOrigin );
 
-void CleanFileName( MYODD_STRING& dirtyFileName );
+void CleanFileName( std::wstring& dirtyFileName );
 
-bool GetFullTempFileName( MYODD_STRING& stdFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt );
+bool GetFullTempFileName( std::wstring& stdFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt );
 bool GetFullTempFileName(MYODD_CHAR*& lpFileName, const MYODD_CHAR* lpPrefix, const MYODD_CHAR* lpExt );
 
-bool GetFullTempFileName( MYODD_STRING& stdFullPathFileName, const MYODD_CHAR* lpFileName );
+bool GetFullTempFileName( std::wstring& stdFullPathFileName, const MYODD_CHAR* lpFileName );
 bool GetFullTempFileName(MYODD_CHAR*& lpFullPathFileName, const MYODD_CHAR* lpFileName );
 
-long GetFileSizeInBytes( const MYODD_STRING& stdFullPathFileName);
+long GetFileSizeInBytes( const std::wstring& stdFullPathFileName);
 
 size_t GetKeys
 ( 
   const MYODD_CHAR* lpFileName,
-  std::vector<MYODD_STRING>& tokens,
+  std::vector<std::wstring>& tokens,
   const MYODD_CHAR* lpAppName,
   const MYODD_CHAR* lpWild = nullptr
 );
@@ -109,7 +109,7 @@ MYODD_CHAR* ReadFile(const MYODD_CHAR* file, __int64 nStartPos = -1, __int64 nEn
 
 MYODD_CHAR* Byte2Char( const char* buf, size_t len, FileEncode fileEncoding );
 
-void Join( MYODD_STRING& returnPath, const MYODD_STRING& pathPartA, const MYODD_STRING& pathPartB );
+void Join( std::wstring& returnPath, const std::wstring& pathPartA, const std::wstring& pathPartB );
 
 // get the version of a given file.
 class Version

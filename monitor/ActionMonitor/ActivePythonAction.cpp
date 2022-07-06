@@ -4,7 +4,7 @@
 /**
  * \copydoc
  */
-ActivePythonAction::ActivePythonAction(IApplication& application, const IAction& src, IVirtualMachine& virtualMachine, HWND hTopHWnd, const MYODD_STRING& szCommandLine, bool isPrivileged) :
+ActivePythonAction::ActivePythonAction(IApplication& application, const IAction& src, IVirtualMachine& virtualMachine, HWND hTopHWnd, const std::wstring& szCommandLine, bool isPrivileged) :
   ActiveVirtualMachineAction( application, src, virtualMachine, hTopHWnd, szCommandLine, isPrivileged )
 {
 }

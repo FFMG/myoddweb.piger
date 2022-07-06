@@ -18,7 +18,7 @@ namespace myodd{ namespace log{
     bool Initialise(const std::wstring& lpPath, const std::wstring& lpPrefix, const std::wstring& lpExtention, size_t maxFileSize );
     bool IsOpen() const;
     bool LogToFile( unsigned int uiType, const MYODD_CHAR* pszLine );
-    const MYODD_STRING& GetCurrentLogFile() const{
+    const std::wstring& GetCurrentLogFile() const{
       return m_sCurrentFile;
     }
 
@@ -38,10 +38,10 @@ namespace myodd{ namespace log{
     bool Create();
     void ValidateDateAndSize();
 
-    MYODD_STRING m_sPrefix;
-    MYODD_STRING m_sExtention;
-    MYODD_STRING m_sDirectory;
-    MYODD_STRING m_sCurrentFile;
+    std::wstring m_sPrefix;
+    std::wstring m_sExtention;
+    std::wstring m_sDirectory;
+    std::wstring m_sCurrentFile;
     bool m_bInOpenCall;
     FILE* m_fp;
     __int64 m_uCurrentSize;

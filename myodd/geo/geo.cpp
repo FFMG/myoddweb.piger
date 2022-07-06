@@ -434,7 +434,7 @@ void decimalToDegree
  */
 double positionToDecimal(const MYODD_CHAR* lpString )
 {
-  MYODD_STRING sPos( lpString );
+  std::wstring sPos( lpString );
   sPos = myodd::strings::Replace( sPos, _T("&apos;"), _T("'") );
   sPos = myodd::strings::Replace( sPos, _T("&quot;"), _T("\"") );
 

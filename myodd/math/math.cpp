@@ -59,7 +59,7 @@ void Test()
   assert( ToBase10( _T("100"), 36 ) == 1296 );
 
   // the other way around.
-  MYODD_STRING ret = _T("");                         // base 36
+  std::wstring ret = _T("");                         // base 36
   ToBase( ret, 10, 36 );
   assert( ret == _T("A") );
   ToBase( ret, 100, 36 );
@@ -466,11 +466,11 @@ int __fastcall ToBase10(const MYODD_CHAR* udata, BYTE fromBase)
 
 /**
  * Convert a base 10 number to a given BASE.
- * @param MYODD_STRING& the container to the return value.
+ * @param std::wstring& the container to the return value.
  * @param unsigned int the base 10 number.
  * @return NULL|string the converted number.
  */
-const MYODD_CHAR* __fastcall ToBase( MYODD_STRING& ret, unsigned int base10number, BYTE base)
+const MYODD_CHAR* __fastcall ToBase( std::wstring& ret, unsigned int base10number, BYTE base)
 {
   //  reset the return value.
   ret = _T("");
@@ -537,20 +537,20 @@ int random_range(int lowest_number, int highest_number)
 }
 
 /**
- * string conversions of MYODD_STRING
+ * string conversions of std::wstring
  * @see _tstof
- * @param const MYODD_STRING& the number we want to convert.
+ * @param const std::wstring& the number we want to convert.
  * @return double the double conversion of the string
  */
-double std_tstof(const MYODD_STRING& s)
+double std_tstof(const std::wstring& s)
 {
   return _tstof( s.c_str() );
 }
 
 /**
- * string conversions of MYODD_STRING
+ * string conversions of std::wstring
  * @see _tstol
- * @param const MYODD_STRING& the number we want to convert.
+ * @param const std::wstring& the number we want to convert.
  * @return long the long conversion of the string
  */
 template<>
@@ -626,12 +626,12 @@ double Convert<const std::string&, double>(const std::string& src)
 }
 
 /**
- * string conversions of MYODD_STRING
+ * string conversions of std::wstring
  * @see _tstoi
- * @param const MYODD_STRING& the number we want to convert.
+ * @param const std::wstring& the number we want to convert.
  * @return int the int conversion of the string
  */
-int std_tstoi(const MYODD_STRING& s)
+int std_tstoi(const std::wstring& s)
 {
   return _tstoi( s.c_str() );
 }

@@ -13,7 +13,7 @@ public:
   bool Initialize() override;
 
   //  check the extension.
-  static bool IsExt(const MYODD_STRING& file);
+  static bool IsExt(const std::wstring& file);
 
   PyThreadState* GetMainPyThread() const {
     return _mainThreadState;

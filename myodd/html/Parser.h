@@ -15,8 +15,8 @@ public:
   struct HTMLDATA
   {
     HTMLDATA() : mIsHtmlTag(false), mToken(0), mIsEnd(false){};
-    MYODD_STRING text;
-    MYODD_STRING attributes;
+    std::wstring text;
+    std::wstring attributes;
     bool mIsHtmlTag;
     bool mIsEnd;
     Token* mToken;
