@@ -429,10 +429,10 @@ int32_t Find
  * @param std::wstring the character we want to convert.
  * @return std::wstring the lower string
  */
-std::wstring lower(const std::wstring& s)
+const std::wstring& lower(const std::wstring& s) const
 {
-  std::wstring ret = _T("");
-  BOOST_FOREACH(wchar_t tch, s )
+  std::wstring ret = L"";
+  BOOST_FOREACH(const wchar_t& tch, s )
   {
     ret += lower( tch );
   }
@@ -588,7 +588,7 @@ bool IsNumeric( const std::wstring& s, bool allowDecimal /*= true*/ )
  * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void Trim( std::wstring& str, const wchar_t* chars /*= _T( " " )*/ )
+void Trim( std::wstring& str, const wchar_t* chars /*= _T( " " )*/ ) const
 {
   TrimLeft( str, chars );
   TrimRight( str, chars );
@@ -600,11 +600,11 @@ void Trim( std::wstring& str, const wchar_t* chars /*= _T( " " )*/ )
  * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void TrimRight( std::wstring& str, const wchar_t* chars )
+void TrimRight( std::wstring& str, const wchar_t* chars ) const
 {
   if (!str.empty())
   {
-    std::string::size_type pos = str.find_first_not_of(chars);
+    const auto pos = str.find_first_not_of(chars);
     if (pos != std::string::npos)
     {
       str.erase(0,pos);
@@ -622,7 +622,7 @@ void TrimRight( std::wstring& str, const wchar_t* chars )
  * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void TrimLeft( std::wstring& str, const wchar_t* chars )
+void TrimLeft( std::wstring& str, const wchar_t* chars ) cosnt
 {
   if (!str.empty())
   {

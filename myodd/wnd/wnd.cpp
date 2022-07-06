@@ -108,7 +108,7 @@ int GetInt( HWND hwndParent, WORD id, int iDefault/*=0*/ )
   }
 
   // get the text
-  std::wstring s = GetText( hwndParent, id );
+  const auto& s = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -143,7 +143,7 @@ long GetLong( HWND hwndParent, WORD id, long lDefault/*=0*/ )
   }
 
   // get the text
-  std::wstring s = GetText( hwndParent, id );
+  const auto & = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -178,7 +178,7 @@ double GetDouble( HWND hwndParent, WORD id, double dDefault/*=0*/ )
   }
 
   // get the text
-  std::wstring s = GetText( hwndParent, id );
+  const auto & = GetText( hwndParent, id );
   size_t length = s.length();
   if( length == 0 )
   {
@@ -201,7 +201,7 @@ double GetDouble( HWND hwndParent, WORD id, double dDefault/*=0*/ )
  * @param bool if we want to trim the return value.
  * @return std::wstring the value been held by the control.
  */
-std::wstring GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ )
+const std::wstring& GetText( HWND hwndParent, WORD id, bool bTrim /*= true*/ ) const
 {
   HWND hwnd = _getDlgItem( hwndParent, id );
   if( NULL == hwnd )

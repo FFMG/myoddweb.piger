@@ -1133,9 +1133,9 @@ bool GetFileInformationByName(const wchar_t* file, BY_HANDLE_FILE_INFORMATION& i
  * @param bool add the trailing backslash or remove it.
  * @return std::wstring the path of the current exe.
  */
-std::wstring GetAppPath( bool bAddtrailing /*=true*/)
+const std::wstring& GetAppPath( bool bAddtrailing /*=true*/) const
 {
-  std::wstring sReturn = _T("");
+  std::wstring sReturn = L"";
   auto lpBuffer = new wchar_t[ T_MAX_PATH ];
   if (GetModuleFileName( nullptr, lpBuffer, T_MAX_PATH ) != 0)
   {
