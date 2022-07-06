@@ -1,4 +1,4 @@
-# Description [![release](https://img.shields.io/badge/release-v0.9.2.2-brightgreen.png?style=default)](https://github.com/FFMG/myoddweb.piger/releases/latest) [![Chocolatey](https://img.shields.io/chocolatey/dt/myoddweb.piger.svg?label=Chocolatey)](https://chocolatey.org/packages/myoddweb.piger)
+# Description [![release](https://img.shields.io/badge/release-v0.9.3.0-brightgreen.png?style=default)](https://github.com/FFMG/myoddweb.piger/releases/latest) [![Chocolatey](https://img.shields.io/chocolatey/dt/myoddweb.piger.svg?label=Chocolatey)](https://chocolatey.org/packages/myoddweb.piger)
 
 Piger is a Keyboard Launcher allowing you to run your own commands from your keyboard. Highlight a word hold the caps lock key and simply type 'Google' to search for it in your browser. You can create your own commands, in LUA, Python, C++ and more.
 
@@ -40,6 +40,7 @@ The full path of the commands directory.
 ### For extra points...
 
 - Write your own script, (see below).
+  - Write .NET plugin (csharp)
   - For Python, add the *.py extension
   - For Lua, add the *.lua extension
   - For batch files, add the *.bat extension
