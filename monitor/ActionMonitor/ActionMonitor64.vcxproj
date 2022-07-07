@@ -162,6 +162,10 @@
     <PostBuildEvent>
       <Command>call postbuild.bat "$(TargetDir)" 64</Command>
     </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\api\csapi.cpp" />

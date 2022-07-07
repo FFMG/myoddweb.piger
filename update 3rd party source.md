@@ -92,7 +92,7 @@ Download the actual python from [https://www.python.org/downloads/release/python
 
 ## Google test
 
-- Download the latest version from [https://github.com/google/googletest/releases](https://github.com/google/googletest/releases), get the amalgamation file, (the file is normally called "sqlite-amalgamation-*.zip")
+- Download the latest version from [https://github.com/google/googletest/releases](https://github.com/google/googletest/releases)
 - Unzip the files to *\myoddweb.piger\myodd\gtest\gtest-x.y.z\*.** where `xyz` is the new version number.     
 **NB:** In the zip file only unpack the `googletest` folder, `googletest-release-x.y.z\googletest` where x.y.z is the compressed file name.
 
