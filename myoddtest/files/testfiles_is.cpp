@@ -52,7 +52,7 @@ TEST_P(MyOddFilesIsDirectory, TestIsDirectory)
   ASSERT_EQ(is, myodd::files::IsDirectory(given));
 }
 
-INSTANTIATE_TEST_CASE_P(TestIsDirectoryEnvironment, MyOddFilesIsDirectory,
+INSTANTIATE_TEST_SUITE_P(TestIsDirectoryEnvironment, MyOddFilesIsDirectory,
   testing::Values(
     test_istype{ L"%appdata%", true },
     test_istype{ L"%ALLUSERSPROFILE%", true },
@@ -66,7 +66,7 @@ INSTANTIATE_TEST_CASE_P(TestIsDirectoryEnvironment, MyOddFilesIsDirectory,
     test_istype{ L"%USERPROFILE%", true }
   ));
 
-INSTANTIATE_TEST_CASE_P(TestIsDot, MyOddFilesIsDot,
+INSTANTIATE_TEST_SUITE_P(TestIsDot, MyOddFilesIsDot,
   testing::Values(
     test_istype{ L".", true },
     test_istype{ L"..", true },
@@ -83,7 +83,7 @@ INSTANTIATE_TEST_CASE_P(TestIsDot, MyOddFilesIsDot,
     test_istype{ L"c:/example/../root/", false }
   ));
 
-INSTANTIATE_TEST_CASE_P(TestIsUrl, MyOddFilesIsUrl,
+INSTANTIATE_TEST_SUITE_P(TestIsUrl, MyOddFilesIsUrl,
   testing::Values(
     test_istype{ L"", false },
     test_istype{ L"          ", false },
@@ -119,7 +119,7 @@ INSTANTIATE_TEST_CASE_P(TestIsUrl, MyOddFilesIsUrl,
   ));
 
 //  http://formvalidation.io/validators/uri/
-INSTANTIATE_TEST_CASE_P(TestValidUrls, MyOddFilesIsUrl,
+INSTANTIATE_TEST_SUITE_P(TestValidUrls, MyOddFilesIsUrl,
   testing::Values(
     test_istype{ L"http://उदाहरण.परीक्षा", true },
     test_istype{ L"http://☺.damowmow.com/", true },
@@ -162,7 +162,7 @@ INSTANTIATE_TEST_CASE_P(TestValidUrls, MyOddFilesIsUrl,
   ));
 
 //  http://formvalidation.io/validators/uri/
-INSTANTIATE_TEST_CASE_P(TestInvalidUrls, MyOddFilesIsUrl,
+INSTANTIATE_TEST_SUITE_P(TestInvalidUrls, MyOddFilesIsUrl,
   testing::Values(
   test_istype{ L"http://", false },
   test_istype{ L"http://.", false },

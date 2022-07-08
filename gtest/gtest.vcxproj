@@ -45,12 +45,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
-    <IncludePath>.\..\gtest\gtest-1.8.0\include;.\..\gtest\gtest-1.8.0\;$(IncludePath)</IncludePath>
+    <IncludePath>.\..\gtest\gtest-1.12.1\include;.\..\gtest\gtest-1.12.1\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\</OutDir>
     <IntDir>$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\$(ProjectName)\</IntDir>
-    <IncludePath>.\..\gtest\gtest-1.8.0\include;.\..\gtest\gtest-1.8.0\;$(IncludePath)</IncludePath>
+    <IncludePath>.\..\gtest\gtest-1.12.1\include;.\..\gtest\gtest-1.12.1\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -90,11 +90,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gtest-1.8.1\src\gtest-all.cc">
+    <ClCompile Include="gtest-1.12.1\src\gtest-all.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="gtest-1.8.1\src\gtest_main.cc">
+    <ClCompile Include="gtest-1.12.1\src\gtest_main.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

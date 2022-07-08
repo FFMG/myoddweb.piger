@@ -93,7 +93,7 @@ Download the actual python from [https://www.python.org/downloads/release/python
 ## Google test
 
 - Download the latest version from [https://github.com/google/googletest/releases](https://github.com/google/googletest/releases)
-- Unzip the files to *\myoddweb.piger\myodd\gtest\gtest-x.y.z\*.** where `xyz` is the new version number.     
+- Unzip the files to *\myoddweb.piger\gtest\gtest-x.y.z\*.** where `xyz` is the new version number.     
 **NB:** In the zip file only unpack the `googletest` folder, `googletest-release-x.y.z\googletest` where x.y.z is the compressed file name.
 
 - In the x64 and x86 remove the 2 files that are pointing to the older version: 
@@ -103,6 +103,7 @@ Download the actual python from [https://www.python.org/downloads/release/python
   - gtest_main.cc
   - gtest-all.cc
 - Make sure that the files don't use 'precompiled headers', (Properties > C/C++ > Precompiled headers)
+- Update all the include path to the new folder.
 - For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.    
 Make sure that the setting is for both debug and release version. 
 
@@ -110,6 +111,6 @@ Make sure that the setting is for both debug and release version.
 
 - Update `myoddtest` and `myoddtest64` to point to the folder you unpacked the files above, \myoddweb.piger\myodd\gtest\gtest-x.y.z    
 Properties > C/C++ > General > Additional Include directories 
-  - `.\..\gtest\gtest-1.8.1\include;`
-  - `.\..\gtest\gtest-1.8.1\`
+  - `.\..\gtest\gtest-1.12.1\include;`
+  - `.\..\gtest\gtest-1.12.1\`
 - For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.

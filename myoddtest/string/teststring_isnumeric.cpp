@@ -46,7 +46,7 @@ TEST_P(MyOddStringIsNumericWithAllowDecimals, UseAllowDecimalsFlag)
   ASSERT_EQ(is, myodd::strings::IsNumeric(given, allowDecimals));
 }
 
-INSTANTIATE_TEST_CASE_P(NegativeStrings, MyOddStringIsNumeric,
+INSTANTIATE_TEST_SUITE_P(NegativeStrings, MyOddStringIsNumeric,
   testing::Values(
     test_isnumeric{ L"-1", true },
     test_isnumeric{ L"-0", true },
@@ -58,7 +58,7 @@ INSTANTIATE_TEST_CASE_P(NegativeStrings, MyOddStringIsNumeric,
     test_isnumeric{ L"-1.1.1", false }
 ));
 
-INSTANTIATE_TEST_CASE_P(NegativeStringsDecimalsAllowed, MyOddStringIsNumericWithAllowDecimals,
+INSTANTIATE_TEST_SUITE_P(NegativeStringsDecimalsAllowed, MyOddStringIsNumericWithAllowDecimals,
   testing::Values(
     test_isnumeric{ L"-1", true, true },
     test_isnumeric{ L"-0", true, true },
@@ -70,7 +70,7 @@ INSTANTIATE_TEST_CASE_P(NegativeStringsDecimalsAllowed, MyOddStringIsNumericWith
     test_isnumeric{ L"-1.1.1", false, true }
 ));
 
-INSTANTIATE_TEST_CASE_P(NegativeStringsDecimalsNotAllowed, MyOddStringIsNumericWithAllowDecimals,
+INSTANTIATE_TEST_SUITE_P(NegativeStringsDecimalsNotAllowed, MyOddStringIsNumericWithAllowDecimals,
   testing::Values(
     test_isnumeric{ L"-1", true, false },
     test_isnumeric{ L"-0", true, false },
@@ -83,7 +83,7 @@ INSTANTIATE_TEST_CASE_P(NegativeStringsDecimalsNotAllowed, MyOddStringIsNumericW
     test_isnumeric{ L"-1.1.1", false, false }
 ));
 
-INSTANTIATE_TEST_CASE_P(PositiveStrings, MyOddStringIsNumeric,
+INSTANTIATE_TEST_SUITE_P(PositiveStrings, MyOddStringIsNumeric,
   testing::Values(
     test_isnumeric{ L"1", true },
     test_isnumeric{ L"+0", true },
@@ -102,7 +102,7 @@ INSTANTIATE_TEST_CASE_P(PositiveStrings, MyOddStringIsNumeric,
     test_isnumeric{ L"   10 . 4   ", false }
 ));
 
-INSTANTIATE_TEST_CASE_P(PositiveStringsDecimalsNotAllowed, MyOddStringIsNumericWithAllowDecimals,
+INSTANTIATE_TEST_SUITE_P(PositiveStringsDecimalsNotAllowed, MyOddStringIsNumericWithAllowDecimals,
   testing::Values(
     test_isnumeric{ L"1", true, false },
     test_isnumeric{ L"+0", true, false },
@@ -121,7 +121,7 @@ INSTANTIATE_TEST_CASE_P(PositiveStringsDecimalsNotAllowed, MyOddStringIsNumericW
     test_isnumeric{ L"   10 . 4   ", false, false }
 ));
 
-INSTANTIATE_TEST_CASE_P(MiscStrings, MyOddStringIsNumeric,
+INSTANTIATE_TEST_SUITE_P(MiscStrings, MyOddStringIsNumeric,
   testing::Values(
     test_isnumeric{ L"-", false },
     test_isnumeric{ L".", false },
@@ -139,7 +139,7 @@ INSTANTIATE_TEST_CASE_P(MiscStrings, MyOddStringIsNumeric,
     test_isnumeric{ L"        ", false } //  empty
 ));
 
-INSTANTIATE_TEST_CASE_P(MiscStringsWithDecimalFlag, MyOddStringIsNumericWithAllowDecimals,
+INSTANTIATE_TEST_SUITE_P(MiscStringsWithDecimalFlag, MyOddStringIsNumericWithAllowDecimals,
   testing::Values(
     test_isnumeric{ L"-", false, false },
     test_isnumeric{ L".", false, false },

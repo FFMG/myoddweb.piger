@@ -87,7 +87,7 @@ TEST_P(MyOddStringWideStringIsEmpty, IsEmptyDefaultParams)
   ASSERT_EQ(is, myodd::strings::IsEmptyString(given));
 }
 
-INSTANTIATE_TEST_CASE_P(CheckEmptyWChar, MyOddStringWideCharIsEmpty,
+INSTANTIATE_TEST_SUITE_P(CheckEmptyWChar, MyOddStringWideCharIsEmpty,
   testing::Values(
     test_is_empty_wchar_t{ L"     ", true },
     test_is_empty_wchar_t{ L"", true },
@@ -99,7 +99,7 @@ INSTANTIATE_TEST_CASE_P(CheckEmptyWChar, MyOddStringWideCharIsEmpty,
     test_is_empty_wchar_t{ nullptr, true }
 ));
 
-INSTANTIATE_TEST_CASE_P(CheckEmptyChar, MyOddStringCharIsEmpty,
+INSTANTIATE_TEST_SUITE_P(CheckEmptyChar, MyOddStringCharIsEmpty,
   testing::Values(
     test_is_empty_char{ "     ", true },
     test_is_empty_char{ "", true },
@@ -111,7 +111,7 @@ INSTANTIATE_TEST_CASE_P(CheckEmptyChar, MyOddStringCharIsEmpty,
     test_is_empty_char{ nullptr, true }
 ));
 
-INSTANTIATE_TEST_CASE_P(CheckEmptyWideStrings, MyOddStringWideStringIsEmpty,
+INSTANTIATE_TEST_SUITE_P(CheckEmptyWideStrings, MyOddStringWideStringIsEmpty,
   testing::Values(
     test_is_empty_wstring{ L"     ", true },
     test_is_empty_wstring{ L"", true },
@@ -122,7 +122,7 @@ INSTANTIATE_TEST_CASE_P(CheckEmptyWideStrings, MyOddStringWideStringIsEmpty,
     test_is_empty_wstring{ L"                  ", true }
 ));
 
-INSTANTIATE_TEST_CASE_P(CheckEmptyStrings, MyOddStringStringIsEmpty,
+INSTANTIATE_TEST_SUITE_P(CheckEmptyStrings, MyOddStringStringIsEmpty,
   testing::Values(
     test_is_empty_string{ "     ", true },
     test_is_empty_string{ "", true },

@@ -55,7 +55,7 @@ TEST_P(MyOddFilesBaseFromFileExpandAppData, TestBaseFromFileAndExpand)
   ASSERT_EQ(expected, myodd::files::GetBaseFromFile(given, expand, trailing));
 }
 
-INSTANTIATE_TEST_CASE_P(TestBaseFromFile, MyOddFilesBaseFromFileExpandAppData,
+INSTANTIATE_TEST_SUITE_P(TestBaseFromFile, MyOddFilesBaseFromFileExpandAppData,
   testing::Values(
     test_basefromfile{ L"%appdata%\\filename.txt", L"%appdata%\\", true, true },
     test_basefromfile{ L"%appdata%\\filename.txt", L"%appdata%\\", false, true },
@@ -63,7 +63,7 @@ INSTANTIATE_TEST_CASE_P(TestBaseFromFile, MyOddFilesBaseFromFileExpandAppData,
     test_basefromfile{ L"%appdata%\\filename.txt", L"%appdata%", false, false }
 ));
 
-INSTANTIATE_TEST_CASE_P(TestBaseFromFile, MyOddFilesBaseFromFile,
+INSTANTIATE_TEST_SUITE_P(TestBaseFromFile, MyOddFilesBaseFromFile,
   testing::Values(
     test_basefromfile{ L"filename.txt", L"\\", false, true },
     test_basefromfile{ L"C:\\", L"C:\\", false, true },

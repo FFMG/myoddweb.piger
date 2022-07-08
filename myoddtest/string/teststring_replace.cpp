@@ -45,7 +45,7 @@ TEST_P(MyOddStringCaseInSensitiveReplace, CaseInSensitiveReplace)
   ASSERT_EQ(expected, myodd::strings::Replace(haystack, needle, replace, false));
 }
 
-INSTANTIATE_TEST_CASE_P(VariousReplace, MyOddStringCaseSensitiveReplace,
+INSTANTIATE_TEST_SUITE_P(VariousReplace, MyOddStringCaseSensitiveReplace,
   testing::Values(
     test_replace{ L"HelloHello", L"Hello", L"No", L"NoNo" },
     test_replace{ L"HelloHello", L"Hello", L"", L"" },
@@ -64,7 +64,7 @@ INSTANTIATE_TEST_CASE_P(VariousReplace, MyOddStringCaseSensitiveReplace,
     test_replace{ L"ABC", L"D", L"X", L"ABC" }    // needle does not exit.
   ));
 
-INSTANTIATE_TEST_CASE_P(VariousReplace, MyOddStringCaseInSensitiveReplace,
+INSTANTIATE_TEST_SUITE_P(VariousReplace, MyOddStringCaseInSensitiveReplace,
   testing::Values(
     test_replace{ L"HelloHello", L"Hello", L"No", L"NoNo" },
     test_replace{ L"HelloHello", L"Hello", L"", L"" },

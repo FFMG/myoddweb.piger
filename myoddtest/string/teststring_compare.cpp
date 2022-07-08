@@ -68,7 +68,7 @@ TEST_P(MyOddStringInsensitiveCompare, CaseInsensitiveCompare)
   }
 }
 
-INSTANTIATE_TEST_CASE_P(CaseInsensitiveCompareAllTheSame, MyOddStringInsensitiveCompare,
+INSTANTIATE_TEST_SUITE_P(CaseInsensitiveCompareAllTheSame, MyOddStringInsensitiveCompare,
   testing::Values(
     test_compare{ L"Hello", L"Hello", 0 },
     test_compare{ L"Hello", L"Hello", 0 },
@@ -86,7 +86,7 @@ INSTANTIATE_TEST_CASE_P(CaseInsensitiveCompareAllTheSame, MyOddStringInsensitive
     test_compare{ L"abCD", L"ABCd", 0 }
   ));
 
-INSTANTIATE_TEST_CASE_P(CaseSensitiveCompareAllTheSame, MyOddStringSensitiveCompare,
+INSTANTIATE_TEST_SUITE_P(CaseSensitiveCompareAllTheSame, MyOddStringSensitiveCompare,
   testing::Values(
     test_compare{ L"Hello", L"Hello", 0 },
     test_compare{ L"Hello", L"Hello", 0 },
@@ -99,7 +99,7 @@ INSTANTIATE_TEST_CASE_P(CaseSensitiveCompareAllTheSame, MyOddStringSensitiveComp
 	test_compare{ L"MÖRBYLÅNGA", L"MÖRBYLÅNGA", 0 }
 ));
 
-INSTANTIATE_TEST_CASE_P(CaseInsensitiveCompareNotTheSame, MyOddStringInsensitiveCompare,
+INSTANTIATE_TEST_SUITE_P(CaseInsensitiveCompareNotTheSame, MyOddStringInsensitiveCompare,
   testing::Values(
     test_compare{ L"Hello", L"Helo", -1 },
     test_compare{ L"0", L"1", -1 },
@@ -113,7 +113,7 @@ INSTANTIATE_TEST_CASE_P(CaseInsensitiveCompareNotTheSame, MyOddStringInsensitive
     test_compare{ L"ABCd", L"abc", 1 } // unlike the test below d>null
     ));
 
-INSTANTIATE_TEST_CASE_P(CaseSensitiveCompareNotTheSame, MyOddStringSensitiveCompare,
+INSTANTIATE_TEST_SUITE_P(CaseSensitiveCompareNotTheSame, MyOddStringSensitiveCompare,
   testing::Values(
     test_compare{ L"Hello", L"Helo", -1 },
     test_compare{ L"Hello", L"hello",-1 },

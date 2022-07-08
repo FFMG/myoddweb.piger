@@ -47,7 +47,7 @@ TEST_P(MyoddOsStringTest, CheckStringValues)
   }
 }
 
-INSTANTIATE_TEST_CASE_P(Default_string, MyoddOsStringTest,
+INSTANTIATE_TEST_SUITE_P(Default_string, MyoddOsStringTest,
   testing::Values(
     test_string{ Uuid(),{ "" } },
     test_string{ Uuid(),{ "Hello world" } },
@@ -56,7 +56,7 @@ INSTANTIATE_TEST_CASE_P(Default_string, MyoddOsStringTest,
     test_string{ Uuid(),{ "\0" } }
 ));
 
-INSTANTIATE_TEST_CASE_P(Multiple_stringValues, MyoddOsStringTest,
+INSTANTIATE_TEST_SUITE_P(Multiple_stringValues, MyoddOsStringTest,
   testing::Values(
     test_string{ Uuid(),{ "", "     ", "Hello", "!@#$%^&*(" } },
     test_string{ Uuid(),{ "12345", "     ", "Hello", "!@#$%^&*(" } }    
