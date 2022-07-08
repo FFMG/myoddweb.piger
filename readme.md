@@ -170,7 +170,7 @@ Read more [code examples/notes](scripts/powershell.md).
 
 ### Python
 
-Read more about the [Powershell scripts](scripts/powershell.md)
+Read more about the [Powershell scripts](scripts/python.md)
 
 #### Code
 
@@ -201,19 +201,21 @@ import module, **import am**, (only usable within Piger of course).
 
 ##### Calculator.py
 
+```python
     # import the action monitor, (am), module.
     import am;
 
     # give a message
-    am.say( "Run - calc ...", 500, 3000);
+    am.say( "Run - calc ...", 500, 3000)
 
     # Launch the application
     # use the second parameter for arguments and 
     # the third, (true|false), is to elevate the process.
-    am.execute( "%SystemRoot%\\system32\\calc.exe", "", True );
+    am.execute( "%SystemRoot%\\system32\\calc.exe", "", True )
 
     # log that all is good.
-    am.log( 1, "Launched calculator" );
+    am.log( 1, "Launched calculator" )
+```
 
 ### Lua
 
@@ -245,6 +247,7 @@ import module, **import am**, (only usable within Piger of course).
 
 Launch the default calculator.
 
+```lua
     -- give a message
     am_say( "Run - calc ...", 400, 10 );
 
@@ -255,6 +258,7 @@ Launch the default calculator.
 
     -- log that all is good.
     am_log( 1, "Launched calculator" );
+```
 
 ##### Google.lua
 
