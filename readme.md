@@ -66,6 +66,7 @@ Of course, the main aim is for you to write your own plugins rather than been sp
 - [.NET usage](scripts/dotnet.md)
 - [C# usage](scripts/csharp.md)
 - [Powershell usage](scripts/powershell.md)
+- [Python usage](scripts/python.md)
 
 ## Scripting your own commands
 
