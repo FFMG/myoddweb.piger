@@ -170,7 +170,7 @@ Read more [code examples/notes](scripts/powershell.md).
 
 ### Python
 
-Read more about the [Powershell scripts](scripts/python.md)
+Read more about the [Python scripts](scripts/python.md)
 
 #### Code
 
