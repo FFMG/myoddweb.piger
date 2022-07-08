@@ -175,9 +175,7 @@ size_t Explode
   //  reset all
   ret.clear();
 
-  auto l = s.length();
-
-  // or return if we have no work to do.
+  // return if we have no work to do.
   // If the limit parameter is zero, then this is treated as 1.
   if( 1 == nCount || 0 == nCount )
   {
@@ -191,46 +189,59 @@ size_t Explode
     ret.reserve( nCount );
   }
 
+  // get the given vector length 
+  const auto length = s.length();
+
+  // The number of items we actually found
   size_t retSize = 0;
   size_t iLast = 0;
 
-  for( size_t pos = 0; pos < l; ++pos)
+  // NB: This loop will go _past_ the length of our string.
+  //     This is done so we can add the last string once we get the end
+  for( auto pos = 0; pos <= length; ++pos)
   {
-    if( s[pos] == strDelimit )
+    if( 
+       pos == length ||     // we reached the end of the string
+       s[pos] == strDelimit // or the char is what we are looking for.
+      )
     {
       if( bAddEmpty || (pos-iLast) > 0 )
       {
         ++retSize;
-        ret.push_back( s.substr( iLast, (pos-iLast) ));
+        if (nCount > 1 && retSize >= nCount)
+        {
+          // we have collected more items than we want.
+          // so we can just stop here and add everything else to our container.
+          ret.push_back( s.substr(iLast));
+          break;
+        }
+
+        ret.push_back( 
+            pos == length ?
+              s.substr(iLast)
+              :
+              s.substr(iLast, (pos-iLast) ));
       }
       iLast = (pos+1);
-      if( nCount >-1 && (retSize+1) >= static_cast<size_t>(nCount) )
-      {
-        // the last item will be added bellow
-        break;
-      }
     }
-  }
-
-  if( bAddEmpty || (l-iLast) > 0 )
-  {
-    // add the remainder
-    ret.push_back( s.substr( iLast ) );
-    ++retSize;
   }
 
   // If count is negative, we only return retSize - count items.
   if( nCount < 0 )
   {
-    if(static_cast<size_t>(nCount *-1) >= retSize )
+    const auto positiveCount = static_cast<const unsigned int>(nCount * -1);
+    if(positiveCount >= retSize )
     {
+      // we want less items that are actually available
+      // so we just clear the array and return;
       ret.clear();
       retSize = 0;
     }
     else
     {
-      retSize += nCount;  //  nCount is negative...
-      ret.erase( ret.begin(), ret.begin() +retSize);
+      retSize += nCount;  // nCount is negative so we want all the items
+                          // in the vector minus the last '-ve count' ones
+      ret.erase( ret.begin()+retSize, ret.end());
     }
   }
   

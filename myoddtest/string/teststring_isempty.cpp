@@ -70,8 +70,23 @@ struct MyOddStringStringIsEmpty : testing::Test, testing::WithParamInterface<tes
 {
 };
 
+TEST_P(MyOddStringCharIsEmpty, TestStringCharIsEmpty)
+{
+  auto given = GetParam().given;
+  auto is = GetParam().is;
+
+  ASSERT_EQ(is, myodd::strings::IsEmptyString(given));
+}
 
 TEST_P(MyOddStringWideCharIsEmpty, IsEmptyDefaultParams)
+{
+  auto given = GetParam().given;
+  auto is = GetParam().is;
+
+  ASSERT_EQ(is, myodd::strings::IsEmptyString(given));
+}
+
+TEST_P(MyOddStringStringIsEmpty, IsEmptyDefaultParams)
 {
   auto given = GetParam().given;
   auto is = GetParam().is;
