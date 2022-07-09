@@ -37,8 +37,8 @@ namespace myodd{ namespace strings{
   bool IsEmptyString(const std::string& s);
 
   // converst to lower case.
-  const wchar_t lower(wchar_t c ) const;
-  const std::wstring& lower(const std::wstring& s) const;
+  const wchar_t lower( const wchar_t c );
+  const std::wstring lower(const std::wstring& s);
 
   // search and replace
   std::wstring Replace( const std::wstring& haystack, const std::wstring& needle, const std::wstring& replace, bool caseSensitive = true );
@@ -216,9 +216,9 @@ namespace myodd{ namespace strings{
   bool IsNumeric( const std::wstring& s, bool allowDecimal = true);
 
   // Trims
-  void Trim( std::wstring& str, const wchar_t* chars = _T( " " ) ) const;
-  void TrimRight( std::wstring& str, const wchar_t* chars ) const;
-  void TrimLeft( std::wstring& str, const wchar_t* chars ) const;
+  void Trim( std::wstring& str, const wchar_t* chars = _T( " " ) );
+  void TrimRight( std::wstring& str, const wchar_t* chars );
+  void TrimLeft( std::wstring& str, const wchar_t* chars );
 
   wchar_t* _tcsistr(const std::wstring& string, const std::wstring& strCharSet);
   wchar_t* _tcsistr(const wchar_t* string, const wchar_t* strCharSet);

@@ -1,7 +1,7 @@
 #define APP_NAME "Myoddweb Action Monitor (Piger)";
 #define APP_PUBLISHER "myoddweb.com";
 #define APP_URL "http://www.myoddweb.com";
-#define APP_DIR "{pf}\myoddweb\piger";
+#define APP_DIR "{commonpf}\myoddweb\piger";
 #define APP_INCLUDE "..\includes\";
 
 ; The source files.
@@ -27,7 +27,7 @@ AppPublisher={#APP_PUBLISHER}
 AppPublisherURL={#APP_URL}
 AppSupportURL={#APP_URL}
 AppUpdatesURL={#APP_URL}
-DefaultDirName={pf}\myoddweb\Piger
+DefaultDirName={commonpf}\myoddweb\Piger
 DefaultGroupName=Piger
 OutputDir=/
 OutputBaseFilename=piger-{#APP_VERSION}
@@ -92,24 +92,24 @@ Type: files; Name: "{app}\AMPowerShellCmdLets.dll"
 ; Remember to update the task list as well as the InstallDelete above!
 ;
 ; x86 plugins
-Source: {#APP_SOURCE86}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginloader')
-Source: {#APP_SOURCE86}AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginapppaths')
-Source: {#APP_SOURCE86}Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('plugindolly')
-Source: {#APP_SOURCE86}OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and IsTaskSelected('pluginontop')
+Source: {#APP_SOURCE86}LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and WizardIsTaskSelected('pluginloader')
+Source: {#APP_SOURCE86}AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and WizardIsTaskSelected('pluginapppaths')
+Source: {#APP_SOURCE86}Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and WizardIsTaskSelected('plugindolly')
+Source: {#APP_SOURCE86}OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: not IsWin64 and WizardIsTaskSelected('pluginontop')
 
 ; x64 plugins
-Source: {#APP_SOURCE64}LoaderPlugin64.amp; DestName:LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginloader')
-Source: {#APP_SOURCE64}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginapppaths')
-Source: {#APP_SOURCE64}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('plugindolly')
-Source: {#APP_SOURCE64}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and IsTaskSelected('pluginontop')
+Source: {#APP_SOURCE64}LoaderPlugin64.amp; DestName:LoaderPlugin.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and WizardIsTaskSelected('pluginloader')
+Source: {#APP_SOURCE64}AppPaths64.amp; DestName:AppPaths.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and WizardIsTaskSelected('pluginapppaths')
+Source: {#APP_SOURCE64}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and WizardIsTaskSelected('plugindolly')
+Source: {#APP_SOURCE64}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and WizardIsTaskSelected('pluginontop')
 
 ; common
-Source: {#APP_SOURCE64}Dolly.NET.amp-net; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsTaskSelected('plugindollynet')
+Source: {#APP_SOURCE64}Dolly.NET.amp-net; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: WizardIsTaskSelected('plugindollynet')
 
 ; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
-Source: .\RootCommandsPS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "IsTaskSelected('pluginpowershell3') and IsPowershell3Installed"
-Source: .\RootCommandsCS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "IsTaskSelected('plugincsharp') and IsPowershell3Installed"
+Source: .\RootCommandsPS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "WizardIsTaskSelected('pluginpowershell3') and IsPowershell3Installed"
+Source: .\RootCommandsCS\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs; Check: "WizardIsTaskSelected('plugincsharp') and IsPowershell3Installed"
 
 ;
 ; All the plugins
@@ -124,12 +124,12 @@ Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinsta
 ; x86 App
 Source: {#APP_SOURCE86}ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}hook.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE86}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
+Source: {#APP_SOURCE86}python310.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 
 ; x64 App
 Source: {#APP_SOURCE64}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE64}python37.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+Source: {#APP_SOURCE64}python310.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 
 ; common
 Source: {#APP_INCLUDE}python86\*.*; DestDir: {app}\python\; Flags: recursesubdirs createallsubdirs; Check: "not IsWin64"
@@ -146,8 +146,8 @@ Source: {#APP_SOURCE64}ActionMonitor.Shell.exe; DestDir: {app}; Flags: ignorever
 Source: profile.xml; DestDir: {userappdata}\myoddweb\ActionMonitor\; Flags: onlyifdoesntexist
 
 [Run]
-Filename: {tmp}\vc_redist.x86.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2017 Redistributables...(Please wait a few minutes); Check: "not IsWin64"
-Filename: {tmp}\vc_redist.x64.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2017 Redistributables...(Please wait a few minutes); Check: IsWin64
+Filename: {tmp}\vc_redist.x86.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2022 Redistributables...(Please wait a few minutes); Check: "not IsWin64"
+Filename: {tmp}\vc_redist.x64.exe; Parameters: "/install /passive /quiet /norestart"; StatusMsg: Installing VC++ 2022 Redistributables...(Please wait a few minutes); Check: IsWin64
 
 Filename: {app}\ActionMonitor.exe; Description: {cm:LaunchProgram,Piger}; Flags: nowait postinstall
 

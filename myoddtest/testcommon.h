@@ -72,8 +72,12 @@ class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class   
   virtual void TestBody();                                                      \
   void TestBodySingle();                                                        \
   static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;         \
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(                                              \
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));                       \
+                                                                                \
+  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)(                            \
+                       GTEST_TEST_CLASS_NAME_(test_case_name, test_name) const&)\
+                                                             = delete;          \
+  void operator=(GTEST_TEST_CLASS_NAME_(test_case_name, test_name) const &)     \
+                                                             = delete;          \
 };                                                                              \
                                                                                 \
 ::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)    \

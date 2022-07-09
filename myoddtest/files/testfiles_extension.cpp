@@ -85,7 +85,7 @@ TEST_P(MyOddFilesGetExtension, TestGetExtension)
   ASSERT_EQ(ext, myodd::files::GetExtension(file));
 }
 
-INSTANTIATE_TEST_CASE_P(TestAddExtension, MyOddFilesAddExtension,
+INSTANTIATE_TEST_SUITE_P(TestAddExtension, MyOddFilesAddExtension,
   testing::Values(
     test_addextension{ L"filename", L"txt", false, L"filename.txt" }, // no strip
     test_addextension{ L"filename", L"txt", true, L"filename.txt" },  // strip, but nothing to strip 
@@ -101,7 +101,7 @@ INSTANTIATE_TEST_CASE_P(TestAddExtension, MyOddFilesAddExtension,
     test_addextension{ L"filename.", L"txt", false, L"filename.txt" }
   ));
 
-INSTANTIATE_TEST_CASE_P(TestStripExtension, MyOddFilesStripExtension,
+INSTANTIATE_TEST_SUITE_P(TestStripExtension, MyOddFilesStripExtension,
   testing::Values(
     test_extension{ L"", L"" },
     test_extension{ L"filename.ext", L"filename" },
@@ -121,7 +121,7 @@ INSTANTIATE_TEST_CASE_P(TestStripExtension, MyOddFilesStripExtension,
     test_extension{ L"z://path\\to//filename.ext", L"z://path\\to//filename" }
   ));
 
-INSTANTIATE_TEST_CASE_P(TestIsExtension, MyOddFilesIsExtension,
+INSTANTIATE_TEST_SUITE_P(TestIsExtension, MyOddFilesIsExtension,
   testing::Values(
     test_extension{ L"", L"", false },
     test_extension{ L"", L"txt", false },
@@ -152,7 +152,7 @@ INSTANTIATE_TEST_CASE_P(TestIsExtension, MyOddFilesIsExtension,
     test_extension{ L"somefile.\\t", L".\\t", true }
   )); 
 
-INSTANTIATE_TEST_CASE_P(TestIsExtensionSpecialCases, MyOddFilesIsExtension,
+INSTANTIATE_TEST_SUITE_P(TestIsExtensionSpecialCases, MyOddFilesIsExtension,
   testing::Values(
     test_extension{ L"somefile.txt1.text2", L".txt1\\.text2", true },  //  second '.' is escaped.
     test_extension{ L"somefile.txt1.text2", L".txt1.text2", true },  //  second '.' is not escaped.
@@ -161,7 +161,7 @@ INSTANTIATE_TEST_CASE_P(TestIsExtensionSpecialCases, MyOddFilesIsExtension,
     test_extension{ L"somefile.txt1.text2", L"txt1.text2", true }  //  second '.' is not escaped.
 ));
 
-INSTANTIATE_TEST_CASE_P(TestIgnoreDeadCharacters, MyOddFilesIsExtension,
+INSTANTIATE_TEST_SUITE_P(TestIgnoreDeadCharacters, MyOddFilesIsExtension,
   testing::Values(
     test_extension{ L"somefile.txt", L"    txt     ", true },
     test_extension{ L"    somefile.txt    ", L"    txt    ", true },
@@ -169,7 +169,7 @@ INSTANTIATE_TEST_CASE_P(TestIgnoreDeadCharacters, MyOddFilesIsExtension,
     test_extension{ L"    somefile.txt    ", L"   txt    ", true }
 ));
 
-INSTANTIATE_TEST_CASE_P(TestGetExtension, MyOddFilesGetExtension,
+INSTANTIATE_TEST_SUITE_P(TestGetExtension, MyOddFilesGetExtension,
   testing::Values(
     test_extension{ L"", L"", false },
     test_extension{ L"file.txt", L"txt", false },

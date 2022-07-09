@@ -45,7 +45,7 @@ TEST_P(MyOddFilesFileNameNotSame, TestNotSameFileName)
 }
 
 // mainly to check that we don't alway return true.
-INSTANTIATE_TEST_CASE_P(TestFileName, MyOddFilesFileNameNotSame,
+INSTANTIATE_TEST_SUITE_P(TestFileName, MyOddFilesFileNameNotSame,
   testing::Values(
     test_filename{ L"\\somthing\\filename.TxT", L"filename.txt", false },
     test_filename{ L"c:\\a\\b\\something.txt", L"\\something.txt", false },
@@ -53,7 +53,7 @@ INSTANTIATE_TEST_CASE_P(TestFileName, MyOddFilesFileNameNotSame,
     test_filename{ L"%COMSPEC%", L"cmd.exe", false } //  not expended
 ));
 
-INSTANTIATE_TEST_CASE_P(TestFileName, MyOddFilesFileName,
+INSTANTIATE_TEST_SUITE_P(TestFileName, MyOddFilesFileName,
   testing::Values(
     test_filename{ L"\\somthing\\.txt", L".txt", false },
     test_filename{ L"\\somthing\\filename.txt", L"filename.txt", false },

@@ -54,7 +54,7 @@ TEST_P(MyOddFilesRemoveTrailingBackslash, TestRemoveTrailingBackSlash)
   ASSERT_EQ(expected, given);
 }
 
-INSTANTIATE_TEST_CASE_P(TestRemoveLeadingBackSlash, MyOddFilesRemoveLeadingBackslash,
+INSTANTIATE_TEST_SUITE_P(TestRemoveLeadingBackSlash, MyOddFilesRemoveLeadingBackslash,
   testing::Values(
     test_backslash{ L"", L"" },
     test_backslash{ L"\\", L"" },
@@ -75,7 +75,7 @@ INSTANTIATE_TEST_CASE_P(TestRemoveLeadingBackSlash, MyOddFilesRemoveLeadingBacks
     test_backslash{ L"/\\Hello", L"Hello" }
   ));
 
-INSTANTIATE_TEST_CASE_P(TestRemoveTrailingBackSlash, MyOddFilesRemoveTrailingBackslash,
+INSTANTIATE_TEST_SUITE_P(TestRemoveTrailingBackSlash, MyOddFilesRemoveTrailingBackslash,
   testing::Values(
     test_backslash{ L"", L"" },
     test_backslash{ L"\\", L"" },
@@ -97,7 +97,7 @@ INSTANTIATE_TEST_CASE_P(TestRemoveTrailingBackSlash, MyOddFilesRemoveTrailingBac
 
 ));
 
-INSTANTIATE_TEST_CASE_P(TestAddTrailingBackSlash, MyOddFilesAddTrailingBackslash,
+INSTANTIATE_TEST_SUITE_P(TestAddTrailingBackSlash, MyOddFilesAddTrailingBackslash,
   testing::Values(
     test_backslash{ L"", L"\\" },
     test_backslash{ L"Hello", L"Hello\\" },

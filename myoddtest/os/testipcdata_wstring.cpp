@@ -47,7 +47,7 @@ TEST_P(MyoddOsWStringTest, CheckWStringValues)
   }
 }
 
-INSTANTIATE_TEST_CASE_P(Default_wstring, MyoddOsWStringTest,
+INSTANTIATE_TEST_SUITE_P(Default_wstring, MyoddOsWStringTest,
   testing::Values(
     test_wstring{ Uuid(),{ L"" } },
     test_wstring{ Uuid(),{ L"Hello world" } },
@@ -56,7 +56,7 @@ INSTANTIATE_TEST_CASE_P(Default_wstring, MyoddOsWStringTest,
     test_wstring{ Uuid(),{ L"\0" } }
 ));
 
-INSTANTIATE_TEST_CASE_P(Multiple_stringValues, MyoddOsWStringTest,
+INSTANTIATE_TEST_SUITE_P(Multiple_stringValues, MyoddOsWStringTest,
   testing::Values(
     test_wstring{ Uuid(),{ L"", L"     ", L"Hello", L"!@#$%^&*(" } },
     test_wstring{ Uuid(),{ L"12345", L"     ", L"Hello", L"!@#$%^&*(" } }

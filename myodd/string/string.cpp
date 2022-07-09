@@ -175,9 +175,7 @@ size_t Explode
   //  reset all
   ret.clear();
 
-  auto l = s.length();
-
-  // or return if we have no work to do.
+  // return if we have no work to do.
   // If the limit parameter is zero, then this is treated as 1.
   if( 1 == nCount || 0 == nCount )
   {
@@ -191,46 +189,59 @@ size_t Explode
     ret.reserve( nCount );
   }
 
+  // get the given vector length 
+  const auto length = s.length();
+
+  // The number of items we actually found
   size_t retSize = 0;
   size_t iLast = 0;
 
-  for( size_t pos = 0; pos < l; ++pos)
+  // NB: This loop will go _past_ the length of our string.
+  //     This is done so we can add the last string once we get the end
+  for( auto pos = 0; pos <= length; ++pos)
   {
-    if( s[pos] == strDelimit )
+    if( 
+       pos == length ||     // we reached the end of the string
+       s[pos] == strDelimit // or the char is what we are looking for.
+      )
     {
       if( bAddEmpty || (pos-iLast) > 0 )
       {
         ++retSize;
-        ret.push_back( s.substr( iLast, (pos-iLast) ));
+        if (nCount > 1 && retSize >= nCount)
+        {
+          // we have collected more items than we want.
+          // so we can just stop here and add everything else to our container.
+          ret.push_back( s.substr(iLast));
+          break;
+        }
+
+        ret.push_back( 
+            pos == length ?
+              s.substr(iLast)
+              :
+              s.substr(iLast, (pos-iLast) ));
       }
       iLast = (pos+1);
-      if( nCount >-1 && (retSize+1) >= static_cast<size_t>(nCount) )
-      {
-        // the last item will be added bellow
-        break;
-      }
     }
-  }
-
-  if( bAddEmpty || (l-iLast) > 0 )
-  {
-    // add the remainder
-    ret.push_back( s.substr( iLast ) );
-    ++retSize;
   }
 
   // If count is negative, we only return retSize - count items.
   if( nCount < 0 )
   {
-    if(static_cast<size_t>(nCount *-1) >= retSize )
+    const auto positiveCount = static_cast<const unsigned int>(nCount * -1);
+    if(positiveCount >= retSize )
     {
+      // we want less items that are actually available
+      // so we just clear the array and return;
       ret.clear();
       retSize = 0;
     }
     else
     {
-      retSize += nCount;  //  nCount is negative...
-      ret.erase( ret.begin(), ret.begin() +retSize);
+      retSize += nCount;  // nCount is negative so we want all the items
+                          // in the vector minus the last '-ve count' ones
+      ret.erase( ret.begin()+retSize, ret.end());
     }
   }
   
@@ -311,20 +322,11 @@ int32_t Compare( const std::wstring& lhs, const std::wstring& rhs, bool caseSens
 {
   if(caseSensitive)
   {
-#ifdef _UNICODE
     // http ://www.cplusplus.com/reference/cwchar/wcscmp/
     return wcscmp(lhs.c_str(), rhs.c_str());
-#else
-    // http://www.cplusplus.com/reference/cstring/strcmp/  
-    return strcmp(lhs.c_str(), rhs.c_str());
-#endif
   }
 
-#ifdef _UNICODE
   return _wcsicmp( lhs.c_str(), rhs.c_str() );
-#else
-  return stricmp(lhs.c_str(), rhs.c_str());
-#endif
 }
 
 /**
@@ -398,11 +400,7 @@ int32_t Find
     it = std::search(
       haystack.begin() + from, haystack.end(),
       needle.begin(), needle.end(),
-#ifdef _UNICODE
       [](wchar_t ch1, wchar_t ch2) { return ch1 == ch2; }
-#else
-      [](char ch1, char ch2) { return ch1 == ch2; }
-#endif
     );
   }
   else
@@ -410,13 +408,9 @@ int32_t Find
     it = std::search(
       haystack.begin() + from, haystack.end(),
       needle.begin(), needle.end(),
-#ifdef _UNICODE
       [](wchar_t ch1, wchar_t ch2) { return std::toupper(ch1, std::locale())
                                             ==
                                             std::toupper(ch2, std::locale()); }
-#else
-      [](char ch1, char ch2) { return std::toupper(ch1) == std::toupper(ch2); }
-#endif
     );
   }
   return (it == haystack.end() ? -1 : it - haystack.begin() );
@@ -429,10 +423,10 @@ int32_t Find
  * @param std::wstring the character we want to convert.
  * @return std::wstring the lower string
  */
-const std::wstring& lower(const std::wstring& s) const
+const std::wstring lower(const std::wstring& s)
 {
   std::wstring ret = L"";
-  BOOST_FOREACH(const wchar_t& tch, s )
+  BOOST_FOREACH(wchar_t tch, s )
   {
     ret += lower( tch );
   }
@@ -445,11 +439,11 @@ const std::wstring& lower(const std::wstring& s) const
  * @param wchar_t the character we want to convert.
  * @return wchar_t the lower char character
  */
-wchar_t lower(wchar_t c )
+const wchar_t lower( const wchar_t c )
 {
-  if( c >= _T('A') && c <= _T('Z') )
+  if( c >= L'A' && c <= L'Z' )
   {
-    return (_T('a')+(c-_T('A')));
+    return (L'a'+(c- L'A'));
   }
   return c;
 }
@@ -481,15 +475,9 @@ bool wildcmp(const wchar_t* wild, const wchar_t* string)
 {
   try
   {
-#ifdef _UNICODE
     boost::wsmatch matches;
     boost::wregex stringRegex;
     std::wstring stdString( string );
-#else
-    boost::smatch matches;
-    boost::regex stringRegex;
-    std::string stdString( string );
-#endif
     stringRegex.assign( wild, boost::regex_constants::icase);
     if (boost::regex_match( stdString, matches, stringRegex))
     {
@@ -568,11 +556,7 @@ bool IsNumeric( const std::wstring& s, bool allowDecimal /*= true*/ )
       decimalFound = true;
       continue;
     }
-#ifdef _UNICODE
     if(!iswdigit(*string_iterator))
-#else
-    if(!isdigit(*string_iterator))
-#endif
     {
       return false;
     }
@@ -588,7 +572,7 @@ bool IsNumeric( const std::wstring& s, bool allowDecimal /*= true*/ )
  * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void Trim( std::wstring& str, const wchar_t* chars /*= _T( " " )*/ ) const
+void Trim( std::wstring& str, const wchar_t* chars /*= _T( " " )*/ )
 {
   TrimLeft( str, chars );
   TrimRight( str, chars );
@@ -600,7 +584,7 @@ void Trim( std::wstring& str, const wchar_t* chars /*= _T( " " )*/ ) const
  * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void TrimRight( std::wstring& str, const wchar_t* chars ) const
+void TrimRight( std::wstring& str, const wchar_t* chars )
 {
   if (!str.empty())
   {
@@ -622,7 +606,7 @@ void TrimRight( std::wstring& str, const wchar_t* chars ) const
  * @param const wchar_t* the char(s) we want to trim off.
  * @return none
  */
-void TrimLeft( std::wstring& str, const wchar_t* chars ) cosnt
+void TrimLeft( std::wstring& str, const wchar_t* chars )
 {
   if (!str.empty())
   {
@@ -765,11 +749,7 @@ bool IntToString( std::wstring& value, int i, const wchar_t* pszFormat )
 {
   try
   {
-#ifdef _UNICODE
     value = (boost::wformat(pszFormat?pszFormat:_T("%d")) % i ).str();
-#else
-    value = (boost::format(pszFormat?pszFormat:"%d") % i ).str();
-#endif
   }
   catch( ... )
   {
@@ -790,11 +770,7 @@ bool DoubleToString( std::wstring& value, double d, const wchar_t* pszFormat )
 {
   try
   {
-#ifdef _UNICODE
     value = (boost::wformat(pszFormat?pszFormat:_T("%f")) % d ).str();
-#else
-    value = (boost::format(pszFormat?pszFormat:"%f") % d ).str();
-#endif
   }
   catch( ... )
   {
@@ -815,11 +791,7 @@ bool FloatToString( std::wstring& value, float f, const wchar_t* pszFormat )
 {
   try
   {
-#ifdef _UNICODE
     value = (boost::wformat(pszFormat?pszFormat:_T("%f")) % f ).str();
-#else
-    value = (boost::format(pszFormat?pszFormat:"%f") % f ).str();
-#endif
   }
   catch( ... )
   {
@@ -840,11 +812,7 @@ bool StringToString( std::wstring& value, const wchar_t* l, const wchar_t* pszFo
 {
   try
   {
-#ifdef _UNICODE
     value = (boost::wformat(pszFormat?pszFormat:_T("%s")) % l ).str();
-#else
-    value = (boost::format(pszFormat?pszFormat:"%s") % l ).str();
-#endif
   }
   catch( ... )
   {

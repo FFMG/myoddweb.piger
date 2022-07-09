@@ -14,19 +14,19 @@
     <ProjectGuid>{8F04DF17-B68F-44E6-B306-8E33F3FDFE35}</ProjectGuid>
     <RootNamespace>ActionMonitor</RootNamespace>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -69,7 +69,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/;$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -78,7 +78,7 @@
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc140.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc143.pdb</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -106,8 +106,7 @@
       <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,7 +126,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.7.2/Include/;$(SolutionDir)/monitor/api/python/Python-3.7.2/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -137,7 +136,7 @@
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc140.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc143.pdb</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -161,9 +160,12 @@
       <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
+      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
       <Command>
       </Command>
-    </PostBuildEvent>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\api\csapi.cpp" />
@@ -332,9 +334,6 @@
     </ProjectReference>
     <ProjectReference Include="..\api\lua\lua64.vcxproj">
       <Project>{460c4fcf-0baa-4e9b-90c3-e7dc57e75fa6}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\api\python\Python-3.7.2\PCbuild\pythoncore64.vcxproj">
-      <Project>{cf7ac3d1-e2df-41d2-bea6-1e2556cdea26}</Project>
     </ProjectReference>
     <ProjectReference Include="..\hook\hook64.vcxproj">
       <Project>{ffd7c5cb-0cb2-4550-8cef-dee9aaad388a}</Project>

@@ -29,7 +29,7 @@ TEST_P(MyOddFilesCleanFileName, TestCleanFilename)
   ASSERT_EQ(expected, given);
 }
 
-INSTANTIATE_TEST_CASE_P(TestCleanFilename, MyOddFilesCleanFileName,
+INSTANTIATE_TEST_SUITE_P(TestCleanFilename, MyOddFilesCleanFileName,
   testing::Values(
     // no changes
     test_cleanfilename{ L"file.txt", L"file.txt" },

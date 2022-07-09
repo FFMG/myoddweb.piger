@@ -49,7 +49,7 @@ TEST_P(MyoddOsInt64Test, CheckIntValues)
   }
 }
 
-INSTANTIATE_TEST_CASE_P(Default_int64, MyoddOsInt64Test,
+INSTANTIATE_TEST_SUITE_P(Default_int64, MyoddOsInt64Test,
   testing::Values(
     test_int64_t{ Uuid(),{ 0 } },
     test_int64_t{ Uuid(),{ 42 } },
@@ -58,7 +58,7 @@ INSTANTIATE_TEST_CASE_P(Default_int64, MyoddOsInt64Test,
     test_int64_t{ Uuid(),{ std::numeric_limits<int64_t>::min() } }
 ));
 
-INSTANTIATE_TEST_CASE_P(Multiple_int64Values, MyoddOsInt64Test,
+INSTANTIATE_TEST_SUITE_P(Multiple_int64Values, MyoddOsInt64Test,
   testing::Values(
     test_int64_t{ Uuid(),{ 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0 } },
     test_int64_t{ Uuid(),{ 0, -1, 2, -3, 4, -4, 3, -2, 1, 0 } },

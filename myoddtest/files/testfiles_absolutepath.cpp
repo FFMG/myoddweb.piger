@@ -64,7 +64,7 @@ TEST_P(MyOddFilesAbsolutePath, TestAbsolutePath)
   }
 }
 
-INSTANTIATE_TEST_CASE_P(TestAbsolutePath, MyOddFilesAbsolutePath,
+INSTANTIATE_TEST_SUITE_P(TestAbsolutePath, MyOddFilesAbsolutePath,
   testing::Values(
     test_absolutepath{ L"../../somefile.txt", L"c:\\dira\\dirb\\", L"c:\\somefile.txt", true },
     test_absolutepath{ L"C:\\Documents and Settings\\All Users\\.\\Application Data\\..\\..\\", L"", L"C:\\Documents and Settings\\", true },
@@ -84,7 +84,7 @@ INSTANTIATE_TEST_CASE_P(TestAbsolutePath, MyOddFilesAbsolutePath,
     test_absolutepath{ L"\\aaa\\bbb\\ccc\\..\\..\\..\\..\\file.txt", L"", L"", false }
 ));
 
-INSTANTIATE_TEST_CASE_P(TestVariousEdgeCases, MyOddFilesAbsolutePath,
+INSTANTIATE_TEST_SUITE_P(TestVariousEdgeCases, MyOddFilesAbsolutePath,
   testing::Values(
     // all the '.\\' are removed
     test_absolutepath{ L".\\.\\.\\.\\.\\Test", L"", L"Test", true },
@@ -103,7 +103,7 @@ INSTANTIATE_TEST_CASE_P(TestVariousEdgeCases, MyOddFilesAbsolutePath,
     test_absolutepath{ L"\\Test\\", L"..\\somewhere\\", L"", false }
   ));
 
-INSTANTIATE_TEST_CASE_P(TestEdgecases, MyOddFilesAbsolutePath,
+INSTANTIATE_TEST_SUITE_P(TestEdgecases, MyOddFilesAbsolutePath,
   testing::Values(
     // origins are ignore.s
     test_absolutepath{ L"c:/somefile.txt", L"c:\\dira\\dirb\\", L"c:\\somefile.txt", true },
@@ -114,7 +114,7 @@ INSTANTIATE_TEST_CASE_P(TestEdgecases, MyOddFilesAbsolutePath,
     test_absolutepath{ L"\\\\dira\\dirb\\..\\..\\dirc\\somefile.txt", L"c:\\dira\\dirb\\", L"\\\\dirc\\somefile.txt", true }
 ));
 
-INSTANTIATE_TEST_CASE_P(TestUNC, MyOddFilesAbsolutePath,
+INSTANTIATE_TEST_SUITE_P(TestUNC, MyOddFilesAbsolutePath,
   testing::Values(
     // origins are ignored.
     test_absolutepath{ L"\\\\somefile.txt", L"c:\\dira\\dirb\\", L"\\\\somefile.txt", true },

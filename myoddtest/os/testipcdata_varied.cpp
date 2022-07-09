@@ -102,7 +102,7 @@ TEST_P(MyoddOsVariedTest, CheckVarriedValues)
   }
 }
 
-INSTANTIATE_TEST_CASE_P(Default_Varied, MyoddOsVariedTest,
+INSTANTIATE_TEST_SUITE_P(Default_Varied, MyoddOsVariedTest,
   testing::Values(
     test_varied{ Uuid(),{{ Int32, L"", "", 0, 0 },{ Int64, L"","", 0, 0 },{ Int32, L"","", 0, 0 }} },
     test_varied{ Uuid(),{{ Int32, L"", "", std::numeric_limits<int32_t>::min(), 0 },

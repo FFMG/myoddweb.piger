@@ -72,7 +72,7 @@ TEST_P(MyOddStringCaseSensitiveFindFrom, CaseSensitiveReplace)
   ASSERT_EQ(expected, myodd::strings::Find(haystack, needle, from));
 }
 
-INSTANTIATE_TEST_CASE_P(VariousCaseSensitiveFind, MyOddStringCaseSensitiveFind,
+INSTANTIATE_TEST_SUITE_P(VariousCaseSensitiveFind, MyOddStringCaseSensitiveFind,
   testing::Values(
     test_find{ L"Hello", L"Hello", 0, 0 },
     test_find{ L"Hello", L"hello", -1, 0 }, // case sensitive
@@ -80,7 +80,7 @@ INSTANTIATE_TEST_CASE_P(VariousCaseSensitiveFind, MyOddStringCaseSensitiveFind,
     test_find{ L"AxAxAx", L"Ax", 0, 0 }
   ));
 
-INSTANTIATE_TEST_CASE_P(VariousCaseInSensitiveFind, MyOddStringCaseInSensitiveFind,
+INSTANTIATE_TEST_SUITE_P(VariousCaseInSensitiveFind, MyOddStringCaseInSensitiveFind,
   testing::Values(
     test_find{ L"Hello", L"Hello", 0, 0 },
     test_find{ L"Hello", L"hello", 0, 0 },
@@ -90,7 +90,7 @@ INSTANTIATE_TEST_CASE_P(VariousCaseInSensitiveFind, MyOddStringCaseInSensitiveFi
     test_find{ L"AXaxAX", L"ax", 0, 0 }
 )); 
 
-INSTANTIATE_TEST_CASE_P(VariousCaseSensitiveFindWithFrom, MyOddStringCaseSensitiveFindFrom,
+INSTANTIATE_TEST_SUITE_P(VariousCaseSensitiveFindWithFrom, MyOddStringCaseSensitiveFindFrom,
   testing::Values(
     test_find{ L"Hello", L"Hello", 0, 0 },
     test_find{ L"Hello", L"hello", -1, 0 }, // case insensitive
@@ -102,7 +102,7 @@ INSTANTIATE_TEST_CASE_P(VariousCaseSensitiveFindWithFrom, MyOddStringCaseSensiti
     test_find{ L"AxAxAx", L"Ax", -1, 10 }  // past the len
 ));
 
-INSTANTIATE_TEST_CASE_P(VariousCaseInSensitiveFindWithFrom, MyOddStringCaseInSensitiveFindFrom,
+INSTANTIATE_TEST_SUITE_P(VariousCaseInSensitiveFindWithFrom, MyOddStringCaseInSensitiveFindFrom,
   testing::Values(
     test_find{ L"Hello", L"Hello", 0, 0 },
     test_find{ L"Hello", L"hello", 0, 0 },
