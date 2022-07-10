@@ -356,6 +356,12 @@
     <ClCompile Include="threads\messages.cpp">
       <Filter>threads</Filter>
     </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_script_run.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
+    <ClCompile Include="pcre2\src\pcre2_extuni.c">
+      <Filter>pcre2\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
