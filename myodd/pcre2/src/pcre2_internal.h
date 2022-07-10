@@ -7,7 +7,7 @@ and semantics are as close as possible to those of the Perl 5 language.
 
                        Written by Philip Hazel
      Original API code Copyright (c) 1997-2012 University of Cambridge
-         New API code Copyright (c) 2016 University of Cambridge
+          New API code Copyright (c) 2016-2022 University of Cambridge
 
 -----------------------------------------------------------------------------
 Redistribution and use in source and binary forms, with or without
@@ -37,6 +37,9 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 -----------------------------------------------------------------------------
 */
+
+#ifndef PCRE2_INTERNAL_H_IDEMPOTENT_GUARD
+#define PCRE2_INTERNAL_H_IDEMPOTENT_GUARD
 
 /* We do not support both EBCDIC and Unicode at the same time. The "configure"
 script prevents both being selected, but not everybody uses "configure". EBCDIC
@@ -71,6 +74,17 @@ typedef int BOOL;
 
 #ifdef SUPPORT_VALGRIND
 #include <valgrind/memcheck.h>
+#endif
+
+/* -ftrivial-auto-var-init support supports initializing all local variables
+to avoid some classes of bug, but this can cause an unacceptable slowdown
+for large on-stack arrays in hot functions. This macro lets us annotate
+such arrays. */
+
+#ifdef HAVE_ATTRIBUTE_UNINITIALIZED
+#define PCRE2_KEEP_UNINITIALIZED __attribute__((uninitialized))
+#else
+#define PCRE2_KEEP_UNINITIALIZED
 #endif
 
 /* Older versions of MSVC lack snprintf(). This define allows for
@@ -142,38 +156,25 @@ pcre2_match() because of the way it backtracks. */
 #define PCRE2_SPTR CUSTOM_SUBJECT_PTR
 #endif
 
-/* When compiling with the MSVC compiler, it is sometimes necessary to include
-a "calling convention" before exported function names. (This is secondhand
-information; I know nothing about MSVC myself). For example, something like
-
-  void __cdecl function(....)
-
-might be needed. In order so make this easy, all the exported functions have
-PCRE2_CALL_CONVENTION just before their names. It is rarely needed; if not
-set, we ensure here that it has no effect. */
-
-#ifndef PCRE2_CALL_CONVENTION
-#define PCRE2_CALL_CONVENTION
-#endif
-
 /* When checking for integer overflow in pcre2_compile(), we need to handle
 large integers. If a 64-bit integer type is available, we can use that.
 Otherwise we have to cast to double, which of course requires floating point
-arithmetic. Handle this by defining a macro for the appropriate type. If
-stdint.h is available, include it; it may define INT64_MAX. Systems that do not
-have stdint.h (e.g. Solaris) may have inttypes.h. The macro int64_t may be set
-by "configure". */
-
-#if defined HAVE_STDINT_H
-#include <stdint.h>
-#elif defined HAVE_INTTYPES_H
-#include <inttypes.h>
-#endif
+arithmetic. Handle this by defining a macro for the appropriate type. */
 
 #if defined INT64_MAX || defined int64_t
 #define INT64_OR_DOUBLE int64_t
 #else
 #define INT64_OR_DOUBLE double
+#endif
+
+/* External (in the C sense) functions and tables that are private to the
+libraries are always referenced using the PRIV macro. This makes it possible
+for pcre2test.c to include some of the source files from the libraries using a
+different PRIV definition to avoid name clashes. It also makes it clear in the
+code that a non-static object is being referenced. */
+
+#ifndef PRIV
+#define PRIV(name) _pcre2_##name
 #endif
 
 /* When compiling for use with the Virtual Pascal compiler, these functions
@@ -189,49 +190,14 @@ option on the command line. */
 #define memset(s,c,n)    _memset(s,c,n)
 #else  /* VPCOMPAT */
 
-/* To cope with SunOS4 and other systems that lack memmove() but have bcopy(),
-define a macro for memmove() if HAVE_MEMMOVE is false, provided that HAVE_BCOPY
-is set. Otherwise, include an emulating function for those systems that have
-neither (there some non-Unix environments where this is the case). */
+/* Otherwise, to cope with SunOS4 and other systems that lack memmove(), define
+a macro that calls an emulating function. */
 
 #ifndef HAVE_MEMMOVE
-#undef  memmove        /* some systems may have a macro */
-#ifdef HAVE_BCOPY
-#define memmove(a, b, c) bcopy(b, a, c)
-#else  /* HAVE_BCOPY */
-static void *
-pcre2_memmove(void *d, const void *s, size_t n)
-{
-size_t i;
-unsigned char *dest = (unsigned char *)d;
-const unsigned char *src = (const unsigned char *)s;
-if (dest > src)
-  {
-  dest += n;
-  src += n;
-  for (i = 0; i < n; ++i) *(--dest) = *(--src);
-  return (void *)dest;
-  }
-else
-  {
-  for (i = 0; i < n; ++i) *dest++ = *src++;
-  return (void *)(dest - n);
-  }
-}
-#define memmove(a, b, c) pcre2_memmove(a, b, c)
-#endif   /* not HAVE_BCOPY */
+#undef  memmove          /* Some systems may have a macro */
+#define memmove(a, b, c) PRIV(memmove)(a, b, c)
 #endif   /* not HAVE_MEMMOVE */
 #endif   /* not VPCOMPAT */
-
-/* External (in the C sense) functions and tables that are private to the
-libraries are always referenced using the PRIV macro. This makes it possible
-for pcre2test.c to include some of the source files from the libraries using a
-different PRIV definition to avoid name clashes. It also makes it clear in the
-code that a non-static object is being referenced. */
-
-#ifndef PRIV
-#define PRIV(name) _pcre2_##name
-#endif
 
 /* This is an unsigned int value that no UTF character can ever have, as
 Unicode doesn't go beyond 0x0010ffff. */
@@ -253,6 +219,21 @@ run-time error numbers numerically different, but in the event the code does
 not rely on this. */
 
 #define COMPILE_ERROR_BASE 100
+
+/* The initial frames vector for remembering backtracking points in
+pcre2_match() is allocated on the system stack, of this size (bytes). The size
+must be a multiple of sizeof(PCRE2_SPTR) in all environments, so making it a
+multiple of 8 is best. Typical frame sizes are a few hundred bytes (it depends
+on the number of capturing parentheses) so 20KiB handles quite a few frames. A
+larger vector on the heap is obtained for patterns that need more frames. The
+maximum size of this can be limited. */
+
+#define START_FRAMES_SIZE 20480
+
+/* Similarly, for DFA matching, an initial internal workspace vector is
+allocated on the stack. */
+
+#define DFA_START_RWS_SIZE 30720
 
 /* Define the default BSR convention. */
 
@@ -547,6 +528,7 @@ bytes in a code unit in that mode. */
 #define PCRE2_HASBKPORX     0x00100000  /* contains \P, \p, or \X */
 #define PCRE2_DUPCAPUSED    0x00200000  /* contains (?| */
 #define PCRE2_HASBKC        0x00400000  /* contains \C */
+#define PCRE2_HASACCEPT     0x00800000  /* contains (*ACCEPT) */
 
 #define PCRE2_MODE_MASK     (PCRE2_MODE8 | PCRE2_MODE16 | PCRE2_MODE32)
 
@@ -556,14 +538,24 @@ enum { PCRE2_MATCHEDBY_INTERPRETER,     /* pcre2_match() */
        PCRE2_MATCHEDBY_DFA_INTERPRETER, /* pcre2_dfa_match() */
        PCRE2_MATCHEDBY_JIT };           /* pcre2_jit_match() */
 
+/* Values for the flags field in a match data block. */
+
+#define PCRE2_MD_COPIED_SUBJECT  0x01u
+
 /* Magic number to provide a small check against being handed junk. */
 
 #define MAGIC_NUMBER  0x50435245UL   /* 'PCRE' */
 
 /* The maximum remaining length of subject we are prepared to search for a
-req_unit match. */
+req_unit match from an anchored pattern. In 8-bit mode, memchr() is used and is
+much faster than the search loop that has to be used in 16-bit and 32-bit
+modes. */
 
-#define REQ_CU_MAX 1000
+#if PCRE2_CODE_UNIT_WIDTH == 8
+#define REQ_CU_MAX       5000
+#else
+#define REQ_CU_MAX       2000
+#endif
 
 /* Offsets for the bitmap tables in the cbits set of tables. Each table
 contains a set of bits for a class map. Some classes are built by combining
@@ -581,14 +573,15 @@ these tables. */
 #define cbit_cntrl   288      /* [:cntrl:] */
 #define cbit_length  320      /* Length of the cbits table */
 
-/* Bit definitions for entries in the ctypes table. */
+/* Bit definitions for entries in the ctypes table. Do not change these values
+without checking pcre2_jit_compile.c, which has an assertion to ensure that
+ctype_word has the value 16. */
 
-#define ctype_space   0x01
-#define ctype_letter  0x02
-#define ctype_digit   0x04
-#define ctype_xdigit  0x08
-#define ctype_word    0x10    /* alphanumeric or '_' */
-#define ctype_meta    0x80    /* regexp meta char or zero (end pattern) */
+#define ctype_space    0x01
+#define ctype_letter   0x02
+#define ctype_lcletter 0x04
+#define ctype_digit    0x08
+#define ctype_word     0x10    /* alphanumeric or '_' */
 
 /* Offsets of the various tables from the base tables pointer, and
 total length of the tables. */
@@ -597,7 +590,7 @@ total length of the tables. */
 #define fcc_offset    256                           /* Flip case */
 #define cbits_offset  512                           /* Character classes */
 #define ctypes_offset (cbits_offset + cbit_length)  /* Character types */
-#define tables_length (ctypes_offset + 256)
+#define TABLES_LENGTH (ctypes_offset + 256)
 
 
 /* -------------------- Character and string names ------------------------ */
@@ -682,7 +675,7 @@ a positive value. */
 
 /* The remaining definitions work in both environments. */
 
-#define CHAR_NULL                   '\0'
+#define CHAR_NUL                    '\0'
 #define CHAR_HT                     '\t'
 #define CHAR_VT                     '\v'
 #define CHAR_FF                     '\f'
@@ -889,40 +882,59 @@ a positive value. */
 #define STR_RIGHT_CURLY_BRACKET     "}"
 #define STR_TILDE                   "~"
 
-#define STRING_ACCEPT0              "ACCEPT\0"
-#define STRING_COMMIT0              "COMMIT\0"
-#define STRING_F0                   "F\0"
-#define STRING_FAIL0                "FAIL\0"
-#define STRING_MARK0                "MARK\0"
-#define STRING_PRUNE0               "PRUNE\0"
-#define STRING_SKIP0                "SKIP\0"
-#define STRING_THEN                 "THEN"
+#define STRING_ACCEPT0               "ACCEPT\0"
+#define STRING_COMMIT0               "COMMIT\0"
+#define STRING_F0                    "F\0"
+#define STRING_FAIL0                 "FAIL\0"
+#define STRING_MARK0                 "MARK\0"
+#define STRING_PRUNE0                "PRUNE\0"
+#define STRING_SKIP0                 "SKIP\0"
+#define STRING_THEN                  "THEN"
 
-#define STRING_alpha0               "alpha\0"
-#define STRING_lower0               "lower\0"
-#define STRING_upper0               "upper\0"
-#define STRING_alnum0               "alnum\0"
-#define STRING_ascii0               "ascii\0"
-#define STRING_blank0               "blank\0"
-#define STRING_cntrl0               "cntrl\0"
-#define STRING_digit0               "digit\0"
-#define STRING_graph0               "graph\0"
-#define STRING_print0               "print\0"
-#define STRING_punct0               "punct\0"
-#define STRING_space0               "space\0"
-#define STRING_word0                "word\0"
-#define STRING_xdigit               "xdigit"
+#define STRING_atomic0               "atomic\0"
+#define STRING_pla0                  "pla\0"
+#define STRING_plb0                  "plb\0"
+#define STRING_napla0                "napla\0"
+#define STRING_naplb0                "naplb\0"
+#define STRING_nla0                  "nla\0"
+#define STRING_nlb0                  "nlb\0"
+#define STRING_sr0                   "sr\0"
+#define STRING_asr0                  "asr\0"
+#define STRING_positive_lookahead0   "positive_lookahead\0"
+#define STRING_positive_lookbehind0  "positive_lookbehind\0"
+#define STRING_non_atomic_positive_lookahead0   "non_atomic_positive_lookahead\0"
+#define STRING_non_atomic_positive_lookbehind0  "non_atomic_positive_lookbehind\0"
+#define STRING_negative_lookahead0   "negative_lookahead\0"
+#define STRING_negative_lookbehind0  "negative_lookbehind\0"
+#define STRING_script_run0           "script_run\0"
+#define STRING_atomic_script_run     "atomic_script_run"
 
-#define STRING_DEFINE               "DEFINE"
-#define STRING_VERSION              "VERSION"
-#define STRING_WEIRD_STARTWORD      "[:<:]]"
-#define STRING_WEIRD_ENDWORD        "[:>:]]"
+#define STRING_alpha0                "alpha\0"
+#define STRING_lower0                "lower\0"
+#define STRING_upper0                "upper\0"
+#define STRING_alnum0                "alnum\0"
+#define STRING_ascii0                "ascii\0"
+#define STRING_blank0                "blank\0"
+#define STRING_cntrl0                "cntrl\0"
+#define STRING_digit0                "digit\0"
+#define STRING_graph0                "graph\0"
+#define STRING_print0                "print\0"
+#define STRING_punct0                "punct\0"
+#define STRING_space0                "space\0"
+#define STRING_word0                 "word\0"
+#define STRING_xdigit                "xdigit"
+
+#define STRING_DEFINE                "DEFINE"
+#define STRING_VERSION               "VERSION"
+#define STRING_WEIRD_STARTWORD       "[:<:]]"
+#define STRING_WEIRD_ENDWORD         "[:>:]]"
 
 #define STRING_CR_RIGHTPAR                "CR)"
 #define STRING_LF_RIGHTPAR                "LF)"
 #define STRING_CRLF_RIGHTPAR              "CRLF)"
 #define STRING_ANY_RIGHTPAR               "ANY)"
 #define STRING_ANYCRLF_RIGHTPAR           "ANYCRLF)"
+#define STRING_NUL_RIGHTPAR               "NUL)"
 #define STRING_BSR_ANYCRLF_RIGHTPAR       "BSR_ANYCRLF)"
 #define STRING_BSR_UNICODE_RIGHTPAR       "BSR_UNICODE)"
 #define STRING_UTF8_RIGHTPAR              "UTF8)"
@@ -936,9 +948,18 @@ a positive value. */
 #define STRING_NO_START_OPT_RIGHTPAR      "NO_START_OPT)"
 #define STRING_NOTEMPTY_RIGHTPAR          "NOTEMPTY)"
 #define STRING_NOTEMPTY_ATSTART_RIGHTPAR  "NOTEMPTY_ATSTART)"
+#define STRING_LIMIT_HEAP_EQ              "LIMIT_HEAP="
 #define STRING_LIMIT_MATCH_EQ             "LIMIT_MATCH="
+#define STRING_LIMIT_DEPTH_EQ             "LIMIT_DEPTH="
 #define STRING_LIMIT_RECURSION_EQ         "LIMIT_RECURSION="
 #define STRING_MARK                       "MARK"
+
+#define STRING_bc                         "bc"
+#define STRING_bidiclass                  "bidiclass"
+#define STRING_sc                         "sc"
+#define STRING_script                     "script"
+#define STRING_scriptextensions           "scriptextensions"
+#define STRING_scx                        "scx"
 
 #else  /* SUPPORT_UNICODE */
 
@@ -958,7 +979,7 @@ only. */
 #define CHAR_ESC                    '\033'
 #define CHAR_DEL                    '\177'
 
-#define CHAR_NULL                   '\0'
+#define CHAR_NUL                    '\0'
 #define CHAR_SPACE                  '\040'
 #define CHAR_EXCLAMATION_MARK       '\041'
 #define CHAR_QUOTATION_MARK         '\042'
@@ -1162,40 +1183,59 @@ only. */
 #define STR_RIGHT_CURLY_BRACKET     "\175"
 #define STR_TILDE                   "\176"
 
-#define STRING_ACCEPT0              STR_A STR_C STR_C STR_E STR_P STR_T "\0"
-#define STRING_COMMIT0              STR_C STR_O STR_M STR_M STR_I STR_T "\0"
-#define STRING_F0                   STR_F "\0"
-#define STRING_FAIL0                STR_F STR_A STR_I STR_L "\0"
-#define STRING_MARK0                STR_M STR_A STR_R STR_K "\0"
-#define STRING_PRUNE0               STR_P STR_R STR_U STR_N STR_E "\0"
-#define STRING_SKIP0                STR_S STR_K STR_I STR_P "\0"
-#define STRING_THEN                 STR_T STR_H STR_E STR_N
+#define STRING_ACCEPT0               STR_A STR_C STR_C STR_E STR_P STR_T "\0"
+#define STRING_COMMIT0               STR_C STR_O STR_M STR_M STR_I STR_T "\0"
+#define STRING_F0                    STR_F "\0"
+#define STRING_FAIL0                 STR_F STR_A STR_I STR_L "\0"
+#define STRING_MARK0                 STR_M STR_A STR_R STR_K "\0"
+#define STRING_PRUNE0                STR_P STR_R STR_U STR_N STR_E "\0"
+#define STRING_SKIP0                 STR_S STR_K STR_I STR_P "\0"
+#define STRING_THEN                  STR_T STR_H STR_E STR_N
 
-#define STRING_alpha0               STR_a STR_l STR_p STR_h STR_a "\0"
-#define STRING_lower0               STR_l STR_o STR_w STR_e STR_r "\0"
-#define STRING_upper0               STR_u STR_p STR_p STR_e STR_r "\0"
-#define STRING_alnum0               STR_a STR_l STR_n STR_u STR_m "\0"
-#define STRING_ascii0               STR_a STR_s STR_c STR_i STR_i "\0"
-#define STRING_blank0               STR_b STR_l STR_a STR_n STR_k "\0"
-#define STRING_cntrl0               STR_c STR_n STR_t STR_r STR_l "\0"
-#define STRING_digit0               STR_d STR_i STR_g STR_i STR_t "\0"
-#define STRING_graph0               STR_g STR_r STR_a STR_p STR_h "\0"
-#define STRING_print0               STR_p STR_r STR_i STR_n STR_t "\0"
-#define STRING_punct0               STR_p STR_u STR_n STR_c STR_t "\0"
-#define STRING_space0               STR_s STR_p STR_a STR_c STR_e "\0"
-#define STRING_word0                STR_w STR_o STR_r STR_d       "\0"
-#define STRING_xdigit               STR_x STR_d STR_i STR_g STR_i STR_t
+#define STRING_atomic0               STR_a STR_t STR_o STR_m STR_i STR_c "\0"
+#define STRING_pla0                  STR_p STR_l STR_a "\0"
+#define STRING_plb0                  STR_p STR_l STR_b "\0"
+#define STRING_napla0                STR_n STR_a STR_p STR_l STR_a "\0"
+#define STRING_naplb0                STR_n STR_a STR_p STR_l STR_b "\0"
+#define STRING_nla0                  STR_n STR_l STR_a "\0"
+#define STRING_nlb0                  STR_n STR_l STR_b "\0"
+#define STRING_sr0                   STR_s STR_r "\0"
+#define STRING_asr0                  STR_a STR_s STR_r "\0"
+#define STRING_positive_lookahead0   STR_p STR_o STR_s STR_i STR_t STR_i STR_v STR_e STR_UNDERSCORE STR_l STR_o STR_o STR_k STR_a STR_h STR_e STR_a STR_d "\0"
+#define STRING_positive_lookbehind0  STR_p STR_o STR_s STR_i STR_t STR_i STR_v STR_e STR_UNDERSCORE STR_l STR_o STR_o STR_k STR_b STR_e STR_h STR_i STR_n STR_d "\0"
+#define STRING_non_atomic_positive_lookahead0   STR_n STR_o STR_n STR_UNDERSCORE STR_a STR_t STR_o STR_m STR_i STR_c STR_UNDERSCORE STR_p STR_o STR_s STR_i STR_t STR_i STR_v STR_e STR_UNDERSCORE STR_l STR_o STR_o STR_k STR_a STR_h STR_e STR_a STR_d "\0"
+#define STRING_non_atomic_positive_lookbehind0  STR_n STR_o STR_n STR_UNDERSCORE STR_a STR_t STR_o STR_m STR_i STR_c STR_UNDERSCORE STR_p STR_o STR_s STR_i STR_t STR_i STR_v STR_e STR_UNDERSCORE STR_l STR_o STR_o STR_k STR_b STR_e STR_h STR_i STR_n STR_d "\0"
+#define STRING_negative_lookahead0   STR_n STR_e STR_g STR_a STR_t STR_i STR_v STR_e STR_UNDERSCORE STR_l STR_o STR_o STR_k STR_a STR_h STR_e STR_a STR_d "\0"
+#define STRING_negative_lookbehind0  STR_n STR_e STR_g STR_a STR_t STR_i STR_v STR_e STR_UNDERSCORE STR_l STR_o STR_o STR_k STR_b STR_e STR_h STR_i STR_n STR_d "\0"
+#define STRING_script_run0           STR_s STR_c STR_r STR_i STR_p STR_t STR_UNDERSCORE STR_r STR_u STR_n "\0"
+#define STRING_atomic_script_run     STR_a STR_t STR_o STR_m STR_i STR_c STR_UNDERSCORE STR_s STR_c STR_r STR_i STR_p STR_t STR_UNDERSCORE STR_r STR_u STR_n
 
-#define STRING_DEFINE               STR_D STR_E STR_F STR_I STR_N STR_E
-#define STRING_VERSION              STR_V STR_E STR_R STR_S STR_I STR_O STR_N
-#define STRING_WEIRD_STARTWORD      STR_LEFT_SQUARE_BRACKET STR_COLON STR_LESS_THAN_SIGN STR_COLON STR_RIGHT_SQUARE_BRACKET STR_RIGHT_SQUARE_BRACKET
-#define STRING_WEIRD_ENDWORD        STR_LEFT_SQUARE_BRACKET STR_COLON STR_GREATER_THAN_SIGN STR_COLON STR_RIGHT_SQUARE_BRACKET STR_RIGHT_SQUARE_BRACKET
+#define STRING_alpha0                STR_a STR_l STR_p STR_h STR_a "\0"
+#define STRING_lower0                STR_l STR_o STR_w STR_e STR_r "\0"
+#define STRING_upper0                STR_u STR_p STR_p STR_e STR_r "\0"
+#define STRING_alnum0                STR_a STR_l STR_n STR_u STR_m "\0"
+#define STRING_ascii0                STR_a STR_s STR_c STR_i STR_i "\0"
+#define STRING_blank0                STR_b STR_l STR_a STR_n STR_k "\0"
+#define STRING_cntrl0                STR_c STR_n STR_t STR_r STR_l "\0"
+#define STRING_digit0                STR_d STR_i STR_g STR_i STR_t "\0"
+#define STRING_graph0                STR_g STR_r STR_a STR_p STR_h "\0"
+#define STRING_print0                STR_p STR_r STR_i STR_n STR_t "\0"
+#define STRING_punct0                STR_p STR_u STR_n STR_c STR_t "\0"
+#define STRING_space0                STR_s STR_p STR_a STR_c STR_e "\0"
+#define STRING_word0                 STR_w STR_o STR_r STR_d       "\0"
+#define STRING_xdigit                STR_x STR_d STR_i STR_g STR_i STR_t
+
+#define STRING_DEFINE                STR_D STR_E STR_F STR_I STR_N STR_E
+#define STRING_VERSION               STR_V STR_E STR_R STR_S STR_I STR_O STR_N
+#define STRING_WEIRD_STARTWORD       STR_LEFT_SQUARE_BRACKET STR_COLON STR_LESS_THAN_SIGN STR_COLON STR_RIGHT_SQUARE_BRACKET STR_RIGHT_SQUARE_BRACKET
+#define STRING_WEIRD_ENDWORD         STR_LEFT_SQUARE_BRACKET STR_COLON STR_GREATER_THAN_SIGN STR_COLON STR_RIGHT_SQUARE_BRACKET STR_RIGHT_SQUARE_BRACKET
 
 #define STRING_CR_RIGHTPAR                STR_C STR_R STR_RIGHT_PARENTHESIS
 #define STRING_LF_RIGHTPAR                STR_L STR_F STR_RIGHT_PARENTHESIS
 #define STRING_CRLF_RIGHTPAR              STR_C STR_R STR_L STR_F STR_RIGHT_PARENTHESIS
 #define STRING_ANY_RIGHTPAR               STR_A STR_N STR_Y STR_RIGHT_PARENTHESIS
 #define STRING_ANYCRLF_RIGHTPAR           STR_A STR_N STR_Y STR_C STR_R STR_L STR_F STR_RIGHT_PARENTHESIS
+#define STRING_NUL_RIGHTPAR               STR_N STR_U STR_L STR_RIGHT_PARENTHESIS
 #define STRING_BSR_ANYCRLF_RIGHTPAR       STR_B STR_S STR_R STR_UNDERSCORE STR_A STR_N STR_Y STR_C STR_R STR_L STR_F STR_RIGHT_PARENTHESIS
 #define STRING_BSR_UNICODE_RIGHTPAR       STR_B STR_S STR_R STR_UNDERSCORE STR_U STR_N STR_I STR_C STR_O STR_D STR_E STR_RIGHT_PARENTHESIS
 #define STRING_UTF8_RIGHTPAR              STR_U STR_T STR_F STR_8 STR_RIGHT_PARENTHESIS
@@ -1209,9 +1249,19 @@ only. */
 #define STRING_NO_START_OPT_RIGHTPAR      STR_N STR_O STR_UNDERSCORE STR_S STR_T STR_A STR_R STR_T STR_UNDERSCORE STR_O STR_P STR_T STR_RIGHT_PARENTHESIS
 #define STRING_NOTEMPTY_RIGHTPAR          STR_N STR_O STR_T STR_E STR_M STR_P STR_T STR_Y STR_RIGHT_PARENTHESIS
 #define STRING_NOTEMPTY_ATSTART_RIGHTPAR  STR_N STR_O STR_T STR_E STR_M STR_P STR_T STR_Y STR_UNDERSCORE STR_A STR_T STR_S STR_T STR_A STR_R STR_T STR_RIGHT_PARENTHESIS
+#define STRING_LIMIT_HEAP_EQ              STR_L STR_I STR_M STR_I STR_T STR_UNDERSCORE STR_H STR_E STR_A STR_P STR_EQUALS_SIGN
 #define STRING_LIMIT_MATCH_EQ             STR_L STR_I STR_M STR_I STR_T STR_UNDERSCORE STR_M STR_A STR_T STR_C STR_H STR_EQUALS_SIGN
+#define STRING_LIMIT_DEPTH_EQ             STR_L STR_I STR_M STR_I STR_T STR_UNDERSCORE STR_D STR_E STR_P STR_T STR_H STR_EQUALS_SIGN
 #define STRING_LIMIT_RECURSION_EQ         STR_L STR_I STR_M STR_I STR_T STR_UNDERSCORE STR_R STR_E STR_C STR_U STR_R STR_S STR_I STR_O STR_N STR_EQUALS_SIGN
 #define STRING_MARK                       STR_M STR_A STR_R STR_K
+
+#define STRING_bc                         STR_b STR_c
+#define STRING_bidiclass                  STR_b STR_i STR_d STR_i STR_c STR_l STR_a STR_s STR_s
+#define STRING_sc                         STR_s STR_c
+#define STRING_script                     STR_s STR_c STR_r STR_i STR_p STR_t
+#define STRING_scriptextensions           STR_s STR_c STR_r STR_i STR_p STR_t STR_e STR_x STR_t STR_e STR_n STR_s STR_i STR_o STR_n STR_s
+#define STRING_scx                        STR_s STR_c STR_x
+
 
 #endif  /* SUPPORT_UNICODE */
 
@@ -1219,20 +1269,25 @@ only. */
 
 /* -------------------- Definitions for compiled patterns -------------------*/
 
-/* Codes for different types of Unicode property */
+/* Codes for different types of Unicode property. If these definitions are
+changed, the autopossessifying table in pcre2_auto_possess.c must be updated to
+match. */
 
 #define PT_ANY        0    /* Any property - matches all chars */
 #define PT_LAMP       1    /* L& - the union of Lu, Ll, Lt */
 #define PT_GC         2    /* Specified general characteristic (e.g. L) */
 #define PT_PC         3    /* Specified particular characteristic (e.g. Lu) */
-#define PT_SC         4    /* Script (e.g. Han) */
-#define PT_ALNUM      5    /* Alphanumeric - the union of L and N */
-#define PT_SPACE      6    /* Perl space - Z plus 9,10,12,13 */
-#define PT_PXSPACE    7    /* POSIX space - Z plus 9,10,11,12,13 */
-#define PT_WORD       8    /* Word - L plus N plus underscore */
-#define PT_CLIST      9    /* Pseudo-property: match character list */
-#define PT_UCNC      10    /* Universal Character nameable character */
-#define PT_TABSIZE   11    /* Size of square table for autopossessify tests */
+#define PT_SC         4    /* Script only (e.g. Han) */
+#define PT_SCX        5    /* Script extensions (includes SC) */
+#define PT_ALNUM      6    /* Alphanumeric - the union of L and N */
+#define PT_SPACE      7    /* Perl space - general category Z plus 9,10,12,13 */
+#define PT_PXSPACE    8    /* POSIX space - Z plus 9,10,11,12,13 */
+#define PT_WORD       9    /* Word - L plus N plus underscore */
+#define PT_CLIST     10    /* Pseudo-property: match character list */
+#define PT_UCNC      11    /* Universal Character nameable character */
+#define PT_BIDICL    12    /* Specified bidi class */
+#define PT_BOOL      13    /* Boolean property */
+#define PT_TABSIZE   14    /* Size of square table for autopossessify tests */
 
 /* The following special properties are used only in XCLASS items, when POSIX
 classes are specified and PCRE2_UCP is set - in other words, for Unicode
@@ -1240,52 +1295,27 @@ handling of these classes. They are not available via the \p or \P escapes like
 those in the above list, and so they do not take part in the autopossessifying
 table. */
 
-#define PT_PXGRAPH   11    /* [:graph:] - characters that mark the paper */
-#define PT_PXPRINT   12    /* [:print:] - [:graph:] plus non-control spaces */
-#define PT_PXPUNCT   13    /* [:punct:] - punctuation characters */
+#define PT_PXGRAPH   14    /* [:graph:] - characters that mark the paper */
+#define PT_PXPRINT   15    /* [:print:] - [:graph:] plus non-control spaces */
+#define PT_PXPUNCT   16    /* [:punct:] - punctuation characters */
+
+/* This value is used when parsing \p and \P escapes to indicate that neither
+\p{script:...} nor \p{scx:...} has been encountered. */
+
+#define PT_NOTSCRIPT 255
 
 /* Flag bits and data types for the extended class (OP_XCLASS) for classes that
 contain characters with values greater than 255. */
 
-#define XCL_NOT       0x01    /* Flag: this is a negative class */
-#define XCL_MAP       0x02    /* Flag: a 32-byte map is present */
-#define XCL_HASPROP   0x04    /* Flag: property checks are present. */
+#define XCL_NOT      0x01  /* Flag: this is a negative class */
+#define XCL_MAP      0x02  /* Flag: a 32-byte map is present */
+#define XCL_HASPROP  0x04  /* Flag: property checks are present. */
 
-#define XCL_END       0    /* Marks end of individual items */
-#define XCL_SINGLE    1    /* Single item (one multibyte char) follows */
-#define XCL_RANGE     2    /* A range (two multibyte chars) follows */
-#define XCL_PROP      3    /* Unicode property (2-byte property code follows) */
-#define XCL_NOTPROP   4    /* Unicode inverted property (ditto) */
-
-/* Escape items that are just an encoding of a particular data value. These
-appear in the escapes[] table in pcre2_compile.c as positive numbers. */
-
-#ifndef ESC_a
-#define ESC_a CHAR_BEL
-#endif
-
-#ifndef ESC_e
-#define ESC_e CHAR_ESC
-#endif
-
-#ifndef ESC_f
-#define ESC_f CHAR_FF
-#endif
-
-#ifndef ESC_n
-#define ESC_n CHAR_LF
-#endif
-
-#ifndef ESC_r
-#define ESC_r CHAR_CR
-#endif
-
-/* We can't officially use ESC_t because it is a POSIX reserved identifier
-(presumably because of all the others like size_t). */
-
-#ifndef ESC_tee
-#define ESC_tee CHAR_HT
-#endif
+#define XCL_END      0     /* Marks end of individual items */
+#define XCL_SINGLE   1     /* Single item (one multibyte char) follows */
+#define XCL_RANGE    2     /* A range (two multibyte chars) follows */
+#define XCL_PROP     3     /* Unicode property (2-byte property code follows) */
+#define XCL_NOTPROP  4     /* Unicode inverted property (ditto) */
 
 /* These are escaped items that aren't just an encoding of a particular data
 value such as \n. They must have non-zero values, as check_escape() returns 0
@@ -1298,23 +1328,16 @@ mode rather than an escape sequence. It is also used for [^] in JavaScript
 compatibility mode, and for \C in non-utf mode. In non-DOTALL mode, "." behaves
 like \N.
 
-The special values ESC_DU, ESC_du, etc. are used instead of ESC_D, ESC_d, etc.
-when PCRE2_UCP is set and replacement of \d etc by \p sequences is required.
-They must be contiguous, and remain in order so that the replacements can be
-looked up from a table.
-
 Negative numbers are used to encode a backreference (\1, \2, \3, etc.) in
-check_escape(). There are two tests in the code for an escape
-greater than ESC_b and less than ESC_Z to detect the types that may be
-repeated. These are the types that consume characters. If any new escapes are
-put in between that don't consume a character, that code will have to change.
-*/
+check_escape(). There are tests in the code for an escape greater than ESC_b
+and less than ESC_Z to detect the types that may be repeated. These are the
+types that consume characters. If any new escapes are put in between that don't
+consume a character, that code will have to change. */
 
 enum { ESC_A = 1, ESC_G, ESC_K, ESC_B, ESC_b, ESC_D, ESC_d, ESC_S, ESC_s,
        ESC_W, ESC_w, ESC_N, ESC_dum, ESC_C, ESC_P, ESC_p, ESC_R, ESC_H,
        ESC_h, ESC_V, ESC_v, ESC_X, ESC_Z, ESC_z,
-       ESC_E, ESC_Q, ESC_g, ESC_k,
-       ESC_DU, ESC_du, ESC_SU, ESC_su, ESC_WU, ESC_wu };
+       ESC_E, ESC_Q, ESC_g, ESC_k };
 
 
 /********************** Opcode definitions ******************/
@@ -1324,7 +1347,7 @@ enum { ESC_A = 1, ESC_G, ESC_K, ESC_B, ESC_b, ESC_D, ESC_d, ESC_S, ESC_s,
 Starting from 1 (i.e. after OP_END), the values up to OP_EOD must correspond in
 order to the list of escapes immediately above. Furthermore, values up to
 OP_DOLLM must not be changed without adjusting the table called autoposstab in
-pcre2_auto_possess.c
+pcre2_auto_possess.c.
 
 Whenever this list is updated, the two macro definitions that follow must be
 updated to match. The possessification table called "opcode_possessify" in
@@ -1380,7 +1403,8 @@ enum {
   OP_CIRC,           /* 27 Start of line - not multiline */
   OP_CIRCM,          /* 28 Start of line - multiline */
 
-  /* Single characters; caseful must precede the caseless ones */
+  /* Single characters; caseful must precede the caseless ones, and these
+  must remain in this order, and adjacent. */
 
   OP_CHAR,           /* 29 Match one character, casefully */
   OP_CHARI,          /* 30 Match one character, caselessly */
@@ -1521,77 +1545,81 @@ enum {
   OP_KETRMIN,        /* 123 order. They are for groups the repeat for ever. */
   OP_KETRPOS,        /* 124 Possessive unlimited repeat. */
 
-  /* The assertions must come before BRA, CBRA, ONCE, and COND, and the four
-  asserts must remain in order. */
+  /* The assertions must come before BRA, CBRA, ONCE, and COND. */
 
   OP_REVERSE,        /* 125 Move pointer back - used in lookbehind assertions */
   OP_ASSERT,         /* 126 Positive lookahead */
   OP_ASSERT_NOT,     /* 127 Negative lookahead */
   OP_ASSERTBACK,     /* 128 Positive lookbehind */
   OP_ASSERTBACK_NOT, /* 129 Negative lookbehind */
+  OP_ASSERT_NA,      /* 130 Positive non-atomic lookahead */
+  OP_ASSERTBACK_NA,  /* 131 Positive non-atomic lookbehind */
 
-  /* ONCE, ONCE_NC, BRA, BRAPOS, CBRA, CBRAPOS, and COND must come immediately
-  after the assertions, with ONCE first, as there's a test for >= ONCE for a
-  subpattern that isn't an assertion. The POS versions must immediately follow
-  the non-POS versions in each case. */
+  /* ONCE, SCRIPT_RUN, BRA, BRAPOS, CBRA, CBRAPOS, and COND must come
+  immediately after the assertions, with ONCE first, as there's a test for >=
+  ONCE for a subpattern that isn't an assertion. The POS versions must
+  immediately follow the non-POS versions in each case. */
 
-  OP_ONCE,           /* 130 Atomic group, contains captures */
-  OP_ONCE_NC,        /* 131 Atomic group containing no captures */
-  OP_BRA,            /* 132 Start of non-capturing bracket */
-  OP_BRAPOS,         /* 133 Ditto, with unlimited, possessive repeat */
-  OP_CBRA,           /* 134 Start of capturing bracket */
-  OP_CBRAPOS,        /* 135 Ditto, with unlimited, possessive repeat */
-  OP_COND,           /* 136 Conditional group */
+  OP_ONCE,           /* 132 Atomic group, contains captures */
+  OP_SCRIPT_RUN,     /* 133 Non-capture, but check characters' scripts */
+  OP_BRA,            /* 134 Start of non-capturing bracket */
+  OP_BRAPOS,         /* 135 Ditto, with unlimited, possessive repeat */
+  OP_CBRA,           /* 136 Start of capturing bracket */
+  OP_CBRAPOS,        /* 137 Ditto, with unlimited, possessive repeat */
+  OP_COND,           /* 138 Conditional group */
 
   /* These five must follow the previous five, in the same order. There's a
   check for >= SBRA to distinguish the two sets. */
 
-  OP_SBRA,           /* 137 Start of non-capturing bracket, check empty  */
-  OP_SBRAPOS,        /* 138 Ditto, with unlimited, possessive repeat */
-  OP_SCBRA,          /* 139 Start of capturing bracket, check empty */
-  OP_SCBRAPOS,       /* 140 Ditto, with unlimited, possessive repeat */
-  OP_SCOND,          /* 141 Conditional group, check empty */
+  OP_SBRA,           /* 139 Start of non-capturing bracket, check empty  */
+  OP_SBRAPOS,        /* 149 Ditto, with unlimited, possessive repeat */
+  OP_SCBRA,          /* 141 Start of capturing bracket, check empty */
+  OP_SCBRAPOS,       /* 142 Ditto, with unlimited, possessive repeat */
+  OP_SCOND,          /* 143 Conditional group, check empty */
 
   /* The next two pairs must (respectively) be kept together. */
 
-  OP_CREF,           /* 142 Used to hold a capture number as condition */
-  OP_DNCREF,         /* 143 Used to point to duplicate names as a condition */
-  OP_RREF,           /* 144 Used to hold a recursion number as condition */
-  OP_DNRREF,         /* 145 Used to point to duplicate names as a condition */
-  OP_FALSE,          /* 146 Always false (used by DEFINE and VERSION) */
-  OP_TRUE,           /* 147 Always true (used by VERSION) */
+  OP_CREF,           /* 144 Used to hold a capture number as condition */
+  OP_DNCREF,         /* 145 Used to point to duplicate names as a condition */
+  OP_RREF,           /* 146 Used to hold a recursion number as condition */
+  OP_DNRREF,         /* 147 Used to point to duplicate names as a condition */
+  OP_FALSE,          /* 148 Always false (used by DEFINE and VERSION) */
+  OP_TRUE,           /* 149 Always true (used by VERSION) */
 
-  OP_BRAZERO,        /* 148 These two must remain together and in this */
-  OP_BRAMINZERO,     /* 149 order. */
-  OP_BRAPOSZERO,     /* 150 */
+  OP_BRAZERO,        /* 150 These two must remain together and in this */
+  OP_BRAMINZERO,     /* 151 order. */
+  OP_BRAPOSZERO,     /* 152 */
 
   /* These are backtracking control verbs */
 
-  OP_MARK,           /* 151 always has an argument */
-  OP_PRUNE,          /* 152 */
-  OP_PRUNE_ARG,      /* 153 same, but with argument */
-  OP_SKIP,           /* 154 */
-  OP_SKIP_ARG,       /* 155 same, but with argument */
-  OP_THEN,           /* 156 */
-  OP_THEN_ARG,       /* 157 same, but with argument */
-  OP_COMMIT,         /* 158 */
+  OP_MARK,           /* 153 always has an argument */
+  OP_PRUNE,          /* 154 */
+  OP_PRUNE_ARG,      /* 155 same, but with argument */
+  OP_SKIP,           /* 156 */
+  OP_SKIP_ARG,       /* 157 same, but with argument */
+  OP_THEN,           /* 158 */
+  OP_THEN_ARG,       /* 159 same, but with argument */
+  OP_COMMIT,         /* 160 */
+  OP_COMMIT_ARG,     /* 161 same, but with argument */
 
-  /* These are forced failure and success verbs */
+  /* These are forced failure and success verbs. FAIL and ACCEPT do accept an
+  argument, but these cases can be compiled as, for example, (*MARK:X)(*FAIL)
+  without the need for a special opcode. */
 
-  OP_FAIL,           /* 159 */
-  OP_ACCEPT,         /* 160 */
-  OP_ASSERT_ACCEPT,  /* 161 Used inside assertions */
-  OP_CLOSE,          /* 162 Used before OP_ACCEPT to close open captures */
+  OP_FAIL,           /* 162 */
+  OP_ACCEPT,         /* 163 */
+  OP_ASSERT_ACCEPT,  /* 164 Used inside assertions */
+  OP_CLOSE,          /* 165 Used before OP_ACCEPT to close open captures */
 
   /* This is used to skip a subpattern with a {0} quantifier */
 
-  OP_SKIPZERO,       /* 163 */
+  OP_SKIPZERO,       /* 166 */
 
   /* This is used to identify a DEFINE group during compilation so that it can
   be checked for having only one branch. It is changed to OP_FALSE before
   compilation finishes. */
 
-  OP_DEFINE,         /* 164 */
+  OP_DEFINE,         /* 167 */
 
   /* This is not an opcode, but is used to check that tables indexed by opcode
   are the correct length, in order to catch updating errors - there have been
@@ -1604,7 +1632,7 @@ enum {
 /* *** NOTE NOTE NOTE *** Whenever the list above is updated, the two macro
 definitions that follow must also be updated to match. There are also tables
 called "opcode_possessify" in pcre2_compile.c and "coptable" and "poptable" in
-pcre2_dfa_exec.c that must be updated. */
+pcre2_dfa_match.c that must be updated. */
 
 
 /* This macro defines textual names for all the opcodes. These are used only
@@ -1637,8 +1665,11 @@ some cases doesn't actually use these names at all). */
   "class", "nclass", "xclass", "Ref", "Refi", "DnRef", "DnRefi",  \
   "Recurse", "Callout", "CalloutStr",                             \
   "Alt", "Ket", "KetRmax", "KetRmin", "KetRpos",                  \
-  "Reverse", "Assert", "Assert not", "AssertB", "AssertB not",    \
-  "Once", "Once_NC",                                              \
+  "Reverse", "Assert", "Assert not",                              \
+  "Assert back", "Assert back not",                               \
+  "Non-atomic assert", "Non-atomic assert back",                  \
+  "Once",                                                         \
+  "Script run",                                                   \
   "Bra", "BraPos", "CBra", "CBraPos",                             \
   "Cond",                                                         \
   "SBra", "SBraPos", "SCBra", "SCBraPos",                         \
@@ -1647,7 +1678,7 @@ some cases doesn't actually use these names at all). */
   "Cond false", "Cond true",                                      \
   "Brazero", "Braminzero", "Braposzero",                          \
   "*MARK", "*PRUNE", "*PRUNE", "*SKIP", "*SKIP",                  \
-  "*THEN", "*THEN", "*COMMIT", "*FAIL",                           \
+  "*THEN", "*THEN", "*COMMIT", "*COMMIT", "*FAIL",                \
   "*ACCEPT", "*ASSERT_ACCEPT",                                    \
   "Close", "Skip zero", "Define"
 
@@ -1721,8 +1752,10 @@ in UTF-8 mode. The code that uses this table must know about such things. */
   1+LINK_SIZE,                   /* Assert not                             */ \
   1+LINK_SIZE,                   /* Assert behind                          */ \
   1+LINK_SIZE,                   /* Assert behind not                      */ \
+  1+LINK_SIZE,                   /* NA Assert                              */ \
+  1+LINK_SIZE,                   /* NA Assert behind                       */ \
   1+LINK_SIZE,                   /* ONCE                                   */ \
-  1+LINK_SIZE,                   /* ONCE_NC                                */ \
+  1+LINK_SIZE,                   /* SCRIPT_RUN                             */ \
   1+LINK_SIZE,                   /* BRA                                    */ \
   1+LINK_SIZE,                   /* BRAPOS                                 */ \
   1+LINK_SIZE+IMM2_SIZE,         /* CBRA                                   */ \
@@ -1740,7 +1773,8 @@ in UTF-8 mode. The code that uses this table must know about such things. */
   3, 1, 3,                       /* MARK, PRUNE, PRUNE_ARG                 */ \
   1, 3,                          /* SKIP, SKIP_ARG                         */ \
   1, 3,                          /* THEN, THEN_ARG                         */ \
-  1, 1, 1, 1,                    /* COMMIT, FAIL, ACCEPT, ASSERT_ACCEPT    */ \
+  1, 3,                          /* COMMIT, COMMIT_ARG                     */ \
+  1, 1, 1,                       /* FAIL, ACCEPT, ASSERT_ACCEPT            */ \
   1+IMM2_SIZE, 1,                /* CLOSE, SKIPZERO                        */ \
   1                              /* DEFINE                                 */
 
@@ -1761,13 +1795,12 @@ typedef struct pcre2_memctl {
 
 /* Structure for building a chain of open capturing subpatterns during
 compiling, so that instructions to close them can be compiled when (*ACCEPT) is
-encountered. This is also used to identify subpatterns that contain recursive
-back references to themselves, so that they can be made atomic. */
+encountered. */
 
 typedef struct open_capitem {
   struct open_capitem *next;    /* Chain link */
   uint16_t number;              /* Capture number */
-  uint16_t flag;                /* Set TRUE if recursive back ref */
+  uint16_t assert_depth;        /* Assertion depth when opened */
 } open_capitem;
 
 /* Layout of the UCP type table that translates property names into types and
@@ -1789,14 +1822,31 @@ typedef struct {
   uint8_t gbprop;     /* ucp_gbControl, etc. (grapheme break property) */
   uint8_t caseset;    /* offset to multichar other cases or zero */
   int32_t other_case; /* offset to other case, or zero if none */
+  uint16_t scriptx_bidiclass; /* script extension (11 bit) and bidi class (5 bit) values */
+  uint16_t bprops;    /* binary properties offset */
 } ucd_record;
 
 /* UCD access macros */
 
 #define UCD_BLOCK_SIZE 128
-#define GET_UCD(ch) (PRIV(ucd_records) + \
+#define REAL_GET_UCD(ch) (PRIV(ucd_records) + \
         PRIV(ucd_stage2)[PRIV(ucd_stage1)[(int)(ch) / UCD_BLOCK_SIZE] * \
         UCD_BLOCK_SIZE + (int)(ch) % UCD_BLOCK_SIZE])
+
+#if PCRE2_CODE_UNIT_WIDTH == 32
+#define GET_UCD(ch) ((ch > MAX_UTF_CODE_POINT)? \
+  PRIV(dummy_ucd_record) : REAL_GET_UCD(ch))
+#else
+#define GET_UCD(ch) REAL_GET_UCD(ch)
+#endif
+
+#define UCD_SCRIPTX_MASK 0x3ff
+#define UCD_BIDICLASS_SHIFT 11
+#define UCD_BPROPS_MASK 0xfff
+
+#define UCD_SCRIPTX_PROP(prop) ((prop)->scriptx_bidiclass & UCD_SCRIPTX_MASK)
+#define UCD_BIDICLASS_PROP(prop) ((prop)->scriptx_bidiclass >> UCD_BIDICLASS_SHIFT)
+#define UCD_BPROPS_PROP(prop) ((prop)->bprops & UCD_BPROPS_MASK)
 
 #define UCD_CHARTYPE(ch)    GET_UCD(ch)->chartype
 #define UCD_SCRIPT(ch)      GET_UCD(ch)->script
@@ -1804,6 +1854,16 @@ typedef struct {
 #define UCD_GRAPHBREAK(ch)  GET_UCD(ch)->gbprop
 #define UCD_CASESET(ch)     GET_UCD(ch)->caseset
 #define UCD_OTHERCASE(ch)   ((uint32_t)((int)ch + (int)(GET_UCD(ch)->other_case)))
+#define UCD_SCRIPTX(ch)     UCD_SCRIPTX_PROP(GET_UCD(ch))
+#define UCD_BPROPS(ch)      UCD_BPROPS_PROP(GET_UCD(ch))
+#define UCD_BIDICLASS(ch)   UCD_BIDICLASS_PROP(GET_UCD(ch))
+
+/* The "scriptx" and bprops fields contain offsets into vectors of 32-bit words
+that form a bitmap representing a list of scripts or boolean properties. These
+macros test or set a bit in the map by number. */
+
+#define MAPBIT(map,n) ((map)[(n)/32]&(1u<<((n)%32)))
+#define MAPSET(map,n) ((map)[(n)/32]|=(1u<<((n)%32)))
 
 /* Header for serialized pcre2 codes. */
 
@@ -1852,11 +1912,18 @@ extern const uint8_t          PRIV(utf8_table4)[];
 #define _pcre2_callout_end_delims      PCRE2_SUFFIX(_pcre2_callout_end_delims_)
 #define _pcre2_callout_start_delims    PCRE2_SUFFIX(_pcre2_callout_start_delims_)
 #define _pcre2_default_compile_context PCRE2_SUFFIX(_pcre2_default_compile_context_)
+#define _pcre2_default_convert_context PCRE2_SUFFIX(_pcre2_default_convert_context_)
 #define _pcre2_default_match_context   PCRE2_SUFFIX(_pcre2_default_match_context_)
 #define _pcre2_default_tables          PCRE2_SUFFIX(_pcre2_default_tables_)
+#if PCRE2_CODE_UNIT_WIDTH == 32
+#define _pcre2_dummy_ucd_record        PCRE2_SUFFIX(_pcre2_dummy_ucd_record_)
+#endif
 #define _pcre2_hspace_list             PCRE2_SUFFIX(_pcre2_hspace_list_)
 #define _pcre2_vspace_list             PCRE2_SUFFIX(_pcre2_vspace_list_)
+#define _pcre2_ucd_boolprop_sets       PCRE2_SUFFIX(_pcre2_ucd_boolprop_sets_)
 #define _pcre2_ucd_caseless_sets       PCRE2_SUFFIX(_pcre2_ucd_caseless_sets_)
+#define _pcre2_ucd_digit_sets          PCRE2_SUFFIX(_pcre2_ucd_digit_sets_)
+#define _pcre2_ucd_script_sets         PCRE2_SUFFIX(_pcre2_ucd_script_sets_)
 #define _pcre2_ucd_records             PCRE2_SUFFIX(_pcre2_ucd_records_)
 #define _pcre2_ucd_stage1              PCRE2_SUFFIX(_pcre2_ucd_stage1_)
 #define _pcre2_ucd_stage2              PCRE2_SUFFIX(_pcre2_ucd_stage2_)
@@ -1872,13 +1939,20 @@ extern const uint8_t                   PRIV(OP_lengths)[];
 extern const uint32_t                  PRIV(callout_end_delims)[];
 extern const uint32_t                  PRIV(callout_start_delims)[];
 extern const pcre2_compile_context     PRIV(default_compile_context);
+extern const pcre2_convert_context     PRIV(default_convert_context);
 extern const pcre2_match_context       PRIV(default_match_context);
 extern const uint8_t                   PRIV(default_tables)[];
 extern const uint32_t                  PRIV(hspace_list)[];
 extern const uint32_t                  PRIV(vspace_list)[];
+extern const uint32_t                  PRIV(ucd_boolprop_sets)[];
 extern const uint32_t                  PRIV(ucd_caseless_sets)[];
+extern const uint32_t                  PRIV(ucd_digit_sets)[];
+extern const uint32_t                  PRIV(ucd_script_sets)[];
 extern const ucd_record                PRIV(ucd_records)[];
-extern const uint8_t                   PRIV(ucd_stage1)[];
+#if PCRE2_CODE_UNIT_WIDTH == 32
+extern const ucd_record                PRIV(dummy_ucd_record)[];
+#endif
+extern const uint16_t                  PRIV(ucd_stage1)[];
 extern const uint16_t                  PRIV(ucd_stage2)[];
 extern const uint32_t                  PRIV(ucp_gbtable)[];
 extern const uint32_t                  PRIV(ucp_gentype)[];
@@ -1912,6 +1986,7 @@ is available. */
 
 #define _pcre2_auto_possessify       PCRE2_SUFFIX(_pcre2_auto_possessify_)
 #define _pcre2_check_escape          PCRE2_SUFFIX(_pcre2_check_escape_)
+#define _pcre2_extuni                PCRE2_SUFFIX(_pcre2_extuni_)
 #define _pcre2_find_bracket          PCRE2_SUFFIX(_pcre2_find_bracket_)
 #define _pcre2_is_newline            PCRE2_SUFFIX(_pcre2_is_newline_)
 #define _pcre2_jit_free_rodata       PCRE2_SUFFIX(_pcre2_jit_free_rodata_)
@@ -1920,6 +1995,7 @@ is available. */
 #define _pcre2_jit_get_target        PCRE2_SUFFIX(_pcre2_jit_get_target_)
 #define _pcre2_memctl_malloc         PCRE2_SUFFIX(_pcre2_memctl_malloc_)
 #define _pcre2_ord2utf               PCRE2_SUFFIX(_pcre2_ord2utf_)
+#define _pcre2_script_run            PCRE2_SUFFIX(_pcre2_script_run_)
 #define _pcre2_strcmp                PCRE2_SUFFIX(_pcre2_strcmp_)
 #define _pcre2_strcmp_c8             PCRE2_SUFFIX(_pcre2_strcmp_c8_)
 #define _pcre2_strcpy_c8             PCRE2_SUFFIX(_pcre2_strcpy_c8_)
@@ -1931,10 +2007,12 @@ is available. */
 #define _pcre2_was_newline           PCRE2_SUFFIX(_pcre2_was_newline_)
 #define _pcre2_xclass                PCRE2_SUFFIX(_pcre2_xclass_)
 
-extern int          _pcre2_auto_possessify(PCRE2_UCHAR *, BOOL,
+extern int          _pcre2_auto_possessify(PCRE2_UCHAR *,
                       const compile_block *);
 extern int          _pcre2_check_escape(PCRE2_SPTR *, PCRE2_SPTR, uint32_t *,
-                      int *, uint32_t, BOOL, compile_block *);
+                      int *, uint32_t, uint32_t, BOOL, compile_block *);
+extern PCRE2_SPTR   _pcre2_extuni(uint32_t, PCRE2_SPTR, PCRE2_SPTR, PCRE2_SPTR,
+                      BOOL, int *);
 extern PCRE2_SPTR   _pcre2_find_bracket(PCRE2_SPTR, BOOL, int);
 extern BOOL         _pcre2_is_newline(PCRE2_SPTR, uint32_t, PCRE2_SPTR,
                       uint32_t *, BOOL);
@@ -1944,6 +2022,7 @@ extern size_t       _pcre2_jit_get_size(void *);
 const char *        _pcre2_jit_get_target(void);
 extern void *       _pcre2_memctl_malloc(size_t, pcre2_memctl *);
 extern unsigned int _pcre2_ord2utf(uint32_t, PCRE2_UCHAR *);
+extern BOOL         _pcre2_script_run(PCRE2_SPTR, PCRE2_SPTR, BOOL);
 extern int          _pcre2_strcmp(PCRE2_SPTR, PCRE2_SPTR);
 extern int          _pcre2_strcmp_c8(PCRE2_SPTR, const char *);
 extern PCRE2_SIZE   _pcre2_strcpy_c8(PCRE2_UCHAR *, const char *);
@@ -1955,6 +2034,15 @@ extern int          _pcre2_valid_utf(PCRE2_SPTR, PCRE2_SIZE, PCRE2_SIZE *);
 extern BOOL         _pcre2_was_newline(PCRE2_SPTR, uint32_t, PCRE2_SPTR,
                       uint32_t *, BOOL);
 extern BOOL         _pcre2_xclass(uint32_t, PCRE2_SPTR, BOOL);
+
+/* This function is needed only when memmove() is not available. */
+
+#if !defined(VPCOMPAT) && !defined(HAVE_MEMMOVE)
+#define _pcre2_memmove               PCRE2_SUFFIX(_pcre2_memmove)
+extern void *       _pcre2_memmove(void *, const void *, size_t);
+#endif
+
 #endif  /* PCRE2_CODE_UNIT_WIDTH */
+#endif  /* PCRE2_INTERNAL_H_IDEMPOTENT_GUARD */
 
 /* End of pcre2_internal.h */

@@ -7,7 +7,7 @@ and semantics are as close as possible to those of the Perl 5 language.
 
                        Written by Philip Hazel
      Original API code Copyright (c) 1997-2012 University of Cambridge
-         New API code Copyright (c) 2016 University of Cambridge
+          New API code Copyright (c) 2016-2022 University of Cambridge
 
 -----------------------------------------------------------------------------
 Redistribution and use in source and binary forms, with or without
@@ -206,7 +206,7 @@ print_custring(FILE *f, PCRE2_SPTR ptr)
 {
 while (*ptr != '\0')
   {
-  register uint32_t c = *ptr++;
+  uint32_t c = *ptr++;
   if (PRINTABLE(c)) fprintf(f, "%c", c); else fprintf(f, "\\x{%x}", c);
   }
 }
@@ -216,7 +216,7 @@ print_custring_bylen(FILE *f, PCRE2_SPTR ptr, PCRE2_UCHAR len)
 {
 for (; len > 0; len--)
   {
-  register uint32_t c = *ptr++;
+  uint32_t c = *ptr++;
   if (PRINTABLE(c)) fprintf(f, "%c", c); else fprintf(f, "\\x{%x}", c);
   }
 }
@@ -230,18 +230,48 @@ for (; len > 0; len--)
 /* When there is no UTF/UCP support, the table of names does not exist. This
 function should not be called in such configurations, because a pattern that
 tries to use Unicode properties won't compile. Rather than put lots of #ifdefs
-into the main code, however, we just put one into this function. */
+into the main code, however, we just put one into this function.
+
+Now that the table contains both full names and their abbreviations, we do some
+fiddling to try to get the full name, which is either the longer of two found
+names, or a 3-character script name. */
 
 static const char *
 get_ucpname(unsigned int ptype, unsigned int pvalue)
 {
 #ifdef SUPPORT_UNICODE
-int i;
-for (i = PRIV(utt_size) - 1; i >= 0; i--)
+int count = 0;
+const char *yield = "??";
+size_t len = 0;
+unsigned int ptypex = (ptype == PT_SC)? PT_SCX : ptype;
+
+for (int i = PRIV(utt_size) - 1; i >= 0; i--)
   {
-  if (ptype == PRIV(utt)[i].type && pvalue == PRIV(utt)[i].value) break;
+  const ucp_type_table *u = PRIV(utt) + i;
+
+  if ((ptype == u->type || ptypex == u->type) && pvalue == u->value)
+    {
+    const char *s = PRIV(utt_names) + u->name_offset;
+    size_t sl = strlen(s);
+
+    if (sl == 3 && (u->type == PT_SC || u->type == PT_SCX))
+      {
+      yield = s;
+      break;
+      }
+
+    if (sl > len)
+      {
+      yield = s;
+      len = sl;
+      }
+
+    if (++count >= 2) break;
+    }
   }
-return (i >= 0)? PRIV(utt_names) + PRIV(utt)[i].name_offset : "??";
+
+return yield;
+
 #else   /* No UTF support */
 (void)ptype;
 (void)pvalue;
@@ -273,8 +303,9 @@ print_prop(FILE *f, PCRE2_SPTR code, const char *before, const char *after)
 {
 if (code[1] != PT_CLIST)
   {
-  fprintf(f, "%s%s %s%s", before, OP_names[*code], get_ucpname(code[1],
-    code[2]), after);
+  const char *sc = (code[1] == PT_SC)? "script:" : "";
+  const char *s = get_ucpname(code[1], code[2]);
+  fprintf(f, "%s%s %s%c%s%s", before, OP_names[*code], sc, toupper(s[0]), s+1, after);
   }
 else
   {
@@ -340,7 +371,7 @@ for(;;)
       case OP_TABLE_LENGTH +
         ((sizeof(OP_names)/sizeof(const char *) == OP_TABLE_LENGTH) &&
         (sizeof(OP_lengths) == OP_TABLE_LENGTH)):
-      break;
+      return;
 /* ========================================================================== */
 
     case OP_END:
@@ -392,8 +423,10 @@ for(;;)
     case OP_ASSERT_NOT:
     case OP_ASSERTBACK:
     case OP_ASSERTBACK_NOT:
+    case OP_ASSERT_NA:
+    case OP_ASSERTBACK_NA:
     case OP_ONCE:
-    case OP_ONCE_NC:
+    case OP_SCRIPT_RUN:
     case OP_COND:
     case OP_SCOND:
     case OP_REVERSE:
@@ -673,17 +706,18 @@ for(;;)
         map = (uint8_t *)ccode;
         if (invertmap)
           {
-          for (i = 0; i < 32; i++) inverted_map[i] = ~map[i];
+          /* Using 255 ^ instead of ~ avoids clang sanitize warning. */
+          for (i = 0; i < 32; i++) inverted_map[i] = 255 ^ map[i];
           map = inverted_map;
           }
 
         for (i = 0; i < 256; i++)
           {
-          if ((map[i/8] & (1 << (i&7))) != 0)
+          if ((map[i/8] & (1u << (i&7))) != 0)
             {
             int j;
             for (j = i+1; j < 256; j++)
-              if ((map[j/8] & (1 << (j&7))) == 0) break;
+              if ((map[j/8] & (1u << (j&7))) == 0) break;
             if (i == '-' || i == ']') fprintf(f, "\\");
             if (PRINTABLE(i)) fprintf(f, "%c", i);
               else fprintf(f, "\\x%02x", i);
@@ -721,6 +755,7 @@ for(;;)
               {
               unsigned int ptype = *ccode++;
               unsigned int pvalue = *ccode++;
+              const char *s;
 
               switch(ptype)
                 {
@@ -737,8 +772,8 @@ for(;;)
                 break;
 
                 default:
-                fprintf(f, "\\%c{%s}", (not? 'P':'p'),
-                  get_ucpname(ptype, pvalue));
+                s = get_ucpname(ptype, pvalue);
+                fprintf(f, "\\%c{%c%s}", (not? 'P':'p'), toupper(s[0]), s+1);
                 break;
                 }
               }
@@ -800,6 +835,7 @@ for(;;)
     break;
 
     case OP_MARK:
+    case OP_COMMIT_ARG:
     case OP_PRUNE_ARG:
     case OP_SKIP_ARG:
     case OP_THEN_ARG:

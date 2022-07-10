@@ -66,7 +66,11 @@
 /* --------------------------------------------------------------------- */
 
 /* 64 KByte. */
-#define CHUNK_SIZE	(sljit_uw)0x10000u
+#define CHUNK_SIZE	(sljit_uw)0x10000
+
+struct chunk_header {
+	void *executable;
+};
 
 /*
    alloc_chunk / free_chunk :
@@ -78,139 +82,180 @@
        as it only uses local variables
 */
 
-#ifdef _WIN32
-#define SLJIT_UPDATE_WX_FLAGS(from, to, enable_exec)
+#ifndef __NetBSD__
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
 
-static SLJIT_INLINE void* alloc_chunk(sljit_uw size)
-{
-	return VirtualAlloc(NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-}
-
-static SLJIT_INLINE void free_chunk(void *chunk, sljit_uw size)
-{
-	SLJIT_UNUSED_ARG(size);
-	VirtualFree(chunk, 0, MEM_RELEASE);
-}
-
-#else /* POSIX */
-
-#if defined(__APPLE__) && defined(MAP_JIT)
-/*
-   On macOS systems, returns MAP_JIT if it is defined _and_ we're running on a
-   version where it's OK to have more than one JIT block or where MAP_JIT is
-   required.
-   On non-macOS systems, returns MAP_JIT if it is defined.
-*/
-#include <TargetConditionals.h>
-#if TARGET_OS_OSX
-#if defined SLJIT_CONFIG_X86 && SLJIT_CONFIG_X86
-#ifdef MAP_ANON
-#include <sys/utsname.h>
-#include <stdlib.h>
-
-#define SLJIT_MAP_JIT	(get_map_jit_flag())
-
-static SLJIT_INLINE int get_map_jit_flag()
-{
-	size_t page_size;
-	void *ptr;
-	struct utsname name;
-	static int map_jit_flag = -1;
-
-	if (map_jit_flag < 0) {
-		map_jit_flag = 0;
-		uname(&name);
-
-		/* Kernel version for 10.14.0 (Mojave) or later */
-		if (atoi(name.release) >= 18) {
-			page_size = get_page_alignment() + 1;
-			/* Only use MAP_JIT if a hardened runtime is used */
-			ptr = mmap(NULL, page_size, PROT_WRITE | PROT_EXEC,
-					MAP_PRIVATE | MAP_ANON, -1, 0);
-
-			if (ptr != MAP_FAILED)
-				munmap(ptr, page_size);
-			else
-				map_jit_flag = MAP_JIT;
-		}
-	}
-	return map_jit_flag;
-}
-#endif /* MAP_ANON */
-#else /* !SLJIT_CONFIG_X86 */
-#if !(defined SLJIT_CONFIG_ARM && SLJIT_CONFIG_ARM)
-#error "Unsupported architecture"
-#endif /* SLJIT_CONFIG_ARM */
-#include <AvailabilityMacros.h>
-#include <pthread.h>
-
-#define SLJIT_MAP_JIT	(MAP_JIT)
-#define SLJIT_UPDATE_WX_FLAGS(from, to, enable_exec) \
-                        apple_update_wx_flags(enable_exec)
-
-static SLJIT_INLINE void apple_update_wx_flags(sljit_s32 enable_exec)
-{
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
-	pthread_jit_write_protect_np(enable_exec);
-#else
-#error "Must target Big Sur or newer"
-#endif /* BigSur */
-}
-#endif /* SLJIT_CONFIG_X86 */
-#else /* !TARGET_OS_OSX */
-#define SLJIT_MAP_JIT	(MAP_JIT)
-#endif /* TARGET_OS_OSX */
-#endif /* __APPLE__ && MAP_JIT */
-#ifndef SLJIT_UPDATE_WX_FLAGS
-#define SLJIT_UPDATE_WX_FLAGS(from, to, enable_exec)
-#endif /* !SLJIT_UPDATE_WX_FLAGS */
-#ifndef SLJIT_MAP_JIT
-#define SLJIT_MAP_JIT	(0)
-#endif /* !SLJIT_MAP_JIT */
-
-static SLJIT_INLINE void* alloc_chunk(sljit_uw size)
-{
-	void *retval;
-	int prot = PROT_READ | PROT_WRITE | PROT_EXEC;
-	int flags = MAP_PRIVATE;
-	int fd = -1;
-
-#ifdef PROT_MAX
-	prot |= PROT_MAX(prot);
+#ifndef O_NOATIME
+#define O_NOATIME 0
 #endif
 
-#ifdef MAP_ANON
-	flags |= MAP_ANON | SLJIT_MAP_JIT;
-#else /* !MAP_ANON */
-	if (SLJIT_UNLIKELY((dev_zero < 0) && open_dev_zero()))
+/* this is a linux extension available since kernel 3.11 */
+#ifndef O_TMPFILE
+#define O_TMPFILE 020200000
+#endif
+
+#ifndef _GNU_SOURCE
+char *secure_getenv(const char *name);
+int mkostemp(char *template, int flags);
+#endif
+
+static SLJIT_INLINE int create_tempfile(void)
+{
+	int fd;
+	char tmp_name[256];
+	size_t tmp_name_len = 0;
+	char *dir;
+	struct stat st;
+#if defined(SLJIT_SINGLE_THREADED) && SLJIT_SINGLE_THREADED
+	mode_t mode;
+#endif
+
+#ifdef HAVE_MEMFD_CREATE
+	/* this is a GNU extension, make sure to use -D_GNU_SOURCE */
+	fd = memfd_create("sljit", MFD_CLOEXEC);
+	if (fd != -1) {
+		fchmod(fd, 0);
+		return fd;
+	}
+#endif
+
+	dir = secure_getenv("TMPDIR");
+
+	if (dir) {
+		tmp_name_len = strlen(dir);
+		if (tmp_name_len > 0 && tmp_name_len < sizeof(tmp_name)) {
+			if ((stat(dir, &st) == 0) && S_ISDIR(st.st_mode))
+				strcpy(tmp_name, dir);
+		}
+	}
+
+#ifdef P_tmpdir
+	if (!tmp_name_len) {
+		tmp_name_len = strlen(P_tmpdir);
+		if (tmp_name_len > 0 && tmp_name_len < sizeof(tmp_name))
+			strcpy(tmp_name, P_tmpdir);
+	}
+#endif
+	if (!tmp_name_len) {
+		strcpy(tmp_name, "/tmp");
+		tmp_name_len = 4;
+	}
+
+	SLJIT_ASSERT(tmp_name_len > 0 && tmp_name_len < sizeof(tmp_name));
+
+	if (tmp_name[tmp_name_len - 1] == '/')
+		tmp_name[--tmp_name_len] = '\0';
+
+#ifdef __linux__
+	/*
+	 * the previous trimming might had left an empty string if TMPDIR="/"
+	 * so work around the problem below
+	 */
+	fd = open(tmp_name_len ? tmp_name : "/",
+		O_TMPFILE | O_EXCL | O_RDWR | O_NOATIME | O_CLOEXEC, 0);
+	if (fd != -1)
+		return fd;
+#endif
+
+	if (tmp_name_len + 7 >= sizeof(tmp_name))
+		return -1;
+
+	strcpy(tmp_name + tmp_name_len, "/XXXXXX");
+#if defined(SLJIT_SINGLE_THREADED) && SLJIT_SINGLE_THREADED
+	mode = umask(0777);
+#endif
+	fd = mkostemp(tmp_name, O_CLOEXEC | O_NOATIME);
+#if defined(SLJIT_SINGLE_THREADED) && SLJIT_SINGLE_THREADED
+	umask(mode);
+#else
+	fchmod(fd, 0);
+#endif
+
+	if (fd == -1)
+		return -1;
+
+	if (unlink(tmp_name)) {
+		close(fd);
+		return -1;
+	}
+
+	return fd;
+}
+
+static SLJIT_INLINE struct chunk_header* alloc_chunk(sljit_uw size)
+{
+	struct chunk_header *retval;
+	int fd;
+
+	fd = create_tempfile();
+	if (fd == -1)
 		return NULL;
 
-	fd = dev_zero;
-#endif /* MAP_ANON */
+	if (ftruncate(fd, (off_t)size)) {
+		close(fd);
+		return NULL;
+	}
 
-	retval = mmap(NULL, size, prot, flags, fd, 0);
+	retval = (struct chunk_header *)mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+	if (retval == MAP_FAILED) {
+		close(fd);
+		return NULL;
+	}
+
+	retval->executable = mmap(NULL, size, PROT_READ | PROT_EXEC, MAP_SHARED, fd, 0);
+
+	if (retval->executable == MAP_FAILED) {
+		munmap((void *)retval, size);
+		close(fd);
+		return NULL;
+	}
+
+	close(fd);
+	return retval;
+}
+#else
+/*
+ * MAP_REMAPDUP is a NetBSD extension available sinde 8.0, make sure to
+ * adjust your feature macros (ex: -D_NETBSD_SOURCE) as needed
+ */
+static SLJIT_INLINE struct chunk_header* alloc_chunk(sljit_uw size)
+{
+	struct chunk_header *retval;
+
+	retval = (struct chunk_header *)mmap(NULL, size,
+			PROT_READ | PROT_WRITE | PROT_MPROTECT(PROT_EXEC),
+			MAP_ANON | MAP_SHARED, -1, 0);
+
 	if (retval == MAP_FAILED)
 		return NULL;
 
-#ifdef __FreeBSD__
-        /* HardenedBSD's mmap lies, so check permissions again */
-	if (mprotect(retval, size, PROT_READ | PROT_WRITE | PROT_EXEC) < 0) {
-		munmap(retval, size);
+	retval->executable = mremap(retval, size, NULL, size, MAP_REMAPDUP);
+	if (retval->executable == MAP_FAILED) {
+		munmap((void *)retval, size);
 		return NULL;
 	}
-#endif /* FreeBSD */
 
-	SLJIT_UPDATE_WX_FLAGS(retval, (uint8_t *)retval + size, 0);
+	if (mprotect(retval->executable, size, PROT_READ | PROT_EXEC) == -1) {
+		munmap(retval->executable, size);
+		munmap((void *)retval, size);
+		return NULL;
+	}
 
 	return retval;
 }
+#endif /* NetBSD */
 
 static SLJIT_INLINE void free_chunk(void *chunk, sljit_uw size)
 {
-	munmap(chunk, size);
-}
+	struct chunk_header *header = ((struct chunk_header *)chunk) - 1;
 
-#endif /* windows */
+	munmap(header->executable, size);
+	munmap((void *)header, size);
+}
 
 /* --------------------------------------------------------------------- */
 /*  Common functions                                                     */
@@ -221,6 +266,7 @@ static SLJIT_INLINE void free_chunk(void *chunk, sljit_uw size)
 struct block_header {
 	sljit_uw size;
 	sljit_uw prev_size;
+	sljit_sw executable_offset;
 };
 
 struct free_block {
@@ -234,7 +280,7 @@ struct free_block {
 	((struct block_header*)(((sljit_u8*)base) + offset))
 #define AS_FREE_BLOCK(base, offset) \
 	((struct free_block*)(((sljit_u8*)base) + offset))
-#define MEM_START(base)		((void*)(((sljit_u8*)base) + sizeof(struct block_header)))
+#define MEM_START(base)		((void*)((base) + 1))
 #define ALIGN_SIZE(size)	(((size) + sizeof(struct block_header) + 7u) & ~(sljit_uw)7)
 
 static struct free_block* free_blocks;
@@ -268,10 +314,12 @@ static SLJIT_INLINE void sljit_remove_free_block(struct free_block *free_block)
 
 SLJIT_API_FUNC_ATTRIBUTE void* sljit_malloc_exec(sljit_uw size)
 {
+	struct chunk_header *chunk_header;
 	struct block_header *header;
 	struct block_header *next_header;
 	struct free_block *free_block;
 	sljit_uw chunk_size;
+	sljit_sw executable_offset;
 
 	SLJIT_ALLOCATOR_LOCK();
 	if (size < (64 - sizeof(struct block_header)))
@@ -282,13 +330,13 @@ SLJIT_API_FUNC_ATTRIBUTE void* sljit_malloc_exec(sljit_uw size)
 	while (free_block) {
 		if (free_block->size >= size) {
 			chunk_size = free_block->size;
-			SLJIT_UPDATE_WX_FLAGS(NULL, NULL, 0);
 			if (chunk_size > size + 64) {
 				/* We just cut a block from the end of the free block. */
 				chunk_size -= size;
 				free_block->size = chunk_size;
 				header = AS_BLOCK_HEADER(free_block, chunk_size);
 				header->prev_size = chunk_size;
+				header->executable_offset = free_block->header.executable_offset;
 				AS_BLOCK_HEADER(header, size)->prev_size = size;
 			}
 			else {
@@ -304,17 +352,24 @@ SLJIT_API_FUNC_ATTRIBUTE void* sljit_malloc_exec(sljit_uw size)
 		free_block = free_block->next;
 	}
 
-	chunk_size = (size + sizeof(struct block_header) + CHUNK_SIZE - 1) & CHUNK_MASK;
-	header = (struct block_header*)alloc_chunk(chunk_size);
-	if (!header) {
+	chunk_size = sizeof(struct chunk_header) + sizeof(struct block_header);
+	chunk_size = (chunk_size + size + CHUNK_SIZE - 1) & CHUNK_MASK;
+
+	chunk_header = alloc_chunk(chunk_size);
+	if (!chunk_header) {
 		SLJIT_ALLOCATOR_UNLOCK();
 		return NULL;
 	}
 
-	chunk_size -= sizeof(struct block_header);
+	executable_offset = (sljit_sw)((sljit_u8*)chunk_header->executable - (sljit_u8*)chunk_header);
+
+	chunk_size -= sizeof(struct chunk_header) + sizeof(struct block_header);
 	total_size += chunk_size;
 
+	header = (struct block_header *)(chunk_header + 1);
+
 	header->prev_size = 0;
+	header->executable_offset = executable_offset;
 	if (chunk_size > size + 64) {
 		/* Cut the allocated space into a free and a used block. */
 		allocated_size += size;
@@ -323,6 +378,7 @@ SLJIT_API_FUNC_ATTRIBUTE void* sljit_malloc_exec(sljit_uw size)
 
 		free_block = AS_FREE_BLOCK(header, size);
 		free_block->header.prev_size = size;
+		free_block->header.executable_offset = executable_offset;
 		sljit_insert_free_block(free_block, chunk_size);
 		next_header = AS_BLOCK_HEADER(free_block, chunk_size);
 	}
@@ -334,6 +390,7 @@ SLJIT_API_FUNC_ATTRIBUTE void* sljit_malloc_exec(sljit_uw size)
 	}
 	next_header->size = 1;
 	next_header->prev_size = chunk_size;
+	next_header->executable_offset = executable_offset;
 	SLJIT_ALLOCATOR_UNLOCK();
 	return MEM_START(header);
 }
@@ -345,10 +402,10 @@ SLJIT_API_FUNC_ATTRIBUTE void sljit_free_exec(void* ptr)
 
 	SLJIT_ALLOCATOR_LOCK();
 	header = AS_BLOCK_HEADER(ptr, -(sljit_sw)sizeof(struct block_header));
+	header = AS_BLOCK_HEADER(header, -header->executable_offset);
 	allocated_size -= header->size;
 
 	/* Connecting free blocks together if possible. */
-	SLJIT_UPDATE_WX_FLAGS(NULL, NULL, 0);
 
 	/* If header->prev_size == 0, free_block will equal to header.
 	   In this case, free_block->header.size will be > 0. */
@@ -377,11 +434,12 @@ SLJIT_API_FUNC_ATTRIBUTE void sljit_free_exec(void* ptr)
 		if (total_size - free_block->size > (allocated_size * 3 / 2)) {
 			total_size -= free_block->size;
 			sljit_remove_free_block(free_block);
-			free_chunk(free_block, free_block->size + sizeof(struct block_header));
+			free_chunk(free_block, free_block->size +
+				sizeof(struct chunk_header) +
+				sizeof(struct block_header));
 		}
 	}
 
-	SLJIT_UPDATE_WX_FLAGS(NULL, NULL, 1);
 	SLJIT_ALLOCATOR_UNLOCK();
 }
 
@@ -391,7 +449,6 @@ SLJIT_API_FUNC_ATTRIBUTE void sljit_free_unused_memory_exec(void)
 	struct free_block* next_free_block;
 
 	SLJIT_ALLOCATOR_LOCK();
-	SLJIT_UPDATE_WX_FLAGS(NULL, NULL, 0);
 
 	free_block = free_blocks;
 	while (free_block) {
@@ -400,12 +457,18 @@ SLJIT_API_FUNC_ATTRIBUTE void sljit_free_unused_memory_exec(void)
 				AS_BLOCK_HEADER(free_block, free_block->size)->size == 1) {
 			total_size -= free_block->size;
 			sljit_remove_free_block(free_block);
-			free_chunk(free_block, free_block->size + sizeof(struct block_header));
+			free_chunk(free_block, free_block->size +
+				sizeof(struct chunk_header) +
+				sizeof(struct block_header));
 		}
 		free_block = next_free_block;
 	}
 
 	SLJIT_ASSERT((total_size && free_blocks) || (!total_size && !free_blocks));
-	SLJIT_UPDATE_WX_FLAGS(NULL, NULL, 1);
 	SLJIT_ALLOCATOR_UNLOCK();
+}
+
+SLJIT_API_FUNC_ATTRIBUTE sljit_sw sljit_exec_offset(void* ptr)
+{
+	return ((struct block_header *)(ptr))[-1].executable_offset;
 }
