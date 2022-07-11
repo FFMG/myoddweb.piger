@@ -220,6 +220,8 @@ import module, **import am**, (only usable within Piger of course).
 
 ### Lua
 
+Read more about the [Lua scripts](scripts/lua.md)
+
 #### Code
 - am_say( what, elapse, fade ), display a message
 - am_version, get the LUA version been used.
