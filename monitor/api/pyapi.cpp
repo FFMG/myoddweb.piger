@@ -10,7 +10,9 @@
 // 2.0 uses version 3.5 of Python.
 // 3.0 added Log( ... )
 // 3.1 C++11 code cleanup
-static const double ACTIONMONITOR_API_PY_VERSION = 3.1;
+// 3.2 Updated to version 10.40
+//     Added error messages
+static const double ACTIONMONITOR_API_PY_VERSION = 3.2;
 
 /**
  * \copydoc
@@ -62,8 +64,9 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
     // the last argument is optional
     if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
     {
-      __super::Log(AM_LOG_ERROR, L"Python: Say( ... ) Missing or more values or invalid format.");
       Say(L"<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>");
+
+      __super::Log(AM_LOG_ERROR, L"Python: Say( ... ) Missing or more values or invalid format.");
       
       //  just return false.
       return Fail();
@@ -120,6 +123,8 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args) const
   {
     Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getCommand( <b>index</b> )</i>");
 
+    __super::Log(AM_LOG_ERROR, L"Python: GetCommand( ... ) Missing index number.");
+
     //  just return false.
     return Fail();
   }
@@ -127,7 +132,7 @@ PyObject* PyApi::GetCommand(PyObject *self, PyObject *args) const
   std::wstring sValue;
   if( !__super::GetCommand( idx, sValue ) )
   {
-    //  just return false.
+    //  just return false, the error is logged in the call to GetCommand
     return Fail();
   }
 
@@ -148,11 +153,12 @@ PyObject* PyApi::GetAction(PyObject *self, PyObject *args) const
   std::wstring sValue;
   if( !__super::GetAction( sValue ) )
   {
-    //  just return false.
+    //  just return false, the error is logged in the call to GetAction
     return Fail();
   }
 
   USES_CONVERSION;
+  
   // or return the value
   return Py_BuildValue("s", T_T2A(sValue.c_str()) );
 }
@@ -166,7 +172,8 @@ PyObject* PyApi::GetAction(PyObject *self, PyObject *args) const
  */
 PyObject* PyApi::GetCommandCount(PyObject *self, PyObject *args) const
 {
-  // get it
+  // get it, if we get any errors we will return 0
+  // and the error will be logged.
   const auto nSize = __super::GetCommandCount();
 
   // and return it.
@@ -192,6 +199,8 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "s|sp", &module, &cmdLine, &isPrivileged))
     {
       Say(L"<b>Error : </b> Missing Module and/or command line.<br>Format is <i>am.execute( module [, commandLine[,isPrivileged=False]])</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: Missing Module and/or command line to execute.");
+
       return Fail();
     }
 
@@ -202,14 +211,24 @@ PyObject* PyApi::Execute(PyObject *self, PyObject *args) const
     if (!result)
     {
       Say(L"<b>Error : </b> There was an error executing the request, please check the parameters.");
+      __super::Log(AM_LOG_ERROR, L"Python: There was an error trying to execute the command.");
+
       return Fail();
     }
 
     // return the result.
     return Py_BuildValue("b", result);
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: Execute( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: Execute( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -229,6 +248,8 @@ PyObject* PyApi::GetString(PyObject *self, PyObject *args) const
   if (!PyArg_ParseTuple(args, "|p", &iQuote))  
   {
     Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getString( [quote=True] )</i>");
+    __super::Log(AM_LOG_ERROR, L"Python: GetString( ... ) missing the index number.");
+
     return Fail();
   }
 
@@ -262,13 +283,14 @@ PyObject* PyApi::GetFile(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
     {
       Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getfile( <b>index</b>[,quote=True] )</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: GetFile( ... ) missing the index number.");
       return Fail();
     }
 
     std::wstring sValue;
     if (!__super::GetFile(idx, sValue, (iQuote == 1)))
     {
-      // return false, nothing was found.
+      // return false, nothing was found, errors are logged in helper.
       return Py_BuildValue("b", false);
     }
 
@@ -276,8 +298,16 @@ PyObject* PyApi::GetFile(PyObject *self, PyObject *args) const
     // we have a string
     return Py_BuildValue("s", T_T2A(sValue.c_str()));
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: GetFile( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: GetFile( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -300,13 +330,14 @@ PyObject* PyApi::GetFolder(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
     {
       Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.getfolder( <b>index</b> [,quote=True] )</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: GetFolder( ... ) missing the index number.");
       return Fail();
     }
 
     std::wstring sValue;
     if (!__super::GetFolder(idx, sValue, (iQuote == 1)))
     {
-      // return false, nothing was found.
+      // return false, nothing was found, errors are logged in the helper file.
       return Py_BuildValue("b", false);
     }
 
@@ -314,8 +345,16 @@ PyObject* PyApi::GetFolder(PyObject *self, PyObject *args) const
     // we have a string
     return Py_BuildValue("s", T_T2A(sValue.c_str()));
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: GetFolder( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: GetFolder( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -338,13 +377,14 @@ PyObject* PyApi::GetUrl(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "I|p", &idx, &iQuote))
     {
       Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.geturl( index [,quote=True] )</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: GetUrl( ... ) missing the index number.");
       return Fail();
     }
 
     std::wstring sValue;
     if (!__super::GetUrl(idx, sValue, (iQuote == 1)))
     {
-      // return false, nothing was found.
+      // return false, nothing was found, errors are in the helper.
       return Py_BuildValue("b", false);
     }
 
@@ -352,8 +392,16 @@ PyObject* PyApi::GetUrl(PyObject *self, PyObject *args) const
     // we have a string
     return Py_BuildValue("s", T_T2A(sValue.c_str()));
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: GetUrl( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: GetUrl( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -376,6 +424,7 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "ss", &szText, &szPath))
     {
       Say(L"<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: AddAction( ... ) missing action name and/or path.");
       return Fail();
     }
 
@@ -383,8 +432,16 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args) const
     const auto result = __super::AddAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str());
     return Py_BuildValue("b", result);
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: AddAction( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: AddAction( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -407,6 +464,7 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "ss", &szText, &szPath))
     {
       Say(L"<b>Error : </b> Missing values.<br>Format is <i>am.removeAction( <b>action</b>, <b>path</b> )</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: RemoveAction( ... ) missing action name and/or path.");
       return Fail();
     }
 
@@ -414,8 +472,16 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args) const
     const auto result = __super::RemoveAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str());
     return Py_BuildValue("b", result);
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: RemoveAction( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: RemoveAction( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -438,6 +504,7 @@ PyObject* PyApi::Log(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "Is", &logType, &szText))
     {
       Say(L"<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: Log( ... ) missing message and/or error type.");
       return Fail();
     }
 
@@ -446,8 +513,16 @@ PyObject* PyApi::Log(PyObject *self, PyObject *args) const
     __super::Log(logType, action.c_str());
     return Py_BuildValue("b", true);
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: Log( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: Log( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -466,7 +541,7 @@ PyObject* PyApi::GetVersion(PyObject *self, PyObject *args) const
     std::wstring sValue = _T("");
     if (!__super::GetVersion(sValue))
     {
-      // we have nothing
+      // we have nothing, errors are logged in the helper.
       return Py_BuildValue("b", false);
     }
 
@@ -474,8 +549,16 @@ PyObject* PyApi::GetVersion(PyObject *self, PyObject *args) const
     // we have a string
     return Py_BuildValue("s", T_T2A(sValue.c_str()));
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: GetVersion( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: GetVersion( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -497,13 +580,14 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "Is", &idx, &szText))
     {
       Say(L"<b>Error : </b> Missing index number.<br>Format is <i>am.findAction( <b>index</b>, <b>string</b> )</i>");
+      __super::Log(AM_LOG_ERROR, L"Python: FindAction( ... ): Missing index number and/or action name");
       return Fail();
     }
 
     const auto action = HelperApi::FindAction(idx, HelperApi::Widen(szText));
     if (action == nullptr )
     {
-      // we have nothing
+      // we have nothing, errors are logged in the helper.
       return Py_BuildValue("b", false);
     }
 
@@ -511,8 +595,16 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
     // we have a string
     return Py_BuildValue("s", T_T2A(action->File().c_str()));
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"Python: FindAction( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    __super::Log(AM_LOG_ERROR, log.c_str());
+
+    return Fail();
+  }
+  catch (...)
+  {
+    __super::Log(AM_LOG_ERROR, L"Python: FindAction( ... ): threw an unknown exception");
     return Fail();
   }
 }
@@ -579,6 +671,9 @@ void PyApi::ExecuteInThread() const
   PyEval_ReleaseLock();
 }
 
+/**
+ * Get an error message from the given pyObject 
+ */
 const std::wstring PyApi::GetErrorMessageFromPyObject(PyObject* pyObject) const
 {
   PyObject* repr = PyObject_Repr(pyObject);

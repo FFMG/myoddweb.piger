@@ -70,6 +70,8 @@ bool HelperApi::GetCommand(const unsigned int idx, std::wstring& sValue ) const
     const auto& action = &_action;
     if (nullptr == action)
     {
+      Log(AM_LOG_ERROR, L"GetCommand( ... ): Missing action.");
+
       //  we don't have a command.
       return false;
     }
@@ -96,6 +98,7 @@ bool HelperApi::GetCommand(const unsigned int idx, std::wstring& sValue ) const
       // if the number that the user wants is within our limits then we will add it.
       if(actual_idx >= params.size() )
       {
+        Log(AM_LOG_WARNING, L"GetCommand( ... ): trying to get an index that is past the total number of commands.");
         return false;
       }
 
@@ -104,8 +107,19 @@ bool HelperApi::GetCommand(const unsigned int idx, std::wstring& sValue ) const
       return true;
     }
   }
+  catch (const std::exception& ex)
+  {
+    const auto log = myodd::strings::Format(L"GetCommand( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    Log(AM_LOG_ERROR, log.c_str());
+
+    // something broke...
+    sValue = _T("");
+    return false;
+  }
   catch(...)
   {
+    Log(AM_LOG_ERROR, L"GetCommand( ... ): unknwon exception.");
+
     // something did not work.
     sValue = _T("");
     return false;
@@ -129,12 +143,24 @@ bool HelperApi::GetAction(std::wstring& sValue ) const
     if (nullptr == action)
     {
       //  we don't have a command.
+      Log(AM_LOG_ERROR, L"GetAction( ... ): Missing action.");
       return false;
     }
     sValue = action->Command( );
   }
+  catch (const std::exception& ex)
+  {
+    const auto log = myodd::strings::Format(L"GetAction( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    Log(AM_LOG_ERROR, log.c_str());
+
+    // something broke...
+    sValue = _T("");
+    return false;
+  }
   catch(...)
   {
+    Log(AM_LOG_ERROR, L"GetCommand( ... ): unknwon exception.");
+
     // something broke...
     sValue = _T("");
     return false;
@@ -157,8 +183,9 @@ size_t HelperApi::GetCommandCount() const
     const auto& action = &_action;
     if (nullptr == action)
     {
+      Log(AM_LOG_ERROR, L"GetCommandCount( ... ): Missing action.");
       //  we don't have a command.
-      return false;
+      return 0;
     }
 
     const auto& szCommandLine = action->CommandLine();
@@ -171,9 +198,19 @@ size_t HelperApi::GetCommandCount() const
     std::vector<std::wstring> params;
     return myodd::strings::Explode(  params, szCommandLine, _T(' '), MYODD_MAX_INT32, false );
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
-    //  we have no command.
+    const auto log = myodd::strings::Format(L"GetCommandCount( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    Log(AM_LOG_ERROR, log.c_str());
+
+    // something broke...
+    return 0;
+  }
+  catch (...)
+  {
+    Log(AM_LOG_ERROR, L"GetCommandCount( ... ): unknwon exception.");
+
+    // something broke...
     return 0;
   }
 }
@@ -247,6 +284,8 @@ bool HelperApi::GetString (std::wstring& sValue, const bool bQuote) const
     std::wstring sClipBoard = _T("");
     if( !clipBoard.GetText( sClipBoard, bQuote ) )
     {
+      Log(AM_LOG_SUCCES, L"GetString( ... ): No  given string");
+
       // we have nothing.
       return false;
     }
@@ -254,6 +293,7 @@ bool HelperApi::GetString (std::wstring& sValue, const bool bQuote) const
     if( sClipBoard.length() == 0 )
     {
       // we have something but the size is 0
+      Log(AM_LOG_WARNING, L"GetString( ... ): The given string is actually null/empty");
       return false;
     }
 
@@ -261,8 +301,19 @@ bool HelperApi::GetString (std::wstring& sValue, const bool bQuote) const
     sValue = sClipBoard;
     return true;
   }
-  catch(... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"GetString( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    Log(AM_LOG_ERROR, log.c_str());
+
+    // something broke...
+    return false;
+  }
+  catch (...)
+  {
+    Log(AM_LOG_ERROR, L"GetString( ... ): unknwon exception.");
+
+    // something broke...
     return false;
   }
 }
@@ -284,6 +335,7 @@ bool HelperApi::GetFile(const unsigned int idx, std::wstring& sValue, const bool
     std::wstring sClipBoard = _T("");
     if( !clipBoard.GetFile( sClipBoard, idx, bQuote ) )
     {
+      Log(AM_LOG_WARNING, L"GetFile( ... ): No files at the given index.");
       // could not find anything
       return false;
     }
@@ -292,8 +344,19 @@ bool HelperApi::GetFile(const unsigned int idx, std::wstring& sValue, const bool
     sValue = sClipBoard;
     return true;
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"GetFile( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    Log(AM_LOG_ERROR, log.c_str());
+
+    // something broke...
+    return false;
+  }
+  catch (...)
+  {
+    Log(AM_LOG_ERROR, L"GetFile( ... ): unknwon exception.");
+
+    // something broke...
     return false;
   }
 }
@@ -315,6 +378,7 @@ bool HelperApi::GetUrl (const unsigned int idx, std::wstring& sValue, const bool
     std::wstring sClipBoard = _T("");
     if( !clipBoard.GetUrl( sClipBoard, idx, bQuote ) )
     {
+      Log(AM_LOG_WARNING, L"GetUrl( ... ): No url at the given index.");
       // could not find anything
       return false;
     }
@@ -325,8 +389,19 @@ bool HelperApi::GetUrl (const unsigned int idx, std::wstring& sValue, const bool
     // we have one item
     return true;
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"GetUrl( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    Log(AM_LOG_ERROR, log.c_str());
+
+    // something broke...
+    return false;
+  }
+  catch (...)
+  {
+    Log(AM_LOG_ERROR, L"GetUrl( ... ): unknwon exception.");
+
+    // something broke...
     return false;
   }
 }
@@ -346,9 +421,10 @@ bool HelperApi::GetFolder (const unsigned int idx, std::wstring& sValue, const b
   {
     const Clipboard& clipBoard = GetClipboard( );
 
-    std::wstring sClipBoard = _T("");
+    std::wstring sClipBoard = L"";
     if( !clipBoard.GetFolder( sClipBoard, idx, bQuote ) )
     {
+      Log(AM_LOG_WARNING, L"GetFolder( ... ): No folders at the given index.");
       // could not find anything
       return false;
     }
@@ -359,8 +435,19 @@ bool HelperApi::GetFolder (const unsigned int idx, std::wstring& sValue, const b
     // we have one item
     return true;
   }
-  catch( ... )
+  catch (const std::exception& ex)
   {
+    const auto log = myodd::strings::Format(L"GetFolder( ... ): threw an '%s'", HelperApi::Widen(ex.what()).c_str());
+    Log(AM_LOG_ERROR, log.c_str());
+
+    // something broke...
+    return false;
+  }
+  catch (...)
+  {
+    Log(AM_LOG_ERROR, L"GetFolder( ... ): unknwon exception.");
+
+    // something broke...
     return false;
   }
 }
