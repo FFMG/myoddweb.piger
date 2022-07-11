@@ -11,8 +11,8 @@
 // the maxfile size we want to use.
 static size_t MAX_FILE_SIZE_IN_MEGABYTES = 5;
 
-static const wchar_t* LogFile_default_Prefix = _T("myodd");
-static const wchar_t* LogFile_default_Extention = _T("log");
+static const wchar_t* LogFile_default_Prefix = L"myodd";
+static const wchar_t* LogFile_default_Extention = L"log";
 
 namespace myodd{ namespace log{
   LogFile::LogFile() : 
@@ -95,19 +95,19 @@ namespace myodd{ namespace log{
       {
         //  get the log file.
         wchar_t szDateLogStarted[40] = {};
-        _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y-%m-%d"), &_tStarted );
+        _tcsftime(szDateLogStarted, _countof(szDateLogStarted), L"%Y-%m-%d", &_tStarted );
 
         // add a number if the file number is > 0
         // so we will create more than one file for today if need be.
         wchar_t szFileCount[10] = {};
         if (i > 0) 
         {
-          swprintf(szFileCount, _T("-%u"), i);
+          swprintf(szFileCount, L"-%u", i);
         }
 
         //  we have already added a back slash at the end of the directory.
         // the file could exist already.
-        std::wstring proposedCurrentFile = m_sDirectory + m_sPrefix + szDateLogStarted + szFileCount + _T(".") + m_sExtention;
+        std::wstring proposedCurrentFile = m_sDirectory + m_sPrefix + szDateLogStarted + szFileCount + L"." + m_sExtention;
 
         double fileSizeInMegabytes = myodd::math::BytesToMegabytes(myodd::files::GetFileSizeInBytes(proposedCurrentFile));
         if (fileSizeInMegabytes < GetMaxFileSizeInMegabytes())
@@ -118,17 +118,17 @@ namespace myodd{ namespace log{
       }
 
       // try and open the new file.
-      m_fp = _tfsopen(m_sCurrentFile.c_str(), _T("a+b"), _SH_DENYWR);
+      m_fp = _tfsopen(m_sCurrentFile.c_str(), L"a+b", _SH_DENYWR);
 
       // did the file open?
       if( NULL == m_fp )
       {
-        myodd::log::LogError( _T("Could not open log file : \"%s\"."), m_sCurrentFile.c_str() );
+        myodd::log::LogError( L"Could not open log file : \"%s\".", m_sCurrentFile.c_str() );
         bResult = false;
       }
       else
       {
-        myodd::log::LogSuccess( _T("Log file, \"%s\", opened."), m_sCurrentFile.c_str() );
+        myodd::log::LogSuccess( L"Log file, \"%s\", opened.", m_sCurrentFile.c_str() );
 
         //  get the size of the file.
         m_uCurrentSize = _filelengthi64(_fileno(m_fp));
@@ -257,7 +257,7 @@ namespace myodd{ namespace log{
       }
 
       // try and open the new file.
-      m_fp = _tfsopen(m_sCurrentFile.c_str(), _T("a+b"), _SH_DENYWR);
+      m_fp = _tfsopen(m_sCurrentFile.c_str(), L"a+b", _SH_DENYWR);
 
       //  get the size of the file.
       m_uCurrentSize = _filelengthi64(_fileno(m_fp));
@@ -328,14 +328,14 @@ namespace myodd{ namespace log{
       auto tStarted = GetCurrentTimeStruct();
 
       wchar_t szDateLogStarted[40];
-      _tcsftime(szDateLogStarted, _countof(szDateLogStarted), _T("%Y/%m/%d %H:%M:%S"), &tStarted );
+      _tcsftime(szDateLogStarted, _countof(szDateLogStarted), L"%Y/%m/%d %H:%M:%S", &tStarted );
 
       //  build the return message.
       std::wstring stdMsg = szDateLogStarted;
-      stdMsg += _T(" ") + myodd::strings::ToString( uiType, _T("%04d") );
-      stdMsg += _T(" ");
-      stdMsg += (pszLine ? pszLine : _T(""));
-      stdMsg += _T("\r\n");
+      stdMsg += L" " + myodd::strings::ToString( uiType, L"%04d");
+      stdMsg += L" ";
+      stdMsg += (pszLine ? pszLine : L"");
+      stdMsg += L"\r\n";
 
       const wchar_t* pszMsg = stdMsg.c_str();
 
@@ -376,7 +376,7 @@ namespace myodd{ namespace log{
     // or is the user telling us that they want to close it?
     if( wPath.length() == 0 )
     {
-      m_sPrefix = m_sExtention = m_sDirectory = _T("");
+      m_sPrefix = m_sExtention = m_sDirectory = L"";
       return true;
     }
 
@@ -398,7 +398,7 @@ namespace myodd{ namespace log{
     myodd::files::AddTrailingBackSlash( m_sDirectory );
 
     //  expand the path, in case the user changes their path or something.
-    if( !myodd::files::GetAbsolutePath( m_sDirectory, m_sDirectory, _T(".") ))
+    if( !myodd::files::GetAbsolutePath( m_sDirectory, m_sDirectory, L"." ))
     {
       return false;
     }

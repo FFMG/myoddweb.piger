@@ -59,6 +59,8 @@ protected:
    */
   static PyObject* Fail();
   void Say(const std::wstring& what) const;
+
+  const std::wstring GetErrorMessageFromPyObject(PyObject* pyObject) const;
 };
 
 #endif /*# ACTIONMONITOR_API_PY*/

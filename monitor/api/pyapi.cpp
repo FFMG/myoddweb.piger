@@ -579,6 +579,25 @@ void PyApi::ExecuteInThread() const
   PyEval_ReleaseLock();
 }
 
+const std::wstring PyApi::GetErrorMessageFromPyObject(PyObject* pyObject) const
+{
+  PyObject* repr = PyObject_Repr(pyObject);
+  if (nullptr == repr)
+  {
+    return L"";
+  }
+
+  std::wstring errorMessage = L"";
+  const auto bytes = PyUnicode_AsEncodedString(repr, "ASCII", "strict");
+  if (bytes != nullptr) 
+  {
+    errorMessage = myodd::strings::String2WString(PyBytes_AS_STRING(bytes));
+    Py_DECREF(bytes);
+  }
+  Py_DECREF(repr);
+  return errorMessage;
+}
+
 /**
  * Check for errors and log a message.
  */
@@ -594,38 +613,36 @@ void PyApi::CheckForPythonErrors() const
       PyErr_Fetch(&type, &value, &traceback);
       PyErr_Clear();
 
-      std::string message = "<b>Error : </b>An error was raised in the PyAPI.";
-      if (type) {
-        const auto temp_bytes = PyUnicode_AsEncodedString(type, "ASCII", "strict");
-        if (temp_bytes != nullptr) {
-          message += "<br>";
-          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
-          Py_DECREF(temp_bytes);
-        }
+      std::vector<std::wstring> logMessages;
+      if (type) 
+      {
+        logMessages.push_back(GetErrorMessageFromPyObject(type));
       }
-      if (value) {
-        const auto temp_bytes = PyUnicode_AsEncodedString(value, "ASCII", "strict");
-        if (temp_bytes != nullptr) {
-          message += "<br>";
-          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
-          Py_DECREF(temp_bytes);
-        }
+      if (value) 
+      {
+        logMessages.push_back(GetErrorMessageFromPyObject(value));
       }
-      if (traceback) {
-        const auto temp_bytes = PyUnicode_AsEncodedString(traceback, "ASCII", "strict");
-        if (temp_bytes != nullptr) {
-          message += "<br>";
-          message += PyBytes_AS_STRING(temp_bytes); // Borrowed pointer
-          Py_DECREF(temp_bytes);
-        }
+      if (traceback) 
+      {
+        logMessages.push_back(GetErrorMessageFromPyObject(traceback));
       }
       Py_XDECREF(type);
       Py_XDECREF(value);
       Py_XDECREF(traceback);
 
+      if (logMessages.size() > 0)
+      {
+        const auto logMessage = myodd::strings::implode(logMessages, L"\n\r");
+        __super::Log(AM_LOG_ERROR, myodd::strings::Format(L"Python code error:\r\n%s", logMessage.c_str()).c_str());
+      }
+      else
+      {
+        __super::Log(AM_LOG_ERROR, myodd::strings::Format(L"Python code error: (No errors logged)" ).c_str() );
+      }
+
       // give the error message
       USES_CONVERSION;
-      const wchar_t* msg = T_A2T(message.c_str());
+      const wchar_t* msg = L"<b>Error : </b>An error was raised in the PyAPI.";
       const unsigned int nElapse = 500;
       const unsigned int nFadeOut = 10;
       __super::Say(msg, nElapse, nFadeOut);
