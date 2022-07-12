@@ -82,6 +82,10 @@ Type: files; Name: "{app}\python36.dll"
 Type: files; Name: "{app}\python36.zip"
 Type: files; Name: "{app}\python6436.dll"
 
+Type: files; Name: "{app}\python37.dll"
+Type: files; Name: "{app}\python37.zip"
+Type: files; Name: "{app}\python6437.dll"
+
 ; remove the powershell dll, in case the user removed powershell, (or something weird).
 ; that way we will not try and execute something that might not exist.
 Type: files; Name: "{app}\AMPowerShellCmdLets.dll"
