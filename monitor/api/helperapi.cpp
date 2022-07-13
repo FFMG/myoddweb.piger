@@ -89,7 +89,7 @@ bool HelperApi::GetCommand(const unsigned int idx, std::wstring& sValue ) const
     {
       // get the number of elements.
       std::vector<std::wstring> params;
-      myodd::strings::Explode( params, szCommandLine , _T(' '), MYODD_MAX_INT32, false );
+      myodd::strings::Explode( params, szCommandLine , L' ', MYODD_MAX_INT32, false );
 
       // because the std::vector is 0 based
       // we must step the index back once to get the right number
@@ -113,7 +113,7 @@ bool HelperApi::GetCommand(const unsigned int idx, std::wstring& sValue ) const
     Log(AM_LOG_ERROR, log.c_str());
 
     // something broke...
-    sValue = _T("");
+    sValue = L"";
     return false;
   }
   catch(...)
@@ -121,7 +121,7 @@ bool HelperApi::GetCommand(const unsigned int idx, std::wstring& sValue ) const
     Log(AM_LOG_ERROR, L"GetCommand( ... ): unknwon exception.");
 
     // something did not work.
-    sValue = _T("");
+    sValue = L"";
     return false;
   }
   return true;
@@ -154,7 +154,7 @@ bool HelperApi::GetAction(std::wstring& sValue ) const
     Log(AM_LOG_ERROR, log.c_str());
 
     // something broke...
-    sValue = _T("");
+    sValue = L"";
     return false;
   }
   catch(...)
@@ -162,7 +162,7 @@ bool HelperApi::GetAction(std::wstring& sValue ) const
     Log(AM_LOG_ERROR, L"GetCommand( ... ): unknwon exception.");
 
     // something broke...
-    sValue = _T("");
+    sValue = L"";
     return false;
   }
 
@@ -196,7 +196,7 @@ size_t HelperApi::GetCommandCount() const
 
     // get the action commands and get the number of argument .
     std::vector<std::wstring> params;
-    return myodd::strings::Explode(  params, szCommandLine, _T(' '), MYODD_MAX_INT32, false );
+    return myodd::strings::Explode(  params, szCommandLine, L' ', MYODD_MAX_INT32, false );
   }
   catch (const std::exception& ex)
   {
@@ -236,14 +236,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, const boo
   std::vector<std::wstring> argv;
 
   // we must have at least the module
-  if( nullptr == module )
-  {
-    argv.push_back( L"" );
-  }
-  else
-  {
-    argv.push_back( module );
-  }
+  argv.push_back( nullptr == module ? L"" : module );
 
   if(nullptr != cmdLine )
   {
@@ -262,7 +255,7 @@ bool HelperApi::Execute(const wchar_t* module, const wchar_t* cmdLine, const boo
 bool HelperApi::GetVersion (std::wstring& sValue )
 {
   myodd::files::Version ver;
-  sValue = myodd::strings::Format( _T("%d.%d.%d.%d"),
+  sValue = myodd::strings::Format( L"%d.%d.%d.%d",
                                    ver.GetFileVersionMajor(),
                                    ver.GetFileVersionMinor(),
                                    ver.GetFileVersionMaintenance(),
@@ -281,7 +274,7 @@ bool HelperApi::GetString (std::wstring& sValue, const bool bQuote) const
   try
   {
     const auto& clipBoard = GetClipboard( );
-    std::wstring sClipBoard = _T("");
+    std::wstring sClipBoard = L"";
     if( !clipBoard.GetText( sClipBoard, bQuote ) )
     {
       Log(AM_LOG_SUCCES, L"GetString( ... ): No  given string");
@@ -332,7 +325,7 @@ bool HelperApi::GetFile(const unsigned int idx, std::wstring& sValue, const bool
   {
     const Clipboard& clipBoard = GetClipboard( );
 
-    std::wstring sClipBoard = _T("");
+    std::wstring sClipBoard = L"";
     if( !clipBoard.GetFile( sClipBoard, idx, bQuote ) )
     {
       Log(AM_LOG_WARNING, L"GetFile( ... ): No files at the given index.");
@@ -375,7 +368,7 @@ bool HelperApi::GetUrl (const unsigned int idx, std::wstring& sValue, const bool
   {
     const auto& clipBoard = GetClipboard( );
 
-    std::wstring sClipBoard = _T("");
+    std::wstring sClipBoard = L"";
     if( !clipBoard.GetUrl( sClipBoard, idx, bQuote ) )
     {
       Log(AM_LOG_WARNING, L"GetUrl( ... ): No url at the given index.");
@@ -577,7 +570,7 @@ void HelperApi::Log(unsigned int logType, const wchar_t* lpText)
     break;
 
   default:
-    myodd::log::LogError( _T("Unknown log type: %s"), lpText );
+    myodd::log::LogError( L"Unknown log type: %s", lpText );
     break;
   }
 }
