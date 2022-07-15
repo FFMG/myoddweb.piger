@@ -18,6 +18,7 @@
 #include "IActiveAction.h"
 #include "IIpcListener.h"
 #include "IApplication.h"
+#include <functional>
 
 template <class Key, class Value>
 class VirtualMachineLists

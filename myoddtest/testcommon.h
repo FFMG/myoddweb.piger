@@ -1,12 +1,7 @@
 #pragma once
 
-#include <boost/uuid/uuid.hpp>            // uuid class
-#include <boost/uuid/uuid_generators.hpp> // generators
-#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
-
 #include <limits>
 #include <string>
-#include <boost/lexical_cast.hpp>
 
 #include <chrono>
 #include <random>
@@ -239,7 +234,29 @@ inline bool BoolRandomNumber()
 
 inline std::wstring Uuid()
 {
-  return boost::lexical_cast<std::wstring>(boost::uuids::random_generator()());
+  // In its canonical textual representation, the 16 octets of a UUID are represented as 32 hexadecimal (base-16) digits, 
+  // displayed in five groups separated by hyphens, in the form 8-4-4-4-12 for a total of 36 characters (32 hexadecimal characters and 4 hyphens).
+  const wchar_t hex_characters[] = { L'0',L'1',L'2',L'3',L'4',L'5',L'6',L'7',L'8',L'9',L'a',L'b',L'c',L'd',L'e',L'f' };
+  const auto lengths = { 8, 4, 4, 4, 12 };
+
+  std::vector<std::wstring> uuids;
+  for (auto& length : lengths)
+  {
+    std::wstring part;
+    for (auto& length : lengths)
+    {
+      auto hex = hex_characters[std::rand() % 16];
+      part += hex;
+    }
+    uuids.push_back( part );
+  }
+  std::wstring uuid;
+  for (auto& uuid_part : uuids)
+  {
+    uuid += uuid_part;
+    uuid += L'-';
+  }
+  return uuid;
 }
 
 inline std::wstring RandomWideString( size_t len )

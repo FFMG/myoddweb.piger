@@ -57,18 +57,6 @@
     <Filter Include="string">
       <UniqueIdentifier>{3087a44d-af8b-4376-a7d9-8eb5ef6d1b70}</UniqueIdentifier>
     </Filter>
-    <Filter Include="stree">
-      <UniqueIdentifier>{920a93e4-eb1d-4ed6-88f1-4fffd20543a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="boost">
-      <UniqueIdentifier>{a6fc104d-1209-4b21-96bc-adfc7e015d7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="boost\boost.program_options">
-      <UniqueIdentifier>{66ceb099-2868-4a40-8dd0-fe2ec1421ce4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="boost\boost.regex">
-      <UniqueIdentifier>{41cfb6e2-dcac-4921-8ec3-17d94adeaa73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="os">
       <UniqueIdentifier>{1f0f441e-0f5d-46e1-abc1-bbb86cb6ce98}</UniqueIdentifier>
     </Filter>
@@ -89,62 +77,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="common\program_options.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="config\Config.cpp">
       <Filter>Config</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\c_regex_traits.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\cpp_regex_traits.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\cregex.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\fileiter.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\icu.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\instances.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\posix_api.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\regex.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\regex_debug.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\regex_raw_buffer.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\regex_traits_defaults.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\static_mutex.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\usinstances.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\w32_regex_traits.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\wc_regex_traits.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\wide_posix_api.cpp">
-      <Filter>boost\boost.regex</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\regex\src\winstances.cpp">
-      <Filter>boost\boost.regex</Filter>
     </ClCompile>
     <ClCompile Include="offsets\offset.cpp">
       <Filter>offset</Filter>
@@ -193,36 +127,6 @@
     </ClCompile>
     <ClCompile Include="html\TokenUnderline.cpp">
       <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\cmdline.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\config_file.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\convert.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\options_description.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\parsers.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\positional_options.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\utf8_codecvt_facet.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\value_semantic.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\variables_map.cpp">
-      <Filter>boost\boost.program_options</Filter>
-    </ClCompile>
-    <ClCompile Include="boost\libs\program_options\src\winmain.cpp">
-      <Filter>boost\boost.program_options</Filter>
     </ClCompile>
     <ClCompile Include="threads\threads.cpp">
       <Filter>threads</Filter>
@@ -381,9 +285,6 @@
     <ClInclude Include="common\includes.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="common\program_options.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="config\Config.h">
       <Filter>Config</Filter>
     </ClInclude>
@@ -458,15 +359,6 @@
     </ClInclude>
     <ClInclude Include="string\string.h">
       <Filter>string</Filter>
-    </ClInclude>
-    <ClInclude Include="stree\smap.h">
-      <Filter>stree</Filter>
-    </ClInclude>
-    <ClInclude Include="stree\sset.h">
-      <Filter>stree</Filter>
-    </ClInclude>
-    <ClInclude Include="stree\stree.h">
-      <Filter>stree</Filter>
     </ClInclude>
     <ClInclude Include="os\os.h">
       <Filter>os</Filter>
