@@ -795,7 +795,7 @@ TEST_MEM_LOOP(AnyTestCharacter, WideCharANegativeNumberWithLeadingZeroNullTermin
 TEST_MEM_LOOP(AnyTestCharacter, CharANegativeNumberWithLeadingZeroNotNullTerminated, NUMBER_OF_TESTS)
 {
   const size_t len = 10;
-  char c[len + 1];
+  char c[len + 1] = { '\0'};
   long long int bignum = 0;
 
   c[0] = '-';
@@ -815,7 +815,7 @@ TEST_MEM_LOOP(AnyTestCharacter, CharANegativeNumberWithLeadingZeroNotNullTermina
 TEST_MEM_LOOP(AnyTestCharacter, WideCharANegativeNumberWithLeadingZeroNotNullTerminated, NUMBER_OF_TESTS)
 {
   const size_t len = 10;
-  wchar_t wc[len + 1];
+  wchar_t wc[len + 1] = { L'\0' };;
   long long int bignum = 0;
 
   wc[0] = L'-';
