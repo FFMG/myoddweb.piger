@@ -205,6 +205,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="common\commandline_variables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="config\Config.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">NotUsing</PrecompiledHeader>
@@ -546,6 +552,7 @@
     <ClInclude Include="cache\cacheitem.h" />
     <ClInclude Include="cache\cacheitempolicy.h" />
     <ClInclude Include="cache\memorycache.h" />
+    <ClInclude Include="common\commandline_variables.h" />
     <ClInclude Include="common\includes.h" />
     <ClInclude Include="config\Config.h" />
     <ClInclude Include="config\data.h" />

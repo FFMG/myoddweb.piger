@@ -266,6 +266,9 @@
     <ClCompile Include="pcre2\src\pcre2_extuni.c">
       <Filter>pcre2\src</Filter>
     </ClCompile>
+    <ClCompile Include="common\commandline_variables.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -419,6 +422,9 @@
     </ClInclude>
     <ClInclude Include="threads\messages.h">
       <Filter>threads</Filter>
+    </ClInclude>
+    <ClInclude Include="common\commandline_variables.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
