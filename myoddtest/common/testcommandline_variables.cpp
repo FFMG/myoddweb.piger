@@ -73,6 +73,18 @@ TEST(BasicCommandLineVariables, GetValuesWillIgnoreDefault)
   ASSERT_STREQ(L"Bar", cmd.get(L"b", L"Default"));
 }
 
+TEST(BasicCommandLineVariables, ValueHaveSpace)
+{
+  const int argc = 3;
+  wchar_t* args[] = { L"example.exe", L"-a", L"Foo Bar" };
+  myodd::commandline_variables cmd(argc, args);
+
+  // it exists
+  ASSERT_TRUE(cmd.contains(L"a"));
+
+  ASSERT_STREQ(L"Foo Bar", cmd.get(L"a", L"Default"));
+}
+
 TEST(BasicCommandLineVariables, HasValueGetAnotherWithNoDefault)
 {
   const int argc = 5;
@@ -119,7 +131,7 @@ TEST(BasicCommandLineVariables, UseNonDefaultPrefixGetValuesWillIgnoreDefault)
   ASSERT_STREQ(L"Bar", cmd.get(L"b", L"Default"));
 }
 
-TEST(BasicCommandLineVariables, NonDefaultPrefixMoreThanOneKeyNoneHaveAValue)
+TEST(BasicCommandLineVariables, UseNonDefaultPrefixMoreThanOneKeyNoneHaveAValue)
 {
   const int argc = 4;
   wchar_t* args[] = { L"example.exe", L"--a", L"--b", L"--c" };
