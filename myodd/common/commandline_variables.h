@@ -47,7 +47,7 @@ namespace myodd {
     /// </summary>
     std::map<std::wstring, int> _key_values;
   public:
-    commandline_variables(int argc, wchar_t* args[], bool allow_unregistered = true);
+    commandline_variables(int argc, wchar_t* args[], const wchar_t* key_prefix = L"-");
 
     /// <summary>
     /// Check if the arguments contain the given value.

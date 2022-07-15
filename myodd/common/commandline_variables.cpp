@@ -25,10 +25,8 @@
 #include "commandline_variables.h"
 
 namespace myodd {
-  commandline_variables::commandline_variables(int argc, wchar_t* args[], bool allow_unregistered)
+  commandline_variables::commandline_variables(int argc, wchar_t* args[], const wchar_t* key_prefix)
   {
-    const wchar_t* prefix = L"-";
-
     //  by definition the fist one is the exe path
     PathToExe = argc > 0 ? args[0] : L"";
 
@@ -43,7 +41,7 @@ namespace myodd {
     {
       // is it a key?
       std::wstring actual;
-      if (IsKey(args[i], prefix, actual ))
+      if (IsKey(args[i], key_prefix, actual ))
       {
         // if the next one is not a value then we are done
         if (i + 1 == argc )
@@ -53,7 +51,7 @@ namespace myodd {
         }
 
         std::wstring next_actual;
-        if (IsKey(args[i + 1], prefix, next_actual))
+        if (IsKey(args[i + 1], key_prefix, next_actual))
         {
           _key_values[actual] = -1;
           continue;

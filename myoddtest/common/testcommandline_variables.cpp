@@ -104,3 +104,33 @@ TEST(BasicCommandLineVariables, HasValueGetAnotherWithDefault)
 
   ASSERT_STREQ(L"Default", cmd.get(L"c", L"Default"));
 }
+
+TEST(BasicCommandLineVariables, UseNonDefaultPrefixGetValuesWillIgnoreDefault)
+{
+  const int argc = 5;
+  wchar_t* args[] = { L"example.exe", L"--a", L"Foo", L"--b", L"Bar" };
+  myodd::commandline_variables cmd(argc, args, L"--");
+
+  // it exists
+  ASSERT_TRUE(cmd.contains(L"a"));
+  ASSERT_TRUE(cmd.contains(L"b"));
+
+  ASSERT_STREQ(L"Foo", cmd.get(L"a", L"Default"));
+  ASSERT_STREQ(L"Bar", cmd.get(L"b", L"Default"));
+}
+
+TEST(BasicCommandLineVariables, NonDefaultPrefixMoreThanOneKeyNoneHaveAValue)
+{
+  const int argc = 4;
+  wchar_t* args[] = { L"example.exe", L"--a", L"--b", L"--c" };
+  myodd::commandline_variables cmd(argc, args, L"--");
+
+  // it exists
+  ASSERT_TRUE(cmd.contains(L"a"));
+  ASSERT_TRUE(cmd.contains(L"b"));
+  ASSERT_TRUE(cmd.contains(L"c"));
+
+  ASSERT_EQ((const wchar_t*)nullptr, cmd.get(L"a"));
+  ASSERT_EQ((const wchar_t*)nullptr, cmd.get(L"b"));
+  ASSERT_EQ((const wchar_t*)nullptr, cmd.get(L"c"));
+}
