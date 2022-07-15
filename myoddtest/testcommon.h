@@ -251,7 +251,7 @@ inline std::wstring Uuid()
     uuids.push_back( part );
   }
   std::wstring uuid;
-  for( auto i = 0; i < uuids.size(); ++i )
+  for( size_t i = 0; i < uuids.size(); ++i )
   {
     uuid += uuids[i];
     if (i + 1 < uuids.size())
@@ -275,7 +275,7 @@ inline std::wstring RandomWideString( size_t len )
   const std::wstring b = L"abcdefghejklmnopqrstuvwxyz1234567890-";
   const auto lb = (int)b.length() - 1;
 
-  for (auto i = 0; i < len; ++i)
+  for (size_t i = 0; i < len; ++i)
   {
     result += (i == 0 || i == (len-1)) ? a[IntRandomNumber<int>(0, la)] : b[IntRandomNumber<int>(0, lb)];
   }
@@ -292,7 +292,7 @@ inline std::string RandomString(size_t len)
   const std::string a = "abcdefghejklmnopqrstuvwxyz1234567890-";
   const auto la = (int)a.length() - 1;
 
-  for (auto i = 0; i < len; ++i)
+  for (size_t i = 0; i < len; ++i)
   {
     result += a[IntRandomNumber<int>(0, la)];
   }
