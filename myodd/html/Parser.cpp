@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "Parser.h"
+#include <algorithm>
 
 static Tokens m_tokens;
 
@@ -129,7 +130,7 @@ void Parser::Add(const wchar_t* begin, const wchar_t* end, const bool isHtmlTag 
     //hd->text.assign( begin, end );
     assert( end - begin > 0 );  // how can the tag be empty??
     hd->text.assign(end - begin, '\0');
-    transform(begin, end, hd->text.begin(), ::tolower);
+    std::transform(begin, end, hd->text.begin(), ::tolower);
     
     // look for the matching token for that tag
     // the token is what does the basic string transformation.

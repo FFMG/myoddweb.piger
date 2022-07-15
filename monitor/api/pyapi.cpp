@@ -424,7 +424,7 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "ss", &szText, &szPath))
     {
       Say(L"<b>Error : </b> Missing values.<br>Format is <i>am.addAction( <b>action</b>, <b>path</b> )</i>");
-      __super::Log(AM_LOG_ERROR, L"Python: AddAction( ... ) missing action name and/or path.");
+      __super::Log(AM_LOG_ERROR, L"Python: AddAction( ... ): missing action name and/or path.");
       return Fail();
     }
 

@@ -3,6 +3,7 @@
 #include <codecvt>
 #include <vector>
 #include <algorithm>
+#include "../pcre2/regex2.h"
 
 #include "string.h"
 #include "assert.h"
@@ -426,7 +427,7 @@ int32_t Find
 const std::wstring lower(const std::wstring& s)
 {
   std::wstring ret = L"";
-  BOOST_FOREACH(wchar_t tch, s )
+  for(auto& tch : s )
   {
     ret += lower( tch );
   }
@@ -475,14 +476,7 @@ bool wildcmp(const wchar_t* wild, const wchar_t* string)
 {
   try
   {
-    boost::wsmatch matches;
-    boost::wregex stringRegex;
-    std::wstring stdString( string );
-    stringRegex.assign( wild, boost::regex_constants::icase);
-    if (boost::regex_match( stdString, matches, stringRegex))
-    {
-      return true;
-    }
+    return myodd::regex::Regex2::Search(wild, string, false);
   }
   catch( const std::runtime_error & e )
   {
@@ -741,22 +735,38 @@ bool IsEmptyString(const std::string& src )
 /**
  * Convert a double value to an string given a format.
  * @param std::wstring& 
- * @param float the number we want to use.
+ * @param int the number we want to use.
  * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool IntToString( std::wstring& value, int i, const wchar_t* pszFormat )
+bool IntToString( std::wstring& value, int given_integer, const wchar_t* pszFormat )
 {
   try
   {
-    value = (boost::wformat(pszFormat?pszFormat:_T("%d")) % i ).str();
+    if (nullptr == pszFormat)
+    {
+      return IntToString(value, given_integer, L"%d");
+    }
+    const auto buffer_size = 2 * wcslen(pszFormat)+1024;
+    auto buffer = new wchar_t[buffer_size];
+    auto actual = std::swprintf(buffer, buffer_size, pszFormat, given_integer );
+    if (actual < 0)
+    {
+      value = L"";
+      delete[] buffer;
+      return false;
+    }
+
+    value = std::wstring(buffer);
+    delete[] buffer;
+    return true;
+
   }
-  catch( ... )
+  catch (...)
   {
-    value = _T("");
+    value = L"";
     return false;
   }
-  return true;
 }
 
 /**
@@ -766,18 +776,33 @@ bool IntToString( std::wstring& value, int i, const wchar_t* pszFormat )
  * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool DoubleToString( std::wstring& value, double d, const wchar_t* pszFormat )
+bool DoubleToString( std::wstring& value, double given_double, const wchar_t* pszFormat )
 {
   try
   {
-    value = (boost::wformat(pszFormat?pszFormat:_T("%f")) % d ).str();
+    if (nullptr == pszFormat)
+    {
+      return DoubleToString(value, given_double, L"%f");
+    }
+    auto buffer_size = 2 * wcslen(pszFormat)+1024;
+    auto buffer = new wchar_t[buffer_size];
+    auto actual = std::swprintf(buffer, buffer_size, pszFormat, given_double);
+    if (actual < 0)
+    {
+      value = L"";
+      delete[] buffer;
+      return false;
+    }
+
+    value = std::wstring(buffer);
+    delete[] buffer;
+    return true;
   }
   catch( ... )
   {
-    value = _T("");
+    value = L"";
     return false;
   }
-  return true;
 }
 
 /**
@@ -787,18 +812,33 @@ bool DoubleToString( std::wstring& value, double d, const wchar_t* pszFormat )
  * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool FloatToString( std::wstring& value, float f, const wchar_t* pszFormat )
+bool FloatToString( std::wstring& value, float given_float, const wchar_t* pszFormat )
 {
   try
   {
-    value = (boost::wformat(pszFormat?pszFormat:_T("%f")) % f ).str();
+    if (nullptr == pszFormat)
+    {
+      return FloatToString(value, given_float, L"%f");
+    }
+    const auto buffer_size = 2 * wcslen(pszFormat) + 1024;
+    auto buffer = new wchar_t[buffer_size];
+    auto actual = std::swprintf(buffer, buffer_size, pszFormat, given_float);
+    if (actual < 0)
+    {
+      value = L"";
+      delete[] buffer;
+      return false;
+    }
+
+    value = std::wstring(buffer);
+    delete[] buffer;
+    return true;
   }
-  catch( ... )
+  catch (...)
   {
-    value = _T("");
+    value = L"";
     return false;
   }
-  return true;
 }
 
 /**
@@ -808,18 +848,36 @@ bool FloatToString( std::wstring& value, float f, const wchar_t* pszFormat )
  * @param const wchar_t*|NULL the format we want to use the float with.
  * @return bool success or if there was an error.
  */
-bool StringToString( std::wstring& value, const wchar_t* l, const wchar_t* pszFormat )
+bool StringToString( std::wstring& value, const wchar_t* given_string, const wchar_t* pszFormat )
 {
   try
   {
-    value = (boost::wformat(pszFormat?pszFormat:_T("%s")) % l ).str();
+    if (nullptr == given_string)
+    {
+      return StringToString(value, L"", pszFormat);
+    }
+    if (nullptr == pszFormat)
+    {
+      return StringToString(value, given_string, L"%s");
+    }
+    const auto buffer_size = 2*wcslen(given_string) + 2 * wcslen(pszFormat);
+    auto buffer = new wchar_t[buffer_size];
+    auto actual = std::swprintf(buffer, buffer_size, pszFormat, given_string);
+    if (actual < 0)
+    {
+      value = L"";
+      return false;
+    }
+
+    value = std::wstring(buffer);
+    delete[] buffer;
+    return true;
   }
-  catch( ... )
+  catch (...)
   {
-    value = _T("");
+    value = L"";
     return false;
   }
-  return true;
 }
 
 /**

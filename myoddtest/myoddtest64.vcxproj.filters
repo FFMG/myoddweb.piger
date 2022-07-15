@@ -29,6 +29,9 @@
     <Filter Include="myodd\config">
       <UniqueIdentifier>{cf74c69e-e5af-4ef8-94a8-60a8f466b046}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\common">
+      <UniqueIdentifier>{d2af3111-8f25-49e0-a1ed-e2413150b03f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -168,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="files\testfiles_cleanfilename.cpp">
       <Filter>myodd\files</Filter>
+    </ClCompile>
+    <ClCompile Include="common\testcommandline_variables.cpp">
+      <Filter>myodd\common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

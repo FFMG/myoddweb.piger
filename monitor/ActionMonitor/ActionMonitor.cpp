@@ -176,23 +176,10 @@ BOOL CActionMonitorApp::InitInstance()
   //  load the command line
   //  --d xxxxxxx    : path of all the root comands
   //  /opt xxxxxxx  : path of the option(s) files
-  myodd::desc desc;
-  desc.add_options()
-#ifdef UNICODE
-  ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
-    ("d", myodd::po::wvalue<std::wstring>(), "the full path of the root commands.")
-#else
-    ("c", myodd::po::wvalue<std::string>(), "the oath of the config file.")
-    ("d", myodd::po::value<std::string>(), "the full path of the root commands.")
-#endif
-    ;
+  // ("c", myodd::po::wvalue<std::wstring>(), "the path of the config file.")
+  // ("d", myodd::po::wvalue<std::wstring>(), "the full path of the root commands.");
 
-#ifdef UNICODE
-  TCHAR** args = __wargv;
-#else
-  TCHAR** args = __argv;
-#endif
-  myodd::variables vm(__argc, args, desc);
+  myodd::commandline_variables vm(__argc, __wargv);
 
   // We need to init the registry so that everybody can use it.
   if (!InitConfig(vm))
@@ -202,15 +189,10 @@ BOOL CActionMonitorApp::InitInstance()
   }
 
   // if the user passed something then it will override what we have
-  if (1 == vm.count("d"))
+  if (vm.contains(L"d"))
   {
     // get the path
-#ifdef UNICODE
-    std::wstring sAPath = vm["d"].as< std::wstring >();
-#else
-    std::string sAPath = vm["d"].as< std::string >();
-#endif
-    const auto lpPath = sAPath.c_str();
+    const auto lpPath = vm.get( L"d");
 
     //  set it in case next time we have nothing
     myodd::config::Set(L"paths\\commands", lpPath);
@@ -301,22 +283,14 @@ void CActionMonitorApp::InitReservedPaths()
  * \param variables the given variables.
  * \return Success or not.
  */
-bool CActionMonitorApp::InitConfig( const myodd::variables& variables )
+bool CActionMonitorApp::InitConfig( const myodd::commandline_variables& variables )
 {
-#ifdef UNICODE
   std::wstring sAPath = CONF_FULLPATH;
-#else
-  std::string sAPath = CONF_FULLPATH;
-#endif
 
-  if (1 == variables.count("c"))
+  if (variables.contains(L"c"))
   {
     // get the path
-#ifdef UNICODE
-    sAPath = variables["c"].as< std::wstring >();
-#else
-    sAPath = vm["c"].as< std::string >();
-#endif
+    sAPath = variables.get(L"c" );
   }
 
   // does the file exist?

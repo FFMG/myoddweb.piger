@@ -44,10 +44,3 @@
 #include <afxcmn.h>                     // MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT
 #endif
-
-// --------------------------------------------------------------------------------------
-// BOOST Files.
-#define BOOST_ALL_NO_LIB 1
-#include <boost/regex.hpp>
-#include <boost/foreach.hpp>
-#include <boost/format.hpp>

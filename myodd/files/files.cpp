@@ -6,7 +6,6 @@
 #include "../log/log.h"
 #include "../pcre2/regex2.h"
 #include <io.h>
-#include <boost\regex.h>
 
 // Look for version.lib
 #pragma comment( lib, "version.lib" )
@@ -194,14 +193,9 @@ bool IsExtension( const std::wstring& fOriginal, const std::wstring& fExt )
   // escape all the other characters.
   e = myodd::regex::Regex2::Escape(e);
   auto stdMatches = L"^(.*)\\.(" + e + L")$";
-  boost::wsmatch matches;
-  const boost::wregex aStringregex( stdMatches.c_str(), boost::regex_constants::icase );
 
-  if (boost::regex_match(f, matches, aStringregex))
-  {
-    return true;
-  }
-  return false;
+  // search for this pattern
+  return myodd::regex::Regex2::Search(e.c_str(), f.c_str(), false);
 }
 
 

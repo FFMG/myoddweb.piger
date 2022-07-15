@@ -47,15 +47,11 @@
 // html
 #include "html/html.h"
 
-// program options.
-#include "common/program_options.h"
-
-#include "stree/smap.h"
-#include "stree/sset.h"
-#include "stree/stree.h"
-
 // threads
 #include "threads/threads.h"
+
+// commandline variables
+#include "common/commandline_variables.h"
 
 // and add the needed lib
 #ifdef _DEBUG

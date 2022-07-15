@@ -28,7 +28,7 @@ public:
   // Implementation
 	DECLARE_MESSAGE_MAP()
 
-  static bool InitConfig(const myodd::variables& vm);
+  static bool InitConfig(const ::myodd::commandline_variables& vm);
   static void InitLog();
   static void InitReservedPaths();
   void InitMaxClipboardSize();
