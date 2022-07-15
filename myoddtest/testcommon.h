@@ -251,10 +251,13 @@ inline std::wstring Uuid()
     uuids.push_back( part );
   }
   std::wstring uuid;
-  for (auto& uuid_part : uuids)
+  for( auto i = 0; i < uuids.size(); ++i )
   {
-    uuid += uuid_part;
-    uuid += L'-';
+    uuid += uuids[i];
+    if (i + 1 < uuids.size())
+    {
+      uuid += L'-';
+    }
   }
   return uuid;
 }
