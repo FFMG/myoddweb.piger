@@ -168,34 +168,42 @@ std::wstring GetExtension( const std::wstring& filename )
  * @param std::wstring the extension we are checking for.
  * @return bool if the file extension is the one we wanted.
  */
-bool IsExtension( const std::wstring& fOriginal, const std::wstring& fExt )
+bool IsExtension( const std::wstring& given_filename, const std::wstring& extension )
 {
-  auto f( fOriginal );
-  _TrimDeadChars( f );
-  strings::Trim(f);
+  // make a copy of the given filename so we can trim it
+  auto copy_given_filename(given_filename);
+  _TrimDeadChars(copy_given_filename);
+  strings::Trim(copy_given_filename);
   
-  auto e( fExt );
-  _TrimDeadChars( e );
-  strings::Trim(e);
-  if( e.length() > 1 && e[0] == '.' )
+  // make a copy of the given extension so we can trim it
+  auto copy_extension(extension);
+  _TrimDeadChars( copy_extension );
+  strings::Trim(copy_extension);
+
+  // if we have a leading '.' then we need to remove it.
+  // in case the extension is something like '.txt' it becomes 'txt'
+  if(copy_extension.length() >= 1 && copy_extension[0] == '.' )
   {
-    e = e.substr( 1 );
+    copy_extension = copy_extension.substr( 1 );
   }
 
-  if( f.length() == 0 || e.length() == 0 )
+  // if either of them are size 0 then we cannot check anything.
+  if(copy_extension.length() == 0 || copy_extension.length() == 0 )
   {
     return false; //  we cannot check 0 lengths
   }
 
-  // escape the characters.
-  e = strings::Replace( e, L"\\.", L"." );     //  in case the user escaped it already
+  // unescape the characters in the extension.
+  // this is in case we are looking for something like .txt.file
+  // we will trim the first '.' but we need to unescape the second one.
+  copy_extension = strings::Replace(copy_extension, L"\\.", L"." );     //  in case the user escaped it already
 
   // escape all the other characters.
-  e = myodd::regex::Regex2::Escape(e);
-  auto stdMatches = L"^(.*)\\.(" + e + L")$";
+  copy_extension = myodd::regex::Regex2::Escape(copy_extension);
+  auto pattern = L"^(.*)\\.(" + copy_extension + L")$";
 
   // search for this pattern
-  return myodd::regex::Regex2::Search(e.c_str(), f.c_str(), false);
+  return myodd::regex::Regex2::Search(pattern.c_str(), copy_given_filename.c_str(), false);
 }
 
 

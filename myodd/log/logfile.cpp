@@ -102,7 +102,7 @@ namespace myodd{ namespace log{
         wchar_t szFileCount[10] = {};
         if (i > 0) 
         {
-          swprintf(szFileCount, L"-%u", i);
+          swprintf(szFileCount, 10, L"-%u", i);
         }
 
         //  we have already added a back slash at the end of the directory.
