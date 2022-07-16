@@ -18,6 +18,7 @@
 #include "ActionBye.h"
 #include "ActionLoad.h"
 #include "ActionVersion.h"
+#include "Actionlog.h"
 #include "Actions.h"
 #include "MessagesHandler.h"
 #include "IpcListener.h"
@@ -345,6 +346,7 @@ void Application::CreateActionsList()
   _possibleActions->Add(new ActionBye(*this));
   _possibleActions->Add(new ActionLoad(*this));
   _possibleActions->Add(new ActionVersion(*this));
+  _possibleActions->Add(new ActionLog(*this));
 }
 #pragma endregion
 

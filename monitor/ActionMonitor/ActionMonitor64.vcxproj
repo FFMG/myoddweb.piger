@@ -206,6 +206,7 @@
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="ActionBye.cpp" />
     <ClCompile Include="ActionLoad.cpp" />
+    <ClCompile Include="ActionLog.cpp" />
     <ClCompile Include="ActionMonitor.cpp" />
     <ClCompile Include="ActionMonitorDlg.cpp" />
     <ClCompile Include="Actions.cpp" />
@@ -277,6 +278,7 @@
     <ClInclude Include="Action.h" />
     <ClInclude Include="ActionBye.h" />
     <ClInclude Include="ActionLoad.h" />
+    <ClInclude Include="ActionLog.h" />
     <ClInclude Include="ActionMonitor.h" />
     <ClInclude Include="ActionMonitorDlg.h" />
     <ClInclude Include="Actions.h" />
