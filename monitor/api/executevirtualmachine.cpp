@@ -14,7 +14,6 @@
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "executevirtualmachine.h"
-#include "ActionBye.h"
 
 /**
  * \copydoc
