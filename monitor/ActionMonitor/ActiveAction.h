@@ -114,7 +114,7 @@ private:
   void CreateClipboard();
 
 protected:
-  bool ReadFile(LPCTSTR pyFile, std::string& script) const;
+  bool ReadFile(const wchar_t* pyFile, std::wstring& script) const;
 
 private:
   enum VariableType {
