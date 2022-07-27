@@ -18,7 +18,7 @@
 class PyApi final : public HelperApi
 {
 public:
-  PyApi( const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler, std::string script, PyThreadState* mainThreadState );
+  PyApi( const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler, std::wstring script, PyThreadState* mainThreadState );
   virtual ~PyApi() = default;
 
 public:
@@ -44,7 +44,7 @@ protected:
   /**
    * \brief the script that we are running
    */
-  const std::string _script;
+  const std::wstring _script;
 
   /**
    * \brief the main thread state

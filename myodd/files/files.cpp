@@ -1608,7 +1608,7 @@ FileEncode DetermineEncoding(const wchar_t* file, int* npSkip )
   }
 
   FILE* fp = 0;
-  errno_t err = _tfopen_s( &fp, file, _T("rb") );
+  errno_t err = _wfopen_s( &fp, file, L"rb" );
   if ( err != 0 || !fp )
   {
     assert( 0 );
@@ -1687,7 +1687,7 @@ wchar_t* ReadFile(const wchar_t* file, __int64 nStartPos, __int64 nEndPos )
   FileEncode encoding = DetermineEncoding( file, &nSkip );
 
   FILE* fp = 0;
-  errno_t err = _tfopen_s( &fp, file, _T("rb" ));
+  errno_t err = _wfopen_s( &fp, file, L"rb");
   if ( err || nullptr == fp )
   {
     // could not open the file.
@@ -2127,8 +2127,8 @@ wchar_t* Byte2Char
     break;
   }
 
-  auto l = convertedString.length();
-  auto tbuf = new wchar_t[ l + sizeof(wchar_t)];
+  const auto& length = convertedString.length();
+  auto tbuf = new wchar_t[ length + sizeof(wchar_t)];
   lstrcpy(tbuf, convertedString.c_str());
 
   return tbuf;

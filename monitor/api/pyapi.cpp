@@ -17,7 +17,7 @@ static const double ACTIONMONITOR_API_PY_VERSION = 3.2;
 /**
  * \copydoc
  */
-PyApi::PyApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler, std::string script, PyThreadState* mainThreadState) :
+PyApi::PyApi(const IActiveAction& action, IApplication& application, IMessagesHandler& messagesHandler, std::wstring script, PyThreadState* mainThreadState) :
   HelperApi(action, application, messagesHandler),
   _script(std::move(script)),
   _mainThreadState(mainThreadState)
@@ -641,8 +641,8 @@ void PyApi::ExecuteInThread() const
     Py_XINCREF(local_dic);
 
     // we can now run our script
-    const auto s = _script.c_str();
-    const auto pyRes = PyRun_String(s, Py_file_input, main_dict, local_dic);
+    const auto& s = myodd::strings::WString2String( _script);
+    const auto pyRes = PyRun_String(s.c_str(), Py_file_input, main_dict, local_dic);
 
     CheckForPythonErrors();
 

@@ -169,50 +169,27 @@ bool PythonVirtualMachine::InitializeFunctions()
  * \param script the string that will contain the string.
  * \return boolean success or not.
  */
-bool PythonVirtualMachine::ReadFile(const std::wstring& pyFile, std::string& script) const
+bool PythonVirtualMachine::ReadFile(const const wchar_t* pyFile, std::wstring& script) const
 {
   // clear the scruot.
-  script = "";
+  script = L"";
 
-  errno_t err;
-  FILE *fp;
-  const auto asciiString = myodd::strings::WString2String(pyFile);
-  if (err = fopen_s(&fp, asciiString.c_str(), "rt"))
+  // read the file
+  auto data = myodd::files::ReadFile(pyFile);
+
+  // did it work?
+  if (nullptr == data)
   {
     return false;
   }
 
-  //
-  // Note that we are no longer in the realm of UNICODE here.
-  // We are using Multi Byte data.
-  static const UINT FILE_READ_SIZE = 100;
-  size_t  count, total = 0;
-  while (!feof(fp))
-  {
-    // Attempt to read
-    char buffer[FILE_READ_SIZE + 1];
-    memset(buffer, '\0', FILE_READ_SIZE + 1);
-    count = fread(buffer, sizeof(char), FILE_READ_SIZE, fp);
+  // copy the data
+  script = data;
 
-    buffer[count] = '\0';
+  // clear the data
+  delete[] data;
 
-    // was there a problem?
-    if (ferror(fp))
-    {
-      break;
-    }
-
-    // add it to the script
-    script += buffer;
-
-    // Total up actual bytes read
-    total += count;
-  }
-
-  // we are done with the file.
-  fclose(fp);
-
-  // success.
+  // success 
   return true;
 }
 
@@ -224,8 +201,8 @@ int PythonVirtualMachine::Execute(const IActiveAction& action, const std::wstrin
   //
   // this could be a memory problem at some stage.
   //
-  std::string script = "";
-  if (!ReadFile(pluginFile, script))
+  std::wstring script = L"";
+  if (!ReadFile(pluginFile.c_str(), script))
   {
     return -1;
   }

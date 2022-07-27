@@ -37,7 +37,7 @@ void LoaderManager::Init(AmPlugin* p  )
   int l = p->GetCommand( 0, _countof(thisPath), thisPath );
   if( l > 0 )
   {
-    // convert this path to std::string as we use it 
+    // convert this path to std::wstring as we use it 
     m_thisPath = thisPath;
     p->AddAction( LOADER_LEARN, thisPath );
     p->AddAction( LOADER_LEARN_PRIVILEGED, thisPath );
@@ -273,8 +273,6 @@ bool LoaderManager::SaveLUAFile
   std::wstring luaFilePath;
   myodd::files::Join(luaFilePath, GetPluginPath(), luaFileName);
 
-  USES_CONVERSION;
-
   // we now have a command and a file path
   // we must create the lua file that will contain this request.
   //
@@ -283,23 +281,23 @@ bool LoaderManager::SaveLUAFile
   errno_t err;
   std::wstring exLuaFilePath;
   myodd::files::ExpandEnvironment(luaFilePath, exLuaFilePath);
-  if ((err = fopen_s(&stream, T_T2A(exLuaFilePath.c_str()), "wb")) != 0)
+  if ((err = _wfopen_s(&stream, exLuaFilePath.c_str(), L"wb")) != 0)
   {
     return false;
   }
 
   //
   // build the comments at the top of the file.
-  std::string sData;
-  sData += "--\n";
-  sData += "-- Loaded version 0.3\n";
-  sData += "-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
-  sData += "-- remove this command with 'unlearn ...'\n";
-  sData += "--\n";
+  std::wstring sData;
+  sData += L"--\n";
+  sData += L"-- Loaded version 0.3\n";
+  sData += L"-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
+  sData += L"-- remove this command with 'unlearn ...'\n";
+  sData += L"--\n";
 
   //
   // add the execute command itself.
-  sData += "am_execute( ";
+  sData += L"am_execute( ";
     
   // unexpand the app path.
   // this is just cosmetic but also allows the user to copy their command
@@ -308,22 +306,22 @@ bool LoaderManager::SaveLUAFile
   myodd::files::UnExpandEnvironment(unAppPath, unAppPath);
 
   //  remember, we cannot add spaces or anything...
-  sData += "[[";
-  sData += T_T2A(unAppPath.c_str());
-  sData += "]], \"\"";
+  sData += L"[[";
+  sData += unAppPath.c_str();
+  sData += L"]], \"\"";
   if (true == isPrivileged)
   {
-    sData += ", true";
+    sData += L", true";
   }
   else
   {
-     sData += ", false";
+     sData += L", false";
   }
-  sData += ");\n";
+  sData += L");\n";
 
   //
   // write the data.
-  fwrite( sData.c_str(), sizeof(CHAR), sData.length(), stream );
+  fwrite( sData.c_str(), sizeof(wchar_t), sData.length(), stream );
 
   // we created the file.
   fclose( stream );
@@ -473,7 +471,7 @@ std::wstring LoaderManager::GetUnLearnCommand(const std::wstring& lowerName)
 bool LoaderManager::LoadXML(AmPlugin* p )
 {
   //  simply go around all the values
-  std::string sFilePath = myodd::strings::WString2String(m_lpFilePath);
+  const auto& sFilePath = myodd::strings::WString2String(m_lpFilePath);
   tinyxml2::XMLDocument doc;
   if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile(sFilePath.c_str() ))
   {
@@ -543,11 +541,11 @@ bool LoaderManager::SaveXML() const
     pElemLoadCommands->InsertEndChild( pValue );
 
     tinyxml2::XMLElement* pName = doc.NewElement( "Name" );
-    std::string sName = myodd::strings::WString2String(it->first.c_str());
+    const auto& sName = myodd::strings::WString2String(it->first.c_str());
     pName->SetText( sName.c_str() );
 
     tinyxml2::XMLElement* pPath = doc.NewElement("Path" );
-    std::string sPath = myodd::strings::WString2String(it->second.c_str());
+    const auto& sPath = myodd::strings::WString2String(it->second.c_str());
     pPath->SetText( sPath.c_str());
 
     pValue->InsertEndChild( pName );
@@ -555,7 +553,7 @@ bool LoaderManager::SaveXML() const
   }
 
   // save the file.
-  std::string sFilePath = myodd::strings::WString2String(m_lpFilePath);
+  const auto& sFilePath = myodd::strings::WString2String(m_lpFilePath);
   doc.SaveFile( sFilePath.c_str() );
 
   return true;

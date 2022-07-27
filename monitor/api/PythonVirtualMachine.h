@@ -33,7 +33,7 @@ private:
 
   PyThreadState* _mainThreadState;
 
-  bool ReadFile(const std::wstring& pyFile, std::string& script) const;
+  bool ReadFile(const const wchar_t* pyFile, std::wstring& script) const;
 
 public:
   static PyObject* Say(PyObject *self, PyObject *args);
