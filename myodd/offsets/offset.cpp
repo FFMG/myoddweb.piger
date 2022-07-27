@@ -35,39 +35,35 @@ namespace myodd{ namespace offset{
       }
 
       FILE* hf;
-#ifdef UNICODE
-      if( 0 == _wfopen_s( &hf, expanded.c_str(), L"rb") )
-#else
-      if (0 == fopen_s(&hf, expanded.c_str(), "rb"))
-#endif
-      {
-        // obtain file size.
-        fseek (hf , 0 , SEEK_END);
-        bufferLen = ftell (hf);
-        rewind (hf);
-
-        // the length of the message
-        myodd::offset::write( bufferLen, pData, ulOffset );
-
-        // read the file.
-        unsigned char* bRead = new unsigned char[bufferLen];
-        memset( bRead, 0, bufferLen );
-        if( bRead )
-        {
-          size_t ulRead = _fread_nolock(bRead, sizeof(unsigned char), bufferLen, hf);
-          assert( ulRead == (size_t)bufferLen );
-          myodd::offset::write( bRead, ulRead, pData, ulOffset );
-          delete [] bRead;
-        }
-
-        // close the file.
-        fclose( hf );
-      }// open the file
-      else
+      errno_t err;
+      if((err = _wfopen_s(&hf, expanded.c_str(), L"rb")) != 0)
       {
         // we have no file, (we could not open it), so just write that the file size is 0.
-        myodd::offset::write( bufferLen, pData, ulOffset );
+        myodd::offset::write(bufferLen, pData, ulOffset);
+        return;
       }
+
+      // obtain file size.
+      fseek (hf , 0 , SEEK_END);
+      bufferLen = ftell (hf);
+      rewind (hf);
+
+      // the length of the message
+      myodd::offset::write( bufferLen, pData, ulOffset );
+
+      // read the file.
+      unsigned char* bRead = new unsigned char[bufferLen];
+      memset( bRead, 0, bufferLen );
+      if( bRead )
+      {
+        size_t ulRead = _fread_nolock(bRead, sizeof(unsigned char), bufferLen, hf);
+        assert( ulRead == (size_t)bufferLen );
+        myodd::offset::write( bRead, ulRead, pData, ulOffset );
+        delete [] bRead;
+      }
+
+      // close the file.
+      fclose( hf );
     }// if we have a file
   }
 
@@ -238,11 +234,7 @@ namespace myodd{ namespace offset{
     }
 
     FILE* hf = NULL;
-#ifdef UNICODE
-      if (0 == _wfopen_s(&hf, fileName, L"wb"))
-#else
-      if (0 == fopen_s(&hf, fileName, "wb"))
-#endif
+    if (0 == _wfopen_s(&hf, fileName, L"wb"))
     {
       return;
     }
