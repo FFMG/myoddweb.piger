@@ -1,6 +1,6 @@
 ﻿using System;
 using ActionMonitor.Myodd;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace ActionMonitor.Tests
 {
@@ -14,10 +14,10 @@ namespace ActionMonitor.Tests
     StringAscii = 5,
   };
 
-  [TestClass]
+  [TestFixture]
   public class IpcDataTest
   {
-    [TestMethod]
+    [Test]
     public void TestHasGuidByDefault()
     {
       var emptyIpcData = new IpcData();
@@ -29,7 +29,7 @@ namespace ActionMonitor.Tests
       Assert.IsFalse( string.IsNullOrEmpty(emptyIpcData.Guid) );
     }
 
-    [TestMethod]
+    [Test]
     public void TestGetSingleTypes()
     {
       var emptyIpcData = new IpcData();
@@ -41,7 +41,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual( "World", emptyIpcData.Get<string>(1));
     }
 
-    [TestMethod]
+    [Test]
     public void TestGetDifferentTypes()
     {
       var emptyIpcData = new IpcData();
@@ -57,7 +57,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual("Something", emptyIpcData.Get<string>(3));
     }
 
-    [TestMethod]
+    [Test]
     public void TestTheArgumentCountIsValid()
     {
       var emptyIpcData = new IpcData();
@@ -70,16 +70,17 @@ namespace ActionMonitor.Tests
       Assert.AreEqual( (uint)3, emptyIpcData.ArgumentsCount);
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There are no items in the list to get.")]
+    [Test]
     public void TestTryingToGetAnEmptyItemOutOfRange()
     {
-      var emptyIpcData = new IpcData();
-      emptyIpcData.Get<object>(0);
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        var emptyIpcData = new IpcData();
+        emptyIpcData.Get<object>(0);
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There are no items in the list to get.")]
+    [Test]
     public void TestTryingToGetANonEmptyItemOutOfRange()
     {
       var emptyIpcData = new IpcData();
@@ -87,223 +88,265 @@ namespace ActionMonitor.Tests
 
       Assert.AreEqual(42, emptyIpcData.Get<int>(0));
 
-      //  out of range
-      emptyIpcData.Get<object>(1);
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  out of range
+        emptyIpcData.Get<object>(1);
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException), "The argument must have at least a version number.")]
+    [Test]
     public void TestTryingToPassEmptyByteArray()
     {
-      new IpcData( new byte[] {} );
+      Assert.Throws<ArgumentException>(() =>
+      {
+        new IpcData(new byte[] { });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException), "The argument must have at least a version number.")]
+    [Test]
     public void TestTryingToPassByteArrayTooSmall()
     {
-      //  the size should be 4
-      new IpcData(new byte[] { 0,0,0 });
+      Assert.Throws<ArgumentException>(() =>
+      {
+        //  the size should be 4
+        new IpcData(new byte[] { 0, 0, 0 });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException), "The version number is too big for our current number.")]
+    [Test]
     public void TestVersionNumberIsPastOurCurrentNumber()
     {
-      //  the current version number is 100
-      new IpcData(new byte[] { 200, 0, 0, 0 });
+      Assert.Throws<ArgumentException>(() =>
+      {
+        //  the current version number is 100
+        new IpcData(new byte[] { 200, 0, 0, 0 });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentException), "Unknown argument type, I am unable to read the size/data for it.")]
+    [Test]
     public void TestDataTypeIsUnknown()
     {
       //  current version number is 100
-
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentException>(() =>
+      {
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 12, 0         //  unknown type
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Unknown argument type, I am unable to read the size/data for it.")]
+    [Test]
     public void TestNotEnoughDataForDataType()
     {
       //  current version number is 100
-
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 2             //  too small.
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the Guid.")]
+    [Test]
     public void TestNoDataToReadGuid()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.Guid, 0          //  data type guid
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int32.")]
+    [Test]
     public void TestNoDataToReadInteger()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.Int32, 0          //  data type int32
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int64.")]
+    [Test]
     public void TestNoDataToReadLong()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.Int64, 0          //  data type int64
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the string.")]
+    [Test]
     public void TestNoDataToReadString()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.String, 0          //  data type string
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the ascii string.")]
+    [Test]
     public void TestNoDataToReadStringAscii()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.StringAscii, 0          //  data type string ascii
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    [Test]
     public void TestNotEnoughDataToReadAGuid()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.Guid, 0,         //  data type guid
                                 0, 0, 0       //  not enough data to make an int32
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    [Test]
     public void TestCanReadGuidSizeButNoData()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.Guid, 0,        //  data type guid
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    [Test]
     public void TestCanReadStringSizeButNoData()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.String, 0,        //  data type string
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the guid.")]
+    [Test]
     public void TestCanReadAsciiStringSizeButNoData()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.StringAscii, 0,        //  data type ascii string
                                 10, 0, 0,0   //  size of 10
                                              //  but no more data
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int32.")]
+    [Test]
     public void TestNotEnoughDataToReadAnInteger()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.Int32, 0,         //  data type int32
                                 0, 0, 0       //  not enough data to make an int32
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the unicode string.")]
+    [Test]
     public void TestNotEnoughDataToReadAString()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.String, 0,         //  data type unicode string
                                 0, 0, 0       //  not enough data to make an int32
                               });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the unicode string.")]
+    [Test]
     public void TestNotEnoughDataToReadAnAsciiString()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.StringAscii, 0,         //  data type ascii string
                                 0, 0, 0       //  not enough data to make an int32
                               });
+      });
     }
     
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int32.")]
+    [Test]
     public void TestCanReadOneInt32ButNotEnoughDataToReadAnotherInteger()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                  (byte) ExpectedIpcDataType.Int32, 0,         //  data type int32
                                  20, 0, 0, 0,  //  first interger is valid
                                  (byte) ExpectedIpcDataType.Int32, 0,         //  data type int32
                                  0, 0, 0       //  not enough data to make an int32
                                });
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "There is no data to read the int32.")]
+    [Test]
     public void TestCanReadOneInt64ButNotEnoughDataToReadAnotherInteger()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0,           //  version
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0,           //  version
                                  (byte) ExpectedIpcDataType.Int64, 0,                 //  data type int64
                                  20, 0, 0, 0,0,0,0,0,  //  first long is valid
                                  (byte) ExpectedIpcDataType.Int64, 0,                 //  data type int64
                                  20, 0, 0, 0,0,0       //  not enough data to make an int64
                                });
+      });
     }
 
-    [TestMethod]
+    [Test]
     public void TestStringCanBeSizeZero()
     {
-      //  give a data type of int32, but no data to read
-      new IpcData(new byte[] { 100, 0, 0, 0, //  version
+      Assert.DoesNotThrow(() =>
+      {
+        //  give a data type of int32, but no data to read
+        new IpcData(new byte[] { 100, 0, 0, 0, //  version
                                 (byte) ExpectedIpcDataType.String, 0,        //  data type string
                                 0, 0, 0,0    //  size of 0
                                              //  no more data needed.
                               });
+      });
     }
 
-    [TestMethod]
+    [Test]
     public void TestCastingToDifferentNumbers()
     {
       var emptyIpcData = new IpcData();
@@ -321,18 +364,20 @@ namespace ActionMonitor.Tests
       Assert.AreEqual((float)67, emptyIpcData.Get<float>(2));
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(InvalidCastException), "Tring to convert a string to a number.")]
+    [Test]
     public void TestTryingtogetANumberWhenTheArgumentIsAString()
     {
       var emptyIpcData = new IpcData();
       emptyIpcData.Add("Hello");
 
-      // this is not a number.
-      emptyIpcData.Get<long>(0);
+      Assert.Throws<InvalidCastException>(() =>
+      {
+        // this is not a number.
+        emptyIpcData.Get<long>(0);
+      });
     }
 
-    [TestMethod]
+    [Test]
     public void TestANumberCanBeCastToAString()
     {
       var emptyIpcData = new IpcData();
@@ -342,7 +387,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual( "12", emptyIpcData.Get<string>(0) );
     }
 
-    [TestMethod]
+    [Test]
     public void TestByteArraySetsIntOneByte()
     {
       var random = new Random();
@@ -357,7 +402,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual(r1 , emptyIpcData.Get<int>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestByteArraySetsIntTwoBytes()
     {
       var random = new Random();
@@ -373,7 +418,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual((r1+r2*256), emptyIpcData.Get<int>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestByteArraySetsIntThreeBytes()
     {
       var random = new Random();
@@ -390,7 +435,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual((r1 + r2 * 256 + r3*256*256), emptyIpcData.Get<int>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestByteArraySetsIntFourBytes()
     {
       var random = new Random();
@@ -408,7 +453,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual((r1 + r2 * 256 + r3 * 256 * 256 + r4 * 256 * 256*256), emptyIpcData.Get<int>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestIsNumeric()
     {
       //  give a data type of int32, but no data to read
@@ -420,7 +465,7 @@ namespace ActionMonitor.Tests
       Assert.IsTrue(emptyIpcData.IsInt(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestWideStringIsString()
     {
       //  give a data type of int32, but no data to read
@@ -438,7 +483,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual("hello", emptyIpcData.Get<string>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestAsciiStringIsString()
     {
       //  give a data type of int32, but no data to read
@@ -456,7 +501,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual("hello", emptyIpcData.Get<string>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestIsNumericPastGuid()
     {
       var emptyIpcData = new IpcData();
@@ -466,7 +511,7 @@ namespace ActionMonitor.Tests
       Assert.IsFalse(emptyIpcData.IsString(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestIsStringPastGuid()
     {
       var emptyIpcData = new IpcData();
@@ -476,7 +521,7 @@ namespace ActionMonitor.Tests
       Assert.IsTrue(emptyIpcData.IsString(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestIsNumericPastGuidAndStrings()
     {
       var random = new Random();
@@ -496,7 +541,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual(r2, emptyIpcData.Get<int>(2));
     }
 
-    [TestMethod]
+    [Test]
     public void TestIsNumericPastGuidAndInteger()
     {
       var random = new Random();
@@ -515,29 +560,33 @@ namespace ActionMonitor.Tests
       Assert.AreEqual("Hello2", emptyIpcData.Get<string>(2));
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Trying to check if an index out of range is an integer.")]
+    [Test]
     public void TestIsNumericInvalidIndex()
     {
       var emptyIpcData = new IpcData();
       emptyIpcData.Add(12);
       emptyIpcData.Add("Hello");
 
-      emptyIpcData.IsInt(2);
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        emptyIpcData.IsInt(2);
+      });
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException), "Trying to check if an index out of range is a string.")]
+    [Test]
     public void TestIsStringInvalidIndex()
     {
       var emptyIpcData = new IpcData();
       emptyIpcData.Add(12);
       emptyIpcData.Add("Hello");
 
-      emptyIpcData.IsString(2);
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        emptyIpcData.IsString(2);
+      });
     }
 
-    [TestMethod]
+    [Test]
     public void TestGetBooleanFromIntegerEqualOne()
     {
       var emptyIpcData = new IpcData();
@@ -545,7 +594,7 @@ namespace ActionMonitor.Tests
       Assert.IsTrue(emptyIpcData.Get<bool>(0)); 
     }
 
-    [TestMethod]
+    [Test]
     public void TestGetBooleanFromIntegerNotEqualOne()
     {
       var random = new Random();
@@ -560,7 +609,7 @@ namespace ActionMonitor.Tests
       Assert.IsTrue(emptyIpcData.Get<bool>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestGetBooleanTrueString()
     {
       var emptyIpcData = new IpcData();
@@ -568,7 +617,7 @@ namespace ActionMonitor.Tests
       Assert.IsTrue(emptyIpcData.Get<bool>(0));
     }
 
-    [TestMethod]
+    [Test]
     public void TestGetBooleanFalseString()
     {
       var emptyIpcData = new IpcData();
@@ -576,16 +625,19 @@ namespace ActionMonitor.Tests
       Assert.IsFalse(emptyIpcData.Get<bool>(0));
     }
 
-    [TestMethod]
-    [ExpectedException(typeof(InvalidCastException), "The given string is not a valid boolean.")]
+    [Test]
     public void TestGetBooleanNeitherTrueNorFalseString()
     {
       var emptyIpcData = new IpcData();
       emptyIpcData.Add("NotAValidString");
-      emptyIpcData.Get<bool>(0);
+
+      Assert.Throws<InvalidCastException>(() =>
+      {
+        emptyIpcData.Get<bool>(0);
+      });
     }
 
-    [TestMethod]
+    [Test]
     public void TestFromInt64ToPtrAndBack()
     {
       var ipc = new IpcData();
@@ -608,7 +660,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual(n, ipc2.Get<long>(1));
     }
 
-    [TestMethod]
+    [Test]
     public void TestFromInt32ToPtrAndBack()
     {
       var ipc = new IpcData();
@@ -632,7 +684,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual(n, ipc2.Get<Int32>(1));
     }
 
-    [TestMethod]
+    [Test]
     public void TestFromInt64And32ToPtrAndBack()
     {
       var ipc = new IpcData();
@@ -657,7 +709,7 @@ namespace ActionMonitor.Tests
       Assert.AreEqual(n, ipc2.Get<long>(1));
     }
 
-    [TestMethod]
+    [Test]
     public void TestFromInt32CanBeConvertedToInt64()
     {
       var ipc = new IpcData();
