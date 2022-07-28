@@ -36,8 +36,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="myoddweb.commandlineparser, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MyOddWeb.CommandlineParser.0.1.0\lib\net452\myoddweb.commandlineparser.dll</HintPath>
+    <Reference Include="myoddweb.commandlineparser, Version=0.1.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MyOddWeb.CommandlineParser.0.1.5\lib\net452\myoddweb.commandlineparser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
