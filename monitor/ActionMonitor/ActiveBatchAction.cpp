@@ -49,9 +49,9 @@ void ActiveBatchAction::OnExecuteInThread()
 
   //  join the two items together.
   std::vector<std::wstring> argv;
-  argv.push_back( _T("cmd") );
+  argv.push_back( L"cmd" );
 
-  const auto arguments = myodd::strings::Format(_T("/c %s %s"), szFile.c_str(), GetCommandLine());
+  const auto arguments = myodd::strings::Format(L"/c %s %s", szFile.c_str(), GetCommandLine());
   argv.push_back(arguments);
   Execute(argv, IsPrivileged(), nullptr);
 }

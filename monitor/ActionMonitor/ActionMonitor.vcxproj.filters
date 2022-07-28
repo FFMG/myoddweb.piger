@@ -203,6 +203,12 @@
     <ClCompile Include="ActiveActionsRunner.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="ActionLog.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveLogAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\api\helperapi.h">
@@ -404,6 +410,12 @@
       <Filter>actions</Filter>
     </ClInclude>
     <ClInclude Include="ActiveActionsRunner.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionLog.h">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveLogAction.h">
       <Filter>actions</Filter>
     </ClInclude>
   </ItemGroup>
