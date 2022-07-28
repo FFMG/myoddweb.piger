@@ -1,60 +1,54 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13F8C416-CB21-4386-BB3E-81C9FF1CCD6B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <Description>Sample Dolly Plugin</Description>
+    <TargetFramework>net452</TargetFramework>
     <RootNamespace>Dolly.NET</RootNamespace>
-    <AssemblyName>Dolly.NET</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <TargetName>Dolly.NET</TargetName>
-    <TargetExt>.amp-net</TargetExt>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RuntimeIdentifiers>win</RuntimeIdentifiers>
+    <PackageId>Dolly.NET</PackageId>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <OutputPath>..\..\Output\$(Configuration)\Any CPU\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Output\Debug\Any CPU\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <OutputPath>..\..\Output\$(Configuration)\Any CPU\</OutputPath>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Output\Release\Any CPU\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <ProjectReference Include="..\ActionMonitor\ActionMonitor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Dolly.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ActionMonitor.Interfaces\ActionMonitor.Interfaces.csproj">
-      <Project>{2fd0640e-9966-42a9-a339-b2a78ba4d3f9}</Project>
-      <Name>ActionMonitor.Interfaces</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(TargetDir)..\x86" /Y
-xcopy "$(TargetDir)*.*" "$(TargetDir)..\x64" /Y</PostBuildEvent>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
+
+  <!--  Copy Files //-->
+  <Target Name="CopyFiles" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
+    <ItemGroup>
+      <TargetArtifacts Include="$(TargetDir)**\*.*" />
+      <TargetArtifacts Remove="$(TargetPath).lastcodeanalysissucceeded" />
+    </ItemGroup>
+    
+    <Copy SourceFiles="@(TargetArtifacts)" DestinationFolder="$(TargetDir)..\..\x86" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(TargetArtifacts)" DestinationFolder="$(TargetDir)..\..\x64" SkipUnchangedFiles="true" />
+  </Target>  
+  
 </Project>
