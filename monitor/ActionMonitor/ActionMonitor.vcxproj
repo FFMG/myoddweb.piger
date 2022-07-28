@@ -217,6 +217,7 @@
     <ClCompile Include="ActiveDefaultAction.cpp" />
     <ClCompile Include="ActiveExeAction.cpp" />
     <ClCompile Include="ActiveLoadAction.cpp" />
+    <ClCompile Include="ActiveLogAction.cpp" />
     <ClCompile Include="ActivePythonAction.cpp" />
     <ClCompile Include="ActiveVersionAction.cpp" />
     <ClCompile Include="ActiveVirtualMachineAction.cpp" />
@@ -290,6 +291,7 @@
     <ClInclude Include="ActiveDefaultAction.h" />
     <ClInclude Include="ActiveExeAction.h" />
     <ClInclude Include="ActiveLoadAction.h" />
+    <ClInclude Include="ActiveLogAction.h" />
     <ClInclude Include="ActivePythonAction.h" />
     <ClInclude Include="ActiveVersionAction.h" />
     <ClInclude Include="ActiveVirtualMachineAction.h" />

@@ -12,33 +12,21 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
-#include "stdafx.h"
-#include "ActionLog.h"
-#include "ActionsCore.h"
-#include "ActiveLogAction.h"
+#pragma once
+#include "ActiveAction.h"
+#include "IApplication.h"
 
-/**
- * \brief Constructor
- * \param application the application to close the app
- */
-ActionLog::ActionLog(IApplication& application ) :
-  Action( application, ACTION_CORE_LOG, L"" )
+class ActiveLogAction final : public ActiveAction
 {
-}
+public:
+  ActiveLogAction(IApplication& application, const IAction& src, HWND hTopHWnd );
+  virtual ~ActiveLogAction();
 
-/**
- * \copydoc
- */
-ActionLog::~ActionLog()
-{
-}
+protected:
+  bool OnInitialize() override;
+  bool OnDeInitialize() override;
+  void OnExecuteInThread() override;
 
-/**
- * \copydoc
- */
-IActiveAction* ActionLog::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const
-{
-  //  get the last forground window handle
-  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
-  return new ActiveLogAction( _application, *this, hTopHWnd );
-}
+private:
+  IApplication& _application;
+};

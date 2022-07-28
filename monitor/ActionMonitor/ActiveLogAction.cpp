@@ -13,32 +13,47 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
-#include "ActionLog.h"
-#include "ActionsCore.h"
 #include "ActiveLogAction.h"
 
 /**
- * \brief Constructor
- * \param application the application to close the app
+ * \copydoc
  */
-ActionLog::ActionLog(IApplication& application ) :
-  Action( application, ACTION_CORE_LOG, L"" )
+ActiveLogAction::ActiveLogAction(IApplication& application, const IAction& src, HWND hTopHWnd ) :
+  ActiveAction( application, src, hTopHWnd, L"", false  ),
+  _application( application )
 {
 }
 
-/**
- * \copydoc
- */
-ActionLog::~ActionLog()
+ActiveLogAction::~ActiveLogAction()
 {
 }
 
-/**
- * \copydoc
- */
-IActiveAction* ActionLog::CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const
+bool ActiveLogAction::OnInitialize()
 {
-  //  get the last forground window handle
-  const auto hTopHWnd = pWnd ? pWnd->GetSafeHwnd() : nullptr;
-  return new ActiveLogAction( _application, *this, hTopHWnd );
+  // do nothing
+  return true;
+}
+
+bool ActiveLogAction::OnDeInitialize()
+{
+  // do nothing
+  return true;
+}
+
+/**
+ * Execute the action in thread.
+ * Call to close this app.
+ */
+void ActiveLogAction::OnExecuteInThread()
+{
+  // get the log file was wanto to open
+  const auto& logFile = myodd::log::GetCurrentLogFile();
+  _application.Execute(
+    { logFile.c_str() }, 
+    false, 
+    nullptr
+  );
+
+  const auto strSay = myodd::strings::Format(L"<b>Opening Logfile</b> '%s'", logFile);
+  //_application.Show(strSay.c_str() , 500, 3000);
 }

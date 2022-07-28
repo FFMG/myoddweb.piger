@@ -60,7 +60,7 @@ void Application::Close()
 void Application::OnClose()
 {
   // log that we are closing down
-  myodd::log::LogMessage(_T("Piger is shutting down."));
+  myodd::log::LogMessage(L"Piger is shutting down.");
 
   // prepare for closing
   PrepareForClose();
@@ -80,7 +80,7 @@ void Application::Restart()
 void Application::OnRestart()
 {
   // log that we are restarting
-  myodd::log::LogMessage(_T("Piger is restarting."));
+  myodd::log::LogMessage(L"Piger is restarting.");
 
   // prepare to close.
   PrepareForClose();
@@ -430,7 +430,7 @@ void Application::ShowStart()
 void Application::ShowVersion()
 {
   myodd::files::Version ver;
-  const auto strSay = myodd::strings::Format(_T("<b>Version : </b>%d.%d.%d.%d"),
+  const auto strSay = myodd::strings::Format(L"<b>Version : </b>%d.%d.%d.%d",
     ver.GetFileVersionMajor(),
     ver.GetFileVersionMinor(),
     ver.GetFileVersionMaintenance(),
@@ -453,7 +453,7 @@ void Application::ShowVersion()
 bool Application::Execute(const std::vector<std::wstring>& argv, const bool isPrivileged, HANDLE* hProcess) const
 {
   // get the number of arguments.
-  const auto argc = argv.size();
+  const auto& argc = argv.size();
 
   // sanity check
   if (argc < 1 || argc > 2)
@@ -469,7 +469,7 @@ bool Application::Execute(const std::vector<std::wstring>& argv, const bool isPr
   // Expand the values that might have been passed.
   if (!myodd::files::ExpandEnvironment(argv[0].c_str(), argvModule))
   {
-    myodd::log::LogError(_T("Could not execute statement: Unable to expand command line '%s'"), argv[0].c_str());
+    myodd::log::LogError(L"Could not execute statement: Unable to expand command line '%s'", argv[0].c_str());
     return false;
   }
 
@@ -479,7 +479,7 @@ bool Application::Execute(const std::vector<std::wstring>& argv, const bool isPr
     // Expand the values that might have been passed.
     if (!myodd::files::ExpandEnvironment(argv[1].c_str(), argvCmd))
     {
-      myodd::log::LogError(_T("Could not execute statement: Unable to expand arguments '%s'"), argv[1].c_str());
+      myodd::log::LogError(L"Could not execute statement: Unable to expand arguments '%s'", argv[1].c_str());
       delete[] argvModule;
       return false;
     }
@@ -504,12 +504,12 @@ bool Application::Execute(const std::vector<std::wstring>& argv, const bool isPr
   //sei.dwHotKey;               // in, valid when SEE_MASK_HOTKEY is specified
   if (isPrivileged == true && !myodd::os::IsElevated())
   {
-    sei.lpVerb = _T("runas"); // in, optional when unspecified the default verb is choosen
+    sei.lpVerb = L"runas"; // in, optional when unspecified the default verb is choosen
   }
   else
   {
     //  launch as a normal file.
-    sei.lpVerb = _T("open");  // in, optional when unspecified the default verb is choosen
+    sei.lpVerb = L"open";  // in, optional when unspecified the default verb is choosen
   }
 
   // did the user pass a handle?
@@ -523,8 +523,8 @@ bool Application::Execute(const std::vector<std::wstring>& argv, const bool isPr
   auto result = false;
   if (!ShellExecuteEx(&sei))
   {
-    myodd::log::LogError(_T("Could not execute statement: could not execute '%s'"), argvModule);
-    myodd::log::LogError(_T("Could not execute statement: Last error '%d'"), ::GetLastError());
+    myodd::log::LogError(L"Could not execute statement: could not execute '%s'", argvModule);
+    myodd::log::LogError(L"Could not execute statement: Last error '%d'", ::GetLastError());
   }
   else
   {
