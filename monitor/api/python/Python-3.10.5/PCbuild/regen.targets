@@ -53,16 +53,22 @@
 
   <Target Name="_RegenAST_H" Inputs="@(_ASTSources)" Outputs="@(_ASTOutputs)">
     <Message Text="Regenerate @(_ASTOutputs->'%(Filename)%(Extension)',' ')" Importance="high" />
+    <!--
     <Exec Command="$(PythonForBuild) Parser\asdl_c.py Parser\Python.asdl @(_ASTOutputs->'%(Argument) &quot;%(Identity)&quot;',' ')"
           WorkingDirectory="$(PySourcePath)" />
+          //-->
   </Target>
 
   <Target Name="_RegenOpcodes" Inputs="@(_OpcodeSources)" Outputs="@(_OpcodeOutputs)">
     <Message Text="Regenerate @(_OpcodeOutputs->'%(Filename)%(Extension)',' ')" Importance="high" />
+    <!--
     <Exec Command="$(PythonForBuild) Tools\scripts\generate_opcode_h.py Lib\opcode.py Include\opcode.h"
           WorkingDirectory="$(PySourcePath)" />
+          //-->
+    <!--
     <Exec Command="$(PythonForBuild) Python\makeopcodetargets.py Python\opcode_targets.h"
           WorkingDirectory="$(PySourcePath)" />
+          //-->
   </Target>
 
   <Target Name="_RegenTokens" Inputs="@(_TokenSources)" Outputs="@(_TokenOutputs)">
