@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ActionMonitor")]
-[assembly: AssemblyCopyright("Copyright © 2016-2019")]
+[assembly: AssemblyCopyright("Copyright (c) 2016-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -27,5 +27,6 @@ using System.Runtime.InteropServices;
 // 2019-02-08 Updated to version 2 as Myodd is no longer visible.
 // 2019-02-13 Renamed to 'ActionMonitor'
 // 2019-02-15 Removed uneeded assembly reference!
-[assembly: AssemblyVersion("2.1.1.0")]
-[assembly: AssemblyFileVersion("2.1.1.0")]
+// 2021-07-28 Updated to latest csproj format
+[assembly: AssemblyVersion("2.1.2.0")]
+[assembly: AssemblyFileVersion("2.1.2.0")]

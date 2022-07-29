@@ -13,11 +13,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using ActionMonitor.Shell.Runners;
 using myoddweb.commandlineparser;
+using myoddweb.commandlineparser.Rules;
 
 namespace ActionMonitor.Shell
 {
@@ -125,12 +125,13 @@ namespace ActionMonitor.Shell
     {
       try
       {
-        var parser = new CommandlineParser(args, new Dictionary<string, CommandlineData>
-        {
-          {Argument.Hidden, new CommandlineData {IsRequired = false}},
-          {Argument.Uuid, new CommandlineData {IsRequired = true}}, //  the unique id
-          {Argument.Path, new CommandlineData {IsRequired = true}} //  the path to what we want to run from shell.
-        });
+        var parser = new CommandlineParser(args, 
+          new CommandlineArgumentRules
+          {
+            new OptionalCommandlineArgumentRule( Argument.Hidden ),
+            new RequiredCommandlineArgumentRule( Argument.Uuid ),
+            new RequiredCommandlineArgumentRule( Argument.Path)//  the path to what we want to run from shell.
+          });
 
         if ( !parser.IsSet(Argument.Hidden ))
         {
