@@ -465,7 +465,7 @@ bool HelperApi::AddAction(const std::wstring& szText, const std::wstring& szPath
     // only internal commands have null paths
     return false;
   }
-  return _application.AddAction( new Action(_application, szText, szPath ) );
+  return _application.AddAction( new Action(_application, szText, szPath, L""));
 }
 
 /**

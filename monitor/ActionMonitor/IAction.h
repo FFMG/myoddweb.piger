@@ -37,6 +37,11 @@ public:
    */
   virtual const std::wstring& File() const = 0;
 
+  /**
+   * \brief the location of the extention relative to the rootcommand
+   */
+  virtual const std::wstring& Extention() const = 0;
+
   // Do that action with the arguments passed
   // if we have no argument then we look in the clipboard
   virtual IActiveAction* CreateActiveAction(IVirtualMachines& virtualMachines, CWnd* pWnd, const std::wstring& szCommandLine, bool isPrivileged) const = 0;

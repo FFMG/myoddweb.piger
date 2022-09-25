@@ -194,7 +194,10 @@ const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsVa
   ret += sBold;
   ret += givenAction.Command();
   ret += sBoldC;
-  ret += myodd::strings::Format( L"<small>(%s)</small>", givenAction.File().c_str() );
+  if (givenAction.Extention().length() > 0)
+  {
+    ret += myodd::strings::Format(L"<small>(%s)</small>", givenAction.Extention().c_str());
+  }
   ret += sItalicC;
 
   return ret;
@@ -559,16 +562,16 @@ void Actions::ParseDirectory(const std::wstring& rootPath, const std::wstring& e
   //  *.bat, *.exe, *.pl
   //  but I am not sure we really need to restrict anything
   // it is up to the user to ensure that they have 
-  auto sPath = directory + L"*.*";
+  const auto sPath = directory + L"*.*";
 
-  LPTSTR fullPath = NULL;
-  if( !myodd::files::ExpandEnvironment( sPath.c_str(), fullPath ) )
+  std::wstring fullPath = L"";
+  if( !myodd::files::ExpandEnvironment( sPath, fullPath ) )
   {
     return;
   }
   
   _tfinddata_t fdata;
-  const auto ffhandle = _tfindfirst( fullPath, &fdata );
+  const auto ffhandle = _tfindfirst( fullPath.c_str(), &fdata);
   if( ffhandle != -1 )
   {
     do
@@ -591,8 +594,7 @@ void Actions::ParseDirectory(const std::wstring& rootPath, const std::wstring& e
           continue;
         }
         
-        std::wstring subPath( extentionPath );
-        subPath += fdata.name;
+        auto subPath( extentionPath + fdata.name);
         myodd::files::AddTrailingBackSlash( subPath );
 
         ParseDirectory( rootPath, subPath.c_str() );
@@ -612,13 +614,11 @@ void Actions::ParseDirectory(const std::wstring& rootPath, const std::wstring& e
         myodd::files::StripExtension( szName );
       }        
 
-      Add( new Action( _application ,szName, szFullPath));
+      Add( new Action( _application ,szName, szFullPath, extentionPath));
     }while( _tfindnext( ffhandle, &fdata ) == 0 );
 
     _findclose( ffhandle );
   }
-
-  delete [] fullPath;
 }
 
 // -------------------------------------------------------------

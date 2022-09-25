@@ -22,7 +22,7 @@
  * \param application the application to close the app
  */
 ActionLog::ActionLog(IApplication& application ) :
-  Action( application, ACTION_CORE_LOG, L"" )
+  Action( application, ACTION_CORE_LOG, L"", L"")
 {
 }
 

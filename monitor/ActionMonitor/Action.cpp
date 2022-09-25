@@ -41,7 +41,12 @@ Action::Action(IApplication& application) :
  * \param szPath the full path of the action that we will execute.
  * \return none
  */
-Action::Action(IApplication& application, const std::wstring& szCommand, const std::wstring& szPath ) :
+Action::Action(
+  IApplication& application, 
+  const std::wstring& szCommand, 
+  const std::wstring& szPath,
+  const std::wstring& extentionPath
+  ) :
   Action(application)
 {
   if(szCommand.length() == 0 )
@@ -76,6 +81,8 @@ Action::Action(IApplication& application, const std::wstring& szCommand, const s
       _szFile = szPath;
     }
   }// if we have an szPath != nullptr
+
+  _szExtention = extentionPath;
 }
 
 /**
@@ -102,6 +109,7 @@ auto Action::operator=(const Action& action) -> const Action&
   {
     _szCommand = action._szCommand; 
     _szFile   = action._szFile;
+    _szExtention = action._szExtention;
   }
   return *this;
 }
