@@ -15,7 +15,7 @@ bool TokenUnderline::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {
-    return (_tcsnicmp(lpString , _T("u"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"u", nLen) ==0);
   }
   return false;
 }

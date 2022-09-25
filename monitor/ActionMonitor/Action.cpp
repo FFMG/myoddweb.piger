@@ -111,7 +111,7 @@ auto Action::operator=(const Action& action) -> const Action&
  */
 void Action::Reset()
 {
-  _szFile = _szCommand = _T("");
+  _szFile = _szCommand = L"";
 }
 
 /**
@@ -207,8 +207,8 @@ IActiveAction* Action::CreateActiveActionWithNoCommandLine(IVirtualMachines& vir
   }
   catch (...)
   {
-    szCommandLine = _T("");
-    myodd::log::LogError(_T("Critical error while trying to run an action, [%s]."), Command().c_str() );
+    szCommandLine = L"";
+    myodd::log::LogError(L"Critical error while trying to run an action, [%s].", Command().c_str() );
     _ASSERT(0);         //  the main reason for failure is probably because  
                         //  there is a format in the Clipboard that I am not handling properly
                         //  there should be a way of sending me a mail when this happens so we can look into fixing it.
@@ -385,19 +385,19 @@ IActiveAction* Action::CreateActiveActionDirect(IVirtualMachines& virtualMachine
 #endif // ACTIONMONITOR_API_PLUGIN
 
   // Batch files...
-  if( myodd::files::IsExtension (_szFile, _T("bat")))
+  if( myodd::files::IsExtension (_szFile, L"bat"))
   {
     return new ActiveBatchAction(_application, *this, hTopHWnd, szCommandLine );
   }
-  if (myodd::files::IsExtension(_szFile, _T("cmd")))
+  if (myodd::files::IsExtension(_szFile, L"cmd"))
   {
     return new ActiveCmdAction(_application, *this, hTopHWnd, szCommandLine);
   }
-  if (myodd::files::IsExtension(_szFile, _T("com")))
+  if (myodd::files::IsExtension(_szFile, L"com"))
   {
     return new ActiveComAction(_application, *this, hTopHWnd, szCommandLine);
   }
-  if (myodd::files::IsExtension(_szFile, _T("exe")))
+  if (myodd::files::IsExtension(_szFile, L"exe"))
   {
     return new ActiveExeAction(_application, *this, hTopHWnd, szCommandLine, isPrivileged);
   }

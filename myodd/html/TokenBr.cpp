@@ -21,11 +21,11 @@ bool TokenBr::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 2 )
   {
-    return (_tcsnicmp(lpString , _T("br"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"br", nLen) ==0);
   }
   if( nLen == 3 )
   {
-    return (_tcsnicmp(lpString , _T("br/"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"br/", nLen) ==0);
   }
   return false;
 }

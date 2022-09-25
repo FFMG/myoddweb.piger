@@ -15,11 +15,11 @@ bool TokenItalic::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {
-    return (_tcsnicmp(lpString , _T("i"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"i", nLen) ==0);
   }
   if( nLen == 2 )
   {
-    return (_tcsnicmp(lpString , _T("em"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"em", nLen) ==0);
   }
   return false;
 }

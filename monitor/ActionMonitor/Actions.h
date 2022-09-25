@@ -39,26 +39,46 @@ protected:
    */
   IApplication& _application;
 
-  struct CommandsValue
+  class CommandsValue
   {
-    bool bBold;
-    bool bItalic;
+  private:
+    bool _bBold;
+    bool _bItalic;
+
+  public:
     CommandsValue() :
-      bBold  (false),
-      bItalic(false)
+      _bBold  (false),
+      _bItalic(false)
     {
     }
     CommandsValue( const bool bold, const bool italic ) :
-      bBold( bold ), bItalic( italic ) 
+      _bBold( bold ), _bItalic( italic ) 
     {
     }
 
-    CommandsValue(CommandsValue&) = delete;
-    void operator=(CommandsValue&) = delete;
+    CommandsValue( const CommandsValue& rhs) : 
+      _bBold(rhs._bBold), _bItalic(rhs._bItalic)
+    {
+
+    }
+
+    const CommandsValue& operator=(CommandsValue& rhs )
+    {
+      if (this != &rhs)
+      {
+        _bBold = rhs._bBold;
+        _bItalic = rhs._bItalic;
+      }
+      return *this;
+    }
+
+    const bool IsItalic() const{ return _bItalic; }
+    const bool IsBold() const { return _bBold; }
   };
 
-  static std::wstring ToChar( const std::wstring& s, const CommandsValue& cv );
-  static void GetCommandValue( const std::wstring& lpName, CommandsValue& cv );
+  static const std::wstring ToChar( const IAction& givenAction, const CommandsValue& cv );
+  static const std::wstring ToChar( const std::wstring& givenAction );
+  static const CommandsValue GetCommandValue( const std::wstring& lpName, bool bold, bool italic );
 
 protected:
   //  vectors containing all the commands we can call
@@ -69,7 +89,7 @@ protected:
 
   array_of_actions::const_iterator Find( const std::wstring& szText, const std::wstring& szPath );
 
-  virtual void ParseDirectory( LPCTSTR  rootDir, LPCTSTR  extentionDir );
+  virtual void ParseDirectory( const std::wstring& rootDir, const std::wstring& extentionDir );
 
 protected:
   // clear the search string and possible actions match list.
@@ -97,8 +117,8 @@ public:
   const IAction* GetCommand() override;
   std::wstring GetCommandLine() override;
   std::wstring ToChar() override;
-  void down() override;
-  void up() override;
+  void Down() override;
+  void Up() override;
   void Initialize() override;
   bool Add(IAction* action) override;
   bool Remove(const std::wstring& szText, const std::wstring& szPath) override;

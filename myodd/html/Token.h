@@ -3,15 +3,14 @@
 #include "../common/includes.h"
 #include <windows.h>
 
-#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
-  TypeName(const TypeName&);               \
-  void operator=(const TypeName&)
-
 class Token
 {
 public:
   Token();
   virtual ~Token(){};
+
+  Token(const Token&) = delete;
+  void operator=(const Token&) = delete;
 
   // if this is the token we are looking for.
   bool IsToken(const wchar_t* lpString, __int64 nLen ) const;
@@ -38,6 +37,4 @@ protected:
 
 private:
   int m_depth;
-
-  DISALLOW_COPY_AND_ASSIGN(Token);
 };

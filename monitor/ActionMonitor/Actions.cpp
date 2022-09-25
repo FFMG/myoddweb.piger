@@ -176,38 +176,67 @@ bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
 }
 
 // ------------------------------------------------------------------------------------
-std::wstring Actions::ToChar(  const std::wstring& s, const CommandsValue& cv )
+const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsValue& cv )
 {
-  if( s.length() == 0 )
+  if(givenAction.Command().length() == 0)
   {
     return L"";
   }
   
-  const auto sBold     = cv.bBold? L"<b>": L"";
-  const auto sBoldC    = cv.bBold? L"</b>": L"";
+  const auto sBold     = cv.IsBold() ? L"<b>" : L"";
+  const auto sBoldC    = cv.IsBold() ? L"</b>": L"";
   
-  const auto sItalic   = cv.bItalic? L"<i>": L"";
-  const auto sItalicC  = cv.bItalic? L"</i>": L"";
+  const auto sItalic   = cv.IsItalic() ? L"<i>" : L"";
+  const auto sItalicC  = cv.IsItalic() ? L"</i>": L"";
     
   std::wstring ret = L"";
-  ret +=  sBold;
-  ret +=  sItalic;
-  ret +=  s;
-  ret +=  sItalicC;
-  ret +=  sBoldC;
+  ret += sItalic;
+  ret += sBold;
+  ret += givenAction.Command();
+  ret += sBoldC;
+  ret += myodd::strings::Format( L"<small>(%s)</small>", givenAction.File().c_str() );
+  ret += sItalicC;
+
+  return ret;
+}
+
+// ------------------------------------------------------------------------------------
+const std::wstring Actions::ToChar(const std::wstring& givenAction )
+{
+  if (givenAction.length() == 0)
+  {
+    return L"";
+  }
+
+  // get the current command, colors and style
+  const auto cv = GetCommandValue(L"current", false, false);
+
+  const auto sBold = cv.IsBold() ? L"<b>" : L"";
+  const auto sBoldC = cv.IsBold() ? L"</b>" : L"";
+
+  const auto sItalic = cv.IsItalic() ? L"<i>" : L"";
+  const auto sItalicC = cv.IsItalic() ? L"</i>" : L"";
+
+  std::wstring ret = L"";
+  ret += sBold;
+  ret += sItalic;
+  ret += givenAction;
+  ret += sItalicC;
+  ret += sBoldC;
 
   return ret;
 }
 
 // -------------------------------------------------------------
-void Actions::GetCommandValue(const std::wstring& lpName, CommandsValue& cv )
+const Actions::CommandsValue Actions::GetCommandValue(const std::wstring& lpName, bool bold, bool italic)
 {
   // get the path
   const auto fullPath = ::myodd::strings::Format( L"commands\\%s", lpName.c_str() );
 
   // get the value
-  cv.bBold    = ::myodd::config::Get( fullPath + L".bold", cv.bBold);
-  cv.bItalic  = ::myodd::config::Get( fullPath + L".italic", cv.bItalic );
+  return CommandsValue(
+    ::myodd::config::Get(fullPath + L".bold", bold ),
+    ::myodd::config::Get( fullPath + L".italic", italic ));
 }
 
 // -------------------------------------------------------------
@@ -221,31 +250,23 @@ void Actions::GetCommandValue(const std::wstring& lpName, CommandsValue& cv )
  */
 std::wstring Actions::ToChar()
 {
-  //  get the current command, colors and style
-  CommandsValue cv(  false, false );
-  GetCommandValue( L"current", cv );
-
   // the default item
-  CommandsValue cvDef( false, false );
-  GetCommandValue( L"default", cvDef );
+  const auto cvDef = GetCommandValue( L"default", false, false);
 
   // and the selected item
-  CommandsValue cvSel( true, true );
-  GetCommandValue( L"selected", cvSel );
+  const auto cvSel = GetCommandValue( L"selected", true, true );
 
   myodd::threads::Lock guard(_mutexActionsMatch );
 
   //  the return string
   //  we keep it as global 'cause we are returning it.
-  auto szCurrentView = ToChar( GetActionAsTyped(), cv );
+  auto szCurrentView = ToChar( GetActionAsTyped() );
   size_t count =  0;
-  for ( auto it =  _actionsMatch.begin(); it != _actionsMatch.end(); ++it )
+  for ( const auto action : _actionsMatch )
   {
     //  we need a break after the previous line, (even for the current action)
     szCurrentView += L"<br>";
-    const auto& acc = *(*it);
-
-    szCurrentView += ToChar( acc.Command(), (count==m_uCommand) ? cvSel:cvDef );
+    szCurrentView += ToChar( *action, (count==m_uCommand) ? cvSel:cvDef );
     ++count;
   }
   return szCurrentView;
@@ -499,7 +520,7 @@ void Actions::Initialize()
 }
 
 // -------------------------------------------------------------
-void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
+void Actions::ParseDirectory(const std::wstring& rootPath, const std::wstring& extentionPath  )
 {
   // make sure that we do not have too many actions
   // this is a sign that something is broken
@@ -515,8 +536,8 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   }
 
   // make sure that the path that we have is valid.
-  ASSERT( _tcslen( rootPath ) > 0 );
-  if( _tcslen( rootPath ) == 0 )
+  ASSERT( rootPath.length() > 0);
+  if( rootPath.length() == 0)
   {
     return;
   }
@@ -601,7 +622,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
 }
 
 // -------------------------------------------------------------
-void Actions::down()
+void Actions::Down()
 {
   myodd::threads::Lock guard(_mutexActionsMatch);
   m_uCommand++;
@@ -612,7 +633,7 @@ void Actions::down()
 }
 
 // -------------------------------------------------------------
-void Actions::up()
+void Actions::Up()
 {
   myodd::threads::Lock guard(_mutexActionsMatch);
   if (m_uCommand == 0)

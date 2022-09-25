@@ -15,11 +15,11 @@ bool TokenStrikeout::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {
-    return (_tcsnicmp(lpString , _T("s"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"s", nLen) ==0);
   }
   if( nLen == 9 )
   {
-    return (_tcsnicmp(lpString , _T("strikeout"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"strikeout", nLen) ==0);
   }
   return false;
 }

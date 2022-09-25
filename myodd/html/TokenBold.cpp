@@ -15,11 +15,11 @@ bool TokenBold::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {
-    return (_tcsnicmp(lpString , _T("b"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"b", nLen) ==0);
   }
   if( nLen == 6 )
   {
-    return (_tcsnicmp(lpString , _T("strong"),	1 ) ==0);
+    return (_tcsnicmp(lpString , L"strong", nLen) ==0);
   }
   return false;
 }

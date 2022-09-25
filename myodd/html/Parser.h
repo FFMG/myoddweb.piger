@@ -34,6 +34,9 @@ public:
               const Parser::HTMLDATA* hd, 
               RECT& rect,
               const RECT& givenRect,
+              const int maxLineHeight,
+              const int paddingTop,
+              const int paddingBottom,
               UINT uFormat );
 
   void DeInit( HDC hdc );

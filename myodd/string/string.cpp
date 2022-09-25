@@ -419,8 +419,6 @@ int32_t Find
 
 /**
  * convert a string to the lower case equivalent.
- * @see boost/foreach.hpp
- *
  * @param std::wstring the character we want to convert.
  * @return std::wstring the lower string
  */

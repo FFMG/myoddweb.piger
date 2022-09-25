@@ -68,7 +68,7 @@ void MessageDlg::InitWindowPos()
   const auto pOldFont = SelDisplayFont( hdc, 35 );
 
   RECT r = {0,0,0,0};
-  myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT );
+  myodd::html::html(hdc, _mStdMessage.c_str() , _mStdMessage.length(), &r, -1, -1, -1, DT_DEFAULT | DT_CALCRECT );
 
   //  clean up old fonts
   if ( pOldFont != nullptr )
@@ -260,14 +260,17 @@ void MessageDlg::RedrawMessage(const HDC hdc)
   //  because of the XML config this is only really used for size.
   const auto pOldFont = SelDisplayFont(hdc, 35 );
 
+  const auto paddingY = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
+
   RECT r = { 0,0,0,0 };
-  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, DT_DEFAULT | DT_CALCRECT);
+  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, -1, paddingY, paddingY, DT_DEFAULT | DT_CALCRECT);
+
+  const auto maxHeight = r.bottom - r.top;
 
   //  pad a little
   r.left += static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
-  r.top += static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
 
-  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, DT_DEFAULT);
+  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, maxHeight, paddingY, paddingY, DT_DEFAULT);
 
   //  clean up old fonts
   if (pOldFont != nullptr)

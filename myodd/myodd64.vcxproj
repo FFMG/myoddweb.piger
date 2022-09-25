@@ -286,6 +286,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="html\TokenSmall.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\TokenStrikeout.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
@@ -567,6 +577,7 @@
     <ClInclude Include="html\TokenBr.h" />
     <ClInclude Include="html\TokenItalic.h" />
     <ClInclude Include="html\Tokens.h" />
+    <ClInclude Include="html\TokenSmall.h" />
     <ClInclude Include="html\TokenStrikeout.h" />
     <ClInclude Include="html\TokenUnderline.h" />
     <ClInclude Include="log\log.h" />

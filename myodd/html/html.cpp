@@ -16,6 +16,7 @@ namespace myodd{ namespace html{
    * @param Parser::HTML_CONTAINER::const_iterator the beginning of our parsed html container.
    * @param Parser::HTML_CONTAINER::const_iterator the end of our parser html container.
    * @param LPRECT the rectangle where we want to draw, or the size of the rectangle.
+   * @param int if known, the maximum height /working area, (for bottom/top adjusting) -1 if unknown
    * @param UINT the format on how we would like to display the text.
    * @return SIZE the height and width the the output text.
    */
@@ -24,6 +25,9 @@ namespace myodd{ namespace html{
                        Parser::HTML_CONTAINER::const_iterator begin,
                        Parser::HTML_CONTAINER::const_iterator end,
                        LPRECT  lpRect,     // address of structure with formatting dimensions
+                       const int maxLineHeight,
+                       const int paddingTop,
+                       const int paddingBottom,
                        UINT    uFormat     // text-drawing flags
                       )
   {
@@ -42,7 +46,7 @@ namespace myodd{ namespace html{
       uFormat &= ~(DT_RIGHT|DT_CENTER);
 
       // get the size of this LEFT aligned rectangle.
-      SIZE sizeRight = _htmlSingleLine( hdc, parser, begin, end, &rTopLeft, uFormat|DT_CALCRECT);
+      const auto sizeRight = _htmlSingleLine( hdc, parser, begin, end, &rTopLeft, maxLineHeight, paddingTop, paddingBottom, uFormat|DT_CALCRECT);
 
       if( (uFormatOrg & DT_RIGHT) != 0 )
       {
@@ -71,7 +75,7 @@ namespace myodd{ namespace html{
       it != end;
       ++it )
     {
-      SIZE thisSize = parser.Apply( hdc, *it, drawRect, *lpRect, uFormat );
+      const auto thisSize = parser.Apply( hdc, *it, drawRect, *lpRect, maxLineHeight, paddingTop, paddingBottom, uFormat );
       size.cx += thisSize.cx;                             // all in one line so we are moving along
       size.cy = myodd::math::max2( size.cy, thisSize.cy); // all in one line so we are using the biggest height.
     }
@@ -99,6 +103,7 @@ namespace myodd{ namespace html{
    * @param const wchar_t* the string we want to output.
    * @param int the number of characters we want to display.
    * @param LPRECT the rectangle where we want to draw, or the size of the rectangle.
+   * @param int the maximum height per line at the 'maximum' font size.
    * @param UINT the format on how we would like to display the text.
    * @return SIZE the height and width the the output text.
    */
@@ -106,6 +111,9 @@ namespace myodd{ namespace html{
             const wchar_t* lpString,   // address of string to draw
             int     nCount,     // string length, in characters
             LPRECT  lpRect,     // address of structure with formatting dimensions
+            const int maxLineHeight,
+            const int paddingTop,
+            const int paddingBottom,
             UINT    uFormat     // text-drawing flags
           )
   {
@@ -136,7 +144,8 @@ namespace myodd{ namespace html{
       uFormat &= ~(DT_VCENTER|DT_BOTTOM);
 
       // get the size of this LEFT aligned rectangle.
-      SIZE sizeRight = html( hdc, lpString, nCount, &rTopLeft, (uFormat|DT_LEFT|DT_CALCRECT) & ~(DT_RIGHT|DT_CENTER));
+      // we pass -1 as a max height as we do not care about the height when calculating rectangle.
+      const auto sizeRight = html( hdc, lpString, nCount, &rTopLeft, -1,-1, -1, (uFormat|DT_LEFT|DT_CALCRECT) & ~(DT_RIGHT|DT_CENTER));
 
       if( (uFormatOrg & DT_BOTTOM) != 0 )
       {
@@ -160,14 +169,14 @@ namespace myodd{ namespace html{
     const Parser::HTML_CONTAINER& dom = parser.Parse( lpString, nCount );
 
     SIZE size = {0};
-    Parser::HTML_CONTAINER::const_iterator begin = dom.begin();
-    Parser::HTML_CONTAINER::const_iterator last = (begin == dom.end()) ? dom.end() : (dom.end() -1);
-    for( Parser::HTML_CONTAINER::const_iterator it = dom.begin();
+    auto& begin = dom.begin();
+    const auto& last = (begin == dom.end()) ? dom.end() : (dom.end() -1);
+    for( auto it = dom.begin();
          it != dom.end();
          ++it 
          )
     {
-      Parser::HTMLDATA* hd = (*it);
+      const auto hd = (*it);
       if( !hd->mToken || !hd->mToken->ToNextLine(hd->mIsEnd)) 
       {
         if(  it == last )
@@ -182,11 +191,11 @@ namespace myodd{ namespace html{
 
       // make sure that the top of the rectangle is below the last line
       // and we also include the offset.
-      RECT thisRect = returnRect;
+      auto thisRect = returnRect;
       thisRect.top += (size.cy + vOffset);
 
       // draw the item
-      SIZE s = _htmlSingleLine( hdc, parser, begin, it, &thisRect, uFormat);
+      auto s = _htmlSingleLine( hdc, parser, begin, it, &thisRect, maxLineHeight, paddingTop, paddingBottom, uFormat);
       if( s.cy == 0 )
       {
         SIZE h = {0};

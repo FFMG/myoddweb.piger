@@ -269,6 +269,9 @@
     <ClCompile Include="common\commandline_variables.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="html\TokenSmall.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -425,6 +428,9 @@
     </ClInclude>
     <ClInclude Include="common\commandline_variables.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TokenSmall.h">
+      <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

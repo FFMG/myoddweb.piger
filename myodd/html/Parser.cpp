@@ -292,10 +292,27 @@ void Parser::DeInit( const HDC hdc )
   }
 }
 
+void DrawDebugRect(const HDC hdc, RECT rect, COLORREF rgb )
+{
+  auto hpen = CreatePen(PS_DASH, 1, rgb );
+  auto hbrush = GetStockObject(NULL_BRUSH);
+  auto hpenOld = SelectObject(hdc, hpen);
+  auto hbrushOld = SelectObject(hdc, hbrush);
+  Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+
+  SelectObject(hdc, hpenOld);
+  DeleteObject(hpen);
+  SelectObject(hdc, hbrushOld);
+  DeleteObject(hbrush);
+}
+
 SIZE Parser::Apply( const HDC hdc, 
                     const Parser::HTMLDATA* hd, 
                     RECT& rect,
                     const RECT& givenRect,
+                    const int maxLineHeight,
+                    const int paddingTop,
+                    const int paddingBottom,
                     const UINT uFormat 
                   )
 {
@@ -334,7 +351,30 @@ SIZE Parser::Apply( const HDC hdc,
 
     if( (uFormat & DT_CALCRECT) == 0 )
     {
-      DrawText( hdc, lpString, lpStringLen, &rect, uFormat );
+      RECT bottomAlignedRect = rect;
+      if (maxLineHeight != -1)
+      {
+        // get the hight of this text ...
+        RECT thisRect = { 0 };
+        DrawText(hdc, L"IM", 2, &thisRect, uFormat | DT_CALCRECT | DT_SINGLELINE);
+
+        // then bottom align the text
+        // we know that the *total* rectangle is equal to "rect"
+        // we are drawing from the top/left corner
+        // so to find the bottom of this current line we +maxHeight and then -thisRect.bottom
+        // the maxHeight will take us to the bottom of the current line
+        // and the -thisRect.bottom will bring us back to the "top/left" making us bottom aligned.
+        bottomAlignedRect.top += (maxLineHeight - thisRect.bottom);
+
+        DrawDebugRect(hdc, bottomAlignedRect, RGB(0, 255, 0));
+      }
+
+      // we have now moved our rectangle right at the bottom of the rectange
+      // so we need to re-add the padding.
+      bottomAlignedRect.top -= paddingTop;
+      bottomAlignedRect.top += paddingBottom;
+
+      DrawText( hdc, lpString, lpStringLen, &bottomAlignedRect, uFormat );
     }
 
     SIZE calcSize = {0};

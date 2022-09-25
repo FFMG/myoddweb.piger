@@ -165,14 +165,17 @@ RECT ActionMonitorDlg::CalculateMinimumRectPosition(const std::wstring& sCommand
   const auto paddingScreenHeight = static_cast<int>((screenHeight - maxScreenHeight) / 2);
 
   // the padding of the text
-  const auto paddingText = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
+  const auto paddingX = static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
+  const auto paddingY = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
 
   // calculate the text height so we can get the height.
   // the width does not matter as we will not be using it.
   // if the command is empty we will pass one character to make sure we have a proper minimum height.
-  const auto nonEmptyCommand = (sCommand.length() == 0 ? L"IM" : sCommand);
-  const auto rectText = CalculateCommandRectangle(nonEmptyCommand, hdc);
-  const auto height = (2*paddingText+rectText.bottom) > maxScreenHeight ? maxScreenHeight : (2*paddingText+rectText.bottom);
+  const auto commandHeight = sCommand.length() == 0 ? 
+    CalculateEmptyCommandHeight(hdc)
+    :
+    CalculateCommandHeight(sCommand, hdc);
+  const auto height = (2*paddingY+ commandHeight) > maxScreenHeight ? maxScreenHeight : (2* paddingX + commandHeight);
 
   return {
     paddingScreenWidth,
@@ -180,6 +183,27 @@ RECT ActionMonitorDlg::CalculateMinimumRectPosition(const std::wstring& sCommand
     maxScreenWidth,
     height + paddingScreenHeight
   };
+}
+
+/**
+ * \brief assuming no command at all, calculate the height of an empty window
+ * \param hdc the device context handle.
+ */
+int ActionMonitorDlg::CalculateEmptyCommandHeight(HDC hdc)
+{
+  return CalculateCommandHeight(L"IM", hdc);
+}
+
+/**
+ * \brief given the command window, recalculate the total size needed for the window to be displayed.
+ *        it will use the minimum size to make sure that the text is not too small either
+ * \param sCommand the command we are measuring
+ * \param hdc the device context handle.
+ */
+int ActionMonitorDlg::CalculateCommandHeight(const std::wstring& sCommand, const HDC hdc)
+{
+  const auto rect = CalculateCommandRectangle(sCommand, hdc);
+  return rect.bottom - rect.top;
 }
 
 /**
@@ -194,9 +218,9 @@ RECT ActionMonitorDlg::CalculateCommandRectangle(const std::wstring& sCommand, c
   //  because of the XML config this is only really used for size.
   const auto pOldFont = SelDisplayFont(hdc, 70);
 
-  // get the text size
+  // get the text size we pass -1 as a max height as we do not care about bottom align and so on.
   RECT rTextRectangle = { 0,0,0,0 };
-  myodd::html::html(hdc, sCommand.c_str(), static_cast<int>(sCommand.length()), &rTextRectangle, DT_DEFAULT | DT_CALCRECT);
+  myodd::html::html(hdc, sCommand.c_str(), static_cast<int>(sCommand.length()), &rTextRectangle, -1, -1, -1, DT_DEFAULT | DT_CALCRECT);
 
   // replace the old font.
   // The resource for it is freed when FramWnd closes.
@@ -242,22 +266,24 @@ void ActionMonitorDlg::OnPaint()
 void ActionMonitorDlg::RedrawText(const std::wstring& sCommand, const HDC hdc)
 {
   // the padding of the text
-  const auto paddingText = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
+  const auto paddingX = static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
+  const auto paddingY = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
 
   // calculate the text height so we can get the height.
   // the width does not matter as we will not be using it.
   auto rectText = _commandRectangle;
-  rectText.top += _mainWindowPosition.top+paddingText;
-  rectText.bottom += _mainWindowPosition.bottom + paddingText;
-  rectText.left += _mainWindowPosition.left + paddingText;
-  rectText.right += _mainWindowPosition.right + paddingText;
+  rectText.left += _mainWindowPosition.left + paddingX;
+  rectText.right += _mainWindowPosition.right + paddingX;
 
   //  get the font that we will be using for display
   //  because of the XML config this is only really used for size.
   const auto pOldFont = SelDisplayFont(hdc, 70);
 
+  // get the max height per line
+  const auto maxHeight = CalculateEmptyCommandHeight(hdc);
+
   // get the text size
-  myodd::html::html(hdc, sCommand.c_str(), static_cast<int>(sCommand.length()), &rectText, DT_DEFAULT );
+  myodd::html::html(hdc, sCommand.c_str(), static_cast<int>(sCommand.length()), &rectText, maxHeight, paddingY, paddingY, DT_DEFAULT );
 
   //  clean up old fonts
   if (pOldFont != nullptr)

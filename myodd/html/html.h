@@ -8,6 +8,9 @@ namespace myodd{ namespace html{
             const wchar_t* lpString,   // address of string to draw
             int     nCount,     // string length, in characters
             LPRECT  lpRect,     // address of structure with formatting dimensions
+            const int maxLineHeight,
+            const int paddingTop,
+            const int paddingBottom,
             UINT    uFormat     // text-drawing flags
             );
   } //  html
