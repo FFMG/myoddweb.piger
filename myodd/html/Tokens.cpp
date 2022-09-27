@@ -19,9 +19,7 @@ Tokens::Tokens()
 
 Tokens::~Tokens()
 {
-  for( const_iterator it = begin();
-    it != end();
-    it++ )
+  for( const_iterator it = begin(); it != end(); it++ )
   {
     delete *it;
   }

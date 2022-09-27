@@ -177,7 +177,7 @@ namespace myodd{ namespace html{
          )
     {
       const auto hd = (*it);
-      if( !hd->mToken || !hd->mToken->ToNextLine(hd->mIsEnd)) 
+      if( !hd->HasTokenData() || !hd->TokenData().ToNextLine(hd->IsEnd()))
       {
         if(  it == last )
         {

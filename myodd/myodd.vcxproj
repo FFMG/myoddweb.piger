@@ -235,7 +235,36 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\Parser.cpp" />
+    <ClCompile Include="html\HtmlData.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\Parser.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\SimpleHtmlData.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\Token.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
@@ -571,7 +600,9 @@
     <ClInclude Include="files\files.h" />
     <ClInclude Include="geo\geo.h" />
     <ClInclude Include="html\html.h" />
+    <ClInclude Include="html\HtmlData.h" />
     <ClInclude Include="html\Parser.h" />
+    <ClInclude Include="html\SimpleHtmlData.h" />
     <ClInclude Include="html\Token.h" />
     <ClInclude Include="html\TokenBold.h" />
     <ClInclude Include="html\TokenBr.h" />

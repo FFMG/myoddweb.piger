@@ -1,9 +1,8 @@
-#include "StdAfx.h"
 #include "Parser.h"
 #include <algorithm>
+#include "SimpleHtmlData.h"
 
-static Tokens m_tokens;
-
+namespace myodd { namespace html {
 Parser::Parser( const HDC hdc ) : 
   mSaveDC( -1 ),
   mFont( nullptr )
@@ -103,18 +102,18 @@ void Parser::Add(const wchar_t* begin, const wchar_t* end, const bool isHtmlTag 
   if( begin == end )
     return;
 
-  const auto hd = new HTMLDATA;
-  hd->mIsHtmlTag = isHtmlTag;
-
   if( isHtmlTag )
   {
+    bool isEnd = false;
+    std::wstring attributes = L"";
+    
     assert( *begin == '<' );
     begin++;    //  '<'
 
     assert( *(end-1) == '>' );
     end--;      //  '>'
-    hd->mIsEnd = *begin == _T('/') ? true : false;
-    if( hd->mIsEnd )
+    isEnd = *begin == _T('/') ? true : false;
+    if( isEnd )
     {
       begin++;  //  '/'
     }
@@ -123,53 +122,73 @@ void Parser::Add(const wchar_t* begin, const wchar_t* end, const bool isHtmlTag 
     const wchar_t* space = _tcschr (begin, ' ');
     if( space && space < end )
     {
-      hd->attributes.assign( space+1, end );
+      attributes.assign( space+1, end );
       end = space;
     }
 
-    //hd->text.assign( begin, end );
-    assert( end - begin > 0 );  // how can the tag be empty??
-    hd->text.assign(end - begin, '\0');
-    std::transform(begin, end, hd->text.begin(), ::tolower);
+    assert(end - begin > 0);  // how can the tag be empty??
+    auto text = std::wstring(end - begin, '\0');
+    std::transform(begin, end, text.begin(), ::tolower);
     
     // look for the matching token for that tag
     // the token is what does the basic string transformation.
-    for( auto it = m_tokens.begin();
-      it != m_tokens.end();
-      ++it )
-    {
-      if( (*it)->IsToken( hd->text.c_str(), (end-begin) ))
-      {
-        hd->mToken = *it;
-        break;
-      }
-    }
+    auto tokenData = FindToken(text);
 
     // if we do not have a token it means that we are not going to parse it properly.
     // the text in the tag will not be displayed.
     // did you mean to use &gt; (>) and &lt; (<)?
-    assert( hd->mToken );
+    assert( tokenData );
+
+    // add this to the list as a text only item.
+    m_data.push_back(new HtmlData(isEnd, attributes, tokenData));
   }
   else
   {
     // this is not a tag so we just assign the text.
     // we might want to do more formating here.
-    hd->text.assign( begin, end );
+    auto text = std::wstring( begin, end );
 
     // special chars are done straight away
-    myodd::strings::Replace( hd->text, _T("&nbsp;"), _T(" "), false );
-    myodd::strings::Replace( hd->text, _T("&lt;"), _T("<"), false);
-    myodd::strings::Replace( hd->text, _T("&gt;"), _T(">"), false);
-    myodd::strings::Replace( hd->text, _T("&amp;"), _T("&"), false);
-    myodd::strings::Replace( hd->text, _T("&deg;"),  std::wstring(1, wchar_t(176)), false);    //  degree
-    myodd::strings::Replace( hd->text, _T("&plusmn;"),  std::wstring(1, wchar_t(177)), false); //  Plus/minus symbol
-  }
+    text = EscapeText(text);
 
-  // add this to the list.
-  m_data.push_back( hd );
+    // add this to the list as a text only item.
+    m_data.push_back( new SimpleHtmlData(text ));
+  }
 }
 
-void CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
+Token* Parser::FindToken(const std::wstring& text) const
+{
+  for (auto it = m_tokens.begin();
+    it != m_tokens.end();
+    ++it)
+  {
+    if ((*it)->IsToken(text.c_str(), text.length() ))
+    {
+      return *it;
+    }
+  }
+  return nullptr;
+}
+
+/**
+ * \brief Escape a given text
+ * \param std::wstring the text we want to excape
+ * \return the escaped text
+ */
+std::wstring Parser::EscapeText(const std::wstring& src) const
+{
+  auto text = src;
+  text = myodd::strings::Replace(text, _T("&nbsp;"), _T(" "), false);
+  text = myodd::strings::Replace(text, _T("&lt;"), _T("<"), false);
+  text = myodd::strings::Replace(text, _T("&gt;"), _T(">"), false);
+  text = myodd::strings::Replace(text, _T("&amp;"), _T("&"), false);
+  text = myodd::strings::Replace(text, _T("&deg;"), std::wstring(1, wchar_t(176)), false);    //  degree
+  text = myodd::strings::Replace(text, _T("&plusmn;"), std::wstring(1, wchar_t(177)), false); //  Plus/minus symbol
+
+  return text;
+}
+
+void Parser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
 {
   if( nLen == -1 )
   {
@@ -292,22 +311,8 @@ void Parser::DeInit( const HDC hdc )
   }
 }
 
-void DrawDebugRect(const HDC hdc, RECT rect, COLORREF rgb )
-{
-  auto hpen = CreatePen(PS_DASH, 1, rgb );
-  auto hbrush = GetStockObject(NULL_BRUSH);
-  auto hpenOld = SelectObject(hdc, hpen);
-  auto hbrushOld = SelectObject(hdc, hbrush);
-  Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
-
-  SelectObject(hdc, hpenOld);
-  DeleteObject(hpen);
-  SelectObject(hdc, hbrushOld);
-  DeleteObject(hbrush);
-}
-
 SIZE Parser::Apply( const HDC hdc, 
-                    const Parser::HTMLDATA* hd, 
+                    const HtmlData* hd, 
                     RECT& rect,
                     const RECT& givenRect,
                     const int maxLineHeight,
@@ -316,32 +321,29 @@ SIZE Parser::Apply( const HDC hdc,
                     const UINT uFormat 
                   )
 {
-  const auto lpString = hd->text.c_str();
-  const auto lpStringLen  = hd->text.length();
-
   SIZE size = {0};
 
   // are we a tag?
-  if( hd->mToken )
+  if( hd->HasTokenData() )
   {
     // this function does single lines only
     // but when asked to parse from beginning to end we are 
     // given the token that caused us to go to the next line
     auto lf = GetCurrentLogFont();
-    if( hd->mIsEnd )
+    if( hd->IsEnd() )
     {
-      hd->mToken->pop( lf );
+      hd->TokenData().pop( lf );
       PopFont( hdc, lf );
     }
     else
     {
-      hd->mToken->push( lf );
+      hd->TokenData().push(lf);
       PushFont( hdc, lf );
     }
   }
 
   // we only output if we are not a string 
-  if( lpStringLen > 0 && !hd->mIsHtmlTag )
+  if( hd->TextLength() > 0 && !hd->IsHtmlTag() )
   {
     // in case the user has ellipses we need to use the rectangle 
     // as it was given to us.
@@ -365,20 +367,18 @@ SIZE Parser::Apply( const HDC hdc,
         // the maxHeight will take us to the bottom of the current line
         // and the -thisRect.bottom will bring us back to the "top/left" making us bottom aligned.
         bottomAlignedRect.top += (maxLineHeight - thisRect.bottom);
-
-        DrawDebugRect(hdc, bottomAlignedRect, RGB(0, 255, 0));
       }
 
       // we have now moved our rectangle right at the bottom of the rectange
       // so we need to re-add the padding.
-      bottomAlignedRect.top -= paddingTop;
-      bottomAlignedRect.top += paddingBottom;
+      bottomAlignedRect.top += paddingTop;
+      bottomAlignedRect.bottom += (paddingTop+paddingBottom);
 
-      DrawText( hdc, lpString, lpStringLen, &bottomAlignedRect, uFormat );
+      DrawText( hdc, hd->Text().c_str(), hd->TextLength(), &bottomAlignedRect, uFormat);
     }
 
     SIZE calcSize = {0};
-    CalculateSmartDimensions( calcSize, hdc, lpString, lpStringLen );
+    CalculateSmartDimensions( calcSize, hdc, hd->Text().c_str(), hd->TextLength());
 
     // given the size of the rectangle, update the various sizes.
     // they will be used later to make sure that we have the right sizes.
@@ -446,3 +446,4 @@ void Parser::ApplyFont( HDC hdc, const LOGFONT& lf )
   // this is the new log font
   mLogFont = lf;
 }
+}}

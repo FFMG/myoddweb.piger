@@ -272,6 +272,12 @@
     <ClCompile Include="html\TokenSmall.cpp">
       <Filter>html</Filter>
     </ClCompile>
+    <ClCompile Include="html\HtmlData.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\SimpleHtmlData.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -430,6 +436,12 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="html\TokenSmall.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\HtmlData.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\SimpleHtmlData.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>
