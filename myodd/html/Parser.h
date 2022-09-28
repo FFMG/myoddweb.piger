@@ -9,15 +9,19 @@ namespace myodd { namespace html {
 class Parser
 {
 public:
-  Parser( HDC hdc );
+  Parser();
   virtual ~Parser(void);
 
 public:
-  typedef std::vector<HtmlData*> HTML_CONTAINER;
-  HTML_CONTAINER m_data;
+  typedef std::vector<HtmlData*> HtmlDataContainer;
 
-  const HTML_CONTAINER& Parse(const wchar_t* lpString, int nCount );
-  const HTML_CONTAINER& Tree() const{
+  const HtmlDataContainer& Parse( const std::wstring& text );
+  const HtmlDataContainer& Parse(const wchar_t* lpString);
+
+private:
+  
+  HtmlDataContainer m_data;
+  const HtmlDataContainer& Tree() const {
     return m_data;
   };
 
@@ -51,11 +55,16 @@ private:
   void ApplyFont( HDC hdc, const LOGFONT& lf );
 
 private:
-  void Add(const wchar_t* begin, const wchar_t* end, bool isHtmlTag );
+  void AddNonHtmlTag( const std::wstring& src );
+  void AddNonHtmlTag(const wchar_t* begin, const wchar_t* end );
+  void AddHtmlTag(const wchar_t* begin, const wchar_t* end);
   void Clear();
 
   std::wstring EscapeText(const std::wstring& src) const;
   Token* FindToken(const std::wstring& text ) const;
+
+  const wchar_t* FindTag(const wchar_t* body, const wchar_t tag) const;
+  const wchar_t* FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude ) const;
 
   Tokens m_tokens;
 };

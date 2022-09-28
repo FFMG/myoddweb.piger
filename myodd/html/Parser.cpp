@@ -3,11 +3,10 @@
 #include "SimpleHtmlData.h"
 
 namespace myodd { namespace html {
-Parser::Parser( const HDC hdc ) : 
+Parser::Parser( ) : 
   mSaveDC( -1 ),
   mFont( nullptr )
 {
-  Init( hdc );
 }
 
 Parser::~Parser()
@@ -30,52 +29,76 @@ void Parser::Clear()
 
 /**
  * \brief Parse a string and build an array of HTML tags/text and so on.
- * \param lpString the string we are parsing.
- * \param nCount the number of characters we want to parse.
+ * \param const std::wstring the string we are parsing.
  * \return const Parser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const Parser::HTML_CONTAINER& Parser::Parse(const wchar_t* lpString, int nCount )
+const Parser::HtmlDataContainer& Parser::Parse(const std::wstring& text)
+{
+  return Parse(text.c_str());
+}
+
+/**
+ * \brief Parse a string and build an array of HTML tags/text and so on.
+ * \param lpString the string we are parsing.
+ * \return const Parser::HTML_CONTAINER& a container with all html the tags and text.
+ */
+const Parser::HtmlDataContainer& Parser::Parse(const wchar_t* lpString )
 {
   Clear();
-  if( !lpString )
+  if( nullptr == lpString )
   {
     return Tree();
   }
 
   // use the len of the string
-  nCount = nCount < 0 ? _tcslen( lpString ) : nCount;
-
-  auto limit = lpString+nCount;
-  auto ptr = lpString;
+  auto limit = lpString+ _tcslen(lpString); // the full string
+  auto ptr = lpString; // the start
   auto begin  = ptr;
   auto end    = ptr;
   while (*ptr && end != limit ) 
   {
-    // look for the opening tag '<'
-    if ((end = _tcschr (begin, '<')) != nullptr)
+    // look for the next opening tag '<'
+    end = FindTag(begin, '<');
+    if (end != nullptr)
     {
       // assign the value from wherever we come from to here.
       // if the tag is the very first one, then there is no need to assign that value.
       end = end > limit ? limit : end;
-      Add( begin, end, false );
+      AddNonHtmlTag( begin, end );
       begin = end;
 
       // look for the closing tag.
       // if we have reached our limit no need to look further.
       if ( begin != limit )
       {
-        if ((end = _tcschr (begin, '>')) != nullptr)
+        end = FindTagExcluding(begin, '>', '<');
+        if (end != nullptr)
         {
-          ++end;  //  include the closing tag.
-          end = end > limit ? limit : end;
-          Add( begin, end, true );
+          if (begin[end - begin] == '>')
+          {
+            ++end;  //  include the closing tag as we know we will be using it.
+            end = end > limit ? limit : end;
+
+            // that tag was what we were looking for
+            // so we can indeed include it as a valid html tag.
+            AddHtmlTag(begin, end);
+          }
+          else
+          {
+            // we do not include the 'invalid' tag here.
+            end = end > limit ? limit : end;
+
+            // there was an invalid tag before the closing tag
+            // so we cannot use it, just add it as a non tag
+            AddNonHtmlTag(begin, end);
+          }
           ptr = begin = end;
         }
         else
         {
-          // this is not very good, we have no closing '>'
-          // this will not render properly.
-          Add( begin, limit, false );
+          // we just don't have an end tag
+          // this is a bit malformated but we can include it.
+          AddHtmlTag( begin, limit );
           break;
         }
       }
@@ -83,7 +106,7 @@ const Parser::HTML_CONTAINER& Parser::Parse(const wchar_t* lpString, int nCount 
     // no more attribute, just go to the end,
     else
     {
-      Add( begin, limit, false );
+      AddNonHtmlTag( begin, limit );
       break;
     }
   }
@@ -91,71 +114,144 @@ const Parser::HTML_CONTAINER& Parser::Parse(const wchar_t* lpString, int nCount 
 }
 
 /**
+ * \brief look for a tag insde the given wchar
+ * \param const wchar_t* the body we will be looking for the tag in
+ * \param const wchar_t the tag we are looking for
+ */
+const wchar_t* Parser::FindTag(const wchar_t* body, const wchar_t tag) const
+{
+  return _tcschr(body, tag);
+}
+
+const wchar_t* Parser::FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude) const
+{
+  // find the start tag
+  // if it does not exist then the exclude does not really matter.
+  const auto findTag = FindTag(body, tag);
+  if (nullptr == findTag)
+  {
+    return nullptr;
+  }
+
+  // now look for the 'exclude' tag
+  // if it does not exist then there is nothing to worry about.
+  // we can use the tag we found earlier
+  const auto excludeTag = FindTag(body+1, exclude);
+  if (nullptr == excludeTag)
+  {
+    return findTag;
+  }
+
+  // we have to be carefull here, we have both our tag
+  // if the excluded tag is after the tag, then we can return the tag.
+  // if the excluded tag is first, then we have to return null.
+  if (excludeTag < findTag)
+  {
+    auto lastKnown = excludeTag;
+    for (;;)
+    {
+      const auto excludeTagAgain = FindTag(lastKnown +1, exclude);
+      if (excludeTagAgain != nullptr && excludeTagAgain < findTag)
+      {
+        lastKnown = excludeTagAgain;
+        continue;
+      }
+      return lastKnown;
+    }
+  }
+  return findTag;
+}
+
+/**
  * \brief Add a string to the array of HTMLDATA 
  * \param begin the start of the string
  * \param end the end of the string 
- * \param isHtmlTag if this is a tag or not.
  */
-void Parser::Add(const wchar_t* begin, const wchar_t* end, const bool isHtmlTag )
+void Parser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
 {
   // an empty string, no need to do it.
-  if( begin == end )
+  if (begin == end)
     return;
-
-  if( isHtmlTag )
-  {
-    bool isEnd = false;
-    std::wstring attributes = L"";
     
-    assert( *begin == '<' );
-    begin++;    //  '<'
+  auto originalString = std::wstring( begin, end );
 
-    assert( *(end-1) == '>' );
-    end--;      //  '>'
-    isEnd = *begin == _T('/') ? true : false;
-    if( isEnd )
-    {
-      begin++;  //  '/'
-    }
+  std::wstring attributes = L"";
 
-    // just get the name skip the attributes.
-    const wchar_t* space = _tcschr (begin, ' ');
-    if( space && space < end )
-    {
-      attributes.assign( space+1, end );
-      end = space;
-    }
+  assert(*begin == '<');
+  begin++;    //  '<'
 
-    assert(end - begin > 0);  // how can the tag be empty??
-    auto text = std::wstring(end - begin, '\0');
-    std::transform(begin, end, text.begin(), ::tolower);
-    
-    // look for the matching token for that tag
-    // the token is what does the basic string transformation.
-    auto tokenData = FindToken(text);
-
-    // if we do not have a token it means that we are not going to parse it properly.
-    // the text in the tag will not be displayed.
-    // did you mean to use &gt; (>) and &lt; (<)?
-    assert( tokenData );
-
-    // add this to the list as a text only item.
-    m_data.push_back(new HtmlData(isEnd, attributes, tokenData));
-  }
-  else
+  if (*(end - 1) != '>')
   {
-    // this is not a tag so we just assign the text.
-    // we might want to do more formating here.
-    auto text = std::wstring( begin, end );
-
-    // special chars are done straight away
-    text = EscapeText(text);
-
-    // add this to the list as a text only item.
-    m_data.push_back( new SimpleHtmlData(text ));
+    AddNonHtmlTag(originalString);
+    return;
   }
+
+  end--;      //  '>'
+  bool isEnd = *begin == _T('/') ? true : false;
+  if (isEnd)
+  {
+    begin++;  //  '/'
+  }
+
+  // just get the name skip the attributes.
+  const wchar_t* space = _tcschr(begin, ' ');
+  if (space && space < end)
+  {
+    attributes.assign(space + 1, end);
+    end = space;
+  }
+
+  assert(end - begin > 0);  // how can the tag be empty??
+  auto text = std::wstring(end - begin, '\0');
+  std::transform(begin, end, text.begin(), ::tolower);
+
+  // look for the matching token for that tag
+  // the token is what does the basic string transformation.
+  auto tokenData = FindToken(text);
+
+  // if we do not have a token it means that we are not going to parse it properly.
+  // the text in the tag will not be displayed.
+  // did you mean to use &gt; (>) and &lt; (<)?
+  if (nullptr == tokenData)
+  {
+    AddNonHtmlTag(originalString);
+    return;
+  }
+
+  // add this to the list as a text only item.
+  m_data.push_back(new HtmlData(isEnd, attributes, tokenData));
 }
 
+/**
+  * \brief Add a string to the array of HTMLDATA
+  * \param begin the start of the string
+  * \param end the end of the string
+  */
+void Parser::AddNonHtmlTag(const wchar_t* begin, const wchar_t* end)
+{
+  AddNonHtmlTag(std::wstring(begin, end));
+}
+
+void Parser::AddNonHtmlTag(const std::wstring& text)
+{
+  // an empty string, no need to do it.
+  if (text.length() == 0 )
+    return;
+
+  // this is not a tag so we just assign the text.
+  // we might want to do more formating here.
+  //
+  // special chars are done straight away
+
+  // add this to the list as a text only item.
+  m_data.push_back( new SimpleHtmlData(EscapeText(text)));
+}
+
+/**
+ * \brief given a name look for a token in the list of possible tokens
+ * \param const std::wstring& the token we are looking for.
+ * \return either null or the token
+ */
 Token* Parser::FindToken(const std::wstring& text) const
 {
   for (auto it = m_tokens.begin();

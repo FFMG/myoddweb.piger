@@ -22,8 +22,8 @@ namespace myodd{ namespace html{
    */
   SIZE _htmlSingleLine(HDC     hdc,        // handle of device context
                        Parser& parser,
-                       Parser::HTML_CONTAINER::const_iterator begin,
-                       Parser::HTML_CONTAINER::const_iterator end,
+                       Parser::HtmlDataContainer::const_iterator begin,
+                       Parser::HtmlDataContainer::const_iterator end,
                        LPRECT  lpRect,     // address of structure with formatting dimensions
                        const int maxLineHeight,
                        const int paddingTop,
@@ -71,9 +71,7 @@ namespace myodd{ namespace html{
     // the return Height/Width of or text.
     SIZE size = {0};
 
-    for( Parser::HTML_CONTAINER::const_iterator it = begin;
-      it != end;
-      ++it )
+    for( auto it = begin; it != end; ++it )
     {
       const auto thisSize = parser.Apply( hdc, *it, drawRect, *lpRect, maxLineHeight, paddingTop, paddingBottom, uFormat );
       size.cx += thisSize.cx;                             // all in one line so we are moving along
@@ -165,8 +163,8 @@ namespace myodd{ namespace html{
     memcpy( &returnRect, lpRect, sizeof(RECT));
 
     // parse all the html code. This will return a vector of all the text and tags in the right order.
-    Parser parser( hdc );
-    const Parser::HTML_CONTAINER& dom = parser.Parse( lpString, nCount );
+    Parser parser;
+    const auto& dom = parser.Parse( lpString );
 
     SIZE size = {0};
     auto& begin = dom.begin();
