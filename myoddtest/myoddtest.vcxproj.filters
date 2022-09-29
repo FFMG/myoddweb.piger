@@ -178,7 +178,7 @@
     <ClCompile Include="common\testcommandline_variables.cpp">
       <Filter>myodd\common</Filter>
     </ClCompile>
-    <ClCompile Include="html\testparser.cpp">
+    <ClCompile Include="html\testtagparser.cpp">
       <Filter>myodd\html</Filter>
     </ClCompile>
   </ItemGroup>
