@@ -41,12 +41,7 @@ private:
   void Init( HDC hdc );
   void CalculateSmartDimensions(SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen);
 
-  int mSaveDC;
-  LOGFONT mLogFont;        //  the current font
-  HFONT mFont;        //  the current font
-  const LOGFONT& GetCurrentLogFont()const{
-    return mLogFont;
-  }
+  const LOGFONT& GetCurrentLogFont() const;
 
   //
   // the fonts
@@ -65,6 +60,9 @@ private:
   const wchar_t* FindTag(const wchar_t* body, const wchar_t tag) const;
   const wchar_t* FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude ) const;
 
-  Tags m_tags;
+  Tags _tags;
+  int _saveDC;
+  LOGFONT _logFont;        //  the current font
+  HFONT _font;        //  the current font
 };
 }}

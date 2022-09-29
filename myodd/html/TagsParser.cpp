@@ -4,14 +4,14 @@
 
 namespace myodd { namespace html {
 TagsParser::TagsParser( ) :
-  mSaveDC( -1 ),
-  mFont( nullptr )
+  _saveDC( -1 ),
+  _font( nullptr )
 {
 }
 
 TagsParser::~TagsParser()
 {
-  assert( mFont == nullptr ); //  forgot to call deinit?
+  assert( _font == nullptr ); //  forgot to call deinit?
   Clear();
 }
 
@@ -215,7 +215,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
 
   // look for the matching Tag for that tag
   // the Tag is what does the basic string transformation.
-  auto tagData = m_tags.FindTag(text);
+  auto tagData = _tags.FindTag(text);
 
   // if we do not have a tag it means that we are not going to parse it properly.
   // the text in the tag will not be displayed.
@@ -371,29 +371,34 @@ void TagsParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wcha
 void TagsParser::Init( const HDC hdc )
 {
   // save the dc so we can restore it when we are done.
-  mSaveDC = SaveDC( hdc );
+  _saveDC = SaveDC( hdc );
 
   // get the current font
   const auto hFont = static_cast<HFONT>(::GetCurrentObject(hdc, OBJ_FONT));
   
   // and the current log font.
-  ::GetObject(hFont, sizeof(LOGFONT), &mLogFont );
+  ::GetObject(hFont, sizeof(LOGFONT), &_logFont);
 }
 
 void TagsParser::DeInit( const HDC hdc )
 {
-  if( -1 != mSaveDC )
+  if( -1 != _saveDC )
   {
-    RestoreDC( hdc, mSaveDC );
-    mSaveDC = -1;
+    RestoreDC( hdc, _saveDC );
+    _saveDC = -1;
   }
 
   // delete the old font.
-  if( mFont )
+  if( _font )
   {
-    DeleteObject( mFont );
-    mFont = nullptr;
+    DeleteObject( _font );
+    _font = nullptr;
   }
+}
+
+const LOGFONT& TagsParser::GetCurrentLogFont() const 
+{
+  return _logFont;
 }
 
 SIZE TagsParser::Apply( const HDC hdc,
@@ -406,6 +411,10 @@ SIZE TagsParser::Apply( const HDC hdc,
                     const UINT uFormat 
                   )
 {
+  if (nullptr != hdc && _saveDC == -1)
+  {
+    Init(hdc);
+  }
   SIZE size = {0};
 
   // are we a tag?
@@ -520,15 +529,15 @@ void TagsParser::ApplyFont( HDC hdc, const LOGFONT& lf )
   // select that font
   SelectObject(hdc, hFont );
 
-  if( mFont )
+  if( _font != nullptr )
   {
-    DeleteObject( mFont );
+    DeleteObject( _font );
   }
 
   // this is the new font.
-  mFont = hFont;
+  _font = hFont;
 
   // this is the new log font
-  mLogFont = lf;
+  _logFont = lf;
 }
 }}
