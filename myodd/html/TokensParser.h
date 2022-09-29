@@ -6,11 +6,11 @@
 #include "HtmlData.h"
 
 namespace myodd { namespace html {
-class Parser
+class TokensParser
 {
 public:
-  Parser();
-  virtual ~Parser(void);
+  TokensParser();
+  virtual ~TokensParser(void);
 
 public:
   typedef std::vector<HtmlData*> HtmlDataContainer;

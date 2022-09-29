@@ -6,10 +6,10 @@ namespace myodd { namespace html {
   class HtmlData
   {
   protected:
-    HtmlData(bool isHtmlTag, bool isEnd, const std::wstring& text, const std::wstring& attributes, Token* tokenData);
+    HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const std::wstring& attributes, Token* tokenData);
 
   public:
-    HtmlData( bool isEnd, const std::wstring& attributes, Token* tokenData);
+    HtmlData( bool isEnd, bool isStartEnd, const std::wstring& attributes, Token* tokenData);
     HtmlData( const HtmlData& rhs );
     const HtmlData& operator=(const HtmlData& rhs) = delete;
 
@@ -21,6 +21,7 @@ namespace myodd { namespace html {
 
     const bool IsHtmlTag() const;
     const bool IsEnd() const;
+    const bool IsStartEnd() const;
     Token& TokenData() const;
 
     const bool HasTokenData() const;
@@ -30,6 +31,7 @@ namespace myodd { namespace html {
     const std::wstring _attributes;
     const bool _isHtmlTag;
     const bool _isEnd;
+    const bool _isStartEnd;
     Token* _token;
   };
 }}

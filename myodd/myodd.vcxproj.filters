@@ -104,9 +104,6 @@
     <ClCompile Include="html\html.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\Parser.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
     <ClCompile Include="html\Token.cpp">
       <Filter>html</Filter>
     </ClCompile>
@@ -278,6 +275,9 @@
     <ClCompile Include="html\SimpleHtmlData.cpp">
       <Filter>html</Filter>
     </ClCompile>
+    <ClCompile Include="html\TokensParser.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -325,9 +325,6 @@
       <Filter>sqlite</Filter>
     </ClInclude>
     <ClInclude Include="html\html.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\Parser.h">
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\Token.h">
@@ -442,6 +439,9 @@
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\SimpleHtmlData.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TokensParser.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>

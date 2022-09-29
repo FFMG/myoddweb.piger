@@ -1,23 +1,24 @@
 #include "HtmlData.h"
 
 namespace myodd { namespace html {
-HtmlData::HtmlData(bool isHtmlTag, bool isEnd, const std::wstring& text, const std::wstring& attributes, Token* tokenData) :
+HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const std::wstring& attributes, Token* tokenData) :
   _isHtmlTag(isHtmlTag),
   _isEnd(isEnd),
+  _isStartEnd(isStartEnd),
   _text(text),
   _attributes(attributes),
   _token(tokenData)
 {
 
 }
-HtmlData::HtmlData(bool isEnd, const std::wstring& attributes, Token* tokenData) :
-  HtmlData( true, isEnd, L"", attributes, tokenData)
+HtmlData::HtmlData(bool isEnd, bool isStartEnd, const std::wstring& attributes, Token* tokenData) :
+  HtmlData( true, isEnd, isStartEnd, L"", attributes, tokenData)
 {
 
 }
 
 HtmlData::HtmlData(const HtmlData& rhs) : 
-  HtmlData(rhs._isHtmlTag, rhs._isEnd, rhs._text, rhs._attributes, rhs._token)
+  HtmlData(rhs._isHtmlTag, rhs._isEnd, rhs._isStartEnd, rhs._text, rhs._attributes, rhs._token)
 {
 }
 
@@ -41,6 +42,11 @@ const bool HtmlData::IsEnd() const
   return _isEnd;
 }
 
+const bool HtmlData::IsStartEnd() const
+{
+  return _isStartEnd;
+}
+
 Token& HtmlData::TokenData() const
 {
   return *_token;
@@ -50,5 +56,4 @@ const bool HtmlData::HasTokenData() const
 {
   return _token != nullptr;
 }
-
 }}

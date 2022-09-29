@@ -1,15 +1,15 @@
-#include "Parser.h"
+#include "TokensParser.h"
 #include <algorithm>
 #include "SimpleHtmlData.h"
 
 namespace myodd { namespace html {
-Parser::Parser( ) : 
+TokensParser::TokensParser( ) :
   mSaveDC( -1 ),
   mFont( nullptr )
 {
 }
 
-Parser::~Parser()
+TokensParser::~TokensParser()
 {
   assert( mFont == nullptr ); //  forgot to call deinit?
   Clear();
@@ -18,7 +18,7 @@ Parser::~Parser()
 /**
  * \brief Delete all the tags/text that we have/
  */
-void Parser::Clear()
+void TokensParser::Clear()
 {
   for (auto it = m_data.begin(); it != m_data.end(); ++it)
   {
@@ -30,9 +30,9 @@ void Parser::Clear()
 /**
  * \brief Parse a string and build an array of HTML tags/text and so on.
  * \param const std::wstring the string we are parsing.
- * \return const Parser::HTML_CONTAINER& a container with all html the tags and text.
+ * \return const TokensParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const Parser::HtmlDataContainer& Parser::Parse(const std::wstring& text)
+const TokensParser::HtmlDataContainer& TokensParser::Parse(const std::wstring& text)
 {
   return Parse(text.c_str());
 }
@@ -40,9 +40,9 @@ const Parser::HtmlDataContainer& Parser::Parse(const std::wstring& text)
 /**
  * \brief Parse a string and build an array of HTML tags/text and so on.
  * \param lpString the string we are parsing.
- * \return const Parser::HTML_CONTAINER& a container with all html the tags and text.
+ * \return const TokensParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const Parser::HtmlDataContainer& Parser::Parse(const wchar_t* lpString )
+const TokensParser::HtmlDataContainer& TokensParser::Parse(const wchar_t* lpString )
 {
   Clear();
   if( nullptr == lpString )
@@ -118,12 +118,12 @@ const Parser::HtmlDataContainer& Parser::Parse(const wchar_t* lpString )
  * \param const wchar_t* the body we will be looking for the tag in
  * \param const wchar_t the tag we are looking for
  */
-const wchar_t* Parser::FindTag(const wchar_t* body, const wchar_t tag) const
+const wchar_t* TokensParser::FindTag(const wchar_t* body, const wchar_t tag) const
 {
   return _tcschr(body, tag);
 }
 
-const wchar_t* Parser::FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude) const
+const wchar_t* TokensParser::FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude) const
 {
   // find the start tag
   // if it does not exist then the exclude does not really matter.
@@ -167,7 +167,7 @@ const wchar_t* Parser::FindTagExcluding(const wchar_t* body, const wchar_t tag, 
  * \param begin the start of the string
  * \param end the end of the string 
  */
-void Parser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
+void TokensParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
 {
   // an empty string, no need to do it.
   if (begin == end)
@@ -187,10 +187,18 @@ void Parser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   end--;      //  '>'
-  bool isEnd = *begin == _T('/') ? true : false;
+  auto isEnd = *begin == L'/' ? true : false;
   if (isEnd)
   {
     begin++;  //  '/'
+  }
+
+  // check if we are a star/end kind of tag
+  // for example <br/> or <br />
+  auto isStartAndEnd = *(end - 1) == L'/' ? true : false;
+  if (isStartAndEnd)
+  {
+    end--;  //  '/'
   }
 
   // just get the name skip the attributes.
@@ -219,7 +227,7 @@ void Parser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   // add this to the list as a text only item.
-  m_data.push_back(new HtmlData(isEnd, attributes, tokenData));
+  m_data.push_back(new HtmlData(isEnd, isStartAndEnd, attributes, tokenData));
 }
 
 /**
@@ -227,12 +235,12 @@ void Parser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   * \param begin the start of the string
   * \param end the end of the string
   */
-void Parser::AddNonHtmlTag(const wchar_t* begin, const wchar_t* end)
+void TokensParser::AddNonHtmlTag(const wchar_t* begin, const wchar_t* end)
 {
   AddNonHtmlTag(std::wstring(begin, end));
 }
 
-void Parser::AddNonHtmlTag(const std::wstring& text)
+void TokensParser::AddNonHtmlTag(const std::wstring& text)
 {
   // an empty string, no need to do it.
   if (text.length() == 0 )
@@ -252,7 +260,7 @@ void Parser::AddNonHtmlTag(const std::wstring& text)
  * \param const std::wstring& the token we are looking for.
  * \return either null or the token
  */
-Token* Parser::FindToken(const std::wstring& text) const
+Token* TokensParser::FindToken(const std::wstring& text) const
 {
   for (auto it = m_tokens.begin();
     it != m_tokens.end();
@@ -271,20 +279,20 @@ Token* Parser::FindToken(const std::wstring& text) const
  * \param std::wstring the text we want to excape
  * \return the escaped text
  */
-std::wstring Parser::EscapeText(const std::wstring& src) const
+std::wstring TokensParser::EscapeText(const std::wstring& src) const
 {
   auto text = src;
-  text = myodd::strings::Replace(text, _T("&nbsp;"), _T(" "), false);
-  text = myodd::strings::Replace(text, _T("&lt;"), _T("<"), false);
-  text = myodd::strings::Replace(text, _T("&gt;"), _T(">"), false);
-  text = myodd::strings::Replace(text, _T("&amp;"), _T("&"), false);
-  text = myodd::strings::Replace(text, _T("&deg;"), std::wstring(1, wchar_t(176)), false);    //  degree
-  text = myodd::strings::Replace(text, _T("&plusmn;"), std::wstring(1, wchar_t(177)), false); //  Plus/minus symbol
+  text = myodd::strings::Replace(text, L"&nbsp;", L" ", false);
+  text = myodd::strings::Replace(text, L"&lt;", L"<", false);
+  text = myodd::strings::Replace(text, L"&gt;", L">", false);
+  text = myodd::strings::Replace(text, L"&amp;", L"&", false);
+  text = myodd::strings::Replace(text, L"&deg;", std::wstring(1, wchar_t(176)), false);    //  degree
+  text = myodd::strings::Replace(text, L"&plusmn;", std::wstring(1, wchar_t(177)), false); //  Plus/minus symbol
 
   return text;
 }
 
-void Parser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
+void TokensParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
 {
   if( nLen == -1 )
   {
@@ -311,7 +319,7 @@ void Parser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t*
   lHeight=sizeText.cy;//lHeight==0 if the text is empty, so try GetTextMetrics below!
   lWidth=sizeText.cx;
 
-  if(nullptr==szText || _T('\0')==szText[0])
+  if(nullptr==szText || L'\0'==szText[0])
   {
     TEXTMETRIC tm;
     GetTextMetrics(hDCMem,&tm);//this helps if the text is empty!
@@ -323,7 +331,7 @@ void Parser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t*
   }
 
   // if the last item is a space then we cannot calculate its width
-  if( szText[-1+nLen] == _T(' '))
+  if( szText[-1+nLen] == L' ')
   {
     SelectObject(hDCMem,hFontOld);
     DeleteDC(hDCMem);
@@ -379,7 +387,7 @@ void Parser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t*
   DeleteDC(hDCMem);
 }
 
-void Parser::Init( const HDC hdc )
+void TokensParser::Init( const HDC hdc )
 {
   // save the dc so we can restore it when we are done.
   mSaveDC = SaveDC( hdc );
@@ -391,7 +399,7 @@ void Parser::Init( const HDC hdc )
   ::GetObject(hFont, sizeof(LOGFONT), &mLogFont );
 }
 
-void Parser::DeInit( const HDC hdc )
+void TokensParser::DeInit( const HDC hdc )
 {
   if( -1 != mSaveDC )
   {
@@ -407,7 +415,7 @@ void Parser::DeInit( const HDC hdc )
   }
 }
 
-SIZE Parser::Apply( const HDC hdc, 
+SIZE TokensParser::Apply( const HDC hdc, 
                     const HtmlData* hd, 
                     RECT& rect,
                     const RECT& givenRect,
@@ -506,17 +514,17 @@ SIZE Parser::Apply( const HDC hdc,
   return size;
 }
 
-void Parser::PushFont( HDC hdc, const LOGFONT& lf )
+void TokensParser::PushFont( HDC hdc, const LOGFONT& lf )
 {
   ApplyFont( hdc, lf );
 }
 
-void Parser::PopFont( HDC hdc, const LOGFONT& lf )
+void TokensParser::PopFont( HDC hdc, const LOGFONT& lf )
 {
   ApplyFont( hdc, lf );
 }
 
-void Parser::ApplyFont( HDC hdc, const LOGFONT& lf )
+void TokensParser::ApplyFont( HDC hdc, const LOGFONT& lf )
 {
   // if the current style is not the same as the last one
   // then we don't need to actually change anything.

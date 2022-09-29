@@ -245,16 +245,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\Parser.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="html\SimpleHtmlData.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
@@ -316,6 +306,16 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="html\TokenSmall.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\TokensParser.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
@@ -601,7 +601,6 @@
     <ClInclude Include="geo\geo.h" />
     <ClInclude Include="html\html.h" />
     <ClInclude Include="html\HtmlData.h" />
-    <ClInclude Include="html\Parser.h" />
     <ClInclude Include="html\SimpleHtmlData.h" />
     <ClInclude Include="html\Token.h" />
     <ClInclude Include="html\TokenBold.h" />
@@ -609,6 +608,7 @@
     <ClInclude Include="html\TokenItalic.h" />
     <ClInclude Include="html\Tokens.h" />
     <ClInclude Include="html\TokenSmall.h" />
+    <ClInclude Include="html\TokensParser.h" />
     <ClInclude Include="html\TokenStrikeout.h" />
     <ClInclude Include="html\TokenUnderline.h" />
     <ClInclude Include="log\log.h" />
