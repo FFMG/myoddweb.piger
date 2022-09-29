@@ -7,10 +7,12 @@
 namespace myodd{ namespace html{
 //
 // the Tags
-class Tags : public std::vector<Tag*>
+class Tags : protected std::vector<Tag*>
 {
 public:
   Tags();
   ~Tags();
+
+  Tag* FindTag(const std::wstring& text) const;
 };
 }}

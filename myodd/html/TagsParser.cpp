@@ -215,7 +215,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
 
   // look for the matching Tag for that tag
   // the Tag is what does the basic string transformation.
-  auto tagData = FindTag(text);
+  auto tagData = m_tags.FindTag(text);
 
   // if we do not have a tag it means that we are not going to parse it properly.
   // the text in the tag will not be displayed.
@@ -253,25 +253,6 @@ void TagsParser::AddNonHtmlTag(const std::wstring& text)
 
   // add this to the list as a text only item.
   m_data.push_back( new SimpleHtmlData(EscapeText(text)));
-}
-
-/**
- * \brief given a name look for a tag in the list of possible tags
- * \param const std::wstring& the tag we are looking for.
- * \return either null or the tag
- */
-Tag* TagsParser::FindTag(const std::wstring& text) const
-{
-  for (auto it = m_tags.begin();
-    it != m_tags.end();
-    ++it)
-  {
-    if ((*it)->IsTag(text.c_str(), text.length() ))
-    {
-      return *it;
-    }
-  }
-  return nullptr;
 }
 
 /**

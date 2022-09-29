@@ -25,4 +25,23 @@ Tags::~Tags()
     delete *it;
   }
 }
+
+/**
+ * \brief given a name look for a tag in the list of possible tags
+ * \param const std::wstring& the tag we are looking for.
+ * \return either null or the tag
+ */
+Tag* Tags::FindTag(const std::wstring& text) const
+{
+  const auto givenText = text.c_str();
+  const auto givenTextLength = text.length();
+  for (const auto tag : *this)
+  {
+    if (tag->IsTag(givenText, givenTextLength))
+    {
+      return tag;
+    }
+  }
+  return nullptr;
+}
 }}

@@ -61,7 +61,6 @@ private:
   void Clear();
 
   std::wstring EscapeText(const std::wstring& src) const;
-  Tag* FindTag(const std::wstring& text ) const;
 
   const wchar_t* FindTag(const wchar_t* body, const wchar_t tag) const;
   const wchar_t* FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude ) const;
