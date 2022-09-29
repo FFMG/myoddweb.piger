@@ -26,13 +26,4 @@ void Tag::pop( LOGFONT& logFont )
    // *** Trying to pop an un open token ***
   }
 }
-
-bool Tag::IsTag(const wchar_t* lpString, __int64 nLen ) const
-{
-  if( !lpString )
-  {
-    return false;
-  }
-  return OnIsTag( lpString, nLen );
-}
 }}

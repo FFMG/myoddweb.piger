@@ -18,7 +18,7 @@ bool TagBr::ToNextLine( bool bIsEnd ) const
 }
 
 // if this is the Tag we are looking for.
-bool TagBr::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
+bool TagBr::IsTag(const wchar_t* lpString, unsigned int nLen ) const
 {
   switch (nLen)
   {

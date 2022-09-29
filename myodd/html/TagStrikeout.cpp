@@ -12,7 +12,7 @@ TagStrikeout::~TagStrikeout()
 }
 
 // if this is the Tag we are looking for.
-bool TagStrikeout::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
+bool TagStrikeout::IsTag(const wchar_t* lpString, unsigned int nLen) const
 {
   if( nLen == 1 )
   {

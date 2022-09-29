@@ -175,7 +175,7 @@ namespace myodd{ namespace html{
          )
     {
       const auto hd = (*it);
-      if( !hd->HasTagData() || !hd->TagData().ToNextLine(hd->IsEnd()))
+      if( !hd->HasTagData() || !hd->TagData().ToNextLine( hd->IsEnd() ))
       {
         if(  it == last )
         {

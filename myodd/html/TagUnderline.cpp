@@ -12,7 +12,7 @@ TagUnderline::~TagUnderline()
 }
 
 // if this is the Tag we are looking for.
-bool TagUnderline::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
+bool TagUnderline::IsTag(const wchar_t* lpString, unsigned int nLen) const
 {
   if( nLen == 1 )
   {

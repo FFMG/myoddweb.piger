@@ -13,7 +13,7 @@ TagSmall::~TagSmall()
 }
 
 // if this is the Tag we are looking for.
-bool TagSmall::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
+bool TagSmall::IsTag(const wchar_t* lpString, unsigned int nLen) const
 {
   if( nLen == 5 )
   {

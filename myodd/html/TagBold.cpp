@@ -12,7 +12,7 @@ TagBold::~TagBold()
 }
 
 // if this is the Tag we are looking for.
-bool TagBold::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
+bool TagBold::IsTag(const wchar_t* lpString, unsigned int nLen) const
 {
   if( nLen == 1 )
   {

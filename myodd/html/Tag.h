@@ -8,13 +8,13 @@ class Tag
 {
 public:
   Tag();
-  virtual ~Tag(){};
+  virtual ~Tag() = default;
 
   Tag(const Tag&) = delete;
   void operator=(const Tag&) = delete;
 
   // if this is the tag we are looking for.
-  bool IsTag(const wchar_t* lpString, __int64 nLen ) const;
+  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen ) const = 0;
   
   // apply the style
   void push( LOGFONT& logFont );
@@ -32,9 +32,6 @@ protected:
 
   // remove the style
   virtual void OnPop( LOGFONT& logFont ) = 0;
-
-  // if this is the tag we are looking for.
-  virtual bool OnIsTag(const wchar_t* lpString, __int64 nLen ) const = 0;
 
 private:
   int m_depth;
