@@ -197,7 +197,7 @@ namespace myodd{ namespace html{
       if( s.cy == 0 )
       {
         SIZE h = {0};
-        GetTextExtentPoint32(hdc, _T(" "), 1, &h);
+        GetTextExtentPoint32(hdc, L" ", 1, &h);
         s.cy = h.cy;
       }
 
