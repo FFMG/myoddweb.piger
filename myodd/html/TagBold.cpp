@@ -1,17 +1,18 @@
-#include "TokenBold.h"
+#include "TagBold.h"
 #include "../string/string.h"
 
-TokenBold::TokenBold() : 
-  Token()
+namespace myodd{ namespace html{
+TagBold::TagBold() :
+  Tag()
 {
 }
 
-TokenBold::~TokenBold()
+TagBold::~TagBold()
 {
 }
 
-// if this is the token we are looking for.
-bool TokenBold::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
+// if this is the Tag we are looking for.
+bool TagBold::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {
@@ -25,13 +26,14 @@ bool TokenBold::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 }
 
 // apply the style
-void TokenBold::OnPush( LOGFONT& logFont )
+void TagBold::OnPush( LOGFONT& logFont )
 {
   logFont.lfWeight = FW_BOLD;
 }
 
 // remove the style
-void TokenBold::OnPop( LOGFONT& logFont )
+void TagBold::OnPop( LOGFONT& logFont )
 {
   logFont.lfWeight = FW_NORMAL;
 }
+}}

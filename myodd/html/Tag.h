@@ -3,17 +3,18 @@
 #include "../common/includes.h"
 #include <windows.h>
 
-class Token
+namespace myodd{ namespace html{
+class Tag
 {
 public:
-  Token();
-  virtual ~Token(){};
+  Tag();
+  virtual ~Tag(){};
 
-  Token(const Token&) = delete;
-  void operator=(const Token&) = delete;
+  Tag(const Tag&) = delete;
+  void operator=(const Tag&) = delete;
 
-  // if this is the token we are looking for.
-  bool IsToken(const wchar_t* lpString, __int64 nLen ) const;
+  // if this is the tag we are looking for.
+  bool IsTag(const wchar_t* lpString, __int64 nLen ) const;
   
   // apply the style
   void push( LOGFONT& logFont );
@@ -32,9 +33,10 @@ protected:
   // remove the style
   virtual void OnPop( LOGFONT& logFont ) = 0;
 
-  // if this is the token we are looking for.
-  virtual bool OnIsToken(const wchar_t* lpString, __int64 nLen ) const = 0;
+  // if this is the tag we are looking for.
+  virtual bool OnIsTag(const wchar_t* lpString, __int64 nLen ) const = 0;
 
 private:
   int m_depth;
 };
+}}

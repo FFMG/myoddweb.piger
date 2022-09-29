@@ -1,11 +1,11 @@
-#include "html/TokensParser.h"
+#include "html/TagsParser.h"
 #include <gtest/gtest.h>
 
 #include "../testcommon.h"
 
-TEST(BasicTokensParser, NothingToParse)
+TEST(BasicTagsParser, NothingToParse)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"");
   ASSERT_EQ(0, dom.size()); //  nothing at all...
@@ -13,9 +13,9 @@ TEST(BasicTokensParser, NothingToParse)
   delete parser;
 }
 
-TEST(BasicTokensParser, SpacesAreMaintained)
+TEST(BasicTagsParser, SpacesAreMaintained)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"   <br>  ");
   ASSERT_EQ(3, dom.size());
@@ -31,9 +31,9 @@ TEST(BasicTokensParser, SpacesAreMaintained)
   delete parser;
 }
 
-TEST(BasicTokensParser, BrTagIsNotAnEndTag)
+TEST(BasicTagsParser, BrTagIsNotAnEndTag)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<br>");
   ASSERT_EQ(1, dom.size());
@@ -46,9 +46,9 @@ TEST(BasicTokensParser, BrTagIsNotAnEndTag)
   delete parser;
 }
 
-TEST(BasicTokensParser, ClosedBrTagsAreLegal)
+TEST(BasicTagsParser, ClosedBrTagsAreLegal)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<br/><br />");
   ASSERT_EQ(2, dom.size());
@@ -67,9 +67,9 @@ TEST(BasicTokensParser, ClosedBrTagsAreLegal)
   delete parser;
 }
 
-TEST(BasicTokensParser, NoHtmlTags)
+TEST(BasicTagsParser, NoHtmlTags)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"Hello");
   ASSERT_EQ(1, dom.size());
@@ -80,9 +80,9 @@ TEST(BasicTokensParser, NoHtmlTags)
   delete parser;
 }
 
-TEST(BasicTokensParser, SimpleSmallTag)
+TEST(BasicTagsParser, SimpleSmallTag)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<small>Hello</small>");
   ASSERT_EQ(3, dom.size()); //  we have 3 parts
@@ -99,9 +99,9 @@ TEST(BasicTokensParser, SimpleSmallTag)
   delete parser;
 }
 
-TEST(BasicTokensParser, NonExistentTag)
+TEST(BasicTagsParser, NonExistentTag)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo>Hello</foo>");
   ASSERT_EQ(3, dom.size()); //  we have 3 parts
@@ -117,9 +117,9 @@ TEST(BasicTokensParser, NonExistentTag)
   delete parser;
 }
 
-TEST(BasicTokensParser, TagIsNotClosed)
+TEST(BasicTagsParser, TagIsNotClosed)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1 and <foo2");
   ASSERT_EQ(1, dom.size()); //  we have 1 parts
@@ -130,9 +130,9 @@ TEST(BasicTokensParser, TagIsNotClosed)
   delete parser;
 }
 
-TEST(BasicTokensParser, InvalidStartEndTagInsideAGoodNode)
+TEST(BasicTagsParser, InvalidStartEndTagInsideAGoodNode)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<small><foo1 and <foo2</small>");
   ASSERT_EQ(3, dom.size());
@@ -149,9 +149,9 @@ TEST(BasicTokensParser, InvalidStartEndTagInsideAGoodNode)
   delete parser;
 }
 
-TEST(BasicTokensParser, TagIsNotClosedThenWeHaveAGoodTag)
+TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTag)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1 and <foo2<small>Hello</small>");
   ASSERT_EQ(4, dom.size());
@@ -171,9 +171,9 @@ TEST(BasicTokensParser, TagIsNotClosedThenWeHaveAGoodTag)
   delete parser;
 }
 
-TEST(BasicTokensParser, TagIsNotClosedThenWeHaveAGoodTagWithBadTagsFater)
+TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTagWithBadTagsFater)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1 and <foo2<small>Hello</small><More<Wrong");
   ASSERT_EQ(5, dom.size());
@@ -197,9 +197,9 @@ TEST(BasicTokensParser, TagIsNotClosedThenWeHaveAGoodTagWithBadTagsFater)
   delete parser;
 }
 
-TEST(BasicTokensParser, JustOneCharacter)
+TEST(BasicTagsParser, JustOneCharacter)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L">");
   ASSERT_EQ(1, dom.size());
@@ -211,9 +211,9 @@ TEST(BasicTokensParser, JustOneCharacter)
   delete parser;
 }
 
-TEST(BasicTokensParser, NoOpenningTag)
+TEST(BasicTagsParser, NoOpenningTag)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"foo1>");
   ASSERT_EQ(1, dom.size());
@@ -225,9 +225,9 @@ TEST(BasicTokensParser, NoOpenningTag)
   delete parser;
 }
 
-TEST(BasicTokensParser, NoClosingTag)
+TEST(BasicTagsParser, NoClosingTag)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1");
   ASSERT_EQ(1, dom.size());
@@ -239,9 +239,9 @@ TEST(BasicTokensParser, NoClosingTag)
   delete parser;
 }
 
-TEST(BasicTokensParser, TagIsNotOpen)
+TEST(BasicTagsParser, TagIsNotOpen)
 {
-  auto parser = new myodd::html::TokensParser();
+  auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"foo>");
   ASSERT_EQ(1, dom.size()); //  we have 3 parts

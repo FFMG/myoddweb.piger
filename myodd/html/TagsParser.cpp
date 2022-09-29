@@ -1,15 +1,15 @@
-#include "TokensParser.h"
+#include "TagsParser.h"
 #include <algorithm>
 #include "SimpleHtmlData.h"
 
 namespace myodd { namespace html {
-TokensParser::TokensParser( ) :
+TagsParser::TagsParser( ) :
   mSaveDC( -1 ),
   mFont( nullptr )
 {
 }
 
-TokensParser::~TokensParser()
+TagsParser::~TagsParser()
 {
   assert( mFont == nullptr ); //  forgot to call deinit?
   Clear();
@@ -18,7 +18,7 @@ TokensParser::~TokensParser()
 /**
  * \brief Delete all the tags/text that we have/
  */
-void TokensParser::Clear()
+void TagsParser::Clear()
 {
   for (auto it = m_data.begin(); it != m_data.end(); ++it)
   {
@@ -30,9 +30,9 @@ void TokensParser::Clear()
 /**
  * \brief Parse a string and build an array of HTML tags/text and so on.
  * \param const std::wstring the string we are parsing.
- * \return const TokensParser::HTML_CONTAINER& a container with all html the tags and text.
+ * \return const TagsParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const TokensParser::HtmlDataContainer& TokensParser::Parse(const std::wstring& text)
+const TagsParser::HtmlDataContainer& TagsParser::Parse(const std::wstring& text)
 {
   return Parse(text.c_str());
 }
@@ -40,9 +40,9 @@ const TokensParser::HtmlDataContainer& TokensParser::Parse(const std::wstring& t
 /**
  * \brief Parse a string and build an array of HTML tags/text and so on.
  * \param lpString the string we are parsing.
- * \return const TokensParser::HTML_CONTAINER& a container with all html the tags and text.
+ * \return const TagsParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const TokensParser::HtmlDataContainer& TokensParser::Parse(const wchar_t* lpString )
+const TagsParser::HtmlDataContainer& TagsParser::Parse(const wchar_t* lpString )
 {
   Clear();
   if( nullptr == lpString )
@@ -118,12 +118,12 @@ const TokensParser::HtmlDataContainer& TokensParser::Parse(const wchar_t* lpStri
  * \param const wchar_t* the body we will be looking for the tag in
  * \param const wchar_t the tag we are looking for
  */
-const wchar_t* TokensParser::FindTag(const wchar_t* body, const wchar_t tag) const
+const wchar_t* TagsParser::FindTag(const wchar_t* body, const wchar_t tag) const
 {
   return _tcschr(body, tag);
 }
 
-const wchar_t* TokensParser::FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude) const
+const wchar_t* TagsParser::FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude) const
 {
   // find the start tag
   // if it does not exist then the exclude does not really matter.
@@ -167,7 +167,7 @@ const wchar_t* TokensParser::FindTagExcluding(const wchar_t* body, const wchar_t
  * \param begin the start of the string
  * \param end the end of the string 
  */
-void TokensParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
+void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
 {
   // an empty string, no need to do it.
   if (begin == end)
@@ -213,21 +213,21 @@ void TokensParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   auto text = std::wstring(end - begin, '\0');
   std::transform(begin, end, text.begin(), ::tolower);
 
-  // look for the matching token for that tag
-  // the token is what does the basic string transformation.
-  auto tokenData = FindToken(text);
+  // look for the matching Tag for that tag
+  // the Tag is what does the basic string transformation.
+  auto tagData = FindTag(text);
 
-  // if we do not have a token it means that we are not going to parse it properly.
+  // if we do not have a tag it means that we are not going to parse it properly.
   // the text in the tag will not be displayed.
   // did you mean to use &gt; (>) and &lt; (<)?
-  if (nullptr == tokenData)
+  if (nullptr == tagData)
   {
     AddNonHtmlTag(originalString);
     return;
   }
 
   // add this to the list as a text only item.
-  m_data.push_back(new HtmlData(isEnd, isStartAndEnd, attributes, tokenData));
+  m_data.push_back(new HtmlData(isEnd, isStartAndEnd, attributes, tagData));
 }
 
 /**
@@ -235,12 +235,12 @@ void TokensParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   * \param begin the start of the string
   * \param end the end of the string
   */
-void TokensParser::AddNonHtmlTag(const wchar_t* begin, const wchar_t* end)
+void TagsParser::AddNonHtmlTag(const wchar_t* begin, const wchar_t* end)
 {
   AddNonHtmlTag(std::wstring(begin, end));
 }
 
-void TokensParser::AddNonHtmlTag(const std::wstring& text)
+void TagsParser::AddNonHtmlTag(const std::wstring& text)
 {
   // an empty string, no need to do it.
   if (text.length() == 0 )
@@ -256,17 +256,17 @@ void TokensParser::AddNonHtmlTag(const std::wstring& text)
 }
 
 /**
- * \brief given a name look for a token in the list of possible tokens
- * \param const std::wstring& the token we are looking for.
- * \return either null or the token
+ * \brief given a name look for a tag in the list of possible tags
+ * \param const std::wstring& the tag we are looking for.
+ * \return either null or the tag
  */
-Token* TokensParser::FindToken(const std::wstring& text) const
+Tag* TagsParser::FindTag(const std::wstring& text) const
 {
-  for (auto it = m_tokens.begin();
-    it != m_tokens.end();
+  for (auto it = m_tags.begin();
+    it != m_tags.end();
     ++it)
   {
-    if ((*it)->IsToken(text.c_str(), text.length() ))
+    if ((*it)->IsTag(text.c_str(), text.length() ))
     {
       return *it;
     }
@@ -279,7 +279,7 @@ Token* TokensParser::FindToken(const std::wstring& text) const
  * \param std::wstring the text we want to excape
  * \return the escaped text
  */
-std::wstring TokensParser::EscapeText(const std::wstring& src) const
+std::wstring TagsParser::EscapeText(const std::wstring& src) const
 {
   auto text = src;
   text = myodd::strings::Replace(text, L"&nbsp;", L" ", false);
@@ -292,7 +292,7 @@ std::wstring TokensParser::EscapeText(const std::wstring& src) const
   return text;
 }
 
-void TokensParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
+void TagsParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
 {
   if( nLen == -1 )
   {
@@ -387,7 +387,7 @@ void TokensParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wc
   DeleteDC(hDCMem);
 }
 
-void TokensParser::Init( const HDC hdc )
+void TagsParser::Init( const HDC hdc )
 {
   // save the dc so we can restore it when we are done.
   mSaveDC = SaveDC( hdc );
@@ -399,7 +399,7 @@ void TokensParser::Init( const HDC hdc )
   ::GetObject(hFont, sizeof(LOGFONT), &mLogFont );
 }
 
-void TokensParser::DeInit( const HDC hdc )
+void TagsParser::DeInit( const HDC hdc )
 {
   if( -1 != mSaveDC )
   {
@@ -415,7 +415,7 @@ void TokensParser::DeInit( const HDC hdc )
   }
 }
 
-SIZE TokensParser::Apply( const HDC hdc, 
+SIZE TagsParser::Apply( const HDC hdc,
                     const HtmlData* hd, 
                     RECT& rect,
                     const RECT& givenRect,
@@ -428,20 +428,20 @@ SIZE TokensParser::Apply( const HDC hdc,
   SIZE size = {0};
 
   // are we a tag?
-  if( hd->HasTokenData() )
+  if( hd->HasTagData() )
   {
     // this function does single lines only
     // but when asked to parse from beginning to end we are 
-    // given the token that caused us to go to the next line
+    // given the tag that caused us to go to the next line
     auto lf = GetCurrentLogFont();
     if( hd->IsEnd() )
     {
-      hd->TokenData().pop( lf );
+      hd->TagData().pop( lf );
       PopFont( hdc, lf );
     }
     else
     {
-      hd->TokenData().push(lf);
+      hd->TagData().push(lf);
       PushFont( hdc, lf );
     }
   }
@@ -514,17 +514,17 @@ SIZE TokensParser::Apply( const HDC hdc,
   return size;
 }
 
-void TokensParser::PushFont( HDC hdc, const LOGFONT& lf )
+void TagsParser::PushFont( HDC hdc, const LOGFONT& lf )
 {
   ApplyFont( hdc, lf );
 }
 
-void TokensParser::PopFont( HDC hdc, const LOGFONT& lf )
+void TagsParser::PopFont( HDC hdc, const LOGFONT& lf )
 {
   ApplyFont( hdc, lf );
 }
 
-void TokensParser::ApplyFont( HDC hdc, const LOGFONT& lf )
+void TagsParser::ApplyFont( HDC hdc, const LOGFONT& lf )
 {
   // if the current style is not the same as the last one
   // then we don't need to actually change anything.

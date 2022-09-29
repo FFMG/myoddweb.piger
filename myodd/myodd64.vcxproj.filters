@@ -101,27 +101,6 @@
     <ClCompile Include="html\html.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\Token.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\TokenBold.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\TokenBr.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\TokenItalic.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\Tokens.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\TokenStrikeout.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\TokenUnderline.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
     <ClCompile Include="threads\threads.cpp">
       <Filter>threads</Filter>
     </ClCompile>
@@ -266,16 +245,37 @@
     <ClCompile Include="common\commandline_variables.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="html\TokenSmall.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
     <ClCompile Include="html\HtmlData.cpp">
       <Filter>html</Filter>
     </ClCompile>
     <ClCompile Include="html\SimpleHtmlData.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\TokensParser.cpp">
+    <ClCompile Include="html\Tag.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagBold.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagBr.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagItalic.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Tags.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagSmall.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagsParser.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagStrikeout.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagUnderline.cpp">
       <Filter>html</Filter>
     </ClCompile>
   </ItemGroup>
@@ -325,27 +325,6 @@
       <Filter>sqlite</Filter>
     </ClInclude>
     <ClInclude Include="html\html.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\Token.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\TokenBold.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\TokenBr.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\TokenItalic.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\Tokens.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\TokenStrikeout.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\TokenUnderline.h">
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="threads\threads.h">
@@ -432,9 +411,6 @@
     <ClInclude Include="common\commandline_variables.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="html\TokenSmall.h">
-      <Filter>html</Filter>
-    </ClInclude>
     <ClInclude Include="HtmlData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -444,7 +420,31 @@
     <ClInclude Include="html\SimpleHtmlData.h">
       <Filter>html</Filter>
     </ClInclude>
-    <ClInclude Include="html\TokensParser.h">
+    <ClInclude Include="html\Tag.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagBold.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagBr.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagItalic.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Tags.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagSmall.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagsParser.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagStrikeout.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagUnderline.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>

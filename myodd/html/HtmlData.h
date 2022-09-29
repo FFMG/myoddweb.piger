@@ -1,15 +1,15 @@
 #pragma once
 #include "../string/string.h"
-#include "Tokens.h"
+#include "Tags.h"
 
 namespace myodd { namespace html {
   class HtmlData
   {
   protected:
-    HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const std::wstring& attributes, Token* tokenData);
+    HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const std::wstring& attributes, Tag* tagData);
 
   public:
-    HtmlData( bool isEnd, bool isStartEnd, const std::wstring& attributes, Token* tokenData);
+    HtmlData( bool isEnd, bool isStartEnd, const std::wstring& attributes, Tag* tagData);
     HtmlData( const HtmlData& rhs );
     const HtmlData& operator=(const HtmlData& rhs) = delete;
 
@@ -22,9 +22,9 @@ namespace myodd { namespace html {
     const bool IsHtmlTag() const;
     const bool IsEnd() const;
     const bool IsStartEnd() const;
-    Token& TokenData() const;
+    Tag& TagData() const;
 
-    const bool HasTokenData() const;
+    const bool HasTagData() const;
 
   protected:
     const std::wstring _text;
@@ -32,6 +32,6 @@ namespace myodd { namespace html {
     const bool _isHtmlTag;
     const bool _isEnd;
     const bool _isStartEnd;
-    Token* _token;
+    Tag* _tag;
   };
 }}

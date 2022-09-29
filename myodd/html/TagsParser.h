@@ -2,15 +2,15 @@
 
 #include <vector>
 #include "../string/string.h"
-#include "Tokens.h"
+#include "Tags.h"
 #include "HtmlData.h"
 
 namespace myodd { namespace html {
-class TokensParser
+class TagsParser
 {
 public:
-  TokensParser();
-  virtual ~TokensParser(void);
+  TagsParser();
+  virtual ~TagsParser(void);
 
 public:
   typedef std::vector<HtmlData*> HtmlDataContainer;
@@ -61,11 +61,11 @@ private:
   void Clear();
 
   std::wstring EscapeText(const std::wstring& src) const;
-  Token* FindToken(const std::wstring& text ) const;
+  Tag* FindTag(const std::wstring& text ) const;
 
   const wchar_t* FindTag(const wchar_t* body, const wchar_t tag) const;
   const wchar_t* FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude ) const;
 
-  Tokens m_tokens;
+  Tags m_tags;
 };
 }}

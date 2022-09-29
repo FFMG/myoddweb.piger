@@ -1,18 +1,19 @@
-#include "TokenSmall.h"
+#include "TagSmall.h"
 #include "../string/string.h"
 
-TokenSmall::TokenSmall() :
-  Token(),
+namespace myodd{ namespace html{
+TagSmall::TagSmall() :
+  Tag(),
   _lfHeight( 0)
 {
 }
 
-TokenSmall::~TokenSmall()
+TagSmall::~TagSmall()
 {
 }
 
-// if this is the token we are looking for.
-bool TokenSmall::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
+// if this is the Tag we are looking for.
+bool TagSmall::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 5 )
   {
@@ -22,14 +23,14 @@ bool TokenSmall::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 }
 
 // apply the style
-void TokenSmall::OnPush( LOGFONT& logFont )
+void TagSmall::OnPush( LOGFONT& logFont )
 {
   _lfHeight = logFont.lfHeight;
   logFont.lfHeight = logFont.lfHeight / 2;
 }
 
 // remove the style
-void TokenSmall::OnPop( LOGFONT& logFont )
+void TagSmall::OnPop( LOGFONT& logFont )
 {
   if (_lfHeight == 0)
   {
@@ -37,3 +38,4 @@ void TokenSmall::OnPop( LOGFONT& logFont )
   }
   logFont.lfHeight = _lfHeight;
 }
+}}

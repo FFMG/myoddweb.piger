@@ -1,17 +1,18 @@
-#include "TokenItalic.h"
+#include "TagItalic.h"
 #include "../string/string.h"
 
-TokenItalic::TokenItalic() : 
-  Token()
+namespace myodd{ namespace html{
+TagItalic::TagItalic() :
+  Tag()
 {
 }
 
-TokenItalic::~TokenItalic()
+TagItalic::~TagItalic()
 {
 }
 
-// if this is the token we are looking for.
-bool TokenItalic::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
+// if this is the Tag we are looking for.
+bool TagItalic::OnIsTag(const wchar_t* lpString, __int64 nLen ) const
 {
   if( nLen == 1 )
   {
@@ -25,13 +26,14 @@ bool TokenItalic::OnIsToken(const wchar_t* lpString, __int64 nLen ) const
 }
 
 // apply the style
-void TokenItalic::OnPush( LOGFONT& logFont )
+void TagItalic::OnPush( LOGFONT& logFont )
 {
   logFont.lfItalic = 1;
 }
 
 // remove the style
-void TokenItalic::OnPop( LOGFONT& logFont )
+void TagItalic::OnPop( LOGFONT& logFont )
 {
   logFont.lfItalic = 0;
 }
+}}

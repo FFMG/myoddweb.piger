@@ -1,19 +1,20 @@
-#include "Token.h"
+#include "Tag.h"
 
-Token::Token() : 
+namespace myodd{ namespace html{
+Tag::Tag() :
   m_depth(0) 
 {
 }
 
 // apply the style
-void Token::push( LOGFONT& logFont )
+void Tag::push( LOGFONT& logFont )
 {
   OnPush( logFont );
   ++m_depth;
 }
 
 // remove the style
-void Token::pop( LOGFONT& logFont )
+void Tag::pop( LOGFONT& logFont )
 {
   if( m_depth >= 1 )
   {
@@ -26,11 +27,12 @@ void Token::pop( LOGFONT& logFont )
   }
 }
 
-bool Token::IsToken(const wchar_t* lpString, __int64 nLen ) const
+bool Tag::IsTag(const wchar_t* lpString, __int64 nLen ) const
 {
   if( !lpString )
   {
     return false;
   }
-  return OnIsToken( lpString, nLen );
+  return OnIsTag( lpString, nLen );
 }
+}}

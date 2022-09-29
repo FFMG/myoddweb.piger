@@ -255,7 +255,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\Token.cpp">
+    <ClCompile Include="html\Tag.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -265,7 +265,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenBold.cpp">
+    <ClCompile Include="html\TagBold.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -275,7 +275,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenBr.cpp">
+    <ClCompile Include="html\TagBr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -285,7 +285,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenItalic.cpp">
+    <ClCompile Include="html\TagItalic.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -295,7 +295,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\Tokens.cpp">
+    <ClCompile Include="html\Tags.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -305,7 +305,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenSmall.cpp">
+    <ClCompile Include="html\TagSmall.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
@@ -315,7 +315,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokensParser.cpp">
+    <ClCompile Include="html\TagsParser.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
@@ -325,7 +325,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenStrikeout.cpp">
+    <ClCompile Include="html\TagStrikeout.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -335,7 +335,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenUnderline.cpp">
+    <ClCompile Include="html\TagUnderline.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -602,15 +602,15 @@
     <ClInclude Include="html\html.h" />
     <ClInclude Include="html\HtmlData.h" />
     <ClInclude Include="html\SimpleHtmlData.h" />
-    <ClInclude Include="html\Token.h" />
-    <ClInclude Include="html\TokenBold.h" />
-    <ClInclude Include="html\TokenBr.h" />
-    <ClInclude Include="html\TokenItalic.h" />
-    <ClInclude Include="html\Tokens.h" />
-    <ClInclude Include="html\TokenSmall.h" />
-    <ClInclude Include="html\TokensParser.h" />
-    <ClInclude Include="html\TokenStrikeout.h" />
-    <ClInclude Include="html\TokenUnderline.h" />
+    <ClInclude Include="html\Tag.h" />
+    <ClInclude Include="html\TagBold.h" />
+    <ClInclude Include="html\TagBr.h" />
+    <ClInclude Include="html\TagItalic.h" />
+    <ClInclude Include="html\Tags.h" />
+    <ClInclude Include="html\TagSmall.h" />
+    <ClInclude Include="html\TagsParser.h" />
+    <ClInclude Include="html\TagStrikeout.h" />
+    <ClInclude Include="html\TagUnderline.h" />
     <ClInclude Include="log\log.h" />
     <ClInclude Include="log\logevent.h" />
     <ClInclude Include="log\logfile.h" />

@@ -6,7 +6,7 @@
 #include "../math/math.h"
 #include <assert.h>
 #include "html.h"
-#include "TokensParser.h"
+#include "TagsParser.h"
 
 namespace myodd{ namespace html{
   /**
@@ -21,9 +21,9 @@ namespace myodd{ namespace html{
    * @return SIZE the height and width the the output text.
    */
   SIZE _htmlSingleLine(HDC     hdc,        // handle of device context
-                       TokensParser& parser,
-                       TokensParser::HtmlDataContainer::const_iterator begin,
-                       TokensParser::HtmlDataContainer::const_iterator end,
+                       TagsParser& parser,
+                       TagsParser::HtmlDataContainer::const_iterator begin,
+                       TagsParser::HtmlDataContainer::const_iterator end,
                        LPRECT  lpRect,     // address of structure with formatting dimensions
                        const int maxLineHeight,
                        const int paddingTop,
@@ -163,7 +163,7 @@ namespace myodd{ namespace html{
     memcpy( &returnRect, lpRect, sizeof(RECT));
 
     // parse all the html code. This will return a vector of all the text and tags in the right order.
-    TokensParser parser;
+    TagsParser parser;
     const auto& dom = parser.Parse( lpString );
 
     SIZE size = {0};
@@ -175,7 +175,7 @@ namespace myodd{ namespace html{
          )
     {
       const auto hd = (*it);
-      if( !hd->HasTokenData() || !hd->TokenData().ToNextLine(hd->IsEnd()))
+      if( !hd->HasTagData() || !hd->TagData().ToNextLine(hd->IsEnd()))
       {
         if(  it == last )
         {
