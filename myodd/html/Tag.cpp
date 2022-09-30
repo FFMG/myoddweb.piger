@@ -7,18 +7,18 @@ Tag::Tag() :
 }
 
 // apply the style
-void Tag::push( LOGFONT& logFont )
+void Tag::Push(HDC hdc, LOGFONT& logFont )
 {
-  OnPush( logFont );
+  OnPush( hdc, logFont );
   ++m_depth;
 }
 
 // remove the style
-void Tag::pop( LOGFONT& logFont )
+void Tag::Pop(HDC hdc, LOGFONT& logFont )
 {
   if( m_depth >= 1 )
   {
-    OnPop( logFont );
+    OnPop(hdc, logFont );
     --m_depth;
   }
   else

@@ -28,12 +28,12 @@ void AttributeStyle::Clear()
 }
 
 // apply the styles
-void AttributeStyle::Push(LOGFONT& logFont)
+void AttributeStyle::Push(HDC hdc, LOGFONT& logFont)
 {
 }
 
 // remove the style
-void AttributeStyle::Pop(LOGFONT& logFont)
+void AttributeStyle::Pop(HDC hdc, LOGFONT& logFont)
 {
 }
 

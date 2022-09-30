@@ -23,15 +23,17 @@ bool TagSmall::IsTag(const wchar_t* lpString, unsigned int nLen) const
 }
 
 // apply the style
-void TagSmall::OnPush( LOGFONT& logFont )
+void TagSmall::OnPush(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   _lfHeight = logFont.lfHeight;
   logFont.lfHeight = logFont.lfHeight / 2;
 }
 
 // remove the style
-void TagSmall::OnPop( LOGFONT& logFont )
+void TagSmall::OnPop(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   if (_lfHeight == 0)
   {
     return;

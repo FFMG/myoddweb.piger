@@ -22,14 +22,16 @@ bool TagUnderline::IsTag(const wchar_t* lpString, unsigned int nLen) const
 }
 
 // apply the style
-void TagUnderline::OnPush( LOGFONT& logFont )
+void TagUnderline::OnPush(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfUnderline = 1;
 }
 
 // remove the style
-void TagUnderline::OnPop( LOGFONT& logFont )
+void TagUnderline::OnPop(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfUnderline = 0;
 }
 }}

@@ -56,4 +56,28 @@ const bool HtmlData::HasTagData() const
 {
   return _tag != nullptr;
 }
+
+// apply the style
+void HtmlData::Push(HDC hdc, LOGFONT& logFont)
+{
+  if (_tag != nullptr)
+  {
+    _tag->Push(hdc, logFont);
+  }
+  _attributes.Push(hdc, logFont);
+}
+
+// remove the style
+void HtmlData::Pop(HDC hdc, LOGFONT& logFont)
+{
+  if (_tag != nullptr)
+  {
+    _tag->Pop(hdc, logFont);
+  }
+
+  assert(0);  // we need to pop the parent attribute
+              // a closing tag does not have attributes to pop!
+  _attributes.Pop(hdc, logFont);
+}
+
 }}

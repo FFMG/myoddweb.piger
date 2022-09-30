@@ -26,14 +26,16 @@ bool TagBold::IsTag(const wchar_t* lpString, unsigned int nLen) const
 }
 
 // apply the style
-void TagBold::OnPush( LOGFONT& logFont )
+void TagBold::OnPush(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfWeight = FW_BOLD;
 }
 
 // remove the style
-void TagBold::OnPop( LOGFONT& logFont )
+void TagBold::OnPop(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfWeight = FW_NORMAL;
 }
 }}

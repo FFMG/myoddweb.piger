@@ -15,10 +15,10 @@ public:
   AttributeStyle& operator=(const AttributeStyle&);
 
   // apply the style
-  virtual void Push( LOGFONT& logFont );
+  virtual void Push(HDC hdc, LOGFONT& logFont );
 
   // remove the style
-  virtual void Pop( LOGFONT& logFont );
+  virtual void Pop(HDC hdc, LOGFONT& logFont );
 
 protected:
   // copy the attribute values here.

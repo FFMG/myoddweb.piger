@@ -20,13 +20,13 @@ AttributeValueColor& AttributeValueColor::operator=(const AttributeValueColor& r
 }
 
 // apply the style
-void AttributeValueColor::Push(LOGFONT& logFont)
+void AttributeValueColor::Push(HDC hdc, LOGFONT& logFont)
 {
 
 }
 
 // remove the style
-void AttributeValueColor::Pop(LOGFONT& logFont)
+void AttributeValueColor::Pop(HDC hdc, LOGFONT& logFont)
 {
 
 }

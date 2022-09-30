@@ -27,7 +27,7 @@ private:
 
 public:
   SIZE Apply( HDC hdc, 
-              const HtmlData* hd, 
+              HtmlData* hd, 
               RECT& rect,
               const RECT& givenRect,
               const int maxLineHeight,

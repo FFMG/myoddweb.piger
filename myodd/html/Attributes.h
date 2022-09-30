@@ -15,10 +15,10 @@ public:
   const Attributes& operator=(const Attributes& rhs);
 
   // apply the style
-  void Push(LOGFONT& logFont);
+  void Push(HDC hdc, LOGFONT& logFont);
 
   // remove the style
-  void Pop(LOGFONT& logFont);
+  void Pop(HDC hdc, LOGFONT& logFont);
 
   /**
    * \brief get the number of attributes

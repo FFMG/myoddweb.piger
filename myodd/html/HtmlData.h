@@ -27,12 +27,18 @@ namespace myodd { namespace html {
 
     const bool HasTagData() const;
 
+    // apply the style
+    void Push(HDC hdc, LOGFONT& logFont);
+
+    // remove the style
+    void Pop(HDC hdc, LOGFONT& logFont);
+
   protected:
     const std::wstring _text;
-    const Attributes _attributes;
     const bool _isHtmlTag;
     const bool _isEnd;
     const bool _isStartEnd;
     Tag* _tag;
+    Attributes _attributes;
   };
 }}

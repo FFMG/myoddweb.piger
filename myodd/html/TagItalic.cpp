@@ -26,14 +26,16 @@ bool TagItalic::IsTag(const wchar_t* lpString, unsigned int nLen) const
 }
 
 // apply the style
-void TagItalic::OnPush( LOGFONT& logFont )
+void TagItalic::OnPush(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfItalic = 1;
 }
 
 // remove the style
-void TagItalic::OnPop( LOGFONT& logFont )
+void TagItalic::OnPop(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfItalic = 0;
 }
 }}

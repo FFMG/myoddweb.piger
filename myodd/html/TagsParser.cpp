@@ -404,7 +404,7 @@ const LOGFONT& TagsParser::GetCurrentLogFont() const
 }
 
 SIZE TagsParser::Apply( const HDC hdc,
-                    const HtmlData* hd, 
+                    HtmlData* hd, 
                     RECT& rect,
                     const RECT& givenRect,
                     const int maxLineHeight,
@@ -428,12 +428,12 @@ SIZE TagsParser::Apply( const HDC hdc,
     auto lf = GetCurrentLogFont();
     if( hd->IsEnd() )
     {
-      hd->TagData().pop( lf );
+      hd->Pop( hdc, lf );
       PopFont( hdc, lf );
     }
     else
     {
-      hd->TagData().push(lf);
+      hd->Push(hdc, lf);
       PushFont( hdc, lf );
     }
   }

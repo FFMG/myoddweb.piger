@@ -56,22 +56,22 @@ const unsigned int Attributes::NumberOfAttributes() const
 
 
 // apply the style
-void Attributes::Push(LOGFONT& logFont)
+void Attributes::Push(HDC hdc, LOGFONT& logFont)
 {
   //  we push from start to end
   for (auto att : _attributes)
   {
-    att->Push(logFont);
+    att->Push(hdc, logFont);
   }
 }
 
 // remove the style
-void Attributes::Pop(LOGFONT& logFont)
+void Attributes::Pop(HDC hdc, LOGFONT& logFont)
 {
   // we pop in reverse order
   for (auto it = _attributes.rbegin(); it != _attributes.rend(); it++)
   {
-    (*it)->Pop(logFont);
+    (*it)->Pop(hdc, logFont);
   }
 }
 
