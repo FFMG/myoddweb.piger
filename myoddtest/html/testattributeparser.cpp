@@ -27,7 +27,7 @@ TEST(BasicAttributesParser, CheckThatTheNameIsValid)
 {
   auto parser = new myodd::html::AttributesParser();
 
-  auto attr = parser->Parse( L"style='color:red'");
+  auto attr = parser->Parse( L"style='color:#f00;color:red;color:blue;'");
   ASSERT_EQ(1, attr.NumberOfAttributes());
 
   delete parser;

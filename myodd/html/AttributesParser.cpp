@@ -42,7 +42,8 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
 
   // at the begining we have nothing
   std::wstring name = L"";
-  std::wstring value = L"";
+  std::vector<std::wstring> values;
+  std::wstring value;
 
   // get the quote types
   auto insideSingleQuote = false;
@@ -85,7 +86,11 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
       // so we are now getting out.
       if (insideDoubleQuote)
       {
-        auto attribute = CreateAttribute(name, value);
+        if (!value.empty())
+        {
+          values.push_back(value);
+        }
+        auto attribute = CreateAttribute(name, values);
         if (nullptr != attribute)
         {
           atts.Add(*attribute);
@@ -93,6 +98,7 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
         }
         insideDoubleQuote = insideSingleQuote = hasName = false;
         name = value = L"";
+        values.clear();
 
         ++position;
         continue;
@@ -102,7 +108,15 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
         // we are inside a single quote 
         // so the double quote is part of what we are using.
         value += current;
-
+        if (next == L';')
+        {
+          if (!value.empty())
+          {
+            values.push_back(value);
+          }
+          value = L"";
+          ++position;
+        }
         ++position;
         continue;
       }
@@ -122,7 +136,11 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
       // so we are now getting out.
       if (insideSingleQuote)
       {
-        auto attribute = CreateAttribute(name, value);
+        if (!value.empty())
+        {
+          values.push_back(value);
+        }
+        auto attribute = CreateAttribute(name, values);
         if (nullptr != attribute)
         {
           atts.Add(*attribute);
@@ -130,6 +148,7 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
         }
         insideDoubleQuote = insideSingleQuote = hasName = false;
         name = value = L"";
+        values.clear();
 
         ++position;
         continue;
@@ -139,6 +158,15 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
         // we are inside a single quote 
         // so the double quote is part of what we are using.
         value += current;
+        if (next == L';')
+        {
+          if (!value.empty())
+          {
+            values.push_back(value);
+          }
+          value = L"";
+          ++position;
+        }
 
         ++position;
         continue;
@@ -163,13 +191,22 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
     // we are inside either single or double
     // so we can move forward with life
     value += current;
+    if (next == L';')
+    {
+      if (!value.empty())
+      {
+        values.push_back(value);
+      }
+      value = L"";
+      ++position;
+    }
     ++position;
   }
   
   return atts;
 }
 
-Attribute* AttributesParser::CreateAttribute(const std::wstring& name, const std::wstring& value) const
+Attribute* AttributesParser::CreateAttribute(const std::wstring& name, const std::vector<std::wstring>& values) const
 {
   // try and find the type
   const auto lowerName = myodd::strings::lower(name);
@@ -182,7 +219,15 @@ Attribute* AttributesParser::CreateAttribute(const std::wstring& name, const std
     if (_tcsnicmp(givenName, L"style", givenNameLength) == 0)
     {
       auto style = new AttributeStyle();
-      style->Add(AttributeValueColor() );
+      for (auto value : values)
+      {
+        auto attributeValue = AttributeValue::CreateFromString(value);
+        if (nullptr != attributeValue)
+        {
+          style->Add(*attributeValue);
+          delete attributeValue;
+        }
+      }
       return style;
     }
   }

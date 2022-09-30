@@ -7,7 +7,7 @@ namespace myodd{ namespace html{
 class AttributeValueColor : public AttributeValue
 {
 public:
-  AttributeValueColor();
+  AttributeValueColor( const std::wstring& color );
   virtual ~AttributeValueColor() = default;
 
   AttributeValueColor(const AttributeValueColor&);
@@ -20,7 +20,20 @@ public:
   virtual void Pop( LOGFONT& logFont );
 
 protected:
+  struct RGB
+  {
+    unsigned short r;
+    unsigned short g;
+    unsigned short b;
+  };
+
   // copy the attribute values here.
   virtual void Copy(const AttributeValueColor& rhs);
+
+  // the actual color
+  RGB _rgb;
+
+  static RGB CreateColor(const std::wstring& color);
+  static unsigned short HexToInt(const std::wstring& hex );
 };
 }}
