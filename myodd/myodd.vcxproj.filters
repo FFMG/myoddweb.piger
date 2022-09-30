@@ -287,6 +287,15 @@
     <ClCompile Include="html\Attributes.cpp">
       <Filter>html</Filter>
     </ClCompile>
+    <ClCompile Include="html\AttributeStyle.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValue.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValueColor.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -460,6 +469,15 @@
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\Attributes.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributeStyle.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributeValue.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributeValueColor.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>

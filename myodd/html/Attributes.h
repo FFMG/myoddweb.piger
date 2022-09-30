@@ -26,6 +26,13 @@ public:
    */
   const unsigned int NumberOfAttributes() const;
 
+  /**
+   * \brief add the given attribute to our list of attributes.
+   * \param const Attribute& the attribute we are adding to our list.
+   * \return unsigned int the number of attributes
+   */
+  void Add(const Attribute& src);
+
 private:
   std::vector<Attribute*> _attributes;
   void Copy(const Attributes& rhs);

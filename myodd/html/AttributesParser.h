@@ -14,5 +14,6 @@ public:
   Attributes Parse( const wchar_t* lpString) const;
 
 private:
+  Attribute* CreateAttribute(const std::wstring& name, const std::wstring& value) const;
 };
 }}

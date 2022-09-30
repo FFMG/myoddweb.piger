@@ -1,4 +1,5 @@
 #include "Attributes.h"
+#include "AttributeStyle.h"
 
 namespace myodd{ namespace html{
 Attributes::Attributes()
@@ -18,7 +19,7 @@ Attributes::Attributes(const Attributes& rhs)
 const Attributes& Attributes::operator=(const Attributes& rhs)
 {
   Copy(rhs);
-  return* this;
+  return *this;
 }
 
 void Attributes::Clear()
@@ -40,7 +41,7 @@ void Attributes::Copy(const Attributes& rhs)
 
   for (auto att : rhs._attributes)
   {
-    assert(0);  //  we need to add each kind.
+    Add(*att);
   }
 }
 
@@ -74,4 +75,13 @@ void Attributes::Pop(LOGFONT& logFont)
   }
 }
 
+void Attributes::Add(const Attribute& src)
+{
+  auto stylePtr = dynamic_cast<const AttributeStyle*>(&src);
+  if (nullptr != stylePtr)
+  {
+    auto ptr = new AttributeStyle(*stylePtr);
+    _attributes.push_back(ptr);
+  }
+}
 }}

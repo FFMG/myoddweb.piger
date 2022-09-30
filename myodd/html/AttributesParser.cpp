@@ -1,4 +1,7 @@
 #include "AttributesParser.h"
+#include "AttributeStyle.h"
+#include "AttributeValueColor.h"
+
 #include <algorithm>
 #include "SimpleHtmlData.h"
 
@@ -82,9 +85,12 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
       // so we are now getting out.
       if (insideDoubleQuote)
       {
-//
-// Add( name, value )
-//
+        auto attribute = CreateAttribute(name, value);
+        if (nullptr != attribute)
+        {
+          atts.Add(*attribute);
+          delete attribute;
+        }
         insideDoubleQuote = insideSingleQuote = hasName = false;
         name = value = L"";
 
@@ -116,9 +122,12 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
       // so we are now getting out.
       if (insideSingleQuote)
       {
-//
-// Add( name, value )
-//
+        auto attribute = CreateAttribute(name, value);
+        if (nullptr != attribute)
+        {
+          atts.Add(*attribute);
+          delete attribute;
+        }
         insideDoubleQuote = insideSingleQuote = hasName = false;
         name = value = L"";
 
@@ -158,5 +167,27 @@ Attributes AttributesParser::Parse(const wchar_t* lpString ) const
   }
   
   return atts;
+}
+
+Attribute* AttributesParser::CreateAttribute(const std::wstring& name, const std::wstring& value) const
+{
+  // try and find the type
+  const auto lowerName = myodd::strings::lower(name);
+  const auto givenName = lowerName.c_str();
+  const auto givenNameLength = lowerName.length();
+
+  switch (givenNameLength)
+  {
+  case 5:
+    if (_tcsnicmp(givenName, L"style", givenNameLength) == 0)
+    {
+      auto style = new AttributeStyle();
+      style->Add(AttributeValueColor() );
+      return style;
+    }
+  }
+
+  // not sure what this is.
+  return nullptr;
 }
 }}
