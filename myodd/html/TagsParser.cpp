@@ -389,7 +389,7 @@ void TagsParser::DeInit( const HDC hdc )
   }
 
   // delete the old font.
-  if( _font )
+  if( _font != nullptr )
   {
     DeleteObject( _font );
     _font = nullptr;
