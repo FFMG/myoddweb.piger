@@ -225,6 +225,36 @@
     </ClCompile>
     <ClCompile Include="files\files.cpp" />
     <ClCompile Include="geo\geo.cpp" />
+    <ClCompile Include="html\Attribute.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\Attributes.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributesParser.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\html.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
@@ -600,6 +630,9 @@
     <ClInclude Include="files\files.h" />
     <ClInclude Include="geo\geo.h" />
     <ClInclude Include="HtmlData.h" />
+    <ClInclude Include="html\Attribute.h" />
+    <ClInclude Include="html\Attributes.h" />
+    <ClInclude Include="html\AttributesParser.h" />
     <ClInclude Include="html\html.h" />
     <ClInclude Include="html\HtmlData.h" />
     <ClInclude Include="html\SimpleHtmlData.h" />

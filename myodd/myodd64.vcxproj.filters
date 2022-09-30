@@ -278,6 +278,15 @@
     <ClCompile Include="html\TagUnderline.cpp">
       <Filter>html</Filter>
     </ClCompile>
+    <ClCompile Include="html\AttributesParser.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Attribute.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Attributes.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -445,6 +454,15 @@
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\TagUnderline.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributesParser.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Attribute.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Attributes.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>
