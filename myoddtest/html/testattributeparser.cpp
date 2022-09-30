@@ -7,7 +7,18 @@ TEST(BasicAttributesParser, NothingToParse)
 {
   auto parser = new myodd::html::AttributesParser();
 
-  parser->Parse(L"");
+  auto attr = parser->Parse(L"");
+  ASSERT_EQ(0, attr.NumberOfAttributes());
+
+  delete parser;
+}
+
+TEST(BasicAttributesParser, TryingToParseNullPtrDoesNotThrowAnError)
+{
+  auto parser = new myodd::html::AttributesParser();
+
+  auto attr = parser->Parse(nullptr);
+  ASSERT_EQ(0, attr.NumberOfAttributes());
 
   delete parser;
 }

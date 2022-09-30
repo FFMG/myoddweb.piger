@@ -10,8 +10,8 @@ public:
   virtual ~AttributesParser(void);
 
 public:
-  Attributes Parse( const std::wstring& text );
-  Attributes Parse( const wchar_t* lpString);
+  Attributes Parse( const std::wstring& text ) const;
+  Attributes Parse( const wchar_t* lpString) const;
 
 private:
 };

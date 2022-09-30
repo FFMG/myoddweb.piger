@@ -1,7 +1,7 @@
 #include "HtmlData.h"
 
 namespace myodd { namespace html {
-HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const std::wstring& attributes, Tag* tagData) :
+HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const Attributes& attributes, Tag* tagData) :
   _isHtmlTag(isHtmlTag),
   _isEnd(isEnd),
   _isStartEnd(isStartEnd),
@@ -11,7 +11,7 @@ HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstri
 {
 
 }
-HtmlData::HtmlData(bool isEnd, bool isStartEnd, const std::wstring& attributes, Tag* tagData) :
+HtmlData::HtmlData(bool isEnd, bool isStartEnd, const Attributes& attributes, Tag* tagData) :
   HtmlData( true, isEnd, isStartEnd, L"", attributes, tagData)
 {
 

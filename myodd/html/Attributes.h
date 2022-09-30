@@ -5,8 +5,6 @@
 #include "Attribute.h"
 
 namespace myodd{ namespace html{
-//
-// the Tags
 class Attributes final
 {
 public:
@@ -21,6 +19,12 @@ public:
 
   // remove the style
   void Pop(LOGFONT& logFont);
+
+  /**
+   * \brief get the number of attributes
+   * \return unsigned int the number of attributes
+   */
+  const unsigned int NumberOfAttributes() const;
 
 private:
   std::vector<Attribute*> _attributes;

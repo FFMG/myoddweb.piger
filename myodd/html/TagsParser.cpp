@@ -1,4 +1,5 @@
 #include "TagsParser.h"
+#include "AttributesParser.h"
 #include <algorithm>
 #include "SimpleHtmlData.h"
 
@@ -175,7 +176,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
     
   auto originalString = std::wstring( begin, end );
 
-  std::wstring attributes = L"";
+  Attributes attributes;
 
   assert(*begin == '<');
   begin++;    //  '<'
@@ -205,7 +206,8 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   const wchar_t* space = _tcschr(begin, ' ');
   if (space && space < end)
   {
-    attributes.assign(space + 1, end);
+    AttributesParser attributesParser;
+    attributes = attributesParser.Parse(std::wstring(space + 1, end));
     end = space;
   }
 

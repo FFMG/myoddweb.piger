@@ -44,6 +44,16 @@ void Attributes::Copy(const Attributes& rhs)
   }
 }
 
+/**
+ * \brief get the number of attributes
+ * \return unsigned int the number of attributes
+ */
+const unsigned int Attributes::NumberOfAttributes() const
+{
+  return static_cast<unsigned int>(_attributes.size());
+}
+
+
 // apply the style
 void Attributes::Push(LOGFONT& logFont)
 {
