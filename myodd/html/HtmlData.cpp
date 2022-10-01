@@ -1,7 +1,7 @@
 #include "HtmlData.h"
 
 namespace myodd { namespace html {
-HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const std::wstring& attributes, Tag* tagData) :
+HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const Attributes& attributes, Tag* tagData) :
   _isHtmlTag(isHtmlTag),
   _isEnd(isEnd),
   _isStartEnd(isStartEnd),
@@ -11,7 +11,7 @@ HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstri
 {
 
 }
-HtmlData::HtmlData(bool isEnd, bool isStartEnd, const std::wstring& attributes, Tag* tagData) :
+HtmlData::HtmlData(bool isEnd, bool isStartEnd, const Attributes& attributes, Tag* tagData) :
   HtmlData( true, isEnd, isStartEnd, L"", attributes, tagData)
 {
 
@@ -56,4 +56,28 @@ const bool HtmlData::HasTagData() const
 {
   return _tag != nullptr;
 }
+
+// apply the style
+void HtmlData::Push(HDC hdc, LOGFONT& logFont)
+{
+  if (_tag != nullptr)
+  {
+    _tag->Push(hdc, logFont);
+  }
+  _attributes.Push(hdc, logFont);
+}
+
+// remove the style
+void HtmlData::Pop(HDC hdc, LOGFONT& logFont)
+{
+  if (_tag != nullptr)
+  {
+    _tag->Pop(hdc, logFont);
+  }
+
+  assert(0);  // we need to pop the parent attribute
+              // a closing tag does not have attributes to pop!
+  _attributes.Pop(hdc, logFont);
+}
+
 }}

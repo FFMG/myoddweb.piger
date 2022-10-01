@@ -1,4 +1,5 @@
 #include "TagsParser.h"
+#include "AttributesParser.h"
 #include <algorithm>
 #include "SimpleHtmlData.h"
 
@@ -175,7 +176,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
     
   auto originalString = std::wstring( begin, end );
 
-  std::wstring attributes = L"";
+  Attributes attributes;
 
   assert(*begin == '<');
   begin++;    //  '<'
@@ -205,7 +206,8 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   const wchar_t* space = _tcschr(begin, ' ');
   if (space && space < end)
   {
-    attributes.assign(space + 1, end);
+    AttributesParser attributesParser;
+    attributes = attributesParser.Parse(std::wstring(space + 1, end));
     end = space;
   }
 
@@ -402,7 +404,7 @@ const LOGFONT& TagsParser::GetCurrentLogFont() const
 }
 
 SIZE TagsParser::Apply( const HDC hdc,
-                    const HtmlData* hd, 
+                    HtmlData* hd, 
                     RECT& rect,
                     const RECT& givenRect,
                     const int maxLineHeight,
@@ -426,12 +428,12 @@ SIZE TagsParser::Apply( const HDC hdc,
     auto lf = GetCurrentLogFont();
     if( hd->IsEnd() )
     {
-      hd->TagData().pop( lf );
+      hd->Pop( hdc, lf );
       PopFont( hdc, lf );
     }
     else
     {
-      hd->TagData().push(lf);
+      hd->Push(hdc, lf);
       PushFont( hdc, lf );
     }
   }

@@ -14,10 +14,10 @@ public:
 
 protected:
   // apply the style
-  virtual void OnPush( LOGFONT& logFont );
+  virtual void OnPush(HDC hdc, LOGFONT& logFont );
 
   // remove the style
-  virtual void OnPop( LOGFONT& logFont );
+  virtual void OnPop(HDC hdc, LOGFONT& logFont );
 
 private:
   long _lfHeight;

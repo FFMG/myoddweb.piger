@@ -26,14 +26,16 @@ bool TagStrikeout::IsTag(const wchar_t* lpString, unsigned int nLen) const
 }
 
 // apply the style
-void TagStrikeout::OnPush( LOGFONT& logFont )
+void TagStrikeout::OnPush(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfStrikeOut = 1;
 }
 
 // remove the style
-void TagStrikeout::OnPop( LOGFONT& logFont )
+void TagStrikeout::OnPop(HDC hdc, LOGFONT& logFont )
 {
+  UNUSED_ALWAYS(hdc);
   logFont.lfStrikeOut = 0;
 }
 }}

@@ -225,6 +225,66 @@
     </ClCompile>
     <ClCompile Include="files\files.cpp" />
     <ClCompile Include="geo\geo.cpp" />
+    <ClCompile Include="html\Attribute.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\Attributes.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributesParser.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributeStyle.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValueColor.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\html.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
@@ -599,6 +659,12 @@
     <ClInclude Include="dynamic\types.h" />
     <ClInclude Include="files\files.h" />
     <ClInclude Include="geo\geo.h" />
+    <ClInclude Include="html\Attribute.h" />
+    <ClInclude Include="html\Attributes.h" />
+    <ClInclude Include="html\AttributesParser.h" />
+    <ClInclude Include="html\AttributeStyle.h" />
+    <ClInclude Include="html\AttributeValue.h" />
+    <ClInclude Include="html\AttributeValueColor.h" />
     <ClInclude Include="html\html.h" />
     <ClInclude Include="html\HtmlData.h" />
     <ClInclude Include="html\SimpleHtmlData.h" />
