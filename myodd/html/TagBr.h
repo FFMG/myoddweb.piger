@@ -6,13 +6,13 @@ namespace myodd{ namespace html{
 class TagBr : public Tag
 {
 public:
-  TagBr(const Attributes& attributes);
+  TagBr(const Attributes& attributes, int tagType);
   virtual ~TagBr();
 
   TagBr(const TagBr&);
   TagBr& operator=(const TagBr&);
 
-  virtual bool ToNextLine( bool bIsEnd ) const;
+  virtual bool ToNextLine() const;
 
 protected:
   // apply the style

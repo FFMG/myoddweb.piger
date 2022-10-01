@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagBr::TagBr(const Attributes& attributes) :
-  Tag(attributes)
+TagBr::TagBr(const Attributes& attributes, int tagType) :
+  Tag(attributes, tagType)
 {
 }
 
@@ -26,9 +26,8 @@ TagBr& TagBr::operator=(const TagBr& rhs)
   return *this;
 }
 
-bool TagBr::ToNextLine( bool bIsEnd ) const
+bool TagBr::ToNextLine() const
 {
-  UNUSED_ALWAYS( bIsEnd );
   return true;
 }
 

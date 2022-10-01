@@ -7,7 +7,14 @@ namespace myodd{ namespace html{
 class Tag
 {
 public:
-  Tag( const Attributes& attributes );
+  enum Type
+  {
+    None    = 0,
+    Opening = 1,
+    Closing = 2
+  };
+
+  Tag( const Attributes& attributes, int tagType );
   virtual ~Tag() = default;
 
   Tag(const Tag&);
@@ -19,9 +26,11 @@ public:
   // remove the style
   void Pop(HDC hdc, LOGFONT& logFont );
 
-  virtual bool ToNextLine( bool /* bIsEnd */ ) const{
+  virtual bool ToNextLine() const{
     return false; // by default we don't
   }
+
+  bool Is(Type type) const;
 
 protected:
   // apply the style
@@ -40,5 +49,10 @@ private:
    * \brief the tag attribute
    */
   Attributes _attributes;
+
+  /**
+   * \brief the tag type.
+   */
+  int _tagType;
 };
 }}

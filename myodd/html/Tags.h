@@ -39,9 +39,10 @@ public:
    * \brief create a tag given the tag name.
    * \param const std::wstring& the tag name we will be looking for.
    * \param const Attributes& the tag attributes
+   * \param const int& the type flag, (open/closed etc)
    * \return Tag* or nullptr if the tag cannot be created
    */
-  static Tag* CreateFromString(const std::wstring& tagName, const Attributes& attributes);
+  static Tag* CreateFromString(const std::wstring& tagName, const Attributes& attributes, const int& tagType);
 
   /**
    * \brief given a source tag, make a copy of it.

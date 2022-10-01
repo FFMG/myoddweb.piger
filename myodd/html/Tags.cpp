@@ -123,9 +123,10 @@ Tag* Tags::CreateFromSource(const Tag& src)
  * \brief create a tag given the tag name.
  * \param const std::wstring& the tag name we will be looking for.
  * \param const Attributes& the tag attributes
+ * \param const int& the type flag, (open/closed etc)
  * \return Tag* or nullptr if the tag cannot be created
  */
-Tag* Tags::CreateFromString(const std::wstring& tagName, const Attributes& attributes)
+Tag* Tags::CreateFromString(const std::wstring& tagName, const Attributes& attributes, const int& tagType)
 {
   auto nLen = tagName.length();
   auto lowerTagName = myodd::strings::lower(tagName);
@@ -135,51 +136,51 @@ Tag* Tags::CreateFromString(const std::wstring& tagName, const Attributes& attri
   case 1:
     if (_tcsncmp(lpString, L"b", nLen) == 0)
     {
-      return new TagBold(attributes);
+      return new TagBold(attributes, tagType);
     }
     if (_tcsncmp(lpString, L"i", nLen) == 0)
     {
-      return new TagItalic(attributes);
+      return new TagItalic(attributes, tagType);
     }
     if (_tcsncmp(lpString, L"s", nLen) == 0)
     {
-      return new TagStrikeout(attributes);
+      return new TagStrikeout(attributes, tagType);
     }
     if (_tcsncmp(lpString, L"u", nLen) == 0)
     {
-      return new TagUnderline(attributes);
+      return new TagUnderline(attributes, tagType);
     }
     break;
 
   case 2:
     if (_tcsncmp(lpString, L"br", nLen) == 0)
     {
-      return new TagBr(attributes);
+      return new TagBr(attributes, tagType);
     }
     if (_tcsncmp(lpString, L"em", nLen) == 0)
     {
-      return new TagItalic(attributes);
+      return new TagItalic(attributes, tagType);
     }
     break;
 
   case 5:
     if (_tcsncmp(lpString, L"small", nLen) == 0)
     {
-      return new TagSmall(attributes);
+      return new TagSmall(attributes, tagType);
     }
     break;
 
   case 6:
     if (_tcsncmp(lpString, L"strong", nLen) == 0)
     {
-      return new TagBold(attributes);
+      return new TagBold(attributes, tagType);
     }
     break;
 
   case 9:
     if (_tcsncmp(lpString, L"strikeout", nLen) == 0)
     {
-      return new TagStrikeout(attributes);
+      return new TagStrikeout(attributes, tagType);
     }
     break;
 

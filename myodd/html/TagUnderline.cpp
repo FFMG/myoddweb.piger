@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagUnderline::TagUnderline(const Attributes& attributes) :
-  Tag(attributes)
+TagUnderline::TagUnderline(const Attributes& attributes, int tagType) :
+  Tag(attributes, tagType)
 {
 }
 

@@ -39,8 +39,8 @@ TEST(BasicTagsParser, BrTagIsNotAnEndTag)
   ASSERT_EQ(1, dom.size());
 
   ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsEnd());
-  ASSERT_FALSE(dom[0]->IsStartEnd());   // We did not follow the xml strict mode
+  ASSERT_FALSE(dom[0]->IsClosing());
+  ASSERT_FALSE(dom[0]->IsOpening());   // We did not follow the xml strict mode
                                         // this tag was left 'open'
                                         // while it is valid it is not a start/end tag
   delete parser;
@@ -57,12 +57,12 @@ TEST(BasicTagsParser, ClosedBrTagsAreLegal)
   //     it is not an end tag as such ... it is just a tag
   //     that just happens to be closed right away.
   ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsEnd());
-  ASSERT_TRUE(dom[0]->IsStartEnd());
+  ASSERT_FALSE(dom[0]->IsClosing());
+  ASSERT_TRUE(dom[0]->IsOpening());
 
   ASSERT_TRUE(dom[1]->IsHtmlTag());
-  ASSERT_FALSE(dom[1]->IsEnd());
-  ASSERT_TRUE(dom[1]->IsStartEnd());
+  ASSERT_FALSE(dom[1]->IsClosing());
+  ASSERT_TRUE(dom[1]->IsOpening());
 
   delete parser;
 }
@@ -88,13 +88,13 @@ TEST(BasicTagsParser, SimpleSmallTag)
   ASSERT_EQ(3, dom.size()); //  we have 3 parts
 
   ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsEnd());
+  ASSERT_FALSE(dom[0]->IsClosing());
 
   ASSERT_FALSE(dom[1]->IsHtmlTag());
   ASSERT_TRUE(dom[1]->Text() == L"Hello");
 
   ASSERT_TRUE(dom[2]->IsHtmlTag());
-  ASSERT_TRUE(dom[2]->IsEnd());
+  ASSERT_TRUE(dom[2]->IsClosing());
 
   delete parser;
 }
@@ -138,13 +138,13 @@ TEST(BasicTagsParser, InvalidStartEndTagInsideAGoodNode)
   ASSERT_EQ(3, dom.size());
 
   ASSERT_TRUE(dom[0]->IsHtmlTag());   // open <small>
-  ASSERT_FALSE(dom[0]->IsEnd());
+  ASSERT_FALSE(dom[0]->IsClosing());
 
   ASSERT_FALSE(dom[1]->IsHtmlTag());  // garbage text '<foo1 and <foo2'
   ASSERT_TRUE(dom[1]->Text() == L"<foo1 and <foo2");
 
   ASSERT_TRUE(dom[2]->IsHtmlTag());   // close </small>
-  ASSERT_TRUE(dom[2]->IsEnd());   // close </small>
+  ASSERT_TRUE(dom[2]->IsClosing());   // close </small>
 
   delete parser;
 }
@@ -160,13 +160,13 @@ TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTag)
   ASSERT_TRUE(dom[0]->Text() == L"<foo1 and <foo2");
 
   ASSERT_TRUE(dom[1]->IsHtmlTag());   // open <small>
-  ASSERT_FALSE(dom[1]->IsEnd());
+  ASSERT_FALSE(dom[1]->IsClosing());
 
   ASSERT_FALSE(dom[2]->IsHtmlTag());  // text in tag 'Hello'
   ASSERT_TRUE(dom[2]->Text() == L"Hello");
 
   ASSERT_TRUE(dom[3]->IsHtmlTag());   // close </small>
-  ASSERT_TRUE(dom[3]->IsEnd());   // close </small>
+  ASSERT_TRUE(dom[3]->IsClosing());   // close </small>
 
   delete parser;
 }
@@ -182,13 +182,13 @@ TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTagWithBadTagsFater)
   ASSERT_TRUE(dom[0]->Text() == L"<foo1 and <foo2");
 
   ASSERT_TRUE(dom[1]->IsHtmlTag());   // open <small>
-  ASSERT_FALSE(dom[1]->IsEnd());
+  ASSERT_FALSE(dom[1]->IsClosing());
 
   ASSERT_FALSE(dom[2]->IsHtmlTag());
   ASSERT_TRUE(dom[2]->Text() == L"Hello");
 
   ASSERT_TRUE(dom[3]->IsHtmlTag());   // close </small>
-  ASSERT_TRUE(dom[3]->IsEnd());   // close </small>
+  ASSERT_TRUE(dom[3]->IsClosing());   // close </small>
 
   // thew rest is all wrong
   ASSERT_FALSE(dom[4]->IsHtmlTag());

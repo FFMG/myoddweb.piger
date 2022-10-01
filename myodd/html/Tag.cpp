@@ -1,9 +1,10 @@
 #include "Tag.h"
 
 namespace myodd{ namespace html{
-Tag::Tag(const Attributes& attributes) :
+Tag::Tag(const Attributes& attributes, int tagType) :
   _depth(0),
-  _attributes(attributes)
+  _attributes(attributes),
+  _tagType(tagType)
 {
 }
 
@@ -11,16 +12,22 @@ Tag::Tag(const Tag& tag)
 {
   *this = tag;
 }
+
 Tag& Tag::operator=(const Tag& tag)
 {
   if (this != &tag)
   {
     _depth = tag._depth;
     _attributes = tag._attributes;
+    _tagType = tag._tagType;
   }
   return *this;
 }
 
+bool Tag::Is(Type type) const
+{
+  return (_tagType & type) != 0;
+}
 
 // apply the style
 void Tag::Push(HDC hdc, LOGFONT& logFont )

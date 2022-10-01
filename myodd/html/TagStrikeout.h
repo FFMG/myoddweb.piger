@@ -6,7 +6,7 @@ namespace myodd{ namespace html{
 class TagStrikeout : public Tag
 {
 public:
-  TagStrikeout(const Attributes& attributes);
+  TagStrikeout(const Attributes& attributes, int tagType);
   virtual ~TagStrikeout();
 
   TagStrikeout(const TagStrikeout&);

@@ -6,7 +6,7 @@ namespace myodd{ namespace html{
 class TagItalic : public Tag
 {
 public:
-  TagItalic(const Attributes& attributes);
+  TagItalic(const Attributes& attributes, int tagType);
   virtual ~TagItalic();
 
   TagItalic(const TagItalic&);

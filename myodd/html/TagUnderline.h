@@ -6,7 +6,7 @@ namespace myodd{ namespace html{
 class TagUnderline : public Tag
 {
 public:
-  TagUnderline(const Attributes& attributes);
+  TagUnderline(const Attributes& attributes, int tagType);
   virtual ~TagUnderline();
 
   TagUnderline(const TagUnderline&);

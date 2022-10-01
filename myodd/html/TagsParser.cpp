@@ -187,18 +187,23 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
     return;
   }
 
+  int tagType = { Tag::None };
   end--;      //  '>'
-  auto isEnd = *begin == L'/' ? true : false;
-  if (isEnd)
+  if (*begin == L'/' ? true : false)
   {
+    tagType |= Tag::Closing;
     begin++;  //  '/'
+  }
+  else
+  {
+    tagType |= Tag::Opening;
   }
 
   // check if we are a star/end kind of tag
   // for example <br/> or <br />
-  auto isStartAndEnd = *(end - 1) == L'/' ? true : false;
-  if (isStartAndEnd)
+  if (*(end - 1) == L'/' ? true : false)
   {
+    tagType |= Tag::Closing;
     end--;  //  '/'
   }
 
@@ -217,7 +222,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
 
   // look for the matching Tag for that tag
   // the Tag is what does the basic string transformation.
-  auto tagData = Tags::CreateFromString(text, attributes);
+  auto tagData = Tags::CreateFromString(text, attributes, tagType );
 
   // if we do not have a tag it means that we are not going to parse it properly.
   // the text in the tag will not be displayed.
@@ -229,7 +234,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   // add this to the list as a text only item.
-  m_data.push_back(new HtmlData(isEnd, isStartAndEnd, tagData));
+  m_data.push_back(new HtmlData(tagData));
   delete tagData;
 }
 
@@ -421,13 +426,13 @@ SIZE TagsParser::Apply( const HDC hdc,
   SIZE size = {0};
 
   // are we a tag?
-  if( hd->HasTagData() )
+  if( hd->IsHtmlTag() )
   {
     // this function does single lines only
     // but when asked to parse from beginning to end we are 
     // given the tag that caused us to go to the next line
     auto lf = GetCurrentLogFont();
-    if( hd->IsEnd() )
+    if( hd->IsClosing() )
     {
       hd->Pop( hdc, lf );
       PopFont( hdc, lf );

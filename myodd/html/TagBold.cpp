@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagBold::TagBold(const Attributes& attributes) :
-  Tag(attributes)
+TagBold::TagBold(const Attributes& attributes, int tagType) :
+  Tag(attributes, tagType )
 {
 }
 

@@ -6,7 +6,7 @@ namespace myodd{ namespace html{
 class TagBold : public Tag
 {
 public:
-  TagBold(const Attributes& attributes);
+  TagBold(const Attributes& attributes, int tagType);
   virtual ~TagBold();
 
   TagBold(const TagBold&);
