@@ -60,7 +60,6 @@ private:
   const wchar_t* FindTag(const wchar_t* body, const wchar_t tag) const;
   const wchar_t* FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude ) const;
 
-  Tags _tags;
   int _saveDC;
   LOGFONT _logFont;        //  the current font
   HFONT _font;        //  the current font

@@ -7,10 +7,10 @@ class TagItalic : public Tag
 {
 public:
   TagItalic();
-  ~TagItalic();
+  virtual ~TagItalic();
 
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
+  TagItalic(const TagItalic&);
+  TagItalic& operator=(const TagItalic&);
 
 protected:
   // apply the style

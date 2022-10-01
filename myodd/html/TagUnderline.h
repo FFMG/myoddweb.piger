@@ -7,10 +7,10 @@ class TagUnderline : public Tag
 {
 public:
   TagUnderline();
-  ~TagUnderline();
+  virtual ~TagUnderline();
 
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
+  TagUnderline(const TagUnderline&);
+  TagUnderline& operator=(const TagUnderline&);
 
 protected:
   // apply the style

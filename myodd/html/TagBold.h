@@ -7,10 +7,10 @@ class TagBold : public Tag
 {
 public:
   TagBold();
-  ~TagBold();
+  virtual ~TagBold();
 
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
+  TagBold(const TagBold&);
+  TagBold& operator=(const TagBold&);
 
 protected:
   // apply the style

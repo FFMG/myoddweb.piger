@@ -12,14 +12,19 @@ TagSmall::~TagSmall()
 {
 }
 
-// if this is the Tag we are looking for.
-bool TagSmall::IsTag(const wchar_t* lpString, unsigned int nLen) const
+TagSmall::TagSmall(const TagSmall& rhs) : Tag(rhs)
 {
-  if( nLen == 5 )
+  *this = rhs;
+}
+
+TagSmall& TagSmall::operator=(const TagSmall& rhs)
+{
+  if (this != &rhs)
   {
-    return (_tcsnicmp(lpString , L"small", nLen) ==0);
+    //  copy
+    Tag::operator=(rhs);
   }
-  return false;
+  return *this;
 }
 
 // apply the style

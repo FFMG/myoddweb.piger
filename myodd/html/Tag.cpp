@@ -6,6 +6,20 @@ Tag::Tag() :
 {
 }
 
+Tag::Tag(const Tag& tag)
+{
+  *this = tag;
+}
+Tag& Tag::operator=(const Tag& tag)
+{
+  if (this != &tag)
+  {
+    m_depth = tag.m_depth;
+  }
+  return *this;
+}
+
+
 // apply the style
 void Tag::Push(HDC hdc, LOGFONT& logFont )
 {

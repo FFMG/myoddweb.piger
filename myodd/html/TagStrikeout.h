@@ -7,10 +7,10 @@ class TagStrikeout : public Tag
 {
 public:
   TagStrikeout();
-  ~TagStrikeout();
+  virtual ~TagStrikeout();
 
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
+  TagStrikeout(const TagStrikeout&);
+  TagStrikeout& operator=(const TagStrikeout&);
 
 protected:
   // apply the style

@@ -7,12 +7,12 @@ class TagBr : public Tag
 {
 public:
   TagBr();
-  ~TagBr();
+  virtual ~TagBr();
+
+  TagBr(const TagBr&);
+  TagBr& operator=(const TagBr&);
 
   virtual bool ToNextLine( bool bIsEnd ) const;
-
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
 
 protected:
   // apply the style

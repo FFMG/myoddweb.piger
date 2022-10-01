@@ -10,11 +10,8 @@ public:
   Tag();
   virtual ~Tag() = default;
 
-  Tag(const Tag&) = delete;
-  void operator=(const Tag&) = delete;
-
-  // if this is the tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen ) const = 0;
+  Tag(const Tag&);
+  Tag& operator=(const Tag&);
   
   // apply the style
   void Push(HDC hdc, LOGFONT& logFont );
