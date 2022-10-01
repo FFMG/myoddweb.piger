@@ -1,13 +1,13 @@
 #pragma once
 
 #include "../common/includes.h"
-#include <windows.h>
+#include "Attributes.h"
 
 namespace myodd{ namespace html{
 class Tag
 {
 public:
-  Tag();
+  Tag( const Attributes& attributes );
   virtual ~Tag() = default;
 
   Tag(const Tag&);
@@ -31,6 +31,14 @@ protected:
   virtual void OnPop(HDC hdc, LOGFONT& logFont ) = 0;
 
 private:
-  int m_depth;
+  /** 
+   * \brief the depth of this tag
+   */
+  int _depth;
+
+  /**
+   * \brief the tag attribute
+   */
+  Attributes _attributes;
 };
 }}

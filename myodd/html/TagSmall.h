@@ -6,7 +6,7 @@ namespace myodd{ namespace html{
 class TagSmall : public Tag
 {
 public:
-  TagSmall();
+  TagSmall(const Attributes& attributes);
   virtual ~TagSmall();
 
   TagSmall(const TagSmall&);

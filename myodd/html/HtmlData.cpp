@@ -1,24 +1,23 @@
 #include "HtmlData.h"
 
 namespace myodd { namespace html {
-HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const Attributes& attributes, Tag* tagData) :
+HtmlData::HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, Tag* tagData) :
   _isHtmlTag(isHtmlTag),
   _isEnd(isEnd),
   _isStartEnd(isStartEnd),
   _text(text),
-  _attributes(attributes),
   _tag(tagData)
 {
 
 }
-HtmlData::HtmlData(bool isEnd, bool isStartEnd, const Attributes& attributes, Tag* tagData) :
-  HtmlData( true, isEnd, isStartEnd, L"", attributes, tagData)
+HtmlData::HtmlData(bool isEnd, bool isStartEnd, Tag* tagData) :
+  HtmlData( true, isEnd, isStartEnd, L"", tagData)
 {
 
 }
 
 HtmlData::HtmlData(const HtmlData& rhs) : 
-  HtmlData(rhs._isHtmlTag, rhs._isEnd, rhs._isStartEnd, rhs._text, rhs._attributes, rhs._tag)
+  HtmlData(rhs._isHtmlTag, rhs._isEnd, rhs._isStartEnd, rhs._text, rhs._tag)
 {
 }
 
@@ -64,7 +63,6 @@ void HtmlData::Push(HDC hdc, LOGFONT& logFont)
   {
     _tag->Push(hdc, logFont);
   }
-  _attributes.Push(hdc, logFont);
 }
 
 // remove the style
@@ -74,10 +72,6 @@ void HtmlData::Pop(HDC hdc, LOGFONT& logFont)
   {
     _tag->Pop(hdc, logFont);
   }
-
-  assert(0);  // we need to pop the parent attribute
-              // a closing tag does not have attributes to pop!
-  _attributes.Pop(hdc, logFont);
 }
 
 }}

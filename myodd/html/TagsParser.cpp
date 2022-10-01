@@ -217,7 +217,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
 
   // look for the matching Tag for that tag
   // the Tag is what does the basic string transformation.
-  auto tagData = Tags::CreateFromString(text);
+  auto tagData = Tags::CreateFromString(text, attributes);
 
   // if we do not have a tag it means that we are not going to parse it properly.
   // the text in the tag will not be displayed.
@@ -229,7 +229,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   // add this to the list as a text only item.
-  m_data.push_back(new HtmlData(isEnd, isStartAndEnd, attributes, tagData));
+  m_data.push_back(new HtmlData(isEnd, isStartAndEnd, tagData));
   delete tagData;
 }
 

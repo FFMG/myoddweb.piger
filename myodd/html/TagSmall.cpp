@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagSmall::TagSmall() :
-  Tag(),
+TagSmall::TagSmall(const Attributes& attributes) :
+  Tag(attributes),
   _lfHeight( 0)
 {
 }
@@ -23,6 +23,7 @@ TagSmall& TagSmall::operator=(const TagSmall& rhs)
   {
     //  copy
     Tag::operator=(rhs);
+    _lfHeight = rhs._lfHeight;
   }
   return *this;
 }

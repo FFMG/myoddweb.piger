@@ -1,16 +1,15 @@
 #pragma once
 #include "../string/string.h"
 #include "Tags.h"
-#include "Attributes.h"
 
 namespace myodd { namespace html {
   class HtmlData
   {
   protected:
-    HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, const Attributes& attributes, Tag* tagData);
+    HtmlData(bool isHtmlTag, bool isEnd, bool isStartEnd, const std::wstring& text, Tag* tagData);
 
   public:
-    HtmlData( bool isEnd, bool isStartEnd, const Attributes& attributes, Tag* tagData);
+    HtmlData( bool isEnd, bool isStartEnd, Tag* tagData);
     HtmlData( const HtmlData& rhs );
     const HtmlData& operator=(const HtmlData& rhs) = delete;
 
@@ -39,6 +38,5 @@ namespace myodd { namespace html {
     const bool _isEnd;
     const bool _isStartEnd;
     Tag* _tag;
-    Attributes _attributes;
   };
 }}

@@ -1,8 +1,9 @@
 #include "Tag.h"
 
 namespace myodd{ namespace html{
-Tag::Tag() :
-  m_depth(0) 
+Tag::Tag(const Attributes& attributes) :
+  _depth(0),
+  _attributes(attributes)
 {
 }
 
@@ -14,7 +15,8 @@ Tag& Tag::operator=(const Tag& tag)
 {
   if (this != &tag)
   {
-    m_depth = tag.m_depth;
+    _depth = tag._depth;
+    _attributes = tag._attributes;
   }
   return *this;
 }
@@ -23,17 +25,26 @@ Tag& Tag::operator=(const Tag& tag)
 // apply the style
 void Tag::Push(HDC hdc, LOGFONT& logFont )
 {
+  // first push the tag itself
   OnPush( hdc, logFont );
-  ++m_depth;
+
+  // then the attributes
+  _attributes.Push(hdc, logFont);
+
+  ++_depth;
 }
 
 // remove the style
 void Tag::Pop(HDC hdc, LOGFONT& logFont )
 {
-  if( m_depth >= 1 )
+  if( _depth >= 1 )
   {
+    // pop the attributes
+    assert(0);  // we need to pop the parent attribute
+                // a closing tag does not have attributes to pop!
+
     OnPop(hdc, logFont );
-    --m_depth;
+    --_depth;
   }
   else
   {

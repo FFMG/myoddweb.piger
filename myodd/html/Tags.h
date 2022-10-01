@@ -38,9 +38,16 @@ public:
   /**
    * \brief create a tag given the tag name.
    * \param const std::wstring& the tag name we will be looking for.
+   * \param const Attributes& the tag attributes
    * \return Tag* or nullptr if the tag cannot be created
    */
-  static Tag* CreateFromString(const std::wstring& tagName);
+  static Tag* CreateFromString(const std::wstring& tagName, const Attributes& attributes);
+
+  /**
+   * \brief given a source tag, make a copy of it.
+   * \param const Tag& the tag we are trying to create from.
+   */
+  static Tag* CreateFromSource(const Tag& src);
 
 private:
   std::vector<Tag*> _tags;
