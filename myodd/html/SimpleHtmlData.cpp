@@ -2,7 +2,7 @@
 
 namespace myodd { namespace html {
 SimpleHtmlData::SimpleHtmlData(const std::wstring& text) :
-  HtmlData( text, nullptr)
+  DomObject( text, nullptr)
 {
 }
 }}

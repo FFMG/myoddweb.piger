@@ -33,7 +33,7 @@ void TagsParser::Clear()
  * \param const std::wstring the string we are parsing.
  * \return const TagsParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const TagsParser::HtmlDataContainer& TagsParser::Parse(const std::wstring& text)
+const DomObjects& TagsParser::Parse(const std::wstring& text)
 {
   return Parse(text.c_str());
 }
@@ -43,7 +43,7 @@ const TagsParser::HtmlDataContainer& TagsParser::Parse(const std::wstring& text)
  * \param lpString the string we are parsing.
  * \return const TagsParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const TagsParser::HtmlDataContainer& TagsParser::Parse(const wchar_t* lpString )
+const DomObjects& TagsParser::Parse(const wchar_t* lpString )
 {
   Clear();
   if( nullptr == lpString )
@@ -234,7 +234,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   // add this to the list as a text only item.
-  m_data.push_back(new HtmlData(tagData));
+  m_data.push_back(new DomObject(tagData));
   delete tagData;
 }
 
@@ -410,7 +410,7 @@ const LOGFONT& TagsParser::GetCurrentLogFont() const
 }
 
 SIZE TagsParser::Apply( const HDC hdc,
-                    HtmlData* hd, 
+                    DomObject* hd,
                     RECT& rect,
                     const RECT& givenRect,
                     const int maxLineHeight,

@@ -2,9 +2,12 @@
 
 #include <vector>
 #include "../string/string.h"
-#include "HtmlData.h"
+#include "DomObject.h"
 
 namespace myodd { namespace html {
+
+typedef std::vector<DomObject*> DomObjects;
+
 class TagsParser
 {
 public:
@@ -12,21 +15,19 @@ public:
   virtual ~TagsParser(void);
 
 public:
-  typedef std::vector<HtmlData*> HtmlDataContainer;
-
-  const HtmlDataContainer& Parse( const std::wstring& text );
-  const HtmlDataContainer& Parse(const wchar_t* lpString);
+  const DomObjects& Parse( const std::wstring& text );
+  const DomObjects& Parse(const wchar_t* lpString);
 
 private:
   
-  HtmlDataContainer m_data;
-  const HtmlDataContainer& Tree() const {
+  DomObjects m_data;
+  const DomObjects& Tree() const {
     return m_data;
   };
 
 public:
   SIZE Apply( HDC hdc, 
-              HtmlData* hd, 
+              DomObject* hd, 
               RECT& rect,
               const RECT& givenRect,
               const int maxLineHeight,

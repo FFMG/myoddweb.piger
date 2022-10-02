@@ -1,45 +1,45 @@
-#include "HtmlData.h"
+#include "DomObject.h"
 
 namespace myodd { namespace html {
-HtmlData::HtmlData(const std::wstring& text, Tag* tagData) :
+DomObject::DomObject(const std::wstring& text, Tag* tagData) :
   _text(text)
 {
   _tag = tagData == nullptr ? nullptr :  Tag::CreateFromSource(*tagData);
 }
 
-HtmlData::HtmlData(Tag* tagData) :
-  HtmlData( L"", tagData)
+DomObject::DomObject(Tag* tagData) :
+  DomObject( L"", tagData)
 {
 
 }
 
-HtmlData::HtmlData(const HtmlData& rhs) : 
-  HtmlData( rhs._text, rhs._tag)
+DomObject::DomObject(const DomObject& rhs) :
+  DomObject( rhs._text, rhs._tag)
 {
 }
 
-HtmlData::~HtmlData()
+DomObject::~DomObject()
 {
   delete _tag;
 }
 
-const int HtmlData::TextLength() const
+const int DomObject::TextLength() const
 {
   return static_cast<int>(_text.length());
 }
 
-const std::wstring& HtmlData::Text() const
+const std::wstring& DomObject::Text() const
 {
   return _text;
 }
 
-Tag& HtmlData::TagData() const
+Tag& DomObject::TagData() const
 {
   return *_tag;
 }
 
 // apply the style
-void HtmlData::Push(HDC hdc, LOGFONT& logFont)
+void DomObject::Push(HDC hdc, LOGFONT& logFont)
 {
   if (_tag != nullptr)
   {
@@ -48,7 +48,7 @@ void HtmlData::Push(HDC hdc, LOGFONT& logFont)
 }
 
 // remove the style
-void HtmlData::Pop(HDC hdc, LOGFONT& logFont)
+void DomObject::Pop(HDC hdc, LOGFONT& logFont)
 {
   if (_tag != nullptr)
   {
@@ -56,17 +56,17 @@ void HtmlData::Pop(HDC hdc, LOGFONT& logFont)
   }
 }
 
-bool HtmlData::IsHtmlTag() const
+bool DomObject::IsHtmlTag() const
 {
   return nullptr != _tag;
 }
 
-bool HtmlData::IsClosing() const
+bool DomObject::IsClosing() const
 {
   return _tag == nullptr ? false : _tag->Is(Tag::Closing);
 }
 
-bool HtmlData::IsOpening() const
+bool DomObject::IsOpening() const
 {
   return _tag == nullptr ? false : _tag->Is(Tag::Opening);
 }

@@ -285,6 +285,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="html\DomObject.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\html.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
@@ -293,16 +303,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="html\HtmlData.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="html\SimpleHtmlData.cpp">
@@ -655,8 +655,8 @@
     <ClInclude Include="html\AttributeStyle.h" />
     <ClInclude Include="html\AttributeValue.h" />
     <ClInclude Include="html\AttributeValueColor.h" />
+    <ClInclude Include="html\DomObject.h" />
     <ClInclude Include="html\html.h" />
-    <ClInclude Include="html\HtmlData.h" />
     <ClInclude Include="html\SimpleHtmlData.h" />
     <ClInclude Include="html\Tag.h" />
     <ClInclude Include="html\TagBold.h" />

@@ -3,17 +3,17 @@
 #include "Tag.h"
 
 namespace myodd { namespace html {
-  class HtmlData
+  class DomObject
   {
   protected:
-    HtmlData(const std::wstring& text, Tag* tagData);
+    DomObject(const std::wstring& text, Tag* tagData);
 
   public:
-    HtmlData( Tag* tagData);
-    HtmlData( const HtmlData& rhs );
-    const HtmlData& operator=(const HtmlData& rhs) = delete;
+    DomObject( Tag* tagData);
+    DomObject( const DomObject& rhs );
+    const DomObject& operator=(const DomObject& rhs) = delete;
 
-    virtual ~HtmlData();
+    virtual ~DomObject();
 
     // helpers
     const int TextLength() const;

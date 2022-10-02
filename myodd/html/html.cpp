@@ -22,8 +22,8 @@ namespace myodd{ namespace html{
    */
   SIZE _htmlSingleLine(HDC     hdc,        // handle of device context
                        TagsParser& parser,
-                       TagsParser::HtmlDataContainer::const_iterator begin,
-                       TagsParser::HtmlDataContainer::const_iterator end,
+                       DomObjects::const_iterator begin,
+                       DomObjects::const_iterator end,
                        LPRECT  lpRect,     // address of structure with formatting dimensions
                        const int maxLineHeight,
                        const int paddingTop,
