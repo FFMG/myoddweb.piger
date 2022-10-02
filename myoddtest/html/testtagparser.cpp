@@ -250,3 +250,39 @@ TEST(BasicTagsParser, TagIsNotOpen)
 
   delete parser;
 }
+
+TEST(BasicTagsParser, TagCanBeClosedByItself)
+{
+  auto parser = new myodd::html::TagsParser();
+
+  auto dom = parser->Parse(L"Foo</i>");
+  ASSERT_EQ(2, dom.size());
+
+  ASSERT_FALSE(dom[0]->IsHtmlTag());
+  ASSERT_FALSE(dom[0]->IsClosing());
+  ASSERT_FALSE(dom[0]->IsOpening());
+
+  ASSERT_TRUE(dom[1]->IsHtmlTag());
+  ASSERT_TRUE(dom[1]->IsClosing());
+  ASSERT_FALSE(dom[1]->IsOpening());
+
+  delete parser;
+}
+
+TEST(BasicTagsParser, TagCanBeOpenByItself)
+{
+  auto parser = new myodd::html::TagsParser();
+
+  auto dom = parser->Parse(L"Foo<i>");
+  ASSERT_EQ(2, dom.size());
+
+  ASSERT_FALSE(dom[0]->IsHtmlTag());
+  ASSERT_FALSE(dom[0]->IsClosing());
+  ASSERT_FALSE(dom[0]->IsOpening());
+
+  ASSERT_TRUE(dom[1]->IsHtmlTag());
+  ASSERT_FALSE(dom[1]->IsClosing());
+  ASSERT_TRUE(dom[1]->IsOpening());
+
+  delete parser;
+}
