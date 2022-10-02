@@ -295,6 +295,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="html\DomObjects.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\html.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
@@ -656,6 +666,7 @@
     <ClInclude Include="html\AttributeValue.h" />
     <ClInclude Include="html\AttributeValueColor.h" />
     <ClInclude Include="html\DomObject.h" />
+    <ClInclude Include="html\DomObjects.h" />
     <ClInclude Include="html\html.h" />
     <ClInclude Include="html\SimpleHtmlData.h" />
     <ClInclude Include="html\Tag.h" />

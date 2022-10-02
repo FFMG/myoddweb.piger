@@ -1,12 +1,12 @@
 #include "TagsParser.h"
 #include "AttributesParser.h"
 #include <algorithm>
-#include "SimpleHtmlData.h"
 
 namespace myodd { namespace html {
-TagsParser::TagsParser( ) :
-  _saveDC( -1 ),
-  _font( nullptr )
+  TagsParser::TagsParser() :
+    _saveDC(-1),
+    _font(nullptr),
+    _logFont{0}
 {
 }
 
@@ -21,11 +21,7 @@ TagsParser::~TagsParser()
  */
 void TagsParser::Clear()
 {
-  for (auto it = m_data.begin(); it != m_data.end(); ++it)
-  {
-    delete *it;
-  }
-  m_data.clear();
+  m_data.Clear();
 }
 
 /**
@@ -234,7 +230,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   // add this to the list as a text only item.
-  m_data.push_back(new DomObject(tagData));
+  m_data.AddTag( *tagData );
   delete tagData;
 }
 
@@ -260,25 +256,7 @@ void TagsParser::AddNonHtmlTag(const std::wstring& text)
   // special chars are done straight away
 
   // add this to the list as a text only item.
-  m_data.push_back( new SimpleHtmlData(EscapeText(text)));
-}
-
-/**
- * \brief Escape a given text
- * \param std::wstring the text we want to excape
- * \return the escaped text
- */
-std::wstring TagsParser::EscapeText(const std::wstring& src) const
-{
-  auto text = src;
-  text = myodd::strings::Replace(text, L"&nbsp;", L" ", false);
-  text = myodd::strings::Replace(text, L"&lt;", L"<", false);
-  text = myodd::strings::Replace(text, L"&gt;", L">", false);
-  text = myodd::strings::Replace(text, L"&amp;", L"&", false);
-  text = myodd::strings::Replace(text, L"&deg;", std::wstring(1, wchar_t(176)), false);    //  degree
-  text = myodd::strings::Replace(text, L"&plusmn;", std::wstring(1, wchar_t(177)), false); //  Plus/minus symbol
-
-  return text;
+  m_data.AddContent( text);
 }
 
 void TagsParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )

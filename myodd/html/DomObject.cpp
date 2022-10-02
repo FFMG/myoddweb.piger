@@ -1,21 +1,21 @@
 #include "DomObject.h"
 
 namespace myodd { namespace html {
-DomObject::DomObject(const std::wstring& text, Tag* tagData) :
-  _text(text)
+DomObject::DomObject(const std::wstring& text) :
+  _text(text),
+  _tag(nullptr)
 {
-  _tag = tagData == nullptr ? nullptr :  Tag::CreateFromSource(*tagData);
 }
 
-DomObject::DomObject(Tag* tagData) :
-  DomObject( L"", tagData)
+DomObject::DomObject(const Tag& tagData)
 {
-
+  _tag = Tag::CreateFromSource(tagData);
 }
 
 DomObject::DomObject(const DomObject& rhs) :
-  DomObject( rhs._text, rhs._tag)
+  _text(rhs._text)
 {
+  _tag = rhs._tag == nullptr ? nullptr : Tag::CreateFromSource(*rhs._tag);
 }
 
 DomObject::~DomObject()

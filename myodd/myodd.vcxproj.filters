@@ -293,6 +293,9 @@
     <ClCompile Include="html\DomObject.cpp">
       <Filter>html</Filter>
     </ClCompile>
+    <ClCompile Include="html\DomObjects.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -472,6 +475,9 @@
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\DomObject.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObjects.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>

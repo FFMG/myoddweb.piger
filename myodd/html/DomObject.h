@@ -6,10 +6,10 @@ namespace myodd { namespace html {
   class DomObject
   {
   protected:
-    DomObject(const std::wstring& text, Tag* tagData);
+    DomObject(const std::wstring& text);
 
   public:
-    DomObject( Tag* tagData);
+    DomObject( const Tag& tagData);
     DomObject( const DomObject& rhs );
     const DomObject& operator=(const DomObject& rhs) = delete;
 
