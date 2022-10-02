@@ -116,9 +116,6 @@
     <ClCompile Include="html\TagItalic.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\Tags.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
     <ClCompile Include="html\TagStrikeout.cpp">
       <Filter>html</Filter>
     </ClCompile>
@@ -355,9 +352,6 @@
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\TagItalic.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\Tags.h">
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\TagStrikeout.h">

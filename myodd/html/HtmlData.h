@@ -1,6 +1,6 @@
 #pragma once
 #include "../string/string.h"
-#include "Tags.h"
+#include "Tag.h"
 
 namespace myodd { namespace html {
   class HtmlData
