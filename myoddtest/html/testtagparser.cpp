@@ -35,14 +35,14 @@ TEST(BasicTagsParser, BrTagIsNotAnEndTag)
 {
   auto parser = new myodd::html::TagsParser();
 
+  // this tag does not follow the open/close strict XML tag.
+  // but it is legal html tag.
   auto dom = parser->Parse(L"<br>");
   ASSERT_EQ(1, dom.size());
 
   ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsClosing());
-  ASSERT_FALSE(dom[0]->IsOpening());   // We did not follow the xml strict mode
-                                        // this tag was left 'open'
-                                        // while it is valid it is not a start/end tag
+  ASSERT_TRUE(dom[0]->IsClosing());
+  ASSERT_TRUE(dom[0]->IsOpening());
   delete parser;
 }
 
@@ -53,15 +53,14 @@ TEST(BasicTagsParser, ClosedBrTagsAreLegal)
   auto dom = parser->Parse(L"<br/><br />");
   ASSERT_EQ(2, dom.size());
 
-  // NB: Although the tags are open/closed
-  //     it is not an end tag as such ... it is just a tag
-  //     that just happens to be closed right away.
+  // they are both open/close tags
+
   ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsClosing());
+  ASSERT_TRUE(dom[0]->IsClosing());
   ASSERT_TRUE(dom[0]->IsOpening());
 
   ASSERT_TRUE(dom[1]->IsHtmlTag());
-  ASSERT_FALSE(dom[1]->IsClosing());
+  ASSERT_TRUE(dom[1]->IsClosing());
   ASSERT_TRUE(dom[1]->IsOpening());
 
   delete parser;

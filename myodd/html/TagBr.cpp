@@ -3,7 +3,7 @@
 
 namespace myodd{ namespace html{
 TagBr::TagBr(const Attributes& attributes, int tagType) :
-  Tag(attributes, tagType)
+  Tag(attributes, tagType | Closing | Opening  )
 {
 }
 

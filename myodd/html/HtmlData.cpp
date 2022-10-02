@@ -2,11 +2,11 @@
 
 namespace myodd { namespace html {
 HtmlData::HtmlData(const std::wstring& text, Tag* tagData) :
-  _text(text),
-  _tag(tagData)
+  _text(text)
 {
-
+  _tag = tagData == nullptr ? nullptr :  Tags::CreateFromSource(*tagData);
 }
+
 HtmlData::HtmlData(Tag* tagData) :
   HtmlData( L"", tagData)
 {
@@ -16,6 +16,11 @@ HtmlData::HtmlData(Tag* tagData) :
 HtmlData::HtmlData(const HtmlData& rhs) : 
   HtmlData( rhs._text, rhs._tag)
 {
+}
+
+HtmlData::~HtmlData()
+{
+  delete _tag;
 }
 
 const int HtmlData::TextLength() const

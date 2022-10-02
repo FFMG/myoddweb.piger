@@ -13,7 +13,7 @@ namespace myodd { namespace html {
     HtmlData( const HtmlData& rhs );
     const HtmlData& operator=(const HtmlData& rhs) = delete;
 
-    virtual ~HtmlData() = default;
+    virtual ~HtmlData();
 
     // helpers
     const int TextLength() const;
