@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "../string/string.h"
-#include "Tags.h"
 #include "HtmlData.h"
 
 namespace myodd { namespace html {

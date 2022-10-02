@@ -4,7 +4,7 @@ namespace myodd { namespace html {
 HtmlData::HtmlData(const std::wstring& text, Tag* tagData) :
   _text(text)
 {
-  _tag = tagData == nullptr ? nullptr :  Tags::CreateFromSource(*tagData);
+  _tag = tagData == nullptr ? nullptr :  Tag::CreateFromSource(*tagData);
 }
 
 HtmlData::HtmlData(Tag* tagData) :
