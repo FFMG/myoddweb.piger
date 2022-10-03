@@ -69,9 +69,6 @@ void Tag::Pop(HDC hdc, LOGFONT& logFont )
   if( _depth >= 1 )
   {
     // pop the attributes
-    assert(0);  // we need to pop the parent attribute
-                // a closing tag does not have attributes to pop!
-
     OnPop(hdc, logFont );
     --_depth;
   }
