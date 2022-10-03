@@ -2,6 +2,7 @@
 #include "AttributesParser.h"
 #include <algorithm>
 #include "DomObjectTag.h"
+#include "DomObjectClosingTag.h"
 #include "DomObjectContent.h"
 
 namespace myodd { namespace html {
@@ -414,7 +415,17 @@ SIZE TagsParser::Apply( const HDC hdc,
     auto lf = GetCurrentLogFont();
     if(isTag->IsClosing() )
     {
-      isTag->Pop( hdc, lf );
+      auto isClosingTag = dynamic_cast<DomObjectClosingTag*>(hd);
+      // if it is an opening/closing tag then it is possible that
+      // we do not have a formal closing tag object.
+      if (nullptr != isClosingTag)
+      {
+        isClosingTag->Pop(hdc, lf);
+      }
+      else
+      {
+        isTag->Pop(hdc, lf);
+      }
       PopFont( hdc, lf );
     }
     else
