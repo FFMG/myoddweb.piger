@@ -1,5 +1,6 @@
 #include "DomObjects.h"
 #include "DomObjectTag.h"
+#include "DomObjectClosingTag.h"
 #include "DomObjectContent.h"
 
 namespace myodd { namespace html {
@@ -52,12 +53,78 @@ void DomObjects::Clear()
 
 void DomObjects::AddTag(const Tag& src)
 {
+  //  if this is the closing tag then we need to look for the opening tag.
+  // but if it is an opneing/closing tag then we do not need to worry about 
+  // looking for a parent, (for example <img /> or <br />
+  if (src.Is(Tag::Closing) && !src.Is(Tag::Opening))
+  {
+    auto parent = FindOpeningTag(src.TagType());
+    if (nullptr != parent)
+    {
+      push_back(new DomObjectClosingTag(src, parent->TagData() ));
+      return;
+    }
+
+    // if we could not find a parent, just add it to the list.
+  }
+
+  // this is an opening tag
   push_back(new DomObjectTag(src));
 }
 
 void DomObjects::AddContent(const std::wstring& content)
 {
   push_back(new DomObjectContent(EscapeText(content)));
+}
+
+/**
+ * \brief given a closing chain, look for the opening chain.
+ * \param Tag::Type the parent tag we are looking for.
+ * \return DomObject* the parent object or nullptr if we could not find one.
+ */
+DomObjectTag* DomObjects::FindOpeningTag(Tag::Type tagType ) const
+{
+  // we want to check in reverse for the last open one
+  // that is not already closed.
+  // in case we have something like <i>...<i>...</i></i> then the second </i> is not the one we want.
+  auto skipTag = 0;
+  for (auto it = rbegin(); it != rend(); it++)
+  {
+    auto tag = dynamic_cast<DomObjectTag*>(*it);
+    if (tag == nullptr)
+    {
+      // it is not a tag
+      continue;
+    }
+
+    if (!tag->TagData().Is(tagType))
+    {
+      // not the tag we are looking for.
+      continue;
+    }
+
+    if (tag->TagData().Is(Tag::Closing))
+    {
+      // this is another closing tag
+      // so we must look for its opening tag.
+      ++skipTag;
+      continue;
+    }
+
+    // this is the tag we are looking for
+    // but are we skipping it?
+    if (skipTag > 0)
+    {
+      --skipTag;
+      continue;
+    }
+
+    // this is our opening tag!
+    return tag;
+  }
+
+  // could not find the parent
+  return nullptr;
 }
 
 /**

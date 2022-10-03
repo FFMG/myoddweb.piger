@@ -295,6 +295,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="html\DomObjectClosingTag.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\DomObjectContent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
@@ -677,6 +687,7 @@
     <ClInclude Include="html\AttributeValue.h" />
     <ClInclude Include="html\AttributeValueColor.h" />
     <ClInclude Include="html\DomObject.h" />
+    <ClInclude Include="html\DomObjectClosingTag.h" />
     <ClInclude Include="html\DomObjectContent.h" />
     <ClInclude Include="html\DomObjects.h" />
     <ClInclude Include="html\DomObjectTag.h" />

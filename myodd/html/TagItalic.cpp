@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagItalic::TagItalic(const Attributes& attributes, int tagType) :
-  Tag(attributes, tagType)
+TagItalic::TagItalic(const Attributes& attributes, int tagStyle) :
+  Tag(attributes, tagStyle)
 {
 }
 

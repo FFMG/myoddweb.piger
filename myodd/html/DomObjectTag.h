@@ -13,7 +13,16 @@ namespace myodd { namespace html {
 
     virtual ~DomObjectTag();
 
+    /***
+     * \brief check if this is a closing tag
+     * \return bool if this is a closing or not
+     */
     bool IsClosing() const;
+
+    /***
+     * \brief check if this is an opening tag
+     * \return bool if this is an opening or not
+     */
     bool IsOpening() const;
     Tag& TagData() const;
 

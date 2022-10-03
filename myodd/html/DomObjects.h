@@ -2,6 +2,7 @@
 #include <vector>
 #include "Tag.h"
 #include "DomObject.h"
+#include "DomObjectTag.h"
 
 namespace myodd { namespace html {
 class DomObjects : public std::vector<DomObject*>
@@ -23,5 +24,12 @@ public:
 
 private:
   std::wstring EscapeText(const std::wstring& src) const;
+
+  /**
+   * \brief given a closing chain, look for the opening chain.
+   * \param Tag::Type the parent tag we are looking for.
+   * \return DomObject* the parent object or nullptr if we could not find one.
+   */
+  DomObjectTag* FindOpeningTag(Tag::Type tagType ) const;
 };
 }}

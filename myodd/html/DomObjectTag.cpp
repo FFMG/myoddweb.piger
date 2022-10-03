@@ -50,11 +50,19 @@ void DomObjectTag::Pop(HDC hdc, LOGFONT& logFont)
   }
 }
 
+/***
+ * \brief check if this is a closing tag
+ * \return bool if this is a closing or not
+ */
 bool DomObjectTag::IsClosing() const
 {
   return _tag == nullptr ? false : _tag->Is(Tag::Closing);
 }
 
+/***
+ * \brief check if this is an opening tag
+ * \return bool if this is an opening or not
+ */
 bool DomObjectTag::IsOpening() const
 {
   return _tag == nullptr ? false : _tag->Is(Tag::Opening);

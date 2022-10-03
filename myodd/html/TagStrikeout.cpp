@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagStrikeout::TagStrikeout(const Attributes& attributes, int tagType) :
-Tag(attributes, tagType )
+TagStrikeout::TagStrikeout(const Attributes& attributes, int tagStyle) :
+Tag(attributes, tagStyle)
 {
 }
 

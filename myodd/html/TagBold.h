@@ -6,11 +6,17 @@ namespace myodd{ namespace html{
 class TagBold : public Tag
 {
 public:
-  TagBold(const Attributes& attributes, int tagType);
+  TagBold(const Attributes& attributes, int tagStyle);
   virtual ~TagBold();
 
   TagBold(const TagBold&);
   TagBold& operator=(const TagBold&);
+
+  /**
+   * \brief get the current tag type
+   * \return the tag type
+   */
+  virtual Type TagType() const { return Type::Bold; }
 
 protected:
   // apply the style

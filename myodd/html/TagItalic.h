@@ -6,11 +6,17 @@ namespace myodd{ namespace html{
 class TagItalic : public Tag
 {
 public:
-  TagItalic(const Attributes& attributes, int tagType);
+  TagItalic(const Attributes& attributes, int tagStyle);
   virtual ~TagItalic();
 
   TagItalic(const TagItalic&);
   TagItalic& operator=(const TagItalic&);
+
+  /**
+   * \brief get the current tag type
+   * \return the tag type
+   */
+  virtual Type TagType() const { return Type::Italic; }
 
 protected:
   // apply the style

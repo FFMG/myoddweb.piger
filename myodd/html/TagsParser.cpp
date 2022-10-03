@@ -215,8 +215,7 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   assert(end - begin > 0);  // how can the tag be empty??
-  auto text = std::wstring(end - begin, '\0');
-  std::transform(begin, end, text.begin(), ::tolower);
+  auto text = std::wstring(begin, end);
 
   // look for the matching Tag for that tag
   // the Tag is what does the basic string transformation.

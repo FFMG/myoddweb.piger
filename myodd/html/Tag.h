@@ -9,12 +9,22 @@ class Tag
 public:
   enum Type
   {
+    Bold,
+    Br,
+    Italic,
+    Small,
+    StrikeOut,
+    UnderLine
+  };
+
+  enum Style
+  {
     None    = 0,
     Opening = 1,
     Closing = 2
   };
 
-  Tag( const Attributes& attributes, int tagType );
+  Tag( const Attributes& attributes, int tagStyle);
   virtual ~Tag() = default;
 
   Tag(const Tag&);
@@ -31,6 +41,12 @@ public:
   }
 
   /**
+   * \brief get the current tag type
+   * \return the tag type
+   */
+  virtual Type TagType() const = 0;
+
+  /**
    * \brief check if something of a given type.
    * \param const Type the type we are checking
    * \return bool if the flag we are checking is set
@@ -38,13 +54,20 @@ public:
   bool Is(Type type) const;
 
   /**
+   * \brief check if something of a given style.
+   * \param const Style the style we are checking
+   * \return bool if the style is the one we are looking for.
+   */
+  bool Is(Style style) const;
+
+  /**
    * \brief create a tag given the tag name.
    * \param const std::wstring& the tag name we will be looking for.
    * \param const Attributes& the tag attributes
-   * \param const int& the type flag, (open/closed etc)
+   * \param const int& the style flag, (open/closed etc)
    * \return Tag* or nullptr if the tag cannot be created
    */
-  static Tag* CreateFromString(const std::wstring& tagName, const Attributes& attributes, const int& tagType);
+  static Tag* CreateFromString(const std::wstring& tagName, const Attributes& attributes, const int& tagStyle);
 
   /**
    * \brief given a source tag, make a copy of it.
@@ -71,8 +94,8 @@ private:
   Attributes _attributes;
 
   /**
-   * \brief the tag type.
+   * \brief the tag style.
    */
-  int _tagType;
+  int _tagStyle;
 };
 }}
