@@ -21,23 +21,21 @@ DomObjectContent& DomObjectContent::operator=(const DomObjectContent& rhs)
   return *this;
 }
 
-const int DomObjectContent::TextLength() const
+/**
+ * \brief get the length of text
+ * \return int the length
+ */
+const unsigned int DomObjectContent::TextLength() const
 {
-  return static_cast<int>(_text.length());
+  return static_cast<unsigned int>(_text.length());
 }
 
+/**
+ * \brief the text/content of this object
+ * \return const std::wstring& the text
+ */
 const std::wstring& DomObjectContent::Text() const
 {
   return _text;
-}
-
-// apply the style
-void DomObjectContent::Push(HDC hdc, LOGFONT& logFont)
-{
-}
-
-// remove the style
-void DomObjectContent::Pop(HDC hdc, LOGFONT& logFont)
-{
 }
 }}

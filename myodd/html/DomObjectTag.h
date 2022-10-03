@@ -24,6 +24,9 @@ namespace myodd { namespace html {
     void Pop(HDC hdc, LOGFONT& logFont);
 
   protected:
+    /**
+     * \brief the tag we are working with.
+     */
     Tag* _tag;
   };
 }}

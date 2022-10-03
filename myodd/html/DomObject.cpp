@@ -14,7 +14,7 @@ DomObject& DomObject::operator=(const DomObject& rhs)
 {
   if (this != &rhs)
   {
-
+    // copy values.
   }
   return *this;
 }

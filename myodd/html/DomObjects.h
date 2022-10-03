@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Tag.h"
 #include "DomObject.h"
 
 namespace myodd { namespace html {

@@ -15,16 +15,23 @@ public:
   virtual ~DomObjectContent() = default;
 
   // helpers
-  const int TextLength() const;
+
+  /**
+   * \brief get the length of text
+   * \return int the length
+   */
+  const unsigned int TextLength() const;
+
+  /**
+   * \brief the text/content of this object
+   * \return const std::wstring& the text
+   */
   const std::wstring& Text() const;
 
-  // apply the style
-  void Push(HDC hdc, LOGFONT& logFont);
-
-  // remove the style
-  void Pop(HDC hdc, LOGFONT& logFont);
-
 private:
+  /**
+   * \brief the content of the object
+   */
   std::wstring _text;
 };
 }}
