@@ -1,6 +1,8 @@
 #include "html/TagsParser.h"
 #include <gtest/gtest.h>
 
+#include "html/DomObjectContent.h"
+#include "html/DomObjectTag.h"
 #include "../testcommon.h"
 
 TEST(BasicTagsParser, NothingToParse)
@@ -20,13 +22,16 @@ TEST(BasicTagsParser, SpacesAreMaintained)
   auto dom = parser->Parse(L"   <br>  ");
   ASSERT_EQ(3, dom.size());
 
-  ASSERT_FALSE(dom[0]->IsHtmlTag());
-  ASSERT_TRUE(dom[0]->Text() == L"   ");
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0!= nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"   ");
 
-  ASSERT_TRUE(dom[1]->IsHtmlTag());
+  auto isTag = dynamic_cast<myodd::html::DomObjectTag*>(dom[1]);
+  EXPECT_TRUE(isTag != nullptr);
 
-  ASSERT_FALSE(dom[2]->IsHtmlTag());
-  ASSERT_TRUE(dom[2]->Text() == L"  ");
+  auto isContent2 = dynamic_cast<myodd::html::DomObjectContent*>(dom[2]);
+  EXPECT_TRUE(isContent2 != nullptr);
+  ASSERT_TRUE(isContent2->Text() == L"  ");
 
   delete parser;
 }
@@ -40,9 +45,10 @@ TEST(BasicTagsParser, BrTagIsNotAnEndTag)
   auto dom = parser->Parse(L"<br>");
   ASSERT_EQ(1, dom.size());
 
-  ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_TRUE(dom[0]->IsClosing());
-  ASSERT_TRUE(dom[0]->IsOpening());
+  auto isTag = dynamic_cast<myodd::html::DomObjectTag*>(dom[0]);
+  EXPECT_TRUE(isTag != nullptr);
+  ASSERT_TRUE(isTag->IsClosing());
+  ASSERT_TRUE(isTag->IsOpening());
   delete parser;
 }
 
@@ -55,13 +61,15 @@ TEST(BasicTagsParser, ClosedBrTagsAreLegal)
 
   // they are both open/close tags
 
-  ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_TRUE(dom[0]->IsClosing());
-  ASSERT_TRUE(dom[0]->IsOpening());
+  auto isTag0 = dynamic_cast<myodd::html::DomObjectTag*>(dom[0]);
+  EXPECT_TRUE(isTag0 != nullptr);
+  ASSERT_TRUE(isTag0->IsClosing());
+  ASSERT_TRUE(isTag0->IsOpening());
 
-  ASSERT_TRUE(dom[1]->IsHtmlTag());
-  ASSERT_TRUE(dom[1]->IsClosing());
-  ASSERT_TRUE(dom[1]->IsOpening());
+  auto isTag1 = dynamic_cast<myodd::html::DomObjectTag*>(dom[1]);
+  EXPECT_TRUE(isTag1 != nullptr);
+  ASSERT_TRUE(isTag1->IsClosing());
+  ASSERT_TRUE(isTag1->IsOpening());
 
   delete parser;
 }
@@ -73,8 +81,9 @@ TEST(BasicTagsParser, NoHtmlTags)
   auto dom = parser->Parse(L"Hello");
   ASSERT_EQ(1, dom.size());
 
-  ASSERT_FALSE(dom[0]->IsHtmlTag());
-  ASSERT_TRUE(dom[0]->Text() == L"Hello");
+  auto isContent = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent != nullptr);
+  ASSERT_TRUE(isContent->Text() == L"Hello");
 
   delete parser;
 }
@@ -86,14 +95,17 @@ TEST(BasicTagsParser, SimpleSmallTag)
   auto dom = parser->Parse(L"<small>Hello</small>");
   ASSERT_EQ(3, dom.size()); //  we have 3 parts
 
-  ASSERT_TRUE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsClosing());
+  auto isTag0 = dynamic_cast<myodd::html::DomObjectTag*>(dom[0]);
+  EXPECT_TRUE(isTag0 != nullptr);
+  ASSERT_FALSE(isTag0->IsClosing());
 
-  ASSERT_FALSE(dom[1]->IsHtmlTag());
-  ASSERT_TRUE(dom[1]->Text() == L"Hello");
+  auto isContent = dynamic_cast<myodd::html::DomObjectContent*>(dom[1]);
+  EXPECT_TRUE(isContent != nullptr);
+  ASSERT_TRUE(isContent->Text() == L"Hello");
 
-  ASSERT_TRUE(dom[2]->IsHtmlTag());
-  ASSERT_TRUE(dom[2]->IsClosing());
+  auto isTag2 = dynamic_cast<myodd::html::DomObjectTag*>(dom[2]);
+  EXPECT_TRUE(isTag2 != nullptr);
+  ASSERT_TRUE(isTag2->IsClosing());
 
   delete parser;
 }
@@ -106,12 +118,15 @@ TEST(BasicTagsParser, NonExistentTag)
   ASSERT_EQ(3, dom.size()); //  we have 3 parts
 
   // none of them are html tags as we do not know them
-  ASSERT_FALSE(dom[0]->IsHtmlTag());
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
   
-  ASSERT_FALSE(dom[1]->IsHtmlTag());
-  ASSERT_TRUE(dom[1]->Text() == L"Hello");
+  auto isContent1 = dynamic_cast<myodd::html::DomObjectContent*>(dom[1]);
+  EXPECT_TRUE(isContent1 != nullptr);
+  ASSERT_TRUE(isContent1->Text() == L"Hello");
 
-  ASSERT_FALSE(dom[2]->IsHtmlTag());
+  auto isContent2 = dynamic_cast<myodd::html::DomObjectContent*>(dom[2]);
+  EXPECT_TRUE(isContent2 != nullptr);
 
   delete parser;
 }
@@ -124,7 +139,9 @@ TEST(BasicTagsParser, TagIsNotClosed)
   ASSERT_EQ(1, dom.size()); //  we have 1 parts
 
   // none of them are html tags as we do not know them
-  ASSERT_FALSE(dom[0]->IsHtmlTag());
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"<foo1 and <foo2");
 
   delete parser;
 }
@@ -136,14 +153,19 @@ TEST(BasicTagsParser, InvalidStartEndTagInsideAGoodNode)
   auto dom = parser->Parse(L"<small><foo1 and <foo2</small>");
   ASSERT_EQ(3, dom.size());
 
-  ASSERT_TRUE(dom[0]->IsHtmlTag());   // open <small>
-  ASSERT_FALSE(dom[0]->IsClosing());
+  auto isTag0 = dynamic_cast<myodd::html::DomObjectTag*>(dom[0]);
+  EXPECT_TRUE(isTag0 != nullptr);
+  ASSERT_FALSE(isTag0->IsClosing());
+  ASSERT_TRUE(isTag0->IsOpening());
 
-  ASSERT_FALSE(dom[1]->IsHtmlTag());  // garbage text '<foo1 and <foo2'
-  ASSERT_TRUE(dom[1]->Text() == L"<foo1 and <foo2");
+  auto isContent1 = dynamic_cast<myodd::html::DomObjectContent*>(dom[1]);
+  EXPECT_TRUE(isContent1 != nullptr);
+  ASSERT_TRUE(isContent1->Text() == L"<foo1 and <foo2");
 
-  ASSERT_TRUE(dom[2]->IsHtmlTag());   // close </small>
-  ASSERT_TRUE(dom[2]->IsClosing());   // close </small>
+  auto isTag2 = dynamic_cast<myodd::html::DomObjectTag*>(dom[2]);
+  EXPECT_TRUE(isTag2 != nullptr);
+  ASSERT_TRUE(isTag2->IsClosing());
+  ASSERT_FALSE(isTag2->IsOpening());
 
   delete parser;
 }
@@ -155,17 +177,23 @@ TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTag)
   auto dom = parser->Parse(L"<foo1 and <foo2<small>Hello</small>");
   ASSERT_EQ(4, dom.size());
 
-  ASSERT_FALSE(dom[0]->IsHtmlTag());  // garbage text '<foo1 and <foo2'
-  ASSERT_TRUE(dom[0]->Text() == L"<foo1 and <foo2");
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"<foo1 and <foo2");
 
-  ASSERT_TRUE(dom[1]->IsHtmlTag());   // open <small>
-  ASSERT_FALSE(dom[1]->IsClosing());
+  auto isTag1 = dynamic_cast<myodd::html::DomObjectTag*>(dom[1]);
+  EXPECT_TRUE(isTag1 != nullptr);
+  ASSERT_FALSE(isTag1->IsClosing());
+  ASSERT_TRUE(isTag1->IsOpening());
 
-  ASSERT_FALSE(dom[2]->IsHtmlTag());  // text in tag 'Hello'
-  ASSERT_TRUE(dom[2]->Text() == L"Hello");
+  auto isContent2 = dynamic_cast<myodd::html::DomObjectContent*>(dom[2]);
+  EXPECT_TRUE(isContent2 != nullptr);
+  ASSERT_TRUE(isContent2->Text() == L"Hello");
 
-  ASSERT_TRUE(dom[3]->IsHtmlTag());   // close </small>
-  ASSERT_TRUE(dom[3]->IsClosing());   // close </small>
+  auto isTag3 = dynamic_cast<myodd::html::DomObjectTag*>(dom[3]);
+  EXPECT_TRUE(isTag3 != nullptr);
+  ASSERT_TRUE(isTag3->IsClosing());
+  ASSERT_FALSE(isTag3->IsOpening());
 
   delete parser;
 }
@@ -177,21 +205,28 @@ TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTagWithBadTagsFater)
   auto dom = parser->Parse(L"<foo1 and <foo2<small>Hello</small><More<Wrong");
   ASSERT_EQ(5, dom.size());
 
-  ASSERT_FALSE(dom[0]->IsHtmlTag());  // garbage text '<foo1 and <foo2'
-  ASSERT_TRUE(dom[0]->Text() == L"<foo1 and <foo2");
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"<foo1 and <foo2");
 
-  ASSERT_TRUE(dom[1]->IsHtmlTag());   // open <small>
-  ASSERT_FALSE(dom[1]->IsClosing());
+  auto isTag1 = dynamic_cast<myodd::html::DomObjectTag*>(dom[1]);
+  EXPECT_TRUE(isTag1 != nullptr);
+  ASSERT_FALSE(isTag1->IsClosing());
+  ASSERT_TRUE(isTag1->IsOpening());
 
-  ASSERT_FALSE(dom[2]->IsHtmlTag());
-  ASSERT_TRUE(dom[2]->Text() == L"Hello");
+  auto isContent2 = dynamic_cast<myodd::html::DomObjectContent*>(dom[2]);
+  EXPECT_TRUE(isContent2 != nullptr);
+  ASSERT_TRUE(isContent2->Text() == L"Hello");
 
-  ASSERT_TRUE(dom[3]->IsHtmlTag());   // close </small>
-  ASSERT_TRUE(dom[3]->IsClosing());   // close </small>
+  auto isTag3 = dynamic_cast<myodd::html::DomObjectTag*>(dom[3]);
+  EXPECT_TRUE(isTag3 != nullptr);
+  ASSERT_TRUE(isTag3->IsClosing());
+  ASSERT_FALSE(isTag3->IsOpening());
 
   // thew rest is all wrong
-  ASSERT_FALSE(dom[4]->IsHtmlTag());
-  ASSERT_TRUE(dom[4]->Text() == L"<More<Wrong");
+  auto isContent4 = dynamic_cast<myodd::html::DomObjectContent*>(dom[4]);
+  EXPECT_TRUE(isContent4 != nullptr);
+  ASSERT_TRUE(isContent4->Text() == L"<More<Wrong");
 
   delete parser;
 }
@@ -204,8 +239,9 @@ TEST(BasicTagsParser, JustOneCharacter)
   ASSERT_EQ(1, dom.size());
 
   // none of them are html tags as we do not know them
-  ASSERT_FALSE(dom[0]->IsHtmlTag());  // garbage text
-  ASSERT_TRUE(dom[0]->Text() == L">");
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L">");
 
   delete parser;
 }
@@ -218,8 +254,9 @@ TEST(BasicTagsParser, NoOpenningTag)
   ASSERT_EQ(1, dom.size());
 
   // none of them are html tags as we do not know them
-  ASSERT_FALSE(dom[0]->IsHtmlTag());  // garbage text
-  ASSERT_TRUE(dom[0]->Text() == L"foo1>");
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"foo1>");
 
   delete parser;
 }
@@ -232,8 +269,9 @@ TEST(BasicTagsParser, NoClosingTag)
   ASSERT_EQ(1, dom.size());
 
   // none of them are html tags as we do not know them
-  ASSERT_FALSE(dom[0]->IsHtmlTag());  // garbage text
-  ASSERT_TRUE(dom[0]->Text() == L"<foo1");
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"<foo1");
 
   delete parser;
 }
@@ -246,7 +284,9 @@ TEST(BasicTagsParser, TagIsNotOpen)
   ASSERT_EQ(1, dom.size()); //  we have 3 parts
 
   // none of them are html tags as we do not know them
-  ASSERT_FALSE(dom[0]->IsHtmlTag());
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"foo>");
 
   delete parser;
 }
@@ -258,13 +298,14 @@ TEST(BasicTagsParser, TagCanBeClosedByItself)
   auto dom = parser->Parse(L"Foo</i>");
   ASSERT_EQ(2, dom.size());
 
-  ASSERT_FALSE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsClosing());
-  ASSERT_FALSE(dom[0]->IsOpening());
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"Foo");
 
-  ASSERT_TRUE(dom[1]->IsHtmlTag());
-  ASSERT_TRUE(dom[1]->IsClosing());
-  ASSERT_FALSE(dom[1]->IsOpening());
+  auto isTag1 = dynamic_cast<myodd::html::DomObjectTag*>(dom[1]);
+  EXPECT_TRUE(isTag1 != nullptr);
+  ASSERT_TRUE(isTag1->IsClosing());
+  ASSERT_FALSE(isTag1->IsOpening());
 
   delete parser;
 }
@@ -276,13 +317,14 @@ TEST(BasicTagsParser, TagCanBeOpenByItself)
   auto dom = parser->Parse(L"Foo<i>");
   ASSERT_EQ(2, dom.size());
 
-  ASSERT_FALSE(dom[0]->IsHtmlTag());
-  ASSERT_FALSE(dom[0]->IsClosing());
-  ASSERT_FALSE(dom[0]->IsOpening());
+  auto isContent0 = dynamic_cast<myodd::html::DomObjectContent*>(dom[0]);
+  EXPECT_TRUE(isContent0 != nullptr);
+  ASSERT_TRUE(isContent0->Text() == L"Foo");
 
-  ASSERT_TRUE(dom[1]->IsHtmlTag());
-  ASSERT_FALSE(dom[1]->IsClosing());
-  ASSERT_TRUE(dom[1]->IsOpening());
+  auto isTag1 = dynamic_cast<myodd::html::DomObjectTag*>(dom[1]);
+  EXPECT_TRUE(isTag1 != nullptr);
+  ASSERT_FALSE(isTag1->IsClosing());
+  ASSERT_TRUE(isTag1->IsOpening());
 
   delete parser;
 }

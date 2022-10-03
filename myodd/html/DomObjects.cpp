@@ -1,5 +1,6 @@
 #include "DomObjects.h"
-#include "SimpleHtmlData.h"
+#include "DomObjectTag.h"
+#include "DomObjectContent.h"
 
 namespace myodd { namespace html {
 DomObjects::~DomObjects()
@@ -19,13 +20,17 @@ DomObjects& DomObjects::operator=(const DomObjects& rhs)
     Clear();
     for (auto it = rhs.begin(); it != rhs.end(); ++it)
     {
-      if ((*it)->IsHtmlTag())
+      auto isTag = dynamic_cast<DomObjectTag*>(*it);
+      if ( isTag != nullptr )
       {
-        AddTag((*it)->TagData());
+        AddTag(isTag->TagData());
+        continue;
       }
-      else
+
+      auto isContent = dynamic_cast<DomObjectContent*>(*it);
+      if (isContent != nullptr)
       {
-        AddContent((*it)->Text());
+        AddContent(isContent->Text());
       }
     }
   }
@@ -47,12 +52,12 @@ void DomObjects::Clear()
 
 void DomObjects::AddTag(const Tag& src)
 {
-  push_back(new DomObject(src));
+  push_back(new DomObjectTag(src));
 }
 
 void DomObjects::AddContent(const std::wstring& content)
 {
-  push_back(new SimpleHtmlData(EscapeText(content)));
+  push_back(new DomObjectContent(EscapeText(content)));
 }
 
 /**

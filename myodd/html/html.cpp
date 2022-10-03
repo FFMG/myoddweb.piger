@@ -7,6 +7,8 @@
 #include <assert.h>
 #include "html.h"
 #include "TagsParser.h"
+#include "DomObjectContent.h"
+#include "DomObjectTag.h"
 
 namespace myodd{ namespace html{
   /**
@@ -175,7 +177,12 @@ namespace myodd{ namespace html{
          )
     {
       const auto hd = (*it);
-      if( !hd->IsHtmlTag() || !hd->TagData().ToNextLine() )
+
+      // is it a content or a tag
+      auto isContent = dynamic_cast<DomObjectContent*>(hd);
+      auto isTag = dynamic_cast<DomObjectTag*>(hd);
+
+      if(isContent != nullptr || (isTag != nullptr && !isTag->TagData().ToNextLine()))
       {
         if(  it == last )
         {

@@ -245,9 +245,6 @@
     <ClCompile Include="common\commandline_variables.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="html\SimpleHtmlData.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
     <ClCompile Include="html\Tag.cpp">
       <Filter>html</Filter>
     </ClCompile>
@@ -294,6 +291,12 @@
       <Filter>html</Filter>
     </ClCompile>
     <ClCompile Include="html\DomObjects.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectContent.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectTag.cpp">
       <Filter>html</Filter>
     </ClCompile>
   </ItemGroup>
@@ -432,9 +435,6 @@
     <ClInclude Include="HtmlData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="html\SimpleHtmlData.h">
-      <Filter>html</Filter>
-    </ClInclude>
     <ClInclude Include="html\Tag.h">
       <Filter>html</Filter>
     </ClInclude>
@@ -481,6 +481,12 @@
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\DomObjects.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObjectContent.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObjectTag.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>

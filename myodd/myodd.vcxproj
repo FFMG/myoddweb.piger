@@ -295,7 +295,27 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="html\DomObjectContent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\DomObjects.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectTag.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
@@ -313,16 +333,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="html\SimpleHtmlData.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|Win32'">
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="html\Tag.cpp">
@@ -666,9 +676,10 @@
     <ClInclude Include="html\AttributeValue.h" />
     <ClInclude Include="html\AttributeValueColor.h" />
     <ClInclude Include="html\DomObject.h" />
+    <ClInclude Include="html\DomObjectContent.h" />
     <ClInclude Include="html\DomObjects.h" />
+    <ClInclude Include="html\DomObjectTag.h" />
     <ClInclude Include="html\html.h" />
-    <ClInclude Include="html\SimpleHtmlData.h" />
     <ClInclude Include="html\Tag.h" />
     <ClInclude Include="html\TagBold.h" />
     <ClInclude Include="html\TagBr.h" />

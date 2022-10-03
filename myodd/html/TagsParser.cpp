@@ -1,6 +1,8 @@
 #include "TagsParser.h"
 #include "AttributesParser.h"
 #include <algorithm>
+#include "DomObjectTag.h"
+#include "DomObjectContent.h"
 
 namespace myodd { namespace html {
   TagsParser::TagsParser() :
@@ -404,26 +406,28 @@ SIZE TagsParser::Apply( const HDC hdc,
   SIZE size = {0};
 
   // are we a tag?
-  if( hd->IsHtmlTag() )
+  auto isTag = dynamic_cast<DomObjectTag*>(hd);
+  if( nullptr != isTag )
   {
     // this function does single lines only
     // but when asked to parse from beginning to end we are 
     // given the tag that caused us to go to the next line
     auto lf = GetCurrentLogFont();
-    if( hd->IsClosing() )
+    if(isTag->IsClosing() )
     {
-      hd->Pop( hdc, lf );
+      isTag->Pop( hdc, lf );
       PopFont( hdc, lf );
     }
     else
     {
-      hd->Push(hdc, lf);
+      isTag->Push(hdc, lf);
       PushFont( hdc, lf );
     }
   }
 
   // we only output if we are not a string 
-  if( hd->TextLength() > 0 && !hd->IsHtmlTag() )
+  auto isContent = dynamic_cast<DomObjectTag*>(hd);
+  if(isContent != nullptr && isContent->TextLength() > 0 )
   {
     // in case the user has ellipses we need to use the rectangle 
     // as it was given to us.
@@ -454,11 +458,11 @@ SIZE TagsParser::Apply( const HDC hdc,
       bottomAlignedRect.top += paddingTop;
       bottomAlignedRect.bottom += (paddingTop+paddingBottom);
 
-      DrawText( hdc, hd->Text().c_str(), hd->TextLength(), &bottomAlignedRect, uFormat);
+      DrawText( hdc, isContent->Text().c_str(), isContent->TextLength(), &bottomAlignedRect, uFormat);
     }
 
     SIZE calcSize = {0};
-    CalculateSmartDimensions( calcSize, hdc, hd->Text().c_str(), hd->TextLength());
+    CalculateSmartDimensions( calcSize, hdc, isContent->Text().c_str(), isContent->TextLength());
 
     // given the size of the rectangle, update the various sizes.
     // they will be used later to make sure that we have the right sizes.
