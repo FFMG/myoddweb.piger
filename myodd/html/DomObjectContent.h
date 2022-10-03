@@ -10,7 +10,7 @@ public:
 
   DomObjectContent(const std::wstring& text);
   DomObjectContent(const DomObjectContent& rhs );
-  const DomObjectContent& operator=(const DomObjectContent& rhs) = delete;
+  DomObjectContent& operator=(const DomObjectContent& rhs);
 
   virtual ~DomObjectContent() = default;
 
@@ -24,7 +24,7 @@ public:
   // remove the style
   void Pop(HDC hdc, LOGFONT& logFont);
 
-protected:
-  const std::wstring _text;
+private:
+  std::wstring _text;
 };
 }}

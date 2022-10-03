@@ -6,19 +6,12 @@
 namespace myodd { namespace html {
   class DomObjectTag : public DomObject
   {
-  protected:
-    DomObjectTag(const std::wstring& text);
-
   public:
     DomObjectTag( const Tag& tagData);
     DomObjectTag( const DomObjectTag& rhs );
-    const DomObjectTag& operator=(const DomObjectTag& rhs) = delete;
+    DomObjectTag& operator=(const DomObjectTag& rhs);
 
     virtual ~DomObjectTag();
-
-    // helpers
-    const int TextLength() const;
-    const std::wstring& Text() const;
 
     bool IsClosing() const;
     bool IsOpening() const;
@@ -31,7 +24,6 @@ namespace myodd { namespace html {
     void Pop(HDC hdc, LOGFONT& logFont);
 
   protected:
-    const std::wstring _text;
     Tag* _tag;
   };
 }}

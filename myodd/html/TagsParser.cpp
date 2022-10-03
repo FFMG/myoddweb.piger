@@ -426,7 +426,7 @@ SIZE TagsParser::Apply( const HDC hdc,
   }
 
   // we only output if we are not a string 
-  auto isContent = dynamic_cast<DomObjectTag*>(hd);
+  auto isContent = dynamic_cast<DomObjectContent*>(hd);
   if(isContent != nullptr && isContent->TextLength() > 0 )
   {
     // in case the user has ellipses we need to use the rectangle 

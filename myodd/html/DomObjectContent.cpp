@@ -6,9 +6,19 @@ DomObjectContent::DomObjectContent(const std::wstring& text) :
 {
 }
 
-DomObjectContent::DomObjectContent(const DomObjectContent& rhs) :
-  _text(rhs._text)
+DomObjectContent::DomObjectContent(const DomObjectContent& rhs)
 {
+  *this = rhs;
+}
+
+DomObjectContent& DomObjectContent::operator=(const DomObjectContent& rhs)
+{
+  if (this != &rhs)
+  {
+    DomObject::operator=(rhs);
+    _text = rhs._text;
+  }
+  return *this;
 }
 
 const int DomObjectContent::TextLength() const

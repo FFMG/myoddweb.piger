@@ -7,16 +7,19 @@
 
 TEST(BasicTagsParser, NothingToParse)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"");
   ASSERT_EQ(0, dom.size()); //  nothing at all...
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, SpacesAreMaintained)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"   <br>  ");
@@ -34,10 +37,12 @@ TEST(BasicTagsParser, SpacesAreMaintained)
   ASSERT_TRUE(isContent2->Text() == L"  ");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, BrTagIsNotAnEndTag)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   // this tag does not follow the open/close strict XML tag.
@@ -50,10 +55,12 @@ TEST(BasicTagsParser, BrTagIsNotAnEndTag)
   ASSERT_TRUE(isTag->IsClosing());
   ASSERT_TRUE(isTag->IsOpening());
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, ClosedBrTagsAreLegal)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<br/><br />");
@@ -72,10 +79,12 @@ TEST(BasicTagsParser, ClosedBrTagsAreLegal)
   ASSERT_TRUE(isTag1->IsOpening());
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, NoHtmlTags)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"Hello");
@@ -86,10 +95,12 @@ TEST(BasicTagsParser, NoHtmlTags)
   ASSERT_TRUE(isContent->Text() == L"Hello");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, SimpleSmallTag)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<small>Hello</small>");
@@ -108,10 +119,12 @@ TEST(BasicTagsParser, SimpleSmallTag)
   ASSERT_TRUE(isTag2->IsClosing());
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, NonExistentTag)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo>Hello</foo>");
@@ -129,10 +142,12 @@ TEST(BasicTagsParser, NonExistentTag)
   EXPECT_TRUE(isContent2 != nullptr);
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, TagIsNotClosed)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1 and <foo2");
@@ -144,10 +159,12 @@ TEST(BasicTagsParser, TagIsNotClosed)
   ASSERT_TRUE(isContent0->Text() == L"<foo1 and <foo2");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, InvalidStartEndTagInsideAGoodNode)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<small><foo1 and <foo2</small>");
@@ -168,10 +185,12 @@ TEST(BasicTagsParser, InvalidStartEndTagInsideAGoodNode)
   ASSERT_FALSE(isTag2->IsOpening());
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTag)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1 and <foo2<small>Hello</small>");
@@ -196,10 +215,12 @@ TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTag)
   ASSERT_FALSE(isTag3->IsOpening());
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTagWithBadTagsFater)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1 and <foo2<small>Hello</small><More<Wrong");
@@ -229,10 +250,12 @@ TEST(BasicTagsParser, TagIsNotClosedThenWeHaveAGoodTagWithBadTagsFater)
   ASSERT_TRUE(isContent4->Text() == L"<More<Wrong");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, JustOneCharacter)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L">");
@@ -244,10 +267,12 @@ TEST(BasicTagsParser, JustOneCharacter)
   ASSERT_TRUE(isContent0->Text() == L">");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, NoOpenningTag)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"foo1>");
@@ -259,10 +284,12 @@ TEST(BasicTagsParser, NoOpenningTag)
   ASSERT_TRUE(isContent0->Text() == L"foo1>");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, NoClosingTag)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"<foo1");
@@ -274,10 +301,12 @@ TEST(BasicTagsParser, NoClosingTag)
   ASSERT_TRUE(isContent0->Text() == L"<foo1");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, TagIsNotOpen)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"foo>");
@@ -289,10 +318,12 @@ TEST(BasicTagsParser, TagIsNotOpen)
   ASSERT_TRUE(isContent0->Text() == L"foo>");
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, TagCanBeClosedByItself)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"Foo</i>");
@@ -308,10 +339,12 @@ TEST(BasicTagsParser, TagCanBeClosedByItself)
   ASSERT_FALSE(isTag1->IsOpening());
 
   delete parser;
+  MEMORY_GUARD_END
 }
 
 TEST(BasicTagsParser, TagCanBeOpenByItself)
 {
+  MEMORY_GUARD_START
   auto parser = new myodd::html::TagsParser();
 
   auto dom = parser->Parse(L"Foo<i>");
@@ -327,4 +360,46 @@ TEST(BasicTagsParser, TagCanBeOpenByItself)
   ASSERT_TRUE(isTag1->IsOpening());
 
   delete parser;
+  MEMORY_GUARD_END
+}
+
+TEST(BasicTagsParser, CopyOfDomObjectDoesNotLeak)
+{
+  MEMORY_GUARD_START
+  auto parser = new myodd::html::TagsParser();
+  auto dom = parser->Parse(L"<i>Small Test<b>With Many Objects</b><strong>Here</strong></i>");
+
+  // make a copy
+  auto copyOfDom = myodd::html::DomObjects(dom);
+  
+  // the copy is the same 
+  ASSERT_TRUE(dom.size() > 0);
+  ASSERT_EQ(dom.size(), copyOfDom.size());
+
+  delete parser;
+  MEMORY_GUARD_END
+}
+
+TEST(BasicTagsParser, CopyOfDomObjectDoesNotLeakWhenASssignNewValue)
+{
+  MEMORY_GUARD_START
+    auto parser = new myodd::html::TagsParser();
+  auto dom = parser->Parse(L"<i>Small Test<b>With Many Objects</b><strong>Here</strong></i>");
+
+  // make a copy
+  auto copyOfDom = myodd::html::DomObjects(dom);
+
+  // the copy is the same 
+  ASSERT_TRUE(dom.size() > 0);
+  ASSERT_EQ(dom.size(), copyOfDom.size());
+
+  // give it a new value
+  dom = parser->Parse(L"<i>Small</i>");
+
+  // no longer the same
+  ASSERT_TRUE(dom.size() > 0);
+  ASSERT_FALSE(dom.size() == copyOfDom.size());
+
+  delete parser;
+  MEMORY_GUARD_END
 }

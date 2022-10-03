@@ -184,5 +184,8 @@
     <ClCompile Include="html\testattributeparser.cpp">
       <Filter>myodd\html</Filter>
     </ClCompile>
+    <ClCompile Include="html\testdomobjecttag.cpp">
+      <Filter>myodd\html</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

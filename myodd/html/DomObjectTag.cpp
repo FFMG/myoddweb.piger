@@ -1,36 +1,30 @@
 #include "DomObjectTag.h"
 
 namespace myodd { namespace html {
-DomObjectTag::DomObjectTag(const std::wstring& text) : DomObject(),
-  _text(text),
-  _tag(nullptr)
-{
-}
-
 DomObjectTag::DomObjectTag(const Tag& tagData)
 {
   _tag = Tag::CreateFromSource(tagData);
 }
 
-DomObjectTag::DomObjectTag(const DomObjectTag& rhs) :
-  _text(rhs._text)
+DomObjectTag::DomObjectTag(const DomObjectTag& rhs)
 {
-  _tag = rhs._tag == nullptr ? nullptr : Tag::CreateFromSource(*rhs._tag);
+  *this = rhs;
+}
+
+DomObjectTag& DomObjectTag::operator=(const DomObjectTag& rhs)
+{
+  if (this != &rhs)
+  {
+    delete _tag;
+    DomObject::operator=(rhs);
+    _tag = rhs._tag == nullptr ? nullptr : Tag::CreateFromSource(*rhs._tag);
+  }
+  return *this;
 }
 
 DomObjectTag::~DomObjectTag()
 {
   delete _tag;
-}
-
-const int DomObjectTag::TextLength() const
-{
-  return static_cast<int>(_text.length());
-}
-
-const std::wstring& DomObjectTag::Text() const
-{
-  return _text;
 }
 
 Tag& DomObjectTag::TagData() const
