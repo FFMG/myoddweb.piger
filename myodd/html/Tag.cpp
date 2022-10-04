@@ -6,6 +6,7 @@
 #include "TagUnderline.h"
 #include "TagBr.h"
 #include "TagStrikeout.h"
+#include "TagSpan.h"
 
 namespace myodd{ namespace html{
 Tag::Tag(const Attributes& attributes, int tagStyle) :
@@ -129,6 +130,16 @@ Tag* Tag::CreateFromSource(const Tag& src)
     }
     break;
 
+  case Span:
+  {
+    auto tagSpan = dynamic_cast<const TagSpan*>(&src);
+    if (nullptr != tagSpan)
+    {
+      return new TagSpan(*tagSpan);
+    }
+  }
+  break;
+
   case StrikeOut:
     {
       auto tagStrikeout = dynamic_cast<const TagStrikeout*>(&src);
@@ -199,6 +210,13 @@ Tag* Tag::CreateFromString(const std::wstring& tagName, const Attributes& attrib
     if (_tcsncmp(lpString, L"em", nLen) == 0)
     {
       return new TagItalic(attributes, tagStyle);
+    }
+    break;
+
+  case 4:
+    if (_tcsncmp(lpString, L"span", nLen) == 0)
+    {
+      return new TagSpan(attributes, tagStyle);
     }
     break;
 

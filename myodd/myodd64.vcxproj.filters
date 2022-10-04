@@ -302,6 +302,9 @@
     <ClCompile Include="html\DomObjectClosingTag.cpp">
       <Filter>html</Filter>
     </ClCompile>
+    <ClCompile Include="html\TagSpan.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -493,6 +496,9 @@
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="html\DomObjectClosingTag.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagSpan.h">
       <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>
