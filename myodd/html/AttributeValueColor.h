@@ -30,10 +30,17 @@ protected:
   // copy the attribute values here.
   virtual void Copy(const AttributeValueColor& rhs);
 
-  // the actual color
-  RGB _rgb;
-
   static RGB CreateColor(const std::wstring& color);
   static unsigned short HexToInt(const std::wstring& hex );
+
+  /**
+   * \brief the colour we want to change our text to.
+   */
+  RGB _rgb;
+
+  /**
+   * \brief if not -1, then it is the color we need to pop back tp
+   */
+  COLORREF _previousColor;
 };
 }}

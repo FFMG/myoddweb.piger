@@ -69,6 +69,9 @@ void Tag::Pop(HDC hdc, LOGFONT& logFont )
   if( _depth >= 1 )
   {
     // pop the attributes
+    _attributes.Pop(hdc, logFont);
+
+    // then the main tag style
     OnPop(hdc, logFont );
     --_depth;
   }

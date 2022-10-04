@@ -2,13 +2,15 @@
 #include "AttributeValueColor.h"
 
 namespace myodd{ namespace html{
-AttributeValueColor::AttributeValueColor(const std::wstring& color)
+AttributeValueColor::AttributeValueColor(const std::wstring& color) :
+  _previousColor(-1)
 {
   _rgb = CreateColor(color);
 }
 
 AttributeValueColor::AttributeValueColor(const AttributeValueColor& rhs) :
-  AttributeValue( rhs )
+  AttributeValue( rhs ),
+  _previousColor( -1 )
 {
   Copy(rhs);
 }
@@ -22,13 +24,20 @@ AttributeValueColor& AttributeValueColor::operator=(const AttributeValueColor& r
 // apply the style
 void AttributeValueColor::Push(HDC hdc, LOGFONT& logFont)
 {
-
+  UNUSED_ALWAYS(logFont);
+  _previousColor = SetTextColor( hdc, RGB(_rgb.r, _rgb.g, _rgb.b ));
 }
 
 // remove the style
 void AttributeValueColor::Pop(HDC hdc, LOGFONT& logFont)
 {
-
+  UNUSED_ALWAYS(logFont);
+  //  restore the old one
+  if (_previousColor != -1)
+  {
+    SetTextColor( hdc, _previousColor );
+  }
+  _previousColor = -1;
 }
 
 AttributeValueColor::RGB AttributeValueColor::CreateColor(const std::wstring& color)
@@ -100,5 +109,6 @@ void AttributeValueColor::Copy(const AttributeValueColor& rhs)
 
   // copy variables.
   _rgb = rhs._rgb;
+  _previousColor = rhs._previousColor;
 }
 }}

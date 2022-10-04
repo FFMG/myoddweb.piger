@@ -14,10 +14,10 @@ public:
   Attribute& operator=(const Attribute&);
     
   // apply the style
-  virtual void Push(HDC hdc, LOGFONT& logFont ) = 0;
+  virtual void Push(HDC hdc, LOGFONT& logFont );
 
   // remove the style
-  virtual void Pop(HDC hdc, LOGFONT& logFont ) = 0;
+  virtual void Pop(HDC hdc, LOGFONT& logFont );
 
   /**
    * \brief add a single attribute value
