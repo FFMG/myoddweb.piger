@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagBold::TagBold() :
-  Tag()
+TagBold::TagBold(const Attributes& attributes, int tagStyle) :
+  Tag(attributes, tagStyle)
 {
 }
 
@@ -11,18 +11,19 @@ TagBold::~TagBold()
 {
 }
 
-// if this is the Tag we are looking for.
-bool TagBold::IsTag(const wchar_t* lpString, unsigned int nLen) const
+TagBold::TagBold(const TagBold& rhs) : Tag( rhs )
 {
-  if( nLen == 1 )
+  *this = rhs;
+}
+
+TagBold& TagBold::operator=(const TagBold& rhs)
+{
+  if (this != &rhs)
   {
-    return (_tcsnicmp(lpString , L"b", nLen) ==0);
+    //  copy
+    Tag::operator=(rhs);
   }
-  if( nLen == 6 )
-  {
-    return (_tcsnicmp(lpString , L"strong", nLen) ==0);
-  }
-  return false;
+  return *this;
 }
 
 // apply the style

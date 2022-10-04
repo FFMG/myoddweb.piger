@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagBr::TagBr() :
-  Tag()
+TagBr::TagBr(const Attributes& attributes, int tagStyle) :
+  Tag(attributes, tagStyle | Closing | Opening  )
 {
 }
 
@@ -11,23 +11,24 @@ TagBr::~TagBr()
 {
 }
 
-bool TagBr::ToNextLine( bool bIsEnd ) const
+TagBr::TagBr(const TagBr& rhs) : Tag(rhs)
 {
-  UNUSED_ALWAYS( bIsEnd );
-  return true;
+  *this = rhs;
 }
 
-// if this is the Tag we are looking for.
-bool TagBr::IsTag(const wchar_t* lpString, unsigned int nLen ) const
+TagBr& TagBr::operator=(const TagBr& rhs)
 {
-  switch (nLen)
+  if (this != &rhs)
   {
-  case 2:
-    return (_tcsnicmp(lpString, L"br", nLen) == 0);
-
-  default:
-    return false;
+    //  copy
+    Tag::operator=(rhs);
   }
+  return *this;
+}
+
+bool TagBr::ToNextLine() const
+{
+  return true;
 }
 
 void TagBr::OnPush(HDC hdc, LOGFONT& logFont )

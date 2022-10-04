@@ -54,7 +54,6 @@ const unsigned int Attributes::NumberOfAttributes() const
   return static_cast<unsigned int>(_attributes.size());
 }
 
-
 // apply the style
 void Attributes::Push(HDC hdc, LOGFONT& logFont)
 {
@@ -80,8 +79,8 @@ void Attributes::Add(const Attribute& src)
   auto stylePtr = dynamic_cast<const AttributeStyle*>(&src);
   if (nullptr != stylePtr)
   {
-    auto ptr = new AttributeStyle(*stylePtr);
-    _attributes.push_back(ptr);
+    _attributes.push_back(new AttributeStyle(*stylePtr));
+    return;
   }
 }
 }}

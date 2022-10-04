@@ -2,10 +2,10 @@
 
 #include <vector>
 #include "../string/string.h"
-#include "Tags.h"
-#include "HtmlData.h"
+#include "DomObjects.h"
 
 namespace myodd { namespace html {
+
 class TagsParser
 {
 public:
@@ -13,21 +13,19 @@ public:
   virtual ~TagsParser(void);
 
 public:
-  typedef std::vector<HtmlData*> HtmlDataContainer;
-
-  const HtmlDataContainer& Parse( const std::wstring& text );
-  const HtmlDataContainer& Parse(const wchar_t* lpString);
+  const DomObjects& Parse( const std::wstring& text );
+  const DomObjects& Parse(const wchar_t* lpString);
 
 private:
   
-  HtmlDataContainer m_data;
-  const HtmlDataContainer& Tree() const {
+  DomObjects m_data;
+  const DomObjects& Tree() const {
     return m_data;
   };
 
 public:
   SIZE Apply( HDC hdc, 
-              HtmlData* hd, 
+              DomObject* hd, 
               RECT& rect,
               const RECT& givenRect,
               const int maxLineHeight,
@@ -55,12 +53,9 @@ private:
   void AddHtmlTag(const wchar_t* begin, const wchar_t* end);
   void Clear();
 
-  std::wstring EscapeText(const std::wstring& src) const;
-
   const wchar_t* FindTag(const wchar_t* body, const wchar_t tag) const;
   const wchar_t* FindTagExcluding(const wchar_t* body, const wchar_t tag, const wchar_t exclude ) const;
 
-  Tags _tags;
   int _saveDC;
   LOGFONT _logFont;        //  the current font
   HFONT _font;        //  the current font

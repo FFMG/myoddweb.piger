@@ -6,11 +6,17 @@ namespace myodd{ namespace html{
 class TagStrikeout : public Tag
 {
 public:
-  TagStrikeout();
-  ~TagStrikeout();
+  TagStrikeout(const Attributes& attributes, int tagStyle);
+  virtual ~TagStrikeout();
 
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
+  TagStrikeout(const TagStrikeout&);
+  TagStrikeout& operator=(const TagStrikeout&);
+
+  /**
+   * \brief get the current tag type
+   * \return the tag type
+   */
+  virtual Type TagType() const { return Type::StrikeOut; }
 
 protected:
   // apply the style

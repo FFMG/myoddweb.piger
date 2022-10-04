@@ -6,11 +6,17 @@ namespace myodd{ namespace html{
 class TagUnderline : public Tag
 {
 public:
-  TagUnderline();
-  ~TagUnderline();
+  TagUnderline(const Attributes& attributes, int tagStyle);
+  virtual ~TagUnderline();
 
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
+  TagUnderline(const TagUnderline&);
+  TagUnderline& operator=(const TagUnderline&);
+
+  /**
+   * \brief get the current tag type
+   * \return the tag type
+   */
+  virtual Type TagType() const { return Type::UnderLine; }
 
 protected:
   // apply the style

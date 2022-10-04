@@ -1,9 +1,9 @@
+#include "../string/string.h"
 #include "AttributesParser.h"
 #include "AttributeStyle.h"
 #include "AttributeValueColor.h"
 
 #include <algorithm>
-#include "SimpleHtmlData.h"
 
 namespace myodd { namespace html {
 AttributesParser::AttributesParser( )

@@ -7,6 +7,8 @@
 #include <assert.h>
 #include "html.h"
 #include "TagsParser.h"
+#include "DomObjectContent.h"
+#include "DomObjectTag.h"
 
 namespace myodd{ namespace html{
   /**
@@ -22,8 +24,8 @@ namespace myodd{ namespace html{
    */
   SIZE _htmlSingleLine(HDC     hdc,        // handle of device context
                        TagsParser& parser,
-                       TagsParser::HtmlDataContainer::const_iterator begin,
-                       TagsParser::HtmlDataContainer::const_iterator end,
+                       DomObjects::const_iterator begin,
+                       DomObjects::const_iterator end,
                        LPRECT  lpRect,     // address of structure with formatting dimensions
                        const int maxLineHeight,
                        const int paddingTop,
@@ -175,7 +177,12 @@ namespace myodd{ namespace html{
          )
     {
       const auto hd = (*it);
-      if( !hd->HasTagData() || !hd->TagData().ToNextLine( hd->IsEnd() ))
+
+      // is it a content or a tag
+      auto isContent = dynamic_cast<DomObjectContent*>(hd);
+      auto isTag = dynamic_cast<DomObjectTag*>(hd);
+
+      if(isContent != nullptr || (isTag != nullptr && !isTag->TagData().ToNextLine()))
       {
         if(  it == last )
         {

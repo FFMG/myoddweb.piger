@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagItalic::TagItalic() :
-  Tag()
+TagItalic::TagItalic(const Attributes& attributes, int tagStyle) :
+  Tag(attributes, tagStyle)
 {
 }
 
@@ -11,18 +11,19 @@ TagItalic::~TagItalic()
 {
 }
 
-// if this is the Tag we are looking for.
-bool TagItalic::IsTag(const wchar_t* lpString, unsigned int nLen) const
+TagItalic::TagItalic(const TagItalic& rhs) : Tag(rhs)
 {
-  if( nLen == 1 )
+  *this = rhs;
+}
+
+TagItalic& TagItalic::operator=(const TagItalic& rhs)
+{
+  if (this != &rhs)
   {
-    return (_tcsnicmp(lpString , L"i", nLen) ==0);
+    //  copy
+    Tag::operator=(rhs);
   }
-  if( nLen == 2 )
-  {
-    return (_tcsnicmp(lpString , L"em", nLen) ==0);
-  }
-  return false;
+  return *this;
 }
 
 // apply the style

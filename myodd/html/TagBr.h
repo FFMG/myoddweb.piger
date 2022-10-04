@@ -6,13 +6,19 @@ namespace myodd{ namespace html{
 class TagBr : public Tag
 {
 public:
-  TagBr();
-  ~TagBr();
+  TagBr(const Attributes& attributes, int tagStyle);
+  virtual ~TagBr();
 
-  virtual bool ToNextLine( bool bIsEnd ) const;
+  TagBr(const TagBr&);
+  TagBr& operator=(const TagBr&);
 
-  // if this is the Tag we are looking for.
-  virtual bool IsTag(const wchar_t* lpString, unsigned int nLen) const;
+  virtual bool ToNextLine() const;
+
+  /**
+   * \brief get the current tag type
+   * \return the tag type
+   */
+  virtual Type TagType() const { return Type::Br; }
 
 protected:
   // apply the style

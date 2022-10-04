@@ -1,12 +1,15 @@
 #include "TagsParser.h"
 #include "AttributesParser.h"
 #include <algorithm>
-#include "SimpleHtmlData.h"
+#include "DomObjectTag.h"
+#include "DomObjectClosingTag.h"
+#include "DomObjectContent.h"
 
 namespace myodd { namespace html {
-TagsParser::TagsParser( ) :
-  _saveDC( -1 ),
-  _font( nullptr )
+  TagsParser::TagsParser() :
+    _saveDC(-1),
+    _font(nullptr),
+    _logFont{0}
 {
 }
 
@@ -21,11 +24,7 @@ TagsParser::~TagsParser()
  */
 void TagsParser::Clear()
 {
-  for (auto it = m_data.begin(); it != m_data.end(); ++it)
-  {
-    delete *it;
-  }
-  m_data.clear();
+  m_data.Clear();
 }
 
 /**
@@ -33,7 +32,7 @@ void TagsParser::Clear()
  * \param const std::wstring the string we are parsing.
  * \return const TagsParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const TagsParser::HtmlDataContainer& TagsParser::Parse(const std::wstring& text)
+const DomObjects& TagsParser::Parse(const std::wstring& text)
 {
   return Parse(text.c_str());
 }
@@ -43,7 +42,7 @@ const TagsParser::HtmlDataContainer& TagsParser::Parse(const std::wstring& text)
  * \param lpString the string we are parsing.
  * \return const TagsParser::HTML_CONTAINER& a container with all html the tags and text.
  */
-const TagsParser::HtmlDataContainer& TagsParser::Parse(const wchar_t* lpString )
+const DomObjects& TagsParser::Parse(const wchar_t* lpString )
 {
   Clear();
   if( nullptr == lpString )
@@ -187,18 +186,23 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
     return;
   }
 
+  int tagType = { Tag::None };
   end--;      //  '>'
-  auto isEnd = *begin == L'/' ? true : false;
-  if (isEnd)
+  if (*begin == L'/' ? true : false)
   {
+    tagType |= Tag::Closing;
     begin++;  //  '/'
+  }
+  else
+  {
+    tagType |= Tag::Opening;
   }
 
   // check if we are a star/end kind of tag
   // for example <br/> or <br />
-  auto isStartAndEnd = *(end - 1) == L'/' ? true : false;
-  if (isStartAndEnd)
+  if (*(end - 1) == L'/' ? true : false)
   {
+    tagType |= Tag::Closing;
     end--;  //  '/'
   }
 
@@ -212,12 +216,11 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   assert(end - begin > 0);  // how can the tag be empty??
-  auto text = std::wstring(end - begin, '\0');
-  std::transform(begin, end, text.begin(), ::tolower);
+  auto text = std::wstring(begin, end);
 
   // look for the matching Tag for that tag
   // the Tag is what does the basic string transformation.
-  auto tagData = _tags.FindTag(text);
+  auto tagData = Tag::CreateFromString(text, attributes, tagType );
 
   // if we do not have a tag it means that we are not going to parse it properly.
   // the text in the tag will not be displayed.
@@ -229,7 +232,8 @@ void TagsParser::AddHtmlTag(const wchar_t* begin, const wchar_t* end)
   }
 
   // add this to the list as a text only item.
-  m_data.push_back(new HtmlData(isEnd, isStartAndEnd, attributes, tagData));
+  m_data.AddTag( *tagData );
+  delete tagData;
 }
 
 /**
@@ -254,25 +258,7 @@ void TagsParser::AddNonHtmlTag(const std::wstring& text)
   // special chars are done straight away
 
   // add this to the list as a text only item.
-  m_data.push_back( new SimpleHtmlData(EscapeText(text)));
-}
-
-/**
- * \brief Escape a given text
- * \param std::wstring the text we want to excape
- * \return the escaped text
- */
-std::wstring TagsParser::EscapeText(const std::wstring& src) const
-{
-  auto text = src;
-  text = myodd::strings::Replace(text, L"&nbsp;", L" ", false);
-  text = myodd::strings::Replace(text, L"&lt;", L"<", false);
-  text = myodd::strings::Replace(text, L"&gt;", L">", false);
-  text = myodd::strings::Replace(text, L"&amp;", L"&", false);
-  text = myodd::strings::Replace(text, L"&deg;", std::wstring(1, wchar_t(176)), false);    //  degree
-  text = myodd::strings::Replace(text, L"&plusmn;", std::wstring(1, wchar_t(177)), false); //  Plus/minus symbol
-
-  return text;
+  m_data.AddContent( text);
 }
 
 void TagsParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wchar_t* szText, int nLen )
@@ -404,7 +390,7 @@ const LOGFONT& TagsParser::GetCurrentLogFont() const
 }
 
 SIZE TagsParser::Apply( const HDC hdc,
-                    HtmlData* hd, 
+                    DomObject* hd,
                     RECT& rect,
                     const RECT& givenRect,
                     const int maxLineHeight,
@@ -420,26 +406,38 @@ SIZE TagsParser::Apply( const HDC hdc,
   SIZE size = {0};
 
   // are we a tag?
-  if( hd->HasTagData() )
+  auto isTag = dynamic_cast<DomObjectTag*>(hd);
+  if( nullptr != isTag )
   {
     // this function does single lines only
     // but when asked to parse from beginning to end we are 
     // given the tag that caused us to go to the next line
     auto lf = GetCurrentLogFont();
-    if( hd->IsEnd() )
+    if(isTag->IsClosing() )
     {
-      hd->Pop( hdc, lf );
+      auto isClosingTag = dynamic_cast<DomObjectClosingTag*>(hd);
+      // if it is an opening/closing tag then it is possible that
+      // we do not have a formal closing tag object.
+      if (nullptr != isClosingTag)
+      {
+        isClosingTag->Pop(hdc, lf);
+      }
+      else
+      {
+        isTag->Pop(hdc, lf);
+      }
       PopFont( hdc, lf );
     }
     else
     {
-      hd->Push(hdc, lf);
+      isTag->Push(hdc, lf);
       PushFont( hdc, lf );
     }
   }
 
   // we only output if we are not a string 
-  if( hd->TextLength() > 0 && !hd->IsHtmlTag() )
+  auto isContent = dynamic_cast<DomObjectContent*>(hd);
+  if(isContent != nullptr && isContent->TextLength() > 0 )
   {
     // in case the user has ellipses we need to use the rectangle 
     // as it was given to us.
@@ -470,11 +468,11 @@ SIZE TagsParser::Apply( const HDC hdc,
       bottomAlignedRect.top += paddingTop;
       bottomAlignedRect.bottom += (paddingTop+paddingBottom);
 
-      DrawText( hdc, hd->Text().c_str(), hd->TextLength(), &bottomAlignedRect, uFormat);
+      DrawText( hdc, isContent->Text().c_str(), isContent->TextLength(), &bottomAlignedRect, uFormat);
     }
 
     SIZE calcSize = {0};
-    CalculateSmartDimensions( calcSize, hdc, hd->Text().c_str(), hd->TextLength());
+    CalculateSmartDimensions( calcSize, hdc, isContent->Text().c_str(), isContent->TextLength());
 
     // given the size of the rectangle, update the various sizes.
     // they will be used later to make sure that we have the right sizes.

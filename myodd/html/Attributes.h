@@ -5,6 +5,9 @@
 #include "Attribute.h"
 
 namespace myodd{ namespace html{
+/**
+ * \brief a list of attributes that are contained within a tag. 
+ */
 class Attributes final
 {
 public:
@@ -29,7 +32,6 @@ public:
   /**
    * \brief add the given attribute to our list of attributes.
    * \param const Attribute& the attribute we are adding to our list.
-   * \return unsigned int the number of attributes
    */
   void Add(const Attribute& src);
 

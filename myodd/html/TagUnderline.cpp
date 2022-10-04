@@ -2,8 +2,8 @@
 #include "../string/string.h"
 
 namespace myodd{ namespace html{
-TagUnderline::TagUnderline() :
-  Tag()
+TagUnderline::TagUnderline(const Attributes& attributes, int tagStyle) :
+  Tag(attributes, tagStyle)
 {
 }
 
@@ -11,14 +11,19 @@ TagUnderline::~TagUnderline()
 {
 }
 
-// if this is the Tag we are looking for.
-bool TagUnderline::IsTag(const wchar_t* lpString, unsigned int nLen) const
+TagUnderline::TagUnderline(const TagUnderline& rhs) : Tag(rhs)
 {
-  if( nLen == 1 )
+  *this = rhs;
+}
+
+TagUnderline& TagUnderline::operator=(const TagUnderline& rhs)
+{
+  if (this != &rhs)
   {
-    return (_tcsnicmp(lpString , L"u", nLen) ==0);
+    //  copy
+    Tag::operator=(rhs);
   }
-  return false;
+  return *this;
 }
 
 // apply the style
