@@ -109,5 +109,6 @@ void AttributeValueColor::Copy(const AttributeValueColor& rhs)
 
   // copy variables.
   _rgb = rhs._rgb;
+  _previousColor = rhs._previousColor;
 }
 }}
