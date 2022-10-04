@@ -262,15 +262,22 @@ void MessageDlg::RedrawMessage(const HDC hdc)
 
   const auto paddingY = static_cast<int>(::myodd::config::Get(L"commands\\pad.y", 2));
 
+  // calculate the max height of a single line of html
+  // for that we pass the letters IM and assume that they are the top
+  RECT rTextRectangle = { 0,0,0,0 };
+  myodd::html::html(hdc, L"IM", 2, &rTextRectangle, -1, -1, -1, DT_DEFAULT | DT_CALCRECT);
+  const auto maxSingleLineHeight = rTextRectangle.bottom - rTextRectangle.top;
+
+  // get the full rectangle size to display the full item
+  // we do not need to pass the single line height as we already know the biggest height.
   RECT r = { 0,0,0,0 };
   myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, -1, paddingY, paddingY, DT_DEFAULT | DT_CALCRECT);
-
-  const auto maxHeight = r.bottom - r.top;
 
   //  pad a little
   r.left += static_cast<int>(::myodd::config::Get(L"commands\\pad.x", 2));
 
-  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, maxHeight, paddingY, paddingY, DT_DEFAULT);
+  // now we do the actual item print.
+  myodd::html::html(hdc, _mStdMessage.c_str(), _mStdMessage.length(), &r, maxSingleLineHeight, paddingY, paddingY, DT_DEFAULT);
 
   //  clean up old fonts
   if (pOldFont != nullptr)
