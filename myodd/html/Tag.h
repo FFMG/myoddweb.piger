@@ -14,7 +14,8 @@ public:
     Italic,
     Small,
     StrikeOut,
-    UnderLine
+    UnderLine,
+    Span
   };
 
   enum Style

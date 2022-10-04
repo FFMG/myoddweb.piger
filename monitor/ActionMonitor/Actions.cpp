@@ -196,9 +196,12 @@ const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsVa
   ret += sBoldC;
   if (givenAction.Extention().length() > 0)
   {
-    ret += myodd::strings::Format(L"<small style='color:#a69914'>(% s)</small>", givenAction.Extention().c_str());
+    ret += myodd::strings::Format(L"<small style='color:#a69914'>(%s)</small>", givenAction.Extention().c_str());
   }
   ret += sItalicC;
+
+  // add the color
+  ret = myodd::strings::Format(L"<span style='color:%s'>%s</span>", cv.Color().c_str(), ret.c_str());
 
   return ret;
 }
@@ -212,7 +215,7 @@ const std::wstring Actions::ToChar(const std::wstring& givenAction )
   }
 
   // get the current command, colors and style
-  const auto cv = GetCommandValue(L"current", false, false);
+  const auto cv = GetCommandValue(L"current", L"000000", false, false);
 
   const auto sBold = cv.IsBold() ? L"<b>" : L"";
   const auto sBoldC = cv.IsBold() ? L"</b>" : L"";
@@ -231,13 +234,14 @@ const std::wstring Actions::ToChar(const std::wstring& givenAction )
 }
 
 // -------------------------------------------------------------
-const Actions::CommandsValue Actions::GetCommandValue(const std::wstring& lpName, bool bold, bool italic)
+const Actions::CommandsValue Actions::GetCommandValue(const std::wstring& lpName, const std::wstring& color, bool bold, bool italic)
 {
   // get the path
   const auto fullPath = ::myodd::strings::Format( L"commands\\%s", lpName.c_str() );
 
   // get the value
   return CommandsValue(
+    ::myodd::config::Get(fullPath + L".color", color),
     ::myodd::config::Get(fullPath + L".bold", bold ),
     ::myodd::config::Get( fullPath + L".italic", italic ));
 }
@@ -254,10 +258,10 @@ const Actions::CommandsValue Actions::GetCommandValue(const std::wstring& lpName
 std::wstring Actions::ToChar()
 {
   // the default item
-  const auto cvDef = GetCommandValue( L"default", false, false);
+  const auto cvDef = GetCommandValue( L"default", L"#000000", false, false);
 
   // and the selected item
-  const auto cvSel = GetCommandValue( L"selected", true, true );
+  const auto cvSel = GetCommandValue( L"selected", L"#808000", true, true );
 
   myodd::threads::Lock guard(_mutexActionsMatch );
 

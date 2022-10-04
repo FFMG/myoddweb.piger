@@ -64,24 +64,25 @@ AttributeValueColor::RGB AttributeValueColor::CreateColor(const std::wstring& co
   if (lowerColor[0] == L'#')
   {
     lowerColor = lowerColor.erase(0, 1);
-    if (lowerColor.length() == 3)
-    {
-      auto r = lowerColor.substr(0, 1);
-      auto g = lowerColor.substr(1, 1);
-      auto b = lowerColor.substr(2, 1);
-      lowerColor = r + r + g + g + b + b; //  make it size 6
-    }
-    if (lowerColor.length() == 6)
-    {
-      auto r = lowerColor.substr(0, 2);
-      auto g = lowerColor.substr(2, 2);
-      auto b = lowerColor.substr(4, 2);
-      return { 
-        HexToInt(r),
-        HexToInt(g),
-        HexToInt(b)
-      };
-    }
+  }
+
+  if (lowerColor.length() == 3)
+  {
+    auto r = lowerColor.substr(0, 1);
+    auto g = lowerColor.substr(1, 1);
+    auto b = lowerColor.substr(2, 1);
+    lowerColor = r + r + g + g + b + b; //  make it size 6
+  }
+  if (lowerColor.length() == 6)
+  {
+    auto r = lowerColor.substr(0, 2);
+    auto g = lowerColor.substr(2, 2);
+    auto b = lowerColor.substr(4, 2);
+    return { 
+      HexToInt(r),
+      HexToInt(g),
+      HexToInt(b)
+    };
   }
 
   // not sure what color this is

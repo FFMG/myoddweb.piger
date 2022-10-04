@@ -44,20 +44,27 @@ protected:
   private:
     bool _bBold;
     bool _bItalic;
+    std::wstring _color;
 
   public:
     CommandsValue() :
+      _color  ( L""),
       _bBold  (false),
       _bItalic(false)
     {
     }
-    CommandsValue( const bool bold, const bool italic ) :
-      _bBold( bold ), _bItalic( italic ) 
+    
+    CommandsValue(const std::wstring& color, const bool bold, const bool italic ) :
+      _color( color ),
+      _bBold( bold ), 
+      _bItalic( italic ) 
     {
     }
 
     CommandsValue( const CommandsValue& rhs) : 
-      _bBold(rhs._bBold), _bItalic(rhs._bItalic)
+      _color(rhs._color),
+      _bBold(rhs._bBold), 
+      _bItalic(rhs._bItalic)
     {
 
     }
@@ -66,19 +73,21 @@ protected:
     {
       if (this != &rhs)
       {
+        _color = rhs._color;
         _bBold = rhs._bBold;
         _bItalic = rhs._bItalic;
       }
       return *this;
     }
 
+    const std::wstring& Color() const { return _color; }
     const bool IsItalic() const{ return _bItalic; }
     const bool IsBold() const { return _bBold; }
   };
 
   static const std::wstring ToChar( const IAction& givenAction, const CommandsValue& cv );
   static const std::wstring ToChar( const std::wstring& givenAction );
-  static const CommandsValue GetCommandValue( const std::wstring& lpName, bool bold, bool italic );
+  static const CommandsValue GetCommandValue(const std::wstring& lpName, const std::wstring& color, bool bold, bool italic);
 
 protected:
   //  vectors containing all the commands we can call

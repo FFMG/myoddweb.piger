@@ -395,6 +395,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="html\TagSpan.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\TagsParser.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
@@ -697,6 +707,7 @@
     <ClInclude Include="html\TagBr.h" />
     <ClInclude Include="html\TagItalic.h" />
     <ClInclude Include="html\TagSmall.h" />
+    <ClInclude Include="html\TagSpan.h" />
     <ClInclude Include="html\TagsParser.h" />
     <ClInclude Include="html\TagStrikeout.h" />
     <ClInclude Include="html\TagUnderline.h" />
