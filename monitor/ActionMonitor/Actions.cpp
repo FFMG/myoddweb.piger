@@ -196,7 +196,7 @@ const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsVa
   ret += sBoldC;
   if (givenAction.Extention().length() > 0)
   {
-    ret += myodd::strings::Format(L"<small style='color:#d3c31a'>(% s)</small>", givenAction.Extention().c_str());
+    ret += myodd::strings::Format(L"<small style='color:#a69914'>(% s)</small>", givenAction.Extention().c_str());
   }
   ret += sItalicC;
 

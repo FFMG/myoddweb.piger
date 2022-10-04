@@ -30,11 +30,13 @@ void AttributeStyle::Clear()
 // apply the styles
 void AttributeStyle::Push(HDC hdc, LOGFONT& logFont)
 {
+  __super::Push(hdc, logFont);
 }
 
 // remove the style
 void AttributeStyle::Pop(HDC hdc, LOGFONT& logFont)
 {
+  __super::Pop(hdc, logFont);
 }
 
 void AttributeStyle::Copy(const Attribute& rhs)

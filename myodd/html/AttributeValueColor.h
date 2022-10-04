@@ -35,5 +35,7 @@ protected:
 
   static RGB CreateColor(const std::wstring& color);
   static unsigned short HexToInt(const std::wstring& hex );
+
+  COLORREF _previousColor;
 };
 }}

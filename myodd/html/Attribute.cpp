@@ -52,4 +52,24 @@ void Attribute::Add(const AttributeValue& value)
 {
   _values.push_back(AttributeValue::CreateFromSource(value));
 }
+
+// apply the style
+void Attribute::Push(HDC hdc, LOGFONT& logFont)
+{
+  //  we push from start to end
+  for (auto att : _values)
+  {
+    att->Push(hdc, logFont);
+  }
+}
+
+// remove the style
+void Attribute::Pop(HDC hdc, LOGFONT& logFont)
+{
+  // we pop in reverse order
+  for (auto it = _values.rbegin(); it != _values.rend(); it++)
+  {
+    (*it)->Pop(hdc, logFont);
+  }
+}
 }}
