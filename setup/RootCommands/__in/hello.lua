@@ -1,2 +1,2 @@
 local version = am_getVersion()
-am_say( "Welcome to Piger (<i>"..version..")</i>.<br>Press [Caps Lock] to get started.", 500, 3000 )
+am_say( "Welcome to Piger (<i>"..version.."</i>).<br>Press [Caps Lock] to get started.", 500, 3000 )
