@@ -108,7 +108,7 @@ Source: {#APP_SOURCE64}Dolly64.amp; DestName:Dolly.amp; DestDir: {userappdata}\m
 Source: {#APP_SOURCE64}OnTop64.amp; DestName:OnTop.amp; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: IsWin64 and WizardIsTaskSelected('pluginontop')
 
 ; common
-Source: {#APP_SOURCE64}Dolly.NET.amp-net; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: WizardIsTaskSelected('plugindollynet')
+; Source: {#APP_SOURCE64}Dolly.NET.amp-net; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\__in\; Flags: ignoreversion; Check: WizardIsTaskSelected('plugindollynet')
 
 ; any commands we might want to add.
 Source: .\RootCommands\*; DestDir: {userappdata}\myoddweb\ActionMonitor\RootCommands\; Flags: recursesubdirs createallsubdirs
@@ -128,12 +128,12 @@ Source: {#APP_INCLUDE}vc_redist.x64.exe; DestDir: {tmp}; Flags: deleteafterinsta
 ; x86 App
 Source: {#APP_SOURCE86}ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 Source: {#APP_SOURCE86}hook.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
-Source: {#APP_SOURCE86}python310.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
+Source: {#APP_SOURCE86}python\python310.dll; DestDir: {app}; Flags: ignoreversion; Check: "not IsWin64"
 
 ; x64 App
 Source: {#APP_SOURCE64}ActionMonitor64.exe; DestName:ActionMonitor.exe; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 Source: {#APP_SOURCE64}hook64.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
-Source: {#APP_SOURCE64}python310.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
+Source: {#APP_SOURCE64}python\python310.dll; DestDir: {app}; Flags: ignoreversion; Check: IsWin64
 
 ; common
 Source: {#APP_INCLUDE}python86\*.*; DestDir: {app}\python\; Flags: recursesubdirs createallsubdirs; Check: "not IsWin64"

@@ -69,7 +69,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.7/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.7/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -106,8 +106,12 @@
       <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
+    </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
@@ -126,7 +130,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.7/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.7/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -160,11 +164,11 @@
       <OutputFile>$(OutDir)$(TargetName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
-    </PostBuildEvent>
-    <PreLinkEvent>
       <Command>
       </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>call postbuild.bat "$(TargetDir)" 64</Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
