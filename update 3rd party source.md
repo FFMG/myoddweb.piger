@@ -18,52 +18,69 @@ To build the code you might need to update some third party libraries from time 
 
 ### Notes
 
-- In the example below, the version is Python 3.10.5 and the files are unpacked in that folder.
+- In the example below, the version is Python 3.10.7 and the files are unpacked in that folder.
 Make sure that you use the correct folder name for whatever future versions you use.
 - Make sure you delete any old `pyconfig.h` that might be lurking around
 
 ### Setup
 
-Download the lates source code from [https://www.python.org/downloads/source/](https://www.python.org/downloads/source/)
+Download the latest source code from [https://www.python.org/downloads/source/](https://www.python.org/downloads/source/)
 The file is called something like "Gzipped source tarball"
-It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.10.5\`
+It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.10.7\`
 
-- look for pythoncore.vcxproj
+- Inside that folder, look for a project file, pythoncore.vcxproj, (normally ..\PCBuild\..)
+  And just copy and rename it as:
   - copy it as "pythoncore86.vcxproj"
   - copy it as "pythoncore64.vcxproj"
   - copy it as "pythoncore86.vcxproj.filters"
   - copy it as "pythoncore64.vcxproj.filters"
   
-Download the actual python from [https://www.python.org/downloads/release/python-3105/](https://www.python.org/downloads/release/python-3105/)
+Download the actual python from [https://www.python.org/downloads/release/python-3107/](https://www.python.org/downloads/release/python-3107/)
 
 - Install the x86 version (pay attention to install location)
+
+Look for the "Download Windows installer (32-bit)" and make sure it is the correct version.
+
   - Select "Download debugging symbols"
   - Select "Download debug binaries"
   - Delete all the files in \includes\python86d\	  
-    - copy all the *_d.pyd files, *_d.dll, *.lib from the python install directory, (Python\DLLs)
-	  Make sure you do not copy the *_d.* files
-- Remove/Uninstall the x86 version
+    - copy all the \*_d.pyd files *(but not the coresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
+	  Make sure you do not copy the *.pdb files
+  - Download the Windows embeddable package (x86) 
+    - Delete all the files in \includes\python86\
+    - Copy all the content of the package to \includes\python86\
+  - In the solution delete the monitor/x86/pythoncore86 project and locate the new one in the new folder.  
+  - Copy the `python310.lib` file to tne \includes\python86\ folder, that file is located in the `\PCBuild\win32` folder.
+  - Remove/Uninstall the x86 version
 
 - Install the x64 version
+
+Look for the "Download Windows installer (64-bit)" and make sure it is the correct version.
+
   - Select "Download debugging symbols"
   - Select "Download debug binaries"
   - Delete all the files in \includes\python64d\	  
-    - copy all the *_d.pyd files, *_d.dll, *.lib from the python install directory, (Python\DLLs)
-	  Make sure you do not copy the *_d.* files
-- Remove/Uninstall the x64 version
-
-- Download the Windows embeddable package (x86) 
-  - Delete all the files in \includes\python86\
-  - Copy all the content of the package to \includes\python86\
-- Download the Windows embeddable package (x64) 
-  - Delete all the files in \includes\python64\
-  - Copy all the content of the package to \includes\python86\
+    - copy all the \*_d.pyd files *(but not the coresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
+	  Make sure you do not copy the *.pdb files
+  - Download the Windows embeddable package (x64) 
+    - Delete all the files in \includes\python64\
+    - Copy all the content of the package to \includes\python64\
+  - In the solution delete the monitor/x64/pythoncore64 project and locate the new one in the new folder.
+  - Copy the `python310.lib` file to tne \includes\python64\ folder, that file is located in the `\PCBuild\amd64` folder.
+  - Remove/Uninstall the x64 version
+  
+In the solution
+  - "Build > Configuration manager" and make sure that the x64 version build targets the correct architecture
+  - In the "x86/ActionMonitor" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
+  - In the "x64/ActionMonitor64" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
+  - Delete the Output folder to make sure that there are no 'extra' files.
+  - Do a full rebuild of release/debug, if this works as expected delete the previous folder.  
 
 #### zlib
 
 - Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.12).
-- Unpack that version to the `.\api\python\Python-3.10.5\externals`, (you might need to create the folder `externals`)
-- The folder should look something like `.\api\python\Python-3.10.5\externals\zlib-1.2.12\`
+- Unpack that version to the `.\api\python\Python-3.10.7\externals`, (you might need to create the folder `externals`)
+- The folder should look something like `.\api\python\Python-3.10.7\externals\zlib-1.2.12\`
 
 **NB**: You must make sure that the the project `$(zlibDir)` is pointing to the same version of zlib and that the name of the folder.
 
@@ -85,7 +102,7 @@ Download the actual python from [https://www.python.org/downloads/release/python
   
 ### The projects that need Python-3
 
-- Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.10.5/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.10.5/PC/`, (just make sure that the paths are valid).  
+- Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.10.7/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.10.7/PC/`, (just make sure that the paths are valid).  
 - Update all the code that inlcude something like, "python310_d.lib", (or whatever the previous version might be)
   - pyapi.h (include the lib)
   - PythonVirtualMachine.cpp (include the zip file)
