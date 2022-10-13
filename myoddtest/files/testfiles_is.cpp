@@ -225,8 +225,7 @@ TEST(TestIsDirectory, TestTempDirectory)
   // but not a file.
   ASSERT_FALSE(myodd::files::IsFile(tempDirectory));
 
-  std::wstring file;
-  myodd::files::Join(file, tempDirectory, Uuid());
+  auto file =  myodd::files::Join(tempDirectory, Uuid());
 
   // not yet a file
   ASSERT_FALSE(myodd::files::IsFile(file));
@@ -267,14 +266,12 @@ TEST(TestIsDirectory, TestTempDirectoryExpanded)
   ASSERT_FALSE(myodd::files::IsFile(_T("%temp%")));
 
   auto uuid = Uuid();
-  std::wstring file;
-  myodd::files::Join(file, _T("%temp%"), uuid );
+  auto file = myodd::files::Join( _T("%temp%"), uuid );
 
   // not yet a file
   ASSERT_FALSE(myodd::files::IsFile(file));
 
-  std::wstring fileActual;
-  myodd::files::Join(fileActual, tempDirectory, uuid );
+  auto fileActual = myodd::files::Join( tempDirectory, uuid );
 
   // create it
   std::wofstream fs(fileActual);

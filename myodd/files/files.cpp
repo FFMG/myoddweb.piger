@@ -10,7 +10,7 @@
 // Look for version.lib
 #pragma comment( lib, "version.lib" )
 
-static const wchar_t* FILE_APPPATH = _T("%apppath%");
+static const wchar_t* FILE_APPPATH = L"%apppath%";
 
 /**
  * TODO : Maybe move to myodd::strings
@@ -34,7 +34,7 @@ inline void _TrimDeadChars( std::wstring& s )
 }
 
 // this is the separator that we will be converting everything to if we are on an MS System.
-static const wchar_t* MYODD_FILE_WINSEPARATOR = _T("\\");
+static const wchar_t* MYODD_FILE_WINSEPARATOR = L"\\";
 
 // the default separator
 static const wchar_t* MYODD_FILE_SEPARATOR   = MYODD_FILE_WINSEPARATOR;
@@ -297,7 +297,7 @@ bool UnExpandEnvironment( const std::wstring& src, std::wstring& dest )
   }
   else
   {
-    dest = _T("");
+    dest = L"";
   }  
   return true;
 }
@@ -321,7 +321,7 @@ bool UnExpandEnvironment(const wchar_t* lpSrc, wchar_t*& dest )
     return true;
   }
 
-  std::wstring stdUnDst = _T("");
+  std::wstring stdUnDst = L"";
   size_t unExpandSize = 0;
 
   std::wstring stdSrc = lpSrc;
@@ -393,7 +393,7 @@ bool ExpandEnvironment( const std::wstring& src, std::wstring& dest )
   }
   else
   {
-    dest = _T("");
+    dest = L"";
   }
 
   return true;
@@ -437,7 +437,7 @@ bool ExpandEnvironment(const wchar_t* lpSrc, wchar_t*& dest )
   if( 0 == expandSize )
   {
     // there was an error, use get last error.
-    log::LogSystem( _T("ExpandEnvironment Error: %d"), ::GetLastError() );
+    log::LogSystem( L"ExpandEnvironment Error: %d", ::GetLastError() );
     return false;
   }
 
@@ -451,7 +451,7 @@ bool ExpandEnvironment(const wchar_t* lpSrc, wchar_t*& dest )
   if( ExpandEnvironmentStrings( stdSrc.c_str(), dest, expandSize ) == 0 )
   {
     // there was an error, use get last error.
-    log::LogSystem( _T("ExpandEnvironment Error2: %d"), ::GetLastError() );
+    log::LogSystem( L"ExpandEnvironment Error2: %d", ::GetLastError() );
 
     // simply return false as there was an error.
     // use GetLastError( ... )
@@ -633,7 +633,7 @@ bool DirectoryExists(const wchar_t* c )
   // if it exists then there is nothing to do really.
   std::wstring findFile = (c);
   AddTrailingBackSlash( findFile );
-  findFile += _T("*.*"); 
+  findFile += L"*.*"; 
   
   return FileExists( findFile.c_str() );
 }
@@ -771,7 +771,7 @@ bool _IsUrlCommon(const std::wstring& path)
   }
 
   // the pattern for each sections.
-  static const auto pattern = _T("^(?:[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}])+$");
+  static const auto pattern = L"^(?:[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}])+$";
   return regex::Regex2::Search(pattern, path, false);
 }
 
@@ -783,13 +783,13 @@ bool _IsUrlFirst(const std::wstring& path)
 
   // get the authority
   std::vector<std::wstring> authorityAndHost;
-  if (2 == strings::Explode(authorityAndHost, host, _T('@'), 2))
+  if (2 == strings::Explode(authorityAndHost, host, L'@', 2))
   {
     authority = authorityAndHost[0];
     host = authorityAndHost[1];
 
     // check the authority now
-    static const auto pattern = _T("^(?:\\S+(?::\\S*)?)?$");
+    static const auto pattern = L"^(?:\\S+(?::\\S*)?)?$";
 
     // in the first string read the username[:password] 
     if (!regex::Regex2::Search(pattern, authority, false))
@@ -800,13 +800,13 @@ bool _IsUrlFirst(const std::wstring& path)
 
   // get the port
   std::vector<std::wstring> hostAndPort;
-  if (2 == strings::Explode(hostAndPort, host, _T(':'), 2))
+  if (2 == strings::Explode(hostAndPort, host, L':', 2))
   {
     host = hostAndPort[0];
     port = hostAndPort[1];
 
     // check the port now.
-    static const auto pattern = _T("^[0-9]{2,}$");
+    static const auto pattern = L"^[0-9]{2,}$";
 
     if (!regex::Regex2::Search(pattern, port, false))
     {
@@ -815,7 +815,7 @@ bool _IsUrlFirst(const std::wstring& path)
   }
 
   // look for invalid parametters
-  static const auto pattern = _T("^(?:[\\?\\.#])");
+  static const auto pattern = L"^(?:[\\?\\.#])";
   if (regex::Regex2::Search(pattern, host, false))
   {
     return false;
@@ -850,7 +850,7 @@ bool IsURL(const std::wstring& givenUrl)
 
     //  get the protocol identifier and remove it.
     // http://www.example.com becomes www.example.com
-    const auto pattern_protocol = _T("^([[:alnum:]]+:\\/{2}).*");
+    const auto pattern_protocol = L"^([[:alnum:]]+:\\/{2}).*";
     if (0 == regex::Regex2::Match(pattern_protocol, url, matches, false))
     {
       return false;
@@ -862,7 +862,7 @@ bool IsURL(const std::wstring& givenUrl)
 
     // get the domain and path
     std::vector<std::wstring> hostAndPaths;
-    if (url.length() == 0 || 0 == strings::Explode(hostAndPaths, url, _T('/')))
+    if (url.length() == 0 || 0 == strings::Explode(hostAndPaths, url, L'/'))
     {
       // if we are here, we got a protocol, but nothing after that
       // in other words, we got "http://" and nothing else.
@@ -914,21 +914,21 @@ bool IsURL(const std::wstring& givenUrl)
 bool IsDot(const std::wstring& givenFile)
 {
   // now we need to replace all the '/' with '\' so we don't worry about UNC stuff.
-  auto copyOfGivenFile = strings::Replace(givenFile, _T("/"), _T("\\"));
+  auto copyOfGivenFile = strings::Replace(givenFile, L"/", L"\\");
 
   std::vector<std::wstring> v_copyOfGivenFile;
-  auto size = strings::Explode(v_copyOfGivenFile, copyOfGivenFile, _T('\\'), MYODD_MAX_INT32, false);
+  auto size = strings::Explode(v_copyOfGivenFile, copyOfGivenFile, L'\\', MYODD_MAX_INT32, false);
   if (size == 0)
   {
     return false;
   }
 
   // check if it is a dot.
-  if (v_copyOfGivenFile[size - 1] == _T(".."))
+  if (v_copyOfGivenFile[size - 1] == L"..")
   {
     return true;
   }
-  if (v_copyOfGivenFile[size - 1] == _T("."))
+  if (v_copyOfGivenFile[size - 1] == L".")
   {
     return true;
   }
@@ -997,7 +997,7 @@ bool IsDirectory( const std::wstring& givenDirectory )
   intptr_t ffhandle = _tfindfirst(expandedGivenDirectory.c_str(), &fdata );
   if( -1 == ffhandle )
   {
-    files::Join(expandedGivenDirectory, expandedGivenDirectory, _T("*.*"));
+    expandedGivenDirectory = files::Join(expandedGivenDirectory, L"*.*");
 
     // if we find something we will not check 
     // the file attrib as know it is a directory.
@@ -1198,7 +1198,7 @@ std::wstring GetBaseFromFile
     wchar_t* lpDest = nullptr;
     if( !files::ExpandEnvironment( lpPath, lpDest ))
     {
-      return _T("");
+      return L"";
     }
     _tcscpy_s( tmpDir, _countof( tmpDir ), lpDest );
     delete [] lpDest;
@@ -1230,7 +1230,7 @@ std::wstring GetBaseFromFile
     //    GetBaseFromFile( "somefile.txt" ); 
     //    would return "\"
     // this is because this code assumes, (by definition), that a file was passed.
-    tmpDir[0] = _T('\0');
+    tmpDir[0] = L'\0';
   }
   else if( r1 > r2 )
   {
@@ -1283,8 +1283,8 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
   strings::Trim(copyOfOrigin);
 
   // make sure that the directory separators are correct.
-  copyOfRelative = strings::Replace(copyOfRelative, _T("/"), MYODD_FILE_SEPARATOR, false);
-  copyOfOrigin = strings::Replace(copyOfOrigin, _T("/"), MYODD_FILE_SEPARATOR, false);
+  copyOfRelative = strings::Replace(copyOfRelative, L"/", MYODD_FILE_SEPARATOR, false);
+  copyOfOrigin = strings::Replace(copyOfOrigin, L"/", MYODD_FILE_SEPARATOR, false);
 
   // the origin must have a trailing backslash
   // makes it easier if we are adding the working directory.
@@ -1303,7 +1303,7 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
   std::wstring pathToEvaluate;
 
   // (?:\\\\[^.]|[a-zA-Z]:[\\\/])
-  if (!regex::Regex2::Search(_T("(?:\\\\\\\\[^.]|[a-zA-Z]:[\\\\\\/])"), copyOfRelative))
+  if (!regex::Regex2::Search(L"(?:\\\\\\\\[^.]|[a-zA-Z]:[\\\\\\/])", copyOfRelative))
   {
     // we will be using the origin hrere.
     useOrigin = true;
@@ -1318,18 +1318,18 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
     // if the origin has a '.' or './' then we need to add the current path to it.
     // that's an assumption made to make the life of the caller easier.
     // ^((?:\.[\/\\])+)
-    const auto pattern = _T("^((?:\\.[\\/\\\\])+)");
+    const auto pattern = L"^((?:\\.[\\/\\\\])+)";
     if (regex::Regex2::Match(pattern, copyOfOrigin, matches) > 1)
     {
       // we can replace the all the '././././' with the 
       // current directory even if the user just gave us a '.'
       
       // join the current directory and the origin without the '.' or './'.
-      files::Join(copyOfOrigin, GetAppPath(true), copyOfOrigin.substr(matches[1].length()));
+      copyOfOrigin = files::Join(GetAppPath(true), copyOfOrigin.substr(matches[1].length()));
     }
 
     // we can now join the origin and relative path.
-    files::Join(pathToEvaluate, copyOfOrigin, copyOfRelative);
+    copyOfRelative = files::Join(pathToEvaluate, copyOfOrigin);
   }
   else
   {
@@ -1344,13 +1344,13 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
   std::vector<std::wstring> evaluatedParts;
   for( auto it = partsOfPathToEvaluate.begin(); it != partsOfPathToEvaluate.end(); ++it )
   {
-    if ( *it == _T("."))
+    if ( *it == L".")
     {
       //  this means nothing
       continue;
     }
 
-    if (*it == _T(".."))
+    if (*it == L"..")
     {
       // before we go backward, can we go backward...
       if( evaluatedParts.size() == 0 )
@@ -1374,7 +1374,7 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
   // this is it... put it all back together now.
   dest = strings::implode(evaluatedParts, MYODD_FILE_SEPARATOR );
 
-  const auto pattern_end = _T("[\\/\\\\]$");
+  const auto pattern_end = L"[\\/\\\\]$";
   if ( regex::Regex2::Search(pattern_end, copyOfRelative, false) )
   {
     AddTrailingBackSlash(dest);
@@ -1393,14 +1393,14 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
   // or, if we did not use the original, was the relative path UNC
   if (useOrigin)
   {
-    if (myodd::regex::Regex2::Search(_T("(?:\\\\{2})"), unExpandedCopyOfOrigin))
+    if (myodd::regex::Regex2::Search(L"(?:\\\\{2})", unExpandedCopyOfOrigin))
     {
-      dest = _T("\\\\") + dest;
+      dest = L"\\\\" + dest;
     }
   }
-  else if (myodd::regex::Regex2::Search(_T("(?:\\\\{2})"), unExpandedCopyOfRelative))
+  else if (myodd::regex::Regex2::Search(L"(?:\\\\{2})", unExpandedCopyOfRelative))
   {
-    dest = _T("\\\\") + dest;
+    dest = L"\\\\" + dest;
   }
 
   // success!
@@ -1416,10 +1416,10 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
 void CleanFileName( std::wstring& dirtyFileName )
 {
   // the bad characters.
-  static auto badChars = _T("?[]/\\=+<>:;\",*|^");
+  static auto badChars = L"?[]/\\=+<>:;\",*|^";
 
   // the good characters.
-  static auto goodChar = _T('_');
+  static auto goodChar = L'_';
 
   // go around looking for a bad characters.
   for(;;)
@@ -1479,9 +1479,9 @@ bool GetFullTempFileName(wchar_t*& lpFileName, const wchar_t* lpPrefix, const wc
 
   // create the return file
   wchar_t* lpTmpFile = new TCHAR[T_MAX_PATH];
-  _stprintf_s( lpTmpFile, T_MAX_PATH, _T("%s%05d.%s"), (lpPrefix == nullptr ? _T("~myodd") : lpPrefix),
+  _stprintf_s( lpTmpFile, T_MAX_PATH, L"%s%05d.%s", (lpPrefix == nullptr ? L"~myodd" : lpPrefix),
                                                         unique_num,
-                                                       (lpExt == nullptr ? _T("tmp") : lpExt)
+                                                       (lpExt == nullptr ? L"tmp" : lpExt)
              );
   bool bResult = GetFullTempFileName( lpFileName, lpTmpFile ); 
 
@@ -1545,7 +1545,7 @@ bool GetFullTempFileName(wchar_t*& lpFullPathFileName, const wchar_t* lpFileName
   memset( lpFullPathFileName, 0, T_MAX_PATH );
 
   // join the path and the given filename
-  _stprintf_s( lpFullPathFileName, T_MAX_PATH, _T("%s%s"), lpTmpBuffer, 
+  _stprintf_s( lpFullPathFileName, T_MAX_PATH, L"%s%s", lpTmpBuffer, 
                                                            lpFileName
              );
 
@@ -1575,7 +1575,7 @@ std::wstring GetFileName( const std::wstring& givenPath, bool bExpand /*= true*/
     //  try and expand it.
     if( !files::ExpandEnvironment(givenPath, copyOfGivenPath))
     {
-      return _T("");
+      return L"";
     }
   }
   else
@@ -1584,10 +1584,10 @@ std::wstring GetFileName( const std::wstring& givenPath, bool bExpand /*= true*/
     copyOfGivenPath = givenPath;
   }
   // make sure that we use only '\'
-  copyOfGivenPath = strings::Replace(copyOfGivenPath, _T("/"), _T("\\"), false);
+  copyOfGivenPath = strings::Replace(copyOfGivenPath, L"/", L"\\", false);
 
   // now go back and create the parent directory.
-  auto pos = copyOfGivenPath.find_last_of(_T('\\'));
+  auto pos = copyOfGivenPath.find_last_of(L'\\');
   return (pos != std::wstring::npos ? copyOfGivenPath.substr(pos + 1) : L"");
 }
 
@@ -1754,19 +1754,29 @@ wchar_t* ReadFile(const wchar_t* file, __int64 nStartPos, __int64 nEndPos )
   return tbuf_;
 }
 
-void Join( std::wstring& returnPath, const std::wstring& pathPartA, const std::wstring& pathPartB )
+/**
+ * \brief properly join 2 file parts together
+ *        for example join c:\folder and file would give c:\folder\file
+ * \param const std::wstring& the lhs for the final part
+ * \param const std::wstring& the rhs of the path that we are joinning to the lhs
+ * \return std::wstring the 'clean' joinned path
+ */
+std::wstring Join(const std::wstring& lhs, const std::wstring& rhs)
 {
-  std::wstring partA = pathPartA;
-  std::wstring partB = pathPartB;
+  // create 2 variables so we can clean the 2 parts.
+  // and then join them properly
+  std::wstring clearLhs = lhs;
+  std::wstring clearRhs = rhs;
 
-  // make sure we have a trailing backslash
-  AddTrailingBackSlash( partA );
+  // make sure we have a trailling back slash
+  AddTrailingBackSlash( clearLhs );
 
-  // and make sure that we don't have a leading one.
-  RemoveLeadingBackSlash( partB );
+  // and make sure that we have no leading back slash
+  RemoveLeadingBackSlash( clearRhs );
   
-  // join the two together.
-  returnPath = partA + partB;
+  // as we know we have a trailling backslash and no leading one
+  // then we can now join the two of them together.
+  return clearLhs + clearRhs;
 }
 
 // --------------------------------------------------------------------------------------------------
@@ -1836,7 +1846,7 @@ void Version::DetermineFileVersion(const wchar_t* lpFileName )
 
   // Retrieves version information from the version-information resource
   if ( false == VerQueryValue( static_cast<void*>( &pData[0] ),
-                               _T("\\"),
+                               L"\\",
                                reinterpret_cast<void**> ( &ptFileInfo ),
                                &uintSize ) )
   {
@@ -1893,7 +1903,7 @@ size_t GetKeys
   while( true )
   {
     wchar_t* keys = new TCHAR[ keys_size ];
-    auto nLen = ::GetPrivateProfileString( lpAppName, nullptr, _T(""), keys, keys_size, lpFileName );
+    auto nLen = ::GetPrivateProfileString( lpAppName, nullptr, L"", keys, keys_size, lpFileName );
     if( (keys_size-2) == nLen )
     {
       keys_size+=T_MAX_PATH;
@@ -2072,7 +2082,7 @@ wchar_t* Byte2Char
   FileEncode fileEncoding 
 )
 {
-  std::wstring convertedString = _T("");
+  std::wstring convertedString = L"";
   switch( fileEncoding )
   {
   case uni8Bit:

@@ -135,7 +135,7 @@ bool ShellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& action, 
 
   // get the action monitor dll path
   auto dllFullpath = myodd::files::GetAppPath(true);
-  myodd::files::Join(dllFullpath, dllFullpath, L"ActionMonitor.dll");
+  dllFullpath = myodd::files::Join(dllFullpath, L"ActionMonitor.dll");
   if (!myodd::files::FileExists(dllFullpath))
   {
     const auto errorMsg = L"I was unable to find the ActionMonitor dll, I cannot execute this script.";
@@ -145,7 +145,7 @@ bool ShellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& action, 
   }
 
   auto dllInterfacesFullpath = myodd::files::GetAppPath(true);
-  myodd::files::Join(dllInterfacesFullpath, dllInterfacesFullpath, L"ActionMonitor.Interfaces.dll");
+  dllInterfacesFullpath = myodd::files::Join(dllInterfacesFullpath, L"ActionMonitor.Interfaces.dll");
   if (!myodd::files::FileExists(dllInterfacesFullpath))
   {
     const auto errorMsg = L"I was unable to find the ActionMonitor.Interfaces dll, I cannot execute this script.";
@@ -230,7 +230,7 @@ bool ShellVirtualMachine::ShellPath(std::wstring& szPath)
   const auto appPath = myodd::files::GetAppPath();
 
   // and then add the exe to it.
-  myodd::files::Join(szPath, appPath, L"ActionMonitor.Shell.exe");
+  szPath = myodd::files::Join(appPath, L"ActionMonitor.Shell.exe");
 
   if (!myodd::files::FileExists(szPath))
   {

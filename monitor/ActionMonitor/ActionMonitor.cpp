@@ -257,23 +257,19 @@ void CActionMonitorApp::InitReservedPaths()
 {
   const auto sPath = ::myodd::config::Get( L"paths\\commands", L"");
 
-  std::wstring sPathIn;
-  myodd::files::Join( sPathIn, sPath, AM_DIRECTORY_IN );
+  auto sPathIn = myodd::files::Join( sPath, AM_DIRECTORY_IN );
   myodd::files::CreateFullDirectory( sPathIn, false );
   myodd::config::Set( L"paths\\in", sPathIn );
 
-  std::wstring sPathOut;
-  myodd::files::Join( sPathOut, sPath, AM_DIRECTORY_OUT );
+  auto sPathOut = myodd::files::Join( sPath, AM_DIRECTORY_OUT );
   myodd::files::CreateFullDirectory( sPathOut, false );
   myodd::config::Set( L"paths\\out", sPathOut );
 
-  std::wstring sPathTmp;
-  myodd::files::Join( sPathTmp, sPath, AM_DIRECTORY_TMP );
+  auto sPathTmp = myodd::files::Join( sPath, AM_DIRECTORY_TMP );
   myodd::files::CreateFullDirectory( sPathTmp, false );
   myodd::config::Set( L"paths\\tmp", sPathTmp );
 
-  std::wstring sPathPlugin;
-  myodd::files::Join( sPathPlugin, sPath, AM_DIRECTORY_PLUGIN );
+  auto sPathPlugin = myodd::files::Join( sPath, AM_DIRECTORY_PLUGIN );
   myodd::files::CreateFullDirectory( sPathPlugin, false );
   myodd::config::Set( L"paths\\plugin", sPathPlugin );
 }
