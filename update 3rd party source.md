@@ -75,18 +75,20 @@ Look for the "Download Windows installer (32-bit)" and make sure it is the corre
 In the solution
 
 - "Build > Configuration manager" and make sure that the x64 version build targets the correct architecture
-- In the "x86/ActionMonitor" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
-- In the "x64/ActionMonitor64" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
+- In the "x86/ActionMonitor" project "C/C++ > General" Additional include directory make sure the python path is correct (All Configurations).
+- In the "x64/ActionMonitor64" project "C/C++ > General" Additional include directory make sure the python path is correct (All Configurations).
 - Delete the Output folder to make sure that there are no 'extra' files.
-- Do a full rebuild of release/debug, if this works as expected delete the previous folder.  
+- Do a full rebuild of release/debug, if this works as expected delete the previous folder.
 
 #### zlib
 
-- Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.12).
-- Unpack that version to the `.\api\python\Python-3.10.7\externals`, (you might need to create the folder `externals`)
-- The folder should look something like `.\api\python\Python-3.10.7\externals\zlib-1.2.12\`
+- Got to [https://www.zlib.net/](https://www.zlib.net/) and download the latest version, (currently 1.2.13).
+- Unpack that version to the `.\api\python\Python-3.10.8\externals`, (you might need to create the folder `externals`)
+- The folder should look something like `.\api\python\Python-3.10.8\externals\zlib-1.2.13\`
 
 **NB**: You must make sure that the the project `$(zlibDir)` is pointing to the same version of zlib and that the name of the folder.
+
+Look for the file "python.props" and make sure that `<zlibDir>$(ExternalsDir)\zlib-1.2.13\</zlibDir>` points to the correct folder.
 
 ### In python 86/64 project
 
@@ -106,8 +108,8 @@ In the solution
   
 ### The projects that need Python-3
 
-- Aditional include directory `$(SolutionDir)/monitor/api/python/Python-3.10.7/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.10.7/PC/`, (just make sure that the paths are valid).  
-- Update all the code that inlcude something like, "python310_d.lib", (or whatever the previous version might be)
+- Additional include directory `$(SolutionDir)/monitor/api/python/Python-3.10.8/Include/` and `$(SolutionDir)/monitor/api/python/Python-3.10.8/PC/`, (just make sure that the paths are valid).  
+- Update all the code that include something like, "python310_d.lib", (or whatever the previous version might be)
   - pyapi.h (include the lib)
   - PythonVirtualMachine.cpp (include the zip file)
 
