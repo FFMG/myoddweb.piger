@@ -21,15 +21,15 @@ To build the code you might need to update some third party libraries from time 
 
 ### Notes
 
-- In the example below, the version is Python 3.10.7 and the files are unpacked in that folder.
+- In the example below, the version is Python 3.10.8 and the files are unpacked in that folder.
 Make sure that you use the correct folder name for whatever future versions you use.
 - Make sure you delete any old `pyconfig.h` that might be lurking around
 
 ### Setup
 
 Download the latest source code from [https://www.python.org/downloads/source/](https://www.python.org/downloads/source/)
-The file is called something like "Gzipped source tarball"
-It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.10.7\`
+The file is called something like "Gzipped source tarball" normally found at the bottom
+It has a single folder inside it, unzip it so it looks something like `.\api\python\Python-3.10.8\`
 
 - Inside that folder, look for a project file, pythoncore.vcxproj, (normally ..\PCBuild\..)
   And just copy and rename it as:
@@ -38,39 +38,39 @@ It has a single folder inside it, unzip it so it looks something like `.\api\pyt
   - copy it as "pythoncore86.vcxproj.filters"
   - copy it as "pythoncore64.vcxproj.filters"
   
-Download the actual python from [https://www.python.org/downloads/release/python-3107/](https://www.python.org/downloads/release/python-3107/)
-
-- Install the x86 version (pay attention to install location)
+Download the actual python from [https://www.python.org/downloads/release/python-3108/](https://www.python.org/downloads/release/python-3108/)
 
 Look for the "Download Windows installer (32-bit)" and make sure it is the correct version.
 
-- Select "Download debugging symbols"
-- Select "Download debug binaries"
-- Delete all the files in \includes\python86d\
-  - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
-  Make sure you do not copy the *.pdb files
-- Download the Windows embeddable package (x86)
-  - Delete all the files in \includes\python86\
-  - Copy all the content of the package to \includes\python86\
-- In the solution delete the monitor/x86/pythoncore86 project and locate the new one in the new folder.  
-- Copy the `python310.lib` file to tne \includes\python86\ folder, that file is located in the `\PCBuild\win32` folder.
-- Remove/Uninstall the x86 version
+- Python x86
+  - Install the x86 version, make sure you select "Customize Installation" (pay attention to install location)
+    - Select "Download debugging symbols"
+    - Select "Download debug binaries"
+  - Delete all the files in \includes\python86d\
+    - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (`\[Install Folder\]\DLLs`)
+      Make sure you do not copy the *.pdb files
+  - Download the Windows embeddable package (x86)
+    - Delete all the files in \includes\python86\
+    - Copy all the content of the package to \includes\python86\
+  - In the solution delete the monitor/x86/pythoncore86 project and locate the new one in the new folder.  
+  - Copy the `python310.lib` file to tne \includes\python86\ folder, that file is located in the `\[Install Folder\]\libs\\` folder.
+  - Copy the `python310_d.lib` file to tne \includes\python86d\ folder, that file is located in the `\[Install Folder\]\libs\` folder.
+  - Remove/Uninstall the x86 version
 
-- Install the x64 version
-
-Look for the "Download Windows installer (64-bit)" and make sure it is the correct version.
-
-- Select "Download debugging symbols"
-- Select "Download debug binaries"
-- Delete all the files in \includes\python64d\
-  - copy all the \*_d.pyd files *(but not the coresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
-  Make sure you do not copy the *.pdb files
-- Download the Windows embeddable package (x64)
-  - Delete all the files in \includes\python64\
-  - Copy all the content of the package to \includes\python64\
-- In the solution delete the monitor/x64/pythoncore64 project and locate the new one in the new folder.
-- Copy the `python310.lib` file to tne \includes\python64\ folder, that file is located in the `\PCBuild\amd64` folder.
-- Remove/Uninstall the x64 version
+- Python x64
+  - Install the x64 version, make sure you select "Customize Installation" (pay attention to install location)
+    - Select "Download debugging symbols"
+    - Select "Download debug binaries"
+  - Delete all the files in \includes\python64d\
+    - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (`\[Install Folder\]\DLLs`)
+      Make sure you do not copy the *.pdb files
+  - Download the Windows embeddable package (x64)
+    - Delete all the files in \includes\python64\
+    - Copy all the content of the package to \includes\python64\
+  - In the solution delete the monitor/x64/pythoncore64 project and locate the new one in the new folder.  
+  - Copy the `python310.lib` file to tne \includes\python64\ folder, that file is located in the `\[Install Folder\]\libs\\` folder.
+  - Copy the `python310_d.lib` file to tne \includes\python64d\ folder, that file is located in the `\[Install Folder\]\libs\\` folder.
+  - Remove/Uninstall the x64 version
   
 In the solution
 
