@@ -1,16 +1,19 @@
 # Upgrade 3rd party libraries / code
+
 To build the code you might need to update some third party libraries from time to time.
   
 ## Lua
+
 - Download the latest version from [https://www.lua.org/download.html](https://www.lua.org/download.html), there should only be one version called "source"
 - Delete the files and folders
-	- *\myoddweb.piger\monitor\api\lua\doc\*
-	- *\myoddweb.piger\monitor\api\lua\src\*
-	- *\myoddweb.piger\monitor\api\lua\Makefile*
-	- *\myoddweb.piger\monitor\api\lua\README*
-- Unpack the file in *\myoddweb.piger\monitor\api\lua\src\*
+  - *\myoddweb.piger\monitor\api\lua\doc\\*
+  - *\myoddweb.piger\monitor\api\lua\src\\*
+  - *\myoddweb.piger\monitor\api\lua\Makefile*
+  - *\myoddweb.piger\monitor\api\lua\README*
+- Unpack the file in *\myoddweb.piger\monitor\api\lua\src\\*
 
 ## SQLite
+
 - Download the latest version from [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html), get the amalgamation file, (the file is normally called "sqlite-amalgamation-*.zip")
 - Unzip the files to *\myoddweb.piger\myodd\sqlite\*.**
 
@@ -41,40 +44,41 @@ Download the actual python from [https://www.python.org/downloads/release/python
 
 Look for the "Download Windows installer (32-bit)" and make sure it is the correct version.
 
-  - Select "Download debugging symbols"
-  - Select "Download debug binaries"
-  - Delete all the files in \includes\python86d\	  
-    - copy all the \*_d.pyd files *(but not the coresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
-	  Make sure you do not copy the *.pdb files
-  - Download the Windows embeddable package (x86) 
-    - Delete all the files in \includes\python86\
-    - Copy all the content of the package to \includes\python86\
-  - In the solution delete the monitor/x86/pythoncore86 project and locate the new one in the new folder.  
-  - Copy the `python310.lib` file to tne \includes\python86\ folder, that file is located in the `\PCBuild\win32` folder.
-  - Remove/Uninstall the x86 version
+- Select "Download debugging symbols"
+- Select "Download debug binaries"
+- Delete all the files in \includes\python86d\
+  - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
+  Make sure you do not copy the *.pdb files
+- Download the Windows embeddable package (x86)
+  - Delete all the files in \includes\python86\
+  - Copy all the content of the package to \includes\python86\
+- In the solution delete the monitor/x86/pythoncore86 project and locate the new one in the new folder.  
+- Copy the `python310.lib` file to tne \includes\python86\ folder, that file is located in the `\PCBuild\win32` folder.
+- Remove/Uninstall the x86 version
 
 - Install the x64 version
 
 Look for the "Download Windows installer (64-bit)" and make sure it is the correct version.
 
-  - Select "Download debugging symbols"
-  - Select "Download debug binaries"
-  - Delete all the files in \includes\python64d\	  
-    - copy all the \*_d.pyd files *(but not the coresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
-	  Make sure you do not copy the *.pdb files
-  - Download the Windows embeddable package (x64) 
-    - Delete all the files in \includes\python64\
-    - Copy all the content of the package to \includes\python64\
-  - In the solution delete the monitor/x64/pythoncore64 project and locate the new one in the new folder.
-  - Copy the `python310.lib` file to tne \includes\python64\ folder, that file is located in the `\PCBuild\amd64` folder.
-  - Remove/Uninstall the x64 version
+- Select "Download debugging symbols"
+- Select "Download debug binaries"
+- Delete all the files in \includes\python64d\
+  - copy all the \*_d.pyd files *(but not the coresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (Python\DLLs)
+  Make sure you do not copy the *.pdb files
+- Download the Windows embeddable package (x64)
+  - Delete all the files in \includes\python64\
+  - Copy all the content of the package to \includes\python64\
+- In the solution delete the monitor/x64/pythoncore64 project and locate the new one in the new folder.
+- Copy the `python310.lib` file to tne \includes\python64\ folder, that file is located in the `\PCBuild\amd64` folder.
+- Remove/Uninstall the x64 version
   
 In the solution
-  - "Build > Configuration manager" and make sure that the x64 version build targets the correct architecture
-  - In the "x86/ActionMonitor" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
-  - In the "x64/ActionMonitor64" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
-  - Delete the Output folder to make sure that there are no 'extra' files.
-  - Do a full rebuild of release/debug, if this works as expected delete the previous folder.  
+
+- "Build > Configuration manager" and make sure that the x64 version build targets the correct architecture
+- In the "x86/ActionMonitor" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
+- In the "x64/ActionMonitor64" project "C/C++ > General" Aditional include directory make sure the python path is correct (All Configurations).
+- Delete the Output folder to make sure that there are no 'extra' files.
+- Do a full rebuild of release/debug, if this works as expected delete the previous folder.  
 
 #### zlib
 
@@ -86,17 +90,17 @@ In the solution
 
 ### In python 86/64 project
 
-  - delete pythoncore86
-  - delete pythoncore64
-  - locate and add the project you just created
-    - pythoncore86
-    - pythoncore64
+- delete pythoncore86
+- delete pythoncore64
+- locate and add the project you just created
+  - pythoncore86
+  - pythoncore64
 
 - For the x64 delete the x86 configuration
 - For the x86 delete the x64 configuration
 - Set the output Directory for all configurations to $(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\
 
-- Build 
+- Build
   - the debug x64 should output to .\Output\Debug\x64
   - the debug x86 should output to .\Output\Debug\x86
   
@@ -110,10 +114,10 @@ In the solution
 ## Google test
 
 - Download the latest version from [https://github.com/google/googletest/releases](https://github.com/google/googletest/releases)
-- Unzip the files to *\myoddweb.piger\gtest\gtest-x.y.z\*.** where `xyz` is the new version number.     
+- Unzip the files to *\myoddweb.piger\gtest\gtest-x.y.z\*.** where `xyz` is the new version number.
 **NB:** In the zip file only unpack the `googletest` folder, `googletest-release-x.y.z\googletest` where x.y.z is the compressed file name.
 
-- In the x64 and x86 remove the 2 files that are pointing to the older version: 
+- In the x64 and x86 remove the 2 files that are pointing to the older version:
   - gtest_main.cc
   - gtest-all.cc
 - Re-add the 2 files to point to the new folder.
@@ -121,13 +125,13 @@ In the solution
   - gtest-all.cc
 - Make sure that the files don't use 'precompiled headers', (Properties > C/C++ > Precompiled headers)
 - Update all the include path to the new folder.
-- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.    
-Make sure that the setting is for both debug and release version. 
+- For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.
+Make sure that the setting is for both debug and release version.
 
 ### Project
 
-- Update `myoddtest` and `myoddtest64` to point to the folder you unpacked the files above, \myoddweb.piger\myodd\gtest\gtest-x.y.z    
-Properties > C/C++ > General > Additional Include directories 
+- Update `myoddtest` and `myoddtest64` to point to the folder you unpacked the files above, \myoddweb.piger\myodd\gtest\gtest-x.y.z
+Properties > C/C++ > General > Additional Include directories
   - `.\..\gtest\gtest-1.12.1\include;`
   - `.\..\gtest\gtest-1.12.1\`
 - For the x64 and x86 project, make sure that preprocessor flag `_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING` is added, (Properties > C/C++ > Preprocessor) is set.
