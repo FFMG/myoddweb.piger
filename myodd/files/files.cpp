@@ -1329,7 +1329,7 @@ bool GetAbsolutePath( std::wstring& dest, const std::wstring& givenRelative, con
     }
 
     // we can now join the origin and relative path.
-    copyOfRelative = files::Join(pathToEvaluate, copyOfOrigin);
+    pathToEvaluate = files::Join(copyOfOrigin, copyOfRelative);
   }
   else
   {
