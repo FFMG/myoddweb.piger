@@ -253,4 +253,4 @@ _Pvt_Extensions
 /setup/chocolatey/tools/*.exe
 
 # python files
-monitor/api/python/Python-3.*/PCbuild/amd64/python3*.*
+monitor/api/python/Python-3.*/PCbuild/*/python3*.*
