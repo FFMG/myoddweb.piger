@@ -47,14 +47,14 @@ Look for the "Download Windows installer (32-bit)" and make sure it is the corre
     - Select "Download debugging symbols"
     - Select "Download debug binaries"
   - Delete all the files in \includes\python86d\
-    - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (`\[Install Folder\]\DLLs`)
+    - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (`[Install Folder]\DLLs`)
       Make sure you do not copy the *.pdb files
   - Download the Windows embeddable package (x86)
     - Delete all the files in \includes\python86\
     - Copy all the content of the package to \includes\python86\
   - In the solution delete the monitor/x86/pythoncore86 project and locate the new one in the new folder.  
-  - Copy the `python310.lib` file to tne \includes\python86\ folder, that file is located in the `\[Install Folder\]\libs\\` folder.
-  - Copy the `python310_d.lib` file to tne \includes\python86d\ folder, that file is located in the `\[Install Folder\]\libs\` folder.
+  - Copy the `python310.lib` file to tne \includes\python86\ folder, that file is located in the `[Install Folder]\libs\` folder.
+  - Copy the `python310_d.lib` file to tne \includes\python86d\ folder, that file is located in the `[Install Folder]\libs\` folder.
   - Remove/Uninstall the x86 version
 
 - Python x64
@@ -62,14 +62,14 @@ Look for the "Download Windows installer (32-bit)" and make sure it is the corre
     - Select "Download debugging symbols"
     - Select "Download debug binaries"
   - Delete all the files in \includes\python64d\
-    - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (`\[Install Folder\]\DLLs`)
+    - copy all the \*_d.pyd files *(but not the corresponding \*.pyb files)*, \*_d.dll, \*.lib from the python install directory, (`[Install Folder]\DLLs`)
       Make sure you do not copy the *.pdb files
   - Download the Windows embeddable package (x64)
     - Delete all the files in \includes\python64\
     - Copy all the content of the package to \includes\python64\
   - In the solution delete the monitor/x64/pythoncore64 project and locate the new one in the new folder.  
-  - Copy the `python310.lib` file to tne \includes\python64\ folder, that file is located in the `\[Install Folder\]\libs\\` folder.
-  - Copy the `python310_d.lib` file to tne \includes\python64d\ folder, that file is located in the `\[Install Folder\]\libs\\` folder.
+  - Copy the `python310.lib` file to tne \includes\python64\ folder, that file is located in the `[Install Folder]\libs\` folder.
+  - Copy the `python310_d.lib` file to tne \includes\python64d\ folder, that file is located in the `[Install Folder]\libs\` folder.
   - Remove/Uninstall the x64 version
   
 In the solution
@@ -87,7 +87,6 @@ In the solution
 - The folder should look something like `.\api\python\Python-3.10.8\externals\zlib-1.2.13\`
 
 **NB**: You must make sure that the the project `$(zlibDir)` is pointing to the same version of zlib and that the name of the folder.
-
 Look for the file "python.props" and make sure that `<zlibDir>$(ExternalsDir)\zlib-1.2.13\</zlibDir>` points to the correct folder.
 
 ### In python 86/64 project
