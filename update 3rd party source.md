@@ -75,8 +75,14 @@ Look for the "Download Windows installer (32-bit)" and make sure it is the corre
 In the solution
 
 - "Build > Configuration manager" and make sure that the x64 version build targets the correct architecture
-- In the "x86/ActionMonitor" project "C/C++ > General" Additional include directory make sure the python path is correct (All Configurations).
-- In the "x64/ActionMonitor64" project "C/C++ > General" Additional include directory make sure the python path is correct (All Configurations).
+- In the "x86/ActionMonitor" project 
+  - "C/C++ > General" Additional include directory make sure the python path is correct (All Configurations).
+  - "General > Output directory" `$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\\`
+  - "General > Intermediate directory" `$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\$(ProjectName)\\`
+- In the "x64/ActionMonitor64" project 
+  - "C/C++ > General" Additional include directory make sure the python path is correct (All Configurations).
+  - "General > Output directory" `$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\\`
+  - "General > Intermediate directory" `$(SolutionDir)Output\$(Configuration)\$(PlatformTarget)\$(ProjectName)\\`
 - Delete the Output folder to make sure that there are no 'extra' files.
 - Do a full rebuild of release/debug, if this works as expected delete the previous folder.
 
