@@ -141,7 +141,7 @@ bool PowershellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& act
 
   // get the powershell dll path
   auto dllFullpath = myodd::files::GetAppPath(true);
-  myodd::files::Join(dllFullpath, dllFullpath, _T("ActionMonitor.dll"));
+  dllFullpath = myodd::files::Join(dllFullpath, L"ActionMonitor.dll");
   if (!myodd::files::FileExists(dllFullpath))
   {
     const auto errorMsg = _T("I was unable to find the ActionMonitor dll, I cannot execute this script.");
@@ -151,7 +151,7 @@ bool PowershellVirtualMachine::Execute(ExecuteApi& api, const IActiveAction& act
   }
 
   auto dllInterfacesFullpath = myodd::files::GetAppPath(true);
-  myodd::files::Join(dllInterfacesFullpath, dllInterfacesFullpath, _T("ActionMonitor.Interfaces.dll"));
+  dllInterfacesFullpath = myodd::files::Join(dllInterfacesFullpath, L"ActionMonitor.Interfaces.dll");
   if (!myodd::files::FileExists(dllInterfacesFullpath))
   {
     const auto errorMsg = _T("I was unable to find the ActionMonitor.Interfaces dll, I cannot execute this script.");
@@ -252,7 +252,7 @@ bool PowershellVirtualMachine::Powershell3Path(std::wstring& szPath)
   }
 
   // we now need to add powershell.exe
-  myodd::files::Join(szPath, szRegPath, _T("powershell.exe"));
+  szPath = myodd::files::Join(szRegPath, L"powershell.exe");
   if (!myodd::files::FileExists(szPath))
   {
     // this does not make sense.

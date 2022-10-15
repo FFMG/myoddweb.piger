@@ -114,7 +114,7 @@ BOOL CLoaderPluginApp::InitInstance()
  */
 void CLoaderPluginApp::SetPluginPath( LPCWSTR lpPath )
 {
-  myodd::files::Join( m_pluginPath, lpPath, L"loader" );
+  m_pluginPath = myodd::files::Join( lpPath, L"loader" );
 }
 
 // ---------------------------------------------------------------------------

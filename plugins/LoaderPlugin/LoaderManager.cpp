@@ -8,9 +8,9 @@
 
 #include <myoddinclude.h>
 
-static LPCWSTR LOADER_LEARN = L"learn";
-static LPCWSTR LOADER_LEARN_PRIVILEGED = L"learn (privileged)";
-static LPCWSTR LOADER_UNLEARN = L"unlearn";
+static const wchar_t* LOADER_LEARN = L"learn";
+static const wchar_t* LOADER_LEARN_PRIVILEGED = L"learn (privileged)";
+static const wchar_t* LOADER_UNLEARN = L"unlearn";
 
 // -------------------------------------------------------------
 LoaderManager::LoaderManager( const std::wstring& pluginPath ) :
@@ -49,8 +49,7 @@ void LoaderManager::Init(AmPlugin* p  )
   }
 
   // we now need to load all the items we already have in our XML
-  std::wstring stdXml;
-  myodd::files::Join(stdXml, GetPluginPath(), L"loader.xml");
+  auto stdXml = myodd::files::Join( GetPluginPath(), L"loader.xml");
 
   // expand the path.
   std::wstring wFilePath;
@@ -87,7 +86,7 @@ void LoaderManager::Main(AmPlugin* p  )
 {
   int l = 0;
   //  get the name of the action
-  WCHAR asAction[ 1024 ];
+  wchar_t asAction[ 1024 ];
   l = p->GetAction( _countof(asAction), asAction );
   if( l == 0 )
   {
@@ -174,8 +173,8 @@ void LoaderManager::Learn(AmPlugin* p, bool isPrivileged)
   for( int i = 1; i <= count; ++i )
   {
     //  get the command we are adding.
-    WCHAR asName[ MAX_PATH ];
-    int l = p->GetCommand( i, _countof(asName), asName );
+    wchar_t asName[ MAX_PATH ];
+    const auto l = p->GetCommand( i, _countof(asName), asName );
     if( l == 0 )
     {
       continue;
@@ -190,8 +189,8 @@ void LoaderManager::Learn(AmPlugin* p, bool isPrivileged)
   // now that we now the name of the command the user wants us to learn
   // we must get the name of the file currently selected.
   // this will what we execute/open when the user enters the command.
-  WCHAR asPath[ MAX_PATH ];
-  int l = p->GetFile( 0, _countof(asPath), asPath );
+  wchar_t asPath[ MAX_PATH ];
+  auto l = p->GetFile( 0, _countof(asPath), asPath );
   if( l == 0 )
   {
     l = p->GetFolder( 0, _countof(asPath), asPath );
@@ -259,19 +258,20 @@ void LoaderManager::Learn(AmPlugin* p, bool isPrivileged)
 bool LoaderManager::SaveLUAFile
 (
   std::wstring& fileName,
-  const std::wstring command,
-  const std::wstring appPath,
+  const std::wstring& command,
+  const std::wstring& appPath,
   bool isPrivileged
 )
 {
   // create the filename.
-  std::wstring luaFileName = command;
-  luaFileName += L".lua";
+  auto luaFileName = command;
+  myodd::files::AddExtension( luaFileName, L".lua", true);
 
   // make sure it is valid.
   myodd::files::CleanFileName(luaFileName);
-  std::wstring luaFilePath;
-  myodd::files::Join(luaFilePath, GetPluginPath(), luaFileName);
+
+  // then join the plugin path to the lua filename
+  auto luaFilePath = myodd::files::Join( GetPluginPath(), luaFileName);
 
   // we now have a command and a file path
   // we must create the lua file that will contain this request.
@@ -281,29 +281,35 @@ bool LoaderManager::SaveLUAFile
   errno_t err;
   std::wstring exLuaFilePath;
   myodd::files::ExpandEnvironment(luaFilePath, exLuaFilePath);
-  if ((err = _wfopen_s(&stream, exLuaFilePath.c_str(), L"wb")) != 0)
+  if ((err = _wfopen_s(&stream, exLuaFilePath.c_str(), L"w, ccs=UTF-8")) != 0)
   {
     return false;
   }
+
+  // the loader version
+  const std::wstring version = L"0.4";
 
   //
   // build the comments at the top of the file.
   std::wstring sData;
   sData += L"--\n";
-  sData += L"-- Loaded version 0.3\n";
+  sData += L"-- Loader version "+version+ L"\n";
   sData += L"-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
   sData += L"-- remove this command with 'unlearn ...'\n";
   sData += L"--\n";
+  sData += L"\n";
+  sData += L"am_say( [[<i>Launching <b style='color:#684e00'>" + appPath + L"</b></i> <small>(loader v" + version + L")</small>.]], 400, 10);";
+  sData += L"\n";
 
-  //
-  // add the execute command itself.
-  sData += L"am_execute( ";
-    
   // unexpand the app path.
   // this is just cosmetic but also allows the user to copy their command
   // files from one machine to another.
   std::wstring unAppPath = appPath;
   myodd::files::UnExpandEnvironment(unAppPath, unAppPath);
+
+  //
+  // add the execute command itself.
+  sData += L"am_execute( ";
 
   //  remember, we cannot add spaces or anything...
   sData += L"[[";

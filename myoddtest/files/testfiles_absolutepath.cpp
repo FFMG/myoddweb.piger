@@ -125,8 +125,7 @@ INSTANTIATE_TEST_SUITE_P(TestUNC, MyOddFilesAbsolutePath,
 
 TEST(TestAbsolutePathExpandValues, TestExpendingValues )
 {
-  std::wstring exp;
-  exp = _T("%appdata%\\Test");
+  std::wstring exp = L"%appdata%\\Test";
   myodd::files::ExpandEnvironment( exp, exp);
   myodd::files::UnExpandEnvironment(exp, exp);
 
@@ -134,7 +133,7 @@ TEST(TestAbsolutePathExpandValues, TestExpendingValues )
   ASSERT_TRUE( myodd::files::GetAbsolutePath(dest, L"\\Test", L"%appdata%"));
   ASSERT_EQ(exp, dest);
 
-  exp = _T("%tmp%\\Test");
+  exp = L"%tmp%\\Test";
   myodd::files::ExpandEnvironment(exp, exp);
   myodd::files::UnExpandEnvironment(exp, exp);
 
