@@ -255,7 +255,7 @@ void CActionMonitorApp::InitMaxClipboardSize()
  */
 void CActionMonitorApp::InitReservedPaths()
 {
-  const auto sPath = ::myodd::config::Get( L"paths\\commands", L"");
+  const std::wstring sPath = ::myodd::config::Get( L"paths\\commands", L"");
 
   auto sPathIn = myodd::files::Join( sPath, AM_DIRECTORY_IN );
   myodd::files::CreateFullDirectory( sPathIn, false );

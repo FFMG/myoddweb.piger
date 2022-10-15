@@ -281,29 +281,35 @@ bool LoaderManager::SaveLUAFile
   errno_t err;
   std::wstring exLuaFilePath;
   myodd::files::ExpandEnvironment(luaFilePath, exLuaFilePath);
-  if ((err = _wfopen_s(&stream, exLuaFilePath.c_str(), L"wb")) != 0)
+  if ((err = _wfopen_s(&stream, exLuaFilePath.c_str(), L"w, ccs=UTF-8")) != 0)
   {
     return false;
   }
+
+  // the loader version
+  const std::wstring version = L"0.4";
 
   //
   // build the comments at the top of the file.
   std::wstring sData;
   sData += L"--\n";
-  sData += L"-- Loaded version 0.4\n";
+  sData += L"-- Loader version "+version+ L"\n";
   sData += L"-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
   sData += L"-- remove this command with 'unlearn ...'\n";
   sData += L"--\n";
+  sData += L"\n";
+  sData += L"am_say( [[<i>Launching <b style='color:#684e00'>" + appPath + L"</b></i> <small>(loader v" + version + L")</small>.]], 400, 10);";
+  sData += L"\n";
 
-  //
-  // add the execute command itself.
-  sData += L"am_execute( ";
-    
   // unexpand the app path.
   // this is just cosmetic but also allows the user to copy their command
   // files from one machine to another.
   std::wstring unAppPath = appPath;
   myodd::files::UnExpandEnvironment(unAppPath, unAppPath);
+
+  //
+  // add the execute command itself.
+  sData += L"am_execute( ";
 
   //  remember, we cannot add spaces or anything...
   sData += L"[[";
