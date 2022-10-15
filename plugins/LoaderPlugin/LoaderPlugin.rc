@@ -28,8 +28,8 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,3,1,0
- PRODUCTVERSION 0,3,1,0
+ FILEVERSION 0,4,0,0
+ PRODUCTVERSION 0,4,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -46,12 +46,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "MyOddWeb.com"
             VALUE "FileDescription", "LoadPlugin for Action monitor - piger project"
-            VALUE "FileVersion", "0.3.1.0"
+            VALUE "FileVersion", "0.4.0.0"
             VALUE "InternalName", "LoaderPlugin.dll"
-            VALUE "LegalCopyright", "Myoddweb.com.  All rights reserved. Copyright (C) 2008-2009"
+            VALUE "LegalCopyright", "Myoddweb.com.  All rights reserved. Copyright (C) 2008-2022"
             VALUE "OriginalFilename", "LoaderPlugin.amp"
             VALUE "ProductName", "Action monitor command loader."
-            VALUE "ProductVersion", "0.3.1.0"
+            VALUE "ProductVersion", "0.4.0.0"
         END
     END
     BLOCK "VarFileInfo"

@@ -290,7 +290,7 @@ bool LoaderManager::SaveLUAFile
   // build the comments at the top of the file.
   std::wstring sData;
   sData += L"--\n";
-  sData += L"-- Loaded version 0.3\n";
+  sData += L"-- Loaded version 0.4\n";
   sData += L"-- am_execute( \"command/exe/shortcut\", \"[commandline arguments]\", [isPrivileged=false]);\n";
   sData += L"-- remove this command with 'unlearn ...'\n";
   sData += L"--\n";
