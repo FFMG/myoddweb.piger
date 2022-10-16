@@ -122,6 +122,7 @@ bool Actions::Add( IAction* action )
 {
   if (nullptr == action)
   {
+    myodd::log::LogError(L"Could not add action as the system passed an empty action.");
     return false;
   }
 
@@ -132,6 +133,7 @@ bool Actions::Add( IAction* action )
   if( it != _actions.end() )
   {
     // this item already exists
+    myodd::log::LogWarning( L"Could not add action '%s' as it already exists.", action->Command().c_str() );
     return false;
   }
   
@@ -141,6 +143,12 @@ bool Actions::Add( IAction* action )
   // make sure we have not reached our limit this can be changed in the config file
   // but if you have more than 2048 then we might have problems with loading speed, memory and so forth.
   ASSERT( _actions.size() <= static_cast<size_t>(::myodd::config::Get(L"paths\\maxcommand", 2048)) );
+
+  // all good
+  myodd::log::LogSuccess( L"Added action '%s' (%s). You now have %d action(s) listed.", 
+    action->Command().c_str(), 
+    action->File().length() > 0 ? action->File().c_str() : L"n/a",
+    _actions.size());
   
   // the action was added.
   return true;
@@ -161,6 +169,8 @@ bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
   const auto it = Find( szText, szPath );
   if( it == _actions.end() )
   {
+    myodd::log::LogWarning(L"Tried to remove action '%s' (%s). But it is not listed.", szText.c_str(), szPath.c_str() );
+
     // this item does not exits
     return false;
   }
@@ -170,6 +180,9 @@ bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
 
   // ajust erase it
   _actions.erase( it );
+
+  // all good
+  myodd::log::LogSuccess(L"Removed action '%s' (%s). You now have %d action(s) listed.", szText.c_str(), szPath.c_str(), _actions.size());
 
   // all good.
   return true;
@@ -341,7 +354,7 @@ void Actions::RebuildPosibleListOfActions()
   const auto aoa = GetListOfPossibleCommands();
 
   // make sure that we are withing our new limits.
-  auto matchSize = aoa.size();
+  const auto matchSize = aoa.size();
   if( matchSize == 0 )
   {
     return;
@@ -373,9 +386,9 @@ Actions::array_of_actions Actions::GetListOfPossibleCommands( std::vector<std::w
   // 'go french victories' then only the command 'google' should match
   // otherwise we might match other commands, 'french' or 'victories', (there are hundreds!)
   std::vector<std::wstring> wildActions;
-  for( auto it = wordsTyped.begin(); it != wordsTyped.end(); ++it )
+  for(auto& wordTyped : wordsTyped)
   {
-    wildActions.push_back( L"(" + *it + L"\\S*)" );
+    wildActions.push_back( L"(" + wordTyped + L"\\S*)" );
   }
 
   // create the regex to look for the word.
@@ -390,15 +403,15 @@ Actions::array_of_actions Actions::GetListOfPossibleCommands( std::vector<std::w
   //  the regex _should_ be {aaa}|{bbb} 
   //  but what we will do is search each exploded items one by one
   array_of_actions aoa;
-  for (auto it = _actions.begin(); it != _actions.end(); ++it)
+  for (auto& action : _actions)
   {
     //  get the possible command.
-    const auto& acc = *(*it);
+    const auto& acc = *action;
 
     //  look for that one item.
     if (myodd::strings::wildcmp((wildAction), acc.Command()))
     {
-      aoa.push_back(*it);
+      aoa.push_back(action);
     }
   }
   return aoa;

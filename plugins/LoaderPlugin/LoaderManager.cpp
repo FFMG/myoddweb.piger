@@ -44,7 +44,7 @@ void LoaderManager::Init(AmPlugin* p  )
   }
   else
   {
-    p->Log( AM_LOG_ERROR, L"I was unable to get the path of this command.");
+    p->Log( AM_LOG_ERROR, L"[Loader] I was unable to get the path of this command.");
     return;
   }
 
@@ -64,14 +64,14 @@ void LoaderManager::Init(AmPlugin* p  )
     }
     else
     {
-      auto log = myodd::strings::Format(L"Could create the directry '%s'.", wFilePath);
+      const auto log = myodd::strings::Format(L"[Loader] Could create the directry '%s'.", wFilePath);
       p->Log(AM_LOG_ERROR, log.c_str() );
       return;
     }
   }
   else
   {
-    auto log = myodd::strings::Format(L"Could not expand the environment '%s'.", stdXml);
+    const auto log = myodd::strings::Format(L"[Loader] Could not expand the environment '%s'.", stdXml);
     p->Log(AM_LOG_ERROR, log.c_str() );
     return;
   }
@@ -386,7 +386,7 @@ bool LoaderManager::RemoveActionIfInList(AmPlugin* p, const std::wstring& lowerN
   if (!p->RemoveAction(cpLowerName, itCommand->second.c_str()))
   {
     // we could not remove it.
-    auto log = myodd::strings::Format(L"I was unable to remove the command '%s' - '%s'", cpLowerName, itCommand->second.c_str());
+    const auto log = myodd::strings::Format(L"[Loader] I was unable to remove the command '%s' - '%s'", cpLowerName, itCommand->second.c_str());
     p->Log(AM_LOG_ERROR, log.c_str() );
     return false;
   }
@@ -398,7 +398,7 @@ bool LoaderManager::RemoveActionIfInList(AmPlugin* p, const std::wstring& lowerN
   }
 
   // log it  
-  auto log = myodd::strings::Format(L"Removed command '%s' - '%s'", cpLowerName, itCommand->second.c_str());
+  const auto log = myodd::strings::Format(L"[Loader] Removed command '%s' - '%s'", cpLowerName, itCommand->second.c_str());
   p->Log(AM_LOG_ERROR, log.c_str() );
 
   // unlearn the unlearn function as well.
@@ -440,17 +440,17 @@ bool LoaderManager::AddCommand(AmPlugin* p, const std::wstring& name, const std:
   // and to the action monitor.
   if( !p->AddAction(cpLowerName, path.c_str() ) )
   {
-    auto log = myodd::strings::Format(L"I was unable to add the command '%s' - '%s'", name.c_str(), path.c_str());
+    auto log = myodd::strings::Format(L"[Loader] I was unable to add the command '%s' - '%s'", name.c_str(), path.c_str());
     p->Log(AM_LOG_ERROR, log.c_str() );
     return false;
   }
 
   // add the unlearn function as well so the user can remove this command.
-  std::wstring sUnLearn = GetUnLearnCommand( lowerName );
+  const auto sUnLearn = GetUnLearnCommand( lowerName );
   p->AddAction( sUnLearn.c_str(), GetThisPath().c_str() );
 
   // it seems to have worked.
-  auto log = myodd::strings::Format(L"Added command '%s' - '%s'", name.c_str(), path.c_str());
+  const auto log = myodd::strings::Format(L"[Loader] Added learned command '%s' - '%s'", name.c_str(), path.c_str());
   p->Log(AM_LOG_SUCCES, log.c_str() );
   return true;
 }
