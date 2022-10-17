@@ -25,6 +25,7 @@
     <selected.italic type="15">1</selected.italic>
     <show.extentions type="15">0</show.extentions>
     <show.time type="15">1</show.time>
+    <show.actionInfo type="15">1</show.actionInfo>
     <top type="15">5</top>
     <transparency type="15">127</transparency>
   </commands>
