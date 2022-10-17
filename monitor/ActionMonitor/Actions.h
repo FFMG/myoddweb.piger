@@ -69,7 +69,7 @@ protected:
 
     }
 
-    const CommandsValue& operator=(CommandsValue& rhs )
+    const CommandsValue& operator=( const CommandsValue& rhs )
     {
       if (this != &rhs)
       {
@@ -85,8 +85,8 @@ protected:
     const bool IsBold() const { return _bBold; }
   };
 
-  static const std::wstring ToChar( const IAction& givenAction, const CommandsValue& cv );
-  static const std::wstring ToChar( const std::wstring& givenAction );
+  static const std::wstring ToChar( const IAction& givenAction, const CommandsValue& cv, bool displayPath );
+  static const std::wstring ToChar( const std::wstring& givenAction, const CommandsValue& cv);
   static const CommandsValue GetCommandValue(const std::wstring& lpName, const std::wstring& color, bool bold, bool italic);
 
 protected:
@@ -148,4 +148,14 @@ protected:
   myodd::threads::Key _mutexActions;
   myodd::threads::Key _mutexActionTemp;
   myodd::threads::Key _mutexActionsMatch;
+
+  Actions::CommandsValue _defaultCommandValue;
+  Actions::CommandsValue _selectedCommandValue;
+  Actions::CommandsValue _currentCommandValue;
+
+  /**
+   * \brief if we want to display the action info
+   *        this would mean the script location if we know it.
+   */
+  bool _displayActionInfo;
 };

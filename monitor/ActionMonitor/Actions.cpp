@@ -1,3 +1,17 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "Actions.h"
 #include <io.h>
@@ -11,7 +25,11 @@ Actions::Actions( IApplication& application ) :
   _sActionAsTyped( L"" ),
   _mutexActions( L"Actions"),
   _mutexActionTemp( L"Action - Temp"),
-  _mutexActionsMatch( L"Actions - Match")
+  _mutexActionsMatch( L"Actions - Match"),
+  _displayActionInfo( true ),
+  _defaultCommandValue(),
+  _selectedCommandValue(),
+  _currentCommandValue()
 {
 }
 
@@ -189,7 +207,7 @@ bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
 }
 
 // ------------------------------------------------------------------------------------
-const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsValue& cv )
+const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsValue& cv, bool displayPath)
 {
   if(givenAction.Command().length() == 0)
   {
@@ -207,7 +225,7 @@ const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsVa
   ret += sBold;
   ret += givenAction.Command();
   ret += sBoldC;
-  if (givenAction.Extention().length() > 0)
+  if (displayPath && givenAction.Extention().length() > 0)
   {
     ret += myodd::strings::Format(L"<small style='color:#a69914'>(%s)</small>", givenAction.Extention().c_str());
   }
@@ -220,15 +238,12 @@ const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsVa
 }
 
 // ------------------------------------------------------------------------------------
-const std::wstring Actions::ToChar(const std::wstring& givenAction )
+const std::wstring Actions::ToChar(const std::wstring& givenAction, const CommandsValue& cv)
 {
   if (givenAction.length() == 0)
   {
     return L"";
   }
-
-  // get the current command, colors and style
-  const auto cv = GetCommandValue(L"current", L"000000", false, false);
 
   const auto sBold = cv.IsBold() ? L"<b>" : L"";
   const auto sBoldC = cv.IsBold() ? L"</b>" : L"";
@@ -254,9 +269,9 @@ const Actions::CommandsValue Actions::GetCommandValue(const std::wstring& lpName
 
   // get the value
   return CommandsValue(
-    ::myodd::config::Get(fullPath + L".color", color),
-    ::myodd::config::Get(fullPath + L".bold", bold ),
-    ::myodd::config::Get( fullPath + L".italic", italic ));
+    ::myodd::config::GetString(fullPath + L".color", color),
+    ::myodd::config::GetBool(fullPath + L".bold", bold ),
+    ::myodd::config::GetBool( fullPath + L".italic", italic ));
 }
 
 // -------------------------------------------------------------
@@ -270,23 +285,17 @@ const Actions::CommandsValue Actions::GetCommandValue(const std::wstring& lpName
  */
 std::wstring Actions::ToChar()
 {
-  // the default item
-  const auto cvDef = GetCommandValue( L"default", L"#000000", false, false);
-
-  // and the selected item
-  const auto cvSel = GetCommandValue( L"selected", L"#808000", true, true );
-
   myodd::threads::Lock guard(_mutexActionsMatch );
 
   //  the return string
   //  we keep it as global 'cause we are returning it.
-  auto szCurrentView = ToChar( GetActionAsTyped() );
+  auto szCurrentView = ToChar( GetActionAsTyped(), _currentCommandValue );
   size_t count =  0;
   for ( const auto action : _actionsMatch )
   {
     //  we need a break after the previous line, (even for the current action)
     szCurrentView += L"<br>";
-    szCurrentView += ToChar( *action, (count==m_uCommand) ? cvSel:cvDef );
+    szCurrentView += ToChar( *action, (count==m_uCommand) ? _selectedCommandValue : _defaultCommandValue, _displayActionInfo );
     ++count;
   }
   return szCurrentView;
@@ -532,11 +541,25 @@ std::wstring Actions::GetCommandLine()
 void Actions::Initialize()
 {
   //  get the root directory
-  std::wstring commandsPath = ::myodd::config::Get( L"paths\\commands", L"" );
+  auto commandsPath = ::myodd::config::GetString( L"paths\\commands", L"" );
   if( myodd::files::ExpandEnvironment(commandsPath, commandsPath) )
   {
     ParseDirectory(commandsPath.c_str(), L"" );
   }
+
+  // create the command values.
+  // the default item
+  _defaultCommandValue = GetCommandValue(L"default", L"#000000", false, false);
+
+  // and the selected item
+  _selectedCommandValue = GetCommandValue(L"selected", L"#808000", true, true);
+
+  // get the current command, colors and style
+  _currentCommandValue = GetCommandValue(L"current", L"000000", false, false);
+
+  // do we want to display command info, (path to the script)
+  // by default we do.
+  _displayActionInfo = ::myodd::config::GetBool(L"commands\\show.actionInfo", true);
 }
 
 // -------------------------------------------------------------
@@ -626,7 +649,7 @@ void Actions::ParseDirectory(const std::wstring& rootPath, const std::wstring& e
       szName = myodd::strings::lower(szName );
       
       //  if we don't want to show the extension then strip it.
-      if( ::myodd::config::Get( L"commands\\show.extentions", 0 ) == false )
+      if( ::myodd::config::GetBool( L"commands\\show.extentions", false ) == false )
       {
         myodd::files::StripExtension( szName );
       }        
