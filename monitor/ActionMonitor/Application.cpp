@@ -430,7 +430,7 @@ void Application::ShowStart()
 void Application::ShowVersion()
 {
   myodd::files::Version ver;
-  const auto strSay = myodd::strings::Format(L"<b>Version : </b>%d.%d.%d.%d",
+  const auto strSay = myodd::strings::Format(L"<b>Version: </b><i style='color:#a69914'>%d.%d.%d.%d</i>",
     ver.GetFileVersionMajor(),
     ver.GetFileVersionMinor(),
     ver.GetFileVersionMaintenance(),

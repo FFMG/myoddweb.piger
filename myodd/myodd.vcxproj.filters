@@ -104,28 +104,22 @@
     <ClCompile Include="html\html.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\Parser.cpp">
+    <ClCompile Include="html\Tag.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\Token.cpp">
+    <ClCompile Include="html\TagBold.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\TokenBold.cpp">
+    <ClCompile Include="html\TagBr.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\TokenBr.cpp">
+    <ClCompile Include="html\TagItalic.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\TokenItalic.cpp">
+    <ClCompile Include="html\TagStrikeout.cpp">
       <Filter>html</Filter>
     </ClCompile>
-    <ClCompile Include="html\Tokens.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\TokenStrikeout.cpp">
-      <Filter>html</Filter>
-    </ClCompile>
-    <ClCompile Include="html\TokenUnderline.cpp">
+    <ClCompile Include="html\TagUnderline.cpp">
       <Filter>html</Filter>
     </ClCompile>
     <ClCompile Include="threads\threads.cpp">
@@ -269,6 +263,48 @@
     <ClCompile Include="common\commandline_variables.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="html\TagSmall.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagsParser.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\AttributesParser.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Attribute.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\Attributes.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\AttributeStyle.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValue.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValueColor.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\DomObject.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\DomObjects.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectContent.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectTag.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectClosingTag.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\TagSpan.cpp">
+      <Filter>html</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="myodd.def">
@@ -318,28 +354,22 @@
     <ClInclude Include="html\html.h">
       <Filter>html</Filter>
     </ClInclude>
-    <ClInclude Include="html\Parser.h">
+    <ClInclude Include="html\Tag.h">
       <Filter>html</Filter>
     </ClInclude>
-    <ClInclude Include="html\Token.h">
+    <ClInclude Include="html\TagBold.h">
       <Filter>html</Filter>
     </ClInclude>
-    <ClInclude Include="html\TokenBold.h">
+    <ClInclude Include="html\TagBr.h">
       <Filter>html</Filter>
     </ClInclude>
-    <ClInclude Include="html\TokenBr.h">
+    <ClInclude Include="html\TagItalic.h">
       <Filter>html</Filter>
     </ClInclude>
-    <ClInclude Include="html\TokenItalic.h">
+    <ClInclude Include="html\TagStrikeout.h">
       <Filter>html</Filter>
     </ClInclude>
-    <ClInclude Include="html\Tokens.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\TokenStrikeout.h">
-      <Filter>html</Filter>
-    </ClInclude>
-    <ClInclude Include="html\TokenUnderline.h">
+    <ClInclude Include="html\TagUnderline.h">
       <Filter>html</Filter>
     </ClInclude>
     <ClInclude Include="threads\threads.h">
@@ -425,6 +455,48 @@
     </ClInclude>
     <ClInclude Include="common\commandline_variables.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagSmall.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagsParser.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributesParser.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Attribute.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\Attributes.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributeStyle.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributeValue.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\AttributeValueColor.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObject.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObjects.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObjectContent.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObjectTag.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\DomObjectClosingTag.h">
+      <Filter>html</Filter>
+    </ClInclude>
+    <ClInclude Include="html\TagSpan.h">
+      <Filter>html</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

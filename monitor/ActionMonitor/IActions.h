@@ -31,8 +31,8 @@ public:
   virtual const IAction* GetCommand() = 0;
   virtual std::wstring GetCommandLine() = 0;
   virtual std::wstring ToChar() = 0;
-  virtual void down() = 0;
-  virtual void up() = 0;
+  virtual void Down() = 0;
+  virtual void Up() = 0;
   virtual void Initialize() = 0;
   virtual bool Add(IAction* action) = 0;
   virtual bool Remove(const std::wstring& szText, const std::wstring& szPath) = 0;

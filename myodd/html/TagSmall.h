@@ -1,0 +1,31 @@
+#pragma once
+
+#include "Tag.h"
+
+namespace myodd{ namespace html{
+class TagSmall : public Tag
+{
+public:
+  TagSmall(const Attributes& attributes, int tagStyle);
+  virtual ~TagSmall();
+
+  TagSmall(const TagSmall&);
+  TagSmall& operator=(const TagSmall&);
+
+  /**
+   * \brief get the current tag type
+   * \return the tag type
+   */
+  virtual Type TagType() const { return Type::Small; }
+
+protected:
+  // apply the style
+  virtual void OnPush(HDC hdc, LOGFONT& logFont );
+
+  // remove the style
+  virtual void OnPop(HDC hdc, LOGFONT& logFont );
+
+private:
+  long _lfHeight;
+};
+}}

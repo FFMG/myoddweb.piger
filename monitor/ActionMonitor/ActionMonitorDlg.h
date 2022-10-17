@@ -47,7 +47,10 @@ protected:
   RECT _commandRectangle;
   void RecalculateAllRectangles( const std::wstring& sCommand);
   RECT CalculateMinimumRectPosition(const std::wstring& sCommand, HDC hdc );
+
   RECT CalculateCommandRectangle(const std::wstring& sCommand, HDC hdc);
+  int CalculateCommandHeight(const std::wstring& sCommand, HDC hdc);
+  int CalculateEmptyCommandHeight(HDC hdc);
 
 protected:
   /**

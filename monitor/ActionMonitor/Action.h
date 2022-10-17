@@ -28,7 +28,7 @@ class Action : public IAction
 public:
   const Action& operator=(const Action& );
   Action( const Action&);
-  Action(IApplication& application, const std::wstring& szCommand, const std::wstring& szPath );
+  Action(IApplication& application, const std::wstring& szCommand, const std::wstring& szPath, const std::wstring& extentionPath);
 
 public:
 	virtual ~Action() = default;
@@ -55,6 +55,11 @@ public:
   const std::wstring& File() const override { return _szFile; }
 
   /**
+   * \brief the location of the extention relative to the rootcommand
+   */
+  const std::wstring& Extention() const override { return _szExtention; }
+
+  /**
    * \brief the length of the command.
    */
   size_t Len() const { return _szCommand.length();}
@@ -75,6 +80,7 @@ protected:
   std::wstring ToSingleLine( const wchar_t* text  ) const;
 
 private:  
-  std::wstring _szCommand;  //  the command line only.
-  std::wstring _szFile;    //  the full path+extension
+  std::wstring _szCommand;      //  the command line only.
+  std::wstring _szFile;         //  the full path+extension
+  std::wstring _szExtention;  // where the extention is located.
 };

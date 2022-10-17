@@ -1,3 +1,17 @@
+//This file is part of Myoddweb.Piger.
+//
+//    Myoddweb.Piger is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Myoddweb.Piger is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Myoddweb.Piger.  If not, see<https://www.gnu.org/licenses/gpl-3.0.en.html>.
 #include "stdafx.h"
 #include "Actions.h"
 #include <io.h>
@@ -11,7 +25,11 @@ Actions::Actions( IApplication& application ) :
   _sActionAsTyped( L"" ),
   _mutexActions( L"Actions"),
   _mutexActionTemp( L"Action - Temp"),
-  _mutexActionsMatch( L"Actions - Match")
+  _mutexActionsMatch( L"Actions - Match"),
+  _displayActionInfo( true ),
+  _defaultCommandValue(),
+  _selectedCommandValue(),
+  _currentCommandValue()
 {
 }
 
@@ -189,38 +207,71 @@ bool Actions::Remove(const std::wstring& szText, const std::wstring& szPath )
 }
 
 // ------------------------------------------------------------------------------------
-std::wstring Actions::ToChar(  const std::wstring& s, const CommandsValue& cv )
+const std::wstring Actions::ToChar( const IAction& givenAction, const CommandsValue& cv, bool displayPath)
 {
-  if( s.length() == 0 )
+  if(givenAction.Command().length() == 0)
   {
     return L"";
   }
   
-  const auto sBold     = cv.bBold? L"<b>": L"";
-  const auto sBoldC    = cv.bBold? L"</b>": L"";
+  const auto sBold     = cv.IsBold() ? L"<b>" : L"";
+  const auto sBoldC    = cv.IsBold() ? L"</b>": L"";
   
-  const auto sItalic   = cv.bItalic? L"<i>": L"";
-  const auto sItalicC  = cv.bItalic? L"</i>": L"";
+  const auto sItalic   = cv.IsItalic() ? L"<i>" : L"";
+  const auto sItalicC  = cv.IsItalic() ? L"</i>": L"";
     
   std::wstring ret = L"";
-  ret +=  sBold;
-  ret +=  sItalic;
-  ret +=  s;
-  ret +=  sItalicC;
-  ret +=  sBoldC;
+  ret += sItalic;
+  ret += sBold;
+  ret += givenAction.Command();
+  ret += sBoldC;
+  if (displayPath && givenAction.Extention().length() > 0)
+  {
+    ret += myodd::strings::Format(L"<small style='color:#a69914'>(%s)</small>", givenAction.Extention().c_str());
+  }
+  ret += sItalicC;
+
+  // add the color
+  ret = myodd::strings::Format(L"<span style='color:%s'>%s</span>", cv.Color().c_str(), ret.c_str());
+
+  return ret;
+}
+
+// ------------------------------------------------------------------------------------
+const std::wstring Actions::ToChar(const std::wstring& givenAction, const CommandsValue& cv)
+{
+  if (givenAction.length() == 0)
+  {
+    return L"";
+  }
+
+  const auto sBold = cv.IsBold() ? L"<b>" : L"";
+  const auto sBoldC = cv.IsBold() ? L"</b>" : L"";
+
+  const auto sItalic = cv.IsItalic() ? L"<i>" : L"";
+  const auto sItalicC = cv.IsItalic() ? L"</i>" : L"";
+
+  std::wstring ret = L"";
+  ret += sBold;
+  ret += sItalic;
+  ret += givenAction;
+  ret += sItalicC;
+  ret += sBoldC;
 
   return ret;
 }
 
 // -------------------------------------------------------------
-void Actions::GetCommandValue(const std::wstring& lpName, CommandsValue& cv )
+const Actions::CommandsValue Actions::GetCommandValue(const std::wstring& lpName, const std::wstring& color, bool bold, bool italic)
 {
   // get the path
   const auto fullPath = ::myodd::strings::Format( L"commands\\%s", lpName.c_str() );
 
   // get the value
-  cv.bBold    = ::myodd::config::Get( fullPath + L".bold", cv.bBold);
-  cv.bItalic  = ::myodd::config::Get( fullPath + L".italic", cv.bItalic );
+  return CommandsValue(
+    ::myodd::config::GetString(fullPath + L".color", color),
+    ::myodd::config::GetBool(fullPath + L".bold", bold ),
+    ::myodd::config::GetBool( fullPath + L".italic", italic ));
 }
 
 // -------------------------------------------------------------
@@ -234,31 +285,17 @@ void Actions::GetCommandValue(const std::wstring& lpName, CommandsValue& cv )
  */
 std::wstring Actions::ToChar()
 {
-  //  get the current command, colors and style
-  CommandsValue cv(  false, false );
-  GetCommandValue( L"current", cv );
-
-  // the default item
-  CommandsValue cvDef( false, false );
-  GetCommandValue( L"default", cvDef );
-
-  // and the selected item
-  CommandsValue cvSel( true, true );
-  GetCommandValue( L"selected", cvSel );
-
   myodd::threads::Lock guard(_mutexActionsMatch );
 
   //  the return string
   //  we keep it as global 'cause we are returning it.
-  auto szCurrentView = ToChar( GetActionAsTyped(), cv );
+  auto szCurrentView = ToChar( GetActionAsTyped(), _currentCommandValue );
   size_t count =  0;
-  for ( auto it =  _actionsMatch.begin(); it != _actionsMatch.end(); ++it )
+  for ( const auto action : _actionsMatch )
   {
     //  we need a break after the previous line, (even for the current action)
     szCurrentView += L"<br>";
-    const auto& acc = *(*it);
-
-    szCurrentView += ToChar( acc.Command(), (count==m_uCommand) ? cvSel:cvDef );
+    szCurrentView += ToChar( *action, (count==m_uCommand) ? _selectedCommandValue : _defaultCommandValue, _displayActionInfo );
     ++count;
   }
   return szCurrentView;
@@ -504,15 +541,29 @@ std::wstring Actions::GetCommandLine()
 void Actions::Initialize()
 {
   //  get the root directory
-  std::wstring commandsPath = ::myodd::config::Get( L"paths\\commands", L"" );
+  auto commandsPath = ::myodd::config::GetString( L"paths\\commands", L"" );
   if( myodd::files::ExpandEnvironment(commandsPath, commandsPath) )
   {
     ParseDirectory(commandsPath.c_str(), L"" );
   }
+
+  // create the command values.
+  // the default item
+  _defaultCommandValue = GetCommandValue(L"default", L"#000000", false, false);
+
+  // and the selected item
+  _selectedCommandValue = GetCommandValue(L"selected", L"#808000", true, true);
+
+  // get the current command, colors and style
+  _currentCommandValue = GetCommandValue(L"current", L"000000", false, false);
+
+  // do we want to display command info, (path to the script)
+  // by default we do.
+  _displayActionInfo = ::myodd::config::GetBool(L"commands\\show.actionInfo", true);
 }
 
 // -------------------------------------------------------------
-void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
+void Actions::ParseDirectory(const std::wstring& rootPath, const std::wstring& extentionPath  )
 {
   // make sure that we do not have too many actions
   // this is a sign that something is broken
@@ -528,8 +579,8 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   }
 
   // make sure that the path that we have is valid.
-  ASSERT( _tcslen( rootPath ) > 0 );
-  if( _tcslen( rootPath ) == 0 )
+  ASSERT( rootPath.length() > 0);
+  if( rootPath.length() == 0)
   {
     return;
   }
@@ -551,16 +602,16 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
   //  *.bat, *.exe, *.pl
   //  but I am not sure we really need to restrict anything
   // it is up to the user to ensure that they have 
-  auto sPath = directory + L"*.*";
+  const auto sPath = directory + L"*.*";
 
-  LPTSTR fullPath = NULL;
-  if( !myodd::files::ExpandEnvironment( sPath.c_str(), fullPath ) )
+  std::wstring fullPath = L"";
+  if( !myodd::files::ExpandEnvironment( sPath, fullPath ) )
   {
     return;
   }
   
   _tfinddata_t fdata;
-  const auto ffhandle = _tfindfirst( fullPath, &fdata );
+  const auto ffhandle = _tfindfirst( fullPath.c_str(), &fdata);
   if( ffhandle != -1 )
   {
     do
@@ -583,8 +634,7 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
           continue;
         }
         
-        std::wstring subPath( extentionPath );
-        subPath += fdata.name;
+        auto subPath( extentionPath + fdata.name);
         myodd::files::AddTrailingBackSlash( subPath );
 
         ParseDirectory( rootPath, subPath.c_str() );
@@ -599,22 +649,20 @@ void Actions::ParseDirectory( LPCTSTR rootPath, LPCTSTR extentionPath  )
       szName = myodd::strings::lower(szName );
       
       //  if we don't want to show the extension then strip it.
-      if( ::myodd::config::Get( L"commands\\show.extentions", 0 ) == false )
+      if( ::myodd::config::GetBool( L"commands\\show.extentions", false ) == false )
       {
         myodd::files::StripExtension( szName );
       }        
 
-      Add( new Action( _application ,szName, szFullPath));
+      Add( new Action( _application ,szName, szFullPath, extentionPath));
     }while( _tfindnext( ffhandle, &fdata ) == 0 );
 
     _findclose( ffhandle );
   }
-
-  delete [] fullPath;
 }
 
 // -------------------------------------------------------------
-void Actions::down()
+void Actions::Down()
 {
   myodd::threads::Lock guard(_mutexActionsMatch);
   m_uCommand++;
@@ -625,7 +673,7 @@ void Actions::down()
 }
 
 // -------------------------------------------------------------
-void Actions::up()
+void Actions::Up()
 {
   myodd::threads::Lock guard(_mutexActionsMatch);
   if (m_uCommand == 0)

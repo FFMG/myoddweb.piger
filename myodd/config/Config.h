@@ -36,12 +36,28 @@ namespace myodd{ namespace config{
   void Set(const std::wstring& path, const ::myodd::dynamic::Any& value );
   
   /**
-   * Try and get a value, if the value is not found, we throw.
-   * @param const std::wstring& path the name of the value we are looking for.
-   * @param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
-   * @return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
+   * \brief Try and get a value, if the value is not found, we throw.
+   * \param const std::wstring& path the name of the value we are looking for.
+   * \param ::myodd::dynamic::Any& defaultValue the default value to use in case it does not exist.
+   * \return ::myodd::dynamic::Any the value, if it exists, the default otherwise.
    */
   ::myodd::dynamic::Any Get(const std::wstring& path, const myodd::dynamic::Any& defaultValue );
+
+  /**
+   * \brief get a config value and convert it to a string value  
+   * \param const std::wstring& path the name of the value we are looking for.
+   * \param const std::wstring& defaultValue the default value to use in case it does not exist.
+   * \return std::wstring the value, if it exists, the default otherwise.
+   */
+  std::wstring GetString(const std::wstring& path, const std::wstring& defaultValue);
+
+  /**
+   * \brief get a config value and convert it to a string value
+   * \param const std::wstring& path the name of the value we are looking for.
+   * \param bool defaultValue the default value to use in case it does not exist.
+   * \return bool the value, if it exists, the default otherwise.
+   */
+  bool GetBool(const std::wstring& path, bool defaultValue);
 
   /**
    * Check if the value has been set or not.

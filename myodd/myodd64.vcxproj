@@ -225,6 +225,116 @@
     </ClCompile>
     <ClCompile Include="files\files.cpp" />
     <ClCompile Include="geo\geo.cpp" />
+    <ClCompile Include="html\Attribute.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\Attributes.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributesParser.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributeStyle.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\AttributeValueColor.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\DomObject.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectClosingTag.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectContent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\DomObjects.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\DomObjectTag.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="html\html.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
@@ -235,75 +345,94 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\Parser.cpp" />
-    <ClCompile Include="html\Token.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-      </PrecompiledHeader>
+    <ClCompile Include="html\Tag.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenBold.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-      </PrecompiledHeader>
+    <ClCompile Include="html\TagBold.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenBr.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-      </PrecompiledHeader>
+    <ClCompile Include="html\TagBr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenItalic.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-      </PrecompiledHeader>
+    <ClCompile Include="html\TagItalic.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\Tokens.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-      </PrecompiledHeader>
+    <ClCompile Include="html\TagSmall.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenStrikeout.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-      </PrecompiledHeader>
+    <ClCompile Include="html\TagSpan.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="html\TokenUnderline.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
-      </PrecompiledHeader>
+    <ClCompile Include="html\TagsParser.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\TagStrikeout.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="html\TagUnderline.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug MT|x64'">
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="log\log.cpp" />
@@ -560,15 +689,28 @@
     <ClInclude Include="dynamic\types.h" />
     <ClInclude Include="files\files.h" />
     <ClInclude Include="geo\geo.h" />
+    <ClInclude Include="HtmlData.h" />
+    <ClInclude Include="html\Attribute.h" />
+    <ClInclude Include="html\Attributes.h" />
+    <ClInclude Include="html\AttributesParser.h" />
+    <ClInclude Include="html\AttributeStyle.h" />
+    <ClInclude Include="html\AttributeValue.h" />
+    <ClInclude Include="html\AttributeValueColor.h" />
+    <ClInclude Include="html\DomObject.h" />
+    <ClInclude Include="html\DomObjectClosingTag.h" />
+    <ClInclude Include="html\DomObjectContent.h" />
+    <ClInclude Include="html\DomObjects.h" />
+    <ClInclude Include="html\DomObjectTag.h" />
     <ClInclude Include="html\html.h" />
-    <ClInclude Include="html\Parser.h" />
-    <ClInclude Include="html\Token.h" />
-    <ClInclude Include="html\TokenBold.h" />
-    <ClInclude Include="html\TokenBr.h" />
-    <ClInclude Include="html\TokenItalic.h" />
-    <ClInclude Include="html\Tokens.h" />
-    <ClInclude Include="html\TokenStrikeout.h" />
-    <ClInclude Include="html\TokenUnderline.h" />
+    <ClInclude Include="html\Tag.h" />
+    <ClInclude Include="html\TagBold.h" />
+    <ClInclude Include="html\TagBr.h" />
+    <ClInclude Include="html\TagItalic.h" />
+    <ClInclude Include="html\TagSmall.h" />
+    <ClInclude Include="html\TagSpan.h" />
+    <ClInclude Include="html\TagsParser.h" />
+    <ClInclude Include="html\TagStrikeout.h" />
+    <ClInclude Include="html\TagUnderline.h" />
     <ClInclude Include="log\log.h" />
     <ClInclude Include="log\logevent.h" />
     <ClInclude Include="log\logfile.h" />

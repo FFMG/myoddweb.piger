@@ -54,6 +54,6 @@ void ActiveLogAction::OnExecuteInThread()
     nullptr
   );
 
-  const auto strSay = myodd::strings::Format(L"<b>Opening Logfile</b> '%s'", logFile);
+  const auto strSay = myodd::strings::Format(L"<b>Opening Logfile</b> '%s'", logFile.c_str() );
   //_application.Show(strSay.c_str() , 500, 3000);
 }

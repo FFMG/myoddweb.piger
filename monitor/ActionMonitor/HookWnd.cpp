@@ -172,7 +172,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     break;
 
   case VK_DOWN:
-    _actions.down();
+    _actions.Down();
     _display.Show( _actions.ToChar() );
     break;
 
@@ -180,7 +180,7 @@ LRESULT HookWnd::OnHookKeyDown(WPARAM wParam, LPARAM lParam)
     break;
 
   case VK_UP:
-    _actions.up();
+    _actions.Up();
     _display.Show( _actions.ToChar() );
     break;
 

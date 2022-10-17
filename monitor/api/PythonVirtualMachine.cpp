@@ -112,8 +112,7 @@ bool PythonVirtualMachine::Initialize()
   {
     // try and load the python core files.
     const auto exe_dir = myodd::files::GetAppPath(true);
-    std::wstring python_path;
-    myodd::files::Join(python_path, exe_dir, L"python\\python310.zip");
+    auto python_path = myodd::files::Join(exe_dir, L"python\\python310.zip");
     Py_SetPath(python_path.c_str());
   }
 
@@ -122,11 +121,9 @@ bool PythonVirtualMachine::Initialize()
   if (embedded)
   {
     const auto exe_dir = myodd::files::GetAppPath(true);
-    std::wstring python_path1;
-    myodd::files::Join(python_path1, exe_dir, L"python\\");
+    auto python_path1 = myodd::files::Join(exe_dir, L"python\\");
 
-    std::wstring python_path2;
-    myodd::files::Join(python_path2, exe_dir, L"python\\python310.zip");
+    auto python_path2 = myodd::files::Join(exe_dir, L"python\\python310.zip");
 
     // join the two together
     std::wstring python_path3 = python_path1 + L";" + python_path2;

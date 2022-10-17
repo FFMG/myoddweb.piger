@@ -109,7 +109,14 @@ wchar_t* ReadFile(const wchar_t* file, __int64 nStartPos = -1, __int64 nEndPos =
 
 wchar_t* Byte2Char( const char* buf, size_t len, FileEncode fileEncoding );
 
-void Join( std::wstring& returnPath, const std::wstring& pathPartA, const std::wstring& pathPartB );
+/**
+ * \brief properly join 2 file parts together
+ *        for example join c:\folder and file would give c:\folder\file
+ * \param const std::wstring& the lhs for the final part
+ * \param const std::wstring& the rhs of the path that we are joinning to the lhs
+ * \return std::wstring the 'clean' joinned path
+ */
+std::wstring Join( const std::wstring& lhs, const std::wstring& rhs );
 
 // get the version of a given file.
 class Version

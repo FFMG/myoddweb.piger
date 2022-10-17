@@ -44,6 +44,30 @@ namespace myodd{ namespace config{
   }
 
   /**
+   * \brief get a config value and convert it to a string value
+   * \param const std::wstring& path the name of the value we are looking for.
+   * \param const std::wstring& defaultValue the default value to use in case it does not exist.
+   * \return std::wstring the value, if it exists, the default otherwise.
+   */
+  std::wstring GetString(const std::wstring& path, const std::wstring& defaultValue)
+  {
+    const auto& any = Get(path, defaultValue);
+    return static_cast<const wchar_t*>(any);
+  }
+
+  /**
+   * \brief get a config value and convert it to a string value
+   * \param const std::wstring& path the name of the value we are looking for.
+   * \param bool defaultValue the default value to use in case it does not exist.
+   * \return bool the value, if it exists, the default otherwise.
+   */
+  bool GetBool(const std::wstring& path, bool defaultValue)
+  {
+    const auto& any = Get(path, defaultValue);
+    return static_cast<bool>(any);
+  }
+
+  /**
    * Check if the value has been set or not.
    * @param const std::wstring& path the path we are looking for.
    * @return bool if the path exists or not.

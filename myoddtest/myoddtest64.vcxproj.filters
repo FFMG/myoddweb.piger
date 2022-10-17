@@ -32,6 +32,9 @@
     <Filter Include="myodd\common">
       <UniqueIdentifier>{d2af3111-8f25-49e0-a1ed-e2413150b03f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="myodd\html">
+      <UniqueIdentifier>{da8d9202-7fb9-4d22-9c39-2e9114ee9e47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -174,6 +177,18 @@
     </ClCompile>
     <ClCompile Include="common\testcommandline_variables.cpp">
       <Filter>myodd\common</Filter>
+    </ClCompile>
+    <ClCompile Include="html\testtagparser.cpp">
+      <Filter>myodd\html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\testattributeparser.cpp">
+      <Filter>myodd\html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\testdomobjecttag.cpp">
+      <Filter>myodd\html</Filter>
+    </ClCompile>
+    <ClCompile Include="html\testattributes.cpp">
+      <Filter>myodd\html</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
