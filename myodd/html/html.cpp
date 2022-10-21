@@ -128,7 +128,7 @@ namespace myodd{ namespace html{
     assert( lpRect );
 
     // set the length of the text if the user did not pass it.
-    nCount = nCount < 0 ? _tcslen( lpString ) : nCount;
+    nCount = nCount < 0 ? static_cast<int>(_tcslen(lpString)) : nCount;
 
     int vOffset = 0;
     // horizontal alignments are handled in the htmlSingle(...) function

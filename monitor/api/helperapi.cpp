@@ -176,7 +176,7 @@ bool HelperApi::GetAction(std::wstring& sValue ) const
  * one command count, ( 'Home' );
  * @return the number of arguments.
  */
-size_t HelperApi::GetCommandCount() const
+unsigned int HelperApi::GetCommandCount() const
 {
   try
   {
@@ -208,7 +208,7 @@ size_t HelperApi::GetCommandCount() const
   }
   catch (...)
   {
-    Log(AM_LOG_ERROR, L"GetCommandCount( ... ): unknwon exception.");
+    Log(AM_LOG_ERROR, L"GetCommandCount( ... ): unknown exception.");
 
     // something broke...
     return 0;

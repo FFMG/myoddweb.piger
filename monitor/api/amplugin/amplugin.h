@@ -103,13 +103,13 @@ public:
   // the various functions
   virtual double Version() = 0;
   virtual bool Say(const wchar_t* msg, const unsigned int nElapse, const unsigned int nFadeOut) const = 0;
-  virtual size_t GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
+  virtual unsigned int GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
 
   // get the full action as given by the user
   virtual size_t GetAction(unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
 
   // get the number of parameters passed.
-  virtual size_t GetCommandCount() const = 0;
+  virtual unsigned int GetCommandCount() const = 0;
   virtual bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged) = 0;
   virtual int GetString(unsigned int nBufferLength, wchar_t* lpBuffer) = 0;
   virtual size_t GetFile(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer) const = 0;

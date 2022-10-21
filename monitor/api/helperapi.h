@@ -67,7 +67,7 @@ protected:
   bool GetAction( std::wstring& sValue ) const;
 
   // get the number of commands.
-  size_t GetCommandCount() const;
+  unsigned int GetCommandCount() const;
 
   // execute a module and a command line
   virtual bool Execute(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const;

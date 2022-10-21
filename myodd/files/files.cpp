@@ -135,8 +135,8 @@ void StripExtension( std::wstring& filename)
   {
     // we do not want to remove the extension from something like '.htaccess'
     // this is clearly not the extension but the filename.
-    auto result = (pdest - (charFilename));
-    if( result >0 && result < filename.length() )
+    const auto result = (pdest - (charFilename));
+    if( result >0 && result < static_cast<int>(filename.length()) )
     {
       filename = filename.substr( 0, result );
     }

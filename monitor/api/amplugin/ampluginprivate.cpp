@@ -3,7 +3,7 @@
 
 typedef bool(*PLUGIN_FNCSAY)(const wchar_t*, unsigned int, unsigned int);
 typedef double(*PLUGIN_FNCVERSION)();
-typedef size_t(*PLUGIN_FNCGETS)(unsigned int, unsigned int, wchar_t*);
+typedef unsigned int(*PLUGIN_FNCGETS)(unsigned int, unsigned int, wchar_t*);
 typedef int(*PLUGIN_FNCGET)(unsigned int, wchar_t*);
 typedef size_t(*PLUGIN_FNCGETCOUNT)();
 typedef bool(*PLUGIN_FNCEXECUTE)(const wchar_t*, const wchar_t*, bool);
@@ -85,7 +85,7 @@ double AmPluginPrivate::Version()
 * @param void
 * @return void
 */
-size_t AmPluginPrivate::GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer)
+unsigned int AmPluginPrivate::GetCommand(unsigned int idx, unsigned int nBufferLength, wchar_t* lpBuffer)
 {
   void* pFunc = Get(L"getCommand");
   if (!pFunc)
@@ -184,7 +184,7 @@ size_t AmPluginPrivate::GetAction(unsigned int nBufferLength, wchar_t* lpBuffer)
 * @param void
 * @return void
 */
-size_t AmPluginPrivate::GetCommandCount() const
+unsigned int AmPluginPrivate::GetCommandCount() const
 {
   void* pFunc = Get(L"getCommandCount");
   if (!pFunc)

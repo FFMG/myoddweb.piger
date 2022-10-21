@@ -15,7 +15,7 @@ public:
 
 public:
   double Version ();
-  size_t GetCommandCount();
+  unsigned int GetCommandCount();
 
   bool Say         (const std::wstring& sText, long elapseMiliSecondsBeforeFadeOut, long totalMilisecondsToShowMessage) const override;
   bool Execute     (const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged, HANDLE* hProcess) const override;

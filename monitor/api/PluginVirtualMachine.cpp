@@ -456,7 +456,7 @@ int PluginVirtualMachine::GetAction(DWORD nBufferLength, wchar_t* lpBuffer)
 * @see __super::getCommandCount
 * @return in the number of commanded entered by the user
 */
-size_t PluginVirtualMachine::GetCommandCount()
+unsigned int PluginVirtualMachine::GetCommandCount()
 {
   return GetApi().GetCommandCount();
 }

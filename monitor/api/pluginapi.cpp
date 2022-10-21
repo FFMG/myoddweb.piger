@@ -108,7 +108,7 @@ int PluginApi::GetAction(unsigned int nBufferLength, wchar_t* lpBuffer ) const
  * @see __super::getCommandCount
  * @return in the number of commanded entered by the user
  */
-size_t PluginApi::GetCommandCount()
+unsigned int PluginApi::GetCommandCount()
 {
   return __super::GetCommandCount();
 }
