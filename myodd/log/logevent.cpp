@@ -125,7 +125,7 @@ namespace myodd { namespace log {
     unsigned idx = 0;
     while (GetNotif(idx++, fnNotif, lParam))
     {
-      (*fnNotif)(uiType, pszLine ? pszLine : _T(""), (void*)lParam);
+      (*fnNotif)(uiType, pszLine ? pszLine : L"", (void*)lParam);
     }
 
     // log it to the file

@@ -187,7 +187,7 @@ namespace myodd{ namespace offset{
     }
     else
     {
-      item = _T("");
+      item = L"";
     }
     return true;
   }

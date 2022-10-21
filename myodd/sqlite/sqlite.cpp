@@ -83,7 +83,7 @@ bool tableExists
   char** szResult;
 
   // create the select that we will call.
-  static const wchar_t* pszSelect = _T("SELECT name FROM sqlite_master WHERE type='table' and name='%s';");
+  static const wchar_t* pszSelect = L"SELECT name FROM sqlite_master WHERE type='table' and name='%s';";
   size_t nLen = (_tcslen( pszSelect ) + _tcslen( table_name )) * sizeof(wchar_t);
   wchar_t* pszSelectFull = new wchar_t[ nLen+ sizeof(wchar_t)];
   _stprintf_s( pszSelectFull, nLen, pszSelect, table_name );
@@ -194,7 +194,7 @@ bool execWithReturn
       for( int i = 0; i < nCol; ++i )
       {
         const wchar_t* sz = (wchar_t *)myodd_sqlite_column_text(pStmt, i);
-        sqlRow.push_back( sz ? sz : _T("NULL") );
+        sqlRow.push_back( sz ? sz : L"NULL" );
       }
     };
     sqlite3_finalize(pStmt); 

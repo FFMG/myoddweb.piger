@@ -30,8 +30,8 @@ namespace myodd{ namespace wnd{
   void MakeValidUInt( HWND hwndParent, WORD id );
   void MakeValidInt( HWND hwndParent, WORD id ); 
   void MakeValidIntRange(HWND hwndParent, WORD id, int nMin, int nMax );
-  void MakeValidDouble( HWND hwndParent, WORD id, const wchar_t* lpszFormat = _T("%f") );
-  void MakeValidDoubleRange( HWND hwndParent, WORD id, double nMin, double nMax, const wchar_t* lpszFormat = _T("%f") );
+  void MakeValidDouble( HWND hwndParent, WORD id, const wchar_t* lpszFormat = L"%f" );
+  void MakeValidDoubleRange( HWND hwndParent, WORD id, double nMin, double nMax, const wchar_t* lpszFormat = L"%f" );
 
   bool SetFocus( HWND hwndParent, WORD id );
 

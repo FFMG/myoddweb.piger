@@ -1032,7 +1032,7 @@ std::wstring IpcData::Get<std::wstring>(unsigned int index) const
   switch (ipc->dataType)
   {
   case IpcDataType::Int32:
-    return myodd::strings::Format(_T("%d"), *static_cast<int32_t*>(ipc->pData));
+    return myodd::strings::Format(L"%d", *static_cast<int32_t*>(ipc->pData));
 
   case IpcDataType::Int64:
     return myodd::strings::Format(_T("%" PRId64), *static_cast<int64_t*>(ipc->pData));

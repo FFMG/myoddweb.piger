@@ -114,7 +114,7 @@ void LoaderManager::Main(AmPlugin* p  )
   }
   else
   {
-    std::wstring s = _T("Error : Unknown action : ");
+    std::wstring s = L"Error : Unknown action : ";
     s += asAction;
     p->Say( s.c_str(), 100, 5 );
     return;

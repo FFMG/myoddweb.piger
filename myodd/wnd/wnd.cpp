@@ -49,7 +49,7 @@ bool SetText( HWND hwndParent, WORD id, const wchar_t* lp )
   {
     return false;
   }
-  return (::SetWindowText( hwnd, (lp ? lp : _T("")) ) ? true : false);
+  return (::SetWindowText( hwnd, (lp ? lp : L"") ) ? true : false);
 }
 
 /**

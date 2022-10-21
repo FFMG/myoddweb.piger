@@ -359,7 +359,7 @@ namespace myodd {
     void Data::WalkElement(const long versionNumber, const tinyxml2::XMLElement& root, std::vector<std::wstring>& parents)
     {
       //  get the type
-      const std::wstring sep = _T("\\");
+      const auto sep = L"\\";
 
       const tinyxml2::XMLAttribute* attributeType = root.FindAttribute("type");
       if (attributeType == NULL)

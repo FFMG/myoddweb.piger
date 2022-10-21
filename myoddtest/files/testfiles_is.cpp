@@ -214,7 +214,7 @@ TEST(TestIsDirectory, TestTempDirectory)
 {
   // get the temp directory
   std::wstring tempDirectory;
-  if (!myodd::files::ExpandEnvironment(_T("%temp%"), tempDirectory))
+  if (!myodd::files::ExpandEnvironment(L"%temp%", tempDirectory))
   {
     FAIL();
   }
@@ -254,19 +254,19 @@ TEST(TestIsDirectory, TestTempDirectoryExpanded)
 {
   // get the temp directory
   std::wstring tempDirectory;
-  if (!myodd::files::ExpandEnvironment(_T("%temp%"), tempDirectory))
+  if (!myodd::files::ExpandEnvironment(L"%temp%", tempDirectory))
   {
     FAIL();
   }
 
   // it is a directory
-  ASSERT_TRUE(myodd::files::IsDirectory(_T("%temp%")));
+  ASSERT_TRUE(myodd::files::IsDirectory(L"%temp%"));
 
   // but not a file.
-  ASSERT_FALSE(myodd::files::IsFile(_T("%temp%")));
+  ASSERT_FALSE(myodd::files::IsFile(L"%temp%"));
 
   auto uuid = Uuid();
-  auto file = myodd::files::Join( _T("%temp%"), uuid );
+  auto file = myodd::files::Join( L"%temp%", uuid );
 
   // not yet a file
   ASSERT_FALSE(myodd::files::IsFile(file));

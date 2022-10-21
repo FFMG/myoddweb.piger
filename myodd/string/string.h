@@ -175,7 +175,7 @@ namespace myodd{ namespace strings{
 #endif
       if (!(o << x))
       {
-        return _T("");
+        return L"";
       }
       return o.str();
     }

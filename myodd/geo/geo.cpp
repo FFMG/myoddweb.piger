@@ -20,19 +20,19 @@ void Test()
 #ifdef _DEBUG
 {
   double d1, d2, d3;
-  d1 = positionToDecimal( _T("N05º 13' 01.3" ));
-  d2 = positionToDecimal( _T("05º 13' 01.3N" ));
+  d1 = positionToDecimal( L"N05º 13' 01.3");
+  d2 = positionToDecimal( L"05º 13' 01.3N");
   assert( d1 == d2 );
 
-  d3 = positionToDecimal( _T("N05* 13.02166666666668"));
+  d3 = positionToDecimal( L"N05* 13.02166666666668");
   assert( d2 == d3 );
 
-  d1 = positionToDecimal( _T("S29° 59&apos;13.60&quot;" )); //  XML format
-  d2 = positionToDecimal( _T("S29:59'13.60\"" ));
+  d1 = positionToDecimal( L"S29° 59&apos;13.60&quot;" ); //  XML format
+  d2 = positionToDecimal( L"S29:59'13.60\"" );
   assert( d1 == d2 );
 
-  d1 = positionToDecimal( _T("E30° 56&apos;58.10&quot;" ));
-  d2 = positionToDecimal( _T("E30° 56'58.10\"" ));
+  d1 = positionToDecimal( L"E30° 56&apos;58.10&quot;" );
+  d2 = positionToDecimal( L"E30° 56'58.10\"" );
   assert( d1 == d2 );
 
   int _d1, _m1, _d2, _m2;
@@ -435,8 +435,8 @@ void decimalToDegree
 double positionToDecimal(const wchar_t* lpString )
 {
   std::wstring sPos( lpString );
-  sPos = myodd::strings::Replace( sPos, _T("&apos;"), _T("'") );
-  sPos = myodd::strings::Replace( sPos, _T("&quot;"), _T("\"") );
+  sPos = myodd::strings::Replace( sPos, L"&apos;", L"'" );
+  sPos = myodd::strings::Replace( sPos, L"&quot;", L"\"" );
 
   const wchar_t* lpPos = sPos.c_str();
 

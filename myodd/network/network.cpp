@@ -34,22 +34,22 @@ namespace myodd{ namespace net{
     wchar_t key[MAX_PATH + MAX_PATH];
 
     // First try ShellExecute()
-    HINSTANCE result = ShellExecute(NULL, _T("open"), lpUrl, NULL,NULL, showcmd);
+    HINSTANCE result = ShellExecute(NULL, L"open", lpUrl, NULL,NULL, showcmd);
 
     // If it failed, get the .htm regkey and lookup the program
     if ((UINT)result <= HINSTANCE_ERROR) 
     {
-      if (GetRegKey(HKEY_CLASSES_ROOT, _T(".htm"), key) == ERROR_SUCCESS) 
+      if (GetRegKey(HKEY_CLASSES_ROOT, L".htm", key) == ERROR_SUCCESS) 
       {
-        lstrcat(key, _T("\\shell\\open\\command"));
+        lstrcat(key, L"\\shell\\open\\command");
 
         if (GetRegKey(HKEY_CLASSES_ROOT,key,key) == ERROR_SUCCESS) 
         {
           wchar_t *pos;
-          pos = _tcsstr(key, _T("\"%1\""));
+          pos = _tcsstr(key, L"\"%1\"");
           if (pos == NULL)                      // No quotes found
           {
-            pos = _tcsstr(key, _T("%1"));       // Check for %1, without quotes 
+            pos = _tcsstr(key, L"%1");       // Check for %1, without quotes 
             if (pos == NULL)                    // No parameter at all...
               pos = key+lstrlen(key)-1;
             else
@@ -60,7 +60,7 @@ namespace myodd{ namespace net{
             *pos = '\0';                        // Remove the parameter
           }
 
-          lstrcat(pos, _T(" "));
+          lstrcat(pos, L" ");
           lstrcat(pos, lpUrl);
 
           USES_CONVERSION;
@@ -86,7 +86,7 @@ namespace myodd{ namespace net{
     void* lpBuffer,
     unsigned int dwNumberOfBytesToRead, 
     unsigned int* lpNumberOfBytesRead, 
-    const wchar_t* lpszAgent /*= _T("myodd getfile")*/
+    const wchar_t* lpszAgent /*= L"myodd getfile"*/
   )
   {
     HINTERNET hInet = InternetOpen(lpszAgent, INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, NULL);

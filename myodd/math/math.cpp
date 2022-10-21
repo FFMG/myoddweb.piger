@@ -44,64 +44,64 @@ void Test()
   }
 
   // Check the various base conversions.
-  assert( ToBase10( _T("A"), 16 ) == 10 );
-  assert( ToBase10( _T("0A"), 16 ) == 10 );            // Zeros don't matter.
-  assert( ToBase10( _T("0000A"), 16 ) == 10 );
-  assert( ToBase10( _T("a"), 16 ) == 10 );             // not case sensitive
-  assert( ToBase10( _T("G"), 16 ) == -1 );             // 'G' is not base 16
-  assert( ToBase10( _T("AA"), 16 ) == 170 );
-  assert( ToBase10( _T("ABCDEF"), 16 ) == 11259375 );
-  assert( ToBase10( _T("AbCdEf"), 16 ) == 11259375 );
-  assert( ToBase10( _T("101010111100110111101111"), 2) == 11259375 );  //  base 2
-  assert( ToBase10( _T("52746757"), 8) == 11259375 );  // base 8
-  assert( ToBase10( _T("Z"), 36 ) == 35 );             // base 36
-  assert( ToBase10( _T("2S"), 36 ) == 100 );
-  assert( ToBase10( _T("100"), 36 ) == 1296 );
+  assert( ToBase10( L"A", 16 ) == 10 );
+  assert( ToBase10( L"0A", 16 ) == 10 );            // Zeros don't matter.
+  assert( ToBase10( L"0000A", 16 ) == 10 );
+  assert( ToBase10( L"a", 16 ) == 10 );             // not case sensitive
+  assert( ToBase10( L"G", 16 ) == -1 );             // 'G' is not base 16
+  assert( ToBase10( L"AA", 16 ) == 170 );
+  assert( ToBase10( L"ABCDEF", 16 ) == 11259375 );
+  assert( ToBase10( L"AbCdEf", 16 ) == 11259375 );
+  assert( ToBase10( L"101010111100110111101111", 2) == 11259375 );  //  base 2
+  assert( ToBase10( L"52746757", 8) == 11259375 );  // base 8
+  assert( ToBase10( L"Z", 36 ) == 35 );             // base 36
+  assert( ToBase10( L"2S", 36 ) == 100 );
+  assert( ToBase10( L"100", 36 ) == 1296 );
 
   // the other way around.
-  std::wstring ret = _T("");                         // base 36
+  std::wstring ret = L"";                         // base 36
   ToBase( ret, 10, 36 );
-  assert( ret == _T("A") );
+  assert( ret == L"A" );
   ToBase( ret, 100, 36 );
-  assert( ret == _T("2S") );
+  assert( ret == L"2S" );
 
   ToBase( ret, 11259375, 2 );
-  assert( ret == _T("101010111100110111101111"));   // base 2
+  assert( ret == L"101010111100110111101111");   // base 2
 
   ToBase( ret, 11259375, 8 );
-  assert( ret == _T("52746757"));                   // base 8
+  assert( ret == L"52746757");                   // base 8
 
   ToBase( ret, 11259375, 16 );
-  assert( ret == _T("ABCDEF"));                     // base 16
+  assert( ret == L"ABCDEF");                     // base 16
 
   // edge cases.
   ToBase( ret, 0, 36 );
-  assert( ret == _T("0") );                         // 0- base 36 number
+  assert( ret == L"0" );                         // 0- base 36 number
   ToBase( ret, 0, 16 );
-  assert( ret == _T("0") );                         // 0- base 16 number
+  assert( ret == L"0" );                         // 0- base 16 number
   ToBase( ret, 0, 8 );
-  assert( ret == _T("0") );                         // 0- base 8 number
+  assert( ret == L"0" );                         // 0- base 8 number
   ToBase( ret, 0, 2 );
-  assert( ret == _T("0") );                         // 0- base 2 number
+  assert( ret == L"0" );                         // 0- base 2 number
 
-  assert( ToBase10( _T("0"), 36 ) == 0 );
-  assert( ToBase10( _T("0"), 16 ) == 0 );
-  assert( ToBase10( _T("0"), 8 ) == 0 );
-  assert( ToBase10( _T("0"), 2 ) == 0 );
+  assert( ToBase10( L"0", 36 ) == 0 );
+  assert( ToBase10( L"0", 16 ) == 0 );
+  assert( ToBase10( L"0", 8 ) == 0 );
+  assert( ToBase10( L"0", 2 ) == 0 );
 
-  assert( ToBase10( _T("0"), 40 ) == -1 );          // Invalid bases.
-  assert( ToBase10( _T("0"), 1 ) == -1 );
-  assert( ToBase10( _T("AAAAA"), 1 ) == -1 );
-  assert( ToBase10( _T("AAAAA"), 40 ) == -1 );
+  assert( ToBase10( L"0", 40 ) == -1 );          // Invalid bases.
+  assert( ToBase10( L"0", 1 ) == -1 );
+  assert( ToBase10( L"AAAAA", 1 ) == -1 );
+  assert( ToBase10( L"AAAAA", 40 ) == -1 );
 
   ToBase( ret, (unsigned int)-1, 36 );
-  assert( ret == _T("1Z141Z3") );                   // the max base 36 number
+  assert( ret == L"1Z141Z3" );                   // the max base 36 number
   ToBase( ret, (unsigned int)-1, 16 );
-  assert( ret == _T("FFFFFFFF") );                  // the max base 16 number
+  assert( ret == L"FFFFFFFF" );                  // the max base 16 number
   ToBase( ret, (unsigned int)-1, 8 );
-  assert( ret == _T("37777777777") );               // the max base 8 number
+  assert( ret == L"37777777777" );               // the max base 8 number
   ToBase( ret, (unsigned int)-1, 2 );
-  assert( ret == _T("11111111111111111111111111111111") );                
+  assert( ret == L"11111111111111111111111111111111" );                
                                                     // the max base 2 number
 
   assert( max2( 1, 2) == 2 );
@@ -473,7 +473,7 @@ int __fastcall ToBase10(const wchar_t* udata, BYTE fromBase)
 const wchar_t* __fastcall ToBase( std::wstring& ret, unsigned int base10number, BYTE base)
 {
   //  reset the return value.
-  ret = _T("");
+  ret = L"";
   //  sanity check
   // 1- We only support base 2 -> 36
   if( base > 36 || base < 2 )
@@ -484,7 +484,7 @@ const wchar_t* __fastcall ToBase( std::wstring& ret, unsigned int base10number, 
   //  no need to try to convert 0.
   if( 0 != base10number )
   {
-    static const wchar_t numdigits[] = TEXT("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    static const wchar_t numdigits[] = L"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     long digitValue = 0;
     
     // copy only the numbers we need, (depending on the base).
@@ -500,7 +500,7 @@ const wchar_t* __fastcall ToBase( std::wstring& ret, unsigned int base10number, 
   }
   else
   {
-    ret = _T("0" ); //  zero is zero in all bases.
+    ret = L"0" ; //  zero is zero in all bases.
   }
   return ret.c_str();
 }

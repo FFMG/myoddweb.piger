@@ -12,31 +12,31 @@ namespace myodd{ namespace strings{
 void Test()
 #ifdef _DEBUG
 {
-  assert("a" == WString2String(_T("a")));
-  assert("abcdef" == WString2String(_T("abcdef")));
-  assert(_T("a") == String2WString( "a"));
-  assert(_T("abcdef") == String2WString("abcdef"));
+  assert("a" == WString2String(L"a"));
+  assert("abcdef" == WString2String(L"abcdef"));
+  assert(L"a"== String2WString( "a"));
+  assert(L"abcdef" == String2WString("abcdef"));
 
-  std::wstring s1 = Format( _T("%10.2f"), 10.27 );
-  assert( s1 == _T("     10.27"));
+  std::wstring s1 = Format( L"%10.2f", 10.27 );
+  assert( s1 == L"     10.27");
 
-  assert( _tcsistr( _T("Hel"), _T("hello")) == NULL );
+  assert( _tcsistr( L"Hel", L"hello") == NULL );
 
-  assert( _tcsistr( _T("Hello"), _T("hello")) != NULL );
-  assert( _tcsistr( _T("Hello"), _T("Hello")) != NULL );
-  assert( _tcsistr( _T("abcdHello"), _T("hello")) != NULL );
-  assert( _tcsistr( _T("abcdHello"), _T("Hello")) != NULL );
-  assert( _tcsistr( _T("Helloabc"), _T("hello")) != NULL );
-  assert( _tcsistr( _T("Helloabc"), _T("Hello")) != NULL );
+  assert( _tcsistr( L"Hello", L"hello") != NULL );
+  assert( _tcsistr( L"Hello", L"Hello") != NULL );
+  assert( _tcsistr( L"abcdHello", L"hello") != NULL );
+  assert( _tcsistr( L"abcdHello", L"Hello") != NULL );
+  assert( _tcsistr( L"Helloabc", L"hello") != NULL );
+  assert( _tcsistr( L"Helloabc", L"Hello") != NULL );
 
-  assert( _tcsistr( _T("Hello"), _T("no match")) == NULL );
+  assert( _tcsistr( L"Hello", L"no match") == NULL );
 
-  assert( ToString( (int)10, NULL ) == _T("10") );
-  assert( ToString( (int)10 ) == _T("10") );
-  assert( ToString( (double)10, NULL ) != _T("10") );
-  assert( ToString( (float)10, NULL ) != _T("10") );
-  assert( ToString( (float)10, NULL ) != _T("10") );
-  assert( ToString( _T("A"), NULL ) == _T("A") );
+  assert( ToString( (int)10, NULL ) == L"10" );
+  assert( ToString( (int)10 ) == L"10" );
+  assert( ToString( (double)10, NULL ) != L"10" );
+  assert( ToString( (float)10, NULL ) != L"10" );
+  assert( ToString( (float)10, NULL ) != L"10" );
+  assert( ToString( L"A", NULL ) == L"A" );
 }
 #else
 {
@@ -268,10 +268,10 @@ std::wstring implode
 )
 {
   if( iToPiece != -1 && iFromPiece >= iToPiece )
-    return _T("");
+    return L"";
 
   if( iFromPiece >= (int)s.size() || iFromPiece < 0 )
-    return _T("");
+    return L"";
 
   std::vector<std::wstring>::const_iterator itEnd;
   if( iToPiece >= (int)s.size() || iToPiece < 0 )
@@ -298,13 +298,13 @@ std::wstring implode
   std::vector<std::wstring>::const_iterator itEnd
 )
 {
-	std::wstring r = _T("");
+	std::wstring r = L"";
 	for( std::vector<std::wstring>::const_iterator it = itStart; 
        it != itEnd; 
        ++it
       ) 
 	{
-		r = ((it != itStart)?	(r + glue) : (_T(""))) + (*it);
+		r = ((it != itStart)?	(r + glue) : (L"")) + (*it);
 	}
   return (r);
 }
@@ -917,13 +917,13 @@ std::wstring Format(const wchar_t* pszFormat, ... )
     va_end(argp);
 
     // return nothing
-    return std::wstring(_T(""));
+    return std::wstring(L"");
   }
 
   // _vscprintf doesn't count + 1; terminating '\0'
   ++len;
   
-  std::wstring result = _T("");
+  std::wstring result = L"";
 
   // create the new buffer.
   wchar_t* buffer = new wchar_t[len];
