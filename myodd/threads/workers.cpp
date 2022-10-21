@@ -114,7 +114,7 @@ namespace myodd {
       Lock guard(_mutex);
 
       // now that we have the lock, make sure that the value is within range
-      const auto numberOfWorkers = _workers.size();
+      const auto numberOfWorkers = static_cast<int>(_workers.size());
       if (numberOfWorkers == 0)
       {
         return -1;

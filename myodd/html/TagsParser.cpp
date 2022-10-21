@@ -265,7 +265,7 @@ void TagsParser::CalculateSmartDimensions( SIZE& size, HDC hDCScreen, const wcha
 {
   if( nLen == -1 )
   {
-    nLen = szText ? _tcslen(szText) : 0;
+    nLen = szText ? static_cast<int>(_tcslen(szText)) : 0;
   }
   auto& lHeight = size.cy;
   auto& lWidth = size.cx;

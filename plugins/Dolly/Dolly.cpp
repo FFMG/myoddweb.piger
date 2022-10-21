@@ -35,8 +35,8 @@ AM_RESPONSE am_Msg(AM_MSG msg, AM_UINT wParam, AM_INT lParam)
   case AM_MSG_MAIN:
     {
       //  seed me up...
-      std::chrono::system_clock::rep seed = std::chrono::system_clock::now().time_since_epoch().count();
-      std::srand(seed);
+      const auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+      std::srand( static_cast<unsigned int>(seed));
 
       // just say something.
       const

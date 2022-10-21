@@ -162,7 +162,7 @@ void LoaderManager::UnLearn(AmPlugin* p, const std::wstring& lpName  )
 void LoaderManager::Learn(AmPlugin* p, bool isPrivileged)
 {
   // the user could have entered a multi word command.
-  int count = p->GetCommandCount();
+  const auto count = p->GetCommandCount();
   if( 0 == count)
   {
     p->Say( L"Error : Open as <i>... what</i>?", 100, 5 );

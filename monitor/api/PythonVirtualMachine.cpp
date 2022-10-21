@@ -166,7 +166,7 @@ bool PythonVirtualMachine::InitializeFunctions()
  * \param script the string that will contain the string.
  * \return boolean success or not.
  */
-bool PythonVirtualMachine::ReadFile(const const wchar_t* pyFile, std::wstring& script) const
+bool PythonVirtualMachine::ReadFile(const wchar_t* pyFile, std::wstring& script) const
 {
   // clear the scruot.
   script = L"";

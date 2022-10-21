@@ -66,7 +66,7 @@ protected:
 
 public:
   static double Version();
-  static size_t GetCommandCount();
+  static unsigned int GetCommandCount();
 
   static bool Say(const wchar_t* sText, unsigned int elapseMiliSecondsBeforeFadeOut, unsigned int totalMilisecondsToShowMessage);
   static bool ExecuteInPlugin(const wchar_t* module, const wchar_t* cmdLine, bool isPrivileged);
