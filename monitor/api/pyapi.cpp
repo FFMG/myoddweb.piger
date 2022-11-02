@@ -56,7 +56,7 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
   {
     PyErr_Clear();
 
-    char* msg;
+    char* msg = nullptr;
     Py_ssize_t slen = 0;
     auto nElapse = 0;
     auto nFadeOut = 0;
@@ -65,9 +65,17 @@ PyObject* PyApi::Say(PyObject *self, PyObject *args) const
     if (!PyArg_ParseTuple(args, "s#i|i", &msg, &slen, &nElapse, &nFadeOut))
     {
       Say(L"<b>Error : </b> Missing or more values or invalid format.<br><i>am.say( msg, elapse [, fade=0])</i>");
-
       __super::Log(AM_LOG_ERROR, L"Python: Say( ... ) Missing or more values or invalid format.");
       
+      //  just return false.
+      return Fail();
+    }
+
+    if (nullptr == msg)
+    {
+      Say(L"<b>Error : </b> The given message is null or empty.");
+      __super::Log(AM_LOG_ERROR, L"Python: Say( ... ) Message is null.");
+
       //  just return false.
       return Fail();
     }
@@ -428,6 +436,13 @@ PyObject* PyApi::AddAction(PyObject *self, PyObject *args) const
       return Fail();
     }
 
+    if (nullptr == szText || nullptr == szPath)
+    {
+      Say(L"<b>Error : </b> The action and/or path is invalid!");
+      __super::Log(AM_LOG_ERROR, L"Python: AddAction( ... ): action and/or text is invalid.");
+      return Fail();
+    }
+
     // run it
     const auto result = __super::AddAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str());
     return Py_BuildValue("b", result);
@@ -468,6 +483,13 @@ PyObject* PyApi::RemoveAction(PyObject *self, PyObject *args) const
       return Fail();
     }
 
+    if (nullptr == szText || nullptr == szPath)
+    {
+      Say(L"<b>Error : </b> The action and/or path is invalid!");
+      __super::Log(AM_LOG_ERROR, L"Python: RemoveAction( ... ): action and/or text is invalid.");
+      return Fail();
+    }
+
     // run it
     const auto result = __super::RemoveAction(HelperApi::Widen(szText).c_str(), HelperApi::Widen(szPath).c_str());
     return Py_BuildValue("b", result);
@@ -505,6 +527,15 @@ PyObject* PyApi::Log(PyObject *self, PyObject *args) const
     {
       Say(L"<b>Error : </b> Missing values.<br>Format is <i>am_Log( <b>logType</b>, <b>string</b> )</i>");
       __super::Log(AM_LOG_ERROR, L"Python: Log( ... ) missing message and/or error type.");
+      return Fail();
+    }
+
+    if (nullptr == szText)
+    {
+      Say(L"<b>Error : </b> The given log text is null or empty.");
+      __super::Log(AM_LOG_ERROR, L"Python: Log( ... ) Text is null.");
+
+      //  just return false.
       return Fail();
     }
 
@@ -610,12 +641,14 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
 }
 
 /**
- * Execute the current script
- * We are now in the thread.
+ * \brief Execute the given script, we are in a thread.
  */
 void PyApi::ExecuteInThread() const
 {
-  assert(Py_IsInitialized() );
+  if (_Py_IsFinalizing())
+  {
+    return;
+  }
   
   // get the lock so we can change things.
   PyEval_AcquireLock();
