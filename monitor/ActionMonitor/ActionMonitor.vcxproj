@@ -70,7 +70,6 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\ActionMonitor\;..\..\myodd\;..\..\myodd\boost\;$(SolutionDir)/monitor/api/python/Python-3.10.8/Include/;$(SolutionDir)/monitor/api/python/Python-3.10.8/PC/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
