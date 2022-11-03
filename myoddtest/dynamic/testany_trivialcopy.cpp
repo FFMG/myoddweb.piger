@@ -284,14 +284,14 @@ TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToString)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW(std::string( (const char*)any) != std::string((const char*)any), std::bad_cast);
+  EXPECT_THROW((void)(std::string( (const char*)any) != std::string((const char*)any)), std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToWideString)
 {
   TrivialStruct ts = { IntRandomNumber<int>(false), IntRandomNumber<int>(false) };
   ::myodd::dynamic::Any any(ts);
-  EXPECT_THROW(std::wstring((const wchar_t*)any) != std::wstring((const wchar_t*)any), std::bad_cast);
+  EXPECT_THROW((void)(std::wstring((const wchar_t*)any) != std::wstring((const wchar_t*)any)), std::bad_cast);
 }
 
 TEST_MEM(AnyTestTrivialCopy, CannotCastTrivialToBoolean)

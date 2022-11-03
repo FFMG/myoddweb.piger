@@ -5,7 +5,7 @@ typedef bool(*PLUGIN_FNCSAY)(const wchar_t*, unsigned int, unsigned int);
 typedef double(*PLUGIN_FNCVERSION)();
 typedef unsigned int(*PLUGIN_FNCGETS)(unsigned int, unsigned int, wchar_t*);
 typedef int(*PLUGIN_FNCGET)(unsigned int, wchar_t*);
-typedef size_t(*PLUGIN_FNCGETCOUNT)();
+typedef unsigned int(*PLUGIN_FNCGETCOUNT)();
 typedef bool(*PLUGIN_FNCEXECUTE)(const wchar_t*, const wchar_t*, bool);
 typedef bool(*PLUGIN_FNCOMMAND)(const wchar_t*, const wchar_t*);
 typedef bool(*PLUGIN_FINDCOMMAND)(unsigned int, const wchar_t*, unsigned int, wchar_t*);

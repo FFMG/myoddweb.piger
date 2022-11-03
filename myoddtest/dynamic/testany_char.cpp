@@ -490,7 +490,7 @@ TEST_MEM(AnyTestCharacter, StdStringPointerConstructor)
 
 TEST_MEM_LOOP(AnyTestCharacter, GetUnsignedCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
 {
-  const size_t len = (size_t)CharRandom<unsigned char>() + 1; // make sure we never have zero
+  const auto len = CharRandom<unsigned char>() + 1; // make sure we never have zero
   unsigned char* c = new unsigned char[len];
   memset(c, 0, len);
   for (auto i = 0; i < len-1; ++i)
@@ -518,7 +518,7 @@ TEST_MEM_LOOP(AnyTestCharacter, GetUnsignedCharPtrWithNoNullTerminatorInsideStri
 
 TEST_MEM_LOOP(AnyTestCharacter, GetSignedCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
 {
-  const size_t len = (size_t)CharRandom<unsigned char>() + 1; // make sure we never have zero
+  const auto len = CharRandom<unsigned char>() + 1; // make sure we never have zero
   signed char* c = new signed char[len];
   memset(c, 0, len);
   for (auto i = 0; i < len; ++i)
@@ -546,7 +546,7 @@ TEST_MEM_LOOP(AnyTestCharacter, GetSignedCharPtrWithNoNullTerminatorInsideString
 
 TEST_MEM_LOOP(AnyTestCharacter, GetCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
 {
-  const size_t len = (size_t)CharRandom<unsigned char>() + 1; // make sure we never have zero
+  const auto len = CharRandom<unsigned char>() + 1; // make sure we never have zero
   char* c = new char[len];
   memset(c, 0, len);
   for (auto i = 0; i < len-1; ++i)
@@ -574,7 +574,7 @@ TEST_MEM_LOOP(AnyTestCharacter, GetCharPtrWithNoNullTerminatorInsideString, NUMB
 
 TEST_MEM_LOOP(AnyTestCharacter, GetWideCharPtrWithNoNullTerminatorInsideString, NUMBER_OF_TESTS)
 {
-  const size_t len = (size_t)CharRandom<unsigned char>() +1; // make sure we never have zero
+  const auto len = CharRandom<unsigned char>() +1; // make sure we never have zero
   wchar_t* c = new wchar_t[len];
   memset(c, 0, len);
   for (auto i = 0; i < len - 1; ++i)
@@ -602,7 +602,7 @@ TEST_MEM_LOOP(AnyTestCharacter, GetWideCharPtrWithNoNullTerminatorInsideString, 
 
 TEST_MEM_LOOP(AnyTestCharacter, GetWideCharPtrWithLength, NUMBER_OF_TESTS)
 {
-  const size_t len = (size_t)CharRandom<unsigned char>() + 1; // make sure we never have zero
+  const auto len = CharRandom<unsigned char>() + 1; // make sure we never have zero
   wchar_t* c = new wchar_t[len];
   memset(c, 0, len);
   for (auto i = 0; i < len; ++i)
@@ -624,7 +624,7 @@ TEST_MEM_LOOP(AnyTestCharacter, GetWideCharPtrWithLength, NUMBER_OF_TESTS)
 
 TEST_MEM_LOOP(AnyTestCharacter, GetCharPtrWithLength, NUMBER_OF_TESTS)
 {
-  const size_t len = (size_t)CharRandom<unsigned char>() + 1; // make sure we never have zero
+  const auto len = CharRandom<unsigned char>() + 1; // make sure we never have zero
   char* c = new char[len];
   memset(c, 0, len);
   for (auto i = 0; i < len; ++i)

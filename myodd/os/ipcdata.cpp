@@ -662,8 +662,11 @@ std::wstring IpcData::ReadString(unsigned char* pData, const size_t dataSize, si
 
     // make sure we can read this.
     ThrowIfReadingPastSize(dataSize, pointer, sizeof(stringSize));
-
-    memcpy_s(&stringSize, sizeof(dataSize), pData + pointer, sizeof(stringSize));
+    memcpy_s(&stringSize,   //  (void* dest)
+      sizeof(stringSize),   //  max dest size
+      pData + pointer,      //  (void* src)
+      sizeof(stringSize)    //  size of src
+    );
 
     // update the pointer location.
     pointer += sizeof(stringSize);
@@ -752,8 +755,12 @@ std::string IpcData::ReadAsciiString(unsigned char* pData, const size_t dataSize
 
     // make sure we can read this.
     ThrowIfReadingPastSize(dataSize, pointer, sizeof(stringSize));
+    memcpy_s(&stringSize,   //  (void* dest)
+      sizeof(stringSize),   //  max dest size
+      pData + pointer,      //  (void* src)
+      sizeof(stringSize)    //  size of src
+    );
 
-    memcpy_s(&stringSize, sizeof(stringSize), pData + pointer, sizeof(stringSize));
 
     // update the pointer location.
     pointer += sizeof(stringSize);

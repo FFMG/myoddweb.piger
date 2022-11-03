@@ -31,7 +31,7 @@ Attributes AttributesParser::Parse(const std::wstring& text) const
  */
 Attributes AttributesParser::Parse(const wchar_t* lpString ) const
 {
-  auto totalLen = lpString == nullptr ? 0 : _tcslen(lpString);
+  const auto totalLen = static_cast<int>(lpString == nullptr ? 0 : wcslen(lpString));
   if (totalLen == 0 )
   {
     return Attributes();
