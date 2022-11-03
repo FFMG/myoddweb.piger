@@ -159,8 +159,10 @@ unsigned int explode_by_null_char
  * \param ret the return container.
  * \param stringToExplode the string we want to explode
  * \param strDelimit Set of delimiter characters.
- * \param nCount the max number of items we want to return.
- *               If the limit parameter is zero, then this is treated as 1.
+ * \param maxnumberOfElements the max number of items we want to return.
+ *               If the limit parameter is zero, then this is treated as 1, (and only return one element).
+ *               If the value is negative, we return the (total - n) number of elements, (from 0 to total - count)
+ *                  If the negative number is greater than the total number of elements, we return nothing.
  * \param bAddEmpty if we want to add empty params or not.
  * \return the number of item that we found.
  */
@@ -169,25 +171,25 @@ unsigned int Explode
   std::vector<std::wstring>& ret,
   const std::wstring& stringToExplode, 
   wchar_t strDelimit,
-  unsigned int nCount /*=MYODD_MAX_INT32*/,
+  int maxnumberOfElements /*=MYODD_MAX_INT32*/,
   bool bAddEmpty /*= true*/
 )
 {
   //  reset all
   ret.clear();
 
-  // return if we have no work to do.
-  // If the limit parameter is zero, then this is treated as 1.
-  if( 1 == nCount || 0 == nCount )
+  // if we have zero or 1 element then there is nothing to explode
+  // we just put the one string in the vector and return that.
+  if( 1 == maxnumberOfElements || 0 == maxnumberOfElements)
   {
     ret.push_back(stringToExplode);
     return 1;
   }
   
   // reserve space.
-  if( nCount > 1 && nCount != MYODD_MAX_INT32 )
+  if(maxnumberOfElements > 1 && maxnumberOfElements != MYODD_MAX_INT32 )
   {
-    ret.reserve( nCount );
+    ret.reserve(maxnumberOfElements);
   }
 
   // get the given vector length 
@@ -209,7 +211,7 @@ unsigned int Explode
       if( bAddEmpty || (pos-iLast) > 0 )
       {
         ++retSize;
-        if (nCount > 1 && retSize >= nCount)
+        if (maxnumberOfElements > 1 && retSize >= maxnumberOfElements)
         {
           // we have collected more items than we want.
           // so we can just stop here and add everything else to our container.
@@ -227,10 +229,10 @@ unsigned int Explode
     }
   }
 
-  // If count is negative, we only return retSize - count items.
-  if( nCount < 0 )
+  // If count is negative, we only return retSize - maxnumberOfElements items.
+  if(maxnumberOfElements < 0 )
   {
-    const auto positiveCount = static_cast<const unsigned int>(nCount * -1);
+    const auto positiveCount = static_cast<const unsigned int>(maxnumberOfElements * -1);
     if(positiveCount >= retSize )
     {
       // we want less items that are actually available
@@ -240,8 +242,8 @@ unsigned int Explode
     }
     else
     {
-      retSize += nCount;  // nCount is negative so we want all the items
-                          // in the vector minus the last '-ve count' ones
+      retSize += maxnumberOfElements;  // nCount is negative so we want all the items
+                                       // in the vector minus the last '-ve count' ones
       ret.erase( ret.begin()+retSize, ret.end());
     }
   }

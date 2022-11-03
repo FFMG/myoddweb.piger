@@ -66,8 +66,10 @@ namespace myodd{ namespace strings{
    * \param ret the return container.
    * \param stringToExplode the string we want to explode
    * \param strDelimit Set of delimiter characters.
-   * \param nCount the max number of items we want to return.
-   *               If the limit parameter is zero, then this is treated as 1.
+   * \param maxnumberOfElements the max number of items we want to return.
+   *               If the limit parameter is zero, then this is treated as 1, (and only return one element).
+   *               If the value is negative, we return the (total - n) number of elements, (from 0 to total - count)
+   *                  If the negative number is greater than the total number of elements, we return nothing.
    * \param bAddEmpty if we want to add empty params or not.
    * \return the number of item that we found.
    */
@@ -76,7 +78,7 @@ namespace myodd{ namespace strings{
       std::vector<std::wstring>& ret,
       const std::wstring& stringToExplode,
       wchar_t strDelimit,
-      unsigned int nCount =MYODD_MAX_INT32,
+      int maxnumberOfElements =MYODD_MAX_INT32,
       bool bAddEmpty = true
     );
 

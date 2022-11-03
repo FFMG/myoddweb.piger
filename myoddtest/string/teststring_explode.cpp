@@ -140,3 +140,47 @@ INSTANTIATE_TEST_SUITE_P(VariousCountSizeWithAddEmptyFlag, MyOddStringExplodeWit
     test_explode{ L",, ,,", L',',{ L" " }, 1, MYODD_MAX_INT32, false },  //  a space is not empty
     test_explode{ L"", L',',{}, 0, MYODD_MAX_INT32, false }
 ));
+
+TEST(ExplodeString, NegativeCountWillReturnTheTotalNumberLessTheCount)
+{
+  std::vector<std::wstring> s;
+  const auto l = myodd::strings::Explode(
+    s,
+    L"1,2,3,4,5", L',', -2);
+
+  // we have 5 items in the array, we want -2 numbers
+  // in other words, we want 5 - 2 = 3
+  std::vector<std::wstring> expected = { L"1",L"2",L"3" };
+
+  ASSERT_EQ(3, l);
+  ASSERT_EQ(expected, s);
+};
+
+TEST(ExplodeString, NegativeCountBiggerThanTheToalWillReturnNothing)
+{
+  std::vector<std::wstring> s;
+  const auto l = myodd::strings::Explode(
+    s,
+    L"1,2,3,4,5", L',', -10);
+
+  // we have 5 items in the array, we want -10 numbers
+  // in other words, we want 5 - 10 = -5
+  // we can't do that, so we will return noting
+  std::vector<std::wstring> expected = {};
+
+  ASSERT_EQ(0, l);
+  ASSERT_EQ(expected, s);
+};
+
+TEST(ExplodeString, ZeroCountWillReturnSingleString)
+{
+  std::vector<std::wstring> s;
+  const auto l = myodd::strings::Explode(
+    s,
+    L"1,2,3,4,5", L',', 0);
+
+  std::vector<std::wstring> expected = { L"1,2,3,4,5" };
+
+  ASSERT_EQ(1, l);
+  ASSERT_EQ(expected, s);
+};
