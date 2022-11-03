@@ -46,22 +46,38 @@ namespace myodd{ namespace strings{
 
   int32_t Compare( const std::wstring& lhs, const std::wstring& rhs, bool caseSensitive = true);
 
-  // explode with a '\0' char
-  size_t explode_by_null_char
+  /**
+   * \brief Explode a string that is separated with '\0' chars.
+   *        This is used with items like GetPrivateProfileString( ... ) when we want to list all the keys.
+   * \param ret the return container.
+   * \param s_keys the string with null chars '\0' finished by '\0\0'
+   * \param nLen the length of the string.
+   * \return int the number of items we exploded the string to.
+   */
+  unsigned int explode_by_null_char
     (
-    std::vector<std::wstring>& ret,
-    const wchar_t* s_keys,
-    size_t nLen
+      std::vector<std::wstring>& ret,
+      const wchar_t* s_keys,
+      unsigned int nLen
     );
 
-  // explode a string with a set of delimiter characters
-  size_t Explode
+  /**
+   * \brief Explode a given string given a delimiter string
+   * \param ret the return container.
+   * \param stringToExplode the string we want to explode
+   * \param strDelimit Set of delimiter characters.
+   * \param nCount the max number of items we want to return.
+   *               If the limit parameter is zero, then this is treated as 1.
+   * \param bAddEmpty if we want to add empty params or not.
+   * \return the number of item that we found.
+   */
+  unsigned int Explode
     (
-    std::vector<std::wstring>& ret,
-    const std::wstring& s, 
-    wchar_t strDelimit,
-    int nCount = MYODD_MAX_INT32,
-    bool bAddEmpty = true
+      std::vector<std::wstring>& ret,
+      const std::wstring& stringToExplode,
+      wchar_t strDelimit,
+      unsigned int nCount =MYODD_MAX_INT32,
+      bool bAddEmpty = true
     );
 
   // implode a string

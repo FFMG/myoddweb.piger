@@ -615,6 +615,13 @@ PyObject* PyApi::FindAction(PyObject *self, PyObject *args) const
       return Fail();
     }
 
+    if ( nullptr == szText )
+    {
+      Say(L"<b>Error : </b> Missing action name.");
+      __super::Log(AM_LOG_ERROR, L"Python: FindAction( ... ): Action name is null");
+      return Fail();
+    }
+
     const auto action = HelperApi::FindAction(idx, HelperApi::Widen(szText));
     if (action == nullptr )
     {

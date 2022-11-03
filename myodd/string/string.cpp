@@ -118,30 +118,30 @@ std::wstring MakeUuid4()
 }
 
 /**
- * Explode a string that is separated with '\0' chars.
- * This is used with items like GetPrivateProfileString( ... ) when we want to list all the keys.
- * @param std::vector<std::wstring>& the return container.
- * @param const wchar_t* the string with null chars '\0' finished by '\0\0'
- * @param size_t the length of the string. 
- * @return int the number of items returned.
+ * \brief Explode a string that is separated with '\0' chars.
+ *        This is used with items like GetPrivateProfileString( ... ) when we want to list all the keys.
+ * \param ret the return container.
+ * \param s_keys the string with null chars '\0' finished by '\0\0'
+ * \param nLen the length of the string. 
+ * \return int the number of items we exploded the string to.
  */
-size_t explode_by_null_char
+unsigned int explode_by_null_char
 (
   std::vector<std::wstring>& ret,
   const wchar_t* s_keys,
-  size_t nLen
+  unsigned int nLen
 )
 {
-  size_t retSize = 0;
+  unsigned int retSize = 0;
   std::wstring stdToken;
-  for(size_t nPos = 0; nPos < nLen; ++nPos )
+  for(unsigned int nPos = 0; nPos < nLen; ++nPos )
   {
-    if( s_keys[ nPos ] == _T('\0') )
+    if( s_keys[ nPos ] == L'\0' )
     {
       ++retSize;
       ret.push_back( stdToken );
       stdToken.clear();
-      if( nPos > 0 && s_keys[ nPos-1 ] == _T('\0'))
+      if( nPos > 0 && s_keys[ nPos-1 ] == L'\0')
       {
         break;
       }
@@ -155,21 +155,21 @@ size_t explode_by_null_char
 }
 
 /**
- * Explode a given string given a delimiter string
- * @param std::vector<std::wstring>& the return container.
- * @param std::wstring the string we want to explode
- * @param const wchar_t* Set of delimiter characters.
- * @param int nCount the max number of items we want to return.
- *                   If the limit parameter is zero, then this is treated as 1.
- * @param bool bAddEmpty if we want to add empty params or not.
- * @return int the number of item that we found.
+ * \brief Explode a given string given a delimiter string
+ * \param ret the return container.
+ * \param stringToExplode the string we want to explode
+ * \param strDelimit Set of delimiter characters.
+ * \param nCount the max number of items we want to return.
+ *               If the limit parameter is zero, then this is treated as 1.
+ * \param bAddEmpty if we want to add empty params or not.
+ * \return the number of item that we found.
  */
-size_t Explode
+unsigned int Explode
 (
   std::vector<std::wstring>& ret,
-  const std::wstring& s, 
+  const std::wstring& stringToExplode, 
   wchar_t strDelimit,
-  int nCount /*=MYODD_MAX_INT32*/,
+  unsigned int nCount /*=MYODD_MAX_INT32*/,
   bool bAddEmpty /*= true*/
 )
 {
@@ -180,7 +180,7 @@ size_t Explode
   // If the limit parameter is zero, then this is treated as 1.
   if( 1 == nCount || 0 == nCount )
   {
-    ret.push_back( s );
+    ret.push_back(stringToExplode);
     return 1;
   }
   
@@ -191,19 +191,19 @@ size_t Explode
   }
 
   // get the given vector length 
-  const auto length = s.length();
+  const auto length = stringToExplode.length();
 
   // The number of items we actually found
-  size_t retSize = 0;
-  size_t iLast = 0;
+  unsigned int retSize = 0;
+  unsigned int iLast = 0;
 
   // NB: This loop will go _past_ the length of our string.
   //     This is done so we can add the last string once we get the end
-  for( auto pos = 0; pos <= length; ++pos)
+  for( unsigned int pos = 0; pos <= length; ++pos)
   {
     if( 
        pos == length ||     // we reached the end of the string
-       s[pos] == strDelimit // or the char is what we are looking for.
+       stringToExplode[pos] == strDelimit // or the char is what we are looking for.
       )
     {
       if( bAddEmpty || (pos-iLast) > 0 )
@@ -213,15 +213,15 @@ size_t Explode
         {
           // we have collected more items than we want.
           // so we can just stop here and add everything else to our container.
-          ret.push_back( s.substr(iLast));
+          ret.push_back(stringToExplode.substr(iLast));
           break;
         }
 
         ret.push_back( 
             pos == length ?
-              s.substr(iLast)
+              stringToExplode.substr(iLast)
               :
-              s.substr(iLast, (pos-iLast) ));
+              stringToExplode.substr(iLast, (pos-iLast) ));
       }
       iLast = (pos+1);
     }
