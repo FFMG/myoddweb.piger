@@ -13,7 +13,8 @@
 // 3.5 C++11 code cleanup
 // 3.6 To lua version 5.4.4
 //     Cleanned up the error messages
-static const double ACTIONMONITOR_API_LUA_VERSION = 3.6;
+// 3.7 To lua version 5.4.6
+static const double ACTIONMONITOR_API_LUA_VERSION = 3.7;
 
 #include "luaapi.h"
 #include "../string/string.h"
